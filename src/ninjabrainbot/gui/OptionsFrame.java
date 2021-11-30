@@ -69,6 +69,7 @@ public class OptionsFrame extends ThemedFrame {
 		// Title bar
 		exitButton = getExitButton();
 		titlebarPanel.addButton(exitButton);
+		titlebarPanel.setFocusable(true);
 		
 		// Main panel
 		mainPanel = new JPanel();

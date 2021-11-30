@@ -30,7 +30,7 @@ public class JThrowPanel extends ThemedPanel {
 	private int index;
 
 	private boolean errorsEnabled;
-	private boolean correctionEnabled;
+	private int correctionSgn;
 	private Color colorNeg, colorPos;
 
 	public JThrowPanel(GUI gui, int i) {
@@ -109,7 +109,7 @@ public class JThrowPanel extends ThemedPanel {
 			if (this.z != null)
 				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 3, 0, w / 3, height);
 			if (this.alpha != null) {
-				if (correctionEnabled) {
+				if (correctionSgn != 0) {
 					int w1 = w / 3 * 3 / 4;
 					int dx = w / 3 * 1 / 8;
 					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3 - dx, 0, w1, height);
@@ -129,7 +129,7 @@ public class JThrowPanel extends ThemedPanel {
 			if (this.z != null)
 				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 4, 0, w / 4, height);
 			if (this.alpha != null) {
-				if (correctionEnabled) {
+				if (correctionSgn != 0) {
 					int w1 = w / 4 * 3 / 4;
 					int dx = w / 4 * 1 / 8;
 					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4 - dx, 0, w1, height);
@@ -158,15 +158,17 @@ public class JThrowPanel extends ThemedPanel {
 			z.setForeground(fg);
 		if (alpha != null)
 			alpha.setForeground(fg);
+		if (correction != null)
+			correction.setForeground(correctionSgn > 0 ? colorPos : colorNeg);
 		if (error != null)
 			error.setForeground(fg);
 	}
 	
 	@Override
 	public void updateColors(GUI gui) {
-		super.updateColors(gui);
 		colorNeg = gui.theme.COLOR_NEGATIVE;
 		colorPos = gui.theme.COLOR_POSITIVE;
+		super.updateColors(gui);
 	}
 
 	public void setThrow(Throw t) {
@@ -176,13 +178,13 @@ public class JThrowPanel extends ThemedPanel {
 			alpha.setText(null);
 			correction.setText(null);
 			removeButton.setVisible(false);
-			correctionEnabled = false;
+			correctionSgn = 0;
 		} else {
 			x.setText(String.format(Locale.US, "%.2f", t.x));
 			z.setText(String.format(Locale.US, "%.2f", t.z));
 			alpha.setText(String.format(Locale.US, "%.2f", t.alpha - t.correction));
-			correctionEnabled = Math.abs(t.correction) > 1e-7;
-			if (correctionEnabled) {
+			correctionSgn = Math.abs(t.correction) < 1e-7 ? 0 : (t.correction > 0 ? 1 : -1);
+			if (correctionSgn != 0) {
 				correction.setText(String.format(Locale.US, t.correction > 0 ? "+%.2f" : "%.2f", t.correction));
 				correction.setForeground(t.correction > 0 ? colorPos : colorNeg);
 			} else {

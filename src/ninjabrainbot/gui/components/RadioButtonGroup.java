@@ -63,6 +63,7 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		setOpaque(false);
 		setBorderPainted(false);
 		setFocusPainted(false);
+		setFocusable(false);
 		// Icons
 		setIcon(icon);
 		setSelectedIcon(selected_icon);

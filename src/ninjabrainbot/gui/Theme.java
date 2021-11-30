@@ -40,10 +40,10 @@ class DarkTheme extends Theme {
 		TEXT_COLOR_WEAK = Color.GRAY;
 		TEXT_COLOR_NEUTRAL = Color.LIGHT_GRAY;
 		COLOR_STRONG = Color.decode("#2D3238");
-		COLOR_REMOVE_BUTTON_HOVER  = Color.decode("#F04747");
-		COLOR_SATURATED =  Color.decode("#245782");
-		COLOR_POSITIVE =  Color.GREEN;
-		COLOR_NEGATIVE =  Color.RED;
+		COLOR_REMOVE_BUTTON_HOVER = Color.decode("#F04747");
+		COLOR_SATURATED = Color.decode("#245782");
+		COLOR_POSITIVE = Color.decode("#75CC6C");
+		COLOR_NEGATIVE = Color.decode("#CC6E72");
 		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29"));
 		BLACK_ICONS = false;
 	}
@@ -62,8 +62,10 @@ class LightTheme extends Theme {
 		TEXT_COLOR_WEAK = Color.decode("#888888");
 		TEXT_COLOR_NEUTRAL = Color.DARK_GRAY;
 		COLOR_STRONG = Color.decode("#E5E5E5");
-		COLOR_REMOVE_BUTTON_HOVER  = Color.decode("#F04747");
+		COLOR_REMOVE_BUTTON_HOVER = Color.decode("#F04747");
 		COLOR_SATURATED =  Color.decode("#BAD7EF");
+		COLOR_POSITIVE = Color.decode("#1E9910");
+		COLOR_NEGATIVE = Color.decode("#991017");
 		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29"));
 		BLACK_ICONS = true;
 	}

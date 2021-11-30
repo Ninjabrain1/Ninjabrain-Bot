@@ -30,6 +30,7 @@ import ninjabrainbot.gui.components.NotificationsButton;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.ThemedFrame;
 import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.ThemedPanel;
 import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.gui.components.TitleBarPanel;
 import ninjabrainbot.io.NinjabrainBotPreferences;
@@ -69,7 +70,7 @@ public class GUI {
 	private JLabel certaintyLabel;
 	private JLabel netherLabel;
 	private JLabel versiontextLabel;
-	private JLabel throwsLabelBG;
+	private ThemedPanel throwsLabelBG;
 	private JLabel throwsLabel;
 	private FlatButton resetButton;
 	private FlatButton undoButton;
@@ -165,7 +166,7 @@ public class GUI {
 		
 		// "Throws" text
 		Profiler.stopAndStart("Create main text area");
-		throwsLabelBG = new ThemedLabel(this) {
+		throwsLabelBG = new ThemedPanel(this) {
 			private static final long serialVersionUID = -8143875137607726122L;
 			@Override
 			public Color getBackgroundColor(Theme theme) {
@@ -173,8 +174,9 @@ public class GUI {
 			}
 		};
 		throwsLabelBG.setOpaque(true);
+		throwsLabelBG.setLayout(null);
 		throwsLabel = new ThemedLabel(this, "Ender eye throws:", true);
-		frame.add(throwsLabel);
+		throwsLabelBG.add(throwsLabel);
 		frame.add(throwsLabelBG);
 		throwPanelHeader = new JThrowPanelHeader(this);
 		frame.add(throwPanelHeader);
@@ -338,7 +340,7 @@ public class GUI {
 		resetButton.setBounds(WINDOW_WIDTH - BUTTON_WIDTH, throwPanelY, BUTTON_WIDTH, BUTTON_HEIGHT);
 		undoButton.setBounds(WINDOW_WIDTH - BUTTON_WIDTH*2, throwPanelY, BUTTON_WIDTH, BUTTON_HEIGHT);
 		throwsLabelBG.setBounds(0, throwPanelY, WINDOW_WIDTH - BUTTON_WIDTH*2, BUTTON_HEIGHT);
-		throwsLabel.setBounds(PADDING, throwPanelY, WINDOW_WIDTH - BUTTON_WIDTH*2 - PADDING, BUTTON_HEIGHT);
+		throwsLabel.setBounds(PADDING, 0, WINDOW_WIDTH - BUTTON_WIDTH*2 - PADDING, BUTTON_HEIGHT);
 		throwPanelHeader.setBounds(0, throwPanelY + BUTTON_HEIGHT, WINDOW_WIDTH, THROW_PANEL_HEADER_HEIGHT);
 		for (int i = 0; i < MAX_THROWS; i++) {
 			throwPanels[i].setBounds(0, throwPanelY + i*THROW_PANEL_HEIGHT + BUTTON_HEIGHT + THROW_PANEL_HEADER_HEIGHT, WINDOW_WIDTH, THROW_PANEL_HEIGHT);

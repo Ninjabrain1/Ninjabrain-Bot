@@ -33,6 +33,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setFocusPainted(false);
 		setContentAreaFilled(false);
 		setBorder(null);
+		setFocusable(false);
 		
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.createGraphics();
@@ -70,6 +71,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setFocusPainted(false);
 		setContentAreaFilled(false);
 		setBorder(null);
+		setFocusable(false);
 		
 		label = new JLabel(text);
 		label.setOpaque(true);

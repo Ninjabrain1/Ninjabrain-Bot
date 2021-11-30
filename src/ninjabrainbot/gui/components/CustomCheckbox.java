@@ -28,6 +28,7 @@ public class CustomCheckbox extends JCheckBox {
 		setBorderPainted(false);
 		setBorderPaintedFlat(false);
 		setFocusPainted(false);
+		setFocusable(false);
 		setOpaque(false);
 		setIcon(icon);
 		setSelectedIcon(selected_icon);

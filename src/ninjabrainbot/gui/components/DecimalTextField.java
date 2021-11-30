@@ -24,6 +24,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		super(new SpinnerNumberModel(value, 0, 1e7, min));
 		setBorder(BorderFactory.createEmptyBorder());
 		setAlignmentX(1);
+		setFocusable(false);
 		hideSpinnerArrows();
 		ChangeListener listener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
