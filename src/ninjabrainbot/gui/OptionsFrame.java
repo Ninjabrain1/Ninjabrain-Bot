@@ -1,10 +1,10 @@
 package ninjabrainbot.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 
@@ -14,7 +14,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.CalibrationPanel;
@@ -29,6 +33,8 @@ import ninjabrainbot.gui.components.ThemedPanel;
 import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.io.BooleanPreference;
 import ninjabrainbot.io.FloatPreference;
+import ninjabrainbot.io.HotkeyPreference;
+import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.MultipleChoicePreference;
 
 public class OptionsFrame extends ThemedFrame {
@@ -77,8 +83,8 @@ public class OptionsFrame extends ThemedFrame {
 		JPanel column2 = new JPanel();
 		column1.setOpaque(false);
 		column2.setOpaque(false);
-		columns.add(column1, BorderLayout.LINE_START);
-		columns.add(column2, BorderLayout.CENTER);
+		columns.add(column1);
+		columns.add(column2);
 		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 		mainPanel.add(columns);
@@ -105,12 +111,20 @@ public class OptionsFrame extends ThemedFrame {
 		mainPanel.add(new CheckboxPanel(gui, "Show advanced options", Main.preferences.showAdvancedOptions));
 		advPanel = new JPanel();
 		advPanel.setOpaque(false);
-		advPanel.setLayout(new BoxLayout(advPanel, BoxLayout.Y_AXIS));
+		advPanel.setLayout(new GridLayout(1, 2, PADDING, 0));
 		advPanel.setBorder(new EmptyBorder(0, PADDING, PADDING, PADDING));
 		advPanel.setVisible(Main.preferences.showAdvancedOptions.get());
+		JPanel ac1 = new JPanel();
+		JPanel ac2 = new JPanel();
+		ac1.setOpaque(false);
+		ac2.setOpaque(false);
+		advPanel.add(ac1);
+		advPanel.add(ac2);
+		ac1.setLayout(new BoxLayout(ac1, BoxLayout.Y_AXIS));
+		ac2.setLayout(new BoxLayout(ac2, BoxLayout.Y_AXIS));
 		settingsPanel.add(advPanel);
 		
-		advPanel.add(new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma));
+		ac1.add(new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma));
 		JButton calibrateButton = new FlatButton(gui, "Calibrate standard deviation") {
 			private static final long serialVersionUID = -673676238214760361L;
 			@Override
@@ -120,10 +134,18 @@ public class OptionsFrame extends ThemedFrame {
 			
 		};
 		calibrateButton.addActionListener(p -> startCalibrating());
-		calibrateButton.setAlignmentX(1);
-		advPanel.add(calibrateButton);
-		advPanel.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
-		
+		calibrateButton.setAlignmentX(0.5f);
+		ac1.add(calibrateButton);
+		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
+		if (KeyboardListener.registered) {
+			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);
+			labelShortcuts.setAlignmentX(0.5f);
+			ac2.add(labelShortcuts);
+			ac2.add(new Divider(gui));
+			ac2.add(new HotkeyPanel(gui, "+0.01 to last angle", Main.preferences.hotkeyIncrement));
+			ac2.add(Box.createGlue());
+			ac2.add(new HotkeyPanel(gui, "-0.01 to last angle", Main.preferences.hotkeyDecrement));
+		}
 	}
 	
 	private void startCalibrating() {
@@ -149,9 +171,6 @@ public class OptionsFrame extends ThemedFrame {
 		setSize(width, height);
 		settingsPanel.setSize(width, height);
 		calibrationPanel.setSize(width, height);
-//		titlebarPanel.setBounds(0, 0, width, GUI.TITLE_BAR_HEIGHT);
-//		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.textSize.TITLE_BAR_TEXT_SIZE)/2, 0, 150, GUI.TITLE_BAR_HEIGHT);
-//		exitButton.setBounds(width - GUI.TITLE_BAR_BUTTON_WH - (GUI.TITLE_BAR_HEIGHT - GUI.TITLE_BAR_BUTTON_WH)/2, (GUI.TITLE_BAR_HEIGHT - GUI.TITLE_BAR_BUTTON_WH)/2, GUI.TITLE_BAR_BUTTON_WH, GUI.TITLE_BAR_BUTTON_WH);
 		mainPanel.setBounds(0, GUI.TITLE_BAR_HEIGHT, WINDOW_WIDTH, h1);
 		advPanel.setBounds(0, GUI.TITLE_BAR_HEIGHT + h1, width, h2);
 		super.updateBounds(gui);
@@ -260,7 +279,6 @@ class TextboxPanel extends ThemedPanel {
 	
 }
 
-
 class RadioButtonPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
@@ -293,6 +311,80 @@ class RadioButtonPanel extends ThemedPanel {
 		add(descLabel);
 		add(radioButtomGroup);
 		setOpaque(false);
+	}
+	
+}
+
+class HotkeyPanel extends ThemedPanel {
+
+	private static final long serialVersionUID = -7054967229481740724L;
+	
+	JLabel descLabel;
+	FlatButton button;
+	HotkeyPreference preference;
+	boolean editing = false;
+	
+	public HotkeyPanel(GUI gui, String description, HotkeyPreference preference) {
+		super(gui);
+		this.preference = preference;
+		setLayout(new GridLayout(1, 2, 10, 0));
+		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
+			private static final long serialVersionUID = -658733822961822860L;
+			@Override
+			public int getTextSize(TextSizePreference p) {
+				return p.SETTINGS_TEXT_SIZE;
+			}
+		};
+		descLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		button = new FlatButton(gui, getKeyText()) {
+			private static final long serialVersionUID = 1865599754734492942L;
+			@Override
+			public int getTextSize(TextSizePreference p) {
+				return p.SETTINGS_TEXT_SIZE;
+			}
+		};
+		button.addActionListener(p -> clicked());
+		Dimension size = button.getPreferredSize();
+		size.width = OptionsFrame.WINDOW_WIDTH / 4;
+		button.setPreferredSize(size);
+		add(descLabel);
+		add(button);
+		setOpaque(false);
+	}
+	
+	private void clicked() {
+		if (!editing) {
+			editing = true;
+			button.setText("...");
+			KeyboardListener.instance.setConsumer((code, modifier) -> {
+				if (code == -1 || code == KeyEvent.VK_ESCAPE) { // Canceled
+					preference.setCode(-1);
+					preference.setModifier(-1);
+				} else {
+					preference.setCode(code);
+					preference.setModifier(modifier);
+				}
+				String s = getKeyText();
+				SwingUtilities.invokeLater(() -> {
+					button.setText(s);
+					editing = false;
+				});
+			});
+		}
+	}
+	
+	private String getKeyText() {
+		if (preference.getCode() == -1)
+			return "Not in use";
+		String k = KeyEvent.getKeyText(preference.getCode());
+		if (k.startsWith("Unknown")) {
+			k = k.substring(17);
+		}
+		if (preference.getModifier() == 0) {
+			return k;
+		} else {
+			return NativeKeyEvent.getModifiersText(preference.getModifier()) + "+" + k;
+		}
 	}
 	
 }

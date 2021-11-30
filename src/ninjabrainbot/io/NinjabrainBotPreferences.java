@@ -2,6 +2,8 @@ package ninjabrainbot.io;
 
 import java.util.prefs.Preferences;
 
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
@@ -12,6 +14,8 @@ public class NinjabrainBotPreferences {
 	
 	public IntPreference windowX;
 	public IntPreference windowY;
+	public HotkeyPreference hotkeyIncrement;
+	public HotkeyPreference hotkeyDecrement;
 	public FloatPreference sigma;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -31,6 +35,18 @@ public class NinjabrainBotPreferences {
 		pref = Preferences.userNodeForPackage(Main.class);
 		windowX = new IntPreference("window_x", 100, pref);
 		windowY = new IntPreference("window_y", 100, pref);
+		hotkeyIncrement = new HotkeyPreference("hotkey_increment", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.changeLastAngle(0.01f));
+			}
+		};
+		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.changeLastAngle(-0.01f));
+			}
+		};
 		sigma = new FloatPreference("sigma", 0.05f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {

@@ -17,6 +17,8 @@ public abstract class Theme {
 	public Color TEXT_COLOR_NEUTRAL;
 	public Color TEXT_COLOR_WEAK;
 	public Color COLOR_SATURATED;
+	public Color COLOR_POSITIVE;
+	public Color COLOR_NEGATIVE;
 	public boolean BLACK_ICONS;
 	public ColorMap CERTAINTY_COLOR_MAP;
 
@@ -40,6 +42,8 @@ class DarkTheme extends Theme {
 		COLOR_STRONG = Color.decode("#2D3238");
 		COLOR_REMOVE_BUTTON_HOVER  = Color.decode("#F04747");
 		COLOR_SATURATED =  Color.decode("#245782");
+		COLOR_POSITIVE =  Color.GREEN;
+		COLOR_NEGATIVE =  Color.RED;
 		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29"));
 		BLACK_ICONS = false;
 	}

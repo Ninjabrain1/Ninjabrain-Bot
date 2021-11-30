@@ -5,11 +5,17 @@ package ninjabrainbot.calculator;
  */
 public class Throw implements Ray {
 
-	public final double x, z, alpha;
+	// correction is how much the angle has been corrected, only used for display purposes (the correction has already been added to alpha)
+	public final double x, z, alpha, correction;
 
 	public Throw(double x, double z, double alpha) {
+		this(x, z, alpha, 0);
+	}
+	
+	public Throw(double x, double z, double alpha, double correction) {
 		this.x = x;
 		this.z = z;
+		this.correction = correction;
 		alpha = alpha % 360.0;
 		if (alpha < -180.0) {
 			alpha += 360.0;

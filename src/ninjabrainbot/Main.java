@@ -3,6 +3,7 @@ package ninjabrainbot;
 import ninjabrainbot.calculator.ApproximatedDensity;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.io.ClipboardReader;
+import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.UpdateChecker;
 import ninjabrainbot.util.Profiler;
@@ -43,14 +44,16 @@ public class Main {
 		preferences = new NinjabrainBotPreferences();
 		Profiler.stopAndStart("Calculate approximated density");
 		ApproximatedDensity.init();
+		Profiler.stopAndStart("Register keyboard listener");
+		KeyboardListener.preInit();
 		Profiler.stopAndStart("Initialize GUI");
 		GUI gui = new GUI();
+		Profiler.stopAndStart("Start keyboard listener");
+		KeyboardListener.init(gui);
 		Profiler.stopAndStart("Start clipboard reader");
 		ClipboardReader clipboardReader = new ClipboardReader(gui);
 		Thread clipboardThread = new Thread(clipboardReader);
 		clipboardThread.start();
-//		Profiler.stopAndStart("Start keyboard listener");
-//		KeyboardListener.init();
 		Profiler.stop();
 		if (preferences.checkForUpdates.get()) {
 			UpdateChecker.check(gui);

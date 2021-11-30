@@ -99,6 +99,11 @@ public class FlatButton extends JButton implements ThemedComponent {
 		}
 	}
 	
+	@Override
+	public void setText(String text) {
+		label.setText(text);
+	}
+	
 	public void setColors(final Color backgroundColor, final Color hoverColor) {
 		label.setBackground(backgroundColor);
 		this.bgCol = backgroundColor;

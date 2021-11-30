@@ -27,7 +27,6 @@ import ninjabrainbot.gui.components.FlatButton;
 import ninjabrainbot.gui.components.JThrowPanel;
 import ninjabrainbot.gui.components.JThrowPanelHeader;
 import ninjabrainbot.gui.components.NotificationsButton;
-import ninjabrainbot.gui.components.NotificationsFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.ThemedFrame;
 import ninjabrainbot.gui.components.ThemedLabel;
@@ -422,6 +421,20 @@ public class GUI {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	public void changeLastAngle(double delta) {
+		if (!calibrationPanel.isCalibrating()) {
+			int i = eyeThrows.size() - 1;
+			Throw last = eyeThrows.get(i);
+			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
+			saveThrowsForUndo();
+			eyeThrows.remove(last);
+			eyeThrows.add(t);
+			throwPanels[i].setThrow(t);
+			textAnimator.setJThrowPanel(throwPanels[i]);
+			onThrowsUpdated();
 		}
 	}
 	

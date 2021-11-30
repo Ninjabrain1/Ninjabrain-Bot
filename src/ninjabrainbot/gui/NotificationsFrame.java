@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.components;
+package ninjabrainbot.gui;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -12,8 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.components.FlatButton;
+import ninjabrainbot.gui.components.ThemedFrame;
+import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.io.VersionURL;
 
 public class NotificationsFrame extends ThemedFrame {	
@@ -29,7 +31,7 @@ public class NotificationsFrame extends ThemedFrame {
 	ThemedLabel label;
 
 	public NotificationsFrame(GUI gui) {
-		super(gui, "New version available");
+		super(gui, "New version available!");
 		this.gui = gui;
 		titlebarPanel.addButton(getExitButton());
 		mainPanel = new JPanel();
@@ -39,20 +41,19 @@ public class NotificationsFrame extends ThemedFrame {
 		add(mainPanel);
 		label = new ThemedLabel(gui, "");
 		mainPanel.add(label);
-		mainPanel.add(new ThemedLabel(gui, "<html>This notification can be disabled in the settings menu.</html>"));
 		mainPanel.add(Box.createVerticalStrut(PADDING));
 		FlatButton downloadButton = new FlatButton(gui, "Download .jar");
 		downloadButton.addActionListener(p -> openURL());
 		mainPanel.add(downloadButton);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		FlatButton changelogButton = new FlatButton(gui, "Changelog (opens browser)");
+		FlatButton changelogButton = new FlatButton(gui, "Open changelog (in browser)");
 		changelogButton.addActionListener(p -> openReleasePage());
 		mainPanel.add(changelogButton);
 	}
 	
 	@Override
 	public void updateBounds(GUI gui) {
-		int width = 240;
+		int width = 300;
 		int height = 200;
 		setShape(new RoundRectangle2D.Double(0, 0, width, height, GUI.WINDOW_ROUNDING, GUI.WINDOW_ROUNDING));
 		setSize(width, height);
@@ -98,7 +99,7 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("Version " + url.tag + " is available.");
+		label.setText("<html>Version " + url.tag + " is available. After downloading the new jar you can delete this jar (your settings will automatically transfer). This notification can be disabled in the settings menu.</html>");
 	}
 
 	public Object getURL() {

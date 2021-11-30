@@ -9,6 +9,7 @@ import javax.swing.Timer;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.NotificationsFrame;
 import ninjabrainbot.io.VersionURL;
 
 public class NotificationsButton extends TitleBarButton {
@@ -100,7 +101,7 @@ public class NotificationsButton extends TitleBarButton {
 		} else {
 			notificationsFrame.setVisible(true);
 			Rectangle bounds = gui.frame.getBounds();
-			notificationsFrame.setLocation(bounds.x + 40, bounds.y + 30);
+			notificationsFrame.setLocation(bounds.x + 10, bounds.y + 30);
 		}
 	}
 	
