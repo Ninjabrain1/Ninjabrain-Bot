@@ -96,7 +96,7 @@ public class GUI {
 	private double lastCertainty = 0.0;
 
 	public GUI() {
-		theme = Main.preferences.darkTheme.get() ? Theme.DARK : Theme.LIGHT;
+		theme = Main.preferences.theme.get() == Theme.DARK.name ? Theme.DARK : Theme.LIGHT;
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
 		
@@ -251,7 +251,7 @@ public class GUI {
 	}
 	
 	public void updateTheme() {
-		theme = Main.preferences.darkTheme.get() ? Theme.DARK : Theme.LIGHT;
+		theme = Main.preferences.theme.get() == Theme.DARK.name ? Theme.DARK : Theme.LIGHT;
 		updateFontsAndColors();
 	}
 

@@ -3,7 +3,8 @@ package ninjabrainbot.gui;
 import java.awt.Color;
 
 public abstract class Theme {
-
+	
+	public String name;
 	public Color COLOR_STRONGEST;
 	public Color COLOR_STRONGER;
 	public Color COLOR_STRONG;
@@ -26,6 +27,7 @@ public abstract class Theme {
 
 class DarkTheme extends Theme {
 	public DarkTheme() {
+		name = "Dark";
 		COLOR_NEUTRAL = Color.decode("#33383D");
 		COLOR_STRONGEST = Color.decode("#212529");
 		COLOR_EXIT_BUTTON_HOVER = Color.decode("#F04747");
@@ -45,6 +47,7 @@ class DarkTheme extends Theme {
 
 class LightTheme extends Theme {
 	public LightTheme() {
+		name = "Light";
 		COLOR_NEUTRAL = Color.decode("#F5F5F5");
 		COLOR_STRONGEST = Color.decode("#D8D8D8");
 		COLOR_EXIT_BUTTON_HOVER = Color.decode("#F04747");

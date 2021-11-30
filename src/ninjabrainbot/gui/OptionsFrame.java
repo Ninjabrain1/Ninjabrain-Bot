@@ -85,14 +85,15 @@ public class OptionsFrame extends ThemedFrame {
 		
 		// Column 1
 		column1.add(new CheckboxPanel(gui, "Show nether coordinates", Main.preferences.showNetherCoords));
-		column1.add(new CheckboxPanel(gui, "Dark theme", Main.preferences.darkTheme));
+		column1.add(new CheckboxPanel(gui, "Auto reset when idle for 15 minutes", Main.preferences.autoReset));
 		column1.add(new CheckboxPanel(gui, "Always on top", Main.preferences.alwaysOnTop));
 		column1.add(new CheckboxPanel(gui, "Translucent window", Main.preferences.translucent));
 		column1.add(new CheckboxPanel(gui, "Notify when a new version is available", Main.preferences.checkForUpdates));
 		
 		// Column 2
-		column2.add(new CheckboxPanel(gui, "Auto reset when idle for 15 minutes", Main.preferences.autoReset));
+		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(gui, "Display stronghold location using", Main.preferences.strongholdDisplayType));
+		column2.add(new RadioButtonPanel(gui, "Theme", Main.preferences.theme));
 		column2.add(Box.createGlue());
 		column2.add(Box.createGlue());
 		column2.add(Box.createGlue());
@@ -231,7 +232,7 @@ class TextboxPanel extends ThemedPanel {
 	public TextboxPanel(GUI gui, String description, FloatPreference preference) {
 		super(gui);
 		this.preference = preference;
-		setLayout(new FlowLayout(OptionsFrame.PADDING));
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
@@ -271,7 +272,7 @@ class RadioButtonPanel extends ThemedPanel {
 	public RadioButtonPanel(GUI gui, String description, MultipleChoicePreference preference) {
 		super(gui);
 		this.preference = preference;
-		setLayout(new FlowLayout(OptionsFrame.PADDING));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
@@ -287,7 +288,8 @@ class RadioButtonPanel extends ThemedPanel {
 				preference.onChangedByUser(gui);
 			}
 		};
-		
+		descLabel.setAlignmentX(0);
+		radioButtomGroup.setAlignmentX(0);
 		add(descLabel);
 		add(radioButtomGroup);
 		setOpaque(false);

@@ -4,6 +4,7 @@ import java.util.prefs.Preferences;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.Theme;
 
 public class NinjabrainBotPreferences {
 	
@@ -15,12 +16,12 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
-	public BooleanPreference darkTheme;
 	public BooleanPreference showNetherCoords;
 	public BooleanPreference showAdvancedOptions;
 	public BooleanPreference showAngleErrors;
 	public BooleanPreference autoReset;
 	public MultipleChoicePreference strongholdDisplayType;
+	public MultipleChoicePreference theme;
 	
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
@@ -57,12 +58,6 @@ public class NinjabrainBotPreferences {
 				gui.setAlwaysOnTop(get());
 			}
 		};
-		darkTheme = new BooleanPreference("dark_theme", true, pref) {
-			@Override
-			public void onChangedByUser(GUI gui) {
-				gui.updateTheme();
-			}
-		};
 		showNetherCoords = new BooleanPreference("show_nether_coords", true, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
@@ -95,6 +90,12 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.recalculateStronghold();
+			}
+		};
+		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] {0, 1}, new String[] {Theme.LIGHT.name, Theme.DARK.name}, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.updateTheme();
 			}
 		};
 	}
