@@ -28,14 +28,14 @@ public class Main {
 	// [x] - translucent
 	// [ ] - number of predictions
 	// [x] - auto reset
-	// [ ] Pixel correction
+	// [x] Pixel correction
 	// [x] Number of blocks away
 	// [ ] Blind travel (?)
 	// [x] Certainty color code
 	// [x] Remove throw
 	// [ ] Link to guide
 	// [ ] Copy result to clipboard
-	// [ ] Hotkeys
+	// [x] Hotkeys
 	// [x] Calibration
 	// [ ] Show closest possible location
 

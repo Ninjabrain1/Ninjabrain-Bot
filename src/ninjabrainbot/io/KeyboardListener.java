@@ -55,6 +55,13 @@ public class KeyboardListener implements NativeKeyListener {
 		}
 		this.consumer = consumer;
 	}
+	
+	public synchronized void cancelConsumer() {
+		if (this.consumer != null) {
+			this.consumer.accept(-1, -1);
+			this.consumer = null;
+		}
+	}
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent e) {

@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -70,16 +71,28 @@ public class CalibrationPanel extends JPanel {
 		panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(new EmptyBorder(10, 20, 20, 20));
+		panel.setBorder(new EmptyBorder(5, 20, 20, 20));
 		add(panel);
 		labels = new InstructionLabel[] {
 				new InstructionLabel(gui, "Make a creative world, start flying (double tap space), and then press F3+C."),
 				new InstructionLabel(gui, "Throw an ender eye and measure the angle with F3+C. Be as accurate as you would be in a real run. Upon pressing F3+C you will be automatically teleported to a new location."),
 				new InstructionLabel(gui, "Keep measuring eyes until the measured STD has settled (usually takes around 10-20 throws), then press 'Done' to apply. "),
 		};
+		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>The program will determine how accurate you are at measuring ender eyes. The lower the standard deviation (STD) is, the more accurate you are. By knowing what your STD is the calculator can make better predictions. Before following the steps below, make sure your 'Open Command' key in Minecraft is set to its default value.</div></html>") {
+			private static final long serialVersionUID = -5378176835369680709L;
+			@Override
+			public int getTextSize(TextSizePreference p) {
+				return p.SETTINGS_TEXT_SIZE;
+			}
+		};
+		explanation.setAlignmentX(0.5f);
+		panel.add(explanation);
+		panel.add(Box.createVerticalStrut(5));
+		panel.add(new Divider(gui));
+		panel.add(Box.createVerticalStrut(5));
 		for (InstructionLabel l : labels) {
 			panel.add(l);
-			panel.add(Box.createVerticalStrut(10));
+			panel.add(Box.createVerticalStrut(5));
 		}
 		JPanel panel2 = new JPanel();
 		panel2.setOpaque(false);
@@ -89,20 +102,18 @@ public class CalibrationPanel extends JPanel {
 		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
 		rightPanel = new JPanel();
 		rightPanel.setOpaque(false);
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel.setLayout(new GridLayout(3, 1, 0, 0));
 		std = new ThemedLabel(gui);
 		std.setOpaque(false);
 		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
 		JLabel l1 = new ThemedLabel(gui, "Measured STD:");
 		JButton done = new FlatButton(gui, "Done");
 		done.addActionListener(p -> done());
-		done.setAlignmentX(0.5f);
-		l1.setAlignmentX(0.5f);
-		std.setAlignmentX(0.5f);
+		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		std.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(l1);
 		rightPanel.add(std);
 		rightPanel.add(done);
-		rightPanel.add(Box.createVerticalGlue());
 		hist = new Histogram(gui, -0.1f, 0.1f, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);

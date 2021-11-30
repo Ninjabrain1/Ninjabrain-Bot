@@ -153,6 +153,9 @@ public class OptionsFrame extends ThemedFrame {
 		settingsPanel.setVisible(false);
 		titlebarPanel.setVisible(false);
 		calibrationPanel.setVisible(true);
+		if (KeyboardListener.registered) {
+			KeyboardListener.instance.cancelConsumer();
+		}
 	}
 	
 	public void stopCalibrating() {
@@ -191,8 +194,16 @@ public class OptionsFrame extends ThemedFrame {
 				return theme.COLOR_EXIT_BUTTON_HOVER;
 			}
 		};
-		button.addActionListener(p -> setVisible(false));
+		button.addActionListener(p -> close());
 		return button;
+	}
+	
+	public void close() {
+		setVisible(false);
+		stopCalibrating();
+		if (KeyboardListener.registered) {
+			KeyboardListener.instance.cancelConsumer();
+		}
 	}
 	
 	public void setAdvancedOptionsEnabled(boolean b) {
@@ -357,7 +368,9 @@ class HotkeyPanel extends ThemedPanel {
 			editing = true;
 			button.setText("...");
 			KeyboardListener.instance.setConsumer((code, modifier) -> {
-				if (code == -1 || code == KeyEvent.VK_ESCAPE) { // Canceled
+				if (code == -1) {
+					// Canceled, dont change anything
+				} else if (code == KeyEvent.VK_ESCAPE) {
 					preference.setCode(-1);
 					preference.setModifier(-1);
 				} else {

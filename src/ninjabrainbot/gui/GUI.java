@@ -368,8 +368,7 @@ public class GUI {
 	
 	private void toggleOptionsWindow() {
 		if (optionsFrame.isVisible()) {
-			optionsFrame.setVisible(false);
-			optionsFrame.stopCalibrating();
+			optionsFrame.close();
 		} else {
 			optionsFrame.setVisible(true);
 			Rectangle bounds = frame.getBounds();
@@ -427,6 +426,8 @@ public class GUI {
 	public void changeLastAngle(double delta) {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
+			if (i == -1)
+				return;
 			Throw last = eyeThrows.get(i);
 			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
 			saveThrowsForUndo();
