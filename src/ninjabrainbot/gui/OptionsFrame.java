@@ -137,14 +137,20 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.setAlignmentX(0.5f);
 		ac1.add(calibrateButton);
 		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
+		ac1.add(Box.createGlue());
 		if (KeyboardListener.registered) {
 			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);
 			labelShortcuts.setAlignmentX(0.5f);
 			ac2.add(labelShortcuts);
 			ac2.add(new Divider(gui));
+			ac2.add(Box.createVerticalStrut(4));
 			ac2.add(new HotkeyPanel(gui, "+0.01 to last angle", Main.preferences.hotkeyIncrement));
-			ac2.add(Box.createGlue());
+			ac2.add(Box.createVerticalStrut(4));
 			ac2.add(new HotkeyPanel(gui, "-0.01 to last angle", Main.preferences.hotkeyDecrement));
+			ac2.add(Box.createVerticalStrut(4));
+			ac2.add(new HotkeyPanel(gui, "Reset", Main.preferences.hotkeyReset));
+			ac2.add(Box.createVerticalStrut(4));
+			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo));
 		}
 	}
 	

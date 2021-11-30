@@ -376,7 +376,7 @@ public class GUI {
 		}
 	}
 
-	private void resetThrows() {
+	public void resetThrows() {
 		if (eyeThrows.size() > 0) {
 			ArrayList<Throw> temp = eyeThrowsLast;
 			eyeThrowsLast = eyeThrows;
@@ -386,7 +386,7 @@ public class GUI {
 		}
 	}
 	
-	private void undo() {
+	public void undo() {
 		ArrayList<Throw> temp = eyeThrowsLast;
 		eyeThrowsLast = eyeThrows;
 		eyeThrows = temp;

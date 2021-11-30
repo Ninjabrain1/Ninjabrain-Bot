@@ -16,6 +16,8 @@ public class NinjabrainBotPreferences {
 	public IntPreference windowY;
 	public HotkeyPreference hotkeyIncrement;
 	public HotkeyPreference hotkeyDecrement;
+	public HotkeyPreference hotkeyReset;
+	public HotkeyPreference hotkeyUndo;
 	public FloatPreference sigma;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -45,6 +47,18 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void execute(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.changeLastAngle(-0.01f));
+			}
+		};
+		hotkeyReset = new HotkeyPreference("hotkey_reset", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.resetThrows());
+			}
+		};
+		hotkeyUndo = new HotkeyPreference("hotkey_undo", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.undo());
 			}
 		};
 		sigma = new FloatPreference("sigma", 0.05f, 0.001f, 1f, pref) {
