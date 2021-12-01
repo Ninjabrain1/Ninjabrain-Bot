@@ -19,8 +19,11 @@ public class KeyboardListener implements NativeKeyListener {
 	
 	public static void preInit() {
 		try {
+			System.setProperty("jnativehook.lib.path", System.getProperty("java.io.tmpdir"));
 			GlobalScreen.registerNativeHook();
 			registered = true;
+		} catch (UnsatisfiedLinkError er) {
+			er.printStackTrace();
 		} catch (NativeHookException ex) {
 			System.err.println("There was a problem registering the native hook.");
 			System.err.println(ex.getMessage());
