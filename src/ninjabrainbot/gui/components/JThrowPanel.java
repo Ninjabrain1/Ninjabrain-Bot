@@ -58,12 +58,12 @@ public class JThrowPanel extends ThemedPanel {
 				return index % 2 == 0 ? theme.COLOR_SLIGHTLY_STRONG : theme.COLOR_SLIGHTLY_WEAK;
 			}
 		};
+		add(removeButton);
 		add(x);
 		add(z);
 		add(alpha);
 		add(correction);
 		add(error);
-		add(removeButton);
 		setLayout(null);
 		setThrow(t);
 		this.t = t;

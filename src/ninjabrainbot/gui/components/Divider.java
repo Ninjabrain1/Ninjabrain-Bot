@@ -3,7 +3,6 @@ package ninjabrainbot.gui.components;
 import java.awt.Color;
 
 import javax.swing.JSeparator;
-import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;

@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -190,20 +191,50 @@ public class CalibrationPanel extends JPanel {
 			}
 		}
 		setHighlighted(stage);
-		if (calibrator.isStrongholdDetermined()) {
-			std.setText(String.format("%.3f", calibrator.getSTD()));
-			StringBuilder b = new StringBuilder();
-			double[] angleErrors = calibrator.getErrors();
-			for (double e : angleErrors) {
-				b.append(String.format("%.3f\n", e));
-			}
-			errors.area.setText(b.toString());
-			hist.setData(angleErrors);
+		updateHistogram();
+	}
+	
+	public void changeLastAngle(double delta) {
+		if (calibrator.getNumThrows() > 0) {
+			calibrator.changeLastAngle(delta);
+			updateHistogram();
 		}
 	}
 
 	public boolean isCalibrating() {
 		return calibrator.isCalibrating();
+	}
+	
+	private void updateHistogram() {
+		if (calibrator.isStrongholdDetermined()) {
+			std.setText(String.format("%.3f", calibrator.getSTD()));
+			StringBuilder b = new StringBuilder();
+			double[] angleErrors = calibrator.getErrors();
+			List<Throw> eyeThrows = calibrator.getThrows();
+			for (int i = 0; i < angleErrors.length; i++) {
+				Throw t = eyeThrows.get(i);
+				double e = angleErrors[i];
+				if (Math.abs(t.correction) > 1e-7) {
+					b.append(String.format(t.correction < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha - t.correction, t.correction));
+				} else {
+					b.append(String.format("Angle: %.2f\n", t.alpha));
+				}
+				b.append(String.format("Error: %.3f\n", e));
+			}
+			errors.area.setText(b.toString());
+			hist.setData(angleErrors);
+		} else {
+			StringBuilder b = new StringBuilder();
+			List<Throw> eyeThrows = calibrator.getThrows();
+			for (Throw t : eyeThrows) {
+				if (Math.abs(t.correction) > 1e-7) {
+					b.append(String.format(t.correction < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha - t.correction, t.correction));
+				} else {
+					b.append(String.format("Angle: %.2f\n", t.alpha));
+				}
+			}
+			errors.area.setText(b.toString());
+		}
 	}
 	
 }
@@ -269,7 +300,7 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 	}
 
 	public int getTextSize(TextSizePreference p) {
-		return p.SETTINGS_TEXT_SIZE;
+		return p.TINY_TEXT_SIZE;
 	}
 	
 }

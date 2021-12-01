@@ -32,6 +32,7 @@ public class Triangulator {
 		// Find chunk with largest posterior probability
 		Chunk predictedChunk = posterior.getMostProbableChunk();
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
+//		posterior.getChunks().stream().sorted((a, b) -> Double.compare(a.weight, b.weight)).forEach(p -> System.out.println(p));;
 		return new TriangulationResult(predictedChunk.x, predictedChunk.z, predictedChunk.weight);
 	}
 	

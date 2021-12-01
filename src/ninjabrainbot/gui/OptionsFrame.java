@@ -45,6 +45,7 @@ public class OptionsFrame extends ThemedFrame {
 	private JPanel settingsPanel;
 	private CalibrationPanel calibrationPanel;
 	private FlatButton exitButton;
+	private TextboxPanel sigma;
 	private JPanel mainPanel; // Panel containing all non-advanced options
 	private JPanel advPanel; // Panel containing all advanced options
 
@@ -125,14 +126,14 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setLayout(new BoxLayout(ac2, BoxLayout.Y_AXIS));
 		settingsPanel.add(advPanel);
 		
-		ac1.add(new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma));
+		sigma = new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma);
+		ac1.add(sigma);
 		JButton calibrateButton = new FlatButton(gui, "Calibrate standard deviation") {
 			private static final long serialVersionUID = -673676238214760361L;
 			@Override
 			public int getTextSize(TextSizePreference p) {
 				return p.SETTINGS_TEXT_SIZE;
 			}
-			
 		};
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
@@ -170,6 +171,7 @@ public class OptionsFrame extends ThemedFrame {
 		titlebarPanel.setVisible(true);
 		calibrationPanel.setVisible(false);
 		calibrationPanel.cancel();
+		sigma.updateValue();
 	}
 	
 	public void updateBounds(GUI gui) {
@@ -293,6 +295,10 @@ class TextboxPanel extends ThemedPanel {
 		add(descLabel);
 		add(textfield);
 		setOpaque(false);
+	}
+	
+	public void updateValue() {
+		textfield.setValue((double) preference.get());
 	}
 	
 }

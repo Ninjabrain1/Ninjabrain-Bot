@@ -438,6 +438,8 @@ public class GUI {
 			throwPanels[i].setThrow(t);
 			textAnimator.setJThrowPanel(throwPanels[i]);
 			onThrowsUpdated();
+		} else {
+			calibrationPanel.changeLastAngle(delta);
 		}
 	}
 	

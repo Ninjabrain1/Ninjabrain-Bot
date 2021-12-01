@@ -75,6 +75,16 @@ public class Calibrator {
 		}
 	}
 	
+	public void changeLastAngle(double delta) {
+		int i = eyeThrows.size() - 1;
+		if (i == -1)
+			return;
+		Throw last = eyeThrows.get(i);
+		Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
+		eyeThrows.remove(last);
+		eyeThrows.add(t);
+	}
+	
 	private double distanceFromIntendedPosition(Throw t) {
 		double dx = lastX - t.x;
 		double dz = lastZ - t.z;
@@ -130,6 +140,10 @@ public class Calibrator {
 		if (stronghold == null)
 			return null;
 		return stronghold.getAngleErrors(eyeThrows);
+	}
+	
+	public ArrayList<Throw> getThrows() {
+		return eyeThrows;
 	}
 	
 	public boolean isReady() {
