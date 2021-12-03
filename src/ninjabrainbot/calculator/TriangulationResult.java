@@ -12,7 +12,7 @@ public class TriangulationResult extends Chunk {
 		super(chunkX, chunkZ, accuracy);
 		this.fourfour_x = 16 * chunkX + 4;
 		this.fourfour_z = 16 * chunkZ + 4;
-		this.success = Double.isFinite(accuracy) && accuracy > 0.001;
+		this.success = Double.isFinite(accuracy) && accuracy > 0.0005;
 	}
 	
 	/**

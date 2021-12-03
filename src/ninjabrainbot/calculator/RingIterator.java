@@ -32,19 +32,4 @@ public class RingIterator implements Iterator<Ring>, Iterable<Ring> {
 	
 }
 
-class Ring {
-	
-	public final int numStrongholds;
-	public final int ring;
-	// Ring radiuses before snapping (in chunks)
-	public final double innerRadius;
-	public final double outerRadius;
-	
-	public Ring(int strongholdsInRing, int ring) {
-		this.numStrongholds = strongholdsInRing;
-		this.ring = ring;
-		this.innerRadius = StrongholdConstants.distParam * ((4 + ring * 6) - 0.5D * 2.5D);
-		this.outerRadius = StrongholdConstants.distParam * ((4 + ring * 6) + 0.5D * 2.5D);
-	}
-	
-}
+

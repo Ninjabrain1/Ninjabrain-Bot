@@ -26,6 +26,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference showAdvancedOptions;
 	public BooleanPreference showAngleErrors;
 	public BooleanPreference autoReset;
+	public BooleanPreference useAdvStatistics;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
 	
@@ -61,7 +62,7 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.undo());
 			}
 		};
-		sigma = new FloatPreference("sigma", 0.05f, 0.001f, 1f, pref) {
+		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigma(get());
@@ -114,6 +115,12 @@ public class NinjabrainBotPreferences {
 				} else {
 					gui.autoResetTimer.stop();
 				}
+			}
+		};
+		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.recalculateStronghold();
 			}
 		};
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] {0, 1, 2}, new String[] {FOURFOUR, EIGHTEIGHT, CHUNK}, pref) {

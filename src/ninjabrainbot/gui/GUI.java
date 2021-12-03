@@ -493,8 +493,8 @@ public class GUI {
 						throwPanel.setError("");
 				}
 			} else {
-				maintextLabel.setText("The throws do not intersect.");
-				certaintytextLabel.setText("Try undoing your last throw.");
+				maintextLabel.setText("Could not determine the stronghold chunk.");
+				certaintytextLabel.setText("You probably misread one of the eyes.");
 				certaintyLabel.setText("");
 				netherLabel.setText("");
 				for (int i = 0; i < throwPanels.length; i++) {
@@ -502,7 +502,7 @@ public class GUI {
 				}
 			}
 		} else {
-			maintextLabel.setText("Waiting for F3+C input...");
+			maintextLabel.setText("Waiting for F3+C...");
 			certaintytextLabel.setText("");
 			certaintyLabel.setText("");
 			netherLabel.setText("");

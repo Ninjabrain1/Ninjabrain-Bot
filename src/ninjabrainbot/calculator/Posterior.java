@@ -5,6 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import ninjabrainbot.Main;
+import ninjabrainbot.util.Profiler;
+
 public class Posterior {
 	
 	IPrior prior;
@@ -12,13 +15,18 @@ public class Posterior {
 	double sigma;
 	
 	public Posterior(double sigma, List<Throw> eyeThrows) {
+		Profiler.clear();
+		Profiler.start("Calculate posterior");
 		this.sigma = sigma;
-		prior = new RayApproximatedPrior(eyeThrows.get(0));
+		Profiler.start("Calculate prior");
+		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma) / 180.0 * Math.PI);
+		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x;
 		double pz = eyeThrows.get(0).z;
-		double maxDist = StrongholdConstants.getMaxDistance(pz, pz) / 16.0;
+		double maxDist = StrongholdConstants.getMaxDistance(px, pz) / 16.0;
 		double maxDist2 = maxDist * maxDist;
+		Profiler.stopAndStart("Copy chunks from prior");
 		for (Chunk c : prior.getChunks()) {
 			Chunk clone = c.clone();
 			double dx = clone.x - px / 16.0;
@@ -28,9 +36,15 @@ public class Posterior {
 			}
 			chunks.add(clone);
 		}
+		Profiler.stopAndStart("Measurement error conditioning");
 		for (Throw t : eyeThrows) {
 			condition(t);
 		}
+		Profiler.stopAndStart("Closest stronghold conditioning");
+		if (Main.preferences.useAdvStatistics.get())
+			closestStrongholdCondition(eyeThrows.get(0), 0.001);
+		Profiler.stop();
+		Profiler.print();
 	}
 	
 	public void condition(Throw t) {
@@ -92,6 +106,115 @@ public class Posterior {
 	
 	public List<Chunk> getChunks() {
 		return chunks;
+	}
+	
+	/**
+	 * Conditions all chunk weights on the fact that the stringhold is closer than any other stronghold.
+	 * This actions is relatively costly, and is approximated for all chunks below the given threshold.
+	 * @param probabilityTheshold
+	 */
+	private void closestStrongholdCondition(Throw t, double probabilityTheshold) {
+		// Update weights
+//		chunks.forEach((chunk) -> closestStrongholdCondition(chunk, t));
+		Profiler.start("Sort chunks");
+		chunks.sort((c1, c2) -> -Double.compare(c1.weight, c2.weight));
+		double totalClosestStrongholdProbability = 0;
+		int samples = 0;
+		Profiler.stopAndStart("Calculate closest stronghold probability");
+		for (int i = 0; i < chunks.size(); i++) {
+			Chunk c = chunks.get(i);
+			if (i < 100 || c.weight > probabilityTheshold) {
+				double a = closestStrongholdCondition(c, t);
+				totalClosestStrongholdProbability += a;
+				samples++;
+			} else {
+				c.weight *= totalClosestStrongholdProbability/samples; // Approximation, no need to be precise for chunks that dont matter
+			}
+		}
+		System.out.println(totalClosestStrongholdProbability/samples);
+		Profiler.stopAndStart("Normalize");
+		// Normalize
+		double weightSum = 0.0;
+		for (Chunk chunk : chunks) {
+			weightSum += chunk.weight;
+		}
+		final double totalWeight = weightSum;
+		chunks.forEach((chunk) -> chunk.weight /= totalWeight);
+		Profiler.stop();
+	}
+	
+	int K = 7;
+	private double closestStrongholdCondition(Chunk chunk, Throw t) {
+		double closestStrongholdProbability = 1;
+		double deltax = chunk.x + 0.5 - t.x/16.0;
+		double deltaz = chunk.z + 0.5 - t.z/16.0;
+		double r_p = Math.sqrt(t.x * t.x + t.z * t.z)/16.0;
+		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
+		double phi_prime = -Math.atan2(chunk.x, chunk.z);
+		double phi_p = -Math.atan2(t.x, t.z);
+		double maxDist = StrongholdConstants.getMaxDistance(t.x, t.z) / 16.0;
+		double stronghold_r_min = r_p - maxDist;
+		double stronghold_r_max = r_p + maxDist;
+		Ring ring_chunk = Ring.get(Math.sqrt(chunk.x * chunk.x + chunk.z * chunk.z));
+		if (ring_chunk == null) {
+			return 0;
+		}
+		for (int i = 0; i < StrongholdConstants.numRings; i++) {
+			Ring ring = Ring.get(i);
+			if (stronghold_r_max < ring.innerRadius || stronghold_r_min > ring.outerRadius)
+				continue;
+			boolean sameRing = ring_chunk.ring == ring.ring;
+			double ak = ring_chunk.innerRadius;
+			double dphi = sameRing ? (2.0/(2.0 * K + 1) * 15 * Math.sqrt(2) / ak) : (2.0/(2.0 * K + 1) * Math.PI / ring.numStrongholds);
+			for (int l = 0; l < ring.numStrongholds; l++) {
+				if (sameRing && l == 0) {
+					continue;
+				}
+				double integral = integral(ring, l, phi_prime, dphi,phi_p, r_p, d_i, sameRing);
+				closestStrongholdProbability *= 1.0 - integral;
+			}
+		}
+		chunk.weight *= closestStrongholdProbability;
+		return closestStrongholdProbability;
+	}
+	
+	private double integral(Ring ring, int l, double phi_prime, double dphi, double phi_p, double r_p, double d_i, boolean sameRingAsChunk) {
+		double phi_prime_l_mu = phi_prime + (l * 2 * Math.PI / ring.numStrongholds);
+		double pdfint = 0;
+		double integral = 0;
+		for (int k = -K; k <= K; k++) {
+			double delta_phi = k * dphi;
+			double pdf = 0;
+			if (sameRingAsChunk) {
+				pdf = Math.pow(1 + delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5) * Math.pow(1 - delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5);
+			} else {
+				pdf = 1;
+			}
+			pdfint += pdf * dphi;
+			double phi_prime_l = phi_prime_l_mu + k * dphi;
+			double gamma = phi_p - phi_prime_l;
+			double sin_beta = r_p / d_i * Math.sin(gamma);
+			if (sin_beta < 1.0 && sin_beta > -1.0) {
+				double beta = Math.asin(sin_beta);
+				double alpha0 = beta - gamma;
+				double alpha1 = Math.PI - gamma - beta;
+				double R0 = d_i * Math.sin(alpha0) / Math.sin(gamma);
+				double R1 = d_i * Math.sin(alpha1) / Math.sin(gamma);
+				if (R1 > ring.outerRadiusPostSnapping)
+					R1 = ring.outerRadiusPostSnapping;
+				if (R0 < ring.innerRadiusPostSnapping)
+					R0 = ring.innerRadiusPostSnapping;
+				if (R0 > ring.outerRadiusPostSnapping)
+					R0 = ring.outerRadiusPostSnapping;
+				if (R1 < ring.innerRadiusPostSnapping)
+					R1 = ring.innerRadiusPostSnapping;
+				integral += pdf * (ApproximatedDensity.cumulativePolar(R1) - ApproximatedDensity.cumulativePolar(R0)) * dphi / ring.numStrongholds;
+			} // else integrand is 0
+		}
+		integral /= pdfint;
+		if (integral > 1.0)
+			integral = 1.0;
+		return integral;
 	}
 	
 }

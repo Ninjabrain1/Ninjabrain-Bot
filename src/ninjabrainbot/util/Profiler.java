@@ -34,6 +34,13 @@ public class Profiler {
 		}
 	}
 	
+	public static void clear() {
+		if (enabled) {
+			root = new Timer(null, "root");
+			active = root;
+		}
+	}
+	
 }
 class Timer {
 	

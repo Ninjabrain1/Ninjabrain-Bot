@@ -1,5 +1,6 @@
 package ninjabrainbot.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -139,6 +140,7 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.setAlignmentX(0.5f);
 		ac1.add(calibrateButton);
 		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
+		ac1.add(new CheckboxPanel(gui, "Use advanced stronghold statistics", Main.preferences.useAdvStatistics));
 		ac1.add(Box.createGlue());
 		if (KeyboardListener.registered) {
 			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);
@@ -253,8 +255,8 @@ class CheckboxPanel extends ThemedPanel {
 				preference.onChangedByUser(gui);
 			}
 		};
-		add(checkbox);
-		add(descLabel);
+		add(checkbox, BorderLayout.LINE_START);
+		add(descLabel, BorderLayout.CENTER);
 		setOpaque(false);
 	}
 	

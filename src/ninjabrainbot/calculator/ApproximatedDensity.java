@@ -6,6 +6,7 @@ public class ApproximatedDensity {
 	
 	private static final int deltaR = 1; // discretisation step size (in chunks)
 	private static double[] density; // approximated density
+	private static double[] cumulative_r_space; // approximated density
 	
 	public static void init() {
 		if (density != null)
@@ -54,6 +55,12 @@ public class ApproximatedDensity {
 				}
 			}
 		}
+		cumulative_r_space = new double[StrongholdConstants.maxChunk / deltaR + 5];
+		double cumsum = 0;
+		for (int i = 0; i < cumulative_r_space.length; i++) {
+			cumsum += density[i] * i * deltaR * 2.0 * Math.PI;
+			cumulative_r_space[i] = cumsum;
+		}
 	}
 	
 	public static double density(double cx, double cz) {
@@ -64,6 +71,17 @@ public class ApproximatedDensity {
 		int i0 = (int) k;
 		int i1 = (int) k + 1;
 		return i1 < density.length ? (1.0 - t) * density[i0]  + t * density[i1] : 0;
+	}
+	
+	public static double cumulativePolar(double r) {
+		if (r < 0)
+			return 0;
+		init();
+		double k = r / deltaR;
+		double t = k - (int) k;
+		int i0 = (int) k;
+		int i1 = (int) k + 1;
+		return i1 < cumulative_r_space.length ? (1.0 - t) * cumulative_r_space[i0]  + t * cumulative_r_space[i1] : cumulative_r_space[cumulative_r_space.length - 1];
 	}
 	
 }

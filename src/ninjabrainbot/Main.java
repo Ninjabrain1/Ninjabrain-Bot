@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = " Beta 5";
+	public static final String VERSION = " Beta 6";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
