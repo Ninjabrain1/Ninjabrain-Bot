@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
@@ -27,7 +28,6 @@ public class JThrowPanel extends ThemedPanel {
 	private JLabel correction;
 	private JLabel error;
 	private FlatButton removeButton;
-	private int index;
 
 	private boolean errorsEnabled;
 	private int correctionSgn;
@@ -41,7 +41,6 @@ public class JThrowPanel extends ThemedPanel {
 		super(gui);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
-		index = i;
 		x = new JLabel((String) null, 0);
 		z = new JLabel((String) null, 0);
 		alpha = new JLabel((String) null, 0);
@@ -55,7 +54,7 @@ public class JThrowPanel extends ThemedPanel {
 			}
 			@Override
 			public Color getBackgroundColor(Theme theme) {
-				return index % 2 == 0 ? theme.COLOR_SLIGHTLY_STRONG : theme.COLOR_SLIGHTLY_WEAK;
+				return theme.COLOR_NEUTRAL;
 			}
 		};
 		add(removeButton);
@@ -122,7 +121,7 @@ public class JThrowPanel extends ThemedPanel {
 				}
 			}
 			if (this.removeButton != null)
-				this.removeButton.setBounds(w, 0, height, height);
+				this.removeButton.setBounds(w, 0, height, height-1);
 		} else {
 			if (this.x != null)
 				this.x.setBounds(GUI.THROW_PANEL_PADDING, 0, w / 4, height);
@@ -144,7 +143,7 @@ public class JThrowPanel extends ThemedPanel {
 			if (this.error != null)
 				this.error.setBounds(GUI.THROW_PANEL_PADDING + 3 * w / 4, 0, w / 4, height);
 			if (this.removeButton != null)
-				this.removeButton.setBounds(w, 0, height, height);
+				this.removeButton.setBounds(w, 0, height, height-1);
 		}
 		error.setVisible(errorsEnabled);
 	}
@@ -168,6 +167,7 @@ public class JThrowPanel extends ThemedPanel {
 	public void updateColors(GUI gui) {
 		colorNeg = gui.theme.COLOR_NEGATIVE;
 		colorPos = gui.theme.COLOR_POSITIVE;
+		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
 		super.updateColors(gui);
 	}
 
@@ -202,7 +202,7 @@ public class JThrowPanel extends ThemedPanel {
 	
 	@Override
 	public Color getBackgroundColor(Theme theme) {
-		return index % 2 == 0 ? theme.COLOR_SLIGHTLY_STRONG : theme.COLOR_SLIGHTLY_WEAK;
+		return theme.COLOR_NEUTRAL;
 	}
 	
 	@Override

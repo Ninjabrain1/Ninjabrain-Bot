@@ -96,7 +96,7 @@ public class GUI {
 	private double lastCertainty = 0.0;
 
 	public GUI() {
-		theme = Main.preferences.theme.get() == Theme.DARK.name ? Theme.DARK : Theme.LIGHT;
+		theme = Theme.get(Main.preferences.theme.get());
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
 		
@@ -148,7 +148,7 @@ public class GUI {
 
 		// Main text
 		Profiler.stopAndStart("Create main text area");
-		maintextLabel = new ThemedLabel(this, "Waiting for F3+C input...");
+		maintextLabel = new ThemedLabel(this, "Waiting for F3+C...");
 		certaintytextLabel = new ThemedLabel(this, "");
 		certaintyLabel = new ThemedLabel(this, "") {
 			private static final long serialVersionUID = -6995689057641195351L;
@@ -175,7 +175,12 @@ public class GUI {
 		};
 		throwsLabelBG.setOpaque(true);
 		throwsLabelBG.setLayout(null);
-		throwsLabel = new ThemedLabel(this, "Ender eye throws:", true);
+		throwsLabel = new ThemedLabel(this, "Ender eye throws:", true) {
+			@Override
+			public Color getForegroundColor(Theme theme) {
+				return theme.TEXT_COLOR_NEUTRAL;
+			}
+		};
 		throwsLabelBG.add(throwsLabel);
 		frame.add(throwsLabelBG);
 		throwPanelHeader = new JThrowPanelHeader(this);
@@ -252,7 +257,7 @@ public class GUI {
 	}
 	
 	public void updateTheme() {
-		theme = Main.preferences.theme.get() == Theme.DARK.name ? Theme.DARK : Theme.LIGHT;
+		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
 	}
 

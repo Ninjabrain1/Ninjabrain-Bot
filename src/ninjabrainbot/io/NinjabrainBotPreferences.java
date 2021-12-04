@@ -129,7 +129,7 @@ public class NinjabrainBotPreferences {
 				gui.recalculateStronghold();
 			}
 		};
-		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] {0, 1}, new String[] {Theme.LIGHT.name, Theme.DARK.name}, pref) {
+		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] {0, 1, 2}, new String[] {Theme.LIGHT.name, Theme.DARK.name, Theme.BLUE.name}, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.updateTheme();

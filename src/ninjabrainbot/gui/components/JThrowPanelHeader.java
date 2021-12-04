@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
@@ -65,26 +66,33 @@ public class JThrowPanelHeader extends ThemedLabel {
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 		int w = width - 2*GUI.THROW_PANEL_PADDING - height;
+		int y0 = -1;
 		if (!errorsEnabled) {
 			if (this.x != null)
-				this.x.setBounds(GUI.THROW_PANEL_PADDING, 0, w / 3, height);
+				this.x.setBounds(GUI.THROW_PANEL_PADDING, y0, w / 3, height);
 			if (this.z != null)
-				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 3, 0, w / 3, height);
+				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 3, y0, w / 3, height);
 			if (this.alpha != null)
-				this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3, 0, w / 3, height);
+				this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3, y0, w / 3, height);
 		} else {
 			if (this.x != null)
-				this.x.setBounds(GUI.THROW_PANEL_PADDING, 0, w / 4, height);
+				this.x.setBounds(GUI.THROW_PANEL_PADDING, y0, w / 4, height);
 			if (this.z != null)
-				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 4, 0, w / 4, height);
+				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 4, y0, w / 4, height);
 			if (this.alpha != null)
-				this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4, 0, w / 4, height);
+				this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4, y0, w / 4, height);
 			if (this.error != null)
-				this.error.setBounds(GUI.THROW_PANEL_PADDING + 3 * w / 4, 0, w / 4, height);
+				this.error.setBounds(GUI.THROW_PANEL_PADDING + 3 * w / 4, y0, w / 4, height);
 		}
 		error.setVisible(errorsEnabled);
 	}
-
+	
+	@Override
+	public void updateColors(GUI gui) {
+		super.updateColors(gui);
+		setBorder(new MatteBorder(0, 0, 2, 0, gui.theme.COLOR_STRONGEST));
+	}
+	
 	@Override
 	public void setForeground(Color fg) {
 		super.setForeground(fg);
@@ -105,7 +113,7 @@ public class JThrowPanelHeader extends ThemedLabel {
 
 	@Override
 	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_SLIGHTLY_WEAK;
+		return theme.COLOR_STRONG;
 	}
 
 	@Override

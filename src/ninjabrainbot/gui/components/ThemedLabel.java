@@ -31,7 +31,7 @@ public class ThemedLabel extends JLabel implements ThemedComponent {
 		setFont(gui.fontSize(getTextSize(gui.textSize), !bold));
 	}
 	
-	public final void updateColors(GUI gui) {
+	public void updateColors(GUI gui) {
 		Color bg = getBackgroundColor(gui.theme);
 		if (bg != null)
 			setBackground(bg);
