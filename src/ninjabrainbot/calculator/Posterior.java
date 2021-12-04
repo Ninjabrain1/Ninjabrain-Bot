@@ -131,7 +131,6 @@ public class Posterior {
 				c.weight *= totalClosestStrongholdProbability/samples; // Approximation, no need to be precise for chunks that dont matter
 			}
 		}
-		System.out.println(totalClosestStrongholdProbability/samples);
 		Profiler.stopAndStart("Normalize");
 		// Normalize
 		double weightSum = 0.0;
