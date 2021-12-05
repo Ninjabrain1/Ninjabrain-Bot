@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Locale;
 
@@ -11,7 +12,7 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 /**
@@ -101,22 +102,22 @@ public class JThrowPanel extends ThemedPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int w = width - 2*GUI.THROW_PANEL_PADDING - height;
+		int w = width - 2*0 - height;
 		if (!errorsEnabled) {
 			if (this.x != null)
-				this.x.setBounds(GUI.THROW_PANEL_PADDING, 0, w / 3, height);
+				this.x.setBounds(0, 0, w / 3, height);
 			if (this.z != null)
-				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 3, 0, w / 3, height);
+				this.z.setBounds(0 + w / 3, 0, w / 3, height);
 			if (this.alpha != null) {
 				if (correctionSgn != 0) {
 					int w1 = w / 3 * 3 / 4;
 					int dx = w / 3 * 1 / 8;
-					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3 - dx, 0, w1, height);
+					this.alpha.setBounds(0 + 2 * w / 3 - dx, 0, w1, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.RIGHT);
-					this.correction.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3 + w1 - dx, 0, w1, height);
+					this.correction.setBounds(0 + 2 * w / 3 + w1 - dx, 0, w1, height);
 					this.correction.setHorizontalAlignment(SwingConstants.LEFT);
 				} else {
-					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 3, 0, w / 3, height);
+					this.alpha.setBounds(0 + 2 * w / 3, 0, w / 3, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.CENTER);
 				}
 			}
@@ -124,24 +125,24 @@ public class JThrowPanel extends ThemedPanel {
 				this.removeButton.setBounds(w, 0, height, height-1);
 		} else {
 			if (this.x != null)
-				this.x.setBounds(GUI.THROW_PANEL_PADDING, 0, w / 4, height);
+				this.x.setBounds(0, 0, w / 4, height);
 			if (this.z != null)
-				this.z.setBounds(GUI.THROW_PANEL_PADDING + w / 4, 0, w / 4, height);
+				this.z.setBounds(0 + w / 4, 0, w / 4, height);
 			if (this.alpha != null) {
 				if (correctionSgn != 0) {
 					int w1 = w / 4 * 3 / 4;
 					int dx = w / 4 * 1 / 8;
-					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4 - dx, 0, w1, height);
+					this.alpha.setBounds(0 + 2 * w / 4 - dx, 0, w1, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.RIGHT);
-					this.correction.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4 + w1 - dx, 0, w1, height);
+					this.correction.setBounds(0 + 2 * w / 4 + w1 - dx, 0, w1, height);
 					this.correction.setHorizontalAlignment(SwingConstants.LEFT);
 				} else {
-					this.alpha.setBounds(GUI.THROW_PANEL_PADDING + 2 * w / 4, 0, w / 4, height);
+					this.alpha.setBounds(0 + 2 * w / 4, 0, w / 4, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.CENTER);
 				}
 			}
 			if (this.error != null)
-				this.error.setBounds(GUI.THROW_PANEL_PADDING + 3 * w / 4, 0, w / 4, height);
+				this.error.setBounds(0 + 3 * w / 4, 0, w / 4, height);
 			if (this.removeButton != null)
 				this.removeButton.setBounds(w, 0, height, height-1);
 		}
@@ -170,7 +171,13 @@ public class JThrowPanel extends ThemedPanel {
 		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
 		super.updateColors(gui);
 	}
-
+	
+	@Override
+	public void updateSize(GUI gui) {
+		super.updateSize(gui);
+		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
+	}
+	
 	public void setThrow(Throw t) {
 		if (t == null) {
 			x.setText(null);
@@ -194,10 +201,14 @@ public class JThrowPanel extends ThemedPanel {
 		}
 		this.t = t;
 	}
+	
+	public boolean hasThrow() {
+		return t != null;
+	}
 
 	@Override
-	public int getTextSize(TextSizePreference p) {
-		return p.THROW_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_SMALL;
 	}
 	
 	@Override

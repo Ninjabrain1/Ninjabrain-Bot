@@ -16,7 +16,7 @@ public class Divider extends JSeparator implements ThemedComponent {
 	}
 
 	@Override
-	public void updateFont(GUI gui) {
+	public void updateSize(GUI gui) {
 	}
 
 	@Override

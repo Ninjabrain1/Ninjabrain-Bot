@@ -2,6 +2,7 @@ package ninjabrainbot.gui;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 
@@ -9,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
@@ -40,6 +42,7 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
 		add(mainPanel);
 		label = new ThemedLabel(gui, "");
+		label.setVerticalAlignment(SwingConstants.TOP);
 		mainPanel.add(label);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
 		FlatButton downloadButton = new FlatButton(gui, "Download .jar");
@@ -53,13 +56,10 @@ public class NotificationsFrame extends ThemedFrame {
 	
 	@Override
 	public void updateBounds(GUI gui) {
-		int width = 300;
-		int height = 200;
-		setShape(new RoundRectangle2D.Double(0, 0, width, height, GUI.WINDOW_ROUNDING, GUI.WINDOW_ROUNDING));
-		setSize(width, height);
-		titlebarPanel.setBounds(0, 0, getWidth(), GUI.TITLE_BAR_HEIGHT);
-		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.textSize.TITLE_BAR_TEXT_SIZE)/2, 0, 200, GUI.TITLE_BAR_HEIGHT);
-		mainPanel.setBounds(0, GUI.TITLE_BAR_HEIGHT, width, height - GUI.TITLE_BAR_HEIGHT);
+		super.updateBounds(gui);
+		label.setMaximumSize(new Dimension(gui.size.WIDTH, Integer.MAX_VALUE));
+		setSize(gui.size.WIDTH * 7/8, gui.size.WIDTH * 5/8);
+		setShape(new RoundRectangle2D.Double(0, 0, gui.size.WIDTH * 7/8, gui.size.WIDTH * 5/8, gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
 	}
 	
 	public void updateFontsAndColors() {
@@ -99,7 +99,8 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("<html>Version " + url.tag + " is available. After downloading the new jar you can delete this jar (your settings will automatically transfer). This notification can be disabled in the settings menu.</html>");
+		label.setText("<html>Version " + url.tag + " is available.  After downloading the new jar you can delete this jar (your settings will automatically transfer). This notification can be disabled in the settings menu.</html>");
+		updateBounds(gui);
 	}
 
 	public Object getURL() {

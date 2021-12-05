@@ -13,7 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
@@ -64,8 +64,8 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	}
 
 	@Override
-	public void updateFont(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.textSize), true));
+	public void updateSize(GUI gui) {
+		setFont(gui.fontSize(getTextSize(gui.size), true));
 	}
 
 	@Override
@@ -93,8 +93,8 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		field.setCaretColor(bg);
 	}
 	
-	public int getTextSize(TextSizePreference p) {
-		return p.SETTINGS_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_SMALL;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

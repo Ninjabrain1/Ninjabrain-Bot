@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 public class ThemedPanel extends JPanel implements ThemedComponent {
@@ -23,8 +23,8 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 		this.bold = bold;
 	}
 	
-	public void updateFont(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.textSize), !bold));
+	public void updateSize(GUI gui) {
+		setFont(gui.fontSize(getTextSize(gui.size), !bold));
 	}
 	
 	public void updateColors(GUI gui) {
@@ -36,8 +36,8 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 			setForeground(fg);
 	}
 	
-	public int getTextSize(TextSizePreference p) {
-		return p.MAIN_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_MEDIUM;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 public class NinjabrainBotPreferences {
@@ -29,6 +30,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference useAdvStatistics;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
+	public MultipleChoicePreference size;
 	
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
@@ -120,19 +122,25 @@ public class NinjabrainBotPreferences {
 		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
-				gui.recalculateStronghold();
+				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] {0, 1, 2}, new String[] {FOURFOUR, EIGHTEIGHT, CHUNK}, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
-				gui.recalculateStronghold();
+				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
 		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] {0, 1, 2}, new String[] {Theme.LIGHT.name, Theme.DARK.name, Theme.BLUE.name}, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
-				gui.updateTheme();
+				SwingUtilities.invokeLater(() -> gui.updateTheme());
+			}
+		};
+		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] {0, 1}, new String[] {SizePreference.REGULAR.name, SizePreference.LARGE.name}, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.updateSizePreference());
 			}
 		};
 	}

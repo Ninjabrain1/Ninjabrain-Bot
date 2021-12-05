@@ -3,9 +3,10 @@ package ninjabrainbot.gui.components;
 import java.awt.Color;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 public class ThemedLabel extends JLabel implements ThemedComponent {
@@ -22,13 +23,18 @@ public class ThemedLabel extends JLabel implements ThemedComponent {
 	}
 	
 	public ThemedLabel(GUI gui, String text, boolean bold) {
+		this(gui, text, bold, false);
+	}
+	
+	public ThemedLabel(GUI gui, String text, boolean bold, boolean centered) {
 		super(text);
 		gui.registerThemedComponent(this);
 		this.bold = bold;
+		setHorizontalAlignment(centered ? SwingConstants.CENTER : SwingConstants.LEFT);
 	}
 	
-	public final void updateFont(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.textSize), !bold));
+	public void updateSize(GUI gui) {
+		setFont(gui.fontSize(getTextSize(gui.size), !bold));
 	}
 	
 	public void updateColors(GUI gui) {
@@ -40,8 +46,8 @@ public class ThemedLabel extends JLabel implements ThemedComponent {
 			setForeground(fg);
 	}
 	
-	public int getTextSize(TextSizePreference p) {
-		return p.MAIN_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_MEDIUM;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

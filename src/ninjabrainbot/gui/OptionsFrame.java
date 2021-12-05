@@ -63,7 +63,7 @@ public class OptionsFrame extends ThemedFrame {
 		// Windows that can be swapped between
 		settingsPanel = new JPanel();
 		settingsPanel.setOpaque(false);
-		settingsPanel.setLayout(null);
+		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
 		add(settingsPanel);
 		calibrationPanel = new CalibrationPanel(gui, this);
 		add(calibrationPanel);
@@ -103,6 +103,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(gui, "Display stronghold location using", Main.preferences.strongholdDisplayType));
 		column2.add(new RadioButtonPanel(gui, "Theme", Main.preferences.theme));
+		column2.add(new RadioButtonPanel(gui, "Window size", Main.preferences.size));
 		column2.add(Box.createGlue());
 		column2.add(Box.createGlue());
 		column2.add(Box.createGlue());
@@ -132,8 +133,8 @@ public class OptionsFrame extends ThemedFrame {
 		JButton calibrateButton = new FlatButton(gui, "Calibrate standard deviation") {
 			private static final long serialVersionUID = -673676238214760361L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		calibrateButton.addActionListener(p -> startCalibrating());
@@ -177,17 +178,9 @@ public class OptionsFrame extends ThemedFrame {
 	}
 	
 	public void updateBounds(GUI gui) {
-		int width = WINDOW_WIDTH;
-		int h1 = mainPanel.getPreferredSize().height;
-		int h2 = Main.preferences.showAdvancedOptions.get() ? advPanel.getPreferredSize().height : 0;
-		int height = GUI.TITLE_BAR_HEIGHT + h1 + h2;
-		setShape(new RoundRectangle2D.Double(0, 0, width, height, GUI.WINDOW_ROUNDING, GUI.WINDOW_ROUNDING));
-		setSize(width, height);
-		settingsPanel.setSize(width, height);
-		calibrationPanel.setSize(width, height);
-		mainPanel.setBounds(0, GUI.TITLE_BAR_HEIGHT, WINDOW_WIDTH, h1);
-		advPanel.setBounds(0, GUI.TITLE_BAR_HEIGHT + h1, width, h2);
 		super.updateBounds(gui);
+		pack();
+		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
 	}
 
 	public void updateFontsAndColors() {
@@ -243,8 +236,8 @@ class CheckboxPanel extends ThemedPanel {
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		checkbox = new CustomCheckbox(preference.get()) {
@@ -277,8 +270,8 @@ class TextboxPanel extends ThemedPanel {
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		textfield = new DecimalTextField(gui, preference.get(), preference.min(), preference.max()) {
@@ -291,7 +284,7 @@ class TextboxPanel extends ThemedPanel {
 		};
 		
 		Dimension size = textfield.getPreferredSize();
-		size.width = 50;
+		size.width = 60;
 		textfield.setPreferredSize(size);
 		add(Box.createHorizontalStrut(0));
 		add(descLabel);
@@ -320,8 +313,8 @@ class RadioButtonPanel extends ThemedPanel {
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		radioButtomGroup = new RadioButtonGroup(gui, preference.getChoices(), preference.get()) {
@@ -357,16 +350,16 @@ class HotkeyPanel extends ThemedPanel {
 		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
 			private static final long serialVersionUID = -658733822961822860L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		descLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		button = new FlatButton(gui, getKeyText()) {
 			private static final long serialVersionUID = 1865599754734492942L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		button.addActionListener(p -> clicked());

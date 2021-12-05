@@ -25,10 +25,10 @@ import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Histogram;
 import ninjabrainbot.gui.OptionsFrame;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
-public class CalibrationPanel extends JPanel {
+public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private static final long serialVersionUID = 1739847622825900761L;
 	
@@ -49,6 +49,7 @@ public class CalibrationPanel extends JPanel {
 	
 	public CalibrationPanel(GUI gui, OptionsFrame frame) {
 		this.gui = gui;
+		gui.registerThemedComponent(this);
 		optionsFrame = frame;
 		calibrator = new Calibrator();
 		setOpaque(false);
@@ -61,8 +62,8 @@ public class CalibrationPanel extends JPanel {
 		titletextLabel = new ThemedLabel(gui, "Settings -> Calibration", true) {
 			private static final long serialVersionUID = -1284032833229918460L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.TITLE_BAR_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_TITLE_LARGE;
 			}
 		};
 		titlebarPanel.add(titletextLabel);
@@ -72,7 +73,6 @@ public class CalibrationPanel extends JPanel {
 		panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(new EmptyBorder(5, 20, 20, 20));
 		add(panel);
 		labels = new InstructionLabel[] {
 				new InstructionLabel(gui, "Make a creative world, start flying (double tap space), and then press F3+C."),
@@ -82,8 +82,8 @@ public class CalibrationPanel extends JPanel {
 		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>The program will determine how accurate you are at measuring ender eyes. The lower the standard deviation (STD) is, the more accurate you are. By knowing what your STD is the calculator can make better predictions. Before following the steps below, make sure your 'Open Command' key in Minecraft is set to its default value.</div></html>") {
 			private static final long serialVersionUID = -5378176835369680709L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.SETTINGS_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
 			}
 		};
 		explanation.setAlignmentX(0.5f);
@@ -148,14 +148,25 @@ public class CalibrationPanel extends JPanel {
 	}
 	
 	@Override
-	public void setSize(int width, int height) {
-		super.setSize(width, height);
-		titlebarPanel.setBounds(0, 0, width, GUI.TITLE_BAR_HEIGHT);
-		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.textSize.TITLE_BAR_TEXT_SIZE)/2, 0, 300, GUI.TITLE_BAR_HEIGHT);
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+		int titlebarHeight = titlebarPanel.getPreferredSize().height;
+		titlebarPanel.setBounds(0, 0, width, titlebarHeight);
+		titletextLabel.setBounds((titlebarHeight - gui.size.TEXT_SIZE_TITLE_LARGE)/2, 0, 300, titlebarHeight);
 		int cancelButtonWidth = cancelButton.getPreferredSize().width;
-		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, GUI.TITLE_BAR_HEIGHT);
-		panel.setBounds(0, GUI.TITLE_BAR_HEIGHT, width, height - GUI.TITLE_BAR_HEIGHT);
+		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, titlebarHeight);
+		panel.setBounds(0, titlebarHeight, width, height - titlebarHeight);
 	}
+	
+//	@Override
+//	public void setSize(int width, int height) {
+//		super.setSize(width, height);
+//		titlebarPanel.setBounds(0, 0, width, GUI.TITLE_BAR_HEIGHT);
+//		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.size.TEXT_SIZE_LARGE)/2, 0, 300, GUI.TITLE_BAR_HEIGHT);
+//		int cancelButtonWidth = cancelButton.getPreferredSize().width;
+//		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, GUI.TITLE_BAR_HEIGHT);
+//		panel.setBounds(0, GUI.TITLE_BAR_HEIGHT, width, height - GUI.TITLE_BAR_HEIGHT);
+//	}
 	
 	private FlatButton getCancelButton() {
 		FlatButton button = new TitleBarButton(gui, "Cancel") {
@@ -165,8 +176,8 @@ public class CalibrationPanel extends JPanel {
 				return theme.COLOR_EXIT_BUTTON_HOVER;
 			}
 			@Override
-			public void updateFont(GUI gui) {
-				setFont(gui.fontSize(getTextSize(gui.textSize), false));
+			public void updateSize(GUI gui) {
+				setFont(gui.fontSize(getTextSize(gui.size), false));
 			}
 		};
 		button.addActionListener(p -> optionsFrame.stopCalibrating());
@@ -237,6 +248,15 @@ public class CalibrationPanel extends JPanel {
 		}
 	}
 	
+	@Override
+	public void updateColors(GUI gui) {
+	}
+	
+	@Override
+	public void updateSize(GUI gui) {
+		panel.setBorder(new EmptyBorder(gui.size.PADDING, 2 * gui.size.PADDING, 2 * gui.size.PADDING, 2 * gui.size.PADDING));
+	}
+	
 }
 
 class InstructionLabel extends ThemedLabel {
@@ -281,8 +301,8 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 	}
 	
 	@Override
-	public void updateFont(GUI gui) {
-		area.setFont(gui.fontSize(getTextSize(gui.textSize), true));
+	public void updateSize(GUI gui) {
+		area.setFont(gui.fontSize(getTextSize(gui.size), true));
 	}
 
 	@Override
@@ -299,8 +319,8 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		return theme.COLOR_STRONGER;
 	}
 
-	public int getTextSize(TextSizePreference p) {
-		return p.TINY_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_TINY;
 	}
 	
 }

@@ -12,7 +12,7 @@ import javax.swing.JRadioButton;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 public class RadioButtonGroup extends ThemedPanel {
@@ -72,8 +72,8 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		setRolloverSelectedIcon(selected_rollover_icon);
 	}
 	
-	public final void updateFont(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.textSize), true));
+	public final void updateSize(GUI gui) {
+		setFont(gui.fontSize(getTextSize(gui.size), true));
 	}
 	
 	public final void updateColors(GUI gui) {
@@ -85,8 +85,8 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 			setForeground(fg);
 	}
 	
-	public int getTextSize(TextSizePreference p) {
-		return p.SETTINGS_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_SMALL;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

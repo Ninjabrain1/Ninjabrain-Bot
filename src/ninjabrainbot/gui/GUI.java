@@ -1,6 +1,5 @@
 package ninjabrainbot.gui;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
@@ -14,7 +13,6 @@ import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -23,17 +21,11 @@ import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.calculator.TriangulationResult;
 import ninjabrainbot.calculator.Triangulator;
 import ninjabrainbot.gui.components.CalibrationPanel;
-import ninjabrainbot.gui.components.FlatButton;
-import ninjabrainbot.gui.components.JThrowPanel;
-import ninjabrainbot.gui.components.JThrowPanelHeader;
-import ninjabrainbot.gui.components.NotificationsButton;
+import ninjabrainbot.gui.components.EnderEyePanel;
+import ninjabrainbot.gui.components.MainButtonPanel;
+import ninjabrainbot.gui.components.MainTextArea;
+import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.components.ThemedFrame;
-import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.components.ThemedPanel;
-import ninjabrainbot.gui.components.TitleBarButton;
-import ninjabrainbot.gui.components.TitleBarPanel;
-import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.Profiler;
 
@@ -41,41 +33,12 @@ import ninjabrainbot.util.Profiler;
  * Main class for the user interface.
  */
 public class GUI {
-
-	public static final int WINDOW_WIDTH = 320;
-	public static final int WINDOW_ROUNDING = 7;
-	public static final int TITLE_BAR_HEIGHT = 28;
-	public static final int THROW_PANEL_HEIGHT = 16;
-	public static final int MAIN_TEXT_HEIGHT = 20;
-	public static final int BUTTON_HEIGHT = 24;
-	public static final int BUTTON_WIDTH = 72;
-	public static final int PADDING = 6;
-	public static final int MAIN_TEXT_TOP_PADDING = 2;
-	public static final int THROW_PANEL_HEADER_HEIGHT = 16;
-	public static final int THROW_PANEL_PADDING = 0;
 	
-	public static final int TITLE_BAR_BUTTON_WH = TITLE_BAR_HEIGHT;
-	public static final int MAIN_PANEL_HEIGHT = 3 * MAIN_TEXT_HEIGHT + 2 * MAIN_TEXT_TOP_PADDING;
-
-	public static final String TITLE_TEXT = "Ninjabrain Bot ";
-	public static final String CERTAINTY_TEXT = "Certainty: ";
-	public static final String VERSION_TEXT =  "v" + Main.VERSION;
-	public static final int MAX_THROWS = 10;
-	public static final int DEFAULT_SHOWN_THROWS = 3;
+	private MainTextArea mainTextArea;
+	private MainButtonPanel mainButtonPanel;
+	private EnderEyePanel enderEyePanel;
 	
-	public ThemedFrame frame;
-	private NotificationsButton notificationsButton;
-	private JLabel maintextLabel;
-	private JLabel certaintytextLabel;
-	private JLabel certaintyLabel;
-	private JLabel netherLabel;
-	private JLabel versiontextLabel;
-	private ThemedPanel throwsLabelBG;
-	private JLabel throwsLabel;
-	private FlatButton resetButton;
-	private FlatButton undoButton;
-	private JThrowPanelHeader throwPanelHeader;
-	private JThrowPanel[] throwPanels;
+	public NinjabrainBotFrame frame;
 	private OptionsFrame optionsFrame;
 	private NotificationsFrame notificationsFrame;
 	private CalibrationPanel calibrationPanel;
@@ -83,27 +46,29 @@ public class GUI {
 	private Font font;
 	private Font fontLight;
 	public Theme theme;
-	public TextSizePreference textSize = TextSizePreference.REGULAR;
+	public SizePreference size;
 	private ArrayList<ThemedComponent> themedComponents;
 	
-	private TextAnimator textAnimator;
 	public Timer autoResetTimer;
 	private static int autoResetDelay = 15 * 60 * 1000;
 	
+	public static final int MAX_THROWS = 10;
 	private Triangulator triangulator;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
-	private double lastCertainty = 0.0;
 
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
+		size = SizePreference.get(Main.preferences.size.get());
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
+		triangulator = new Triangulator();
+		eyeThrows = new ArrayList<Throw>();
+		eyeThrowsLast = new ArrayList<Throw>();
 		
 		Profiler.start("Create frame");
-		frame = new ThemedFrame(this, TITLE_TEXT);
-		frame.setLocation(Main.preferences.windowX.get(), Main.preferences.windowY.get()); // Set window position
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new NinjabrainBotFrame(this);
+		notificationsFrame = frame.getNotificationsFrame();
 		
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
@@ -124,94 +89,26 @@ public class GUI {
 		frame.setIconImage(img.getImage());
 
 		Profiler.stopAndStart("Create gui components");
-		// Create title bar
-		Profiler.start("Create title bar");
-		TitleBarPanel titleBar = frame.getTitleBar();
-		versiontextLabel = new ThemedLabel(this, VERSION_TEXT) {
-			private static final long serialVersionUID = 7210941876032010219L;
-			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.VERSION_TEXT_SIZE;
-			}
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.TEXT_COLOR_WEAK;
-			}
-		};
-		titleBar.add(versiontextLabel);
-		titleBar.addButton(getExitButton());
-		titleBar.addButton(getMinimizeButton());
-		titleBar.addButton(getSettingsButton());
-		notificationsButton = new NotificationsButton(this);
-		notificationsFrame = notificationsButton.getNotificationsFrame();
-		titleBar.addButton(notificationsButton);
-
 		// Main text
 		Profiler.stopAndStart("Create main text area");
-		maintextLabel = new ThemedLabel(this, "Waiting for F3+C...");
-		certaintytextLabel = new ThemedLabel(this, "");
-		certaintyLabel = new ThemedLabel(this, "") {
-			private static final long serialVersionUID = -6995689057641195351L;
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.CERTAINTY_COLOR_MAP.get(lastCertainty);
-			}
-		};
-		netherLabel = new ThemedLabel(this, "");
-		netherLabel.setVisible(Main.preferences.showNetherCoords.get());
-		frame.add(maintextLabel);
-		frame.add(certaintytextLabel);
-		frame.add(certaintyLabel);
-		frame.add(netherLabel);
+		mainTextArea = new MainTextArea(this);
+		frame.add(mainTextArea);
 		
 		// "Throws" text
-		Profiler.stopAndStart("Create main text area");
-		throwsLabelBG = new ThemedPanel(this) {
-			private static final long serialVersionUID = -8143875137607726122L;
-			@Override
-			public Color getBackgroundColor(Theme theme) {
-				return theme.COLOR_STRONG;
-			}
-		};
-		throwsLabelBG.setOpaque(true);
-		throwsLabelBG.setLayout(null);
-		throwsLabel = new ThemedLabel(this, "Ender eye throws:", true) {
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.TEXT_COLOR_NEUTRAL;
-			}
-		};
-		throwsLabelBG.add(throwsLabel);
-		frame.add(throwsLabelBG);
-		throwPanelHeader = new JThrowPanelHeader(this);
-		frame.add(throwPanelHeader);
-		
-		// Reset/Undo button
-		Profiler.stopAndStart("Create reset/undo buttons");
-		resetButton = getResetButton();
-		frame.add(resetButton);
-		undoButton = getUndoButton();
-		frame.add(undoButton);
-		
+		Profiler.stopAndStart("Create main button area");
+		mainButtonPanel = new MainButtonPanel(this);
+		frame.add(mainButtonPanel);
+
 		// Throw panels
 		Profiler.stopAndStart("Create throw panels");
-		throwPanels = new JThrowPanel[MAX_THROWS];
-		for (int i = 0; i < MAX_THROWS; i++) {
-			throwPanels[i] = new JThrowPanel(this, i);
-			frame.add(throwPanels[i]);
-		}
-		triangulator = new Triangulator();
-		eyeThrows = new ArrayList<Throw>();
-		eyeThrowsLast = new ArrayList<Throw>();
+		enderEyePanel = new EnderEyePanel(this);
+		frame.add(enderEyePanel);
 		
 		// Settings window
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(this);
 		calibrationPanel = optionsFrame.getCalibrationPanel();
 		Profiler.stop();
-		
-		Profiler.stopAndStart("Create settings window");
-		textAnimator = new TextAnimator(theme.TEXT_COLOR_STRONG, theme.TEXT_COLOR_NEUTRAL, 200);
 		
 		Profiler.stopAndStart("Update fonts and colors");
 		updateFontsAndColors();
@@ -227,15 +124,6 @@ public class GUI {
 		autoResetTimer = new Timer(autoResetDelay, p -> {
 			resetThrows();
 			autoResetTimer.stop();
-		});
-		
-		// Shutdown hook
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				Main.preferences.windowX.set(frame.getX());
-				Main.preferences.windowY.set(frame.getY());
-			}
 		});
 	}
 	
@@ -253,16 +141,22 @@ public class GUI {
 	}
 	
 	public void setNotificationsEnabled(boolean b) {
-		notificationsButton.setVisible(b && notificationsButton.hasURL());
+		frame.getNotificationsButton().setVisible(b && frame.getNotificationsButton().hasURL());
 	}
 	
 	public void updateTheme() {
 		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
 	}
+	
+	public void updateSizePreference() {
+		size = SizePreference.get(Main.preferences.size.get());
+		updateFontsAndColors();
+		updateBounds();
+	}
 
 	public void setNetherCoordsEnabled(boolean b) {
-		netherLabel.setVisible(b);
+		mainTextArea.netherLabel.setVisible(b);
 	}
 
 	public void setAdvancedOptionsEnabled(boolean b) {
@@ -270,59 +164,12 @@ public class GUI {
 	}
 
 	public void setAngleErrorsEnabled(boolean b) {
-		throwPanelHeader.setAngleErrorsEnabled(b);
-		for (JThrowPanel p : throwPanels) {
-			p.setAngleErrorsEnabled(b);
-		}
+		enderEyePanel.setAngleErrorsEnabled(b);
 		updateBounds();
 	}
 	
 	public Font fontSize(float size, boolean light) {
 		return light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
-	}
-
-	private FlatButton getExitButton() {
-		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(this, img) {
-			private static final long serialVersionUID = -5122431392273627666L;
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-		};
-		button.addActionListener(p -> System.exit(0));
-		return button;
-	}
-
-	private FlatButton getMinimizeButton() {
-		URL iconURL = Main.class.getResource("/resources/minimize_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(this, img);
-		button.addActionListener(p -> frame.setState(JFrame.ICONIFIED));
-		return button;
-	}
-	
-	private FlatButton getSettingsButton() {
-		URL iconURL = Main.class.getResource("/resources/settings_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(this, img);
-		button.addActionListener(p -> toggleOptionsWindow());
-		return button;
-	}
-	
-	
-	
-	private FlatButton getResetButton() {
-		FlatButton button = new FlatButton(this, "Reset");
-		button.addActionListener(p -> resetThrows());
-		return button;
-	}
-	
-	private FlatButton getUndoButton() {
-		FlatButton button = new FlatButton(this, "Undo");
-		button.addActionListener(p -> undo());
-		return button;
 	}
 	
 	public void registerThemedComponent(ThemedComponent c) {
@@ -330,50 +177,38 @@ public class GUI {
 	}
 
 	private void updateBounds() {
-		// Size
-		int modifiedWindowHeight = TITLE_BAR_HEIGHT + MAIN_PANEL_HEIGHT + BUTTON_HEIGHT + THROW_PANEL_HEADER_HEIGHT + Math.max(eyeThrows.size(), DEFAULT_SHOWN_THROWS)*THROW_PANEL_HEIGHT;
-		frame.setShape(new RoundRectangle2D.Double(0, 0, WINDOW_WIDTH, modifiedWindowHeight, WINDOW_ROUNDING, WINDOW_ROUNDING));
-		frame.setSize(WINDOW_WIDTH, modifiedWindowHeight);
-		maintextLabel.setBounds(PADDING, MAIN_TEXT_TOP_PADDING + TITLE_BAR_HEIGHT, WINDOW_WIDTH - 2*PADDING, MAIN_TEXT_HEIGHT);
-		certaintytextLabel.setBounds(PADDING, MAIN_TEXT_TOP_PADDING + TITLE_BAR_HEIGHT + MAIN_TEXT_HEIGHT, WINDOW_WIDTH - 2*PADDING, MAIN_TEXT_HEIGHT);
-		int certaintywidth = getTextWidth(CERTAINTY_TEXT, fontSize(textSize.MAIN_TEXT_SIZE, true));
-		certaintyLabel.setBounds(PADDING + certaintywidth, MAIN_TEXT_TOP_PADDING + TITLE_BAR_HEIGHT + MAIN_TEXT_HEIGHT, WINDOW_WIDTH - 2*PADDING - certaintywidth, MAIN_TEXT_HEIGHT);
-		netherLabel.setBounds(PADDING, MAIN_TEXT_TOP_PADDING + TITLE_BAR_HEIGHT + MAIN_TEXT_HEIGHT * 2, WINDOW_WIDTH - 2*PADDING, MAIN_TEXT_HEIGHT);
-		int titlewidth = getTextWidth(TITLE_TEXT, fontSize(textSize.TITLE_BAR_TEXT_SIZE, false));
-		versiontextLabel.setBounds(titlewidth + (TITLE_BAR_HEIGHT - textSize.VERSION_TEXT_SIZE)/2, (textSize.TITLE_BAR_TEXT_SIZE - textSize.VERSION_TEXT_SIZE)/2, 50, TITLE_BAR_HEIGHT);
-		int throwPanelY = TITLE_BAR_HEIGHT + MAIN_PANEL_HEIGHT;
-		resetButton.setBounds(WINDOW_WIDTH - BUTTON_WIDTH, throwPanelY, BUTTON_WIDTH, BUTTON_HEIGHT);
-		undoButton.setBounds(WINDOW_WIDTH - BUTTON_WIDTH*2, throwPanelY, BUTTON_WIDTH, BUTTON_HEIGHT);
-		throwsLabelBG.setBounds(0, throwPanelY, WINDOW_WIDTH - BUTTON_WIDTH*2, BUTTON_HEIGHT);
-		throwsLabel.setBounds(PADDING, 0, WINDOW_WIDTH - BUTTON_WIDTH*2 - PADDING, BUTTON_HEIGHT);
-		throwPanelHeader.setBounds(0, throwPanelY + BUTTON_HEIGHT, WINDOW_WIDTH, THROW_PANEL_HEADER_HEIGHT);
-		for (int i = 0; i < MAX_THROWS; i++) {
-			throwPanels[i].setBounds(0, throwPanelY + i*THROW_PANEL_HEIGHT + BUTTON_HEIGHT + THROW_PANEL_HEADER_HEIGHT, WINDOW_WIDTH, THROW_PANEL_HEIGHT);
+		for (ThemedComponent tc : themedComponents) {
+			tc.updateSize(this);
 		}
+//		enderEyePanel.updateSize(this);
+		updateFontsAndColors();
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 		notificationsFrame.updateBounds(this);
+//		frame.pack();
+		frame.setSize(size.WIDTH, frame.getPreferredSize().height);
+//		frame.validate();
+		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
 	
 	private void updateFontsAndColors() {
 		// Color and font
 		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
 		frame.setBackground(theme.COLOR_NEUTRAL);
-		textAnimator.setColors(theme.TEXT_COLOR_STRONG, theme.TEXT_COLOR_NEUTRAL);
 		optionsFrame.updateFontsAndColors();
 		notificationsFrame.updateFontsAndColors();
 		for (ThemedComponent tc : themedComponents) {
 			tc.updateColors(this);
-			tc.updateFont(this);
+			tc.updateSize(this);
 		}
 	}
 	
 	private FontRenderContext frc = new FontRenderContext(null, true, false);
-	private int getTextWidth(String text, Font font) {
+	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
 	
-	private void toggleOptionsWindow() {
+	public void toggleOptionsWindow() {
 		if (optionsFrame.isVisible()) {
 			optionsFrame.close();
 		} else {
@@ -415,8 +250,7 @@ public class GUI {
 			if (t != null && i < MAX_THROWS && shouldAddThrow(t)) {
 				saveThrowsForUndo();
 				eyeThrows.add(t);
-				throwPanels[i].setThrow(t);
-				textAnimator.setJThrowPanel(throwPanels[i]);
+				enderEyePanel.setThrow(i, t);
 				onThrowsUpdated();
 			}
 		} else {
@@ -440,8 +274,7 @@ public class GUI {
 			saveThrowsForUndo();
 			eyeThrows.remove(last);
 			eyeThrows.add(t);
-			throwPanels[i].setThrow(t);
-			textAnimator.setJThrowPanel(throwPanels[i]);
+			enderEyePanel.setThrow(i, t);
 			onThrowsUpdated();
 		} else {
 			calibrationPanel.changeLastAngle(delta);
@@ -449,19 +282,13 @@ public class GUI {
 	}
 	
 	private void setUpdateURL(VersionURL url) {
-		notificationsButton.setURL(url);
+		frame.setURL(url);
 	}
 	
 	/**
 	 * Returns true if the newly inputed throw t should be added.
 	 */
 	private boolean shouldAddThrow(Throw t) {
-//		for (Throw existing : eyeThrows) {
-//			// Dont add if closer than 1 block to existing throw
-//			if (t.distance2(existing) < 1.0) {
-//				return false;
-//			}
-//		}
 		return true;
 	}
 	
@@ -470,63 +297,25 @@ public class GUI {
 	}
 	
 	private void onThrowsUpdated() {
+		TriangulationResult result = null;
+		double[] errors = null;
 		if (eyeThrows.size() >= 1) {
-			TriangulationResult result = triangulator.triangulate(eyeThrows);
+			result = triangulator.triangulate(eyeThrows);
 			if (result.success) {
-				int distance = result.getDistance(eyeThrows.get(eyeThrows.size() - 1));
-				lastCertainty = result.weight;
-				switch (Main.preferences.strongholdDisplayType.get()) {
-				case NinjabrainBotPreferences.FOURFOUR:
-					maintextLabel.setText(String.format(Locale.US, "Location: (%d, %d), %d blocks away ", result.fourfour_x, result.fourfour_z, distance));
-					break;
-				case NinjabrainBotPreferences.EIGHTEIGHT:
-					maintextLabel.setText(String.format(Locale.US, "Location: (%d, %d), %d blocks away ", result.fourfour_x + 4, result.fourfour_z + 4, distance));
-					break;
-				case NinjabrainBotPreferences.CHUNK:
-					maintextLabel.setText(String.format(Locale.US, "Chunk: (%d, %d), %d blocks away ", result.x, result.z, distance));
-					break;
-				}
-				certaintytextLabel.setText(CERTAINTY_TEXT);
-				certaintyLabel.setText(String.format(Locale.US, "%.1f%%", result.weight*100.0));
-				netherLabel.setText(String.format(Locale.US, "Nether coordinates: (%d, %d)", result.x*2, result.z*2));
-				double[] errors = result.getAngleErrors(eyeThrows);
-				for (int i = 0; i < throwPanels.length; i++) {
-					JThrowPanel throwPanel = throwPanels[i];
-					if (i < errors.length)
-						throwPanel.setError(errors[i]);
-					else
-						throwPanel.setError("");
-				}
-			} else {
-				maintextLabel.setText("Could not determine the stronghold chunk.");
-				certaintytextLabel.setText("You probably misread one of the eyes.");
-				certaintyLabel.setText("");
-				netherLabel.setText("");
-				for (int i = 0; i < throwPanels.length; i++) {
-					throwPanels[i].setError("");
-				}
+				errors = result.getAngleErrors(eyeThrows);
 			}
-		} else {
-			maintextLabel.setText("Waiting for F3+C...");
-			certaintytextLabel.setText("");
-			certaintyLabel.setText("");
-			netherLabel.setText("");
-			for (int i = 0; i < throwPanels.length; i++) {
-				throwPanels[i].setError("");
-			}
-		}
+		} 
+		mainTextArea.setResult(result);
+		enderEyePanel.setErrors(errors);
 		// Update throw panels
-		for (int i = 0; i < throwPanels.length; i++) {
-			JThrowPanel throwPanel = throwPanels[i];
-			throwPanel.setThrow(i < eyeThrows.size() ? eyeThrows.get(i) : null);
-		}
+		enderEyePanel.setThrows(eyeThrows);
 		// Update auto reset timer
 		if (Main.preferences.autoReset.get()) {
 			autoResetTimer.restart();
 		}
 		// Update bounds
 		updateBounds();
-		certaintyLabel.setForeground(theme.CERTAINTY_COLOR_MAP.get(lastCertainty));
+		mainTextArea.updateColors(this);
 	}
 
 	public void onClipboardUpdated(String newClipboard) {

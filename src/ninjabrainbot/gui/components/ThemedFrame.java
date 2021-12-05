@@ -1,10 +1,11 @@
 package ninjabrainbot.gui.components;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 
 public class ThemedFrame extends JFrame {
 
@@ -17,15 +18,14 @@ public class ThemedFrame extends JFrame {
 		super(title);
 		setUndecorated(true); // Remove borders
 		setAlwaysOnTop(Main.preferences.alwaysOnTop.get()); // Always focused
-		setLayout(null);
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		titlebarPanel = new TitleBarPanel(gui, this);
-		titlebarPanel.setLayout(null);
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(gui, title, true) {
 			private static final long serialVersionUID = 1508931943984181857L;
 			@Override
-			public int getTextSize(TextSizePreference p) {
-				return p.TITLE_BAR_TEXT_SIZE;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_TITLE_LARGE;
 			}
 		};
 		titlebarPanel.add(titletextLabel);
@@ -36,8 +36,8 @@ public class ThemedFrame extends JFrame {
 	}
 	
 	public void updateBounds(GUI gui) {
-		titlebarPanel.setBounds(0, 0, getWidth(), GUI.TITLE_BAR_HEIGHT);
-		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.textSize.TITLE_BAR_TEXT_SIZE)/2, 0, 150, GUI.TITLE_BAR_HEIGHT);
+		int titlebarHeight = titlebarPanel.getPreferredSize().height;
+		titletextLabel.setBounds((titlebarHeight - gui.size.TEXT_SIZE_TITLE_LARGE)/2, 0, titletextLabel.getPreferredSize().width, titlebarHeight);
 	}
 	
 }

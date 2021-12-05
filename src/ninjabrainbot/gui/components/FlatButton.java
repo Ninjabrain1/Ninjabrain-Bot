@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.TextSizePreference;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
 /**
@@ -132,8 +132,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 	}
 
 	@Override
-	public void updateFont(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.textSize), true));
+	public void updateSize(GUI gui) {
+		setFont(gui.fontSize(getTextSize(gui.size), true));
 	}
 
 	@Override
@@ -145,8 +145,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		label.setIcon(gui.theme.BLACK_ICONS ? icon_inverted : icon);
 	}
 	
-	public int getTextSize(TextSizePreference p) {
-		return p.MAIN_TEXT_SIZE;
+	public int getTextSize(SizePreference p) {
+		return p.TEXT_SIZE_MEDIUM;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -31,7 +32,7 @@ public class TitleBarPanel extends ThemedPanel {
 				getComponentAt(initialClick);
 			}
 		});
-
+		setLayout(null);
 		this.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -51,12 +52,17 @@ public class TitleBarPanel extends ThemedPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int h0 = (height - GUI.TITLE_BAR_BUTTON_WH) / 2;
 		for (int i = 0; i < buttons.size(); i++) {
-			buttons.get(i).setBounds(width - (i + 1) * GUI.TITLE_BAR_BUTTON_WH - h0, h0, GUI.TITLE_BAR_BUTTON_WH, GUI.TITLE_BAR_BUTTON_WH);
+			buttons.get(i).setBounds(width - (i + 1) * height, 0, height, height);
 		}
 	}
-	
+
+	@Override
+	public void updateSize(GUI gui) {
+		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_TITLE_LARGE + gui.size.PADDING_TITLE * 2 + 1));
+		super.updateSize(gui);
+	}
+
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONGEST;

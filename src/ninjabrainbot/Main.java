@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = " Beta 6";
+	public static final String VERSION = " Beta 7";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
@@ -23,7 +23,7 @@ public class Main {
 	// [x] - show chunk location instead of block
 	// [x] - theme
 	// [x] - keep focused
-	// [ ] - size
+	// [x] - size
 	// [x] - check for updates
 	// [x] - translucent
 	// [ ] - number of predictions

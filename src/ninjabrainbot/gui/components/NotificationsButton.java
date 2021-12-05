@@ -59,7 +59,7 @@ public class NotificationsButton extends TitleBarButton {
 	}
 	
 	public void setColors(final Color backgroundColor, final Color hoverColor) {
-		super.setColors(backgroundColor, hoverColor);
+//		super.setColors(backgroundColor, hoverColor);
 		this.start = backgroundColor;
 		this.end = getInterpolatedColor(this.start, Color.YELLOW, 0.3f);
 	}
