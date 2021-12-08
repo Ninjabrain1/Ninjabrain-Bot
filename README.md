@@ -5,7 +5,7 @@ An accurate stronghold calculator for minecraft speedrunning. Achieves better re
 
 ## Installation
 
-Download the ![latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar.
+Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar.
 
 ## History
 
