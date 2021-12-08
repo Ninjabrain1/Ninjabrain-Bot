@@ -27,6 +27,9 @@ Simply put, the standard deviation describes how accuretely you measure ender ey
 * 0.020 - 0.040, if you're measuring eyes in 30 FOV
 * 0.005 - 0.010, if you're measuring eyes in 30 FOV and use subpixel adjustment
 
+#### What is "Show angle errors" in the settings?
+Angle errors tell you how wrongly you measured each ender eye (assuming that the predicted stronghold location is correct). This can be used to practice your ender eye measuring accuracy by trying to get as low errors as possible. It can also be used as a sanity check in runs, if the angle errors are abnormally large you may have measured something wrong, or moved while you were throwing one of the eyes.
+
 #### What is "Use advanced stronghold statistics" in the settings?
 "Advanced stronghold statistics" will use the existence of other strongholds and the fact that the eye points towards the closest one to make a better prediction. This improves the accuracy and it should be turned on for 99.9% of users. 
 
