@@ -3,10 +3,13 @@ package ninjabrainbot.gui.components;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
@@ -45,14 +48,20 @@ public class MainButtonPanel extends ThemedPanel {
 	@Override
 	public void updateSize(GUI gui) {
 		setPreferredSize(new Dimension(0, 24));
-		setBorder(new EmptyBorder(0, gui.size.PADDING, 0, 0));
+		setBorder(getBorder(gui));
 		super.updateSize(gui);
 	}
 	
 	@Override
 	public void updateColors(GUI gui) {
 		super.updateColors(gui);
-//		setBorder(new MatteBorder(2, 0, 0, 0, gui.theme.COLOR_STRONGEST));
+		setBorder(getBorder(gui));
+	}
+	
+	private Border getBorder(GUI gui) {
+		Border b1 = new MatteBorder(1, 0, 0, 0, gui.theme.COLOR_STRONGEST);
+		Border b2 = new EmptyBorder(0, gui.size.PADDING, 0, 0);
+		return BorderFactory.createCompoundBorder(b1, b2);
 	}
 	
 	@Override

@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = " Beta 7";
+	public static final String VERSION = " Beta 8";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
@@ -38,6 +38,7 @@ public class Main {
 	// [x] Hotkeys
 	// [x] Calibration
 	// [ ] Show closest possible location
+	// [ ] Sigma toggle
 
 	public static void main(String[] args) {
 		Profiler.start("Initialize preferences");
