@@ -28,5 +28,5 @@ Simply put, the standard deviation describes how accuretely you measure ender ey
 * 0.005 - 0.010, if you're measuring eyes in 30 FOV and use subpixel adjustment
 
 #### What is "Use advanced stronghold statistics" in the settings?
-Advanced stronghold statistics will further improve the stronghold prediction by 
+"Advanced stronghold statistics" will use the existence of other strongholds and the fact that the eye points towards the closest one to make a better prediction. This improves the accuracy and it should be turned on for 99.9% of users. 
 
