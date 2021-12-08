@@ -9,7 +9,7 @@ Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/rele
 
 ## History
 
-Ninjabrain bot was first created in November 2020, in the era of Throwpro. The bot was created because the calculators at the time were too inaccurate, especially for calculated travel which was just beeing pioneered at the time. The two most common alternatives, Throwpro and FastStronghold, used models that were too simple and were not accurate at far distances. However, back then Ninjabrain bot only existed in a more primitive form, as a twitch chat bot. The first example of it being used in a real run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).
+Ninjabrain bot was first created in November 2020, in the era of Throwpro. The bot was created because the calculators at the time were too inaccurate, especially for calculated travel which was just beeing pioneered at the time. The two most common alternatives, Throwpro and FastStronghold, used models that were too simple and were not accurate at long distances. However, back then Ninjabrain bot only existed in a more primitive form, as a twitch chat bot. The first example of it being used in a real run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).
 
 ## FAQ
 
