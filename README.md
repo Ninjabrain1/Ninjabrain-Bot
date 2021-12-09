@@ -5,7 +5,9 @@ An accurate stronghold calculator for minecraft speedrunning. Achieves better re
 
 ## Getting started
 
-Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar. 
+Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar. To use the calculator, throw an ender eye, look at it, and press F3+C, and repeat for as many eyes as you like. The calculator will give you a certainty percentage of how confident it is that the predicted location is correct.
+
+If you are used to perfect travel and want the same accuracy you need to set hotkeys for "+0.01/-0.01 to last angle" in the advanced options, and calibrate your standard deviation (can also be done in the advanced options).
 
 ## History
 
