@@ -16,6 +16,8 @@ import ninjabrainbot.gui.Theme;
 
 public class MainButtonPanel extends ThemedPanel {
 	
+	private static final long serialVersionUID = -8143875137607726122L;
+	
 	private JLabel throwsLabel;
 	private FlatButton resetButton;
 	private FlatButton undoButton;
@@ -39,8 +41,6 @@ public class MainButtonPanel extends ThemedPanel {
 		add(undoButton);
 		add(resetButton);
 	}
-	
-	private static final long serialVersionUID = -8143875137607726122L;
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONG;

@@ -8,7 +8,7 @@ import ninjabrainbot.io.KeyPresser;
 public class Calibrator {
 	
 	KeyPresser keyPresser;
-	int delay = 100; // key press delay
+	int delay = 150; // key press delay
 	
 	Triangulator triangulator;
 	boolean calibrating;
