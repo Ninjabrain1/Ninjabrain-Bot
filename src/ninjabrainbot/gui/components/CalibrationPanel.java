@@ -79,7 +79,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 				new InstructionLabel(gui, "Throw an ender eye and measure the angle with F3+C. Be as accurate as you would be in a real run. Upon pressing F3+C you will be automatically teleported to a new location."),
 				new InstructionLabel(gui, "Keep measuring eyes until the measured STD has settled (usually takes around 10-20 throws), then press 'Done' to apply. "),
 		};
-		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>The program will determine how accurate you are at measuring ender eyes. The lower the standard deviation (STD) is, the more accurate you are. By knowing what your STD is the calculator can make better predictions. Before following the steps below, make sure your 'Open Command' key in Minecraft is set to its default value.</div></html>") {
+		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>The program will determine how accurate you are at measuring ender eyes. The lower the standard deviation (STD) is, the more accurate you are. By knowing what your STD is the calculator can make better predictions. Before following the steps below, make sure your 'Open Command' key in Minecraft is set to - (the minus key).</div></html>") {
 			private static final long serialVersionUID = -5378176835369680709L;
 			@Override
 			public int getTextSize(SizePreference p) {
