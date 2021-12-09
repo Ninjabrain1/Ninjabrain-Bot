@@ -24,6 +24,12 @@ You most likely moved when you were throwing one of the eyes. It takes way longe
 #### Can I do subpixel adjustment, like in perfect travel, with the bot?
 Yes. Under advanced options in the settings you can set hotkeys for "+0.01 to last angle" and "-0.01 to last angle". Pressing those hotkeys will manually change the angle of the last F3+C you did. So for example, if your resolution is 1920x1027 and your eye has a wide middle eye-slit, you would press the "+0.01 to last angle"-hotkey to adjust the angle. See the [perfect travel document](https://docs.google.com/document/d/1JTMOIiS-Hl6_giEB0IQ5ki7UV-gvUXnNmoxhYoSgEAA/edit#heading=h.agb0mdup7ims) for more details.
 
+#### What does the "Display stronghold location" setting mean?
+It is just a setting that says how the stronghold location should be presented, it does not impact the accuracy of the calculator in any way. 
+* **(4, 4)** will show you the coordinates of the starter staircase
+* **(8, 8)** will show you the coordinates of (8, 8) in the stronghold chunk (the center of the chunk)
+* **Chunk** will show you the chunk coordinates of the stronghold
+
 #### What is "Standard deviation" in the settings?
 Simply put, the standard deviation describes how accuretely you measure ender eye angles. The better you are at measuring ender eyes the lower the standard deviation should be. Setting the standard deviation to a small value means that the bot will trust your readings more, but setting the standard deviation too low means that the bot will be overconfident in its results. To find out your optimal standard deviation you can use the "Calibrate standard deviation" funciton available in the settings. Each players own standard deviation depends on a lot of factors such as FOV, resolution, mouse sensitivity, and experience measuring ender eyes, but the value should typically be in the range
 * 0.050 - 0.200, if you're measuring eyes in quake pro
