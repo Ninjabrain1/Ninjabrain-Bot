@@ -217,6 +217,10 @@ public class GUI {
 			optionsFrame.setLocation(bounds.x + 40, bounds.y + 30);
 		}
 	}
+	
+	public void toggleMinimized() {
+		frame.toggleMinimized();
+	}
 
 	public void resetThrows() {
 		if (eyeThrows.size() > 0) {

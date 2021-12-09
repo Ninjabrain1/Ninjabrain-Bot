@@ -19,6 +19,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyDecrement;
 	public HotkeyPreference hotkeyReset;
 	public HotkeyPreference hotkeyUndo;
+	public HotkeyPreference hotkeyMinimize;
 	public FloatPreference sigma;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -62,6 +63,12 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void execute(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.undo());
+			}
+		};
+		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.toggleMinimized());
 			}
 		};
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {

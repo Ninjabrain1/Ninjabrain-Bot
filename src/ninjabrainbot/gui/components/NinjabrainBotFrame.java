@@ -95,6 +95,15 @@ public class NinjabrainBotFrame extends ThemedFrame {
 		return button;
 	}
 	
+	public void toggleMinimized() {
+		int state = getState();
+		if (state == JFrame.ICONIFIED) {
+			setState(JFrame.NORMAL);
+		} else {
+			setState(JFrame.ICONIFIED);
+		}
+	}
+	
 	public NotificationsButton getNotificationsButton() {
 		return notificationsButton;
 	}

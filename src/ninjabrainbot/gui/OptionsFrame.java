@@ -156,6 +156,8 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, "Reset", Main.preferences.hotkeyReset));
 			ac2.add(Box.createVerticalStrut(4));
 			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo));
+			ac2.add(Box.createVerticalStrut(4));
+			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize));
 		}
 	}
 	
