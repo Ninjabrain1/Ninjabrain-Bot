@@ -3,9 +3,9 @@ An accurate stronghold calculator for minecraft speedrunning. Achieves better re
 
 ![NinjabrainBot](https://i.imgur.com/WVBWnrC.png)
 
-## Installation
+## Getting started
 
-Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar.
+Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar. 
 
 ## History
 
@@ -14,6 +14,7 @@ Ninjabrain bot was first created in November 2020, in the era of Throwpro. The b
 ## FAQ
 
 #### Is this legal to use in speedruns?
+Yes, as of the calculator unban 2021-12-09 it is legal for runs submitted on speedrun.com.
 
 #### The calculator said it was 100% certain but still missed the stronghold, what went wrong?
 You most likely moved when you were throwing one of the eyes. It takes way longer than most people think for the player to fully come to a stop, even when your coordinates in F3 are completely stationary you still have to wait a while before throwing the eye (I think this happens because of client-server desync, but i'm not sure). If you want to come to a stop quickly I recommend pushing yourself into a corner between two blocks. 
