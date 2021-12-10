@@ -22,8 +22,8 @@ public class Ring {
 		this.ring = ring;
 		this.innerRadius = StrongholdConstants.distParam * ((4 + ring * 6) - 0.5D * 2.5D);
 		this.outerRadius = StrongholdConstants.distParam * ((4 + ring * 6) + 0.5D * 2.5D);
-		this.innerRadiusPostSnapping = this.innerRadius - (StrongholdConstants.snappingRadius + 0.5) * Math.sqrt(2);
-		this.outerRadiusPostSnapping = this.outerRadius + (StrongholdConstants.snappingRadius + 0.5) * Math.sqrt(2);
+		this.innerRadiusPostSnapping = this.innerRadius - (StrongholdConstants.snappingRadius + 1.0) * Math.sqrt(2);
+		this.outerRadiusPostSnapping = this.outerRadius + (StrongholdConstants.snappingRadius + 1.0) * Math.sqrt(2);
 	}
 	
 	public static Ring get(int i) {

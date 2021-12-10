@@ -180,14 +180,11 @@ public class GUI {
 		for (ThemedComponent tc : themedComponents) {
 			tc.updateSize(this);
 		}
-//		enderEyePanel.updateSize(this);
 		updateFontsAndColors();
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 		notificationsFrame.updateBounds(this);
-//		frame.pack();
 		frame.setSize(size.WIDTH, frame.getPreferredSize().height);
-//		frame.validate();
 		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
 	

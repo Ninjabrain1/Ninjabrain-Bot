@@ -151,7 +151,7 @@ public class Prior implements IPrior {
 		this.radius = radius;
 		x0 = centerX - radius - StrongholdConstants.snappingRadius;
 		z0 = centerZ - radius - StrongholdConstants.snappingRadius;
-		x1 = centerZ + radius + StrongholdConstants.snappingRadius;
+		x1 = centerX + radius + StrongholdConstants.snappingRadius;
 		z1 = centerZ + radius + StrongholdConstants.snappingRadius;
 		size1d = 2 * (radius + StrongholdConstants.snappingRadius) + 1;
 	}
@@ -160,7 +160,7 @@ public class Prior implements IPrior {
 		this.radius = radius;
 		x0 = centerX - radius;
 		z0 = centerZ - radius;
-		x1 = centerZ + radius;
+		x1 = centerX + radius;
 		z1 = centerZ + radius;
 		size1d = 2 * radius + 1;
 	}

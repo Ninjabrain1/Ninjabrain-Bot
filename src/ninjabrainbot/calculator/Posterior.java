@@ -109,8 +109,8 @@ public class Posterior {
 	}
 	
 	/**
-	 * Conditions all chunk weights on the fact that the stringhold is closer than any other stronghold.
-	 * This actions is relatively costly, and is approximated for all chunks below the given threshold.
+	 * Conditions all chunk weights on the fact that the stronghold is closer than any other stronghold.
+	 * This action is relatively costly, and is approximated for all chunks below the given threshold.
 	 * @param probabilityTheshold
 	 */
 	private void closestStrongholdCondition(Throw t, double probabilityTheshold) {
