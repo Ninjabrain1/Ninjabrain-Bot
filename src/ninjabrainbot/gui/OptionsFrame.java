@@ -154,6 +154,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac1.add(Box.createVerticalStrut(4));
 		ac1.add(new Divider(gui));
 		ac1.add(Box.createVerticalStrut(4));
+		ac1.add(new TextboxPanel(gui, "Crosshair correction:", Main.preferences.crosshairCorrection));
 		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
 		ac1.add(new CheckboxPanel(gui, "Use advanced stronghold statistics", Main.preferences.useAdvStatistics));
 		ac1.add(Box.createGlue());
@@ -172,6 +173,8 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo));
 			ac2.add(Box.createVerticalStrut(4));
 			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize));
+			ac2.add(Box.createGlue());
+			ac2.add(Box.createGlue());
 			ac2.add(Box.createGlue());
 		}
 	}

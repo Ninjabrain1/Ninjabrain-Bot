@@ -23,6 +23,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyAltStd;
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
+	public FloatPreference crosshairCorrection;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
@@ -78,7 +79,9 @@ public class NinjabrainBotPreferences {
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.toggleLastSTD());
+				if (Main.preferences.useAltStd.get()) {
+					SwingUtilities.invokeLater(() -> gui.toggleLastSTD());
+				}
 			}
 		};
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
@@ -93,6 +96,11 @@ public class NinjabrainBotPreferences {
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigmaAlt(get());
 				gui.recalculateStronghold();
+			}
+		};
+		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
 			}
 		};
 		checkForUpdates = new BooleanPreference("check_for_updates", true, pref) {

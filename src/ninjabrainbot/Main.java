@@ -17,7 +17,7 @@ public class Main {
 	// [x] Error message if throws dont intersect
 	// [x] Options
 	// [x] - std
-	// [ ] - mean?
+	// [x] - mean?
 	// [x] - angle errors
 	// [x] - show nether coords
 	// [x] - show chunk location instead of block
@@ -38,7 +38,7 @@ public class Main {
 	// [x] Hotkeys
 	// [x] Calibration
 	// [ ] Show closest possible location
-	// [ ] Sigma toggle
+	// [x] Sigma toggle
 
 	public static void main(String[] args) {
 		Profiler.start("Initialize preferences");

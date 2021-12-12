@@ -1,5 +1,7 @@
 package ninjabrainbot.calculator;
 
+import ninjabrainbot.Main;
+
 /**
  * Represents an eye of ender throw.
  */
@@ -50,6 +52,7 @@ public class Throw implements Ray {
 			double x = Double.parseDouble(substrings[6]);
 			double z = Double.parseDouble(substrings[8]);
 			double alpha = Double.parseDouble(substrings[9]);
+			alpha += Main.preferences.crosshairCorrection.get();
 			return new Throw(x, z, alpha);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
