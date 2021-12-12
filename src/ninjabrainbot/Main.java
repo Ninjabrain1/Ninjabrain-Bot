@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "1.0.2-pre1";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
@@ -39,6 +39,7 @@ public class Main {
 	// [x] Calibration
 	// [ ] Show closest possible location
 	// [ ] Sigma toggle
+	// [ ] Angle you need to hold
 
 	public static void main(String[] args) {
 		Profiler.start("Initialize preferences");
@@ -49,11 +50,11 @@ public class Main {
 		KeyboardListener.preInit();
 		Profiler.stopAndStart("Initialize GUI");
 		GUI gui = new GUI();
-		Profiler.stopAndStart("Start keyboard listener");
-		KeyboardListener.init(gui);
 		Profiler.stopAndStart("Start clipboard reader");
 		ClipboardReader clipboardReader = new ClipboardReader(gui);
 		Thread clipboardThread = new Thread(clipboardReader);
+		Profiler.stopAndStart("Start keyboard listener");
+		KeyboardListener.init(gui, clipboardReader);
 		clipboardThread.start();
 		Profiler.stop();
 		if (preferences.checkForUpdates.get()) {
