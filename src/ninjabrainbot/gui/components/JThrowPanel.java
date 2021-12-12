@@ -3,6 +3,7 @@ package ninjabrainbot.gui.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.util.Locale;
 
 import javax.swing.JLabel;
@@ -200,6 +201,17 @@ public class JThrowPanel extends ThemedPanel {
 			removeButton.setVisible(true); 
 		}
 		this.t = t;
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (t != null && t.altStd) {
+			int a = 3;
+			int b = 2;
+			g.setColor(Color.RED);
+			g.fillRect(b, b, a, a);
+		}
 	}
 	
 	public boolean hasThrow() {

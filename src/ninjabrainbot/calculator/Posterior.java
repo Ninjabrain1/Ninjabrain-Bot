@@ -12,14 +12,16 @@ public class Posterior {
 	
 	IPrior prior;
 	ArrayList<Chunk> chunks;
-	double sigma;
+	double sigma, sigmaAlt;
 	
-	public Posterior(double sigma, List<Throw> eyeThrows) {
+	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows) {
 		Profiler.clear();
 		Profiler.start("Calculate posterior");
 		this.sigma = sigma;
+		this.sigmaAlt = sigmaAlt;
 		Profiler.start("Calculate prior");
-		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma) / 180.0 * Math.PI);
+		double sigma0 = eyeThrows.get(0).altStd ? sigmaAlt : sigma;
+		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI);
 		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x;
@@ -101,7 +103,8 @@ public class Posterior {
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		double delta = Math.abs((gamma - t.alpha) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
-		chunk.weight *= Math.exp(-delta * delta / (2 * sigma * sigma));
+		double s = t.altStd ? sigmaAlt : sigma;
+		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
 	}
 	
 	public List<Chunk> getChunks() {

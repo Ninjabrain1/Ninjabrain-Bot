@@ -39,7 +39,7 @@ public class GUI {
 	private EnderEyePanel enderEyePanel;
 	
 	public NinjabrainBotFrame frame;
-	private OptionsFrame optionsFrame;
+	public OptionsFrame optionsFrame;
 	private NotificationsFrame notificationsFrame;
 	private CalibrationPanel calibrationPanel;
 	
@@ -279,6 +279,21 @@ public class GUI {
 			onThrowsUpdated();
 		} else {
 			calibrationPanel.changeLastAngle(delta);
+		}
+	}
+	
+	public void toggleLastSTD() {
+		if (!calibrationPanel.isCalibrating()) {
+			int i = eyeThrows.size() - 1;
+			if (i == -1)
+				return;
+			Throw last = eyeThrows.get(i);
+			Throw t = last.withToggledSTD();
+			saveThrowsForUndo();
+			eyeThrows.remove(last);
+			eyeThrows.add(t);
+			enderEyePanel.setThrow(i, t);
+			onThrowsUpdated();
 		}
 	}
 	

@@ -7,12 +7,17 @@ public class Throw implements Ray {
 
 	// correction is how much the angle has been corrected, only used for display purposes (the correction has already been added to alpha)
 	public final double x, z, alpha, correction;
+	public final boolean altStd;
 
 	public Throw(double x, double z, double alpha) {
 		this(x, z, alpha, 0);
 	}
 	
 	public Throw(double x, double z, double alpha, double correction) {
+		this(x, z, alpha, correction, false);
+	}
+	
+	public Throw(double x, double z, double alpha, double correction, boolean altStd) {
 		this.x = x;
 		this.z = z;
 		this.correction = correction;
@@ -23,6 +28,7 @@ public class Throw implements Ray {
 			alpha -= 360.0;
 		}
 		this.alpha = alpha;
+		this.altStd = altStd;
 	}
 	
 	@Override
@@ -58,7 +64,11 @@ public class Throw implements Ray {
 		double dz = z - other.z;
 		return dx * dx + dz * dz;
 	}
-
+	
+	public Throw withToggledSTD() {
+		return new Throw(x, z, alpha, correction, !this.altStd);
+	}
+	
 	@Override
 	public double x() {
 		return x;

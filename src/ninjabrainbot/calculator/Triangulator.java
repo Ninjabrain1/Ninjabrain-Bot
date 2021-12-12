@@ -7,20 +7,30 @@ import ninjabrainbot.Main;
 public class Triangulator {
 
 	double sigma;
+	double sigmaAlt;
 	// Used only for pixel correction
 	int yRes = 1080;
 	int fov = 30;
 
 	public Triangulator() {
-		this(Main.preferences.sigma.get());
+		this(Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get());
 	}
 
 	public Triangulator(double sigma) {
+		this(sigma, sigma);
+	}
+	
+	public Triangulator(double sigma, double sigmaAlt) {
 		this.sigma = sigma;
+		this.sigmaAlt = sigmaAlt;
 	}
 
 	public void setSigma(double sigma) {
 		this.sigma = sigma;
+	}
+	
+	public void setSigmaAlt(double sigmaAlt) {
+		this.sigmaAlt = sigmaAlt;
 	}
 
 	public TriangulationResult triangulate(ArrayList<Throw> eyeThrows) {
@@ -28,7 +38,7 @@ public class Triangulator {
 			return new TriangulationResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(sigma, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
 		// Find chunk with largest posterior probability
 		Chunk predictedChunk = posterior.getMostProbableChunk();
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
@@ -39,7 +49,7 @@ public class Triangulator {
 	public Posterior getPosterior(ArrayList<Throw> eyeThrows) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(sigma, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
 		return posterior;
 	}
 
