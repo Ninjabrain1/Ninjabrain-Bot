@@ -157,6 +157,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac1.add(new TextboxPanel(gui, "Crosshair correction:", Main.preferences.crosshairCorrection));
 		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
 		ac1.add(new CheckboxPanel(gui, "Use advanced stronghold statistics", Main.preferences.useAdvStatistics));
+		ac1.add(new CheckboxPanel(gui, "Use alternative clipboard reader", Main.preferences.altClipboardReader));
 		ac1.add(Box.createGlue());
 		if (KeyboardListener.registered) {
 			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);

@@ -49,11 +49,11 @@ public class Main {
 		KeyboardListener.preInit();
 		Profiler.stopAndStart("Initialize GUI");
 		GUI gui = new GUI();
-		Profiler.stopAndStart("Start keyboard listener");
-		KeyboardListener.init(gui);
 		Profiler.stopAndStart("Start clipboard reader");
 		ClipboardReader clipboardReader = new ClipboardReader(gui);
 		Thread clipboardThread = new Thread(clipboardReader);
+		Profiler.stopAndStart("Start keyboard listener");
+		KeyboardListener.init(gui, clipboardReader);
 		clipboardThread.start();
 		Profiler.stop();
 		if (preferences.checkForUpdates.get()) {

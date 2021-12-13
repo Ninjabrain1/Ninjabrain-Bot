@@ -32,6 +32,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference showAngleErrors;
 	public BooleanPreference autoReset;
 	public BooleanPreference useAdvStatistics;
+	public BooleanPreference altClipboardReader;
 	public BooleanPreference useAltStd;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
@@ -157,6 +158,11 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
+		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+      }
+    };
 		useAltStd = new BooleanPreference("use_alt_std", false, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {

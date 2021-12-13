@@ -3,7 +3,9 @@ package ninjabrainbot.io;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
 
 public class ClipboardReader implements Runnable {
@@ -12,28 +14,46 @@ public class ClipboardReader implements Runnable {
 	Clipboard clipboard;
 	String lastClipboardString;
 	
+	private AtomicBoolean forceReadLater;
+	
 	public ClipboardReader(GUI gui) {
 		this.gui = gui;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
+		forceReadLater = new AtomicBoolean(false);
 	}
-
+	
+	public void forceRead() {
+		forceReadLater.set(true);
+		System.out.println("asd");
+	}
+	
 	@Override
 	public void run() {
 		while (true) {
-			try {
-				String clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
-				if (!lastClipboardString.equals(clipboardString)) {
-					gui.onClipboardUpdated(clipboardString);
-					// Set clipboard (allows the program to detect an identical F3+C later)
-//					StringSelection selection = new StringSelection(clipboardString + " ");
-//					clipboard.setContents(selection, selection);
-					lastClipboardString = clipboardString;
+			boolean read = !Main.preferences.altClipboardReader.get();
+			if (Main.preferences.altClipboardReader.get() && forceReadLater.get()) {
+				read = true;
+				// Sleep 0.1 seconds to let the game update the clipboard
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
 			}
+			if (read) {
+				try {
+					String clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
+					if (!lastClipboardString.equals(clipboardString)) {
+						gui.onClipboardUpdated(clipboardString);
+						lastClipboardString = clipboardString;
+					}
+				} catch (Exception e) {
+				}
+			}
+			// Sleep 0.1 seconds
 			try {
-				Thread.sleep(100); // Sleep 0.1 seconds
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
