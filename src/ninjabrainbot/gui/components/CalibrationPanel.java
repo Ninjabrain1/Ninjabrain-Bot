@@ -75,7 +75,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		add(panel);
 		labels = new InstructionLabel[] {
-				new InstructionLabel(gui, "Make sure your 'Open Command' key in Minecraft is set to P. Make a creative world, start flying (double tap space), and then press F3+C."),
+				new InstructionLabel(gui, "Make sure your 'Open Command' key in Minecraft is set to K. Make a creative world, start flying (double tap space), and then press F3+C."),
 				new InstructionLabel(gui, "Throw an ender eye and measure the angle with F3+C. Be as accurate as you would be in a real run. Upon pressing F3+C you will be automatically teleported to a new location."),
 				new InstructionLabel(gui, "Keep measuring eyes until the measured STD has settled (usually takes around 10-20 throws), then press 'Done' to apply. "),
 		};
@@ -115,7 +115,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		rightPanel.add(l1);
 		rightPanel.add(std);
 		rightPanel.add(done);
-		hist = new Histogram(gui, -0.1f, 0.1f, 11);
+		hist = new Histogram(gui, -0.03f, 0.03f, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);

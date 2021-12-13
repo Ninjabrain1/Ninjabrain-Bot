@@ -39,7 +39,7 @@ public class KeyPresser {
 	}
 	
 	public void openCommand() {
-		press(KeyEvent.VK_P);
+		press(KeyEvent.VK_K);
 	}
 	
 	public void enter() {

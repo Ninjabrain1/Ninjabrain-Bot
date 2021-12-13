@@ -25,7 +25,6 @@ public class ClipboardReader implements Runnable {
 	
 	public void forceRead() {
 		forceReadLater.set(true);
-		System.out.println("asd");
 	}
 	
 	@Override
