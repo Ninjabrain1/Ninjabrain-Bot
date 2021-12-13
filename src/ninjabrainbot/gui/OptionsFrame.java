@@ -47,6 +47,8 @@ public class OptionsFrame extends ThemedFrame {
 	private CalibrationPanel calibrationPanel;
 	private FlatButton exitButton;
 	private TextboxPanel sigma;
+	private TextboxPanel sigmaAlt;
+	private HotkeyPanel sigmaAltHotkey;
 	private JPanel mainPanel; // Panel containing all non-advanced options
 	private JPanel advPanel; // Panel containing all advanced options
 
@@ -140,6 +142,19 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
 		ac1.add(calibrateButton);
+		ac1.add(new CheckboxPanel(gui, "Enable standard deviation toggle", Main.preferences.useAltStd));
+		sigmaAlt = new TextboxPanel(gui, "Alt. standard deviation: ", Main.preferences.sigmaAlt);
+		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());
+		ac1.add(sigmaAlt);
+		if (KeyboardListener.registered) {
+			sigmaAltHotkey = new HotkeyPanel(gui, "Alt. std on last angle", Main.preferences.hotkeyAltStd);
+			sigmaAltHotkey.setEnabled(Main.preferences.useAltStd.get());
+			ac1.add(sigmaAltHotkey);
+		}
+		ac1.add(Box.createVerticalStrut(4));
+		ac1.add(new Divider(gui));
+		ac1.add(Box.createVerticalStrut(4));
+		ac1.add(new TextboxPanel(gui, "Crosshair correction:", Main.preferences.crosshairCorrection));
 		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
 		ac1.add(new CheckboxPanel(gui, "Use advanced stronghold statistics", Main.preferences.useAdvStatistics));
 		ac1.add(new CheckboxPanel(gui, "Use alternative clipboard reader", Main.preferences.altClipboardReader));
@@ -159,6 +174,9 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo));
 			ac2.add(Box.createVerticalStrut(4));
 			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize));
+			ac2.add(Box.createGlue());
+			ac2.add(Box.createGlue());
+			ac2.add(Box.createGlue());
 		}
 	}
 	
@@ -222,6 +240,13 @@ public class OptionsFrame extends ThemedFrame {
 		return calibrationPanel;
 	}
 	
+	public void setAltSigmaEnabled(boolean b) {
+		sigmaAlt.setEnabled(b);
+		sigmaAlt.descLabel.updateColors(gui);
+		sigmaAltHotkey.setEnabled(b);
+		sigmaAltHotkey.descLabel.updateColors(gui);
+	}
+	
 }
 
 class CheckboxPanel extends ThemedPanel {
@@ -262,7 +287,7 @@ class TextboxPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
 	
-	JLabel descLabel;
+	ThemedLabel descLabel;
 	DecimalTextField textfield;
 	FloatPreference preference;
 	
@@ -275,6 +300,13 @@ class TextboxPanel extends ThemedPanel {
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
+			}
+			@Override
+			public Color getForegroundColor(Theme theme) {
+				if (textfield.isEnabled()) {
+					return super.getForegroundColor(theme);
+				}
+				return theme.TEXT_COLOR_WEAK;
 			}
 		};
 		textfield = new DecimalTextField(gui, preference.get(), preference.min(), preference.max()) {
@@ -297,6 +329,12 @@ class TextboxPanel extends ThemedPanel {
 	
 	public void updateValue() {
 		textfield.setValue((double) preference.get());
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		textfield.setEnabled(enabled);
 	}
 	
 }
@@ -341,7 +379,7 @@ class HotkeyPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
 	
-	JLabel descLabel;
+	ThemedLabel descLabel;
 	FlatButton button;
 	HotkeyPreference preference;
 	boolean editing = false;
@@ -355,6 +393,13 @@ class HotkeyPanel extends ThemedPanel {
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
+			}
+			@Override
+			public Color getForegroundColor(Theme theme) {
+				if (button.isEnabled()) {
+					return super.getForegroundColor(theme);
+				}
+				return theme.TEXT_COLOR_WEAK;
 			}
 		};
 		descLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -409,6 +454,12 @@ class HotkeyPanel extends ThemedPanel {
 		} else {
 			return NativeKeyEvent.getModifiersText(preference.getModifier()) + "+" + k;
 		}
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		button.setEnabled(enabled);
 	}
 	
 }

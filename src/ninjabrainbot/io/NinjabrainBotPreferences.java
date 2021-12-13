@@ -20,7 +20,10 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyReset;
 	public HotkeyPreference hotkeyUndo;
 	public HotkeyPreference hotkeyMinimize;
+	public HotkeyPreference hotkeyAltStd;
 	public FloatPreference sigma;
+	public FloatPreference sigmaAlt;
+	public FloatPreference crosshairCorrection;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
@@ -30,9 +33,11 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference autoReset;
 	public BooleanPreference useAdvStatistics;
 	public BooleanPreference altClipboardReader;
+	public BooleanPreference useAltStd;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
 	public MultipleChoicePreference size;
+	public MultipleChoicePreference stdToggleMode;
 	
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
@@ -72,11 +77,31 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.toggleMinimized());
 			}
 		};
+		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", pref) {
+			@Override
+			public void execute(GUI gui) {
+				if (Main.preferences.useAltStd.get()) {
+					SwingUtilities.invokeLater(() -> gui.toggleLastSTD());
+				}
+			}
+		};
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigma(get());
 				gui.recalculateStronghold();
+			}
+		};
+		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.getTriangulator().setSigmaAlt(get());
+				gui.recalculateStronghold();
+			}
+		};
+		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
 			}
 		};
 		checkForUpdates = new BooleanPreference("check_for_updates", true, pref) {
@@ -136,6 +161,12 @@ public class NinjabrainBotPreferences {
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
+      }
+    };
+		useAltStd = new BooleanPreference("use_alt_std", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.optionsFrame.setAltSigmaEnabled(get()));
 			}
 		};
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] {0, 1, 2}, new String[] {FOURFOUR, EIGHTEIGHT, CHUNK}, pref) {

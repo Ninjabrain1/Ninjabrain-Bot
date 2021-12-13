@@ -10,14 +10,14 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = "1.0.2-pre1";
+	public static final String VERSION = "1.0.1";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
 	// [x] Error message if throws dont intersect
 	// [x] Options
 	// [x] - std
-	// [ ] - mean?
+	// [x] - mean?
 	// [x] - angle errors
 	// [x] - show nether coords
 	// [x] - show chunk location instead of block
@@ -38,8 +38,7 @@ public class Main {
 	// [x] Hotkeys
 	// [x] Calibration
 	// [ ] Show closest possible location
-	// [ ] Sigma toggle
-	// [ ] Angle you need to hold
+	// [x] Sigma toggle
 
 	public static void main(String[] args) {
 		Profiler.start("Initialize preferences");

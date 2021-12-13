@@ -55,7 +55,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 		// Change color on hover
 		addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mouseEntered(java.awt.event.MouseEvent evt) {
-		    	label.setBackground(hoverCol);
+		    	label.setBackground(isEnabled() ? hoverCol : bgCol);
 		    }
 
 		    public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -83,9 +83,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		// Change color on hover
 		addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mouseEntered(java.awt.event.MouseEvent evt) {
-		    	label.setBackground(hoverCol);
+		    	label.setBackground(isEnabled() ? hoverCol : bgCol);
 		    }
-
 		    public void mouseExited(java.awt.event.MouseEvent evt) {
 		    	label.setBackground(bgCol);
 		    }
