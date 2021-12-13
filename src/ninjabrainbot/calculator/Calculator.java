@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ninjabrainbot.Main;
 
-public class Triangulator {
+public class Calculator {
 
 	double sigma;
 	double sigmaAlt;
@@ -12,15 +12,15 @@ public class Triangulator {
 	int yRes = 1080;
 	int fov = 30;
 
-	public Triangulator() {
+	public Calculator() {
 		this(Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get());
 	}
 
-	public Triangulator(double sigma) {
+	public Calculator(double sigma) {
 		this(sigma, sigma);
 	}
 	
-	public Triangulator(double sigma, double sigmaAlt) {
+	public Calculator(double sigma, double sigmaAlt) {
 		this.sigma = sigma;
 		this.sigmaAlt = sigmaAlt;
 	}
@@ -51,6 +51,24 @@ public class Triangulator {
 			return null;
 		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
 		return posterior;
+	}
+	
+	public BlindResult blind(BlindPosition b, boolean approximated) {
+		int distanceThreshold = 400;
+		double probability = 0;
+		Prior prior;
+		if (!approximated) {
+			prior = new Prior((int) b.x * 8 / 16, (int) b.z * 8 / 16, distanceThreshold / 16 + 1);
+		} else {
+			prior = new ApproximatedPrior((int) b.x * 8 / 16, (int) b.z * 8 / 16, distanceThreshold / 16 + 1);
+		}
+		for (Chunk c : prior.getChunks()) {
+			double dx = b.x * 8 - c.x * 16 + 8;
+			double dz = b.z * 8 - c.z * 16 + 8;
+			if (dx * dx + dz * dz < distanceThreshold * distanceThreshold)
+				probability += c.weight;
+		}
+		return new BlindResult(probability, distanceThreshold);
 	}
 
 	/**

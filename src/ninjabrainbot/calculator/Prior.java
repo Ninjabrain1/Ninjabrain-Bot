@@ -35,12 +35,12 @@ public class Prior implements IPrior {
 	protected void setInitialWeights() {
 		RingIterator ringIterator = new RingIterator();
 		for (Ring ring : ringIterator) {
-			int c0 = (int) ring.innerRadius;
-			int c1 = (int) ring.outerRadius;
-			int xStart = (-c1 > x0 ? -c1 : x0) - margin();
-			int xEnd = (c1 < x1 ? c1 : x1) + margin();
-			int zStart = (-c1 > z0 ? -c1 : z0) - margin();
-			int zEnd = (c1 < z1 ? c1 : z1) + margin();
+			int c0 = (int) ring.innerRadius - margin();
+			int c1 = (int) ring.outerRadius + margin();
+			int xStart = (-c1 > x0 ? -c1 : x0);
+			int xEnd = (c1 < x1 ? c1 : x1);
+			int zStart = (-c1 > z0 ? -c1 : z0);
+			int zEnd = (c1 < z1 ? c1 : z1);
 			int innerThreshold = (int) ((c0 - 1)/Math.sqrt(2)) - 10;
 			for (int i = xStart; i <= xEnd; i++) {
 				for (int j = zStart; j <= zEnd; j++) {
@@ -170,7 +170,7 @@ public class Prior implements IPrior {
 	}
 	
 	private int idx(int i, int j) {
-		return size1d * (j - z0) + i - x0;
+		return 1 * (j - z0) + (i - x0) * size1d;
 	}
 	
 	@Override

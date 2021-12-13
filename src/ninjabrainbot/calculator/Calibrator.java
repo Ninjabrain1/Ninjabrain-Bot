@@ -10,7 +10,7 @@ public class Calibrator {
 	KeyPresser keyPresser;
 	int delay = 150; // key press delay
 	
-	Triangulator triangulator;
+	Calculator triangulator;
 	boolean calibrating;
 	ArrayList<Throw> eyeThrows;
 	boolean ready; 
@@ -20,7 +20,7 @@ public class Calibrator {
 	double lastZ;
 
 	public Calibrator() {
-		triangulator = new Triangulator(0.5);
+		triangulator = new Calculator(0.5);
 		calibrating = false;
 	}
 

@@ -19,7 +19,8 @@ import javax.swing.Timer;
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.calculator.TriangulationResult;
-import ninjabrainbot.calculator.Triangulator;
+import ninjabrainbot.calculator.BlindPosition;
+import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
 import ninjabrainbot.gui.components.MainButtonPanel;
@@ -53,7 +54,7 @@ public class GUI {
 	private static int autoResetDelay = 15 * 60 * 1000;
 	
 	public static final int MAX_THROWS = 10;
-	private Triangulator triangulator;
+	private Calculator calculator;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
 
@@ -62,7 +63,7 @@ public class GUI {
 		size = SizePreference.get(Main.preferences.size.get());
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
-		triangulator = new Triangulator();
+		calculator = new Calculator();
 		eyeThrows = new ArrayList<Throw>();
 		eyeThrowsLast = new ArrayList<Throw>();
 		
@@ -248,14 +249,22 @@ public class GUI {
 		Throw t = Throw.parseF3C(clipboard);
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size();
-			if (t != null && i < MAX_THROWS && shouldAddThrow(t)) {
-				saveThrowsForUndo();
-				eyeThrows.add(t);
-				enderEyePanel.setThrow(i, t);
-				onThrowsUpdated();
+			if (t != null) {
+				if (i < MAX_THROWS) {
+					saveThrowsForUndo();
+					eyeThrows.add(t);
+					enderEyePanel.setThrow(i, t);
+					onThrowsUpdated();
+				}
+			} else {
+				BlindPosition b = BlindPosition.parseF3C(clipboard);
+				if (b != null) {
+					System.out.println(calculator.blind(b, false).format());
+					System.out.println(calculator.blind(b, true).format());
+				}
 			}
 		} else {
-			if (t != null && shouldAddThrow(t)) {
+			if (t != null) {
 				try {
 					calibrationPanel.add(t);
 				} catch (InterruptedException e) {
@@ -301,13 +310,6 @@ public class GUI {
 		frame.setURL(url);
 	}
 	
-	/**
-	 * Returns true if the newly inputed throw t should be added.
-	 */
-	private boolean shouldAddThrow(Throw t) {
-		return true;
-	}
-	
 	public void recalculateStronghold() {
 		onThrowsUpdated();
 	}
@@ -316,7 +318,7 @@ public class GUI {
 		TriangulationResult result = null;
 		double[] errors = null;
 		if (eyeThrows.size() >= 1) {
-			result = triangulator.triangulate(eyeThrows);
+			result = calculator.triangulate(eyeThrows);
 			if (result.success) {
 				errors = result.getAngleErrors(eyeThrows);
 			}
@@ -349,8 +351,8 @@ public class GUI {
 		}
 	}
 	
-	public Triangulator getTriangulator() {
-		return this.triangulator;
+	public Calculator getTriangulator() {
+		return this.calculator;
 	}
 
 	private void checkIfOffScreen(JFrame frame) {
