@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,7 +59,7 @@ public class UpdateChecker implements Runnable {
 		JSONObject latest = getLatestRelease(releases);
 		String tag = latest.getString("tag_name");
 		JSONArray assets = getLatestRelease(releases).getJSONArray("assets");
-		if (!Main.VERSION.contentEquals(tag)) {
+		if (compareVersions(getSemanticVersion(tag), getSemanticVersion(Main.VERSION)) == 1) {
 			return new VersionURL(getDownloadUrl(assets), getReleaseUrl(latest), tag);
 		}
 		return null;
@@ -104,6 +106,46 @@ public class UpdateChecker implements Runnable {
 			e.printStackTrace();
 		}
 		System.out.println("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+	}
+	
+	private static int[] getSemanticVersion(String s) {
+		try {
+			Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
+			Matcher m = p.matcher(s);
+			if (m.find()) {
+				String[] split = m.group().split("\\.");
+				int[] version = new int[split.length];
+				for (int i = 0; i < split.length; i++) {
+					version[i] = Integer.parseInt(split[i]);
+				}
+				return version;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns 1 if a is newer than b, -1 if b is newer than a, and 0 if they are equivalent
+	 */
+	private static int compareVersions(int[] a, int[] b) {
+		if (a == b)
+			return 0;
+		if (b == null)
+			return 1;
+		if (a == null)
+			return -1;
+		int m = Math.max(a.length, b.length);
+		for (int i = 0; i < m; i++) {
+			int v_a = i < a.length ? a[i] : 0;
+			int v_b = i < b.length ? b[i] : 0;
+			if (v_a > v_b)
+				return 1;
+			if (v_b > v_a)
+				return -1;
+		}
+		return 0;
 	}
 
 }
