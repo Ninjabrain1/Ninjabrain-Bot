@@ -232,6 +232,7 @@ public class GUI {
 			eyeThrows.clear();
 			onThrowsUpdated();
 		}
+		mainTextArea.onReset();
 	}
 	
 	public void undo() {
@@ -260,7 +261,7 @@ public class GUI {
 					enderEyePanel.setThrow(i, t);
 					onThrowsUpdated();
 				}
-			} else {
+			} else if (eyeThrows.size() == 0) {
 				BlindPosition b = BlindPosition.parseF3C(clipboard);
 				if (b != null) {
 					BlindResult result = calculator.blind(b, true);

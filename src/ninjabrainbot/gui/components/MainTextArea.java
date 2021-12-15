@@ -59,6 +59,10 @@ public class MainTextArea extends JPanel {
 		basicTriangulation.updateColors(gui);
 		blind.updateColors(gui);
 	}
+	
+	public void onReset() {
+		layout.show(this, TRIANGULATION);
+	}
 
 }
 class BasicTriangulationPanel extends ThemedPanel {
