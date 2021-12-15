@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = "1.0.1";
+	public static final String VERSION = "1.0.1+pre1";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
@@ -30,7 +30,7 @@ public class Main {
 	// [x] - auto reset
 	// [x] Pixel correction
 	// [x] Number of blocks away
-	// [ ] Blind travel (?)
+	// [x] Blind travel (?)
 	// [x] Certainty color code
 	// [x] Remove throw
 	// [ ] Link to guide

@@ -20,6 +20,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.calculator.TriangulationResult;
 import ninjabrainbot.calculator.BlindPosition;
+import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
@@ -64,6 +65,9 @@ public class GUI {
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
 		calculator = new Calculator();
+		for (int i = 0; i < 1000; i+=10) {
+			calculator.blind(new BlindPosition(0, i), true);
+		}
 		eyeThrows = new ArrayList<Throw>();
 		eyeThrowsLast = new ArrayList<Throw>();
 		
@@ -157,7 +161,7 @@ public class GUI {
 	}
 
 	public void setNetherCoordsEnabled(boolean b) {
-		mainTextArea.netherLabel.setVisible(b);
+		mainTextArea.setNetherCoordsEnabled(b);
 	}
 
 	public void setAdvancedOptionsEnabled(boolean b) {
@@ -259,8 +263,8 @@ public class GUI {
 			} else {
 				BlindPosition b = BlindPosition.parseF3C(clipboard);
 				if (b != null) {
-					System.out.println(calculator.blind(b, false).format());
-					System.out.println(calculator.blind(b, true).format());
+					BlindResult result = calculator.blind(b, true);
+					mainTextArea.setResult(result, this);
 				}
 			}
 		} else {
@@ -323,7 +327,7 @@ public class GUI {
 				errors = result.getAngleErrors(eyeThrows);
 			}
 		} 
-		mainTextArea.setResult(result);
+		mainTextArea.setResult(result, this);
 		enderEyePanel.setErrors(errors);
 		// Update throw panels
 		enderEyePanel.setThrows(eyeThrows);
@@ -333,7 +337,6 @@ public class GUI {
 		}
 		// Update bounds
 		updateBounds();
-		mainTextArea.updateColors(this);
 	}
 
 	public void onClipboardUpdated(String newClipboard) {
