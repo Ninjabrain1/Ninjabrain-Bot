@@ -4,8 +4,13 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,18 +18,21 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.BlindResult;
-import ninjabrainbot.calculator.TriangulationResult;
+import ninjabrainbot.calculator.CalculatorResult;
+import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.io.NinjabrainBotPreferences;
 
 public class MainTextArea extends JPanel {
 
 	private static final long serialVersionUID = 5680882946230890993L;
 	
 	BasicTriangulationPanel basicTriangulation;
+	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
 	
-	private final String BLIND = "BLIND", TRIANGULATION = "TRI"; 
+	private final String BLIND = "BLIND", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET"; 
 	
 	CardLayout layout;
 	
@@ -33,16 +41,37 @@ public class MainTextArea extends JPanel {
 		setLayout(layout);
 		setAlignmentX(0);
 		basicTriangulation = new BasicTriangulationPanel(gui);
+		detailedTriangulation = new DetailedTriangulationPanel(gui);
 		blind = new BlindPanel(gui);
 		add(basicTriangulation, TRIANGULATION);
+		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);
 		setOpaque(false);
+		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+			layout.show(this, TRIANGULATION);
+		} else {
+			layout.show(this, TRIANGULATION_DETAILED);
+		}
 	}
 	
-	public void setResult(TriangulationResult result, GUI gui) {
-		basicTriangulation.setResult(result);
-		basicTriangulation.updateColors(gui);
-		layout.show(this, TRIANGULATION);
+	public void setResult(CalculatorResult result, GUI gui) {
+		if (result == null && blind.isVisible()) {
+			return;
+		}
+		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+			basicTriangulation.setResult(result);
+			basicTriangulation.updateColors(gui);
+			layout.show(this, TRIANGULATION);
+		} else {
+			if (result != null && !result.success()) {
+				basicTriangulation.setResult(result);
+				basicTriangulation.updateColors(gui);
+				layout.show(this, TRIANGULATION);
+			} else {
+				detailedTriangulation.setResult(result);
+				layout.show(this, TRIANGULATION_DETAILED);
+			}
+		}
 	}
 	
 	public void setResult(BlindResult result, GUI gui) {
@@ -61,7 +90,20 @@ public class MainTextArea extends JPanel {
 	}
 	
 	public void onReset() {
-		layout.show(this, TRIANGULATION);
+		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+			layout.show(this, TRIANGULATION);
+		} else {
+			layout.show(this, TRIANGULATION_DETAILED);
+		}
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+			return basicTriangulation.getPreferredSize();
+		} else {
+			return detailedTriangulation.getPreferredSize();
+		}
 	}
 
 }
@@ -91,13 +133,14 @@ class BasicTriangulationPanel extends ThemedPanel {
 		add(netherLabel);
 	}
 	
-	public void setResult(TriangulationResult result) {
+	public void setResult(CalculatorResult result) {
 		if (result != null) {
-			if (result.success) {
-				maintextLabel.setText(result.format());
+			if (result.success()) {
+				ChunkPrediction prediction = result.getBestPrediction();
+				maintextLabel.setText(prediction.format());
 				certaintyPanel.setText(CERTAINTY_TEXT);
-				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", result.weight*100.0), (float) result.weight);
-				netherLabel.setText(String.format(Locale.US, "Nether coordinates: (%d, %d)", result.x*2, result.z*2));
+				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.weight*100.0), (float) prediction.weight);
+				netherLabel.setText(String.format(Locale.US, "Nether coordinates: (%d, %d)", prediction.x*2, prediction.z*2));
 			} else {
 				maintextLabel.setText("Could not determine the stronghold chunk.");
 				certaintyPanel.setText("You probably misread one of the eyes.");
@@ -131,6 +174,55 @@ class BasicTriangulationPanel extends ThemedPanel {
 	}
 	
 }
+class DetailedTriangulationPanel extends ThemedPanel {
+
+	private static final long serialVersionUID = -9022636765337872342L;
+	
+	private ChunkPanelHeader header;
+	private List<ChunkPanel> panels;
+	private static final int numPanels = 5;
+	
+	public DetailedTriangulationPanel(GUI gui) {
+		super(gui);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setAlignmentX(0);
+		header = new ChunkPanelHeader(gui);
+		add(header);
+		panels = new ArrayList<ChunkPanel>();
+		for (int i = 0; i < numPanels; i++) {
+			ChunkPanel panel = new ChunkPanel(gui);
+			panels.add(panel);
+			add(panel);
+		}
+	}
+	
+	public void setResult(CalculatorResult result) {
+		if (result == null) {
+			for (ChunkPanel p : panels) {
+				p.setPrediciton(null);
+			}
+			return;
+		}
+		List<ChunkPrediction> predictions = result.getTopPredictions(numPanels);
+		for (int i = 0; i < numPanels; i++) {
+			ChunkPanel p = panels.get(i);
+			p.setPrediciton(predictions.get(i));
+		}
+		header.updateHeaderText();
+	}
+	
+	@Override
+	public Color getBackgroundColor(Theme theme) {
+		return theme.COLOR_NEUTRAL;
+	}
+	
+	@Override
+	public void updateSize(GUI gui) {
+		setPreferredSize(new Dimension(0, (1 + numPanels) * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM)));
+		super.updateSize(gui);
+	}
+	
+}
 class BlindPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = 5784318732643211103L;
@@ -141,14 +233,21 @@ class BlindPanel extends ThemedPanel {
 	
 	public BlindPanel(GUI gui) {
 		super(gui);
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new GridBagLayout());
 		setAlignmentX(0);
 		evalLabel = new ColorMapLabel(gui, true);
 		distanceLabel = new ThemedLabel(gui, "");
 		certaintyPanel = new ColorMapLabel(gui, false);
-		add(evalLabel);
-		add(certaintyPanel);
-		add(distanceLabel);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridy = GridBagConstraints.RELATIVE;
+		gbc.gridx = 0;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.weightx = 1;
+		add(evalLabel, gbc);
+		add(certaintyPanel, gbc);
+		add(distanceLabel, gbc);
+		gbc.weighty = 1;
+		add(Box.createGlue(), gbc);
 	}
 	
 	public void setResult(BlindResult result) {

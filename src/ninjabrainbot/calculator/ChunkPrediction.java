@@ -5,7 +5,7 @@ import java.util.Locale;
 import ninjabrainbot.Main;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 
-public class TriangulationResult extends Chunk {
+public class ChunkPrediction extends Chunk {
 
 	public final int fourfour_x, fourfour_z;
 	public final boolean success;
@@ -14,7 +14,7 @@ public class TriangulationResult extends Chunk {
 	/**
 	 * Creates a triangulation result.
 	 */
-	public TriangulationResult(Chunk chunk, Throw playerPos) {
+	public ChunkPrediction(Chunk chunk, Throw playerPos) {
 		super(chunk.x, chunk.z, chunk.weight);
 		this.fourfour_x = 16 * chunk.x + 4;
 		this.fourfour_z = 16 * chunk.z + 4;
@@ -25,7 +25,7 @@ public class TriangulationResult extends Chunk {
 	/**
 	 * Creates a failed triangulation result.
 	 */
-	public TriangulationResult() {
+	public ChunkPrediction() {
 		this(new Chunk(0, 0), null);
 	}
 	
@@ -39,6 +39,30 @@ public class TriangulationResult extends Chunk {
 			return String.format(Locale.US, "Chunk: (%d, %d), %d blocks away ", x, z, distance);
 		}
 		return String.format(Locale.US, "Chunk: (%d, %d), %d blocks away ", x, z, distance);
+	}
+
+	public String formatLocation() {
+		switch (Main.preferences.strongholdDisplayType.get()) {
+		case NinjabrainBotPreferences.FOURFOUR:
+			return String.format(Locale.US, "(%d, %d)", fourfour_x, fourfour_z);
+		case NinjabrainBotPreferences.EIGHTEIGHT:
+			return String.format(Locale.US, "(%d, %d)", fourfour_x + 4, fourfour_z + 4);
+		case NinjabrainBotPreferences.CHUNK:
+			return String.format(Locale.US, "(%d, %d)", x, z);
+		}
+		return String.format(Locale.US, "(%d, %d)", x, z);
+	}
+
+	public String formatCertainty() {
+		return String.format(Locale.US, "%.1f%%", weight * 100);
+	}
+
+	public String formatDistance() {
+		return String.format(Locale.US, "%d", distance);
+	}
+
+	public String formatNether() {
+		return String.format(Locale.US, "(%d, %d)", x * 2, z * 2);
 	}
 
 }

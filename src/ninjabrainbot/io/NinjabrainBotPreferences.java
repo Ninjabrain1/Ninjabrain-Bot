@@ -38,11 +38,15 @@ public class NinjabrainBotPreferences {
 	public MultipleChoicePreference theme;
 	public MultipleChoicePreference size;
 	public MultipleChoicePreference stdToggleMode;
+	public MultipleChoicePreference view;
 	
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
 	public static final String CHUNK = "Chunk";
-	
+
+	public static final String BASIC = "Basic";
+	public static final String DETAILED = "Detailed";
+
 	public NinjabrainBotPreferences() {
 		pref = Preferences.userNodeForPackage(Main.class);
 		windowX = new IntPreference("window_x", 100, pref);
@@ -161,8 +165,8 @@ public class NinjabrainBotPreferences {
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
-      }
-    };
+			}
+		};
 		useAltStd = new BooleanPreference("use_alt_std", false, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
@@ -185,6 +189,12 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.updateSizePreference());
+			}
+		};
+		view = new MultipleChoicePreference("view", BASIC, new int[] {0, 1}, new String[] {BASIC, DETAILED}, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
 	}

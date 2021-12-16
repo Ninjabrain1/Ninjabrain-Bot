@@ -36,17 +36,14 @@ public class Calculator {
 		this.sigmaAlt = sigmaAlt;
 	}
 
-	public TriangulationResult triangulate(ArrayList<Throw> eyeThrows) {
+	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows) {
 		if (eyeThrows.size() == 0)
-			return new TriangulationResult();
+			return new CalculatorResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
 		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
-		// Find chunk with largest posterior probability
-		Chunk predictedChunk = posterior.getMostProbableChunk();
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
-//		posterior.getChunks().stream().sorted((a, b) -> Double.compare(a.weight, b.weight)).forEach(p -> System.out.println(p));;
-		return new TriangulationResult(predictedChunk, eyeThrows.get(eyeThrows.size() - 1));
+		return new CalculatorResult(posterior, eyeThrows);
 	}
 	
 	public Posterior getPosterior(ArrayList<Throw> eyeThrows) {

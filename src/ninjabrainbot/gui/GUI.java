@@ -17,11 +17,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.Throw;
-import ninjabrainbot.calculator.TriangulationResult;
 import ninjabrainbot.calculator.BlindPosition;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
+import ninjabrainbot.calculator.CalculatorResult;
+import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
 import ninjabrainbot.gui.components.MainButtonPanel;
@@ -65,9 +65,6 @@ public class GUI {
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<ThemedComponent>();
 		calculator = new Calculator();
-		for (int i = 0; i < 1000; i+=10) {
-			calculator.blind(new BlindPosition(0, i), true);
-		}
 		eyeThrows = new ArrayList<Throw>();
 		eyeThrowsLast = new ArrayList<Throw>();
 		
@@ -320,12 +317,12 @@ public class GUI {
 	}
 	
 	private void onThrowsUpdated() {
-		TriangulationResult result = null;
+		CalculatorResult result = null;
 		double[] errors = null;
 		if (eyeThrows.size() >= 1) {
 			result = calculator.triangulate(eyeThrows);
-			if (result.success) {
-				errors = result.getAngleErrors(eyeThrows);
+			if (result.success()) {
+				errors = result.getAngleErrors();
 			}
 		} 
 		mainTextArea.setResult(result, this);

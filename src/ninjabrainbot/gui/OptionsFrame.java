@@ -100,14 +100,14 @@ public class OptionsFrame extends ThemedFrame {
 		column1.add(new CheckboxPanel(gui, "Always on top", Main.preferences.alwaysOnTop));
 		column1.add(new CheckboxPanel(gui, "Translucent window", Main.preferences.translucent));
 		column1.add(new CheckboxPanel(gui, "Notify when a new version is available", Main.preferences.checkForUpdates));
+		column2.add(Box.createGlue());
 		
 		// Column 2
 		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(gui, "Display stronghold location using", Main.preferences.strongholdDisplayType));
+		column2.add(new RadioButtonPanel(gui, "View type", Main.preferences.view));
 		column2.add(new RadioButtonPanel(gui, "Theme", Main.preferences.theme));
 		column2.add(new RadioButtonPanel(gui, "Window size", Main.preferences.size));
-		column2.add(Box.createGlue());
-		column2.add(Box.createGlue());
 		column2.add(Box.createGlue());
 		
 		// Advanced panel
