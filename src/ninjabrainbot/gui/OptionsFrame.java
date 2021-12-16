@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
@@ -100,7 +103,7 @@ public class OptionsFrame extends ThemedFrame {
 		column1.add(new CheckboxPanel(gui, "Always on top", Main.preferences.alwaysOnTop));
 		column1.add(new CheckboxPanel(gui, "Translucent window", Main.preferences.translucent));
 		column1.add(new CheckboxPanel(gui, "Notify when a new version is available", Main.preferences.checkForUpdates));
-		column2.add(Box.createGlue());
+		column1.add(Box.createGlue());
 		
 		// Column 2
 		column2.add(Box.createVerticalStrut(10));
@@ -127,7 +130,7 @@ public class OptionsFrame extends ThemedFrame {
 		advPanel.add(ac1);
 		advPanel.add(ac2);
 		ac1.setLayout(new BoxLayout(ac1, BoxLayout.Y_AXIS));
-		ac2.setLayout(new BoxLayout(ac2, BoxLayout.Y_AXIS));
+		ac2.setLayout(new GridBagLayout());
 		settingsPanel.add(advPanel);
 		
 		sigma = new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma);
@@ -161,22 +164,23 @@ public class OptionsFrame extends ThemedFrame {
 		ac1.add(Box.createGlue());
 		if (KeyboardListener.registered) {
 			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);
-			labelShortcuts.setAlignmentX(0.5f);
-			ac2.add(labelShortcuts);
-			ac2.add(new Divider(gui));
-			ac2.add(Box.createVerticalStrut(4));
-			ac2.add(new HotkeyPanel(gui, "+0.01 to last angle", Main.preferences.hotkeyIncrement));
-			ac2.add(Box.createVerticalStrut(4));
-			ac2.add(new HotkeyPanel(gui, "-0.01 to last angle", Main.preferences.hotkeyDecrement));
-			ac2.add(Box.createVerticalStrut(4));
-			ac2.add(new HotkeyPanel(gui, "Reset", Main.preferences.hotkeyReset));
-			ac2.add(Box.createVerticalStrut(4));
-			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo));
-			ac2.add(Box.createVerticalStrut(4));
-			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize));
-			ac2.add(Box.createGlue());
-			ac2.add(Box.createGlue());
-			ac2.add(Box.createGlue());
+			labelShortcuts.setHorizontalAlignment(0);
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.gridy = GridBagConstraints.RELATIVE;
+			constraints.gridx = 0;
+			constraints.insets = new Insets(0, 0, 4, 0);
+			constraints.anchor = GridBagConstraints.CENTER;
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.weightx = 1;
+			ac2.add(labelShortcuts, constraints);
+			ac2.add(new Divider(gui), constraints);
+			ac2.add(new HotkeyPanel(gui, "+0.01 to last angle", Main.preferences.hotkeyIncrement), constraints);
+			ac2.add(new HotkeyPanel(gui, "-0.01 to last angle", Main.preferences.hotkeyDecrement), constraints);
+			ac2.add(new HotkeyPanel(gui, "Reset", Main.preferences.hotkeyReset), constraints);
+			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo), constraints);
+			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize), constraints);
+			constraints.weighty = 1;
+			ac2.add(Box.createGlue(), constraints);
 		}
 	}
 	

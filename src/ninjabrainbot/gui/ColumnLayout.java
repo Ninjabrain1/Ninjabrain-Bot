@@ -65,7 +65,6 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 			Insets insets = parent.getInsets();
 			int ncomponents = parent.getComponentCount();
 			int ncols = ncomponents;
-			boolean ltr = parent.getComponentOrientation().isLeftToRight();
 
 			if (ncomponents == 0) {
 				return;

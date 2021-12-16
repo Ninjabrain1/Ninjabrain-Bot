@@ -10,7 +10,7 @@ import ninjabrainbot.util.Profiler;
 
 public class Main {
 
-	public static final String VERSION = "1.0.1-pre2";
+	public static final String VERSION = "1.1.0";
 	public static NinjabrainBotPreferences preferences;
 
 	// TO-DO LIST
@@ -26,7 +26,7 @@ public class Main {
 	// [x] - size
 	// [x] - check for updates
 	// [x] - translucent
-	// [ ] - number of predictions
+	// [x] - number of predictions
 	// [x] - auto reset
 	// [x] Pixel correction
 	// [x] Number of blocks away
@@ -37,7 +37,7 @@ public class Main {
 	// [ ] Copy result to clipboard
 	// [x] Hotkeys
 	// [x] Calibration
-	// [ ] Show closest possible location
+	// [x] Show closest possible location
 	// [x] Sigma toggle
 
 	public static void main(String[] args) {
