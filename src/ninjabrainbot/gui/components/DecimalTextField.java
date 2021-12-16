@@ -21,7 +21,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	private static final long serialVersionUID = 1167120412326064670L;
 
 	public DecimalTextField(GUI gui, float value, float min, float max) {
-		super(new SpinnerNumberModel(value, 0, 1e7, min));
+		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
 		setBorder(BorderFactory.createEmptyBorder());
 		setAlignmentX(1);
 		setFocusable(false);
