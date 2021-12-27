@@ -29,45 +29,47 @@ import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
 /**
  * Main class for the user interface.
  */
 public class GUI {
-	
-	private MainTextArea mainTextArea;
-	private MainButtonPanel mainButtonPanel;
-	private EnderEyePanel enderEyePanel;
-	
+
+	private final MainTextArea mainTextArea;
+	private final EnderEyePanel enderEyePanel;
+
 	public NinjabrainBotFrame frame;
 	public OptionsFrame optionsFrame;
-	private NotificationsFrame notificationsFrame;
-	private CalibrationPanel calibrationPanel;
-	
-	private Font font;
-	private Font fontLight;
+	private final NotificationsFrame notificationsFrame;
+	private final CalibrationPanel calibrationPanel;
+
 	public Theme theme;
 	public SizePreference size;
-	private ArrayList<ThemedComponent> themedComponents;
-	
+	private final ArrayList<ThemedComponent> themedComponents;
+
 	public Timer autoResetTimer;
-	private static int autoResetDelay = 15 * 60 * 1000;
-	
+	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
+
 	public static final int MAX_THROWS = 10;
-	private Calculator calculator;
+	private final Calculator calculator;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
+
+	private Font font;
+	private Font fontLight;
 
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
+		font = new Font(null, Font.BOLD, 25);
 		Locale.setDefault(Locale.US);
-		themedComponents = new ArrayList<ThemedComponent>();
+		themedComponents = new ArrayList<>();
 		calculator = new Calculator();
-		eyeThrows = new ArrayList<Throw>();
-		eyeThrowsLast = new ArrayList<Throw>();
-		
+		eyeThrows = new ArrayList<>();
+		eyeThrowsLast = new ArrayList<>();
+
 		Profiler.start("Create frame");
 		frame = new NinjabrainBotFrame(this);
 		notificationsFrame = frame.getNotificationsFrame();
@@ -76,7 +78,13 @@ public class GUI {
 		Profiler.stopAndStart("Load fonts");
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+			if (font.canDisplayUpTo(I18n.get("lang")) != -1) {
+				font = new Font(null);
+			}
 			fontLight = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Light.ttf"));
+			if (fontLight.canDisplayUpTo(I18n.get("lang")) != -1) {
+				fontLight = new Font(null);
+			}
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(font);
 			ge.registerFont(fontLight);
@@ -95,23 +103,23 @@ public class GUI {
 		Profiler.stopAndStart("Create main text area");
 		mainTextArea = new MainTextArea(this);
 		frame.add(mainTextArea);
-		
+
 		// "Throws" text
 		Profiler.stopAndStart("Create main button area");
-		mainButtonPanel = new MainButtonPanel(this);
+		MainButtonPanel mainButtonPanel = new MainButtonPanel(this);
 		frame.add(mainButtonPanel);
 
 		// Throw panels
 		Profiler.stopAndStart("Create throw panels");
 		enderEyePanel = new EnderEyePanel(this);
 		frame.add(enderEyePanel);
-		
+
 		// Settings window
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(this);
 		calibrationPanel = optionsFrame.getCalibrationPanel();
 		Profiler.stop();
-		
+
 		Profiler.stopAndStart("Update fonts and colors");
 		updateFontsAndColors();
 		Profiler.stopAndStart("Update bounds");
@@ -121,36 +129,37 @@ public class GUI {
 		frame.setVisible(true);
 		Profiler.stopAndStart("Set translucency");
 		setTranslucent(Main.preferences.translucent.get());
-		
+
 		// Auto reset timer
-		autoResetTimer = new Timer(autoResetDelay, p -> {
+		autoResetTimer = new Timer(AUTO_RESET_DELAY, p -> {
 			resetThrows();
 			autoResetTimer.stop();
 		});
 	}
-	
+
 	public void setTranslucent(boolean t) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		if (gd.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT))
+		if (gd.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT)) {
 			frame.setOpacity(t ? 0.75f : 1.0f);
+		}
 	}
-	
+
 	public void setAlwaysOnTop(boolean b) {
 		frame.setAlwaysOnTop(b);
 		optionsFrame.setAlwaysOnTop(b);
 		notificationsFrame.setAlwaysOnTop(b);
 	}
-	
+
 	public void setNotificationsEnabled(boolean b) {
 		frame.getNotificationsButton().setVisible(b && frame.getNotificationsButton().hasURL());
 	}
-	
+
 	public void updateTheme() {
 		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
 	}
-	
+
 	public void updateSizePreference() {
 		size = SizePreference.get(Main.preferences.size.get());
 		updateFontsAndColors();
@@ -169,11 +178,11 @@ public class GUI {
 		enderEyePanel.setAngleErrorsEnabled(b);
 		updateBounds();
 	}
-	
+
 	public Font fontSize(float size, boolean light) {
 		return light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
 	}
-	
+
 	public void registerThemedComponent(ThemedComponent c) {
 		themedComponents.add(c);
 	}
@@ -189,7 +198,7 @@ public class GUI {
 		frame.setSize(size.WIDTH, frame.getPreferredSize().height);
 		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
-	
+
 	private void updateFontsAndColors() {
 		// Color and font
 		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
@@ -201,12 +210,12 @@ public class GUI {
 			tc.updateSize(this);
 		}
 	}
-	
-	private FontRenderContext frc = new FontRenderContext(null, true, false);
+
+	private final FontRenderContext frc = new FontRenderContext(null, true, false);
 	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
-	
+
 	public void toggleOptionsWindow() {
 		if (optionsFrame.isVisible()) {
 			optionsFrame.close();
@@ -216,7 +225,7 @@ public class GUI {
 			optionsFrame.setLocation(bounds.x + 40, bounds.y + 30);
 		}
 	}
-	
+
 	public void toggleMinimized() {
 		frame.toggleMinimized();
 	}
@@ -231,14 +240,14 @@ public class GUI {
 		}
 		mainTextArea.onReset();
 	}
-	
+
 	public void undo() {
 		ArrayList<Throw> temp = eyeThrowsLast;
 		eyeThrowsLast = eyeThrows;
 		eyeThrows = temp;
 		onThrowsUpdated();
 	}
-	
+
 	public void removeThrow(Throw t) {
 		if (eyeThrows.contains(t)) {
 			saveThrowsForUndo();
@@ -246,7 +255,7 @@ public class GUI {
 			onThrowsUpdated();
 		}
 	}
-	
+
 	private void processClipboardUpdate(String clipboard) {
 		Throw t = Throw.parseF3C(clipboard);
 		if (!calibrationPanel.isCalibrating()) {
@@ -275,12 +284,13 @@ public class GUI {
 			}
 		}
 	}
-	
+
 	public void changeLastAngle(double delta) {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
-			if (i == -1)
+			if (i == -1) {
 				return;
+			}
 			Throw last = eyeThrows.get(i);
 			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
 			saveThrowsForUndo();
@@ -292,12 +302,13 @@ public class GUI {
 			calibrationPanel.changeLastAngle(delta);
 		}
 	}
-	
+
 	public void toggleLastSTD() {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
-			if (i == -1)
+			if (i == -1) {
 				return;
+			}
 			Throw last = eyeThrows.get(i);
 			Throw t = last.withToggledSTD();
 			saveThrowsForUndo();
@@ -307,15 +318,15 @@ public class GUI {
 			onThrowsUpdated();
 		}
 	}
-	
+
 	private void setUpdateURL(VersionURL url) {
 		frame.setURL(url);
 	}
-	
+
 	public void recalculateStronghold() {
 		onThrowsUpdated();
 	}
-	
+
 	private void onThrowsUpdated() {
 		CalculatorResult result = null;
 		double[] errors = null;
@@ -324,7 +335,7 @@ public class GUI {
 			if (result.success()) {
 				errors = result.getAngleErrors();
 			}
-		} 
+		}
 		mainTextArea.setResult(result, this);
 		enderEyePanel.setErrors(errors);
 		// Update throw panels
@@ -340,28 +351,26 @@ public class GUI {
 	public void onClipboardUpdated(String newClipboard) {
 		SwingUtilities.invokeLater(() -> processClipboardUpdate(newClipboard));
 	}
-	
+
 	public void onNewUpdateAvailable(VersionURL url) {
 		SwingUtilities.invokeLater(() -> setUpdateURL(url));
 	}
-	
+
 	private void saveThrowsForUndo() {
 		eyeThrowsLast.clear();
-		for (int i = 0; i < eyeThrows.size(); i++) {
-			eyeThrowsLast.add(eyeThrows.get(i));
-		}
+		eyeThrowsLast.addAll(eyeThrows);
 	}
-	
+
 	public Calculator getTriangulator() {
 		return this.calculator;
 	}
 
 	private void checkIfOffScreen(JFrame frame) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice lstGDs[] = ge.getScreenDevices();
-		for (GraphicsDevice gd : lstGDs) {
-			if (gd.getDefaultConfiguration().getBounds().contains(frame.getBounds()))
+		for (GraphicsDevice gd : ge.getScreenDevices()) {
+			if (gd.getDefaultConfiguration().getBounds().contains(frame.getBounds())) {
 				return;
+			}
 		}
 		frame.setLocation(100, 100);
 	}

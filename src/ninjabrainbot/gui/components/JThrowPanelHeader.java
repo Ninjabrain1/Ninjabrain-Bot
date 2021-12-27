@@ -12,6 +12,7 @@ import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.util.I18n;
 
 /**
  * JComponent for showing a Throw.
@@ -37,8 +38,8 @@ public class JThrowPanelHeader extends ThemedPanel {
 		errorsEnabled = Main.preferences.showAngleErrors.get();
 		x = new JLabel("x", 0);
 		z = new JLabel("z", 0);
-		alpha = new JLabel("Angle", 0);
-		error = new JLabel("Error", 0);
+		alpha = new JLabel(I18n.get("angle"), 0);
+		error = new JLabel(I18n.get("error"), 0);
 		add(x);
 		add(z);
 		add(alpha);

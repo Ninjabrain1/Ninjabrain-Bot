@@ -6,6 +6,7 @@ import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.UpdateChecker;
+import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
 public class Main {
@@ -41,6 +42,7 @@ public class Main {
 	// [x] Sigma toggle
 
 	public static void main(String[] args) {
+		System.out.println("lang info: " + I18n.get("lang"));
 		Profiler.start("Initialize preferences");
 		preferences = new NinjabrainBotPreferences();
 		Profiler.stopAndStart("Calculate approximated density");

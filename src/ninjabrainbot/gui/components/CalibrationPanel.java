@@ -27,6 +27,7 @@ import ninjabrainbot.gui.Histogram;
 import ninjabrainbot.gui.OptionsFrame;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.util.I18n;
 
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
@@ -226,11 +227,11 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 				Throw t = eyeThrows.get(i);
 				double e = angleErrors[i];
 				if (Math.abs(t.correction) > 1e-7) {
-					b.append(String.format(t.correction < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha - t.correction, t.correction));
+					b.append(String.format(I18n.get("angle") + (t.correction < 0 ? ": %.2f %.2f\n" : ": %.2f +%.2f\n"), t.alpha - t.correction, t.correction));
 				} else {
-					b.append(String.format("Angle: %.2f\n", t.alpha));
+					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.alpha));
 				}
-				b.append(String.format("Error: %.3f\n", e));
+				b.append(String.format(I18n.get("error") + ": %.3f\n", e));
 			}
 			errors.area.setText(b.toString());
 			hist.setData(angleErrors);

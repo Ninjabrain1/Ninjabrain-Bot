@@ -13,6 +13,7 @@ import ninjabrainbot.gui.NotificationsFrame;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.util.I18n;
 
 public class NinjabrainBotFrame extends ThemedFrame {
 
@@ -21,7 +22,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 	private JLabel versiontextLabel;
 	private NotificationsButton notificationsButton;
 
-	public static final String TITLE_TEXT = "Ninjabrain Bot ";
+	public static final String TITLE_TEXT = I18n.get("title");
 	public static final String VERSION_TEXT =  "v" + Main.VERSION;
 
 	public NinjabrainBotFrame(GUI gui) {

@@ -23,6 +23,7 @@ import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.util.I18n;
 
 public class MainTextArea extends JPanel {
 
@@ -115,13 +116,13 @@ class BasicTriangulationPanel extends ThemedPanel {
 	public ColorMapLabel certaintyPanel;
 	public JLabel netherLabel;
 
-	public static final String CERTAINTY_TEXT = "Certainty: ";
+	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 	
 	public BasicTriangulationPanel(GUI gui) {
 		super(gui);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(0);
-		maintextLabel = new ThemedLabel(gui, "Waiting for F3+C...");
+		maintextLabel = new ThemedLabel(gui, I18n.get("waiting_f3c"));
 		certaintyPanel = new ColorMapLabel(gui, true);
 		netherLabel = new ThemedLabel(gui, "");
 		netherLabel.setVisible(Main.preferences.showNetherCoords.get());
@@ -140,15 +141,15 @@ class BasicTriangulationPanel extends ThemedPanel {
 				maintextLabel.setText(prediction.format());
 				certaintyPanel.setText(CERTAINTY_TEXT);
 				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.weight*100.0), (float) prediction.weight);
-				netherLabel.setText(String.format(Locale.US, "Nether coordinates: (%d, %d)", prediction.x*2, prediction.z*2));
+				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2));
 			} else {
-				maintextLabel.setText("Could not determine the stronghold chunk.");
-				certaintyPanel.setText("You probably misread one of the eyes.");
+				maintextLabel.setText(I18n.get("could_not_determine"));
+				certaintyPanel.setText(I18n.get("you_probably_misread"));
 				certaintyPanel.setColoredText("", 0);
 				netherLabel.setText("");
 			}
 		} else {
-			maintextLabel.setText("Waiting for F3+C...");
+			maintextLabel.setText(I18n.get("waiting_f3c"));
 			certaintyPanel.setText("");
 			certaintyPanel.setColoredText("", 0);
 			netherLabel.setText("");
@@ -251,11 +252,11 @@ class BlindPanel extends ThemedPanel {
 	}
 	
 	public void setResult(BlindResult result) {
-		evalLabel.setText(String.format(Locale.US, "Blind coords (%.0f, %.0f) are ", result.x, result.z));
+		evalLabel.setText(I18n.get("blind_coords", result.x, result.z));
 		evalLabel.setColoredText(String.format(Locale.US, "%s", result.evaluation().snd), result.evaluation().fst);
-		certaintyPanel.setText(String.format(Locale.US, " chance of <%d block blind", (int) result.highrollThreshold));
+		certaintyPanel.setText(I18n.get("chance_of", (int) result.highrollThreshold));
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", result.highrollProbability*100), (float) result.highrollProbability / 0.1f);
-		distanceLabel.setText(String.format(Locale.US, "Average distance to stronghold: %.0f blocks", result.avgDistance));
+		distanceLabel.setText(I18n.get("average_distance_to", result.avgDistance));
 	}
 	
 	@Override
