@@ -40,6 +40,7 @@ import ninjabrainbot.io.FloatPreference;
 import ninjabrainbot.io.HotkeyPreference;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.MultipleChoicePreference;
+import ninjabrainbot.util.I18n;
 
 public class OptionsFrame extends ThemedFrame {
 
@@ -59,7 +60,7 @@ public class OptionsFrame extends ThemedFrame {
 	static final int COLUMN_WIDTH = WINDOW_WIDTH/2;
 	static final int PADDING = 6;
 	
-	private static final String TITLE_TEXT = "Settings";
+	private static final String TITLE_TEXT = I18n.get("settings");
 
 	public OptionsFrame(GUI gui) {
 		super(gui, TITLE_TEXT);
@@ -98,26 +99,26 @@ public class OptionsFrame extends ThemedFrame {
 		mainPanel.add(columns);
 		
 		// Column 1
-		column1.add(new CheckboxPanel(gui, "Show nether coordinates", Main.preferences.showNetherCoords));
-		column1.add(new CheckboxPanel(gui, "Auto reset when idle for 15 minutes", Main.preferences.autoReset));
-		column1.add(new CheckboxPanel(gui, "Always on top", Main.preferences.alwaysOnTop));
-		column1.add(new CheckboxPanel(gui, "Translucent window", Main.preferences.translucent));
-		column1.add(new CheckboxPanel(gui, "Notify when a new version is available", Main.preferences.checkForUpdates));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.show_nether_coordinates"), Main.preferences.showNetherCoords));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.auto_reset"), Main.preferences.autoReset));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.always_on_top"), Main.preferences.alwaysOnTop));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.translucent_window"), Main.preferences.translucent));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.notify_when_a_new_version_is_available"), Main.preferences.checkForUpdates));
 		column1.add(Box.createGlue());
 		
 		// Column 2
 		column2.add(Box.createVerticalStrut(10));
-		column2.add(new RadioButtonPanel(gui, "Display stronghold location using", Main.preferences.strongholdDisplayType));
-		column2.add(new RadioButtonPanel(gui, "View type", Main.preferences.view));
-		column2.add(new RadioButtonPanel(gui, "Theme", Main.preferences.theme));
-		column2.add(new RadioButtonPanel(gui, "Window size", Main.preferences.size));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.display_stronghold_location_using"), Main.preferences.strongholdDisplayType));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.view_type"), Main.preferences.view));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.theme"), Main.preferences.theme));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.window_size"), Main.preferences.size));
 		column2.add(Box.createGlue());
 		
 		// Advanced panel
 		mainPanel.add(Box.createVerticalStrut(PADDING));
 		mainPanel.add(new Divider(gui));
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		mainPanel.add(new CheckboxPanel(gui, "Show advanced options", Main.preferences.showAdvancedOptions));
+		mainPanel.add(new CheckboxPanel(gui, I18n.get("settings.show_advanced_options"), Main.preferences.showAdvancedOptions));
 		advPanel = new JPanel();
 		advPanel.setOpaque(false);
 		advPanel.setLayout(new GridLayout(1, 2, PADDING, 0));
@@ -133,9 +134,9 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setLayout(new GridBagLayout());
 		settingsPanel.add(advPanel);
 		
-		sigma = new TextboxPanel(gui, "Standard deviation: ", Main.preferences.sigma);
+		sigma = new TextboxPanel(gui, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
 		ac1.add(sigma);
-		JButton calibrateButton = new FlatButton(gui, "Calibrate standard deviation") {
+		JButton calibrateButton = new FlatButton(gui, I18n.get("settings.calibrate_standard_deviation")) {
 			private static final long serialVersionUID = -673676238214760361L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -145,25 +146,25 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
 		ac1.add(calibrateButton);
-		ac1.add(new CheckboxPanel(gui, "Enable standard deviation toggle", Main.preferences.useAltStd));
-		sigmaAlt = new TextboxPanel(gui, "Alt. standard deviation: ", Main.preferences.sigmaAlt);
+		ac1.add(new CheckboxPanel(gui, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
+		sigmaAlt = new TextboxPanel(gui, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
 		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());
 		ac1.add(sigmaAlt);
 		if (KeyboardListener.registered) {
-			sigmaAltHotkey = new HotkeyPanel(gui, "Alt. std on last angle", Main.preferences.hotkeyAltStd);
+			sigmaAltHotkey = new HotkeyPanel(gui, I18n.get("settings.alt_std_on_last_angle"), Main.preferences.hotkeyAltStd);
 			sigmaAltHotkey.setEnabled(Main.preferences.useAltStd.get());
 			ac1.add(sigmaAltHotkey);
 		}
 		ac1.add(Box.createVerticalStrut(4));
 		ac1.add(new Divider(gui));
 		ac1.add(Box.createVerticalStrut(4));
-		ac1.add(new TextboxPanel(gui, "Crosshair correction:", Main.preferences.crosshairCorrection));
-		ac1.add(new CheckboxPanel(gui, "Show angle errors", Main.preferences.showAngleErrors));
-		ac1.add(new CheckboxPanel(gui, "Use advanced stronghold statistics", Main.preferences.useAdvStatistics));
-		ac1.add(new CheckboxPanel(gui, "Use alternative clipboard reader", Main.preferences.altClipboardReader));
+		ac1.add(new TextboxPanel(gui, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
+		ac1.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
+		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
+		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
 		ac1.add(Box.createGlue());
 		if (KeyboardListener.registered) {
-			ThemedLabel labelShortcuts = new ThemedLabel(gui, "Keyboard shortcuts", false);
+			ThemedLabel labelShortcuts = new ThemedLabel(gui, I18n.get("settings.keyboard_shortcuts"), false);
 			labelShortcuts.setHorizontalAlignment(0);
 			GridBagConstraints constraints = new GridBagConstraints();
 			constraints.gridy = GridBagConstraints.RELATIVE;
@@ -174,11 +175,11 @@ public class OptionsFrame extends ThemedFrame {
 			constraints.weightx = 1;
 			ac2.add(labelShortcuts, constraints);
 			ac2.add(new Divider(gui), constraints);
-			ac2.add(new HotkeyPanel(gui, "+0.01 to last angle", Main.preferences.hotkeyIncrement), constraints);
-			ac2.add(new HotkeyPanel(gui, "-0.01 to last angle", Main.preferences.hotkeyDecrement), constraints);
-			ac2.add(new HotkeyPanel(gui, "Reset", Main.preferences.hotkeyReset), constraints);
-			ac2.add(new HotkeyPanel(gui, "Undo", Main.preferences.hotkeyUndo), constraints);
-			ac2.add(new HotkeyPanel(gui, "Hide/show window", Main.preferences.hotkeyMinimize), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("settings.up_001_to_last_angle"), Main.preferences.hotkeyIncrement), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("settings.down_001_to_last_angle"), Main.preferences.hotkeyDecrement), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("undo"), Main.preferences.hotkeyUndo), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
 			constraints.weighty = 1;
 			ac2.add(Box.createGlue(), constraints);
 		}
@@ -448,7 +449,7 @@ class HotkeyPanel extends ThemedPanel {
 	
 	private String getKeyText() {
 		if (preference.getCode() == -1)
-			return "Not in use";
+			return I18n.get("settings.not_in_use");
 		String k = KeyEvent.getKeyText(preference.getCode());
 		if (k.startsWith("Unknown")) {
 			k = k.substring(17);
