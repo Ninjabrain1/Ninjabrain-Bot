@@ -61,7 +61,7 @@ public class GUI {
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
-		font = new Font("雅黑", Font.BOLD, 25);
+		font = new Font(null, Font.BOLD, 25);
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<>();
 		calculator = new Calculator();

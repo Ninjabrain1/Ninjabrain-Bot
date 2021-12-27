@@ -45,12 +45,6 @@ public class Main {
 	// [x] Sigma toggle
 
 	public static void main(String[] args) {
-		System.out.println(Arrays.toString(args));
-		for (String arg : args) {
-			if ("-dev=true".equals(arg)) {
-				I18n.setDev(true);
-			}
-		}
 		System.out.println("lang info: " + I18n.get("lang"));
 		Profiler.start("Initialize preferences");
 		preferences = new NinjabrainBotPreferences();
