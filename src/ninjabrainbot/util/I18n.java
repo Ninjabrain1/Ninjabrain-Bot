@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * @since 2021/12/25 14:39
  */
 public class I18n {
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", Locale.getDefault(), new UTF8Control());
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", Locale.US, new UTF8Control());
 
     public static String get(String key, Object... args) {
         return String.format(BUNDLE.getString(key), args);
