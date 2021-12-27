@@ -122,7 +122,7 @@ class BasicTriangulationPanel extends ThemedPanel {
 		super(gui);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(0);
-		maintextLabel = new ThemedLabel(gui, I18n.get("ender_eye_throws"));
+		maintextLabel = new ThemedLabel(gui, I18n.get("waiting_f3c"));
 		certaintyPanel = new ColorMapLabel(gui, true);
 		netherLabel = new ThemedLabel(gui, "");
 		netherLabel.setVisible(Main.preferences.showNetherCoords.get());
