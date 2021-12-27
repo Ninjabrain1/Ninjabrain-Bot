@@ -29,6 +29,7 @@ import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
 /**
@@ -56,7 +57,8 @@ public class GUI {
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
 
-	private final Font font;
+	private Font font;
+	private Font fontLight;
 
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
@@ -71,7 +73,25 @@ public class GUI {
 		Profiler.start("Create frame");
 		frame = new NinjabrainBotFrame(this);
 		notificationsFrame = frame.getNotificationsFrame();
-
+		
+		// Load fonts
+		Profiler.stopAndStart("Load fonts");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+			if (font.canDisplayUpTo(I18n.get("lang")) != -1) {
+				font = new Font(null);
+			}
+			fontLight = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Light.ttf"));
+			if (fontLight.canDisplayUpTo(I18n.get("lang")) != -1) {
+				fontLight = new Font(null);
+			}
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(font);
+			ge.registerFont(fontLight);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// Set application icon
 		Profiler.stopAndStart("Set app icon");
 		URL iconURL = Main.class.getResource("/resources/icon.png");
@@ -161,7 +181,7 @@ public class GUI {
 	}
 
 	public Font fontSize(float size, boolean light) {
-		return font.deriveFont(Font.BOLD, size);
+		return light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
 	}
 
 	public void registerThemedComponent(ThemedComponent c) {

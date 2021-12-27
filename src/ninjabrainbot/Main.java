@@ -9,9 +9,6 @@ import ninjabrainbot.io.UpdateChecker;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 public class Main {
 
 	public static final String VERSION = "1.1.0";
