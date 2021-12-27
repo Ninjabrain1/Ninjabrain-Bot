@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.util.I18n;
 
 public class ChunkPrediction extends Chunk {
 
@@ -30,24 +31,32 @@ public class ChunkPrediction extends Chunk {
 	}
 	
 	public String format() {
-		switch (Main.preferences.strongholdDisplayType.get()) {
+		final String key = Main.preferences.strongholdDisplayType.get();
+		switch (key) {
 		case NinjabrainBotPreferences.FOURFOUR:
-			return String.format(Locale.US, "Location: (%d, %d), %d blocks away ", fourfour_x, fourfour_z, distance);
+			return I18n.get("location_blocks", fourfour_x, fourfour_z, distance);
 		case NinjabrainBotPreferences.EIGHTEIGHT:
-			return String.format(Locale.US, "Location: (%d, %d), %d blocks away ", fourfour_x + 4, fourfour_z + 4, distance);
-		case NinjabrainBotPreferences.CHUNK:
-			return String.format(Locale.US, "Chunk: (%d, %d), %d blocks away ", x, z, distance);
+			return I18n.get("location_blocks",fourfour_x + 4, fourfour_z + 4, distance);
+			default:
+				break;
 		}
-		return String.format(Locale.US, "Chunk: (%d, %d), %d blocks away ", x, z, distance);
+		if (key.equals(NinjabrainBotPreferences.CHUNK)) {
+			return String.format(Locale.US, I18n.get("chunk_blocks"), x, z, distance);
+		}
+		return String.format(Locale.US, I18n.get("chunk_blocks"), x, z, distance);
 	}
 
 	public String formatLocation() {
-		switch (Main.preferences.strongholdDisplayType.get()) {
+		final String key = Main.preferences.strongholdDisplayType.get();
+		switch (key) {
 		case NinjabrainBotPreferences.FOURFOUR:
 			return String.format(Locale.US, "(%d, %d)", fourfour_x, fourfour_z);
 		case NinjabrainBotPreferences.EIGHTEIGHT:
 			return String.format(Locale.US, "(%d, %d)", fourfour_x + 4, fourfour_z + 4);
-		case NinjabrainBotPreferences.CHUNK:
+			default:
+				break;
+		}
+		if (key.equals(NinjabrainBotPreferences.CHUNK)) {
 			return String.format(Locale.US, "(%d, %d)", x, z);
 		}
 		return String.format(Locale.US, "(%d, %d)", x, z);

@@ -8,6 +8,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.util.I18n;
 
 public class NinjabrainBotPreferences {
 	
@@ -42,10 +43,10 @@ public class NinjabrainBotPreferences {
 	
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
-	public static final String CHUNK = "Chunk";
+	public static final String CHUNK = I18n.get("chunk");
 
-	public static final String BASIC = "Basic";
-	public static final String DETAILED = "Detailed";
+	public static final String BASIC = I18n.get("basic");
+	public static final String DETAILED = I18n.get("detailed");
 
 	public NinjabrainBotPreferences() {
 		pref = Preferences.userNodeForPackage(Main.class);

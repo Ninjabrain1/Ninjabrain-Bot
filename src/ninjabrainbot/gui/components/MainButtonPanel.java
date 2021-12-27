@@ -13,6 +13,7 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends ThemedPanel {
 	
@@ -27,7 +28,7 @@ public class MainButtonPanel extends ThemedPanel {
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
-		throwsLabel = new ThemedLabel(gui, "Ender eye throws:", true) {
+		throwsLabel = new ThemedLabel(gui, I18n.get("ender_eye_throws"), true) {
 			private static final long serialVersionUID = -9014547502923743608L;
 			@Override
 			public Color getForegroundColor(Theme theme) {
@@ -70,13 +71,13 @@ public class MainButtonPanel extends ThemedPanel {
 	}
 	
 	private FlatButton getResetButton(GUI gui) {
-		FlatButton button = new FlatButton(gui, "Reset");
+		FlatButton button = new FlatButton(gui, I18n.get("reset"));
 		button.addActionListener(p -> gui.resetThrows());
 		return button;
 	}
 	
 	private FlatButton getUndoButton(GUI gui) {
-		FlatButton button = new FlatButton(gui, "Undo");
+		FlatButton button = new FlatButton(gui, I18n.get("undo"));
 		button.addActionListener(p -> gui.undo());
 		return button;
 	}

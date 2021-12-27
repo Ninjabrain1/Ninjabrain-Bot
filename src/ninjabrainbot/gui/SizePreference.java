@@ -1,5 +1,7 @@
 package ninjabrainbot.gui;
 
+import ninjabrainbot.util.I18n;
+
 import java.util.HashMap;
 
 public abstract class SizePreference {
@@ -33,7 +35,7 @@ public abstract class SizePreference {
 
 class RegularSize extends SizePreference {
 	public RegularSize() {
-		super("Small");
+		super(I18n.get("small"));
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 14;
@@ -49,7 +51,7 @@ class RegularSize extends SizePreference {
 
 class LargeSize extends SizePreference {
 	public LargeSize() {
-		super("Large");
+		super(I18n.get("large"));
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 16;
