@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.sun.tools.javac.util.Pair;
+import ninjabrainbot.util.Pair;
 
 public class Ring {
 	

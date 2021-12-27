@@ -3,7 +3,7 @@ package ninjabrainbot.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.tools.javac.util.Pair;
+import ninjabrainbot.util.Pair;
 
 import ninjabrainbot.Main;
 

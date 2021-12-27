@@ -1,6 +1,6 @@
 package ninjabrainbot.calculator;
 
-import com.sun.tools.javac.util.Pair;
+import ninjabrainbot.util.Pair;
 
 public class BlindResult {
 
