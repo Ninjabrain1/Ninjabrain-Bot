@@ -19,7 +19,7 @@ Ninjabrain bot was first created in November 2020, in the era of Throwpro. The b
 Yes, as of the calculator unban 2021-12-09 it is legal for runs submitted on speedrun.com.
 
 #### The calculator said it was 100% certain but still missed the stronghold, what went wrong?
-You most likely moved when you were throwing one of the eyes. It takes way longer than most people think for the player to fully come to a stop, even when your coordinates in F3 are completely stationary you still have to wait a while before throwing the eye (I think this happens because of client-server desync, but i'm not sure). If you want to come to a stop quickly I recommend pushing yourself into a corner between two blocks. 
+You most likely moved when you were throwing one of the eyes. It takes way longer than most people think for the player to fully come to a stop, even when your coordinates in F3 are completely stationary you still have to wait a while before throwing the eye (because of weird client-server desync). If you want to come to a stop quickly I recommend pushing yourself into a corner between two blocks, this also seems to prevent the aforementioned client-server desync. 
 
 #### Can I do subpixel adjustment, like in perfect travel, with the bot?
 Yes. Under advanced options in the settings you can set hotkeys for "+0.01 to last angle" and "-0.01 to last angle". Pressing those hotkeys will manually change the angle of the last F3+C you did. So for example, if your resolution is 1920x1027 and your eye has a wide middle eye-slit, you would press the "+0.01 to last angle"-hotkey to adjust the angle. See the [perfect travel document](https://docs.google.com/document/d/1JTMOIiS-Hl6_giEB0IQ5ki7UV-gvUXnNmoxhYoSgEAA/edit#heading=h.agb0mdup7ims) for more details.
