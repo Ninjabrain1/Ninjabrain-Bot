@@ -95,7 +95,6 @@ public class GUI {
 		// Set application icon
 		Profiler.stopAndStart("Set app icon");
 		URL iconURL = Main.class.getResource("/resources/icon.png");
-		assert iconURL != null;
 		ImageIcon img = new ImageIcon(iconURL);
 		frame.setIconImage(img.getImage());
 
