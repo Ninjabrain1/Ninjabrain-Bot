@@ -9,6 +9,10 @@ Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/rele
 
 If you are used to perfect travel and want the same accuracy you need to set hotkeys for "+0.01/-0.01 to last angle" in the advanced options, and calibrate your standard deviation (can also be done in the advanced options).
 
+## Video guide
+
+[Full tutorial](https://www.youtube.com/watch?v=Rx8i7e5lu7g)  by Four
+
 ## History
 
 Ninjabrain bot was first created in November 2020, in the era of Throwpro. The bot was created because the calculators at the time were too inaccurate, especially for calculated travel which was just beeing pioneered at the time. The two most common alternatives, Throwpro and FastStronghold, used models that were too simple and were not accurate at long distances. However, back then Ninjabrain bot only existed in a more primitive form, as a twitch chat bot. The first example of it being used in a real run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).
