@@ -9,6 +9,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.ImageIcon;
@@ -59,6 +60,7 @@ public class GUI {
 
 	private Font font;
 	private Font fontLight;
+	private HashMap<String, Font> fonts;
 
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
@@ -88,6 +90,7 @@ public class GUI {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(font);
 			ge.registerFont(fontLight);
+			fonts = new HashMap<>();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,7 +183,13 @@ public class GUI {
 	}
 
 	public Font fontSize(float size, boolean light) {
-		return light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
+		String key = size + " " + light;
+		if (!fonts.containsKey(key)) {
+			Font f = light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
+			fonts.put(key, f);
+			return f;
+		}
+		return fonts.get(key);
 	}
 
 	public void registerThemedComponent(ThemedComponent c) {
