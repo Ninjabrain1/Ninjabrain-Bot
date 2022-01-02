@@ -28,7 +28,6 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		this.bold = bold;
 		setEditable(false);
 		setLineWrap(false);
-		setFocusable(false);
 	}
 	
 	public void updateSize(GUI gui) {
