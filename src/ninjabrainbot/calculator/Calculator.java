@@ -3,9 +3,8 @@ package ninjabrainbot.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import ninjabrainbot.util.Pair;
-
 import ninjabrainbot.Main;
+import ninjabrainbot.util.Pair;
 
 public class Calculator {
 
@@ -225,6 +224,10 @@ public class Calculator {
 	 */
 	private double getPixelAngle() {
 		return Math.toDegrees(Math.atan(Math.tan(Math.toRadians(fov) / 2.0) / (yRes / 2.0)));
+	}
+
+	public DivineResult divine(Fossil f) {
+		return new DivineResult(f);
 	}
 
 }

@@ -14,12 +14,16 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.CalculatorResult;
 import ninjabrainbot.calculator.ChunkPrediction;
+import ninjabrainbot.calculator.DivineResult;
+import ninjabrainbot.calculator.Ring;
+import ninjabrainbot.gui.ColumnLayout;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
@@ -32,8 +36,9 @@ public class MainTextArea extends JPanel {
 	BasicTriangulationPanel basicTriangulation;
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
+	DivinePanel divine;
 	
-	private final String BLIND = "BLIND", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET"; 
+	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET"; 
 	
 	CardLayout layout;
 	
@@ -44,9 +49,11 @@ public class MainTextArea extends JPanel {
 		basicTriangulation = new BasicTriangulationPanel(gui);
 		detailedTriangulation = new DetailedTriangulationPanel(gui);
 		blind = new BlindPanel(gui);
+		divine = new DivinePanel(gui);
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);
+		add(divine, DIVINE);
 		setOpaque(false);
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
 			layout.show(this, TRIANGULATION);
@@ -56,7 +63,7 @@ public class MainTextArea extends JPanel {
 	}
 	
 	public void setResult(CalculatorResult result, GUI gui) {
-		if (result == null && blind.isVisible()) {
+		if (result == null && (blind.isVisible() || divine.isVisible())) {
 			return;
 		}
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
@@ -79,6 +86,12 @@ public class MainTextArea extends JPanel {
 		blind.setResult(result);
 		blind.updateColors(gui);
 		layout.show(this, BLIND);
+	}
+	
+	public void setResult(DivineResult result, GUI gui) {
+		divine.setResult(result);
+		divine.updateColors(gui);
+		layout.show(this, DIVINE);
 	}
 
 	public void setNetherCoordsEnabled(boolean b) {
@@ -275,6 +288,93 @@ class BlindPanel extends ThemedPanel {
 	public void updateSize(GUI gui) {
 		setPreferredSize(new Dimension(0, 3 * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + 2 * gui.size.PADDING_THIN));
 		setBorder(new EmptyBorder(gui.size.PADDING_THIN, gui.size.PADDING, gui.size.PADDING_THIN, gui.size.PADDING));
+		super.updateSize(gui);
+	}
+	
+}
+class DivinePanel extends ThemedPanel {
+
+	private static final long serialVersionUID = 8846911396318732368L;
+	
+	private JPanel panels[];
+	public JLabel fossilLabel;
+	public JLabel safeLabels[];
+	public JLabel highrollLabels[];
+	
+	public DivinePanel(GUI gui) {
+		super(gui);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setAlignmentX(0);
+		int n = Ring.get(0).numStrongholds;
+		JPanel panel0 = new ThemedPanel(gui);
+		ColumnLayout layout0 = new ColumnLayout(0);
+		panels = new JPanel[3];
+		panel0.setLayout(layout0);
+		panel0.setOpaque(false);
+		panels[0] = panel0;
+		fossilLabel = new ThemedLabel(gui, "");
+		fossilLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		layout0.setRelativeWidth(fossilLabel, 0.9f);
+		panel0.add(fossilLabel, 0);
+		for (int i = 0; i < n; i++) {
+			panel0.add(new ThemedLabel(gui, "s" + (i + 1), true, true));
+		}
+		JPanel panel1 = new ThemedPanel(gui);
+		ColumnLayout layout1 = new ColumnLayout(0);
+		panel1.setLayout(layout1);
+		panel1.setOpaque(false);
+		panels[1] = panel1;
+		JLabel safeLabel = new ThemedLabel(gui, I18n.get("divine_safe"));
+		safeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		layout1.setRelativeWidth(safeLabel, 0.9f);
+		panel1.add(safeLabel);
+		safeLabels = new ThemedLabel[n];
+		for (int i = 0; i < n; i++) {
+			JLabel s = new ThemedLabel(gui, "", false, true);
+			safeLabels[i] = s;
+			panel1.add(s);
+		}
+		JPanel panel2 = new ThemedPanel(gui);
+		ColumnLayout layout2 = new ColumnLayout(0);
+		panel2.setLayout(layout2);
+		panel2.setOpaque(false);
+		panels[2] = panel2;
+		JLabel highrollLabel = new ThemedLabel(gui, I18n.get("divine_highroll"));
+		highrollLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		layout2.setRelativeWidth(highrollLabel, 0.9f);
+		panel2.add(highrollLabel);
+		highrollLabels = new ThemedLabel[n];
+		for (int i = 0; i < n; i++) {
+			JLabel h = new ThemedLabel(gui, "", false, true);
+			highrollLabels[i] = h;
+			panel2.add(h);
+		}
+		add(panel0);
+		add(panel1);
+		add(panel2);
+		add(Box.createGlue());
+	}
+	
+	public void setResult(DivineResult result) {
+		fossilLabel.setText(I18n.get("fossil_number", result.fossil.x));
+		for (int i = 0; i < Ring.get(0).numStrongholds; i++) {
+			safeLabels[i].setText(result.safe[i].toString());
+			highrollLabels[i].setText(result.highroll[i].toString());
+		}
+	}
+	
+	@Override
+	public Color getBackgroundColor(Theme theme) {
+		return theme.COLOR_NEUTRAL;
+	}
+	
+	@Override
+	public void updateSize(GUI gui) {
+		setPreferredSize(new Dimension(0, 3 * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + 2 * gui.size.PADDING_THIN));
+		setBorder(new EmptyBorder(gui.size.PADDING_THIN, gui.size.PADDING, gui.size.PADDING_THIN, gui.size.PADDING));
+		for (JPanel p : panels) {
+			p.setMaximumSize(new Dimension(1000, gui.size.TEXT_SIZE_MEDIUM));
+		}
 		super.updateSize(gui);
 	}
 	

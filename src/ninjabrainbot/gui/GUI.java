@@ -26,6 +26,8 @@ import ninjabrainbot.calculator.BlindPosition;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
+import ninjabrainbot.calculator.DivineResult;
+import ninjabrainbot.calculator.Fossil;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
@@ -294,6 +296,14 @@ public class GUI {
 					BlindResult result = calculator.blind(b, true);
 					mainTextArea.setResult(result, this);
 					SwingUtilities.invokeLater(() -> updateOBSOverlay());
+					return;
+				}
+				Fossil f = Fossil.parseF3I(clipboard);
+				if (f != null) {
+					DivineResult result = calculator.divine(f);
+					mainTextArea.setResult(result, this);
+					SwingUtilities.invokeLater(() -> updateOBSOverlay());
+					return;
 				}
 			}
 		} else {
