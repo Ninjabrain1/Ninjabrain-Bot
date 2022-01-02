@@ -35,6 +35,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference useAdvStatistics;
 	public BooleanPreference altClipboardReader;
 	public BooleanPreference useAltStd;
+	public BooleanPreference useOverlay;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
 	public MultipleChoicePreference size;
@@ -171,6 +172,12 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.optionsFrame.setAltSigmaEnabled(get()));
+			}
+		};
+		useOverlay = new BooleanPreference("use_obs_overlay", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.setOverlayEnabled(get()));
 			}
 		};
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] {0, 1, 2}, new String[] {FOURFOUR, EIGHTEIGHT, CHUNK}, pref) {

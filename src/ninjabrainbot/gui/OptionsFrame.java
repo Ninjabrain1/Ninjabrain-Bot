@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.View;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
@@ -34,6 +35,7 @@ import ninjabrainbot.gui.components.RadioButtonGroup;
 import ninjabrainbot.gui.components.ThemedFrame;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.components.ThemedPanel;
+import ninjabrainbot.gui.components.ThemedTextArea;
 import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.io.BooleanPreference;
 import ninjabrainbot.io.FloatPreference;
@@ -134,6 +136,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setLayout(new GridBagLayout());
 		settingsPanel.add(advPanel);
 		
+		// Left advanced column
 		sigma = new TextboxPanel(gui, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
 		ac1.add(sigma);
 		JButton calibrateButton = new FlatButton(gui, I18n.get("settings.calibrate_standard_deviation")) {
@@ -163,16 +166,18 @@ public class OptionsFrame extends ThemedFrame {
 		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
 		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
 		ac1.add(Box.createGlue());
+		
+		// Right advanced column
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridy = GridBagConstraints.RELATIVE;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 4, 0);
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 1;
 		if (KeyboardListener.registered) {
 			ThemedLabel labelShortcuts = new ThemedLabel(gui, I18n.get("settings.keyboard_shortcuts"), false);
 			labelShortcuts.setHorizontalAlignment(0);
-			GridBagConstraints constraints = new GridBagConstraints();
-			constraints.gridy = GridBagConstraints.RELATIVE;
-			constraints.gridx = 0;
-			constraints.insets = new Insets(0, 0, 4, 0);
-			constraints.anchor = GridBagConstraints.CENTER;
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.weightx = 1;
 			ac2.add(labelShortcuts, constraints);
 			ac2.add(new Divider(gui), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("settings.up_001_to_last_angle"), Main.preferences.hotkeyIncrement), constraints);
@@ -180,9 +185,29 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("undo"), Main.preferences.hotkeyUndo), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
-			constraints.weighty = 1;
-			ac2.add(Box.createGlue(), constraints);
 		}
+		ThemedLabel labelOverlay = new ThemedLabel(gui, I18n.get("settings.overlay"), false);
+		labelOverlay.setHorizontalAlignment(0);
+		ac2.add(labelOverlay, constraints);
+		ac2.add(new Divider(gui), constraints);
+		ThemedLabel overlayExplanation = new ThemedLabel(gui, "<html>" + I18n.get("settings.overlay_explanation") + "</html>") {
+			private static final long serialVersionUID = 7980539999697524316L;
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
+			};
+			public Dimension getPreferredSize() {
+				View view = (View) getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
+				view.setSize(COLUMN_WIDTH, 0);
+				float w = view.getPreferredSpan(View.X_AXIS);
+				float h = view.getPreferredSpan(View.Y_AXIS);
+				return new java.awt.Dimension((int) Math.ceil(w), (int) Math.ceil(h));
+			}
+		};
+		ac2.add(overlayExplanation, constraints);
+		ac2.add(new ThemedTextArea(gui, gui.OBS_OVERLAY.getAbsolutePath()), constraints);
+		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
+		constraints.weighty = 1;
+		ac2.add(Box.createGlue(), constraints);
 	}
 	
 	private void startCalibrating() {

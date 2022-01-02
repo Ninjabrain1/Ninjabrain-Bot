@@ -7,11 +7,15 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -61,6 +65,8 @@ public class GUI {
 	private Font font;
 	private Font fontLight;
 	private HashMap<String, Font> fonts;
+	
+	public final File OBS_OVERLAY;
 
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
@@ -75,6 +81,9 @@ public class GUI {
 		Profiler.start("Create frame");
 		frame = new NinjabrainBotFrame(this);
 		notificationsFrame = frame.getNotificationsFrame();
+
+		OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
+		OBS_OVERLAY.deleteOnExit();
 		
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
@@ -138,6 +147,7 @@ public class GUI {
 			resetThrows();
 			autoResetTimer.stop();
 		});
+		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
 	public void setTranslucent(boolean t) {
@@ -161,12 +171,14 @@ public class GUI {
 	public void updateTheme() {
 		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
+		updateOBSOverlay();
 	}
 
 	public void updateSizePreference() {
 		size = SizePreference.get(Main.preferences.size.get());
 		updateFontsAndColors();
 		updateBounds();
+		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
 	public void setNetherCoordsEnabled(boolean b) {
@@ -240,6 +252,7 @@ public class GUI {
 	}
 
 	public void resetThrows() {
+		mainTextArea.onReset();
 		if (eyeThrows.size() > 0) {
 			ArrayList<Throw> temp = eyeThrowsLast;
 			eyeThrowsLast = eyeThrows;
@@ -247,7 +260,6 @@ public class GUI {
 			eyeThrows.clear();
 			onThrowsUpdated();
 		}
-		mainTextArea.onReset();
 	}
 
 	public void undo() {
@@ -281,6 +293,7 @@ public class GUI {
 				if (b != null) {
 					BlindResult result = calculator.blind(b, true);
 					mainTextArea.setResult(result, this);
+					SwingUtilities.invokeLater(() -> updateOBSOverlay());
 				}
 			}
 		} else {
@@ -355,6 +368,8 @@ public class GUI {
 		}
 		// Update bounds
 		updateBounds();
+		// Update overlay
+		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
 	public void onClipboardUpdated(String newClipboard) {
@@ -382,6 +397,26 @@ public class GUI {
 			}
 		}
 		frame.setLocation(100, 100);
+	}
+	
+	private void updateOBSOverlay() {
+		if (Main.preferences.useOverlay.get()) {
+			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			frame.paint(img.createGraphics());
+			try {
+				ImageIO.write(img, "png", OBS_OVERLAY);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void setOverlayEnabled(boolean b) {
+		if (b) {
+			updateOBSOverlay();
+		} else {
+			OBS_OVERLAY.delete();
+		}
 	}
 
 }
