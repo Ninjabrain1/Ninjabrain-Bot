@@ -35,7 +35,7 @@ public class ChunkPanelHeader extends ThemedPanel {
 		super(gui, true);
 		this.gui = gui;
 		setOpaque(true);
-		location = new JLabel(I18n.get("location"), 0);
+		location = new JLabel("", 0);
 		certainty = new JLabel(I18n.get("certainty_2"), 0);
 		distance = new JLabel(I18n.get("dist"), 0);
 		nether = new JLabel(I18n.get("nether"), 0);
@@ -48,6 +48,7 @@ public class ChunkPanelHeader extends ThemedPanel {
 		add(certainty);
 		add(distance);
 		add(nether);
+		updateHeaderText();
 	}
 	
 	@Override
@@ -72,7 +73,7 @@ public class ChunkPanelHeader extends ThemedPanel {
 	}
 	
 	public void updateHeaderText() {
-		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? "Chunk" : "Location");
+		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? I18n.get("chunk") : I18n.get("location"));
 	}
 	
 	@Override

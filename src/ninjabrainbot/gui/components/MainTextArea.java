@@ -198,6 +198,7 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	}
 	
 	public void setResult(CalculatorResult result) {
+		header.updateHeaderText();
 		if (result == null) {
 			for (ChunkPanel p : panels) {
 				p.setPrediciton(null);
@@ -209,7 +210,6 @@ class DetailedTriangulationPanel extends ThemedPanel {
 			ChunkPanel p = panels.get(i);
 			p.setPrediciton(predictions.get(i));
 		}
-		header.updateHeaderText();
 	}
 	
 	@Override
