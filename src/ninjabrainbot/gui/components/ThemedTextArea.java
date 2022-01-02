@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JTextArea;
 
@@ -25,6 +26,9 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		super(text);
 		gui.registerThemedComponent(this);
 		this.bold = bold;
+		setEditable(false);
+		setLineWrap(false);
+		setFocusable(false);
 	}
 	
 	public void updateSize(GUI gui) {
@@ -50,6 +54,11 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 	
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_STRONG;
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(0, super.getPreferredSize().height);
 	}
 	
 }
