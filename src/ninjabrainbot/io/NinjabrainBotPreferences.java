@@ -44,7 +44,6 @@ public class NinjabrainBotPreferences {
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
 	public static final String CHUNK = I18n.get("chunk");
-
 	public static final String BASIC = I18n.get("basic");
 	public static final String DETAILED = I18n.get("detailed");
 

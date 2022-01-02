@@ -255,7 +255,7 @@ class BlindPanel extends ThemedPanel {
 		evalLabel.setText(I18n.get("blind_coords", result.x, result.z));
 		evalLabel.setColoredText(String.format(Locale.US, "%s", result.evaluation().snd), result.evaluation().fst);
 		certaintyPanel.setText(I18n.get("chance_of", (int) result.highrollThreshold));
-		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", result.highrollProbability*100), (float) result.highrollProbability / 0.1f);
+		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%% ", result.highrollProbability*100), (float) result.highrollProbability / 0.1f);
 		distanceLabel.setText(I18n.get("average_distance_to", result.avgDistance));
 	}
 	
