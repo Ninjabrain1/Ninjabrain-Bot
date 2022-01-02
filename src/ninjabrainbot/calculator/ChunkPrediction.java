@@ -36,14 +36,14 @@ public class ChunkPrediction extends Chunk {
 		case NinjabrainBotPreferences.FOURFOUR:
 			return I18n.get("location_blocks", fourfour_x, fourfour_z, distance);
 		case NinjabrainBotPreferences.EIGHTEIGHT:
-			return I18n.get("location_blocks",fourfour_x + 4, fourfour_z + 4, distance);
+			return I18n.get("location_blocks", fourfour_x + 4, fourfour_z + 4, distance);
 			default:
 				break;
 		}
 		if (key.equals(NinjabrainBotPreferences.CHUNK)) {
-			return String.format(Locale.US, I18n.get("chunk_blocks"), x, z, distance);
+			return I18n.get("chunk_blocks", x, z, distance);
 		}
-		return String.format(Locale.US, I18n.get("chunk_blocks"), x, z, distance);
+		return I18n.get("chunk_blocks", x, z, distance);
 	}
 
 	public String formatLocation() {
