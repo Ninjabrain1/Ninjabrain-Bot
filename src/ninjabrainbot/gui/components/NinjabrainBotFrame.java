@@ -54,6 +54,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 			public void run() {
 				Main.preferences.windowX.set(getX());
 				Main.preferences.windowY.set(getY());
+				gui.clearOBSOverlay();
 			}
 		});
 	}

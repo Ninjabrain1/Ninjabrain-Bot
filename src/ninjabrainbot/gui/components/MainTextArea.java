@@ -33,17 +33,19 @@ public class MainTextArea extends JPanel {
 
 	private static final long serialVersionUID = 5680882946230890993L;
 	
+	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET";
+	
 	BasicTriangulationPanel basicTriangulation;
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
 	DivinePanel divine;
 	
-	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET"; 
-	
+	boolean idle;
 	CardLayout layout;
 	
 	public MainTextArea(GUI gui) {
 		layout = new CardLayout();
+		idle = true;
 		setLayout(layout);
 		setAlignmentX(0);
 		basicTriangulation = new BasicTriangulationPanel(gui);
@@ -80,18 +82,21 @@ public class MainTextArea extends JPanel {
 				layout.show(this, TRIANGULATION_DETAILED);
 			}
 		}
+		idle = result == null;
 	}
 	
 	public void setResult(BlindResult result, GUI gui) {
 		blind.setResult(result);
 		blind.updateColors(gui);
 		layout.show(this, BLIND);
+		idle = false;
 	}
 	
 	public void setResult(DivineResult result, GUI gui) {
 		divine.setResult(result);
 		divine.updateColors(gui);
 		layout.show(this, DIVINE);
+		idle = false;
 	}
 
 	public void setNetherCoordsEnabled(boolean b) {
@@ -118,6 +123,10 @@ public class MainTextArea extends JPanel {
 		} else {
 			return detailedTriangulation.getPreferredSize();
 		}
+	}
+
+	public boolean isIdle() {
+		return idle;
 	}
 
 }

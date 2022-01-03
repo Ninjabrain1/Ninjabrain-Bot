@@ -85,7 +85,6 @@ public class GUI {
 		notificationsFrame = frame.getNotificationsFrame();
 
 		OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
-		OBS_OVERLAY.deleteOnExit();
 		
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
@@ -260,8 +259,8 @@ public class GUI {
 			eyeThrowsLast = eyeThrows;
 			eyeThrows = temp;
 			eyeThrows.clear();
-			onThrowsUpdated();
 		}
+		onThrowsUpdated();
 	}
 
 	public void undo() {
@@ -412,7 +411,20 @@ public class GUI {
 	private void updateOBSOverlay() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			frame.paint(img.createGraphics());
+			if (!mainTextArea.isIdle()) {
+				frame.paint(img.createGraphics());
+			}
+			try {
+				ImageIO.write(img, "png", OBS_OVERLAY);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void clearOBSOverlay() {
+		if (Main.preferences.useOverlay.get()) {
+			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			try {
 				ImageIO.write(img, "png", OBS_OVERLAY);
 			} catch (IOException e) {
