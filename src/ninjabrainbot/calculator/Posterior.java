@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Profiler;
 
 public class Posterior {
@@ -152,8 +153,8 @@ public class Posterior {
 		double deltaz = chunk.z + 0.5 - t.z/16.0;
 		double r_p = Math.sqrt(t.x * t.x + t.z * t.z)/16.0;
 		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
-		double phi_prime = -Math.atan2(chunk.x, chunk.z);
-		double phi_p = -Math.atan2(t.x, t.z);
+		double phi_prime = Coords.getPhi(chunk.x, chunk.z);
+		double phi_p = Coords.getPhi(t.x, t.z);
 		double maxDist = StrongholdConstants.getMaxDistance(t.x, t.z) / 16.0;
 		double stronghold_r_min = r_p - maxDist;
 		double stronghold_r_max = r_p + maxDist;

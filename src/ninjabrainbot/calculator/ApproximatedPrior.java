@@ -1,5 +1,7 @@
 package ninjabrainbot.calculator;
 
+import ninjabrainbot.util.Coords;
+
 /**
  * A prior that approximates biome snapping as opposed to calculating it
  * exactly, which is costly.
@@ -10,8 +12,8 @@ public class ApproximatedPrior extends Prior {
 		super();
 	}
 
-	public ApproximatedPrior(int centerX, int centerZ, int radius) {
-		super(centerX, centerZ, radius);
+	public ApproximatedPrior(int centerX, int centerZ, int radius, DivineContext divineContext) {
+		super(centerX, centerZ, radius, divineContext);
 	}
 	
 	/**
@@ -62,21 +64,33 @@ public class ApproximatedPrior extends Prior {
 		System.out.println("Approx prior sum: " + sum);
 		RingIterator ringIterator = new RingIterator();
 		Ring ring = ringIterator.next();
-		System.out.println("Density at 1600: Approx: " + strongholdDensity(100, 0, ring.innerRadius, ring.outerRadius, ring.numStrongholds) + ", True (pre snapping): " + super.strongholdDensity(100, 0, ring.innerRadius, ring.outerRadius, ring.numStrongholds));
+		System.out.println("Density at 1600: Approx: " + strongholdDensity(100, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(100, 0, ring));
 		ring = ringIterator.next();
 		ring = ringIterator.next();
-		System.out.println("Density at 8000: Approx: " + strongholdDensity(500, 0, ring.innerRadius, ring.outerRadius, ring.numStrongholds) + ", True (pre snapping): " + super.strongholdDensity(500, 0, ring.innerRadius, ring.outerRadius, ring.numStrongholds));
+		System.out.println("Density at 8000: Approx: " + strongholdDensity(500, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(500, 0, ring));
 	}
 
 	@Override
-	protected double strongholdDensity(double cx, double cz, double c0, double c1, int strongholdsInRing) {
+	protected double strongholdDensity(double cx, double cz, Ring ring) {
 		double d2 = cx * cx + cz * cz;
+		double relativeWeight = 1.0;
+		if (ring.ring == 0 && divineContext != null) {
+			double phi = Coords.getPhi(cx, cz);
+			relativeWeight = -divineContext.angleOffsetFromSector(phi) / (StrongholdConstants.snappingRadius * 1.5 / Math.sqrt(d2)); // 1.5 ~ sqrt(2) + a small margin
+			relativeWeight = (1.0 + relativeWeight) * 0.5;
+			// clamp
+			if (relativeWeight > 1)
+				relativeWeight = 1;
+			if (relativeWeight < 0)
+				relativeWeight = 0;
+			relativeWeight *= divineContext.relativeDensity();
+		}
 		// Post snapping circle radiuses (dont have to be exact, tighter margins only affect performance, not the result)
-		double c0_ps = c0 - 2 * StrongholdConstants.snappingRadius;
-		double c1_ps = c1 + 2 * StrongholdConstants.snappingRadius;
+		double c0_ps = ring.innerRadius - 2 * StrongholdConstants.snappingRadius;
+		double c1_ps = ring.outerRadius + 2 * StrongholdConstants.snappingRadius;
 		if (d2 < c0_ps * c0_ps || d2 > c1_ps * c1_ps)
 			return 0;
-		return ApproximatedDensity.density(cx, cz);
+		return relativeWeight * ApproximatedDensity.density(cx, cz);
 	}
 	
 	@Override

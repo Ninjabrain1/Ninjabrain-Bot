@@ -22,12 +22,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.calculator.ApproximatedPrior;
 import ninjabrainbot.calculator.BlindPosition;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
+import ninjabrainbot.calculator.Chunk;
+import ninjabrainbot.calculator.DivineContext;
 import ninjabrainbot.calculator.DivineResult;
 import ninjabrainbot.calculator.Fossil;
+import ninjabrainbot.calculator.Prior;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
@@ -63,6 +67,7 @@ public class GUI {
 	private final Calculator calculator;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
+	private DivineContext divineContext;
 
 	private Font font;
 	private Font fontLight;
@@ -260,6 +265,7 @@ public class GUI {
 			eyeThrows = temp;
 			eyeThrows.clear();
 		}
+		divineContext = null;
 		onThrowsUpdated();
 	}
 
@@ -292,8 +298,11 @@ public class GUI {
 			} else if (eyeThrows.size() == 0) {
 				BlindPosition b = BlindPosition.parseF3C(clipboard);
 				if (b != null) {
-					BlindResult result = calculator.blind(b, true);
+					BlindResult result = calculator.blind(b, divineContext, true);
 					mainTextArea.setResult(result, this);
+					if (Main.preferences.autoReset.get()) {
+						autoResetTimer.restart();
+					}
 					SwingUtilities.invokeLater(() -> updateOBSOverlay());
 					return;
 				}
@@ -301,6 +310,14 @@ public class GUI {
 				if (f != null) {
 					DivineResult result = calculator.divine(f);
 					mainTextArea.setResult(result, this);
+					if (result != null) {
+						divineContext = new DivineContext(f);
+					} else {
+						divineContext = null;
+					}
+					if (Main.preferences.autoReset.get()) {
+						autoResetTimer.restart();
+					}
 					SwingUtilities.invokeLater(() -> updateOBSOverlay());
 					return;
 				}
@@ -362,7 +379,7 @@ public class GUI {
 		CalculatorResult result = null;
 		double[] errors = null;
 		if (eyeThrows.size() >= 1) {
-			result = calculator.triangulate(eyeThrows);
+			result = calculator.triangulate(eyeThrows, divineContext);
 			if (result.success()) {
 				errors = result.getAngleErrors();
 			}
