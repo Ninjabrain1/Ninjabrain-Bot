@@ -2,19 +2,23 @@ package ninjabrainbot.calculator;
 
 import java.util.ArrayList;
 
+import ninjabrainbot.util.Coords;
+
 /**
  * A prior computed only close to a ray.
  */
 public class RayApproximatedPrior implements IPrior {
 
 	ArrayList<Chunk> chunks;
+	DivineContext divineContext;
 	
-	public RayApproximatedPrior(Ray r) {
-		this(r, 1.0 / 180.0 * Math.PI); // 1 degree tolerance
+	public RayApproximatedPrior(Ray r, DivineContext divineContext) {
+		this(r, 1.0 / 180.0 * Math.PI, divineContext); // 1 degree tolerance
 	}
 
-	public RayApproximatedPrior(Ray r, double tolerance) {
+	public RayApproximatedPrior(Ray r, double tolerance, DivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
+		this.divineContext = divineContext;
 		construct(r, tolerance);
 		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
 	}
@@ -53,12 +57,32 @@ public class RayApproximatedPrior implements IPrior {
 				j = StrongholdConstants.maxChunk;
 			while (rightPositive ? j < minor_v : j > minor_v && j <= StrongholdConstants.maxChunk && j >= -StrongholdConstants.maxChunk) {
 				Chunk chunk = majorX ? new Chunk(i, j) : new Chunk(j, i);
-				chunk.weight = ApproximatedDensity.density(chunk.x, chunk.z);
+				chunk.weight = strongholdDensity(chunk.x, chunk.z);
 				chunks.add(chunk);
 				j += rightPositive ? 1 : -1;
 			}
 			i += majorPositive ? 1 : -1;
 		}
+	}
+	
+	protected double strongholdDensity(double cx, double cz) {
+		double d2 = cx * cx + cz * cz;
+		double relativeWeight = 1.0;
+		if (divineContext != null) {
+			double chunkR = Math.sqrt(d2);
+			if (chunkR <= Ring.get(0).outerRadiusPostSnapping) {
+				double phi = Coords.getPhi(cx, cz);
+				relativeWeight = -divineContext.angleOffsetFromSector(phi) / (StrongholdConstants.snappingRadius * 1.5 / chunkR); // 1.5 ~ sqrt(2) + a small margin
+				relativeWeight = (1.0 + relativeWeight) * 0.5;
+				// clamp
+				if (relativeWeight > 1)
+					relativeWeight = 1;
+				if (relativeWeight < 0)
+					relativeWeight = 0;
+				relativeWeight *= divineContext.relativeDensity();
+			}
+		}
+		return relativeWeight * ApproximatedDensity.density(cx, cz);
 	}
 	
 	/**

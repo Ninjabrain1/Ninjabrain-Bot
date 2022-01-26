@@ -15,14 +15,14 @@ public class Posterior {
 	ArrayList<Chunk> chunks;
 	double sigma, sigmaAlt;
 	
-	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows) {
+	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows, DivineContext divineContext) {
 		Profiler.clear();
 		Profiler.start("Calculate posterior");
 		this.sigma = sigma;
 		this.sigmaAlt = sigmaAlt;
 		Profiler.start("Calculate prior");
 		double sigma0 = eyeThrows.get(0).altStd ? sigmaAlt : sigma;
-		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI);
+		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext);
 		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x;

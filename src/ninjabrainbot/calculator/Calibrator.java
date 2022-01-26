@@ -52,7 +52,7 @@ public class Calibrator {
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				Posterior posterior = triangulator.getPosterior(eyeThrows);
+				Posterior posterior = triangulator.getPosterior(eyeThrows, null);
 				prediction = posterior.getMostProbableChunk();
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;

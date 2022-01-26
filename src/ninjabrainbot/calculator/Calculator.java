@@ -40,15 +40,15 @@ public class Calculator {
 			return new CalculatorResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
 		return new CalculatorResult(posterior, eyeThrows);
 	}
 	
-	public Posterior getPosterior(ArrayList<Throw> eyeThrows) {
+	public Posterior getPosterior(ArrayList<Throw> eyeThrows, DivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
 		return posterior;
 	}
 	
