@@ -3,7 +3,6 @@ package ninjabrainbot.gui.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Locale;
 
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
