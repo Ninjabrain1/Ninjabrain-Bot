@@ -1,5 +1,7 @@
 package ninjabrainbot;
 
+import java.util.Locale;
+
 import ninjabrainbot.calculator.ApproximatedDensity;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.io.ClipboardReader;

@@ -28,6 +28,7 @@ import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.Pair;
 
 public class MainTextArea extends JPanel {
 
@@ -274,11 +275,17 @@ class BlindPanel extends ThemedPanel {
 	}
 	
 	public void setResult(BlindResult result) {
+		Pair<Float, String> eval = result.evaluation();
 		evalLabel.setText(I18n.get("blind_coords", result.x, result.z));
-		evalLabel.setColoredText(I18n.get(result.evaluation().snd), result.evaluation().fst);
+		evalLabel.setColoredText(I18n.get(eval.snd), eval.fst);
 		certaintyPanel.setText(I18n.get("chance_of", (int) result.highrollThreshold));
-		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%% ", result.highrollProbability*100), (float) result.highrollProbability / 0.1f);
-		distanceLabel.setText(I18n.get("average_distance_to", result.avgDistance));
+		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%% ", result.highrollProbability*100), (float) (result.highrollProbability / result.optHighrollProb));
+//		distanceLabel.setText(I18n.get("average_distance_to", result.avgDistance));
+		if (eval != BlindResult.EXCELLENT) {
+			distanceLabel.setText(I18n.get("blind_direction", result.improveDirection * 180.0 / Math.PI, result.improveDistance));
+		} else {
+			distanceLabel.setText("");
+		}
 	}
 	
 	@Override

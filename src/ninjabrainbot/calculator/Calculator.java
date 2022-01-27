@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Pair;
 
 public class Calculator {
@@ -55,19 +56,41 @@ public class Calculator {
 	public BlindResult blind(BlindPosition b, DivineContext divineContext, boolean approximated) {
 		long t0 = System.currentTimeMillis();
 		int distanceThreshold = 400;
-		double h = 5;
+		int h = 2;
 		double phi_p = phi(b.x, b.z);
 		double probability = getHighrollProbability(b.x, b.z, distanceThreshold, approximated, divineContext);
-		int deltaX = 2 * ((int) Math.round(-h * Math.sin(phi_p))/2);
-		int deltaZ = 2 * ((int) Math.round(h * Math.cos(phi_p))/2);
-		double probability2 = getHighrollProbability(b.x + deltaX, b.z + deltaZ, distanceThreshold, approximated, divineContext);
-		double probabilityDerivative = (probability2 - probability) / Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+		// difference in x direction
+		int deltaX1 = h;
+		int deltaZ1 = 0;
+		double probability1 = getHighrollProbability(b.x + deltaX1, b.z + deltaZ1, distanceThreshold, approximated, divineContext);
+		double probabilityDerivative1 = (probability1 - probability) / Math.sqrt(deltaX1 * deltaX1 + deltaZ1 * deltaZ1);
+		// difference in z direction
+		int deltaX2 = deltaZ1;
+		int deltaZ2 = -deltaX1;
+		double probability2 = getHighrollProbability(b.x + deltaX2, b.z + deltaZ2, distanceThreshold, approximated, divineContext);
+		double probabilityDerivative2 = (probability2 - probability) / Math.sqrt(deltaX1 * deltaX1 + deltaZ1 * deltaZ1);
+		double probabilityDerivative = Math.sqrt(probabilityDerivative1 * probabilityDerivative1 +probabilityDerivative2 * probabilityDerivative2);
 		double ninetiethPercentileDerivative = probabilityDerivative * Math.sqrt(0.1 / (2 * probability * probability * probability)) * distanceThreshold;
 		double avgDist = getAverageDistance(b.x, b.z, 10, 20);
 		double avgDist2 = getAverageDistance(b.x - h * Math.sin(phi_p), b.z + h * Math.cos(phi_p), 10, 20);
 		double avgDistDerivative = (avgDist2 - avgDist) / h;
+		// Optimal coords
+		Ring closestRing = Ring.getClosestRings(b.x / 2.0, b.z / 2.0).fst;
+		double optDist = (closestRing.innerRadius + distanceThreshold / 16.0) * 2.0;
+		double optX = b.x;
+		double optZ = b.z;
+		double optHighrollProb = 0.1;
+		if (divineContext != null && closestRing.ring == 0) {
+			BlindPosition divinePos = divineContext.getClosestCoords(optX, optZ, optDist);
+			optX = divinePos.x;
+			optZ = divinePos.z;
+			optHighrollProb *= divineContext.relativeDensity();
+		}
+		double optR = Math.sqrt(optX * optX + optZ * optZ);
+		optX *= optDist / optR;
+		optZ *= optDist / optR;
 		System.out.println("Time to calculate blind features: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
-		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative);
+		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z), Coords.dist(optX, optZ, b.x, b.z), optHighrollProb);
 	}
 	
 	private double getHighrollProbability(double x, double z, int distanceThreshold, boolean approximated, DivineContext divineContext) {

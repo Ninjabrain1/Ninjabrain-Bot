@@ -1,5 +1,7 @@
 package ninjabrainbot.calculator;
 
+import ninjabrainbot.util.Coords;
+
 public class DivineContext {
 	
 	double phiMin, phiMax;
@@ -37,6 +39,29 @@ public class DivineContext {
 				minOffset = offset;
 		}
 		return minOffset;
+	}
+	
+	/**
+	 * Returns the closest of the three divine coords that are a distance r from (0,0)
+	 */
+	public BlindPosition getClosestCoords(double x, double z, double r) {
+		int n = Ring.get(0).numStrongholds;
+		double minDist2 = Double.MAX_VALUE;
+		double phi = (phiMin + phiMax) * 0.5;
+		double optX = 0;
+		double optZ = 0;
+		for (int i = 0; i < n; i++) {
+			double phi_i = phi + i * 2.0 * Math.PI / n;
+			double x2 = Coords.getX(r, phi_i);
+			double z2 = Coords.getZ(r, phi_i);
+			double d2 = Coords.dist2(x, z, x2, z2);
+			if (d2 < minDist2) {
+				minDist2 = d2;
+				optX = x2;
+				optZ = z2;
+			}
+		}
+		return new BlindPosition(optX, optZ);
 	}
 	
 	private double angleOffsetFromFirstSector(double phi) {
