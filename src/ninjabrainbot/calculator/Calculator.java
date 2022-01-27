@@ -35,32 +35,32 @@ public class Calculator {
 		this.sigmaAlt = sigmaAlt;
 	}
 
-	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows) {
+	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows, DivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return new CalculatorResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
 		return new CalculatorResult(posterior, eyeThrows);
 	}
 	
-	public Posterior getPosterior(ArrayList<Throw> eyeThrows) {
+	public Posterior getPosterior(ArrayList<Throw> eyeThrows, DivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
 		return posterior;
 	}
 	
-	public BlindResult blind(BlindPosition b, boolean approximated) {
+	public BlindResult blind(BlindPosition b, DivineContext divineContext, boolean approximated) {
 		long t0 = System.currentTimeMillis();
 		int distanceThreshold = 400;
 		double h = 5;
 		double phi_p = phi(b.x, b.z);
-		double probability = getHighrollProbability(b.x, b.z, distanceThreshold, approximated);
+		double probability = getHighrollProbability(b.x, b.z, distanceThreshold, approximated, divineContext);
 		int deltaX = 2 * ((int) Math.round(-h * Math.sin(phi_p))/2);
 		int deltaZ = 2 * ((int) Math.round(h * Math.cos(phi_p))/2);
-		double probability2 = getHighrollProbability(b.x + deltaX, b.z + deltaZ, distanceThreshold, approximated);
+		double probability2 = getHighrollProbability(b.x + deltaX, b.z + deltaZ, distanceThreshold, approximated, divineContext);
 		double probabilityDerivative = (probability2 - probability) / Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 		double ninetiethPercentileDerivative = probabilityDerivative * Math.sqrt(0.1 / (2 * probability * probability * probability)) * distanceThreshold;
 		double avgDist = getAverageDistance(b.x, b.z, 10, 20);
@@ -70,13 +70,13 @@ public class Calculator {
 		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative);
 	}
 	
-	private double getHighrollProbability(double x, double z, int distanceThreshold, boolean approximated) {
+	private double getHighrollProbability(double x, double z, int distanceThreshold, boolean approximated, DivineContext divineContext) {
 		double probability = 0;
 		Prior prior;
 		if (!approximated) {
-			prior = new Prior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1);
+			prior = new Prior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
 		} else {
-			prior = new ApproximatedPrior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1);
+			prior = new ApproximatedPrior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
 		}
 		for (Chunk c : prior.getChunks()) {
 			double dx = x * 8 - c.x * 16 + 8;

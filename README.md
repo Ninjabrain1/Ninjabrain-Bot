@@ -13,6 +13,19 @@ If you are used to perfect travel and want the same accuracy you need to set hot
 
 [Full tutorial](https://www.youtube.com/watch?v=Rx8i7e5lu7g)  by Four
 
+## Features
+* Most accurate known triangulation algorithm
+    * Accounts for user error and all known stronghold generation mechanics
+    * The certainty value describes how much the prediction should be trusted
+* Subpixel adjustment
+* Evaluation of blind coords (press F3+C in the nether)
+* Fossil divine
+    * Look at the fossil start and press F3+I to get the divine coords
+    * Works with blind coord evaluation
+    * Ender eye throws can be combined with divine for increased precision
+* OBS overlay (auto hides in OBS when it's not showing anything)
+* Lots of quality of life features
+
 ## History
 
 Ninjabrain bot was first created in November 2020, in the era of Throwpro. The bot was created because the calculators at the time were too inaccurate, especially for calculated travel which was just beeing pioneered at the time. The two most common alternatives, Throwpro and FastStronghold, used models that were too simple and were not accurate at long distances. However, back then Ninjabrain bot only existed in a more primitive form, as a twitch chat bot. The first example of it being used in a real run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).

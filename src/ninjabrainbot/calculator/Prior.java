@@ -3,19 +3,23 @@ package ninjabrainbot.calculator;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import ninjabrainbot.util.Coords;
+
 public class Prior implements IPrior {
 
 	int size1d;
 	int radius;
 	int x0, z0, x1, z1;
 	Chunk[] chunks;
+	DivineContext divineContext;
 	
 	public Prior() {
-		this(0, 0, StrongholdConstants.maxChunk);
+		this(0, 0, StrongholdConstants.maxChunk, null);
 	}
 	
-	public Prior(int centerX, int centerZ, int radius) {
+	public Prior(int centerX, int centerZ, int radius, DivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
+		this.divineContext = divineContext;
 		setInitialSize(centerX, centerZ, radius);
 		chunks = new Chunk[size1d * size1d];
 		for (int i = x0; i <= x1; i++) {
@@ -57,13 +61,13 @@ public class Prior implements IPrior {
 					int n = discretisationPointsPerChunkSide();
 					double weight = 0;
 					if (n == 1) {
-						weight = strongholdDensity(i, j, ring.innerRadius, ring.outerRadius, ring.numStrongholds);
+						weight = strongholdDensity(i, j, ring);
 					} else {
 						for (int k = 0; k < n; k++) {
 							double x = i - 0.5 + k / (n - 1.0);
 							for (int l = 0; l < n; l++) {
 								double z = j - 0.5 + l / (n - 1.0);
-								weight += strongholdDensity(x, z, ring.innerRadius, ring.outerRadius, ring.numStrongholds);
+								weight += strongholdDensity(x, z, ring);
 							}
 						}
 					}
@@ -137,12 +141,19 @@ public class Prior implements IPrior {
 	}
 	
 	/**
-	 * Density (pdf) of strongholds at chunk coords (cx, cy), in the ring with radius bounds [c0, c1].
+	 * Density (pdf) of strongholds at chunk coords (cx, cy), in the given ring.
 	 */
-	protected double strongholdDensity(double cx, double cz, double c0, double c1, int strongholdsInRing) {
+	protected double strongholdDensity(double cx, double cz, Ring ring) {
+		if (ring.ring == 0 && divineContext != null) {
+			double phi = Coords.getPhi(cx, cz);
+			if (divineContext.angleOffsetFromSector(phi) > 0) {
+				return 0;
+			}
+		}
 		double d2 = cx * cx + cz * cz;
-		if (d2 > c0 * c0 && d2 < c1 * c1) {
-			return strongholdsInRing / (2.0 * Math.PI * (c1 - c0) * Math.sqrt(d2));
+		double relDensity = divineContext != null ? divineContext.relativeDensity() : 1.0;
+		if (d2 > ring.innerRadius * ring.innerRadius && d2 < ring.outerRadius * ring.outerRadius) {
+			return relDensity * ring.numStrongholds / (2.0 * Math.PI * (ring.outerRadius - ring.innerRadius) * Math.sqrt(d2));
 		}
 		return 0;
 	}

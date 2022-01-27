@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Profiler;
 
 public class Posterior {
@@ -14,14 +15,14 @@ public class Posterior {
 	ArrayList<Chunk> chunks;
 	double sigma, sigmaAlt;
 	
-	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows) {
+	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows, DivineContext divineContext) {
 		Profiler.clear();
 		Profiler.start("Calculate posterior");
 		this.sigma = sigma;
 		this.sigmaAlt = sigmaAlt;
 		Profiler.start("Calculate prior");
 		double sigma0 = eyeThrows.get(0).altStd ? sigmaAlt : sigma;
-		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI);
+		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext);
 		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x;
@@ -152,8 +153,8 @@ public class Posterior {
 		double deltaz = chunk.z + 0.5 - t.z/16.0;
 		double r_p = Math.sqrt(t.x * t.x + t.z * t.z)/16.0;
 		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
-		double phi_prime = -Math.atan2(chunk.x, chunk.z);
-		double phi_p = -Math.atan2(t.x, t.z);
+		double phi_prime = Coords.getPhi(chunk.x, chunk.z);
+		double phi_p = Coords.getPhi(t.x, t.z);
 		double maxDist = StrongholdConstants.getMaxDistance(t.x, t.z) / 16.0;
 		double stronghold_r_min = r_p - maxDist;
 		double stronghold_r_max = r_p + maxDist;
