@@ -11,12 +11,12 @@ public class BlindResult {
 	public final double avgDistanceDerivative;
 	public final double ninetiethPercentileDerivative;
 	
-	private static final Pair<Float, String> EXCELLENT = new Pair<Float, String>(1.0f, "excellent");
-	private static final Pair<Float, String> HIGHROLL_GOOD = new Pair<Float, String>(0.8f, "good for highroll");
-	private static final Pair<Float, String> HIGHROLL_SUFFICIENT = new Pair<Float, String>(0.6f, "okay for highroll");
-	private static final Pair<Float, String> UNDESIRABLE = new Pair<Float, String>(0.4f, "bad, but in ring");
-	private static final Pair<Float, String> BAD = new Pair<Float, String>(0.2f, "bad");
-	private static final Pair<Float, String> NOT_IN_RING = new Pair<Float, String>(0.0f, "not in any ring");
+	private static final Pair<Float, String> EXCELLENT = new Pair<Float, String>(1.0f, "blind_excellent");
+	private static final Pair<Float, String> HIGHROLL_GOOD = new Pair<Float, String>(0.8f, "blind_good_highroll");
+	private static final Pair<Float, String> HIGHROLL_SUFFICIENT = new Pair<Float, String>(0.6f, "blind_okay_highroll");
+	private static final Pair<Float, String> UNDESIRABLE = new Pair<Float, String>(0.4f, "blind_bad_in_ring");
+	private static final Pair<Float, String> BAD = new Pair<Float, String>(0.2f, "blind_bad");
+	private static final Pair<Float, String> NOT_IN_RING = new Pair<Float, String>(0.0f, "blind_not_in_ring");
 	
 	/**
 	 * Creates a blind result.

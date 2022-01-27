@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import ninjabrainbot.calculator.DivineContext;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.TextAnimator;
@@ -15,8 +16,9 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 
 	public static final int DEFAULT_SHOWN_THROWS = 3;
 	
-	private JThrowPanelHeader throwPanelHeader;
-	private JThrowPanel[] throwPanels;
+	private ThrowPanelHeader throwPanelHeader;
+	private ThrowPanel[] throwPanels;
+	private DivineContextPanel divineContextPanel;
 	
 	private TextAnimator textAnimator;
 
@@ -24,11 +26,13 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 		gui.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		throwPanelHeader = new JThrowPanelHeader(gui);
+		throwPanelHeader = new ThrowPanelHeader(gui);
 		add(throwPanelHeader);
-		throwPanels = new JThrowPanel[GUI.MAX_THROWS];
+		divineContextPanel = new DivineContextPanel(gui);
+		add(divineContextPanel);
+		throwPanels = new ThrowPanel[GUI.MAX_THROWS];
 		for (int i = 0; i < GUI.MAX_THROWS; i++) {
-			throwPanels[i] = new JThrowPanel(gui, i);
+			throwPanels[i] = new ThrowPanel(gui);
 			add(throwPanels[i]);
 		}
 		textAnimator = new TextAnimator(gui, 200);
@@ -36,7 +40,7 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 	
 	public void setAngleErrorsEnabled(boolean b) {
 		throwPanelHeader.setAngleErrorsEnabled(b);
-		for (JThrowPanel p : throwPanels) {
+		for (ThrowPanel p : throwPanels) {
 			p.setAngleErrorsEnabled(b);
 		}
 	}
@@ -48,7 +52,7 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 
 	public void setErrors(double[] errors) {
 		for (int i = 0; i < throwPanels.length; i++) {
-			JThrowPanel throwPanel = throwPanels[i];
+			ThrowPanel throwPanel = throwPanels[i];
 			if (errors != null && i < errors.length)
 				throwPanel.setError(errors[i]);
 			else
@@ -56,18 +60,21 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 		}
 	}
 
-	public void setThrows(List<Throw> eyeThrows) {
+	public void setThrows(List<Throw> eyeThrows, DivineContext dc) {
+		divineContextPanel.setDivineContext(dc);
 		for (int i = 0; i < throwPanels.length; i++) {
-			JThrowPanel throwPanel = throwPanels[i];
+			ThrowPanel throwPanel = throwPanels[i];
 			throwPanel.setThrow(i < eyeThrows.size() ? eyeThrows.get(i) : null);
 		}
 	}
 
 	@Override
 	public void updateSize(GUI gui) {
+		divineContextPanel.setVisible(divineContextPanel.hasDivineContext());
+		int k = divineContextPanel.hasDivineContext() ? 1 : 0;
 		for (int i = 0; i < throwPanels.length; i++) {
-			JThrowPanel throwPanel = throwPanels[i];
-			throwPanel.setVisible(i < DEFAULT_SHOWN_THROWS || throwPanel.hasThrow());
+			ThrowPanel throwPanel = throwPanels[i];
+			throwPanel.setVisible(i < DEFAULT_SHOWN_THROWS - k || throwPanel.hasThrow());
 		}
 	}
 

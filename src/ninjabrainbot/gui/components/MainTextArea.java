@@ -65,7 +65,7 @@ public class MainTextArea extends JPanel {
 	}
 	
 	public void setResult(CalculatorResult result, GUI gui) {
-		if (result == null && (blind.isVisible() || divine.isVisible())) {
+		if (result == null && blind.isVisible()) {
 			return;
 		}
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
@@ -275,7 +275,7 @@ class BlindPanel extends ThemedPanel {
 	
 	public void setResult(BlindResult result) {
 		evalLabel.setText(I18n.get("blind_coords", result.x, result.z));
-		evalLabel.setColoredText(String.format(Locale.US, "%s", result.evaluation().snd), result.evaluation().fst);
+		evalLabel.setColoredText(I18n.get(result.evaluation().snd), result.evaluation().fst);
 		certaintyPanel.setText(I18n.get("chance_of", (int) result.highrollThreshold));
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%% ", result.highrollProbability*100), (float) result.highrollProbability / 0.1f);
 		distanceLabel.setText(I18n.get("average_distance_to", result.avgDistance));

@@ -3,8 +3,10 @@ package ninjabrainbot.calculator;
 public class DivineContext {
 	
 	double phiMin, phiMax;
+	public final Fossil fossil;
 	
 	public DivineContext(Fossil fossil) {
+		this.fossil = fossil;
 		int k = -4 + fossil.x;
 		if (k >= 8) {
 			k -= 16;

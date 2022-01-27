@@ -19,7 +19,7 @@ import ninjabrainbot.gui.Theme;
 /**
  * JComponent for showing a Throw.
  */
-public class JThrowPanel extends ThemedPanel {
+public class ThrowPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 	
@@ -35,11 +35,11 @@ public class JThrowPanel extends ThemedPanel {
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
 
-	public JThrowPanel(GUI gui, int i) {
-		this(gui, i, null);
+	public ThrowPanel(GUI gui) {
+		this(gui, null);
 	}
 
-	public JThrowPanel(GUI gui, int i, Throw t) {
+	public ThrowPanel(GUI gui, Throw t) {
 		super(gui);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
@@ -67,7 +67,6 @@ public class JThrowPanel extends ThemedPanel {
 		add(error);
 		setLayout(null);
 		setThrow(t);
-		this.t = t;
 		removeButton.addActionListener(p -> gui.removeThrow(this.t));
 	}
 	

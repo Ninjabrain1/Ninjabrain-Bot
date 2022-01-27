@@ -22,16 +22,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.ApproximatedPrior;
 import ninjabrainbot.calculator.BlindPosition;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
-import ninjabrainbot.calculator.Chunk;
 import ninjabrainbot.calculator.DivineContext;
 import ninjabrainbot.calculator.DivineResult;
 import ninjabrainbot.calculator.Fossil;
-import ninjabrainbot.calculator.Prior;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
@@ -68,6 +65,7 @@ public class GUI {
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
 	private DivineContext divineContext;
+	private DivineContext divineContextLast;
 
 	private Font font;
 	private Font fontLight;
@@ -259,13 +257,14 @@ public class GUI {
 
 	public void resetThrows() {
 		mainTextArea.onReset();
-		if (eyeThrows.size() > 0) {
+		if (eyeThrows.size() > 0 || divineContext != null) {
 			ArrayList<Throw> temp = eyeThrowsLast;
 			eyeThrowsLast = eyeThrows;
 			eyeThrows = temp;
 			eyeThrows.clear();
+			divineContextLast = divineContext;
+			divineContext = null;
 		}
-		divineContext = null;
 		onThrowsUpdated();
 	}
 
@@ -273,6 +272,9 @@ public class GUI {
 		ArrayList<Throw> temp = eyeThrowsLast;
 		eyeThrowsLast = eyeThrows;
 		eyeThrows = temp;
+		DivineContext temp2 = divineContextLast;
+		divineContextLast = divineContext;
+		divineContext = temp2;
 		onThrowsUpdated();
 	}
 
@@ -280,6 +282,14 @@ public class GUI {
 		if (eyeThrows.contains(t)) {
 			saveThrowsForUndo();
 			eyeThrows.remove(t);
+			onThrowsUpdated();
+		}
+	}
+	
+	public void removeDivineContext() {
+		if (divineContext != null) {
+			saveThrowsForUndo();
+			divineContext = null;
 			onThrowsUpdated();
 		}
 	}
@@ -295,31 +305,24 @@ public class GUI {
 					enderEyePanel.setThrow(i, t);
 					onThrowsUpdated();
 				}
-			} else if (eyeThrows.size() == 0) {
-				BlindPosition b = BlindPosition.parseF3C(clipboard);
-				if (b != null) {
-					BlindResult result = calculator.blind(b, divineContext, true);
-					mainTextArea.setResult(result, this);
-					if (Main.preferences.autoReset.get()) {
-						autoResetTimer.restart();
-					}
-					SwingUtilities.invokeLater(() -> updateOBSOverlay());
-					return;
-				}
+			} else {
 				Fossil f = Fossil.parseF3I(clipboard);
 				if (f != null) {
-					DivineResult result = calculator.divine(f);
-					mainTextArea.setResult(result, this);
-					if (result != null) {
-						divineContext = new DivineContext(f);
-					} else {
-						divineContext = null;
-					}
-					if (Main.preferences.autoReset.get()) {
-						autoResetTimer.restart();
-					}
-					SwingUtilities.invokeLater(() -> updateOBSOverlay());
+					saveThrowsForUndo();
+					divineContext = new DivineContext(f);
+					onThrowsUpdated();
 					return;
+				} else if (eyeThrows.size() == 0) {
+					BlindPosition b = BlindPosition.parseF3C(clipboard);
+					if (b != null) {
+						BlindResult result = calculator.blind(b, divineContext, true);
+						mainTextArea.setResult(result, this);
+						if (Main.preferences.autoReset.get()) {
+							autoResetTimer.restart();
+						}
+						SwingUtilities.invokeLater(() -> updateOBSOverlay());
+						return;
+					}
 				}
 			}
 		} else {
@@ -376,18 +379,24 @@ public class GUI {
 	}
 
 	private void onThrowsUpdated() {
-		CalculatorResult result = null;
-		double[] errors = null;
-		if (eyeThrows.size() >= 1) {
-			result = calculator.triangulate(eyeThrows, divineContext);
-			if (result.success()) {
-				errors = result.getAngleErrors();
+		if (eyeThrows.size() == 0 && divineContext != null) {
+			DivineResult result = calculator.divine(divineContext.fossil);
+			mainTextArea.setResult(result, this);
+			enderEyePanel.setErrors(null);
+		} else {
+			CalculatorResult result = null;
+			double[] errors = null;
+			if (eyeThrows.size() >= 1) {
+				result = calculator.triangulate(eyeThrows, divineContext);
+				if (result.success()) {
+					errors = result.getAngleErrors();
+				}
 			}
+			mainTextArea.setResult(result, this);
+			enderEyePanel.setErrors(errors);
 		}
-		mainTextArea.setResult(result, this);
-		enderEyePanel.setErrors(errors);
 		// Update throw panels
-		enderEyePanel.setThrows(eyeThrows);
+		enderEyePanel.setThrows(eyeThrows, divineContext);
 		// Update auto reset timer
 		if (Main.preferences.autoReset.get()) {
 			autoResetTimer.restart();
@@ -409,6 +418,7 @@ public class GUI {
 	private void saveThrowsForUndo() {
 		eyeThrowsLast.clear();
 		eyeThrowsLast.addAll(eyeThrows);
+		divineContextLast = divineContext;
 	}
 
 	public Calculator getTriangulator() {

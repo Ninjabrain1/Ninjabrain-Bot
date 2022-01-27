@@ -17,7 +17,7 @@ import ninjabrainbot.util.I18n;
 /**
  * JComponent for showing a Throw.
  */
-public class JThrowPanelHeader extends ThemedPanel {
+public class ThrowPanelHeader extends ThemedPanel {
 
 	private static final long serialVersionUID = -1159034678242273505L;
 	
@@ -28,11 +28,11 @@ public class JThrowPanelHeader extends ThemedPanel {
 	
 	private boolean errorsEnabled;
 	
-	public JThrowPanelHeader(GUI gui) {
+	public ThrowPanelHeader(GUI gui) {
 		this(gui, null);
 	}
 
-	public JThrowPanelHeader(GUI gui, Throw t) {
+	public ThrowPanelHeader(GUI gui, Throw t) {
 		super(gui, true);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
