@@ -14,33 +14,6 @@ public class Main {
 	public static final String VERSION = "1.2.0";
 	public static NinjabrainBotPreferences preferences;
 
-	// TO-DO LIST
-	// [x] Error message if throws dont intersect
-	// [x] Options
-	// [x] - std
-	// [x] - mean?
-	// [x] - angle errors
-	// [x] - show nether coords
-	// [x] - show chunk location instead of block
-	// [x] - theme
-	// [x] - keep focused
-	// [x] - size
-	// [x] - check for updates
-	// [x] - translucent
-	// [x] - number of predictions
-	// [x] - auto reset
-	// [x] Pixel correction
-	// [x] Number of blocks away
-	// [x] Blind travel (?)
-	// [x] Certainty color code
-	// [x] Remove throw
-	// [ ] Link to guide
-	// [ ] Copy result to clipboard
-	// [x] Hotkeys
-	// [x] Calibration
-	// [x] Show closest possible location
-	// [x] Sigma toggle
-
 	public static void main(String[] args) {
 		System.out.println("lang info: " + I18n.get("lang"));
 		Profiler.start("Initialize preferences");
