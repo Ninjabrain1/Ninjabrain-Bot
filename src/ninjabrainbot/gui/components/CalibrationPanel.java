@@ -60,7 +60,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		titlebarPanel = new TitleBarPanel(gui, frame);
 		titlebarPanel.setLayout(null);
 		add(titlebarPanel);
-		titletextLabel = new ThemedLabel(gui, "Settings -> Calibration", true) {
+		titletextLabel = new ThemedLabel(gui, I18n.get("calibrator.title_text_label"), true) {
 			private static final long serialVersionUID = -1284032833229918460L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -76,11 +76,11 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		add(panel);
 		labels = new InstructionLabel[] {
-				new InstructionLabel(gui, "Make sure your 'Open Command' key in Minecraft is set to K. Make a creative world, start flying (double tap space), and then press F3+C."),
-				new InstructionLabel(gui, "Throw an ender eye and measure the angle with F3+C. Be as accurate as you would be in a real run. Upon pressing F3+C you will be automatically teleported to a new location."),
-				new InstructionLabel(gui, "Keep measuring eyes until the measured STD has settled (usually takes around 10-20 throws), then press 'Done' to apply. "),
+				new InstructionLabel(gui, I18n.get("calibrator.command_label")),
+				new InstructionLabel(gui, I18n.get("calibrator.throw_label")),
+				new InstructionLabel(gui, I18n.get("calibrator.measure_label")),
 		};
-		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>The program will determine how accurate you are at measuring ender eyes. The lower the standard deviation (STD) is, the more accurate you are. By knowing what your STD is the calculator can make better predictions.</div></html>") {
+		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>"+I18n.get("calibrator.explanation")+"</div></html>") {
 			private static final long serialVersionUID = -5378176835369680709L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -108,8 +108,8 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		std = new ThemedLabel(gui);
 		std.setOpaque(false);
 		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
-		JLabel l1 = new ThemedLabel(gui, "Measured STD:");
-		JButton done = new FlatButton(gui, "Done");
+		JLabel l1 = new ThemedLabel(gui, I18n.get("calibrator.l1"));
+		JButton done = new FlatButton(gui, I18n.get("calibrator.done"));
 		done.addActionListener(p -> done());
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		std.setHorizontalAlignment(SwingConstants.CENTER);
@@ -170,7 +170,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 //	}
 	
 	private FlatButton getCancelButton() {
-		FlatButton button = new TitleBarButton(gui, "Cancel") {
+		FlatButton button = new TitleBarButton(gui, I18n.get("calibrator.cancel")) {
 			private static final long serialVersionUID = 4380111129291481489L;
 			@Override
 			public Color getHoverColor(Theme theme) {

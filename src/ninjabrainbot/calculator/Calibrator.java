@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.util.ArrayList;
 
 import ninjabrainbot.io.KeyPresser;
+import ninjabrainbot.util.I18n;
 
 public class Calibrator {
 	
@@ -44,7 +45,7 @@ public class Calibrator {
 			ready = true;
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
-				doCommand("say Ignoring last throw because you moved.");
+				doCommand("say "+ I18n.get("calibrator.you_moved"));
 				tp(lastX, lastZ, t.alpha, -31.2);
 				return;
 			}
