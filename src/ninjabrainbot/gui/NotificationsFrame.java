@@ -19,6 +19,7 @@ import ninjabrainbot.gui.components.ThemedFrame;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.util.I18n;
 
 public class NotificationsFrame extends ThemedFrame {	
 	
@@ -33,7 +34,7 @@ public class NotificationsFrame extends ThemedFrame {
 	ThemedLabel label;
 
 	public NotificationsFrame(GUI gui) {
-		super(gui, "New version available!");
+		super(gui, I18n.get("notificationsframe.new_version_available"));
 		this.gui = gui;
 		titlebarPanel.addButton(getExitButton());
 		mainPanel = new JPanel();
@@ -45,11 +46,11 @@ public class NotificationsFrame extends ThemedFrame {
 		label.setVerticalAlignment(SwingConstants.TOP);
 		mainPanel.add(label);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		FlatButton downloadButton = new FlatButton(gui, "Download .jar");
+		FlatButton downloadButton = new FlatButton(gui, I18n.get("notificationsframe.download_button"));
 		downloadButton.addActionListener(p -> openURL());
 		mainPanel.add(downloadButton);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		FlatButton changelogButton = new FlatButton(gui, "Open changelog (in browser)");
+		FlatButton changelogButton = new FlatButton(gui, I18n.get("notificationsframe.changelog_button"));
 		changelogButton.addActionListener(p -> openReleasePage());
 		mainPanel.add(changelogButton);
 	}
@@ -99,7 +100,7 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("<html>Version " + url.tag + " is available.  After downloading the new jar you can delete this jar (your settings will automatically transfer). This notification can be disabled in the settings menu.</html>");
+		label.setText("<html>"+ I18n.get("notificationsframe.update_texta") + url.tag + I18n.get("notificationsframe.update_textb")+"</html>");
 		updateBounds(gui);
 	}
 
