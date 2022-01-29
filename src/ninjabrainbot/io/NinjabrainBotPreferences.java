@@ -192,7 +192,7 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.updateTheme());
 			}
 		};
-		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] {0, 1}, new String[] {SizePreference.REGULAR.name, SizePreference.LARGE.name}, pref) {
+		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] {0, 1, 2}, new String[] {SizePreference.REGULAR.name, SizePreference.LARGE.name, SizePreference.EXTRALARGE.name}, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.updateSizePreference());

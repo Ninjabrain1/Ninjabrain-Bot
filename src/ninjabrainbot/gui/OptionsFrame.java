@@ -58,9 +58,9 @@ public class OptionsFrame extends ThemedFrame {
 	private JPanel mainPanel; // Panel containing all non-advanced options
 	private JPanel advPanel; // Panel containing all advanced options
 
-	static final int WINDOW_WIDTH = 560;
-	static final int COLUMN_WIDTH = WINDOW_WIDTH/2;
-	static final int PADDING = 6;
+	static int WINDOW_WIDTH = 560;
+	static int COLUMN_WIDTH = WINDOW_WIDTH/2;
+	static int PADDING = 6;
 	
 	private static final String TITLE_TEXT = I18n.get("settings");
 
@@ -229,6 +229,8 @@ public class OptionsFrame extends ThemedFrame {
 	}
 	
 	public void updateBounds(GUI gui) {
+		WINDOW_WIDTH = gui.size.WIDTH * 7 / 4;
+		COLUMN_WIDTH = WINDOW_WIDTH/2;
 		super.updateBounds(gui);
 		pack();
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
