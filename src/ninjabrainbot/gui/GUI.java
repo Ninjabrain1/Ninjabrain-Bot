@@ -1,6 +1,7 @@
 package ninjabrainbot.gui;
 
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
@@ -68,7 +69,6 @@ public class GUI {
 	private DivineContext divineContextLast;
 
 	private Font font;
-	private Font fontLight;
 	private HashMap<String, Font> fonts;
 	
 	public final File OBS_OVERLAY;
@@ -91,22 +91,10 @@ public class GUI {
 		
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
-		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
-			if (font.canDisplayUpTo(I18n.get("lang")) != -1) {
-				font = new Font(null);
-			}
-			fontLight = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Light.ttf"));
-			if (fontLight.canDisplayUpTo(I18n.get("lang")) != -1) {
-				fontLight = new Font(null);
-			}
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(font);
-			ge.registerFont(fontLight);
-			fonts = new HashMap<>();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		font = loadFont();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		ge.registerFont(font);
+		fonts = new HashMap<>();
 		
 		// Set application icon
 		Profiler.stopAndStart("Set app icon");
@@ -153,7 +141,7 @@ public class GUI {
 		});
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
-
+	
 	public void setTranslucent(boolean t) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
@@ -198,10 +186,31 @@ public class GUI {
 		updateBounds();
 	}
 
+	private Font loadFont() {
+		Font font = null;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+		if (font == null || font.canDisplayUpTo(I18n.get("lang")) != -1) {
+			font = new Font(null);
+		}
+		if (font == null || font.canDisplayUpTo(I18n.get("lang")) != -1) {
+			Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+	        for (Font f : fonts) {
+	            if (f.canDisplayUpTo(I18n.get("lang")) < 0) {
+	                return f;
+	            }
+	        }
+		}
+		return font;
+	}
+	
 	public Font fontSize(float size, boolean light) {
 		String key = size + " " + light;
 		if (!fonts.containsKey(key)) {
-			Font f = light ? fontLight.deriveFont(Font.BOLD, size) : font.deriveFont(Font.BOLD, size);
+			Font f = font.deriveFont(light ? Font.PLAIN : Font.BOLD, size);
 			fonts.put(key, f);
 			return f;
 		}

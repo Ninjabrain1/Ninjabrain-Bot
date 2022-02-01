@@ -42,7 +42,12 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
 		add(mainPanel);
-		label = new ThemedLabel(gui, "");
+		label = new ThemedLabel(gui, "") {
+			@Override
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
+			}
+		};
 		label.setVerticalAlignment(SwingConstants.TOP);
 		mainPanel.add(label);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
@@ -100,7 +105,7 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("<html>"+ I18n.get("notificationsframe.update_texta") + url.tag + I18n.get("notificationsframe.update_textb")+"</html>");
+		label.setText("<html>"+ I18n.get("notificationsframe.update_text", url.tag) +"</html>");
 		updateBounds(gui);
 	}
 

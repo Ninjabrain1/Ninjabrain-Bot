@@ -293,7 +293,7 @@ class CheckboxPanel extends ThemedPanel {
 		super(gui);
 		this.preference = preference;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
+		descLabel = new ThemedLabel(gui, description) {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -327,7 +327,7 @@ class TextboxPanel extends ThemedPanel {
 		super(gui);
 		this.preference = preference;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
+		descLabel = new ThemedLabel(gui, description) {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -383,7 +383,7 @@ class RadioButtonPanel extends ThemedPanel {
 		super(gui);
 		this.preference = preference;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
+		descLabel = new ThemedLabel(gui, description) {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -420,7 +420,7 @@ class HotkeyPanel extends ThemedPanel {
 		super(gui);
 		this.preference = preference;
 		setLayout(new GridLayout(1, 2, 10, 0));
-		descLabel = new ThemedLabel(gui, "<html>"+ description +"</html>") {
+		descLabel = new ThemedLabel(gui, description) {
 			private static final long serialVersionUID = -658733822961822860L;
 			@Override
 			public int getTextSize(SizePreference p) {
