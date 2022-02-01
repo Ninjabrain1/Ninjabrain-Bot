@@ -92,7 +92,6 @@ public class GUI {
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
 		font = loadFont();
-		System.out.println(font.getFontName());
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(font);
 		fonts = new HashMap<>();
