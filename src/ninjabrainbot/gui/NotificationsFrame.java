@@ -100,7 +100,7 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("<html>"+ I18n.get("notificationsframe.update_texta") + url.tag + I18n.get("notificationsframe.update_textb")+"</html>");
+		label.setText("<html>"+ I18n.get("notificationsframe.update_text", url.tag) +"</html>");
 		updateBounds(gui);
 	}
 
