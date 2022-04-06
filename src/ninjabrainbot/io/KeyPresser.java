@@ -6,13 +6,21 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 public class KeyPresser {
 	
 	Robot robot;
+	final int CTRL_KEYCODE;
 	
 	public KeyPresser() throws AWTException {
 		robot = new Robot();
+		String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+		if (osName.equals("mac os x")) {
+			CTRL_KEYCODE = KeyEvent.VK_META;
+		} else {
+			CTRL_KEYCODE = KeyEvent.VK_CONTROL;
+		}
 	}
 	
 	public void paste(String s) {
@@ -23,11 +31,11 @@ public class KeyPresser {
 //		System.out.println(3);
 		clipboard.setContents(selection, null);
 //		System.out.println(4);
-		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(CTRL_KEYCODE);
 //		System.out.println(5);
 		robot.keyPress(KeyEvent.VK_V);
 //		System.out.println(6);
-		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.keyRelease(CTRL_KEYCODE);
 //		System.out.println(7);
 		robot.keyRelease(KeyEvent.VK_V);
 //		System.out.println(8);
