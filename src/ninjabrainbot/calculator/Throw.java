@@ -8,18 +8,18 @@ import ninjabrainbot.Main;
 public class Throw implements Ray {
 
 	// correction is how much the angle has been corrected, only used for display purposes (the correction has already been added to alpha)
-	public final double x, z, alpha, correction;
+	public final double x, z, alpha, beta, correction;
 	public final boolean altStd;
 
-	public Throw(double x, double z, double alpha) {
-		this(x, z, alpha, 0);
+	public Throw(double x, double z, double alpha, double beta) {
+		this(x, z, alpha, beta, 0);
 	}
 	
-	public Throw(double x, double z, double alpha, double correction) {
-		this(x, z, alpha, correction, false);
+	public Throw(double x, double z, double alpha, double beta, double correction) {
+		this(x, z, alpha, beta, correction, false);
 	}
 	
-	public Throw(double x, double z, double alpha, double correction, boolean altStd) {
+	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd) {
 		this.x = x;
 		this.z = z;
 		this.correction = correction;
@@ -30,6 +30,7 @@ public class Throw implements Ray {
 			alpha -= 360.0;
 		}
 		this.alpha = alpha;
+		this.beta = beta;
 		this.altStd = altStd;
 	}
 	
@@ -52,8 +53,9 @@ public class Throw implements Ray {
 			double x = Double.parseDouble(substrings[6]);
 			double z = Double.parseDouble(substrings[8]);
 			double alpha = Double.parseDouble(substrings[9]);
+			double beta = Double.parseDouble(substrings[10]);
 			alpha += Main.preferences.crosshairCorrection.get();
-			return new Throw(x, z, alpha);
+			return new Throw(x, z, alpha, beta);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
@@ -69,7 +71,7 @@ public class Throw implements Ray {
 	}
 	
 	public Throw withToggledSTD() {
-		return new Throw(x, z, alpha, correction, !this.altStd);
+		return new Throw(x, z, alpha, correction, beta, !this.altStd);
 	}
 	
 	@Override

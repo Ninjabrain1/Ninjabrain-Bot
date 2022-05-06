@@ -309,10 +309,15 @@ public class GUI {
 			int i = eyeThrows.size();
 			if (t != null) {
 				if (i < MAX_THROWS) {
-					saveThrowsForUndo();
-					eyeThrows.add(t);
-					enderEyePanel.setThrow(i, t);
-					onThrowsUpdated();
+					if (t.beta > 0 && i > 0) {
+						mainTextArea.updateCurrentAngle(t.alpha, eyeThrows.get(eyeThrows.size() - 1).alpha);
+					} else if (t.beta < 0) {
+						saveThrowsForUndo();
+						eyeThrows.add(t);
+						mainTextArea.setCurrentAngle(t.alpha);
+						enderEyePanel.setThrow(i, t);
+						onThrowsUpdated();
+					}
 				}
 			} else {
 				Fossil f = Fossil.parseF3I(clipboard);
@@ -401,7 +406,7 @@ public class GUI {
 					errors = result.getAngleErrors();
 				}
 			}
-			mainTextArea.setResult(result, this);
+			mainTextArea.setResult(result, eyeThrows.get(eyeThrows.size() - 1).alpha, this);
 			enderEyePanel.setErrors(errors);
 		}
 		// Update throw panels
