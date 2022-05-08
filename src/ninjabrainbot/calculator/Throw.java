@@ -11,15 +11,17 @@ public class Throw implements Ray {
 	public final double x, z, alpha, beta, correction;
 	public final boolean altStd;
 
+	private final boolean nether;
+
 	public Throw(double x, double z, double alpha, double beta) {
-		this(x, z, alpha, beta, 0);
+		this(x, z, alpha, beta, 0, false);
 	}
 	
-	public Throw(double x, double z, double alpha, double beta, double correction) {
-		this(x, z, alpha, beta, correction, false);
+	public Throw(double x, double z, double alpha, double beta, double correction, boolean nether) {
+		this(x, z, alpha, beta, correction, false, nether);
 	}
 	
-	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd) {
+	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd, boolean nether) {
 		this.x = x;
 		this.z = z;
 		this.correction = correction;
@@ -32,6 +34,7 @@ public class Throw implements Ray {
 		this.alpha = alpha;
 		this.beta = beta;
 		this.altStd = altStd;
+		this.nether = nether;
 	}
 	
 	@Override
@@ -44,18 +47,21 @@ public class Throw implements Ray {
 	 * in the overworld, null otherwise.
 	 */
 	public static Throw parseF3C(String string) {
-		if (!string.startsWith("/execute in minecraft:overworld run tp @s"))
+		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") ||
+				string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
+		}
 		String[] substrings = string.split(" ");
 		if (substrings.length != 11)
 			return null;
 		try {
+			boolean nether = substrings[2].equals("minecraft:the_nether");
 			double x = Double.parseDouble(substrings[6]);
 			double z = Double.parseDouble(substrings[8]);
 			double alpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
 			alpha += Main.preferences.crosshairCorrection.get();
-			return new Throw(x, z, alpha, beta);
+			return new Throw(x, z, alpha, beta, 0, nether);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
@@ -89,4 +95,11 @@ public class Throw implements Ray {
 		return alpha;
 	}
 
+	public boolean isNether() {
+		return nether;
+	}
+
+	public BlindPosition toBlind() {
+		return new BlindPosition(x, z);
+	}
 }

@@ -22,6 +22,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyUndo;
 	public HotkeyPreference hotkeyMinimize;
 	public HotkeyPreference hotkeyAltStd;
+	public HotkeyPreference hotkeyLock;
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
 	public FloatPreference crosshairCorrection;
@@ -67,7 +68,11 @@ public class NinjabrainBotPreferences {
 		hotkeyReset = new HotkeyPreference("hotkey_reset", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.resetThrows());
+				SwingUtilities.invokeLater(() -> {
+					if (!gui.isTargetLocked()) {
+						gui.resetThrows();
+					}
+				});
 			}
 		};
 		hotkeyUndo = new HotkeyPreference("hotkey_undo", pref) {
@@ -89,6 +94,10 @@ public class NinjabrainBotPreferences {
 					SwingUtilities.invokeLater(() -> gui.toggleLastSTD());
 				}
 			}
+		};
+		hotkeyLock = new HotkeyPreference("hotkey_lock", pref) {
+			@Override
+			public void execute(GUI gui) { SwingUtilities.invokeLater(() -> gui.toggleTargetLocked()); }
 		};
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
 			@Override

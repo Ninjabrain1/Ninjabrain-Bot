@@ -10,7 +10,9 @@ public class ChunkPrediction extends Chunk {
 
 	public final int fourfour_x, fourfour_z;
 	public final boolean success;
-	public final int distance;
+	private int distance;
+	private double travelAngle;
+	private double travelAngleDiff;
 	
 	/**
 	 * Creates a triangulation result.
@@ -20,9 +22,45 @@ public class ChunkPrediction extends Chunk {
 		this.fourfour_x = 16 * chunk.x + 4;
 		this.fourfour_z = 16 * chunk.z + 4;
 		this.success = Double.isFinite(chunk.weight) && chunk.weight > 0.0005;
+		updateDistance(playerPos);
+	}
+
+	private void updateDistance(Throw playerPos) {
 		distance = playerPos != null ? getDistance(playerPos) : 0;
 	}
-	
+
+	public void updateWithTravelAngle(Throw playerPos) {
+		updateDistance(playerPos);
+		double playerX = playerPos.x;
+		double playerZ = playerPos.z;
+		if (playerPos.isNether()) {
+			playerX *= 8;
+			playerZ *= 8;
+		}
+		double xDiff = fourfour_x + 4 - playerX;
+		double zDiff = fourfour_z + 4 - playerZ;
+
+		double newAngle = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
+		double simpleDiff = newAngle - playerPos.alpha;
+		double adjustedDiff = ((newAngle + 360) % 360) - ((playerPos.alpha + 360) % 360);
+		double finalDiff = Math.abs(adjustedDiff) < Math.abs(simpleDiff) ? adjustedDiff : simpleDiff;
+
+		this.travelAngle = newAngle;
+		this.travelAngleDiff = finalDiff;
+	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public double getTravelAngle() {
+		return travelAngle;
+	}
+
+	public double getTravelAngleDiff() {
+		return travelAngleDiff;
+	}
+
 	/**
 	 * Creates a failed triangulation result.
 	 */
@@ -72,6 +110,22 @@ public class ChunkPrediction extends Chunk {
 
 	public String formatNether() {
 		return String.format(Locale.US, "(%d, %d)", x * 2, z * 2);
+	}
+
+	public String formatTravelAngle(boolean forBasic) {
+		if (forBasic) {
+			return String.format("%s: %.2f", I18n.get("current_angle"), travelAngle);
+		}
+		return String.format("%.2f%s", travelAngle, formatTravelAngleDiff());
+	}
+
+	public String formatTravelAngleDiff() {
+		double absChange = Math.abs(travelAngleDiff);
+		return String.format(" (%s %.1f)", travelAngleDiff > 0 ? "->" : "<-", absChange);
+	}
+
+	public float getTravelAngleDiffColor() {
+		return (float) (1 - Math.abs(travelAngleDiff) / 180.0);
 	}
 
 }

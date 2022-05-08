@@ -23,9 +23,10 @@ public class ChunkPanelHeader extends ThemedPanel {
 	private static final long serialVersionUID = -5271531617019225933L;
 	
 	private JLabel location;
-	private JLabel certainty;
 	private JLabel distance;
 	private JLabel nether;
+	private JLabel certainty;
+	private JLabel angle;
 	private JLabel[] labels;
 	
 	GUI gui;
@@ -39,15 +40,18 @@ public class ChunkPanelHeader extends ThemedPanel {
 		certainty = new JLabel(I18n.get("certainty_2"), 0);
 		distance = new JLabel(I18n.get("dist"), 0);
 		nether = new JLabel(I18n.get("nether"), 0);
-		labels = new JLabel[] {location, certainty, distance, nether};
+		angle = new JLabel(I18n.get("angle"), 0);
+		labels = new JLabel[] {location, distance, nether, certainty, angle};
 		ColumnLayout layout = new ColumnLayout(0);
-		layout.setRelativeWidth(location, 2f);
-		layout.setRelativeWidth(nether, 1.5f);
+		layout.setRelativeWidth(distance, 0.5f);
+		layout.setRelativeWidth(certainty, 0.5f);
+		layout.setRelativeWidth(angle, 1.2f);
 		setLayout(layout);
 		add(location);
-		add(certainty);
 		add(distance);
 		add(nether);
+		add(certainty);
+		add(angle);
 		updateHeaderText();
 	}
 	

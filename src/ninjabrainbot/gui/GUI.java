@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -23,14 +24,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.BlindPosition;
-import ninjabrainbot.calculator.BlindResult;
-import ninjabrainbot.calculator.Calculator;
-import ninjabrainbot.calculator.CalculatorResult;
-import ninjabrainbot.calculator.DivineContext;
-import ninjabrainbot.calculator.DivineResult;
-import ninjabrainbot.calculator.Fossil;
-import ninjabrainbot.calculator.Throw;
+import ninjabrainbot.calculator.*;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
 import ninjabrainbot.gui.components.MainButtonPanel;
@@ -63,10 +57,13 @@ public class GUI {
 
 	public static final int MAX_THROWS = 10;
 	private final Calculator calculator;
+	private CalculatorResult latestResult;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
 	private DivineContext divineContext;
 	private DivineContext divineContextLast;
+
+	private boolean targetLocked = false;
 
 	private Font font;
 	private HashMap<String, Font> fonts;
@@ -273,6 +270,7 @@ public class GUI {
 			eyeThrows.clear();
 			divineContextLast = divineContext;
 			divineContext = null;
+			latestResult = null;
 		}
 		onThrowsUpdated();
 	}
@@ -308,15 +306,24 @@ public class GUI {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size();
 			if (t != null) {
+				if (t.isNether()) {
+					if (i > 0) {
+						onAngleUpdate(t, true);
+					} else {
+						BlindResult result = calculator.blind(t.toBlind(), divineContext, true);
+						mainTextArea.setResult(result, this);
+						if (Main.preferences.autoReset.get()) {
+							autoResetTimer.restart();
+						}
+						SwingUtilities.invokeLater(() -> updateOBSOverlay());
+					}
+					return;
+				}
 				if (i < MAX_THROWS) {
-					if (t.beta > 0 && i > 0) {
-						mainTextArea.updateCurrentAngle(t.alpha, eyeThrows.get(eyeThrows.size() - 1).alpha);
-					} else if (t.beta < 0) {
-						saveThrowsForUndo();
-						eyeThrows.add(t);
-						mainTextArea.setCurrentAngle(t.alpha);
-						enderEyePanel.setThrow(i, t);
-						onThrowsUpdated();
+					if (i > 0 && (targetLocked || t.beta > 0)) {
+						onAngleUpdate(t, true);
+					} else if (!targetLocked && t.beta <= 0) {
+						updateWithNewThrow(t, i);
 					}
 				}
 			} else {
@@ -325,18 +332,6 @@ public class GUI {
 					saveThrowsForUndo();
 					divineContext = new DivineContext(f);
 					onThrowsUpdated();
-					return;
-				} else if (eyeThrows.size() == 0) {
-					BlindPosition b = BlindPosition.parseF3C(clipboard);
-					if (b != null) {
-						BlindResult result = calculator.blind(b, divineContext, true);
-						mainTextArea.setResult(result, this);
-						if (Main.preferences.autoReset.get()) {
-							autoResetTimer.restart();
-						}
-						SwingUtilities.invokeLater(() -> updateOBSOverlay());
-						return;
-					}
 				}
 			}
 		} else {
@@ -348,6 +343,13 @@ public class GUI {
 				}
 			}
 		}
+	}
+
+	private void updateWithNewThrow(Throw t, int index) {
+		saveThrowsForUndo();
+		eyeThrows.add(t);
+		enderEyePanel.setThrow(index, t);
+		onThrowsUpdated();
 	}
 
 	public void changeLastAngle(double delta) {
@@ -384,6 +386,17 @@ public class GUI {
 		}
 	}
 
+	public void toggleTargetLocked() {
+		if (latestResult != null) {
+			targetLocked = !targetLocked;
+			mainTextArea.setResult(latestResult, this);
+		}
+	}
+
+	public boolean isTargetLocked() {
+		return targetLocked;
+	}
+
 	private void setUpdateURL(VersionURL url) {
 		frame.setURL(url);
 	}
@@ -398,15 +411,18 @@ public class GUI {
 			mainTextArea.setResult(result, this);
 			enderEyePanel.setErrors(null);
 		} else {
-			CalculatorResult result = null;
 			double[] errors = null;
 			if (eyeThrows.size() >= 1) {
-				result = calculator.triangulate(eyeThrows, divineContext);
-				if (result.success()) {
-					errors = result.getAngleErrors();
+				latestResult = calculator.triangulate(eyeThrows, divineContext);
+				if (latestResult.success()) {
+					errors = latestResult.getAngleErrors();
+					Throw latestThrow = eyeThrows.get(eyeThrows.size() - 1);
+					onAngleUpdate(latestThrow, false);
 				}
+			} else {
+				latestResult = null;
 			}
-			mainTextArea.setResult(result, eyeThrows.get(eyeThrows.size() - 1).alpha, this);
+			mainTextArea.setResult(latestResult, this);
 			enderEyePanel.setErrors(errors);
 		}
 		// Update throw panels
@@ -419,6 +435,19 @@ public class GUI {
 		updateBounds();
 		// Update overlay
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
+	}
+
+	private void onAngleUpdate(Throw updateThrow, boolean updateGui) {
+		if (latestResult != null && latestResult.success()) {
+			latestResult.getBestPrediction().updateWithTravelAngle(updateThrow);
+			List<ChunkPrediction> topPredictions = latestResult.getTopPredictions(SizePreference.NUM_DETAILED_PANELS);
+			for (ChunkPrediction topPrediction : topPredictions) {
+				topPrediction.updateWithTravelAngle(updateThrow);
+			}
+			if (updateGui) {
+				mainTextArea.setResult(latestResult, this);
+			}
+		}
 	}
 
 	public void onClipboardUpdated(String newClipboard) {

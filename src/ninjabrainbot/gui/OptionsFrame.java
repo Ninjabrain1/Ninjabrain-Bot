@@ -184,6 +184,7 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, I18n.get("settings.down_001_to_last_angle"), Main.preferences.hotkeyDecrement), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("undo"), Main.preferences.hotkeyUndo), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("lock"), Main.preferences.hotkeyLock), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
 		}
 		ThemedLabel labelOverlay = new ThemedLabel(gui, I18n.get("settings.overlay"), false);

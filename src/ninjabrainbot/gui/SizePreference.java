@@ -18,6 +18,8 @@ public abstract class SizePreference {
 	public int WIDTH;
 	public int WINDOW_ROUNDING;
 
+	public static final int NUM_DETAILED_PANELS = 5;
+
 	public static final HashMap<String, SizePreference> SIZES = new HashMap<String, SizePreference>();
 	public static final SizePreference REGULAR = new RegularSize();
 	public static final SizePreference LARGE = new LargeSize();
@@ -45,7 +47,7 @@ class RegularSize extends SizePreference {
 		PADDING = 6;
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
-		WIDTH = 320;
+		WIDTH = 360;
 		WINDOW_ROUNDING = 7;
 	}
 }
@@ -61,7 +63,7 @@ class LargeSize extends SizePreference {
 		PADDING = 7;
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
-		WIDTH = 380;
+		WIDTH = 400;
 		WINDOW_ROUNDING = 7;
 	}
 }
@@ -77,7 +79,7 @@ class ExtraLargeSize extends SizePreference {
 		PADDING = 9;
 		PADDING_THIN = 3;
 		PADDING_TITLE = 6;
-		WIDTH = 570;
+		WIDTH = 600;
 		WINDOW_ROUNDING = 7;
 	}
 }

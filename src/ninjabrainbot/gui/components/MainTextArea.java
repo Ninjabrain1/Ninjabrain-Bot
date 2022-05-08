@@ -21,6 +21,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.*;
 import ninjabrainbot.gui.ColumnLayout;
 import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
@@ -61,17 +62,17 @@ public class MainTextArea extends JPanel {
 		}
 	}
 	
-	public void setResult(CalculatorResult result, double angle, GUI gui) {
+	public void setResult(CalculatorResult result, GUI gui) {
 		if (result == null && blind.isVisible()) {
 			return;
 		}
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
-			basicTriangulation.setResult(result, angle);
+			basicTriangulation.setResult(result, gui.isTargetLocked());
 			basicTriangulation.updateColors(gui);
 			layout.show(this, TRIANGULATION);
 		} else {
 			if (result != null && !result.success()) {
-				basicTriangulation.setResult(result, angle);
+				basicTriangulation.setResult(result, gui.isTargetLocked());
 				basicTriangulation.updateColors(gui);
 				layout.show(this, TRIANGULATION);
 			} else {
@@ -94,14 +95,6 @@ public class MainTextArea extends JPanel {
 		divine.updateColors(gui);
 		layout.show(this, DIVINE);
 		idle = false;
-	}
-
-	public void setCurrentAngle(double angle) {
-		basicTriangulation.setCurrentAngle(angle);
-	}
-
-	public void updateCurrentAngle(double angle, double change) {
-		basicTriangulation.updateCurrentAngle(angle, change);
 	}
 
 	public void setNetherCoordsEnabled(boolean b) {
@@ -142,10 +135,9 @@ class BasicTriangulationPanel extends ThemedPanel {
 	public JLabel maintextLabel;
 	public ColorMapLabel certaintyPanel;
 	public JLabel netherLabel;
-	public JLabel currentAngleLabel;
+	public ColorMapLabel currentAngleLabel;
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
-	public static final String CURRENT_ANGLE_TEXT = I18n.get("current_angle");
 	
 	public BasicTriangulationPanel(GUI gui) {
 		super(gui);
@@ -155,32 +147,38 @@ class BasicTriangulationPanel extends ThemedPanel {
 		certaintyPanel = new ColorMapLabel(gui, true);
 		netherLabel = new ThemedLabel(gui, "");
 		netherLabel.setVisible(Main.preferences.showNetherCoords.get());
-		currentAngleLabel = new ThemedLabel(gui, "");
+		currentAngleLabel = new ColorMapLabel(gui, true);
 		maintextLabel.setAlignmentX(0);
 		netherLabel.setAlignmentX(0);
 		certaintyPanel.setAlignmentX(0);
 		currentAngleLabel.setAlignmentX(0);
 		add(maintextLabel);
-		add(certaintyPanel);
 		add(netherLabel);
 		add(currentAngleLabel);
+		add(certaintyPanel);
 	}
 	
-	public void setResult(CalculatorResult result, double angle) {
+	public void setResult(CalculatorResult result, boolean locked) {
 		if (result != null) {
 			if (result.success()) {
 				ChunkPrediction prediction = result.getBestPrediction();
-				maintextLabel.setText(prediction.format());
+				String mainText = prediction.format();
+				if (locked) {
+					mainText += " (" + I18n.get("locked") + ")";
+				}
+				maintextLabel.setText(mainText);
 				certaintyPanel.setText(CERTAINTY_TEXT);
 				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.weight*100.0), (float) prediction.weight);
-				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2));
-				setCurrentAngle(angle);
+				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2, prediction.getDistance()/8));
+				currentAngleLabel.setText(prediction.formatTravelAngle(true));
+				currentAngleLabel.setColoredText(prediction.formatTravelAngleDiff(), prediction.getTravelAngleDiffColor());
 			} else {
 				maintextLabel.setText(I18n.get("could_not_determine"));
 				certaintyPanel.setText(I18n.get("you_probably_misread"));
 				certaintyPanel.setColoredText("", 0);
 				netherLabel.setText("");
 				currentAngleLabel.setText("");
+				currentAngleLabel.setColoredText("", 0);
 			}
 		} else {
 			maintextLabel.setText(I18n.get("waiting_f3c"));
@@ -188,21 +186,15 @@ class BasicTriangulationPanel extends ThemedPanel {
 			certaintyPanel.setColoredText("", 0);
 			netherLabel.setText("");
 			currentAngleLabel.setText("");
+			currentAngleLabel.setColoredText("", 0);
 		}
-	}
-
-	public void setCurrentAngle(double angle) {
-		currentAngleLabel.setText(String.format("%s: %.2f", CURRENT_ANGLE_TEXT, angle));
-	}
-
-	public void updateCurrentAngle(double angle, double change) {
-		currentAngleLabel.setText(String.format("%s: %.2f (%.2f)", CURRENT_ANGLE_TEXT, angle, change));
 	}
 	
 	@Override
 	public void updateColors(GUI gui) {
 		super.updateColors(gui);
 		certaintyPanel.updateColor(gui);
+		currentAngleLabel.updateColor(gui);
 	}
 	
 	@Override
@@ -224,7 +216,6 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	
 	private ChunkPanelHeader header;
 	private List<ChunkPanel> panels;
-	private static final int numPanels = 5;
 	
 	public DetailedTriangulationPanel(GUI gui) {
 		super(gui);
@@ -233,7 +224,7 @@ class DetailedTriangulationPanel extends ThemedPanel {
 		header = new ChunkPanelHeader(gui);
 		add(header);
 		panels = new ArrayList<ChunkPanel>();
-		for (int i = 0; i < numPanels; i++) {
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
 			ChunkPanel panel = new ChunkPanel(gui);
 			panels.add(panel);
 			add(panel);
@@ -248,8 +239,8 @@ class DetailedTriangulationPanel extends ThemedPanel {
 			}
 			return;
 		}
-		List<ChunkPrediction> predictions = result.getTopPredictions(numPanels);
-		for (int i = 0; i < numPanels; i++) {
+		List<ChunkPrediction> predictions = result.getTopPredictions(SizePreference.NUM_DETAILED_PANELS);
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
 			ChunkPanel p = panels.get(i);
 			p.setPrediciton(predictions.get(i));
 		}
@@ -262,7 +253,7 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	
 	@Override
 	public void updateSize(GUI gui) {
-		setPreferredSize(new Dimension(0, (1 + numPanels) * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM)));
+		setPreferredSize(new Dimension(0, (1 + SizePreference.NUM_DETAILED_PANELS) * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM)));
 		super.updateSize(gui);
 	}
 	

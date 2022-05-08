@@ -8,10 +8,9 @@ public class CalculatorResult {
 	Posterior posterior;
 	ArrayList<Throw> eyeThrows;
 	ChunkPrediction bestPrediction;
-	
-	public CalculatorResult() {
-		bestPrediction = new ChunkPrediction();
-	}
+	private final List<ChunkPrediction> topPredictions = new ArrayList<>();
+
+	public CalculatorResult() {}
 	
 	public CalculatorResult(Posterior posterior, ArrayList<Throw> eyeThrows) {
 		this.posterior = posterior;
@@ -25,15 +24,16 @@ public class CalculatorResult {
 	}
 	
 	public List<ChunkPrediction> getTopPredictions(int amount) {
-		List<ChunkPrediction> predictions = new ArrayList<ChunkPrediction>();
-		List<Chunk> topChunks = posterior.getChunks();
-		topChunks.sort((a, b) -> -Double.compare(a.weight, b.weight));
-		for (Chunk c : topChunks) {
-			predictions.add(new ChunkPrediction(c, eyeThrows.get(eyeThrows.size() - 1)));
-			if (predictions.size() >= amount)
-				break;
+		if (topPredictions.isEmpty()) {
+			List<Chunk> topChunks = posterior.getChunks();
+			topChunks.sort((a, b) -> -Double.compare(a.weight, b.weight));
+			for (Chunk c : topChunks) {
+				topPredictions.add(new ChunkPrediction(c, eyeThrows.get(eyeThrows.size() - 1)));
+				if (topPredictions.size() >= amount)
+					break;
+			}
 		}
-		return predictions;
+		return topPredictions;
 	}
 	
 	public ChunkPrediction getBestPrediction() {

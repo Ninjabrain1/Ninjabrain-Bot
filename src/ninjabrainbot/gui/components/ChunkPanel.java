@@ -21,9 +21,10 @@ public class ChunkPanel extends ThemedPanel {
 	private static final long serialVersionUID = -1522335220282509326L;
 	
 	private JLabel location;
-	private JLabel certainty;
 	private JLabel distance;
 	private JLabel nether;
+	private JLabel certainty;
+	private JLabel angle;
 	private JLabel[] labels;
 	
 	GUI gui;
@@ -48,15 +49,23 @@ public class ChunkPanel extends ThemedPanel {
 		certainty.setHorizontalAlignment(0);
 		distance = new JLabel((String) null, 0);
 		nether = new JLabel((String) null, 0);
-		labels = new JLabel[] {location, certainty, distance, nether};
+		angle = new ThemedLabel(gui, null) {
+			@Override
+			public Color getForegroundColor(Theme theme) {
+				return theme.CERTAINTY_COLOR_MAP.get(lastColor);
+			}
+		};
+		labels = new JLabel[] {location, distance, nether, certainty, angle};
 		ColumnLayout layout = new ColumnLayout(0);
-		layout.setRelativeWidth(location, 2f);
-		layout.setRelativeWidth(nether, 1.5f);
+		layout.setRelativeWidth(distance, 0.5f);
+		layout.setRelativeWidth(certainty, 0.5f);
+		layout.setRelativeWidth(angle, 1.2f);
 		setLayout(layout);
 		add(location);
-		add(certainty);
 		add(distance);
 		add(nether);
+		add(certainty);
+		add(angle);
 		setPrediciton(p);
 	}
 	
@@ -98,7 +107,9 @@ public class ChunkPanel extends ThemedPanel {
 			certainty.setText(p.formatCertainty());
 			distance.setText(p.formatDistance());
 			nether.setText(p.formatNether());
+			angle.setText(p.formatTravelAngle(false));
 			certainty.setForeground(gui.theme.CERTAINTY_COLOR_MAP.get(p.weight));
+			angle.setForeground(gui.theme.CERTAINTY_COLOR_MAP.get(p.getTravelAngleDiffColor()));
 			lastColor = p.weight;
 		}
 	}
