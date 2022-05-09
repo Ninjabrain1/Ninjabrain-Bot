@@ -402,7 +402,7 @@ class DivinePanel extends ThemedPanel {
 	}
 	
 }
-class ColorMapLabel extends JPanel {
+class ColorMapLabel extends JPanel implements ILabel {
 	
 	private static final long serialVersionUID = 8926205242557099213L;
 	
@@ -412,6 +412,10 @@ class ColorMapLabel extends JPanel {
 	private double lastColor = 0.0;
 
 	public ColorMapLabel(GUI gui, boolean textFirst) {
+		this(gui, textFirst, false);
+	}
+
+	public ColorMapLabel(GUI gui, boolean textFirst, boolean centered) {
 		textLabel = new ThemedLabel(gui, "");
 		coloredLabel = new ThemedLabel(gui, "") {
 			private static final long serialVersionUID = -6995689057641195351L;
@@ -420,7 +424,7 @@ class ColorMapLabel extends JPanel {
 				return theme.CERTAINTY_COLOR_MAP.get(lastColor);
 			}
 		};
-		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		setLayout(new FlowLayout(centered ? FlowLayout.CENTER : FlowLayout.LEFT, 0, 0));
 		setOpaque(false);
 		if (textFirst) {
 			add(textLabel);
@@ -437,7 +441,7 @@ class ColorMapLabel extends JPanel {
 		coloredLabel.setText(text);
 	}
 	
-	void setText(String text) {
+	public void setText(String text) {
 		textLabel.setText(text);
 	}
 	

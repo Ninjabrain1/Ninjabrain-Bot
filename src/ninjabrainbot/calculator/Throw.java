@@ -12,10 +12,6 @@ public class Throw implements Ray {
 	public final boolean altStd;
 
 	private final boolean nether;
-
-	public Throw(double x, double z, double alpha, double beta) {
-		this(x, z, alpha, beta, 0, false);
-	}
 	
 	public Throw(double x, double z, double alpha, double beta, double correction, boolean nether) {
 		this(x, z, alpha, beta, correction, false, nether);
@@ -77,7 +73,7 @@ public class Throw implements Ray {
 	}
 	
 	public Throw withToggledSTD() {
-		return new Throw(x, z, alpha, correction, beta, !this.altStd);
+		return new Throw(x, z, alpha, correction, beta, this.nether, !this.altStd);
 	}
 	
 	@Override

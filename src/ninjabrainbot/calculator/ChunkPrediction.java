@@ -116,7 +116,7 @@ public class ChunkPrediction extends Chunk {
 		if (forBasic) {
 			return String.format("%s: %.2f", I18n.get("current_angle"), travelAngle);
 		}
-		return String.format("%.2f%s", travelAngle, formatTravelAngleDiff());
+		return String.format("%.2f", travelAngle);
 	}
 
 	public String formatTravelAngleDiff() {

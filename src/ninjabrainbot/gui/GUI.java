@@ -271,6 +271,7 @@ public class GUI {
 			divineContextLast = divineContext;
 			divineContext = null;
 			latestResult = null;
+			targetLocked = false;
 		}
 		onThrowsUpdated();
 	}
@@ -359,7 +360,7 @@ public class GUI {
 				return;
 			}
 			Throw last = eyeThrows.get(i);
-			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
+			Throw t = new Throw(last.x, last.z, last.alpha + delta, 0, last.correction + delta, false);
 			saveThrowsForUndo();
 			eyeThrows.remove(last);
 			eyeThrows.add(t);

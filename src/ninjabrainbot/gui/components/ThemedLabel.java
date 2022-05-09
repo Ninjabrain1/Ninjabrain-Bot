@@ -9,13 +9,17 @@ import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
-public class ThemedLabel extends JLabel implements ThemedComponent {
+public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 	
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 	
 	public ThemedLabel(GUI gui) {
 		this(gui, "");
+	}
+
+	public ThemedLabel(GUI gui, boolean centered) {
+		this(gui, "", false, centered);
 	}
 	
 	public ThemedLabel(GUI gui, String text) {
