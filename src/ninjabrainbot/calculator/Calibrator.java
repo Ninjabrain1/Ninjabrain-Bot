@@ -100,10 +100,22 @@ public class Calibrator {
 	}
 	
 	private void tp(double x, double z, double alpha, double theta) throws InterruptedException {
+		// tp
+		keyPresser.openCommand();
+		Thread.sleep(delay);
+		keyPresser.paste(String.format("tp @p %.2f 128 %.2f %.5f %.2f", x, z, alpha, theta));
+		keyPresser.enter();
+		// place block
+		keyPresser.openCommand();
+		Thread.sleep(delay);
+		keyPresser.paste(String.format("setblock %d 255 %d minecraft:diamond_block", (int) x, (int) z));
+		keyPresser.enter();
+		// tp
 		keyPresser.openCommand();
 		Thread.sleep(delay);
 		keyPresser.paste(String.format("tp @p %.2f 256 %.2f %.5f %.2f", x, z, alpha, theta));
 		keyPresser.enter();
+		//
 		lastX = x;
 		lastZ = z;
 	}
