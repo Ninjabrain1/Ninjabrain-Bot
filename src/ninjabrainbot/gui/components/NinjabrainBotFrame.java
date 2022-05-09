@@ -62,7 +62,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 	@Override
 	public void updateBounds(GUI gui) {
 		super.updateBounds(gui);
-		int titlewidth = gui.getTextWidth(TITLE_TEXT, gui.fontSize(gui.size.TEXT_SIZE_TITLE_LARGE, false));
+		int titlewidth = gui.getTextWidth(this.titleText, gui.fontSize(gui.size.TEXT_SIZE_TITLE_LARGE, false));
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
 		versiontextLabel.setBounds(titlewidth + (titlebarHeight - gui.size.TEXT_SIZE_TITLE_SMALL)/2, (gui.size.TEXT_SIZE_TITLE_LARGE - gui.size.TEXT_SIZE_TITLE_SMALL)/2, 70, titlebarHeight);
 	}

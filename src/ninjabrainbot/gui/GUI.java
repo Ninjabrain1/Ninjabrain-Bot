@@ -389,7 +389,9 @@ public class GUI {
 	public void toggleTargetLocked() {
 		if (latestResult != null) {
 			targetLocked = !targetLocked;
-			mainTextArea.setResult(latestResult, this);
+			String newTitle = NinjabrainBotFrame.TITLE_TEXT + (targetLocked ? " - " + I18n.get("locked") : "");
+			frame.setTitleText(newTitle);
+			updateBounds();
 		}
 	}
 

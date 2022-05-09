@@ -13,6 +13,7 @@ public class ThemedFrame extends JFrame {
 
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
+	protected String titleText;
 	
 	public ThemedFrame(GUI gui, String title) {
 		super(title);
@@ -21,6 +22,7 @@ public class ThemedFrame extends JFrame {
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		titlebarPanel = new TitleBarPanel(gui, this);
 		add(titlebarPanel);
+		this.titleText = title;
 		titletextLabel = new ThemedLabel(gui, title, true) {
 			private static final long serialVersionUID = 1508931943984181857L;
 			@Override
@@ -30,9 +32,14 @@ public class ThemedFrame extends JFrame {
 		};
 		titlebarPanel.add(titletextLabel);
 	}
-	
+
 	public TitleBarPanel getTitleBar() {
 		return titlebarPanel;
+	}
+
+	public void setTitleText(String titleText) {
+		this.titleText = titleText;
+		titletextLabel.setText(titleText);
 	}
 	
 	public void updateBounds(GUI gui) {

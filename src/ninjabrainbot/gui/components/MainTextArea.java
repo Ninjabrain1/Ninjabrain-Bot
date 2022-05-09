@@ -67,12 +67,12 @@ public class MainTextArea extends JPanel {
 			return;
 		}
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
-			basicTriangulation.setResult(result, gui.isTargetLocked());
+			basicTriangulation.setResult(result);
 			basicTriangulation.updateColors(gui);
 			layout.show(this, TRIANGULATION);
 		} else {
 			if (result != null && !result.success()) {
-				basicTriangulation.setResult(result, gui.isTargetLocked());
+				basicTriangulation.setResult(result);
 				basicTriangulation.updateColors(gui);
 				layout.show(this, TRIANGULATION);
 			} else {
@@ -158,15 +158,11 @@ class BasicTriangulationPanel extends ThemedPanel {
 		add(certaintyPanel);
 	}
 	
-	public void setResult(CalculatorResult result, boolean locked) {
+	public void setResult(CalculatorResult result) {
 		if (result != null) {
 			if (result.success()) {
 				ChunkPrediction prediction = result.getBestPrediction();
-				String mainText = prediction.format();
-				if (locked) {
-					mainText += " (" + I18n.get("locked") + ")";
-				}
-				maintextLabel.setText(mainText);
+				maintextLabel.setText(prediction.format());
 				certaintyPanel.setText(CERTAINTY_TEXT);
 				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.weight*100.0), (float) prediction.weight);
 				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2, prediction.getDistance()/8));
