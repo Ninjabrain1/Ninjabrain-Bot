@@ -177,10 +177,6 @@ public class GUI {
 		mainTextArea.setNetherCoordsEnabled(b);
 	}
 
-	public void setAdvancedOptionsEnabled(boolean b) {
-		optionsFrame.setAdvancedOptionsEnabled(b);
-	}
-
 	public void setAngleErrorsEnabled(boolean b) {
 		enderEyePanel.setAngleErrorsEnabled(b);
 		updateBounds();
