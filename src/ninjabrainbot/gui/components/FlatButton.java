@@ -23,7 +23,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 	
 	private static final long serialVersionUID = 3274726146609442471L;
 	
-	private JLabel label; // Graphical element
+	protected JLabel label; // Graphical element
 	protected Color bgCol, hoverCol;
 	private ImageIcon icon, icon_inverted;
 	

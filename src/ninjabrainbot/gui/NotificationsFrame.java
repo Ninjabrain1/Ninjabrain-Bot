@@ -43,6 +43,7 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
 		add(mainPanel);
 		label = new ThemedLabel(gui, "") {
+			private static final long serialVersionUID = 4168366004174721821L;
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;

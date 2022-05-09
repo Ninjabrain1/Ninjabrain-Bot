@@ -44,7 +44,7 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 	}
 	
 	public int getTextSize(SizePreference p) {
-		return p.TEXT_SIZE_TINY;
+		return p.TEXT_SIZE_SMALL;
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

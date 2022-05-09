@@ -29,12 +29,12 @@ import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.CustomCheckbox;
 import ninjabrainbot.gui.components.DecimalTextField;
-import ninjabrainbot.gui.components.Divider;
 import ninjabrainbot.gui.components.FlatButton;
 import ninjabrainbot.gui.components.RadioButtonGroup;
 import ninjabrainbot.gui.components.ThemedFrame;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.components.ThemedPanel;
+import ninjabrainbot.gui.components.ThemedTabbedPane;
 import ninjabrainbot.gui.components.ThemedTextArea;
 import ninjabrainbot.gui.components.TitleBarButton;
 import ninjabrainbot.io.BooleanPreference;
@@ -49,15 +49,15 @@ public class OptionsFrame extends ThemedFrame {
 	private static final long serialVersionUID = 8033865173874423916L;
 
 	private GUI gui;
-	private JPanel settingsPanel;
+	private ThemedTabbedPane tabbedPane;
 	private CalibrationPanel calibrationPanel;
 	private FlatButton exitButton;
 	private TextboxPanel sigma;
 	private TextboxPanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
-	private JPanel mainPanel; // Panel containing all non-advanced options
-	private JPanel advPanel; // Panel containing all advanced options
-
+//	private JPanel mainPanel; // Panel containing all non-advanced options
+//	private JPanel advPanel; // Panel containing all advanced options
+	
 	static int WINDOW_WIDTH = 560;
 	static int COLUMN_WIDTH = WINDOW_WIDTH/2;
 	static int PADDING = 6;
@@ -67,38 +67,35 @@ public class OptionsFrame extends ThemedFrame {
 	public OptionsFrame(GUI gui) {
 		super(gui, TITLE_TEXT);
 		this.gui = gui;
-		
-		// Windows that can be swapped between
-		settingsPanel = new JPanel();
-		settingsPanel.setOpaque(false);
-		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
-		add(settingsPanel);
+		setLayout(null);
+		tabbedPane = new ThemedTabbedPane(gui);
+		add(tabbedPane);
 		calibrationPanel = new CalibrationPanel(gui, this);
 		add(calibrationPanel);
+		tabbedPane.addTab(I18n.get("settings.basic"), getBasicPanel());
+		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());
+		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), getHotkeyPanel());
+		tabbedPane.addTab(I18n.get("settings.overlay"), getOBSPanel());
 		
 		// Title bar
 		exitButton = getExitButton();
 		titlebarPanel.addButton(exitButton);
 		titlebarPanel.setFocusable(true);
-		
-		// Main panel
-		mainPanel = new JPanel();
+	}
+	
+	private JPanel getBasicPanel() {
+		JPanel mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.setLayout(new GridLayout(1, 2));
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
-		settingsPanel.add(mainPanel);
-		JPanel columns = new JPanel();
-		columns.setOpaque(false);
-		columns.setLayout(new GridLayout(1, 2));
 		JPanel column1 = new JPanel();
 		JPanel column2 = new JPanel();
 		column1.setOpaque(false);
 		column2.setOpaque(false);
-		columns.add(column1);
-		columns.add(column2);
+		mainPanel.add(column1);
+		mainPanel.add(column2);
 		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
-		mainPanel.add(columns);
 		
 		// Column 1
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.show_nether_coordinates"), Main.preferences.showNetherCoords));
@@ -115,30 +112,26 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.theme"), Main.preferences.theme));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.window_size"), Main.preferences.size));
 		column2.add(Box.createGlue());
-		
-		// Advanced panel
-		mainPanel.add(Box.createVerticalStrut(PADDING));
-		mainPanel.add(new Divider(gui));
-		mainPanel.add(Box.createVerticalStrut(PADDING));
-		mainPanel.add(new CheckboxPanel(gui, I18n.get("settings.show_advanced_options"), Main.preferences.showAdvancedOptions));
-		advPanel = new JPanel();
-		advPanel.setOpaque(false);
-		advPanel.setLayout(new GridLayout(1, 2, PADDING, 0));
-		advPanel.setBorder(new EmptyBorder(0, PADDING, PADDING, PADDING));
-		advPanel.setVisible(Main.preferences.showAdvancedOptions.get());
-		JPanel ac1 = new JPanel();
-		JPanel ac2 = new JPanel();
-		ac1.setOpaque(false);
-		ac2.setOpaque(false);
-		advPanel.add(ac1);
-		advPanel.add(ac2);
-		ac1.setLayout(new BoxLayout(ac1, BoxLayout.Y_AXIS));
-		ac2.setLayout(new GridBagLayout());
-		settingsPanel.add(advPanel);
+		return mainPanel;
+	}
+	
+	private JPanel getAdvancedPanel() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setOpaque(false);
+		mainPanel.setLayout(new GridLayout(1, 2));
+		mainPanel.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
+		JPanel column1 = new JPanel();
+		JPanel column2 = new JPanel();
+		column1.setOpaque(false);
+		column2.setOpaque(false);
+		mainPanel.add(column1);
+		mainPanel.add(column2);
+		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
+		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 		
 		// Left advanced column
 		sigma = new TextboxPanel(gui, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
-		ac1.add(sigma);
+		column1.add(sigma);
 		JButton calibrateButton = new FlatButton(gui, I18n.get("settings.calibrate_standard_deviation")) {
 			private static final long serialVersionUID = -673676238214760361L;
 			@Override
@@ -148,38 +141,38 @@ public class OptionsFrame extends ThemedFrame {
 		};
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
-		ac1.add(calibrateButton);
-		ac1.add(new CheckboxPanel(gui, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
+		column1.add(calibrateButton);
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
 		sigmaAlt = new TextboxPanel(gui, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
 		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());
-		ac1.add(sigmaAlt);
+		column1.add(sigmaAlt);
 		if (KeyboardListener.registered) {
 			sigmaAltHotkey = new HotkeyPanel(gui, I18n.get("settings.alt_std_on_last_angle"), Main.preferences.hotkeyAltStd);
 			sigmaAltHotkey.setEnabled(Main.preferences.useAltStd.get());
-			ac1.add(sigmaAltHotkey);
+			column1.add(sigmaAltHotkey);
 		}
-		ac1.add(Box.createVerticalStrut(4));
-		ac1.add(new Divider(gui));
-		ac1.add(Box.createVerticalStrut(4));
-		ac1.add(new TextboxPanel(gui, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
-		ac1.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
-		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
-		ac1.add(new CheckboxPanel(gui, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
-		ac1.add(Box.createGlue());
+		column2.add(new TextboxPanel(gui, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
+		column2.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
+		column2.add(new CheckboxPanel(gui, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
+		column2.add(new CheckboxPanel(gui, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
+		column2.add(Box.createGlue());
+		return mainPanel;
+	}
+
+	private JPanel getHotkeyPanel() {
+		JPanel ac2 = new JPanel();
+		ac2.setOpaque(false);
+		ac2.setLayout(new GridBagLayout());
+		ac2.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
 		
-		// Right advanced column
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = GridBagConstraints.RELATIVE;
 		constraints.gridx = 0;
-		constraints.insets = new Insets(0, 0, 4, 0);
+		constraints.insets = new Insets(0, 0, PADDING, 0);
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 1;
 		if (KeyboardListener.registered) {
-			ThemedLabel labelShortcuts = new ThemedLabel(gui, I18n.get("settings.keyboard_shortcuts"), false);
-			labelShortcuts.setHorizontalAlignment(0);
-			ac2.add(labelShortcuts, constraints);
-			ac2.add(new Divider(gui), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("settings.up_001_to_last_angle"), Main.preferences.hotkeyIncrement), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("settings.down_001_to_last_angle"), Main.preferences.hotkeyDecrement), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
@@ -187,10 +180,25 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, I18n.get("lock"), Main.preferences.hotkeyLock), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
 		}
-		ThemedLabel labelOverlay = new ThemedLabel(gui, I18n.get("settings.overlay"), false);
-		labelOverlay.setHorizontalAlignment(0);
-		ac2.add(labelOverlay, constraints);
-		ac2.add(new Divider(gui), constraints);
+		constraints.weighty = 1;
+		ac2.add(Box.createGlue(), constraints);
+		return ac2;
+	}
+	
+
+	private JPanel getOBSPanel() {
+		JPanel ac2 = new JPanel();
+		ac2.setOpaque(false);
+		ac2.setLayout(new GridBagLayout());
+		ac2.setBorder(new EmptyBorder(PADDING, 2 * PADDING, PADDING, PADDING));
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridy = GridBagConstraints.RELATIVE;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, PADDING, 0);
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 1;
 		ThemedLabel overlayExplanation = new ThemedLabel(gui, "<html>" + I18n.get("settings.overlay_explanation") + "</html>") {
 			private static final long serialVersionUID = 7980539999697524316L;
 			public int getTextSize(SizePreference p) {
@@ -198,7 +206,7 @@ public class OptionsFrame extends ThemedFrame {
 			};
 			public Dimension getPreferredSize() {
 				View view = (View) getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
-				view.setSize(COLUMN_WIDTH, 0);
+				view.setSize(WINDOW_WIDTH - 2 * PADDING, 0);
 				float w = view.getPreferredSpan(View.X_AXIS);
 				float h = view.getPreferredSpan(View.Y_AXIS);
 				return new java.awt.Dimension((int) Math.ceil(w), (int) Math.ceil(h));
@@ -209,11 +217,12 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
 		constraints.weighty = 1;
 		ac2.add(Box.createGlue(), constraints);
+		return ac2;
 	}
 	
 	private void startCalibrating() {
 		calibrationPanel.startCalibrating();
-		settingsPanel.setVisible(false);
+		tabbedPane.setVisible(false);
 		titlebarPanel.setVisible(false);
 		calibrationPanel.setVisible(true);
 		if (KeyboardListener.registered) {
@@ -222,7 +231,7 @@ public class OptionsFrame extends ThemedFrame {
 	}
 	
 	public void stopCalibrating() {
-		settingsPanel.setVisible(true);
+		tabbedPane.setVisible(true);
 		titlebarPanel.setVisible(true);
 		calibrationPanel.setVisible(false);
 		calibrationPanel.cancel();
@@ -232,8 +241,13 @@ public class OptionsFrame extends ThemedFrame {
 	public void updateBounds(GUI gui) {
 		WINDOW_WIDTH = gui.size.WIDTH * 7 / 4;
 		COLUMN_WIDTH = WINDOW_WIDTH/2;
+		int titleBarHeight = titlebarPanel.getPreferredSize().height;
+		int panelHeight = tabbedPane.getPreferredSize().height;
+		titlebarPanel.setBounds(0, 0, WINDOW_WIDTH, titleBarHeight);
 		super.updateBounds(gui);
-		pack();
+		tabbedPane.setBounds(0, titleBarHeight, WINDOW_WIDTH, panelHeight);
+		setSize(WINDOW_WIDTH, titleBarHeight + panelHeight);
+//		pack();
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
 	}
 
@@ -262,11 +276,6 @@ public class OptionsFrame extends ThemedFrame {
 		if (KeyboardListener.registered) {
 			KeyboardListener.instance.cancelConsumer();
 		}
-	}
-	
-	public void setAdvancedOptionsEnabled(boolean b) {
-		advPanel.setVisible(b);
-		updateBounds(gui);
 	}
 
 	public CalibrationPanel getCalibrationPanel() {
@@ -420,7 +429,8 @@ class HotkeyPanel extends ThemedPanel {
 	public HotkeyPanel(GUI gui, String description, HotkeyPreference preference) {
 		super(gui);
 		this.preference = preference;
-		setLayout(new GridLayout(1, 2, 10, 0));
+		setLayout(new GridLayout(1, 2, 0, 0));
+		setBorder(new EmptyBorder(0, 10, 0, 0));
 		descLabel = new ThemedLabel(gui, description) {
 			private static final long serialVersionUID = -658733822961822860L;
 			@Override
@@ -435,7 +445,7 @@ class HotkeyPanel extends ThemedPanel {
 				return theme.TEXT_COLOR_WEAK;
 			}
 		};
-		descLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		descLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		button = new FlatButton(gui, getKeyText()) {
 			private static final long serialVersionUID = 1865599754734492942L;
 			@Override
