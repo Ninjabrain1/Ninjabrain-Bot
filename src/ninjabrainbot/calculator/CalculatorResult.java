@@ -7,7 +7,7 @@ public class CalculatorResult {
 	
 	Posterior posterior;
 	ArrayList<Throw> eyeThrows;
-	ChunkPrediction bestPrediction;
+	ChunkPrediction bestPrediction = new ChunkPrediction();
 	private final List<ChunkPrediction> topPredictions = new ArrayList<>();
 
 	public CalculatorResult() {}
