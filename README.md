@@ -75,8 +75,9 @@ you've gone off angle while traveling). This angle information is presented as
 both the raw angle, as well as a relative angle (meaning how much leftward or
 rightward you have to turn to be on the right angle).
   - This update information feature also works without the calculator being in
-  "locked" mode, but the caveat is that you'll have to be looking downwards when
-  you press F3+C. This is because when you're looking upwards, the calculator
-  does not know whether you are trying to measure a new eye throw or get an
-  update on your angle. This feature also works in the nether, provided you've
-  already blinded and thrown some eyes.
+  "locked" mode; you have to enable this optional feature in the settings menu
+  by checking the "Show Angle Updates" box. The caveat is that you'll have
+  to be looking downwards when you press F3+C. This is because when you're
+  looking upwards, the calculator does not know whether you are trying to
+  measure a new eye throw or get an update on your angle. This feature also
+  works in the nether, provided you've already blinded and thrown some eyes.
