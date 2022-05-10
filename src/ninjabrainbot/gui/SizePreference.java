@@ -33,7 +33,8 @@ public abstract class SizePreference {
 		this.name = name;
 		SIZES.put(name, this);
 	}
-	
+
+	public abstract void setAngleUpdatesEnabled(boolean b);
 }
 
 class RegularSize extends SizePreference {
@@ -47,8 +48,17 @@ class RegularSize extends SizePreference {
 		PADDING = 6;
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
-		WIDTH = 360;
+		WIDTH = 320;
 		WINDOW_ROUNDING = 7;
+	}
+
+	@Override
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			WIDTH = 360;
+		} else {
+			WIDTH = 320;
+		}
 	}
 }
 
@@ -63,8 +73,17 @@ class LargeSize extends SizePreference {
 		PADDING = 7;
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
-		WIDTH = 400;
+		WIDTH = 380;
 		WINDOW_ROUNDING = 7;
+	}
+
+	@Override
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			WIDTH = 400;
+		} else {
+			WIDTH = 380;
+		}
 	}
 }
 
@@ -79,7 +98,16 @@ class ExtraLargeSize extends SizePreference {
 		PADDING = 9;
 		PADDING_THIN = 3;
 		PADDING_TITLE = 6;
-		WIDTH = 600;
+		WIDTH = 570;
 		WINDOW_ROUNDING = 7;
+	}
+
+	@Override
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			WIDTH = 600;
+		} else {
+			WIDTH = 570;
+		}
 	}
 }

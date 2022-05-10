@@ -51,8 +51,8 @@ public class ChunkPanelHeader extends ThemedPanel {
 		add(certainty);
 		add(distance);
 		add(nether);
-		add(angle);
 		updateHeaderText();
+		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
 	@Override
@@ -78,6 +78,14 @@ public class ChunkPanelHeader extends ThemedPanel {
 	
 	public void updateHeaderText() {
 		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? I18n.get("chunk") : I18n.get("location"));
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			add(angle);
+		} else {
+			remove(angle);
+		}
 	}
 	
 	@Override

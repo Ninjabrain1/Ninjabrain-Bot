@@ -30,6 +30,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
 	public BooleanPreference showNetherCoords;
+	public BooleanPreference showAngleUpdates;
 	public BooleanPreference showAngleErrors;
 	public BooleanPreference autoReset;
 	public BooleanPreference useAdvStatistics;
@@ -141,6 +142,12 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.setNetherCoordsEnabled(get());
+			}
+		};
+		showAngleUpdates = new BooleanPreference("show_angle_updates", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.setAngleUpdatesEnabled(get());
 			}
 		};
 		showAngleErrors = new BooleanPreference("show_angle_errors", false, pref) {

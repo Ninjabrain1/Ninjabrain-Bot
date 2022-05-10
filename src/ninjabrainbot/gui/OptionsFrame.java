@@ -99,6 +99,7 @@ public class OptionsFrame extends ThemedFrame {
 		
 		// Column 1
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.show_nether_coordinates"), Main.preferences.showNetherCoords));
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_updates"), Main.preferences.showAngleUpdates));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.auto_reset"), Main.preferences.autoReset));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.always_on_top"), Main.preferences.alwaysOnTop));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.translucent_window"), Main.preferences.translucent));

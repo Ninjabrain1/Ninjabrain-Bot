@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.Main;
 import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.gui.ColumnLayout;
 import ninjabrainbot.gui.GUI;
@@ -60,8 +61,8 @@ public class ChunkPanel extends ThemedPanel {
 		add(certainty);
 		add(distance);
 		add(nether);
-		add(angle);
 		setPrediciton(p);
+		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
 	@Override
@@ -82,6 +83,14 @@ public class ChunkPanel extends ThemedPanel {
 				if (l != null)
 					l.setForeground(fg);
 			}
+		}
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			add(angle);
+		} else {
+			remove(angle);
 		}
 	}
 	

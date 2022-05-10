@@ -31,6 +31,7 @@ import ninjabrainbot.gui.components.MainButtonPanel;
 import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
@@ -73,6 +74,7 @@ public class GUI {
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
+		size.setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED));
 		font = new Font(null, Font.BOLD, 25);
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<>();
@@ -176,6 +178,12 @@ public class GUI {
 
 	public void setAngleErrorsEnabled(boolean b) {
 		enderEyePanel.setAngleErrorsEnabled(b);
+		updateBounds();
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		size.setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED));
+		mainTextArea.setAngleUpdatesEnabled(b);
 		updateBounds();
 	}
 

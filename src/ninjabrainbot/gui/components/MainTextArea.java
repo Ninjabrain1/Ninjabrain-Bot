@@ -101,6 +101,11 @@ public class MainTextArea extends JPanel {
 		basicTriangulation.netherLabel.setVisible(b);
 	}
 
+	public void setAngleUpdatesEnabled(boolean b) {
+		basicTriangulation.setAngleUpdatesEnabled(b);
+		detailedTriangulation.setAngleUpdatesEnabled(b);
+	}
+
 	public void updateColors(GUI gui) {
 		basicTriangulation.updateColors(gui);
 		blind.updateColors(gui);
@@ -156,6 +161,7 @@ class BasicTriangulationPanel extends ThemedPanel {
 		add(netherLabel);
 		add(currentAngleLabel);
 		add(certaintyPanel);
+		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
 	public void setResult(CalculatorResult result) {
@@ -185,6 +191,10 @@ class BasicTriangulationPanel extends ThemedPanel {
 			currentAngleLabel.setColoredText("", 0);
 		}
 	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		currentAngleLabel.setVisible(b);
+	}
 	
 	@Override
 	public void updateColors(GUI gui) {
@@ -200,7 +210,8 @@ class BasicTriangulationPanel extends ThemedPanel {
 	
 	@Override
 	public void updateSize(GUI gui) {
-		setPreferredSize(new Dimension(0, 4 * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + 3 * gui.size.PADDING_THIN));
+		int numLabels = currentAngleLabel.isVisible() ? 4 : 3;
+		setPreferredSize(new Dimension(0, numLabels * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + (numLabels - 1) * gui.size.PADDING_THIN));
 		setBorder(new EmptyBorder(gui.size.PADDING_THIN, gui.size.PADDING, gui.size.PADDING_THIN, gui.size.PADDING));
 		super.updateSize(gui);
 	}
@@ -240,6 +251,11 @@ class DetailedTriangulationPanel extends ThemedPanel {
 			ChunkPanel p = panels.get(i);
 			p.setPrediciton(predictions.get(i));
 		}
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		header.setAngleUpdatesEnabled(b);
+		panels.forEach(p -> p.setAngleUpdatesEnabled(b));
 	}
 	
 	@Override
