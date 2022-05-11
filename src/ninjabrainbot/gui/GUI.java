@@ -275,7 +275,7 @@ public class GUI {
 			divineContextLast = divineContext;
 			divineContext = null;
 			latestResult = null;
-			targetLocked = false;
+			setTargetLocked(false);
 		}
 		onThrowsUpdated();
 	}
@@ -391,12 +391,16 @@ public class GUI {
 		}
 	}
 
+	private void setTargetLocked(boolean locked) {
+		targetLocked = locked;
+		String newTitle = NinjabrainBotFrame.TITLE_TEXT + (targetLocked ? " - " + I18n.get("locked") : "");
+		frame.setTitleText(newTitle);
+		updateBounds();
+	}
+
 	public void toggleTargetLocked() {
 		if (latestResult != null) {
-			targetLocked = !targetLocked;
-			String newTitle = NinjabrainBotFrame.TITLE_TEXT + (targetLocked ? " - " + I18n.get("locked") : "");
-			frame.setTitleText(newTitle);
-			updateBounds();
+			setTargetLocked(!targetLocked);
 		}
 	}
 
