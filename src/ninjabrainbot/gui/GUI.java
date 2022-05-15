@@ -288,6 +288,7 @@ public class GUI {
 	}
 
 	public void undo() {
+		setTargetLocked(false);
 		ArrayList<Throw> temp = eyeThrowsLast;
 		eyeThrowsLast = eyeThrows;
 		eyeThrows = temp;
