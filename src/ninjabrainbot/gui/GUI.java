@@ -372,7 +372,7 @@ public class GUI {
 				return;
 			}
 			Throw last = eyeThrows.get(i);
-			Throw t = new Throw(last.x, last.z, last.alpha + delta, 0, last.correction + delta, false);
+			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.beta, last.correction + delta, last.altStd, last.isNether());
 			saveThrowsForUndo();
 			eyeThrows.remove(last);
 			eyeThrows.add(t);
