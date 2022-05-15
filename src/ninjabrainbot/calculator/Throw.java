@@ -73,7 +73,7 @@ public class Throw implements Ray {
 	}
 	
 	public Throw withToggledSTD() {
-		return new Throw(x, z, alpha, correction, beta, this.nether, !this.altStd);
+		return new Throw(x, z, alpha, beta, correction, !this.altStd, this.nether);
 	}
 	
 	@Override
