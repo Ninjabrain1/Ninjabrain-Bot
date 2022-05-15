@@ -6,6 +6,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
@@ -21,6 +22,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 	
 	private JLabel versiontextLabel;
 	private NotificationsButton notificationsButton;
+	private JLabel lockIcon;
 
 	public static final String TITLE_TEXT = I18n.get("title");
 	public static final String VERSION_TEXT =  "v" + Main.VERSION;
@@ -42,7 +44,10 @@ public class NinjabrainBotFrame extends ThemedFrame {
 				return theme.TEXT_COLOR_WEAK;
 			}
 		};
+		lockIcon = new JLabel(new ImageIcon(Main.class.getResource("/resources/lock_icon.png")), SwingConstants.LEFT);
+		lockIcon.setVisible(false);
 		titlebarPanel.add(versiontextLabel);
+		titlebarPanel.add(lockIcon);
 		titlebarPanel.addButton(getExitButton(gui));
 		titlebarPanel.addButton(getMinimizeButton(gui));
 		titlebarPanel.addButton(getSettingsButton(gui));
@@ -62,9 +67,11 @@ public class NinjabrainBotFrame extends ThemedFrame {
 	@Override
 	public void updateBounds(GUI gui) {
 		super.updateBounds(gui);
-		int titlewidth = gui.getTextWidth(this.titleText, gui.fontSize(gui.size.TEXT_SIZE_TITLE_LARGE, false));
+		int titlewidth = gui.getTextWidth(TITLE_TEXT, gui.fontSize(gui.size.TEXT_SIZE_TITLE_LARGE, false));
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
 		versiontextLabel.setBounds(titlewidth + (titlebarHeight - gui.size.TEXT_SIZE_TITLE_SMALL)/2, (gui.size.TEXT_SIZE_TITLE_LARGE - gui.size.TEXT_SIZE_TITLE_SMALL)/2, 70, titlebarHeight);
+		int versionwidth = gui.getTextWidth(VERSION_TEXT, gui.fontSize(gui.size.TEXT_SIZE_TITLE_SMALL, false));
+		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - gui.size.TEXT_SIZE_TITLE_SMALL)/2, 0, titlebarHeight, titlebarHeight);
 	}
 	
 	private FlatButton getExitButton(GUI gui) {
@@ -116,6 +123,10 @@ public class NinjabrainBotFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		notificationsButton.setURL(url);
+	}
+
+	public void setLocked(boolean locked) {
+		lockIcon.setVisible(locked);
 	}
 	
 }

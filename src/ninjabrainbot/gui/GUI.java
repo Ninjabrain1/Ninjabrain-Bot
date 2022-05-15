@@ -24,7 +24,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.*;
+import ninjabrainbot.calculator.BlindResult;
+import ninjabrainbot.calculator.Calculator;
+import ninjabrainbot.calculator.CalculatorResult;
+import ninjabrainbot.calculator.ChunkPrediction;
+import ninjabrainbot.calculator.DivineContext;
+import ninjabrainbot.calculator.DivineResult;
+import ninjabrainbot.calculator.Fossil;
+import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
 import ninjabrainbot.gui.components.MainButtonPanel;
@@ -393,8 +400,7 @@ public class GUI {
 
 	private void setTargetLocked(boolean locked) {
 		targetLocked = locked;
-		String newTitle = NinjabrainBotFrame.TITLE_TEXT + (targetLocked ? " - " + I18n.get("locked") : "");
-		frame.setTitleText(newTitle);
+		frame.setLocked(locked);
 		updateBounds();
 	}
 
