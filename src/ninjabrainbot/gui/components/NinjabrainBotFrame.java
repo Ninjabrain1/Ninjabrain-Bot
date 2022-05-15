@@ -6,7 +6,6 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
@@ -44,7 +43,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 				return theme.TEXT_COLOR_WEAK;
 			}
 		};
-		lockIcon = new JLabel(new ImageIcon(Main.class.getResource("/resources/lock_icon.png")), SwingConstants.LEFT);
+		lockIcon = new ThemedIcon(gui, new ImageIcon(Main.class.getResource("/resources/lock_icon.png")));
 		lockIcon.setVisible(false);
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
