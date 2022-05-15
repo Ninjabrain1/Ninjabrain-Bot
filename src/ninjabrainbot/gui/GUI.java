@@ -332,9 +332,9 @@ public class GUI {
 					return;
 				}
 				if (i < MAX_THROWS) {
-					if (i > 0 && (targetLocked || t.beta > 0)) {
+					if (i > 0 && (targetLocked || t.lookingBelowHorizon())) {
 						onAngleUpdate(t, true);
-					} else if (!targetLocked && t.beta <= 0) {
+					} else if (!targetLocked && !t.lookingBelowHorizon()) {
 						updateWithNewThrow(t, i);
 					}
 				}

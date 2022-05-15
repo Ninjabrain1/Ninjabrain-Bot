@@ -76,6 +76,10 @@ public class Throw implements Ray {
 		return new Throw(x, z, alpha, beta, correction, !this.altStd, this.nether);
 	}
 	
+	public boolean lookingBelowHorizon() {
+		return beta > 0;
+	}
+	
 	@Override
 	public double x() {
 		return x;
