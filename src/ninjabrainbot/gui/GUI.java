@@ -81,7 +81,6 @@ public class GUI {
 	public GUI() {
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
-		size.setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED));
 		font = new Font(null, Font.BOLD, 25);
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<>();
@@ -189,7 +188,6 @@ public class GUI {
 	}
 
 	public void setAngleUpdatesEnabled(boolean b) {
-		size.setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED));
 		mainTextArea.setAngleUpdatesEnabled(b);
 		updateBounds();
 	}
@@ -237,7 +235,8 @@ public class GUI {
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 		notificationsFrame.updateBounds(this);
-		frame.setSize(size.WIDTH, frame.getPreferredSize().height);
+		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
 		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
 

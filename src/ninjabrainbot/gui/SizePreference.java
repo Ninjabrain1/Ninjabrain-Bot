@@ -16,6 +16,7 @@ public abstract class SizePreference {
 	public int PADDING_THIN;
 	public int PADDING_TITLE;
 	public int WIDTH;
+	public int ANGLE_COLUMN_WIDTH;
 	public int WINDOW_ROUNDING;
 
 	public static final int NUM_DETAILED_PANELS = 5;
@@ -34,7 +35,6 @@ public abstract class SizePreference {
 		SIZES.put(name, this);
 	}
 
-	public abstract void setAngleUpdatesEnabled(boolean b);
 }
 
 class RegularSize extends SizePreference {
@@ -49,16 +49,8 @@ class RegularSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 320;
+		ANGLE_COLUMN_WIDTH = 40;
 		WINDOW_ROUNDING = 7;
-	}
-
-	@Override
-	public void setAngleUpdatesEnabled(boolean b) {
-		if (b) {
-			WIDTH = 360;
-		} else {
-			WIDTH = 320;
-		}
 	}
 }
 
@@ -74,17 +66,10 @@ class LargeSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 380;
+		ANGLE_COLUMN_WIDTH = 46;
 		WINDOW_ROUNDING = 7;
 	}
-
-	@Override
-	public void setAngleUpdatesEnabled(boolean b) {
-		if (b) {
-			WIDTH = 400;
-		} else {
-			WIDTH = 380;
-		}
-	}
+	
 }
 
 class ExtraLargeSize extends SizePreference {
@@ -99,15 +84,8 @@ class ExtraLargeSize extends SizePreference {
 		PADDING_THIN = 3;
 		PADDING_TITLE = 6;
 		WIDTH = 570;
+		ANGLE_COLUMN_WIDTH = 70;
 		WINDOW_ROUNDING = 7;
 	}
-
-	@Override
-	public void setAngleUpdatesEnabled(boolean b) {
-		if (b) {
-			WIDTH = 600;
-		} else {
-			WIDTH = 570;
-		}
-	}
+	
 }
