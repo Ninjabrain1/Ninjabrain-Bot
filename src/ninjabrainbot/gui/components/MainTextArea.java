@@ -77,6 +77,7 @@ public class MainTextArea extends JPanel {
 				layout.show(this, TRIANGULATION);
 			} else {
 				detailedTriangulation.setResult(result);
+				detailedTriangulation.updateColors(gui);
 				layout.show(this, TRIANGULATION_DETAILED);
 			}
 		}
@@ -108,6 +109,7 @@ public class MainTextArea extends JPanel {
 
 	public void updateColors(GUI gui) {
 		basicTriangulation.updateColors(gui);
+		detailedTriangulation.updateColors(gui);
 		blind.updateColors(gui);
 	}
 	
@@ -158,9 +160,9 @@ class BasicTriangulationPanel extends ThemedPanel {
 		certaintyPanel.setAlignmentX(0);
 		currentAngleLabel.setAlignmentX(0);
 		add(maintextLabel);
+		add(certaintyPanel);
 		add(netherLabel);
 		add(currentAngleLabel);
-		add(certaintyPanel);
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
@@ -256,6 +258,15 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	public void setAngleUpdatesEnabled(boolean b) {
 		header.setAngleUpdatesEnabled(b);
 		panels.forEach(p -> p.setAngleUpdatesEnabled(b));
+	}
+	
+	@Override
+	public void updateColors(GUI gui) {
+		super.updateColors(gui);
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
+			ChunkPanel p = panels.get(i);
+			p.updateColors(gui);
+		}
 	}
 	
 	@Override

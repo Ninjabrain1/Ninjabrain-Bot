@@ -51,15 +51,15 @@ public class ChunkPanel extends ThemedPanel {
 		angle = new ColorMapLabel(gui, true, true);
 		labels = new ILabel[] {location, certainty, distance, nether, angle};
 		ColumnLayout layout = new ColumnLayout(0);
-		layout.setRelativeWidth(location, 1.2f);
-		layout.setRelativeWidth(distance, 0.5f);
-		layout.setRelativeWidth(certainty, 0.5f);
-		layout.setRelativeWidth(angle, 1.2f);
+		layout.setRelativeWidth(location, 2f);
+		layout.setRelativeWidth(nether, 1.8f);
+		layout.setRelativeWidth(angle, 2.5f);
 		setLayout(layout);
 		add(location);
 		add(certainty);
 		add(distance);
 		add(nether);
+		add(angle);
 		setPrediciton(p);
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
@@ -86,17 +86,14 @@ public class ChunkPanel extends ThemedPanel {
 	}
 
 	public void setAngleUpdatesEnabled(boolean b) {
-		if (b) {
-			add(angle);
-		} else {
-			remove(angle);
-		}
+		angle.setVisible(b);
 	}
 	
 	@Override
 	public void updateColors(GUI gui) {
 		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
 		super.updateColors(gui);
+		angle.updateColor(gui);
 	}
 	
 	public void setPrediciton(ChunkPrediction p) {

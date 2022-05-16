@@ -49,7 +49,7 @@ class RegularSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 320;
-		ANGLE_COLUMN_WIDTH = 40;
+		ANGLE_COLUMN_WIDTH = 100;
 		WINDOW_ROUNDING = 7;
 	}
 }
@@ -66,7 +66,7 @@ class LargeSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 380;
-		ANGLE_COLUMN_WIDTH = 46;
+		ANGLE_COLUMN_WIDTH = 110;
 		WINDOW_ROUNDING = 7;
 	}
 	
@@ -84,7 +84,7 @@ class ExtraLargeSize extends SizePreference {
 		PADDING_THIN = 3;
 		PADDING_TITLE = 6;
 		WIDTH = 570;
-		ANGLE_COLUMN_WIDTH = 70;
+		ANGLE_COLUMN_WIDTH = 160;
 		WINDOW_ROUNDING = 7;
 	}
 	

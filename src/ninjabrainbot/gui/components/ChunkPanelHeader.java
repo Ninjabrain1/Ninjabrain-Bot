@@ -42,10 +42,9 @@ public class ChunkPanelHeader extends ThemedPanel {
 		angle = new JLabel(I18n.get("angle"), 0);
 		labels = new JLabel[] {location, certainty, distance, nether, angle};
 		ColumnLayout layout = new ColumnLayout(0);
-		layout.setRelativeWidth(location, 1.2f);
-		layout.setRelativeWidth(distance, 0.5f);
-		layout.setRelativeWidth(certainty, 0.5f);
-		layout.setRelativeWidth(angle, 1.2f);
+		layout.setRelativeWidth(location, 2f);
+		layout.setRelativeWidth(nether, 1.8f);
+		layout.setRelativeWidth(angle, 2.5f);
 		setLayout(layout);
 		add(location);
 		add(certainty);
