@@ -81,7 +81,7 @@ public class Calibrator {
 		if (i == -1)
 			return;
 		Throw last = eyeThrows.get(i);
-		Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
+		Throw t = new Throw(last.x, last.z, last.alpha + delta, 0, last.correction + delta, false);
 		eyeThrows.remove(last);
 		eyeThrows.add(t);
 	}

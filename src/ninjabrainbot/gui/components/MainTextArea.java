@@ -18,13 +18,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.BlindResult;
-import ninjabrainbot.calculator.CalculatorResult;
-import ninjabrainbot.calculator.ChunkPrediction;
-import ninjabrainbot.calculator.DivineResult;
-import ninjabrainbot.calculator.Ring;
+import ninjabrainbot.calculator.*;
 import ninjabrainbot.gui.ColumnLayout;
 import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
@@ -80,6 +77,7 @@ public class MainTextArea extends JPanel {
 				layout.show(this, TRIANGULATION);
 			} else {
 				detailedTriangulation.setResult(result);
+				detailedTriangulation.updateColors(gui);
 				layout.show(this, TRIANGULATION_DETAILED);
 			}
 		}
@@ -104,8 +102,14 @@ public class MainTextArea extends JPanel {
 		basicTriangulation.netherLabel.setVisible(b);
 	}
 
+	public void setAngleUpdatesEnabled(boolean b) {
+		basicTriangulation.setAngleUpdatesEnabled(b);
+		detailedTriangulation.setAngleUpdatesEnabled(b);
+	}
+
 	public void updateColors(GUI gui) {
 		basicTriangulation.updateColors(gui);
+		detailedTriangulation.updateColors(gui);
 		blind.updateColors(gui);
 	}
 	
@@ -138,6 +142,7 @@ class BasicTriangulationPanel extends ThemedPanel {
 	public JLabel maintextLabel;
 	public ColorMapLabel certaintyPanel;
 	public JLabel netherLabel;
+	public ColorMapLabel currentAngleLabel;
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 	
@@ -149,12 +154,16 @@ class BasicTriangulationPanel extends ThemedPanel {
 		certaintyPanel = new ColorMapLabel(gui, true);
 		netherLabel = new ThemedLabel(gui, "");
 		netherLabel.setVisible(Main.preferences.showNetherCoords.get());
+		currentAngleLabel = new ColorMapLabel(gui, true);
 		maintextLabel.setAlignmentX(0);
 		netherLabel.setAlignmentX(0);
 		certaintyPanel.setAlignmentX(0);
+		currentAngleLabel.setAlignmentX(0);
 		add(maintextLabel);
 		add(certaintyPanel);
 		add(netherLabel);
+		add(currentAngleLabel);
+		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
 	public void setResult(CalculatorResult result) {
@@ -164,25 +173,36 @@ class BasicTriangulationPanel extends ThemedPanel {
 				maintextLabel.setText(prediction.format());
 				certaintyPanel.setText(CERTAINTY_TEXT);
 				certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.weight*100.0), (float) prediction.weight);
-				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2));
+				netherLabel.setText(I18n.get("nether_coordinates", prediction.x*2, prediction.z*2, prediction.getDistance()/8));
+				currentAngleLabel.setText(prediction.formatTravelAngle(true));
+				currentAngleLabel.setColoredText(prediction.formatTravelAngleDiff(), prediction.getTravelAngleDiffColor());
 			} else {
 				maintextLabel.setText(I18n.get("could_not_determine"));
 				certaintyPanel.setText(I18n.get("you_probably_misread"));
 				certaintyPanel.setColoredText("", 0);
 				netherLabel.setText("");
+				currentAngleLabel.setText("");
+				currentAngleLabel.setColoredText("", 0);
 			}
 		} else {
 			maintextLabel.setText(I18n.get("waiting_f3c"));
 			certaintyPanel.setText("");
 			certaintyPanel.setColoredText("", 0);
 			netherLabel.setText("");
+			currentAngleLabel.setText("");
+			currentAngleLabel.setColoredText("", 0);
 		}
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		currentAngleLabel.setVisible(b);
 	}
 	
 	@Override
 	public void updateColors(GUI gui) {
 		super.updateColors(gui);
 		certaintyPanel.updateColor(gui);
+		currentAngleLabel.updateColor(gui);
 	}
 	
 	@Override
@@ -192,7 +212,8 @@ class BasicTriangulationPanel extends ThemedPanel {
 	
 	@Override
 	public void updateSize(GUI gui) {
-		setPreferredSize(new Dimension(0, 3 * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + 2 * gui.size.PADDING_THIN));
+		int numLabels = currentAngleLabel.isVisible() ? 4 : 3;
+		setPreferredSize(new Dimension(0, numLabels * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM) + (numLabels - 1) * gui.size.PADDING_THIN));
 		setBorder(new EmptyBorder(gui.size.PADDING_THIN, gui.size.PADDING, gui.size.PADDING_THIN, gui.size.PADDING));
 		super.updateSize(gui);
 	}
@@ -204,7 +225,6 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	
 	private ChunkPanelHeader header;
 	private List<ChunkPanel> panels;
-	private static final int numPanels = 5;
 	
 	public DetailedTriangulationPanel(GUI gui) {
 		super(gui);
@@ -213,7 +233,7 @@ class DetailedTriangulationPanel extends ThemedPanel {
 		header = new ChunkPanelHeader(gui);
 		add(header);
 		panels = new ArrayList<ChunkPanel>();
-		for (int i = 0; i < numPanels; i++) {
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
 			ChunkPanel panel = new ChunkPanel(gui);
 			panels.add(panel);
 			add(panel);
@@ -228,10 +248,24 @@ class DetailedTriangulationPanel extends ThemedPanel {
 			}
 			return;
 		}
-		List<ChunkPrediction> predictions = result.getTopPredictions(numPanels);
-		for (int i = 0; i < numPanels; i++) {
+		List<ChunkPrediction> predictions = result.getTopPredictions(SizePreference.NUM_DETAILED_PANELS);
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
 			ChunkPanel p = panels.get(i);
 			p.setPrediciton(predictions.get(i));
+		}
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		header.setAngleUpdatesEnabled(b);
+		panels.forEach(p -> p.setAngleUpdatesEnabled(b));
+	}
+	
+	@Override
+	public void updateColors(GUI gui) {
+		super.updateColors(gui);
+		for (int i = 0; i < SizePreference.NUM_DETAILED_PANELS; i++) {
+			ChunkPanel p = panels.get(i);
+			p.updateColors(gui);
 		}
 	}
 	
@@ -242,7 +276,7 @@ class DetailedTriangulationPanel extends ThemedPanel {
 	
 	@Override
 	public void updateSize(GUI gui) {
-		setPreferredSize(new Dimension(0, (1 + numPanels) * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM)));
+		setPreferredSize(new Dimension(0, (1 + SizePreference.NUM_DETAILED_PANELS) * (gui.size.PADDING + gui.size.TEXT_SIZE_MEDIUM)));
 		super.updateSize(gui);
 	}
 	
@@ -395,7 +429,7 @@ class DivinePanel extends ThemedPanel {
 	}
 	
 }
-class ColorMapLabel extends JPanel {
+class ColorMapLabel extends JPanel implements ILabel {
 	
 	private static final long serialVersionUID = 8926205242557099213L;
 	
@@ -405,6 +439,10 @@ class ColorMapLabel extends JPanel {
 	private double lastColor = 0.0;
 
 	public ColorMapLabel(GUI gui, boolean textFirst) {
+		this(gui, textFirst, false);
+	}
+
+	public ColorMapLabel(GUI gui, boolean textFirst, boolean centered) {
 		textLabel = new ThemedLabel(gui, "");
 		coloredLabel = new ThemedLabel(gui, "") {
 			private static final long serialVersionUID = -6995689057641195351L;
@@ -413,7 +451,7 @@ class ColorMapLabel extends JPanel {
 				return theme.CERTAINTY_COLOR_MAP.get(lastColor);
 			}
 		};
-		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		setLayout(new FlowLayout(centered ? FlowLayout.CENTER : FlowLayout.LEFT, 0, 0));
 		setOpaque(false);
 		if (textFirst) {
 			add(textLabel);
@@ -430,7 +468,7 @@ class ColorMapLabel extends JPanel {
 		coloredLabel.setText(text);
 	}
 	
-	void setText(String text) {
+	public void setText(String text) {
 		textLabel.setText(text);
 	}
 	

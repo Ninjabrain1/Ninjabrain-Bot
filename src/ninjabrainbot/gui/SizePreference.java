@@ -16,7 +16,10 @@ public abstract class SizePreference {
 	public int PADDING_THIN;
 	public int PADDING_TITLE;
 	public int WIDTH;
+	public int ANGLE_COLUMN_WIDTH;
 	public int WINDOW_ROUNDING;
+
+	public static final int NUM_DETAILED_PANELS = 5;
 
 	public static final HashMap<String, SizePreference> SIZES = new HashMap<String, SizePreference>();
 	public static final SizePreference REGULAR = new RegularSize();
@@ -31,7 +34,7 @@ public abstract class SizePreference {
 		this.name = name;
 		SIZES.put(name, this);
 	}
-	
+
 }
 
 class RegularSize extends SizePreference {
@@ -46,6 +49,7 @@ class RegularSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 320;
+		ANGLE_COLUMN_WIDTH = 100;
 		WINDOW_ROUNDING = 7;
 	}
 }
@@ -62,8 +66,10 @@ class LargeSize extends SizePreference {
 		PADDING_THIN = 2;
 		PADDING_TITLE = 6;
 		WIDTH = 380;
+		ANGLE_COLUMN_WIDTH = 110;
 		WINDOW_ROUNDING = 7;
 	}
+	
 }
 
 class ExtraLargeSize extends SizePreference {
@@ -78,6 +84,8 @@ class ExtraLargeSize extends SizePreference {
 		PADDING_THIN = 3;
 		PADDING_TITLE = 6;
 		WIDTH = 570;
+		ANGLE_COLUMN_WIDTH = 160;
 		WINDOW_ROUNDING = 7;
 	}
+	
 }

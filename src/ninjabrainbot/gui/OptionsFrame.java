@@ -153,6 +153,7 @@ public class OptionsFrame extends ThemedFrame {
 		}
 		column2.add(new TextboxPanel(gui, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
 		column2.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
+		column2.add(new CheckboxPanel(gui, I18n.get("settings.show_angle_updates"), Main.preferences.showAngleUpdates));
 		column2.add(new CheckboxPanel(gui, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(gui, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
 		column2.add(Box.createGlue());
@@ -177,6 +178,7 @@ public class OptionsFrame extends ThemedFrame {
 			ac2.add(new HotkeyPanel(gui, I18n.get("settings.down_001_to_last_angle"), Main.preferences.hotkeyDecrement), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("undo"), Main.preferences.hotkeyUndo), constraints);
+			ac2.add(new HotkeyPanel(gui, I18n.get("lock"), Main.preferences.hotkeyLock), constraints);
 			ac2.add(new HotkeyPanel(gui, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
 		}
 		constraints.weighty = 1;
