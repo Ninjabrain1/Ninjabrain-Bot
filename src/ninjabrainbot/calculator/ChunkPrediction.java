@@ -22,15 +22,13 @@ public class ChunkPrediction extends Chunk {
 		this.fourfour_x = 16 * chunk.x + 4;
 		this.fourfour_z = 16 * chunk.z + 4;
 		this.success = Double.isFinite(chunk.weight) && chunk.weight > 0.0005;
-		updateDistance(playerPos);
+		if (playerPos != null) {
+			updateWithPlayerPos(playerPos);
+		}
 	}
 
-	private void updateDistance(Throw playerPos) {
-		distance = playerPos != null ? getDistance(playerPos) : 0;
-	}
-
-	public void updateWithTravelAngle(Throw playerPos) {
-		updateDistance(playerPos);
+	public void updateWithPlayerPos(Throw playerPos) {
+		distance = getDistance(playerPos);
 		double playerX = playerPos.x;
 		double playerZ = playerPos.z;
 		if (playerPos.isNether()) {

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -27,7 +26,6 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
-import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.calculator.DivineContext;
 import ninjabrainbot.calculator.DivineResult;
 import ninjabrainbot.calculator.Fossil;
@@ -65,9 +63,10 @@ public class GUI {
 
 	public static final int MAX_THROWS = 10;
 	private final Calculator calculator;
-	private CalculatorResult latestResult;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
+	private Throw playerPos;
+	private Throw playerPosLast;
 	private DivineContext divineContext;
 	private DivineContext divineContextLast;
 
@@ -280,7 +279,8 @@ public class GUI {
 			eyeThrows.clear();
 			divineContextLast = divineContext;
 			divineContext = null;
-			latestResult = null;
+			playerPosLast = playerPos;
+			playerPos = null;
 			setTargetLocked(false);
 		}
 		onThrowsUpdated();
@@ -294,6 +294,9 @@ public class GUI {
 		DivineContext temp2 = divineContextLast;
 		divineContextLast = divineContext;
 		divineContext = temp2;
+		Throw temp3 = playerPosLast;
+		playerPosLast = playerPos;
+		playerPos = temp3;
 		onThrowsUpdated();
 	}
 
@@ -320,7 +323,7 @@ public class GUI {
 			if (t != null) {
 				if (t.isNether()) {
 					if (i > 0) {
-						onAngleUpdate(t, true);
+						onAngleUpdate(t);
 					} else {
 						BlindResult result = calculator.blind(t.toBlind(), divineContext, true);
 						mainTextArea.setResult(result, this);
@@ -333,7 +336,7 @@ public class GUI {
 				}
 				if (i < MAX_THROWS) {
 					if (i > 0 && (targetLocked || t.lookingBelowHorizon())) {
-						onAngleUpdate(t, true);
+						onAngleUpdate(t);
 					} else if (!targetLocked && !t.lookingBelowHorizon()) {
 						updateWithNewThrow(t, i);
 					}
@@ -361,6 +364,7 @@ public class GUI {
 		saveThrowsForUndo();
 		eyeThrows.add(t);
 		enderEyePanel.setThrow(index, t);
+		playerPos = t;
 		onThrowsUpdated();
 	}
 
@@ -405,9 +409,7 @@ public class GUI {
 	}
 
 	public void toggleTargetLocked() {
-		if (latestResult != null) {
-			setTargetLocked(!targetLocked);
-		}
+		setTargetLocked(!targetLocked);
 	}
 
 	public boolean isTargetLocked() {
@@ -428,18 +430,16 @@ public class GUI {
 			mainTextArea.setResult(result, this);
 			enderEyePanel.setErrors(null);
 		} else {
+			CalculatorResult result = null;
 			double[] errors = null;
 			if (eyeThrows.size() >= 1) {
-				latestResult = calculator.triangulate(eyeThrows, divineContext);
-				if (latestResult.success()) {
-					errors = latestResult.getAngleErrors();
-					Throw latestThrow = eyeThrows.get(eyeThrows.size() - 1);
-					onAngleUpdate(latestThrow, false);
+				System.out.println(playerPos);
+				result = calculator.triangulate(eyeThrows, divineContext, playerPos);
+				if (result.success()) {
+					errors = result.getAngleErrors();
 				}
-			} else {
-				latestResult = null;
 			}
-			mainTextArea.setResult(latestResult, this);
+			mainTextArea.setResult(result, this);
 			enderEyePanel.setErrors(errors);
 		}
 		// Update throw panels
@@ -454,17 +454,10 @@ public class GUI {
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
-	private void onAngleUpdate(Throw updateThrow, boolean updateGui) {
-		if (latestResult != null && latestResult.success()) {
-			latestResult.getBestPrediction().updateWithTravelAngle(updateThrow);
-			List<ChunkPrediction> topPredictions = latestResult.getTopPredictions(SizePreference.NUM_DETAILED_PANELS);
-			for (ChunkPrediction topPrediction : topPredictions) {
-				topPrediction.updateWithTravelAngle(updateThrow);
-			}
-			if (updateGui) {
-				mainTextArea.setResult(latestResult, this);
-			}
-		}
+	private void onAngleUpdate(Throw updateThrow) {
+		saveThrowsForUndo();
+		playerPos = updateThrow;
+		onThrowsUpdated();
 	}
 
 	public void onClipboardUpdated(String newClipboard) {
@@ -479,6 +472,7 @@ public class GUI {
 		eyeThrowsLast.clear();
 		eyeThrowsLast.addAll(eyeThrows);
 		divineContextLast = divineContext;
+		playerPosLast = playerPos;
 	}
 
 	public Calculator getTriangulator() {
