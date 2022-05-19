@@ -108,7 +108,7 @@ public class Calibrator {
 		// place block
 		keyPresser.openCommand();
 		Thread.sleep(delay);
-		keyPresser.paste(String.format("setblock %d 255 %d minecraft:diamond_block", (int) x, (int) z));
+		keyPresser.paste(String.format("setblock %d 255 %d minecraft:diamond_block", (int) Math.floor(x), (int) Math.floor(z)));
 		keyPresser.enter();
 		// tp
 		keyPresser.openCommand();
