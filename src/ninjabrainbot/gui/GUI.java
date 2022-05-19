@@ -58,6 +58,10 @@ public class GUI {
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 
+	private Timer overlayHideTimer;
+	private Timer overlayUpdateTimer;
+	private long lastOverlayUpdate = System.currentTimeMillis();
+	private final long minOverlayUpdateDelayMillis = 1000;
 	public Timer autoResetTimer;
 	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
 
@@ -74,7 +78,7 @@ public class GUI {
 
 	private Font font;
 	private HashMap<String, Font> fonts;
-	
+
 	public final File OBS_OVERLAY;
 
 	public GUI() {
@@ -92,14 +96,14 @@ public class GUI {
 		notificationsFrame = frame.getNotificationsFrame();
 
 		OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
-		
+
 		// Load fonts
 		Profiler.stopAndStart("Load fonts");
 		font = loadFont();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(font);
 		fonts = new HashMap<>();
-		
+
 		// Set application icon
 		Profiler.stopAndStart("Set app icon");
 		URL iconURL = Main.class.getResource("/resources/icon.png");
@@ -142,11 +146,19 @@ public class GUI {
 		autoResetTimer = new Timer(AUTO_RESET_DELAY, p -> {
 			if (!targetLocked)
 				resetThrows();
+			autoResetTimer.restart();
 			autoResetTimer.stop();
+		});
+		overlayHideTimer = new Timer((int) (Main.preferences.overlayHideDelay.get() * 1000f), p -> {
+			clearOBSOverlay();
+		});
+		overlayUpdateTimer = new Timer(1000, p -> {
+			overlayUpdateTimer.stop();
+			SwingUtilities.invokeLater(() -> updateOBSOverlay());
 		});
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
-	
+
 	public void setTranslucent(boolean t) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
@@ -195,7 +207,8 @@ public class GUI {
 	private Font loadFont() {
 		Font font = null;
 		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+			font = Font.createFont(Font.TRUETYPE_FONT,
+					Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -204,15 +217,15 @@ public class GUI {
 		}
 		if (font == null || font.canDisplayUpTo(I18n.get("lang")) != -1) {
 			Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
-	        for (Font f : fonts) {
-	            if (f.canDisplayUpTo(I18n.get("lang")) < 0) {
-	                return f;
-	            }
-	        }
+			for (Font f : fonts) {
+				if (f.canDisplayUpTo(I18n.get("lang")) < 0) {
+					return f;
+				}
+			}
 		}
 		return font;
 	}
-	
+
 	public Font fontSize(float size, boolean light) {
 		String key = size + " " + light;
 		if (!fonts.containsKey(key)) {
@@ -235,9 +248,11 @@ public class GUI {
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 		notificationsFrame.updateBounds(this);
-		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+		int extraWidth = Main.preferences.showAngleUpdates.get()
+				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
 		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
-		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
+		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
+				size.WINDOW_ROUNDING));
 	}
 
 	private void updateFontsAndColors() {
@@ -253,6 +268,7 @@ public class GUI {
 	}
 
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);
+
 	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
@@ -308,7 +324,7 @@ public class GUI {
 			onThrowsUpdated();
 		}
 	}
-	
+
 	public void removeDivineContext() {
 		if (divineContext != null) {
 			saveThrowsForUndo();
@@ -374,7 +390,7 @@ public class GUI {
 		playerPos = updateThrow;
 		onThrowsUpdated();
 	}
-	
+
 	public void changeLastAngle(double delta) {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
@@ -382,7 +398,8 @@ public class GUI {
 				return;
 			}
 			Throw last = eyeThrows.get(i);
-			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.beta, last.correction + delta, last.altStd, last.isNether());
+			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.beta, last.correction + delta, last.altStd,
+					last.isNether());
 			saveThrowsForUndo();
 			eyeThrows.remove(last);
 			eyeThrows.add(t);
@@ -416,6 +433,7 @@ public class GUI {
 			autoResetTimer.restart();
 		}
 		updateBounds();
+		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
 	public void toggleTargetLocked() {
@@ -494,12 +512,26 @@ public class GUI {
 		}
 		frame.setLocation(100, 100);
 	}
-	
+
 	private void updateOBSOverlay() {
+		long time = System.currentTimeMillis();
+		if (time - lastOverlayUpdate < minOverlayUpdateDelayMillis) {
+			overlayUpdateTimer.setInitialDelay((int) (10 + minOverlayUpdateDelayMillis - (time - lastOverlayUpdate)));
+			overlayUpdateTimer.restart();
+			return;
+		}
+		lastOverlayUpdate = time;
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			if (!mainTextArea.isIdle()) {
+			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && targetLocked;
+			if (!mainTextArea.isIdle() && !hideBecauseLocked) {
 				frame.paint(img.createGraphics());
+				if (Main.preferences.overlayAutoHide.get()) {
+					overlayHideTimer.setInitialDelay((int) (Main.preferences.overlayHideDelay.get() * 1000f));
+					overlayHideTimer.restart();
+				} else {
+					overlayHideTimer.stop();
+				}
 			}
 			try {
 				ImageIO.write(img, "png", OBS_OVERLAY);
@@ -508,7 +540,7 @@ public class GUI {
 			}
 		}
 	}
-	
+
 	public void clearOBSOverlay() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -516,6 +548,9 @@ public class GUI {
 				ImageIO.write(img, "png", OBS_OVERLAY);
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+			if (Main.preferences.overlayAutoHide.get()) {
+				overlayHideTimer.stop();
 			}
 		}
 	}
@@ -526,6 +561,10 @@ public class GUI {
 		} else {
 			OBS_OVERLAY.delete();
 		}
+	}
+
+	public void onOverlaySettingsChanged() {
+		updateOBSOverlay();
 	}
 
 }

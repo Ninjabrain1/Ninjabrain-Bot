@@ -26,6 +26,7 @@ public class NinjabrainBotPreferences {
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
 	public FloatPreference crosshairCorrection;
+	public FloatPreference overlayHideDelay;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
@@ -37,6 +38,8 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference altClipboardReader;
 	public BooleanPreference useAltStd;
 	public BooleanPreference useOverlay;
+	public BooleanPreference overlayAutoHide;
+	public BooleanPreference overlayHideWhenLocked;
 	public MultipleChoicePreference strongholdDisplayType;
 	public MultipleChoicePreference theme;
 	public MultipleChoicePreference size;
@@ -136,6 +139,12 @@ public class NinjabrainBotPreferences {
 			public void onChangedByUser(GUI gui) {
 			}
 		};
+		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.onOverlaySettingsChanged());
+			}
+		};
 		checkForUpdates = new BooleanPreference("check_for_updates", true, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
@@ -205,6 +214,21 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.setOverlayEnabled(get()));
+			}
+		};
+		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> {
+					gui.onOverlaySettingsChanged();
+					gui.optionsFrame.setOverlayAutoHideEnabled(get());
+				});
+			}
+		};
+		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.onOverlaySettingsChanged());
 			}
 		};
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] { 0, 1, 2 },

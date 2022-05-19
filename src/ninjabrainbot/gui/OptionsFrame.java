@@ -55,8 +55,7 @@ public class OptionsFrame extends ThemedFrame {
 	private TextboxPanel sigma;
 	private TextboxPanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
-//	private JPanel mainPanel; // Panel containing all non-advanced options
-//	private JPanel advPanel; // Panel containing all advanced options
+	private TextboxPanel overlayResetDelay;
 	
 	static int WINDOW_WIDTH = 560;
 	static int COLUMN_WIDTH = WINDOW_WIDTH/2;
@@ -191,12 +190,12 @@ public class OptionsFrame extends ThemedFrame {
 		JPanel ac2 = new JPanel();
 		ac2.setOpaque(false);
 		ac2.setLayout(new GridBagLayout());
-		ac2.setBorder(new EmptyBorder(PADDING, 2 * PADDING, PADDING, PADDING));
+		ac2.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
 		
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = GridBagConstraints.RELATIVE;
 		constraints.gridx = 0;
-		constraints.insets = new Insets(0, 0, PADDING, 0);
+		constraints.insets = new Insets(0, PADDING, 0, PADDING);
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 1;
@@ -215,7 +214,14 @@ public class OptionsFrame extends ThemedFrame {
 		};
 		ac2.add(overlayExplanation, constraints);
 		ac2.add(new ThemedTextArea(gui, gui.OBS_OVERLAY.getAbsolutePath()), constraints);
+		constraints.insets = new Insets(0, 0, 0, 0);
 		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
+		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_hide_locked"), Main.preferences.overlayHideWhenLocked), constraints);
+		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_auto_hide"), Main.preferences.overlayAutoHide), constraints);
+		overlayResetDelay = new TextboxPanel(gui, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
+		overlayResetDelay.setEnabled(Main.preferences.overlayAutoHide.get());
+		ac2.add(overlayResetDelay, constraints);
+		
 		constraints.weighty = 1;
 		ac2.add(Box.createGlue(), constraints);
 		return ac2;
@@ -294,6 +300,11 @@ public class OptionsFrame extends ThemedFrame {
 		sigmaAlt.descLabel.updateColors(gui);
 		sigmaAltHotkey.setEnabled(b);
 		sigmaAltHotkey.descLabel.updateColors(gui);
+	}
+	
+	public void setOverlayAutoHideEnabled(boolean b) {
+		overlayResetDelay.setEnabled(b);
+		overlayResetDelay.descLabel.updateColors(gui);
 	}
 	
 }
