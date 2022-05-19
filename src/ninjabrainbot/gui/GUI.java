@@ -409,7 +409,9 @@ public class GUI {
 	}
 
 	public void toggleTargetLocked() {
-		setTargetLocked(!targetLocked);
+		if (!mainTextArea.isIdle()) {
+			setTargetLocked(!targetLocked);
+		}
 	}
 
 	public boolean isTargetLocked() {
