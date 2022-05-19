@@ -226,6 +226,7 @@ public class OptionsFrame extends ThemedFrame {
 		tabbedPane.setVisible(false);
 		titlebarPanel.setVisible(false);
 		calibrationPanel.setVisible(true);
+		updateBounds(gui);
 		if (KeyboardListener.registered) {
 			KeyboardListener.instance.cancelConsumer();
 		}
@@ -236,6 +237,7 @@ public class OptionsFrame extends ThemedFrame {
 		titlebarPanel.setVisible(true);
 		calibrationPanel.setVisible(false);
 		calibrationPanel.cancel();
+		updateBounds(gui);
 		sigma.updateValue();
 	}
 	
@@ -246,9 +248,13 @@ public class OptionsFrame extends ThemedFrame {
 		int panelHeight = tabbedPane.getPreferredSize().height;
 		titlebarPanel.setBounds(0, 0, WINDOW_WIDTH, titleBarHeight);
 		super.updateBounds(gui);
-		tabbedPane.setBounds(0, titleBarHeight, WINDOW_WIDTH, panelHeight);
-		setSize(WINDOW_WIDTH, titleBarHeight + panelHeight);
-//		pack();
+		if (!calibrationPanel.isVisible()) {
+			tabbedPane.setBounds(0, titleBarHeight, WINDOW_WIDTH, panelHeight);
+			setSize(WINDOW_WIDTH, titleBarHeight + panelHeight);
+		} else {
+			calibrationPanel.setBounds(0, 0, WINDOW_WIDTH, 2 * panelHeight + titleBarHeight);
+			setSize(WINDOW_WIDTH, titleBarHeight + 2 * panelHeight);
+		}
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
 	}
 
