@@ -69,9 +69,11 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 			if (ncomponents == 0) {
 				return;
 			}
-			float totalWeight = ncomponents;
-			for (Float f : relativeWidths.values()) {
-				totalWeight += f - 1f;
+			float totalWeight = 0;
+			for (Component c : parent.getComponents()) {
+				if (c.isVisible()) {
+					totalWeight += relativeWidths.getOrDefault(c, 1f);
+				}
 			}
 			int totalGapsWidth = (ncols - 1) * hgap;
 			int widthWOInsets = parent.getWidth() - (insets.left + insets.right);

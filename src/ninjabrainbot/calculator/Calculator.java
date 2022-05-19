@@ -36,14 +36,14 @@ public class Calculator {
 		this.sigmaAlt = sigmaAlt;
 	}
 
-	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows, DivineContext divineContext) {
+	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows, DivineContext divineContext, Throw playerPos) {
 		if (eyeThrows.size() == 0)
 			return new CalculatorResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
 		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
-		return new CalculatorResult(posterior, eyeThrows);
+		return new CalculatorResult(posterior, eyeThrows, playerPos);
 	}
 	
 	public Posterior getPosterior(ArrayList<Throw> eyeThrows, DivineContext divineContext) {

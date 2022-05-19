@@ -50,8 +50,14 @@ public class Chunk {
 	 * Returns the distance (number of blocks) to the predicted location from the given throw.
 	 */
 	public int getDistance(Throw t) {
-		double deltax = 16 * x + 8 - t.x;
-		double deltaz = 16 * z + 8 - t.z;
+		double playerX = t.x;
+		double playerZ = t.z;
+		if (t.isNether()) {
+			playerX *= 8;
+			playerZ *= 8;
+		}
+		double deltax = 16 * x + 8 - playerX;
+		double deltaz = 16 * z + 8 - playerZ;
 		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
 	}
 	

@@ -30,7 +30,7 @@ public class ThemedFrame extends JFrame {
 		};
 		titlebarPanel.add(titletextLabel);
 	}
-	
+
 	public TitleBarPanel getTitleBar() {
 		return titlebarPanel;
 	}

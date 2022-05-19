@@ -11,9 +11,9 @@ import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
 
 public class NinjabrainBotPreferences {
-	
+
 	Preferences pref;
-	
+
 	public IntPreference windowX;
 	public IntPreference windowY;
 	public HotkeyPreference hotkeyIncrement;
@@ -22,6 +22,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyUndo;
 	public HotkeyPreference hotkeyMinimize;
 	public HotkeyPreference hotkeyAltStd;
+	public HotkeyPreference hotkeyLock;
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
 	public FloatPreference crosshairCorrection;
@@ -29,6 +30,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference translucent;
 	public BooleanPreference alwaysOnTop;
 	public BooleanPreference showNetherCoords;
+	public BooleanPreference showAngleUpdates;
 	public BooleanPreference showAngleErrors;
 	public BooleanPreference autoReset;
 	public BooleanPreference useAdvStatistics;
@@ -40,7 +42,7 @@ public class NinjabrainBotPreferences {
 	public MultipleChoicePreference size;
 	public MultipleChoicePreference stdToggleMode;
 	public MultipleChoicePreference view;
-	
+
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
 	public static final String CHUNK = I18n.get("chunk");
@@ -54,25 +56,41 @@ public class NinjabrainBotPreferences {
 		hotkeyIncrement = new HotkeyPreference("hotkey_increment", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.changeLastAngle(0.01f));
+				SwingUtilities.invokeLater(() -> {
+					if (!gui.isTargetLocked()) {
+						gui.changeLastAngle(0.01f);
+					}
+				});
 			}
 		};
 		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.changeLastAngle(-0.01f));
+				SwingUtilities.invokeLater(() -> {
+					if (!gui.isTargetLocked()) {
+						gui.changeLastAngle(-0.01f);
+					}
+				});
 			}
 		};
 		hotkeyReset = new HotkeyPreference("hotkey_reset", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.resetThrows());
+				SwingUtilities.invokeLater(() -> {
+					if (!gui.isTargetLocked()) {
+						gui.resetThrows();
+					}
+				});
 			}
 		};
 		hotkeyUndo = new HotkeyPreference("hotkey_undo", pref) {
 			@Override
 			public void execute(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.undo());
+				SwingUtilities.invokeLater(() -> {
+					if (!gui.isTargetLocked()) {
+						gui.undo();
+					}
+				});
 			}
 		};
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", pref) {
@@ -85,8 +103,18 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void execute(GUI gui) {
 				if (Main.preferences.useAltStd.get()) {
-					SwingUtilities.invokeLater(() -> gui.toggleLastSTD());
+					SwingUtilities.invokeLater(() -> {
+						if (!gui.isTargetLocked()) {
+							gui.toggleLastSTD();
+						}
+					});
 				}
+			}
+		};
+		hotkeyLock = new HotkeyPreference("hotkey_lock", pref) {
+			@Override
+			public void execute(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.toggleTargetLocked());
 			}
 		};
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
@@ -134,6 +162,12 @@ public class NinjabrainBotPreferences {
 				gui.setNetherCoordsEnabled(get());
 			}
 		};
+		showAngleUpdates = new BooleanPreference("show_angle_updates", false, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.setAngleUpdatesEnabled(get());
+			}
+		};
 		showAngleErrors = new BooleanPreference("show_angle_errors", false, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
@@ -173,30 +207,34 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.setOverlayEnabled(get()));
 			}
 		};
-		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] {0, 1, 2}, new String[] {FOURFOUR, EIGHTEIGHT, CHUNK}, pref) {
+		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] { 0, 1, 2 },
+				new String[] { FOURFOUR, EIGHTEIGHT, CHUNK }, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
-		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] {0, 1, 2}, new String[] {Theme.LIGHT.name, Theme.DARK.name, Theme.BLUE.name}, pref) {
+		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] { 0, 1, 2 },
+				new String[] { Theme.LIGHT.name, Theme.DARK.name, Theme.BLUE.name }, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.updateTheme());
 			}
 		};
-		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] {0, 1, 2}, new String[] {SizePreference.REGULAR.name, SizePreference.LARGE.name, SizePreference.EXTRALARGE.name}, pref) {
+		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] { 0, 1, 2 },
+				new String[] { SizePreference.REGULAR.name, SizePreference.LARGE.name, SizePreference.EXTRALARGE.name },
+				pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.updateSizePreference());
 			}
 		};
-		view = new MultipleChoicePreference("view", BASIC, new int[] {0, 1}, new String[] {BASIC, DETAILED}, pref) {
+		view = new MultipleChoicePreference("view", BASIC, new int[] { 0, 1 }, new String[] { BASIC, DETAILED }, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
 	}
-	
+
 }

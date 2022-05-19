@@ -23,7 +23,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.BlindPosition;
 import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
@@ -37,6 +36,7 @@ import ninjabrainbot.gui.components.MainButtonPanel;
 import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
@@ -65,8 +65,12 @@ public class GUI {
 	private final Calculator calculator;
 	private ArrayList<Throw> eyeThrows;
 	private ArrayList<Throw> eyeThrowsLast;
+	private Throw playerPos;
+	private Throw playerPosLast;
 	private DivineContext divineContext;
 	private DivineContext divineContextLast;
+
+	private boolean targetLocked = false;
 
 	private Font font;
 	private HashMap<String, Font> fonts;
@@ -182,6 +186,11 @@ public class GUI {
 		updateBounds();
 	}
 
+	public void setAngleUpdatesEnabled(boolean b) {
+		mainTextArea.setAngleUpdatesEnabled(b);
+		updateBounds();
+	}
+
 	private Font loadFont() {
 		Font font = null;
 		try {
@@ -225,7 +234,8 @@ public class GUI {
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 		notificationsFrame.updateBounds(this);
-		frame.setSize(size.WIDTH, frame.getPreferredSize().height);
+		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
 		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
 
@@ -269,17 +279,24 @@ public class GUI {
 			eyeThrows.clear();
 			divineContextLast = divineContext;
 			divineContext = null;
+			playerPosLast = playerPos;
+			playerPos = null;
+			setTargetLocked(false);
 		}
 		onThrowsUpdated();
 	}
 
 	public void undo() {
+		setTargetLocked(false);
 		ArrayList<Throw> temp = eyeThrowsLast;
 		eyeThrowsLast = eyeThrows;
 		eyeThrows = temp;
 		DivineContext temp2 = divineContextLast;
 		divineContextLast = divineContext;
 		divineContext = temp2;
+		Throw temp3 = playerPosLast;
+		playerPosLast = playerPos;
+		playerPos = temp3;
 		onThrowsUpdated();
 	}
 
@@ -304,11 +321,25 @@ public class GUI {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size();
 			if (t != null) {
+				if (t.isNether()) {
+					if (i > 0) {
+						updateWithNewPlayerPos(t);
+					} else {
+						BlindResult result = calculator.blind(t.toBlind(), divineContext, true);
+						mainTextArea.setResult(result, this);
+						if (Main.preferences.autoReset.get()) {
+							autoResetTimer.restart();
+						}
+						SwingUtilities.invokeLater(() -> updateOBSOverlay());
+					}
+					return;
+				}
 				if (i < MAX_THROWS) {
-					saveThrowsForUndo();
-					eyeThrows.add(t);
-					enderEyePanel.setThrow(i, t);
-					onThrowsUpdated();
+					if (i > 0 && (targetLocked || t.lookingBelowHorizon())) {
+						updateWithNewPlayerPos(t);
+					} else if (!targetLocked && !t.lookingBelowHorizon()) {
+						updateWithNewThrow(t, i);
+					}
 				}
 			} else {
 				Fossil f = Fossil.parseF3I(clipboard);
@@ -316,18 +347,6 @@ public class GUI {
 					saveThrowsForUndo();
 					divineContext = new DivineContext(f);
 					onThrowsUpdated();
-					return;
-				} else if (eyeThrows.size() == 0) {
-					BlindPosition b = BlindPosition.parseF3C(clipboard);
-					if (b != null) {
-						BlindResult result = calculator.blind(b, divineContext, true);
-						mainTextArea.setResult(result, this);
-						if (Main.preferences.autoReset.get()) {
-							autoResetTimer.restart();
-						}
-						SwingUtilities.invokeLater(() -> updateOBSOverlay());
-						return;
-					}
 				}
 			}
 		} else {
@@ -341,6 +360,20 @@ public class GUI {
 		}
 	}
 
+	private void updateWithNewThrow(Throw t, int index) {
+		saveThrowsForUndo();
+		eyeThrows.add(t);
+		enderEyePanel.setThrow(index, t);
+		playerPos = t;
+		onThrowsUpdated();
+	}
+
+	private void updateWithNewPlayerPos(Throw updateThrow) {
+		saveThrowsForUndo();
+		playerPos = updateThrow;
+		onThrowsUpdated();
+	}
+	
 	public void changeLastAngle(double delta) {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
@@ -348,7 +381,7 @@ public class GUI {
 				return;
 			}
 			Throw last = eyeThrows.get(i);
-			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.correction + delta);
+			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.beta, last.correction + delta, last.altStd, last.isNether());
 			saveThrowsForUndo();
 			eyeThrows.remove(last);
 			eyeThrows.add(t);
@@ -375,6 +408,22 @@ public class GUI {
 		}
 	}
 
+	private void setTargetLocked(boolean locked) {
+		targetLocked = locked;
+		frame.setLocked(locked);
+		updateBounds();
+	}
+
+	public void toggleTargetLocked() {
+		if (!mainTextArea.isIdle()) {
+			setTargetLocked(!targetLocked);
+		}
+	}
+
+	public boolean isTargetLocked() {
+		return targetLocked;
+	}
+
 	private void setUpdateURL(VersionURL url) {
 		frame.setURL(url);
 	}
@@ -392,7 +441,8 @@ public class GUI {
 			CalculatorResult result = null;
 			double[] errors = null;
 			if (eyeThrows.size() >= 1) {
-				result = calculator.triangulate(eyeThrows, divineContext);
+				System.out.println(playerPos);
+				result = calculator.triangulate(eyeThrows, divineContext, playerPos);
 				if (result.success()) {
 					errors = result.getAngleErrors();
 				}
@@ -424,6 +474,7 @@ public class GUI {
 		eyeThrowsLast.clear();
 		eyeThrowsLast.addAll(eyeThrows);
 		divineContextLast = divineContext;
+		playerPosLast = playerPos;
 	}
 
 	public Calculator getTriangulator() {

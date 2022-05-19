@@ -26,10 +26,10 @@ public class ChunkPanelHeader extends ThemedPanel {
 	private JLabel certainty;
 	private JLabel distance;
 	private JLabel nether;
+	private JLabel angle;
 	private JLabel[] labels;
 	
 	GUI gui;
-	double lastColor;
 
 	public ChunkPanelHeader(GUI gui) {
 		super(gui, true);
@@ -39,16 +39,19 @@ public class ChunkPanelHeader extends ThemedPanel {
 		certainty = new JLabel(I18n.get("certainty_2"), 0);
 		distance = new JLabel(I18n.get("dist"), 0);
 		nether = new JLabel(I18n.get("nether"), 0);
-		labels = new JLabel[] {location, certainty, distance, nether};
+		angle = new JLabel(I18n.get("angle"), 0);
+		labels = new JLabel[] {location, certainty, distance, nether, angle};
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(location, 2f);
-		layout.setRelativeWidth(nether, 1.5f);
+		layout.setRelativeWidth(nether, 1.8f);
+		layout.setRelativeWidth(angle, 2.5f);
 		setLayout(layout);
 		add(location);
 		add(certainty);
 		add(distance);
 		add(nether);
 		updateHeaderText();
+		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 	
 	@Override
@@ -74,6 +77,14 @@ public class ChunkPanelHeader extends ThemedPanel {
 	
 	public void updateHeaderText() {
 		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? I18n.get("chunk") : I18n.get("location"));
+	}
+
+	public void setAngleUpdatesEnabled(boolean b) {
+		if (b) {
+			add(angle);
+		} else {
+			remove(angle);
+		}
 	}
 	
 	@Override
