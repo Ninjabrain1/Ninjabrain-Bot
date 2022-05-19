@@ -140,7 +140,8 @@ public class GUI {
 
 		// Auto reset timer
 		autoResetTimer = new Timer(AUTO_RESET_DELAY, p -> {
-			resetThrows();
+			if (!targetLocked)
+				resetThrows();
 			autoResetTimer.stop();
 		});
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
@@ -411,6 +412,9 @@ public class GUI {
 	private void setTargetLocked(boolean locked) {
 		targetLocked = locked;
 		frame.setLocked(locked);
+		if (!locked && Main.preferences.autoReset.get()) {
+			autoResetTimer.restart();
+		}
 		updateBounds();
 	}
 
