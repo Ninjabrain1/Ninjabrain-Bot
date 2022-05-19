@@ -94,6 +94,7 @@ public class ChunkPanel extends ThemedPanel {
 		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
 		super.updateColors(gui);
 		angle.updateColor(gui);
+		certainty.updateColors(gui);
 	}
 	
 	public void setPrediciton(ChunkPrediction p) {
