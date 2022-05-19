@@ -66,5 +66,6 @@ both a raw angle, as well as a relative angle (meaning how much leftward or righ
 #### What is the "Lock calculator" hotkey in the settings?
 Pressing this hotkey will toggle "Locked mode", with this mode enabled:
 - Hotkeys for Reset, Undo, and subpixel adjustment will be disabled, so that you do not change the result by accident.
-- Pressing F3+C again will not count as another eye throw, but will rather update the distance and direction to the
+- If "Auto reset when idle for 15 minutes" is enabled, the calculator will not auto reset.
+- Pressing F3+C will not count as another eye throw, but will rather update the distance and direction to the
 stronghold from your current location (keep in mind that in order to see the direction to the stronghold you have to enable "Show direction to stronghold" in the settings).
