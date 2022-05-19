@@ -27,7 +27,7 @@ public class ChunkPrediction extends Chunk {
 		}
 	}
 
-	public void updateWithPlayerPos(Throw playerPos) {
+	private void updateWithPlayerPos(Throw playerPos) {
 		distance = getDistance(playerPos);
 		double playerX = playerPos.x;
 		double playerZ = playerPos.z;

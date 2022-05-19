@@ -323,7 +323,7 @@ public class GUI {
 			if (t != null) {
 				if (t.isNether()) {
 					if (i > 0) {
-						onAngleUpdate(t);
+						updateWithNewPlayerPos(t);
 					} else {
 						BlindResult result = calculator.blind(t.toBlind(), divineContext, true);
 						mainTextArea.setResult(result, this);
@@ -336,7 +336,7 @@ public class GUI {
 				}
 				if (i < MAX_THROWS) {
 					if (i > 0 && (targetLocked || t.lookingBelowHorizon())) {
-						onAngleUpdate(t);
+						updateWithNewPlayerPos(t);
 					} else if (!targetLocked && !t.lookingBelowHorizon()) {
 						updateWithNewThrow(t, i);
 					}
@@ -368,6 +368,12 @@ public class GUI {
 		onThrowsUpdated();
 	}
 
+	private void updateWithNewPlayerPos(Throw updateThrow) {
+		saveThrowsForUndo();
+		playerPos = updateThrow;
+		onThrowsUpdated();
+	}
+	
 	public void changeLastAngle(double delta) {
 		if (!calibrationPanel.isCalibrating()) {
 			int i = eyeThrows.size() - 1;
@@ -454,12 +460,6 @@ public class GUI {
 		updateBounds();
 		// Update overlay
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-	}
-
-	private void onAngleUpdate(Throw updateThrow) {
-		saveThrowsForUndo();
-		playerPos = updateThrow;
-		onThrowsUpdated();
 	}
 
 	public void onClipboardUpdated(String newClipboard) {
