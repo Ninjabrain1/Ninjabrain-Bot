@@ -59,21 +59,12 @@ Angle errors tell you how wrongly you measured each ender eye (assuming that the
 #### What is "Use advanced stronghold statistics" in the settings?
 "Advanced stronghold statistics" will use the existence of other strongholds and the fact that the eye points towards the closest one to make a better prediction. This improves the accuracy and it should be turned on for 99.9% of users. 
 
+#### What is "Show direction to stronghold" in the settings?
+With this setting enabled the bot will tell you the direction you need to go to get to the stronghold. If you press F3+C while looking down the bot will tell you what direction the stronghold is from your current position, which is useful if you have gone off angle while traveling. This will also update the distance to the stronghold, and can be done in both the overworld and the nether (in the nether you don't have to look down, however). The stronghold direction is presented as
+both a raw angle, as well as a relative angle (meaning how much leftward or rightward you have to turn to be on the right angle).
+
 #### What is the "Lock calculator" hotkey in the settings?
-"Lock calculator" is a hotkey that you can enable for convenience. After you've
-thrown some eyes and determined that the result given to you by the calculator
-is where you want to go, you can press this hotkey to toggle the calculator
-into "Locked" mode. With this mode enabled:
-- Hotkeys for Reset, Undo, and subpixel adjustment will be disabled.
-- Pressing F3+C again will not count as another data point (eye throw), but will rather update the distance and direction to the
-stronghold from your current location. This is useful if
-you've gone off angle while traveling. The angle information is presented as
-both the raw angle, as well as a relative angle (meaning how much leftward or
-rightward you have to turn to be on the right angle).
-  - This update information feature also works without the calculator being in
-  "Locked" mode; you have to enable this optional feature in the settings menu
-  by checking the "Show Angle Updates" box. The caveat is that you'll have
-  to be looking downwards when you press F3+C. This is because when you're
-  looking upwards, the calculator does not know whether you are trying to
-  measure a new eye throw or get an update on your angle. This feature also
-  works in the nether, provided you've already blinded and thrown some eyes.
+Pressing this hotkey will toggle "Locked mode", with this mode enabled:
+- Hotkeys for Reset, Undo, and subpixel adjustment will be disabled, so that you do not change the result by accident.
+- Pressing F3+C again will not count as another eye throw, but will rather update the distance and direction to the
+stronghold from your current location (keep in mind that in order to see the direction to the stronghold you have to enable "Show direction to stronghold" in the settings).
