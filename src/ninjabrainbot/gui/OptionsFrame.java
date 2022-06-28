@@ -110,6 +110,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.view_type"), Main.preferences.view));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.theme"), Main.preferences.theme));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.window_size"), Main.preferences.size));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.mc_version"), Main.preferences.mcVersion));
 		column2.add(Box.createGlue());
 		return mainPanel;
 	}

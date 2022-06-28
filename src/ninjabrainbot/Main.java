@@ -1,6 +1,7 @@
 package ninjabrainbot;
 
 import ninjabrainbot.calculator.ApproximatedDensity;
+import ninjabrainbot.calculator.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
@@ -18,6 +19,7 @@ public class Main {
 		System.out.println("lang info: " + I18n.get("lang"));
 		Profiler.start("Initialize preferences");
 		preferences = new NinjabrainBotPreferences();
+		StrongholdConstants.updateStrongholdChunkCoord();
 		Profiler.stopAndStart("Calculate approximated density");
 		ApproximatedDensity.init();
 		Profiler.stopAndStart("Register keyboard listener");

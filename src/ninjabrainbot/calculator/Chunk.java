@@ -56,8 +56,8 @@ public class Chunk {
 			playerX *= 8;
 			playerZ *= 8;
 		}
-		double deltax = 16 * x + 8 - playerX;
-		double deltaz = 16 * z + 8 - playerZ;
+		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord() - playerX;
+		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord() - playerZ;
 		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
 	}
 	
@@ -65,8 +65,8 @@ public class Chunk {
 		double[] errors = new double[eyeThrows.size()];
 		for (int i = 0; i < errors.length; i++) {
 			Throw t = eyeThrows.get(i);
-			double deltax = x * 16 + 8 - t.x;
-			double deltaz = z * 16 + 8 - t.z;
+			double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x;
+			double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z;
 			double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
 			double delta = (t.alpha - gamma) % 360.0;
 			if (delta < -180) delta += 360;

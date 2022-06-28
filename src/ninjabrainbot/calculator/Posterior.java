@@ -99,8 +99,8 @@ public class Posterior {
 	}
 	
 	private void updateConditionalProbability(Chunk chunk, Throw t) {
-		double deltax = chunk.x * 16 + 8 - t.x;
-		double deltaz = chunk.z * 16 + 8 - t.z;
+		double deltax = chunk.x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x;
+		double deltaz = chunk.z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z;
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		double delta = Math.abs((gamma - t.alpha) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
@@ -149,8 +149,8 @@ public class Posterior {
 	int K = 7;
 	private double closestStrongholdCondition(Chunk chunk, Throw t) {
 		double closestStrongholdProbability = 1;
-		double deltax = chunk.x + 0.5 - t.x/16.0;
-		double deltaz = chunk.z + 0.5 - t.z/16.0;
+		double deltax = chunk.x + (StrongholdConstants.getStrongholdChunkCoord() - t.x)/16.0;
+		double deltaz = chunk.z + (StrongholdConstants.getStrongholdChunkCoord() - t.z)/16.0;
 		double r_p = Math.sqrt(t.x * t.x + t.z * t.z)/16.0;
 		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
 		double phi_prime = Coords.getPhi(chunk.x, chunk.z);
