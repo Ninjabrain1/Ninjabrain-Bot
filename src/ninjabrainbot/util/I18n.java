@@ -33,19 +33,21 @@ public class I18n {
         LANGUAGE_CONFIG.add(Locale.US);
         LANGUAGE_CONFIG.add(Locale.KOREA);
         LANGUAGE_CONFIG.add(Locale.SIMPLIFIED_CHINESE);
+        LANGUAGE_CONFIG.add(Locale.ITALY);
         final Preferences preferences = Preferences.userNodeForPackage(Main.class);
         LANGUAGE = Locale.getDefault();
         final Integer language = preferences.getInt("language", -1);
 
         int i = 0;
         for (Locale value : LANGUAGE_CONFIG) {
-            if (i == language) {
+            if (i == language || (language == -1 && value.equals(LANGUAGE))) {
                 LANGUAGE = value;
                 BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", value, new UTF8Control());
             }
             i++;
         }
         if (Objects.isNull(BUNDLE)) {
+            LANGUAGE = Locale.US;
             BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", LANGUAGE, new UTF8Control());
         }
         for (Locale value : LANGUAGE_CONFIG) {
