@@ -111,6 +111,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.view_type"), Main.preferences.view));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.theme"), Main.preferences.theme));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.window_size"), Main.preferences.size));
+		column2.add(new RadioButtonPanel(gui, I18n.get("settings.mc_version"), Main.preferences.mcVersion));
 		column2.add(Box.createGlue());
 		return mainPanel;
 	}
@@ -331,11 +332,20 @@ class CheckboxPanel extends ThemedPanel {
 		super(gui);
 		this.preference = preference;
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-		descLabel = new ThemedLabel(gui, description) {
+		CheckboxPanel t = this;
+		descLabel = new ThemedLabel(gui, "<html>" + description + "</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
+			}
+			public Dimension getPreferredSize() {
+//				View view = (View) getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
+//				view.setSize(t.getWidth() - 2 * OptionsFrame.PADDING - 32, 0);
+//				float w = view.getPreferredSpan(View.X_AXIS);
+//				float h = view.getPreferredSpan(View.Y_AXIS);
+//				return new java.awt.Dimension((int) Math.ceil(w), super.getPreferredSize().height);
+				return new Dimension(t.getWidth() - 2 * OptionsFrame.PADDING - 32, super.getPreferredSize().height);
 			}
 		};
 		checkbox = new CustomCheckbox(preference.get()) {

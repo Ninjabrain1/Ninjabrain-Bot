@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.calculator.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
@@ -49,12 +50,16 @@ public class NinjabrainBotPreferences {
 	public MultipleChoicePreference stdToggleMode;
 	public MultipleChoicePreference view;
 	public MultipleChoicePreference language;
+	public MultipleChoicePreference mcVersion;
 
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
 	public static final String CHUNK = I18n.get("chunk");
 	public static final String BASIC = I18n.get("basic");
 	public static final String DETAILED = I18n.get("detailed");
+
+	public static final String PRE_119 = I18n.get("settings.mc_version.1");
+	public static final String POST_119 = I18n.get("settings.mc_version.2");
 
 	public NinjabrainBotPreferences() {
 		pref = Preferences.userNodeForPackage(Main.class);
@@ -276,6 +281,15 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
+			}
+		};
+		mcVersion = new MultipleChoicePreference("mc_version", PRE_119, new int[] { 0, 1 }, new String[] { PRE_119, POST_119 }, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> {
+					StrongholdConstants.updateStrongholdChunkCoord();
+					gui.recalculateStronghold();
+				});
 			}
 		};
 	}
