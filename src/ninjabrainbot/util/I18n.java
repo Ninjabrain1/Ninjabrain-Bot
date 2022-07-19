@@ -1,10 +1,7 @@
 package ninjabrainbot.util;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
-import ninjabrainbot.io.MultipleChoicePreference;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,7 +10,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.prefs.Preferences;
-import java.util.stream.Collectors;
 
 /**
  * @author LingMuQingYu
@@ -25,7 +21,7 @@ public class I18n {
 
     private static ResourceBundle BUNDLE = null;
 
-    private static Locale LANGUAGE = null;
+    private static Locale LANGUAGE;
 
     private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
 
@@ -70,8 +66,7 @@ public class I18n {
 
     public static class UTF8Control extends ResourceBundle.Control {
         @Override
-        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
-                throws IllegalAccessException, InstantiationException, IOException {
+        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
             // The below is a copy of the default implementation.
             String bundleName = toBundleName(baseName, locale);
             String resourceName = toResourceName(bundleName, "properties");
