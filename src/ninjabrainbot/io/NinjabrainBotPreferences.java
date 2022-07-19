@@ -1,6 +1,9 @@
 package ninjabrainbot.io;
 
+import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 
@@ -45,6 +48,7 @@ public class NinjabrainBotPreferences {
 	public MultipleChoicePreference size;
 	public MultipleChoicePreference stdToggleMode;
 	public MultipleChoicePreference view;
+	public MultipleChoicePreference language;
 
 	public static final String FOURFOUR = "(4, 4)";
 	public static final String EIGHTEIGHT = "(8, 8)";
@@ -254,6 +258,21 @@ public class NinjabrainBotPreferences {
 			}
 		};
 		view = new MultipleChoicePreference("view", BASIC, new int[] { 0, 1 }, new String[] { BASIC, DETAILED }, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
+			}
+		};
+		final List<String> languageNames = I18n.getLanguageNames();
+		final int[] languageIds = new int[languageNames.size()];
+		final String[] languageLabels = new String[languageNames.size()];
+		int i = 0;
+		for (String languageName : languageNames) {
+			languageIds[i] = i;
+			languageLabels[i] = languageName;
+			i++;
+		}
+		language = new MultipleChoicePreference("language", I18n.getDefaultName(), languageIds, languageLabels, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
