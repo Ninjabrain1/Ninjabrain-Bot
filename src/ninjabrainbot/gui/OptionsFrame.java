@@ -234,6 +234,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setOpaque(false);
 		ac2.setAlignmentX(0);
 		ac2.setLayout(new FlowLayout(FlowLayout.LEFT));
+		ac2.setBorder(new EmptyBorder(0, PADDING, PADDING, PADDING));
 		ac2.add(new RadioButtonPanel(gui, I18n.get("settings.language.hint"), Main.preferences.language));
 		return ac2;
 	}

@@ -279,9 +279,7 @@ public class NinjabrainBotPreferences {
 		}
 		language = new MultipleChoicePreference("language", I18n.getDefaultName(), languageIds, languageLabels, pref) {
 			@Override
-			public void onChangedByUser(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
-			}
+			public void onChangedByUser(GUI gui) {}
 		};
 		mcVersion = new MultipleChoicePreference("mc_version", PRE_119, new int[] { 0, 1 }, new String[] { PRE_119, POST_119 }, pref) {
 			@Override

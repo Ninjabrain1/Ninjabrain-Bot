@@ -49,7 +49,7 @@ public class I18n {
         for (Locale value : LANGUAGE_CONFIG) {
             LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
         }
-        System.out.println(LANGUAGE_NAMES);
+//        System.out.println(LANGUAGE_NAMES);
     }
 
     public static String getDefaultName() {
