@@ -1,6 +1,9 @@
 package ninjabrainbot.io;
 
+import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 
@@ -46,6 +49,7 @@ public class NinjabrainBotPreferences {
 	public MultipleChoicePreference size;
 	public MultipleChoicePreference stdToggleMode;
 	public MultipleChoicePreference view;
+	public MultipleChoicePreference language;
 	public MultipleChoicePreference mcVersion;
 
 	public static final String FOURFOUR = "(4, 4)";
@@ -53,7 +57,7 @@ public class NinjabrainBotPreferences {
 	public static final String CHUNK = I18n.get("chunk");
 	public static final String BASIC = I18n.get("basic");
 	public static final String DETAILED = I18n.get("detailed");
-	
+
 	public static final String PRE_119 = I18n.get("settings.mc_version.1");
 	public static final String POST_119 = I18n.get("settings.mc_version.2");
 
@@ -263,6 +267,19 @@ public class NinjabrainBotPreferences {
 			public void onChangedByUser(GUI gui) {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
+		};
+		final List<String> languageNames = I18n.getLanguageNames();
+		final int[] languageIds = new int[languageNames.size()];
+		final String[] languageLabels = new String[languageNames.size()];
+		int i = 0;
+		for (String languageName : languageNames) {
+			languageIds[i] = i;
+			languageLabels[i] = languageName;
+			i++;
+		}
+		language = new MultipleChoicePreference("language", I18n.getDefaultName(), languageIds, languageLabels, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {}
 		};
 		mcVersion = new MultipleChoicePreference("mc_version", PRE_119, new int[] { 0, 1 }, new String[] { PRE_119, POST_119 }, pref) {
 			@Override

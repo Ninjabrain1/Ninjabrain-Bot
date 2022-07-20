@@ -56,11 +56,11 @@ public class OptionsFrame extends ThemedFrame {
 	private TextboxPanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
 	private TextboxPanel overlayResetDelay;
-	
+
 	static int WINDOW_WIDTH = 560;
 	static int COLUMN_WIDTH = WINDOW_WIDTH/2;
 	static int PADDING = 6;
-	
+
 	private static final String TITLE_TEXT = I18n.get("settings");
 
 	public OptionsFrame(GUI gui) {
@@ -75,13 +75,14 @@ public class OptionsFrame extends ThemedFrame {
 		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), getHotkeyPanel());
 		tabbedPane.addTab(I18n.get("settings.overlay"), getOBSPanel());
-		
+		tabbedPane.addTab(I18n.get("settings.language"), getLanguagePanel());
+
 		// Title bar
 		exitButton = getExitButton();
 		titlebarPanel.addButton(exitButton);
 		titlebarPanel.setFocusable(true);
 	}
-	
+
 	private JPanel getBasicPanel() {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
@@ -95,7 +96,7 @@ public class OptionsFrame extends ThemedFrame {
 		mainPanel.add(column2);
 		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
-		
+
 		// Column 1
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.show_nether_coordinates"), Main.preferences.showNetherCoords));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.auto_reset"), Main.preferences.autoReset));
@@ -103,7 +104,7 @@ public class OptionsFrame extends ThemedFrame {
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.translucent_window"), Main.preferences.translucent));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.notify_when_a_new_version_is_available"), Main.preferences.checkForUpdates));
 		column1.add(Box.createGlue());
-		
+
 		// Column 2
 		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(gui, I18n.get("settings.display_stronghold_location_using"), Main.preferences.strongholdDisplayType));
@@ -114,7 +115,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(Box.createGlue());
 		return mainPanel;
 	}
-	
+
 	private JPanel getAdvancedPanel() {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
@@ -128,7 +129,7 @@ public class OptionsFrame extends ThemedFrame {
 		mainPanel.add(column2);
 		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
-		
+
 		// Left advanced column
 		sigma = new TextboxPanel(gui, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
 		column1.add(sigma);
@@ -165,7 +166,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setOpaque(false);
 		ac2.setLayout(new GridBagLayout());
 		ac2.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = GridBagConstraints.RELATIVE;
 		constraints.gridx = 0;
@@ -185,14 +186,14 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.add(Box.createGlue(), constraints);
 		return ac2;
 	}
-	
+
 
 	private JPanel getOBSPanel() {
 		JPanel ac2 = new JPanel();
 		ac2.setOpaque(false);
 		ac2.setLayout(new GridBagLayout());
 		ac2.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridy = GridBagConstraints.RELATIVE;
 		constraints.gridx = 0;
@@ -222,12 +223,22 @@ public class OptionsFrame extends ThemedFrame {
 		overlayResetDelay = new TextboxPanel(gui, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
 		overlayResetDelay.setEnabled(Main.preferences.overlayAutoHide.get());
 		ac2.add(overlayResetDelay, constraints);
-		
+
 		constraints.weighty = 1;
 		ac2.add(Box.createGlue(), constraints);
 		return ac2;
 	}
-	
+
+	private JPanel getLanguagePanel() {
+		JPanel ac2 = new JPanel();
+		ac2.setOpaque(false);
+		ac2.setAlignmentX(0);
+		ac2.setLayout(new FlowLayout(FlowLayout.LEFT));
+		ac2.setBorder(new EmptyBorder(0, PADDING, PADDING, PADDING));
+		ac2.add(new RadioButtonPanel(gui, I18n.get("settings.language.hint"), Main.preferences.language));
+		return ac2;
+	}
+
 	private void startCalibrating() {
 		calibrationPanel.startCalibrating();
 		tabbedPane.setVisible(false);
@@ -238,7 +249,7 @@ public class OptionsFrame extends ThemedFrame {
 			KeyboardListener.instance.cancelConsumer();
 		}
 	}
-	
+
 	public void stopCalibrating() {
 		tabbedPane.setVisible(true);
 		titlebarPanel.setVisible(true);
@@ -247,7 +258,7 @@ public class OptionsFrame extends ThemedFrame {
 		updateBounds(gui);
 		sigma.updateValue();
 	}
-	
+
 	public void updateBounds(GUI gui) {
 		WINDOW_WIDTH = gui.size.WIDTH * 7 / 4;
 		COLUMN_WIDTH = WINDOW_WIDTH/2;
@@ -283,7 +294,7 @@ public class OptionsFrame extends ThemedFrame {
 		button.addActionListener(p -> close());
 		return button;
 	}
-	
+
 	public void close() {
 		setVisible(false);
 		stopCalibrating();
@@ -295,29 +306,29 @@ public class OptionsFrame extends ThemedFrame {
 	public CalibrationPanel getCalibrationPanel() {
 		return calibrationPanel;
 	}
-	
+
 	public void setAltSigmaEnabled(boolean b) {
 		sigmaAlt.setEnabled(b);
 		sigmaAlt.descLabel.updateColors(gui);
 		sigmaAltHotkey.setEnabled(b);
 		sigmaAltHotkey.descLabel.updateColors(gui);
 	}
-	
+
 	public void setOverlayAutoHideEnabled(boolean b) {
 		overlayResetDelay.setEnabled(b);
 		overlayResetDelay.descLabel.updateColors(gui);
 	}
-	
+
 }
 
 class CheckboxPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
-	
+
 	JLabel descLabel;
 	CustomCheckbox checkbox;
 	BooleanPreference preference;
-	
+
 	public CheckboxPanel(GUI gui, String description, BooleanPreference preference) {
 		super(gui);
 		this.preference = preference;
@@ -350,17 +361,17 @@ class CheckboxPanel extends ThemedPanel {
 		add(descLabel, BorderLayout.CENTER);
 		setOpaque(false);
 	}
-	
+
 }
 
 class TextboxPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
-	
+
 	ThemedLabel descLabel;
 	DecimalTextField textfield;
 	FloatPreference preference;
-	
+
 	public TextboxPanel(GUI gui, String description, FloatPreference preference) {
 		super(gui);
 		this.preference = preference;
@@ -387,7 +398,7 @@ class TextboxPanel extends ThemedPanel {
 				preference.onChangedByUser(gui);
 			}
 		};
-		
+
 		Dimension size = textfield.getPreferredSize();
 		size.width = 60;
 		textfield.setPreferredSize(size);
@@ -396,27 +407,27 @@ class TextboxPanel extends ThemedPanel {
 		add(textfield);
 		setOpaque(false);
 	}
-	
+
 	public void updateValue() {
 		textfield.setValue((double) preference.get());
 	}
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		textfield.setEnabled(enabled);
 	}
-	
+
 }
 
 class RadioButtonPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
-	
+
 	JLabel descLabel;
 	RadioButtonGroup radioButtomGroup;
 	MultipleChoicePreference preference;
-	
+
 	public RadioButtonPanel(GUI gui, String description, MultipleChoicePreference preference) {
 		super(gui);
 		this.preference = preference;
@@ -442,18 +453,18 @@ class RadioButtonPanel extends ThemedPanel {
 		add(radioButtomGroup);
 		setOpaque(false);
 	}
-	
+
 }
 
 class HotkeyPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
-	
+
 	ThemedLabel descLabel;
 	FlatButton button;
 	HotkeyPreference preference;
 	boolean editing = false;
-	
+
 	public HotkeyPanel(GUI gui, String description, HotkeyPreference preference) {
 		super(gui);
 		this.preference = preference;
@@ -489,7 +500,7 @@ class HotkeyPanel extends ThemedPanel {
 		add(button);
 		setOpaque(false);
 	}
-	
+
 	private void clicked() {
 		if (!editing) {
 			editing = true;
@@ -512,7 +523,7 @@ class HotkeyPanel extends ThemedPanel {
 			});
 		}
 	}
-	
+
 	private String getKeyText() {
 		if (preference.getCode() == -1)
 			return I18n.get("settings.not_in_use");
@@ -526,12 +537,12 @@ class HotkeyPanel extends ThemedPanel {
 			return NativeKeyEvent.getModifiersText(preference.getModifier()) + "+" + k;
 		}
 	}
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		button.setEnabled(enabled);
 	}
-	
+
 }
 
