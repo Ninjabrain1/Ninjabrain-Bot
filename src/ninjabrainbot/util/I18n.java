@@ -1,15 +1,19 @@
 package ninjabrainbot.util;
 
-import ninjabrainbot.Main;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
+
+import ninjabrainbot.Main;
 
 /**
  * @author LingMuQingYu
@@ -17,48 +21,62 @@ import java.util.prefs.Preferences;
  */
 public class I18n {
 
-    private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
+	private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
 
-    private static ResourceBundle BUNDLE = null;
+	private static ResourceBundle BUNDLE = null;
 
-    private static Locale LANGUAGE;
+	private static Locale LANGUAGE;
 
-    private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
+	private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
 
-    static {
-        LANGUAGE_CONFIG.add(Locale.US);
-        LANGUAGE_CONFIG.add(Locale.KOREA);
-        LANGUAGE_CONFIG.add(Locale.SIMPLIFIED_CHINESE);
-        LANGUAGE_CONFIG.add(Locale.ITALY);
-        final Preferences preferences = Preferences.userNodeForPackage(Main.class);
-        LANGUAGE = Locale.getDefault();
-        final Integer language = preferences.getInt("language", -1);
+	static {
+		LANGUAGE_CONFIG.add(Locale.US);
+		LANGUAGE_CONFIG.add(Locale.KOREA);
+		LANGUAGE_CONFIG.add(Locale.SIMPLIFIED_CHINESE);
+		LANGUAGE_CONFIG.add(Locale.ITALY);
+		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
+		final Integer language = preferences.getInt("language", -1);
+		LANGUAGE = getLanguageFromID(language);
+		BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", LANGUAGE, new UTF8Control());
+		for (Locale value : LANGUAGE_CONFIG) {
+			LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
+		}
+	}
+	
+	private static Locale getLanguageFromID(int id) {
+		if (id == -1) {
+			Locale def = Locale.getDefault();
+			for (Locale value : LANGUAGE_CONFIG) {
+				if (value.equals(def)) {
+					return value;
+				}
+			}
+			return Locale.US;
+		}
+		return LANGUAGE_CONFIG.get(id);
+	}
 
-        int i = 0;
-        for (Locale value : LANGUAGE_CONFIG) {
-            if (i == language || (language == -1 && value.equals(LANGUAGE))) {
-                LANGUAGE = value;
-                BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", value, new UTF8Control());
-            }
-            i++;
-        }
-        if (Objects.isNull(BUNDLE)) {
-            LANGUAGE = Locale.US;
-            BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", LANGUAGE, new UTF8Control());
-        }
-        for (Locale value : LANGUAGE_CONFIG) {
-            LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
-        }
-//        System.out.println(LANGUAGE_NAMES);
+	public static String getDefaultName() {
+		return LANGUAGE_NAMES.get(LANGUAGE_CONFIG.indexOf(LANGUAGE));
+	}
+
+	public static String[] getLanguageNames() {
+		final String[] languageNames = new String[LANGUAGE_NAMES.size()];
+    	int i = 0;
+    	for (String languageName : LANGUAGE_NAMES) {
+    		languageNames[i] = languageName;
+    		i++;
+    	}
+        return languageNames;
     }
-
-    public static String getDefaultName() {
-        return LANGUAGE_NAMES.get(LANGUAGE_CONFIG.indexOf(LANGUAGE));
-    }
-
-    public static List<String> getLanguageNames() {
-        return LANGUAGE_NAMES;
-    }
+    
+	public static int[] getLanguageIDs() {
+		final int[] languageIds = new int[LANGUAGE_NAMES.size()];
+		for (int i = 0; i < languageIds.length; i++) {
+			languageIds[i] = i;
+		}
+		return languageIds;
+	}
 
     public static String get(String key, Object... args) {
         return String.format(BUNDLE.getString(key), args);

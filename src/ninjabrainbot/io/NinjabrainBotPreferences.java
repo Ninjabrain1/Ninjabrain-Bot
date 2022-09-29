@@ -1,9 +1,6 @@
 package ninjabrainbot.io;
 
-import java.util.List;
-import java.util.Map;
 import java.util.prefs.Preferences;
-import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 
@@ -268,16 +265,7 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.recalculateStronghold());
 			}
 		};
-		final List<String> languageNames = I18n.getLanguageNames();
-		final int[] languageIds = new int[languageNames.size()];
-		final String[] languageLabels = new String[languageNames.size()];
-		int i = 0;
-		for (String languageName : languageNames) {
-			languageIds[i] = i;
-			languageLabels[i] = languageName;
-			i++;
-		}
-		language = new MultipleChoicePreference("language", I18n.getDefaultName(), languageIds, languageLabels, pref) {
+		language = new MultipleChoicePreference("language", I18n.getDefaultName(), I18n.getLanguageIDs(), I18n.getLanguageNames(), pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {}
 		};
