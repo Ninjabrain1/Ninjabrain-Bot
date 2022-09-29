@@ -205,11 +205,18 @@ public class ThrowPanel extends ThemedPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (t != null && t.altStd) {
-			int a = 3;
-			int b = 2;
-			g.setColor(Color.RED);
-			g.fillRect(b, b, a, a);
+		if (t != null) {
+			if (t.manualInput) {
+				int a = 3;
+				int b = 2;
+				g.setColor(Color.CYAN);
+				g.fillRect(b, b, a, a);
+			} else if (t.altStd) {
+				int a = 3;
+				int b = 2;
+				g.setColor(Color.RED);
+				g.fillRect(b, b, a, a);
+			}
 		}
 	}
 	

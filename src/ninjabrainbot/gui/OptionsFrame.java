@@ -143,6 +143,7 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
 		column1.add(calibrateButton);
+		column1.add(new TextboxPanel(gui, I18n.get("settings.standard_deviation_manual"), Main.preferences.sigmaManual));
 		column1.add(new CheckboxPanel(gui, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
 		sigmaAlt = new TextboxPanel(gui, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
 		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());

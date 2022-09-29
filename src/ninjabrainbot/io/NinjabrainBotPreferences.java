@@ -26,6 +26,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyLock;
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
+	public FloatPreference sigmaManual;
 	public FloatPreference crosshairCorrection;
 	public FloatPreference overlayHideDelay;
 	public BooleanPreference checkForUpdates;
@@ -137,6 +138,13 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigmaAlt(get());
+				gui.recalculateStronghold();
+			}
+		};
+		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, pref) {
+			@Override
+			public void onChangedByUser(GUI gui) {
+				gui.getTriangulator().setSigmaManual(get());
 				gui.recalculateStronghold();
 			}
 		};

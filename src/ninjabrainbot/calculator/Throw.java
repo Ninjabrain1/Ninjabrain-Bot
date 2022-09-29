@@ -9,7 +9,7 @@ public class Throw implements Ray {
 
 	// correction is how much the angle has been corrected, only used for display purposes (the correction has already been added to alpha)
 	public final double x, z, alpha, beta, correction;
-	public final boolean altStd;
+	public final boolean manualInput, altStd;
 
 	private final boolean nether;
 	
@@ -18,6 +18,10 @@ public class Throw implements Ray {
 	}
 	
 	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd, boolean nether) {
+		this(x, z, alpha, beta, correction, altStd, nether, false);
+	}
+	
+	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd, boolean nether, boolean manualInput) {
 		this.x = x;
 		this.z = z;
 		this.correction = correction;
@@ -31,6 +35,7 @@ public class Throw implements Ray {
 		this.beta = beta;
 		this.altStd = altStd;
 		this.nether = nether;
+		this.manualInput = manualInput;
 	}
 	
 	@Override
@@ -45,7 +50,7 @@ public class Throw implements Ray {
 	public static Throw parseF3C(String string) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") ||
 				string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
-			return null;
+			return parseF3COneTwelve(string);
 		}
 		String[] substrings = string.split(" ");
 		if (substrings.length != 11)
@@ -63,6 +68,21 @@ public class Throw implements Ray {
 		}
 	}
 	
+	private static Throw parseF3COneTwelve(String string) {
+		String[] substrings = string.split(" ");
+		if (substrings.length != 3)
+			return null;
+		try {
+			double x = Double.parseDouble(substrings[0]) + 0.5; // Add 0.5 because block coords should be used
+			double z = Double.parseDouble(substrings[1]) + 0.5; // Add 0.5 because block coords should be used
+			double alpha = Double.parseDouble(substrings[2]);
+			alpha += Main.preferences.crosshairCorrection.get();
+			return new Throw(x, z, alpha, -31, 0, false, false, true);
+		} catch (NullPointerException | NumberFormatException e) {
+			return null;
+		}
+	}
+	
 	/**
 	 * Returns the squared distance between this throw and the given throw.
 	 */
@@ -73,7 +93,7 @@ public class Throw implements Ray {
 	}
 	
 	public Throw withToggledSTD() {
-		return new Throw(x, z, alpha, beta, correction, !this.altStd, this.nether);
+		return new Throw(x, z, alpha, beta, correction, !this.altStd, this.nether, this.manualInput);
 	}
 	
 	public boolean lookingBelowHorizon() {

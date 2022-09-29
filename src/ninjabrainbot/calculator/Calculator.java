@@ -11,12 +11,13 @@ public class Calculator {
 
 	double sigma;
 	double sigmaAlt;
+	double sigmaManual;
 	// Used only for pixel correction
 	int yRes = 1080;
 	int fov = 30;
 
 	public Calculator() {
-		this(Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get());
+		this(Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get(), Main.preferences.sigmaManual.get());
 	}
 
 	public Calculator(double sigma) {
@@ -24,8 +25,13 @@ public class Calculator {
 	}
 	
 	public Calculator(double sigma, double sigmaAlt) {
+		this(sigma, sigmaAlt, 0.03);
+	}
+	
+	public Calculator(double sigma, double sigmaAlt, double sigmaManual) {
 		this.sigma = sigma;
 		this.sigmaAlt = sigmaAlt;
+		this.sigmaManual = sigmaManual;
 	}
 
 	public void setSigma(double sigma) {
@@ -35,13 +41,17 @@ public class Calculator {
 	public void setSigmaAlt(double sigmaAlt) {
 		this.sigmaAlt = sigmaAlt;
 	}
+	
+	public void setSigmaManual(double sigmaManual) {
+		this.sigmaManual = sigmaManual;
+	}
 
 	public CalculatorResult triangulate(ArrayList<Throw> eyeThrows, DivineContext divineContext, Throw playerPos) {
 		if (eyeThrows.size() == 0)
 			return new CalculatorResult();
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, sigmaManual, eyeThrows, divineContext);
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
 		return new CalculatorResult(posterior, eyeThrows, playerPos);
 	}
@@ -49,7 +59,7 @@ public class Calculator {
 	public Posterior getPosterior(ArrayList<Throw> eyeThrows, DivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(sigma, sigmaAlt, eyeThrows, divineContext);
+		Posterior posterior = new Posterior(sigma, sigmaAlt, sigmaManual, eyeThrows, divineContext);
 		return posterior;
 	}
 	

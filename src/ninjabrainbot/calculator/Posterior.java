@@ -13,15 +13,16 @@ public class Posterior {
 	
 	IPrior prior;
 	ArrayList<Chunk> chunks;
-	double sigma, sigmaAlt;
+	double sigma, sigmaAlt, sigmaManual;
 	
-	public Posterior(double sigma, double sigmaAlt, List<Throw> eyeThrows, DivineContext divineContext) {
+	public Posterior(double sigma, double sigmaAlt, double sigmaManual, List<Throw> eyeThrows, DivineContext divineContext) {
 		Profiler.clear();
 		Profiler.start("Calculate posterior");
 		this.sigma = sigma;
 		this.sigmaAlt = sigmaAlt;
+		this.sigmaManual = sigmaManual;
 		Profiler.start("Calculate prior");
-		double sigma0 = eyeThrows.get(0).altStd ? sigmaAlt : sigma;
+		double sigma0 = getSTD(eyeThrows.get(0));
 		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext);
 		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
@@ -48,6 +49,12 @@ public class Posterior {
 			closestStrongholdCondition(eyeThrows.get(0), 0.001);
 		Profiler.stop();
 		Profiler.print();
+	}
+	
+	private double getSTD(Throw t) {
+		if (t.manualInput)
+			return sigmaManual;
+		return t.altStd ? sigmaAlt : sigma;
 	}
 	
 	public void condition(Throw t) {
@@ -104,7 +111,7 @@ public class Posterior {
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		double delta = Math.abs((gamma - t.alpha) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
-		double s = t.altStd ? sigmaAlt : sigma;
+		double s = getSTD(t);
 		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
 	}
 	
