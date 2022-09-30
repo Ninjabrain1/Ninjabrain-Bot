@@ -58,7 +58,7 @@ public class Chunk {
 		}
 		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord() - playerX;
 		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord() - playerZ;
-		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
+		return (int) (Math.sqrt(deltax * deltax + deltaz * deltaz) / (t.isNether() ? 8.0 : 1.0));
 	}
 	
 	public double[] getAngleErrors(List<Throw> eyeThrows) {
