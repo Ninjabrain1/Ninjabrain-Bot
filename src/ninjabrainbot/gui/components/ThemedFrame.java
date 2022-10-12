@@ -16,7 +16,7 @@ public class ThemedFrame extends JFrame implements IDisposable {
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
-	protected SubscriptionHandler sh;
+	protected SubscriptionHandler sh = new SubscriptionHandler();
 	
 	public ThemedFrame(GUI gui, String title) {
 		super(title);

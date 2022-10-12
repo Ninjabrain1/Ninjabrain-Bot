@@ -82,11 +82,7 @@ public class Calibrator implements IDisposable {
 		int i = eyeThrows.size() - 1;
 		if (i == -1)
 			return;
-		IThrow last = eyeThrows.get(i);
-//		IThrow t = new Throw(last.x(), last.z(), last.alpha() + delta, 0, last.correction() + delta, false);
-//		eyeThrows.remove(last);
-//		eyeThrows.add(t);
-		// TODO
+		eyeThrows.get(i).addCorrection(delta);
 	}
 	
 	private double distanceFromIntendedPosition(IThrow t) {

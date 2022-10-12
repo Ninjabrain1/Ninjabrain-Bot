@@ -6,7 +6,7 @@ public class Subscription {
 	
 	private Runnable unsubscribe;
 	
-	public <T> Subscription(ISubscribable<T> subscribable, Consumer<T> subscriber){
+	public <T> Subscription(IUnsubscribable<T> subscribable, Consumer<T> subscriber){
 		unsubscribe = () -> subscribable.unsubscribe(subscriber);
 	}
 	

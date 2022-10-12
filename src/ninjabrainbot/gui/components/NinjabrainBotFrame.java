@@ -44,7 +44,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 		createTitleBar(gui);
 		createComponents(gui, dataState, dataStateHandler);
-		setupSubscriptions(gui);
+		setupSubscriptions(gui, dataState);
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		return settingsButton;
 	}
 	
-	private void setupSubscriptions(GUI gui) {
+	private void setupSubscriptions(GUI gui, IDataState dataState) {
 		// Settings
 		sh.add(Main.preferences.translucent.whenModified().subscribe(b -> setTranslucent(b)));
 		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
@@ -69,6 +69,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		// Components bounds changed
 		sh.add(mainTextArea.whenSizeModified.subscribe(__ -> updateBounds(gui)));
 		sh.add(enderEyePanel.whenSizeModified.subscribe(__ -> updateBounds(gui)));
+		sh.add(dataState.whenLockedChanged().subscribe(b -> lockIcon.setVisible(b)));
 	}
 
 	private void createTitleBar(GUI gui) {
@@ -99,7 +100,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void createComponents(GUI gui, IDataState dataState, IDataStateHandler dataHandler) {
 		// Main text
-		mainTextArea = new MainTextArea(gui);
+		mainTextArea = new MainTextArea(gui, dataState);
 		add(mainTextArea);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(gui, dataState, dataHandler);

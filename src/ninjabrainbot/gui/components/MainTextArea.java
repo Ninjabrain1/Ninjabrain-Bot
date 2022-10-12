@@ -18,8 +18,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.CalculatorResult;
 import ninjabrainbot.calculator.ChunkPrediction;
+import ninjabrainbot.calculator.ICalculatorResult;
+import ninjabrainbot.calculator.IDataState;
 import ninjabrainbot.calculator.blind.BlindResult;
 import ninjabrainbot.calculator.divine.DivineResult;
 import ninjabrainbot.calculator.stronghold.Ring;
@@ -39,6 +40,8 @@ public class MainTextArea extends ResizablePanel {
 
 	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET";
 
+	GUI gui;
+	
 	BasicTriangulationPanel basicTriangulation;
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
@@ -47,7 +50,8 @@ public class MainTextArea extends ResizablePanel {
 	boolean idle;
 	CardLayout layout;
 
-	public MainTextArea(GUI gui) {
+	public MainTextArea(GUI gui, IDataState dataState) {
+		this.gui = gui;
 		layout = new CardLayout();
 		idle = true;
 		setLayout(layout);
@@ -62,16 +66,18 @@ public class MainTextArea extends ResizablePanel {
 		add(divine, DIVINE);
 		setOpaque(false);
 		layout.show(this, Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
-		setupSubscriptions();
+		setupSubscriptions(dataState);
 	}
 	
-	private void setupSubscriptions() {
+	private void setupSubscriptions(IDataState dataState) {
 		// Settings
 		sh.add(Main.preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
 		sh.add(Main.preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
+		// Data state
+		sh.add(dataState.whenCalculatorResultChanged().subscribe(result -> setResult(result)));
 	}
 
-	private void setResult(CalculatorResult result, GUI gui) {
+	private void setResult(ICalculatorResult result) {
 		if (result == null && blind.isVisible()) {
 			return;
 		}
@@ -93,14 +99,14 @@ public class MainTextArea extends ResizablePanel {
 		idle = result == null;
 	}
 
-	private void setResult(BlindResult result, GUI gui) {
+	private void setResult(BlindResult result) {
 		blind.setResult(result);
 		blind.updateColors(gui);
 		layout.show(this, BLIND);
 		idle = false;
 	}
 
-	private void setResult(DivineResult result, GUI gui) {
+	private void setResult(DivineResult result) {
 		divine.setResult(result);
 		divine.updateColors(gui);
 		layout.show(this, DIVINE);
@@ -186,7 +192,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 	}
 
-	public void setResult(CalculatorResult result) {
+	public void setResult(ICalculatorResult result) {
 		if (result != null) {
 			if (result.success()) {
 				ChunkPrediction prediction = result.getBestPrediction();
@@ -279,7 +285,7 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 		}
 	}
 
-	public void setResult(CalculatorResult result) {
+	public void setResult(ICalculatorResult result) {
 		header.updateHeaderText();
 		if (result == null) {
 			for (ChunkPanel p : panels) {

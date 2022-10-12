@@ -15,5 +15,12 @@ public class ThrowSet extends ModifiableSet<IThrow> implements IThrowSet {
 			return super.add(t);
 		return false;
 	}
+	
+	@Override
+	public boolean insert(IThrow t, int index) {
+		if (size() < maxCapacity())
+			return super.insert(t, index);
+		return false;
+	}
 
 }

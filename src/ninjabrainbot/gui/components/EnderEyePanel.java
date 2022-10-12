@@ -3,13 +3,10 @@ package ninjabrainbot.gui.components;
 import javax.swing.BoxLayout;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.IThrowSet;
-import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.TextAnimator;
-import ninjabrainbot.util.ISet;
 
 public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
@@ -33,13 +30,12 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		add(divineContextPanel);
 		throwPanels = new ThrowPanel[throwSet.maxCapacity()];
 		for (int i = 0; i < throwSet.maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(gui, throwSet);
+			throwPanels[i] = new ThrowPanel(gui, throwSet, i);
 			add(throwPanels[i]);
 		}
 		textAnimator = new TextAnimator(gui, 200);
 		// Subscriptions
 		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
-		sh.add(throwSet.whenModified().subscribe(ts -> setThrows(ts)));
 	}
 	
 	private void setAngleErrorsEnabled(boolean b) {
@@ -50,11 +46,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		whenSizeModified.notifySubscribers(this);
 	}
 
-	private void setThrow(int i, Throw t) {
-		throwPanels[i].setThrow(t);
-		textAnimator.setJThrowPanel(throwPanels[i]);
-	}
-
 	private void setErrors(double[] errors) {
 		for (int i = 0; i < throwPanels.length; i++) {
 			ThrowPanel throwPanel = throwPanels[i];
@@ -62,13 +53,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 				throwPanel.setError(errors[i]);
 			else
 				throwPanel.setError("");
-		}
-	}
-
-	private void setThrows(ISet<IThrow> throwSet) {
-		for (int i = 0; i < throwPanels.length; i++) {
-			ThrowPanel throwPanel = throwPanels[i];
-			throwPanel.setThrow(i < throwSet.size() ? throwSet.get(i) : null);
 		}
 	}
 
@@ -84,6 +68,14 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	@Override
 	public void updateColors(GUI gui) {
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		for (ThrowPanel p : throwPanels) {
+			p.dispose();
+		}
 	}
 	
 }

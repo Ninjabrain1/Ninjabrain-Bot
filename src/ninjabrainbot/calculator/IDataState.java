@@ -1,6 +1,7 @@
 package ninjabrainbot.calculator;
 
 import ninjabrainbot.calculator.blind.BlindResult;
+import ninjabrainbot.calculator.divine.DivineResult;
 import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.util.IObservable;
 
@@ -13,6 +14,8 @@ public interface IDataState {
 	public IObservable<ICalculatorResult> whenCalculatorResultChanged();
 
 	public IObservable<BlindResult> whenBlindResultChanged();
+	
+	public IObservable<DivineResult> whenDivineResultChanged();
 
 	public IObservable<Boolean> whenLockedChanged();
 

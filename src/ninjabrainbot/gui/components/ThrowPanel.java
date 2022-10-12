@@ -16,11 +16,13 @@ import ninjabrainbot.calculator.IThrowSet;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.Subscription;
 
 /**
  * JComponent for showing a Throw.
  */
-public class ThrowPanel extends ThemedPanel {
+public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 	
@@ -35,8 +37,10 @@ public class ThrowPanel extends ThemedPanel {
 	private boolean errorsEnabled;
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
+	
+	Subscription throwSetSubscription;
 
-	public ThrowPanel(GUI gui, IThrowSet throwSet) {
+	public ThrowPanel(GUI gui, IThrowSet throwSet, int index) {
 		super(gui);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
@@ -65,6 +69,7 @@ public class ThrowPanel extends ThemedPanel {
 		setLayout(null);
 		setThrow(t);
 		removeButton.addActionListener(p -> throwSet.remove(this.t));
+		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribe(t -> setThrow(t), index);
 	}
 	
 	protected void setAngleErrorsEnabled(boolean e) {
@@ -234,5 +239,9 @@ public class ThrowPanel extends ThemedPanel {
 		return theme.TEXT_COLOR_NEUTRAL;
 	}
 
+	@Override
+	public void dispose() {
+		throwSetSubscription.cancel();
+	}
 	
 }

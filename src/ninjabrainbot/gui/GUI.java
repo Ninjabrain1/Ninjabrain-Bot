@@ -3,12 +3,9 @@ package ninjabrainbot.gui;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -16,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -24,27 +20,17 @@ import javax.swing.Timer;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Calculator;
-import ninjabrainbot.calculator.CalculatorResult;
 import ninjabrainbot.calculator.DataState;
+import ninjabrainbot.calculator.DataStateHandler;
 import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.StandardStdProfile;
-import ninjabrainbot.calculator.Throw;
-import ninjabrainbot.calculator.blind.BlindResult;
-import ninjabrainbot.calculator.divine.DivineContext;
-import ninjabrainbot.calculator.divine.DivineResult;
-import ninjabrainbot.calculator.divine.Fossil;
-import ninjabrainbot.gui.components.CalibrationPanel;
-import ninjabrainbot.gui.components.EnderEyePanel;
-import ninjabrainbot.gui.components.MainButtonPanel;
-import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
-import ninjabrainbot.io.NinjabrainBotPreferences;
-import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
@@ -73,6 +59,7 @@ public class GUI {
 	public final File OBS_OVERLAY;
 	
 	private final IDataState dataState;
+	private final IDataStateHandler dataStateHandler;
 
 	public GUI() {
 		ClipboardReader clipboardReader = new ClipboardReader();
@@ -83,7 +70,7 @@ public class GUI {
 		setupHotkeys();
 		setupSettingsSubscriptions();
 		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), new StandardStdProfile());
-		
+		dataStateHandler = new DataStateHandler();
 		
 		// OLD
 		theme = Theme.get(Main.preferences.theme.get());
@@ -93,7 +80,7 @@ public class GUI {
 		themedComponents = new ArrayList<>();
 
 		Profiler.start("Create frame");
-		frame = new NinjabrainBotFrame(this);
+		frame = new NinjabrainBotFrame(this, dataState, dataStateHandler);
 
 		OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
@@ -206,13 +193,13 @@ public class GUI {
 		}
 	}
 
-	public void updateTheme() {
+	private void updateTheme() {
 		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
 		updateOBSOverlay();
 	}
 
-	public void updateSizePreference() {
+	private void updateSizePreference() {
 		size = SizePreference.get(Main.preferences.size.get());
 		updateFontsAndColors();
 		updateBounds();
@@ -256,30 +243,30 @@ public class GUI {
 	}
 
 	private void updateBounds() {
-		for (ThemedComponent tc : themedComponents) {
-			tc.updateSize(this);
-		}
-		updateFontsAndColors();
-		frame.updateBounds(this);
-		optionsFrame.updateBounds(this);
-		notificationsFrame.updateBounds(this);
-		int extraWidth = Main.preferences.showAngleUpdates.get()
-				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
-		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
-		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
-				size.WINDOW_ROUNDING));
+//		for (ThemedComponent tc : themedComponents) {
+//			tc.updateSize(this);
+//		}
+//		updateFontsAndColors();
+//		frame.updateBounds(this);
+//		optionsFrame.updateBounds(this);
+//		notificationsFrame.updateBounds(this);
+//		int extraWidth = Main.preferences.showAngleUpdates.get()
+//				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+//		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
+//		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
+//				size.WINDOW_ROUNDING));
 	}
 
 	private void updateFontsAndColors() {
-		// Color and font
-		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
-		frame.setBackground(theme.COLOR_NEUTRAL);
-		optionsFrame.updateFontsAndColors();
-		notificationsFrame.updateFontsAndColors();
-		for (ThemedComponent tc : themedComponents) {
-			tc.updateColors(this);
-			tc.updateSize(this);
-		}
+//		// Color and font
+//		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
+//		frame.setBackground(theme.COLOR_NEUTRAL);
+//		optionsFrame.updateFontsAndColors();
+//		notificationsFrame.updateFontsAndColors();
+//		for (ThemedComponent tc : themedComponents) {
+//			tc.updateColors(this);
+//			tc.updateSize(this);
+//		}
 	}
 
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);
@@ -298,48 +285,6 @@ public class GUI {
 		}
 	}
 
-	private void removeThrow(Throw t) {
-		dataState.getThrowSet().remove(t);
-	}
-
-	private void setTargetLocked(boolean locked) {
-		targetLocked = locked;
-		frame.setLocked(locked);
-		if (!locked && Main.preferences.autoReset.get()) {
-			autoResetTimer.restart();
-		}
-	}
-
-	private void onThrowsUpdated() {
-		if (eyeThrows.size() == 0 && divineContext != null) {
-			DivineResult result = calculator.divine();
-			mainTextArea.setResult(result, this);
-			enderEyePanel.setErrors(null);
-		} else {
-			CalculatorResult result = null;
-			double[] errors = null;
-			if (eyeThrows.size() >= 1) {
-				System.out.println(playerPos);
-				result = calculator.triangulate(eyeThrows);
-				if (result.success()) {
-					errors = result.getAngleErrors();
-				}
-			}
-			mainTextArea.setResult(result, this);
-			enderEyePanel.setErrors(errors);
-		}
-		// Update throw panels
-		enderEyePanel.setThrows(eyeThrows, divineContext);
-		// Update auto reset timer
-		if (Main.preferences.autoReset.get()) {
-			autoResetTimer.restart();
-		}
-		// Update bounds
-		updateBounds();
-		// Update overlay
-		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-	}
-
 	private void checkIfOffScreen(JFrame frame) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		for (GraphicsDevice gd : ge.getScreenDevices()) {
@@ -351,45 +296,45 @@ public class GUI {
 	}
 
 	private void updateOBSOverlay() {
-		long time = System.currentTimeMillis();
-		if (time - lastOverlayUpdate < minOverlayUpdateDelayMillis) {
-			overlayUpdateTimer.setInitialDelay((int) (10 + minOverlayUpdateDelayMillis - (time - lastOverlayUpdate)));
-			overlayUpdateTimer.restart();
-			return;
-		}
-		lastOverlayUpdate = time;
-		if (Main.preferences.useOverlay.get()) {
-			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && targetLocked;
-			if (!mainTextArea.isIdle() && !hideBecauseLocked) {
-				frame.paint(img.createGraphics());
-				if (Main.preferences.overlayAutoHide.get()) {
-					overlayHideTimer.setInitialDelay((int) (Main.preferences.overlayHideDelay.get() * 1000f));
-					overlayHideTimer.restart();
-				} else {
-					overlayHideTimer.stop();
-				}
-			}
-			try {
-				ImageIO.write(img, "png", OBS_OVERLAY);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		long time = System.currentTimeMillis();
+//		if (time - lastOverlayUpdate < minOverlayUpdateDelayMillis) {
+//			overlayUpdateTimer.setInitialDelay((int) (10 + minOverlayUpdateDelayMillis - (time - lastOverlayUpdate)));
+//			overlayUpdateTimer.restart();
+//			return;
+//		}
+//		lastOverlayUpdate = time;
+//		if (Main.preferences.useOverlay.get()) {
+//			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+//			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && targetLocked;
+//			if (!mainTextArea.isIdle() && !hideBecauseLocked) {
+//				frame.paint(img.createGraphics());
+//				if (Main.preferences.overlayAutoHide.get()) {
+//					overlayHideTimer.setInitialDelay((int) (Main.preferences.overlayHideDelay.get() * 1000f));
+//					overlayHideTimer.restart();
+//				} else {
+//					overlayHideTimer.stop();
+//				}
+//			}
+//			try {
+//				ImageIO.write(img, "png", OBS_OVERLAY);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	private void clearOBSOverlay() {
-		if (Main.preferences.useOverlay.get()) {
-			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			try {
-				ImageIO.write(img, "png", OBS_OVERLAY);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (Main.preferences.overlayAutoHide.get()) {
-				overlayHideTimer.stop();
-			}
-		}
+//		if (Main.preferences.useOverlay.get()) {
+//			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+//			try {
+//				ImageIO.write(img, "png", OBS_OVERLAY);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			if (Main.preferences.overlayAutoHide.get()) {
+//				overlayHideTimer.stop();
+//			}
+//		}
 	}
 
 	private void setOverlayEnabled(boolean b) {

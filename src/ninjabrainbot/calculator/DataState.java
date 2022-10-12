@@ -4,6 +4,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.blind.BlindPosition;
 import ninjabrainbot.calculator.blind.BlindResult;
 import ninjabrainbot.calculator.divine.DivineContext;
+import ninjabrainbot.calculator.divine.DivineResult;
 import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.IObservable;
@@ -22,6 +23,7 @@ public class DataState implements IDataState, IDisposable {
 	private ObservableField<IThrow> playerPos;
 	private ObservableField<ICalculatorResult> calculatorResult;
 	private ObservableField<BlindResult> blindResult;
+	private ObservableField<DivineResult> divineResult;
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
@@ -63,14 +65,24 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
+	public IObservable<DivineResult> whenDivineResultChanged() {
+		return divineResult;
+	}
+
+	@Override
+	public IObservable<Boolean> whenLockedChanged() {
+		return locked;
+	}
+
+	@Override
 	public void reset() {
 		throwSet.clear();
 		divineContext.clear();
 	}
-	
+
 	@Override
 	public void toggleLocked() {
-		setTargetLocked(!locked.get());
+		locked.set(!locked.get());
 	}
 
 	@Override
@@ -101,7 +113,7 @@ public class DataState implements IDataState, IDisposable {
 		if (t.lookingBelowHorizon() || !throwSet.add(t))
 			setPlayerPos(t);
 	}
-	
+
 	private void setPlayerPos(IThrow t) {
 		if (throwSet.size() > 0) {
 			playerPos.set(t);

@@ -14,4 +14,9 @@ public class CalibratorStdProfile extends Unmodifiable<IStdProfile> implements I
 		return 1;
 	}
 
+	@Override
+	public int getInitialProfileNumber(IThrow t) {
+		return 0;
+	}
+
 }
