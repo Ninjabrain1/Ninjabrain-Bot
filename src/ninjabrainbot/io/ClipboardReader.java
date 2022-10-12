@@ -6,27 +6,42 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.calculator.IThrow;
+import ninjabrainbot.calculator.Throw;
+import ninjabrainbot.calculator.Throw1_12;
+import ninjabrainbot.calculator.divine.Fossil;
+import ninjabrainbot.util.ISubscribable;
+import ninjabrainbot.util.ObservableProperty;
 
 public class ClipboardReader implements Runnable {
-	
-	GUI gui;
+
 	Clipboard clipboard;
 	String lastClipboardString;
-	
+
 	private AtomicBoolean forceReadLater;
-	
-	public ClipboardReader(GUI gui) {
-		this.gui = gui;
+
+	private ObservableProperty<IThrow> whenNewThrowInputed;
+	private ObservableProperty<Fossil> whenNewFossilInputed;
+
+	public ClipboardReader() {
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
+		whenNewThrowInputed = new ObservableProperty<IThrow>();
 	}
-	
+
 	public void forceRead() {
 		forceReadLater.set(true);
 	}
-	
+
+	public ISubscribable<IThrow> whenNewThrowInputed() {
+		return whenNewThrowInputed;
+	}
+
+	public ISubscribable<Fossil> whenNewFossilInputed() {
+		return whenNewFossilInputed;
+	}
+
 	@Override
 	public void run() {
 		while (true) {
@@ -44,7 +59,7 @@ public class ClipboardReader implements Runnable {
 				try {
 					String clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
 					if (!lastClipboardString.equals(clipboardString)) {
-						gui.onClipboardUpdated(clipboardString);
+						onClipboardUpdated(clipboardString);
 						lastClipboardString = clipboardString;
 					}
 				} catch (Exception e) {
@@ -56,6 +71,23 @@ public class ClipboardReader implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void onClipboardUpdated(String clipboard) {
+		IThrow t = Throw.parseF3C(clipboard);
+		if (t != null) {
+			whenNewThrowInputed.notifySubscribers(t);
+			return;
+		}
+		t = Throw1_12.parseF3C(clipboard);
+		if (t != null) {
+			whenNewThrowInputed.notifySubscribers(t);
+			return;
+		}
+		Fossil f = Fossil.parseF3I(clipboard);
+		if (f != null) {
+			whenNewFossilInputed.notifySubscribers(f);
 		}
 	}
 

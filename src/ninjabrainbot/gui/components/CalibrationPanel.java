@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Calibrator;
+import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.Throw;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Histogram;
@@ -28,6 +28,7 @@ import ninjabrainbot.gui.OptionsFrame;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.ISet;
 
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
@@ -222,14 +223,14 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			std.setText(String.format("%.3f", calibrator.getSTD()));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors();
-			List<Throw> eyeThrows = calibrator.getThrows();
+			ISet<IThrow> eyeThrows = calibrator.getThrows();
 			for (int i = 0; i < angleErrors.length; i++) {
-				Throw t = eyeThrows.get(i);
+				IThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
-				if (Math.abs(t.correction) > 1e-7) {
-					b.append(String.format(I18n.get("angle") + (t.correction < 0 ? ": %.2f %.2f\n" : ": %.2f +%.2f\n"), t.alpha - t.correction, t.correction));
+				if (Math.abs(t.correction()) > 1e-7) {
+					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.2f %.2f\n" : ": %.2f +%.2f\n"), t.alpha() - t.correction(), t.correction()));
 				} else {
-					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.alpha));
+					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.alpha()));
 				}
 				b.append(String.format(I18n.get("error") + ": %.3f\n", e));
 			}
@@ -237,12 +238,12 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			hist.setData(angleErrors);
 		} else {
 			StringBuilder b = new StringBuilder();
-			List<Throw> eyeThrows = calibrator.getThrows();
-			for (Throw t : eyeThrows) {
-				if (Math.abs(t.correction) > 1e-7) {
-					b.append(String.format(t.correction < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha - t.correction, t.correction));
+			ISet<IThrow>  eyeThrows = calibrator.getThrows();
+			for (IThrow t : eyeThrows) {
+				if (Math.abs(t.correction()) > 1e-7) {
+					b.append(String.format(t.correction() < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha() - t.correction(), t.correction()));
 				} else {
-					b.append(String.format("Angle: %.2f\n", t.alpha));
+					b.append(String.format("Angle: %.2f\n", t.alpha()));
 				}
 			}
 			errors.area.setText(b.toString());

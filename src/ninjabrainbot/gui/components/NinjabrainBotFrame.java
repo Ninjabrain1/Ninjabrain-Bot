@@ -1,66 +1,50 @@
 package ninjabrainbot.gui.components;
 
 import java.awt.Color;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsDevice.WindowTranslucency;
+import java.awt.GraphicsEnvironment;
 import java.net.URL;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.NotificationsFrame;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
-import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.IDisposable;
 
-public class NinjabrainBotFrame extends ThemedFrame {
+public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private static final long serialVersionUID = -8033268694989543737L;
 	
 	private JLabel versiontextLabel;
 	private NotificationsButton notificationsButton;
+	private JButton settingsButton;
 	private JLabel lockIcon;
 
+	private MainTextArea mainTextArea;
+	private EnderEyePanel enderEyePanel;
+	
 	public static final String TITLE_TEXT = I18n.get("title");
 	public static final String VERSION_TEXT =  "v" + Main.VERSION;
-
-	public NinjabrainBotFrame(GUI gui) {
+	
+	public NinjabrainBotFrame(GUI gui, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(gui, TITLE_TEXT);
 		setLocation(Main.preferences.windowX.get(), Main.preferences.windowY.get()); // Set window position
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		// Create title bar
-		versiontextLabel = new ThemedLabel(gui, VERSION_TEXT) {
-			private static final long serialVersionUID = 7210941876032010219L;
-			@Override
-			public int getTextSize(SizePreference p) {
-				return p.TEXT_SIZE_TITLE_SMALL;
-			}
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.TEXT_COLOR_WEAK;
-			}
-		};
-		lockIcon = new ThemedIcon(gui, new ImageIcon(Main.class.getResource("/resources/lock_icon.png")));
-		lockIcon.setVisible(false);
-		titlebarPanel.add(versiontextLabel);
-		titlebarPanel.add(lockIcon);
-		titlebarPanel.addButton(getExitButton(gui));
-		titlebarPanel.addButton(getMinimizeButton(gui));
-		titlebarPanel.addButton(getSettingsButton(gui));
-		notificationsButton = new NotificationsButton(gui);
-		titlebarPanel.addButton(notificationsButton);
-		// Shutdown hook
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				Main.preferences.windowX.set(getX());
-				Main.preferences.windowY.set(getY());
-				gui.clearOBSOverlay();
-			}
-		});
+		setTranslucent(Main.preferences.translucent.get());
+
+		createTitleBar(gui);
+		createComponents(gui, dataState, dataStateHandler);
+		setupSubscriptions(gui);
 	}
 	
 	@Override
@@ -73,7 +57,59 @@ public class NinjabrainBotFrame extends ThemedFrame {
 		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - gui.size.TEXT_SIZE_TITLE_SMALL)/2, 0, titlebarHeight, titlebarHeight);
 	}
 	
-	private FlatButton getExitButton(GUI gui) {
+	public AbstractButton getSettingsButton() {
+		return settingsButton;
+	}
+	
+	private void setupSubscriptions(GUI gui) {
+		// Settings
+		sh.add(Main.preferences.translucent.whenModified().subscribe(b -> setTranslucent(b)));
+		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		sh.add(Main.preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
+		// Components bounds changed
+		sh.add(mainTextArea.whenSizeModified.subscribe(__ -> updateBounds(gui)));
+		sh.add(enderEyePanel.whenSizeModified.subscribe(__ -> updateBounds(gui)));
+	}
+
+	private void createTitleBar(GUI gui) {
+		versiontextLabel = new ThemedLabel(gui, VERSION_TEXT) {
+			private static final long serialVersionUID = 7210941876032010219L;
+
+			@Override
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_TITLE_SMALL;
+			}
+
+			@Override
+			public Color getForegroundColor(Theme theme) {
+				return theme.TEXT_COLOR_WEAK;
+			}
+		};
+		lockIcon = new ThemedIcon(gui, new ImageIcon(Main.class.getResource("/resources/lock_icon.png")));
+		lockIcon.setVisible(false);
+		titlebarPanel.add(versiontextLabel);
+		titlebarPanel.add(lockIcon);
+		titlebarPanel.addButton(createExitButton(gui));
+		titlebarPanel.addButton(createMinimizeButton(gui));
+		settingsButton = createSettingsButton(gui);
+		titlebarPanel.addButton(settingsButton);
+		notificationsButton = new NotificationsButton(gui);
+		titlebarPanel.addButton(notificationsButton);
+	}
+
+	private void createComponents(GUI gui, IDataState dataState, IDataStateHandler dataHandler) {
+		// Main text
+		mainTextArea = new MainTextArea(gui);
+		add(mainTextArea);
+		// "Throws" text + buttons
+		MainButtonPanel mainButtonPanel = new MainButtonPanel(gui, dataState, dataHandler);
+		add(mainButtonPanel);
+		// Throw panels
+		enderEyePanel = new EnderEyePanel(gui, dataState.getThrowSet(), dataState.getDivineContext());
+		add(enderEyePanel);
+	}
+	
+	private FlatButton createExitButton(GUI gui) {
 		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(gui, img) {
@@ -87,7 +123,7 @@ public class NinjabrainBotFrame extends ThemedFrame {
 		return button;
 	}
 
-	private FlatButton getMinimizeButton(GUI gui) {
+	private FlatButton createMinimizeButton(GUI gui) {
 		URL iconURL = Main.class.getResource("/resources/minimize_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(gui, img);
@@ -95,15 +131,14 @@ public class NinjabrainBotFrame extends ThemedFrame {
 		return button;
 	}
 	
-	private FlatButton getSettingsButton(GUI gui) {
+	private FlatButton createSettingsButton(GUI gui) {
 		URL iconURL = Main.class.getResource("/resources/settings_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(gui, img);
-		button.addActionListener(p -> gui.toggleOptionsWindow());
 		return button;
 	}
 	
-	public void toggleMinimized() {
+	private void toggleMinimized() {
 		int state = getState();
 		if (state == JFrame.ICONIFIED) {
 			setState(JFrame.NORMAL);
@@ -112,20 +147,19 @@ public class NinjabrainBotFrame extends ThemedFrame {
 		}
 	}
 	
-	public NotificationsButton getNotificationsButton() {
-		return notificationsButton;
+	private void setTranslucent(boolean t) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		if (gd.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT)) {
+			setOpacity(t ? 0.75f : 1.0f);
+		}
 	}
 	
-	public NotificationsFrame getNotificationsFrame() {
-		return notificationsButton.getNotificationsFrame();
-	}
-
-	public void setURL(VersionURL url) {
-		notificationsButton.setURL(url);
-	}
-
-	public void setLocked(boolean locked) {
-		lockIcon.setVisible(locked);
+	@Override
+	public void dispose() {
+		super.dispose();
+		mainTextArea.dispose();
+		enderEyePanel.dispose();
 	}
 	
 }

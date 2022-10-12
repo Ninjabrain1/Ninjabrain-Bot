@@ -9,7 +9,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
 
 public class KeyboardListener implements NativeKeyListener {
 	
@@ -17,7 +16,6 @@ public class KeyboardListener implements NativeKeyListener {
 	public static KeyboardListener instance;
 	
 	BiConsumer<Integer, Integer> consumer;
-	GUI gui;
 	ClipboardReader clr;
 	boolean f3Held = false;
 	
@@ -44,16 +42,15 @@ public class KeyboardListener implements NativeKeyListener {
 		});
 	}
 	
-	public static void init(GUI gui, ClipboardReader clr) {
+	public static void init(ClipboardReader clr) {
 		if (registered) {
-			instance = new KeyboardListener(gui, clr);
+			instance = new KeyboardListener(clr);
 			GlobalScreen.addNativeKeyListener(instance);
 		}
 	}
 	
-	KeyboardListener(GUI gui, ClipboardReader clr){
+	KeyboardListener(ClipboardReader clr){
 		super();
-		this.gui = gui;
 		this.clr = clr;
 	}
 	
@@ -83,7 +80,7 @@ public class KeyboardListener implements NativeKeyListener {
 		}
 		for (HotkeyPreference h : HotkeyPreference.hotkeys) {
 			if (h.getCode() == e.getRawCode() && (h.getModifier() & e.getModifiers()) == h.getModifier()) {
-				h.execute(gui);
+				h.execute(e);
 			}
 		}
 		// Alt clipboard reader

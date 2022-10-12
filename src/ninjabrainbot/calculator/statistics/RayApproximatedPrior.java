@@ -1,7 +1,11 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.statistics;
 
 import java.util.ArrayList;
 
+import ninjabrainbot.calculator.Chunk;
+import ninjabrainbot.calculator.divine.IDivineContext;
+import ninjabrainbot.calculator.stronghold.Ring;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
 
 /**
@@ -10,20 +14,20 @@ import ninjabrainbot.util.Coords;
 public class RayApproximatedPrior implements IPrior {
 
 	ArrayList<Chunk> chunks;
-	DivineContext divineContext;
+	IDivineContext divineContext;
 	
-	public RayApproximatedPrior(Ray r, DivineContext divineContext) {
+	public RayApproximatedPrior(IRay r, IDivineContext divineContext) {
 		this(r, 1.0 / 180.0 * Math.PI, divineContext); // 1 degree tolerance
 	}
 
-	public RayApproximatedPrior(Ray r, double tolerance, DivineContext divineContext) {
+	public RayApproximatedPrior(IRay r, double tolerance, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
 		construct(r, tolerance);
 		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
 	}
 	
-	private void construct(Ray r, double tolerance) {
+	private void construct(IRay r, double tolerance) {
 		double range = 5000.0 / 16;
 		chunks = new ArrayList<Chunk>();
 		double phi = r.alpha() / 180.0 * Math.PI;

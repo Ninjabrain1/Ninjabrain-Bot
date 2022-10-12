@@ -1,4 +1,7 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.divine;
+
+import ninjabrainbot.calculator.stronghold.Ring;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 
 public class DivineResult {
 	

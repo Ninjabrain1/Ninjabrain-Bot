@@ -1,56 +1,53 @@
 package ninjabrainbot.calculator;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.Modifiable;
+import ninjabrainbot.util.Subscription;
 
 /**
  * Represents an eye of ender throw.
  */
-public class Throw implements Ray {
+public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 
-	// correction is how much the angle has been corrected, only used for display purposes (the correction has already been added to alpha)
-	public final double x, z, alpha, beta, correction;
-	public final boolean manualInput, altStd;
-
+	private final double x, z, alpha_0, beta;
 	private final boolean nether;
-	
-	public Throw(double x, double z, double alpha, double beta, double correction, boolean nether) {
-		this(x, z, alpha, beta, correction, false, nether);
-	}
-	
-	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd, boolean nether) {
-		this(x, z, alpha, beta, correction, altStd, nether, false);
-	}
-	
-	public Throw(double x, double z, double alpha, double beta, double correction, boolean altStd, boolean nether, boolean manualInput) {
+
+	private IStdProfile stdProfile;
+	private int stdProfileNumber;
+	private double std;
+	private double correction;
+
+	private Subscription stdProfileSubscription;
+
+	public Throw(double x, double z, double alpha, double beta, boolean nether) {
 		this.x = x;
 		this.z = z;
-		this.correction = correction;
 		alpha = alpha % 360.0;
 		if (alpha < -180.0) {
 			alpha += 360.0;
 		} else if (alpha > 180.0) {
 			alpha -= 360.0;
 		}
-		this.alpha = alpha;
+		this.alpha_0 = alpha;
 		this.beta = beta;
-		this.altStd = altStd;
 		this.nether = nether;
-		this.manualInput = manualInput;
+		this.correction = 0;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "x=" + x + ", z=" + z + ", alpha=" + alpha;
+		return "x=" + x + ", z=" + z + ", alpha=" + alpha_0;
 	}
 
 	/**
-	 * Returns a Throw object if the given string is the result of an F3+C command
-	 * in the overworld, null otherwise.
+	 * Returns a Throw object if the given string is the result of an F3+C command,
+	 * null otherwise.
 	 */
-	public static Throw parseF3C(String string) {
-		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") ||
-				string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
-			return parseF3COneTwelve(string);
+	public static IThrow parseF3C(String string) {
+		if (!(string.startsWith("/execute in minecraft:overworld run tp @s")
+				|| string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
+			return null;
 		}
 		String[] substrings = string.split(" ");
 		if (substrings.length != 11)
@@ -62,44 +59,37 @@ public class Throw implements Ray {
 			double alpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
 			alpha += Main.preferences.crosshairCorrection.get();
-			return new Throw(x, z, alpha, beta, 0, nether);
+			return new Throw(x, z, alpha, beta, nether);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
 	}
-	
-	private static Throw parseF3COneTwelve(String string) {
-		String[] substrings = string.split(" ");
-		if (substrings.length != 3)
-			return null;
-		try {
-			double x = Double.parseDouble(substrings[0]) + 0.5; // Add 0.5 because block coords should be used
-			double z = Double.parseDouble(substrings[1]) + 0.5; // Add 0.5 because block coords should be used
-			double alpha = Double.parseDouble(substrings[2]);
-			alpha += Main.preferences.crosshairCorrection.get();
-			return new Throw(x, z, alpha, -31, 0, false, false, true);
-		} catch (NullPointerException | NumberFormatException e) {
-			return null;
-		}
+
+	@Override
+	public void setStdProfileNumber(int profileNumber) {
+		stdProfileNumber = profileNumber;
+		updateStd();
 	}
-	
-	/**
-	 * Returns the squared distance between this throw and the given throw.
-	 */
-	public double distance2(Throw other) {
-		double dx = x - other.x;
-		double dz = z - other.z;
-		return dx * dx + dz * dz;
+
+	@Override
+	public void setStdProfile(IStdProfile stdProfile) {
+		this.stdProfile = stdProfile;
+		if (stdProfileSubscription != null)
+			stdProfileSubscription.cancel();
+		stdProfileSubscription = stdProfile.whenModified().subscribe(__ -> updateStd());
+		setStdProfileNumber(stdProfile.getInitialProfileNumber(this));
 	}
-	
-	public Throw withToggledSTD() {
-		return new Throw(x, z, alpha, beta, correction, !this.altStd, this.nether, this.manualInput);
+
+	@Override
+	public int getStdProfileNumber() {
+		return stdProfileNumber;
 	}
-	
+
+	@Override
 	public boolean lookingBelowHorizon() {
 		return beta > 0;
 	}
-	
+
 	@Override
 	public double x() {
 		return x;
@@ -112,14 +102,49 @@ public class Throw implements Ray {
 
 	@Override
 	public double alpha() {
-		return alpha;
+		return alpha_0 + correction;
 	}
 
+	@Override
+	public double correction() {
+		return correction;
+	}
+
+	@Override
+	public double alpha_0() {
+		return alpha_0;
+	}
+
+	@Override
 	public boolean isNether() {
 		return nether;
 	}
 
-	public BlindPosition toBlind() {
-		return new BlindPosition(x, z);
+	@Override
+	public double getStd() {
+		return std;
 	}
+
+	@Override
+	public void addCorrection(double angle) {
+		correction += angle;
+		whenModified.notifySubscribers(this);
+	}
+
+	private void updateStd() {
+		if(stdProfile == null)
+			return;
+		double newStd = stdProfile.getStd(stdProfileNumber);
+		if (newStd == std)
+			return;
+		std = newStd;
+		whenModified.notifySubscribers(this);
+	}
+
+	@Override
+	public void dispose() {
+		if (stdProfileSubscription != null)
+			stdProfileSubscription.cancel();
+	}
+
 }

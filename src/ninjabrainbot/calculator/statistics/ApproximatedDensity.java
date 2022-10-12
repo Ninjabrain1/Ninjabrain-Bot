@@ -1,6 +1,10 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.statistics;
 
 import java.util.HashMap;
+
+import ninjabrainbot.calculator.stronghold.Ring;
+import ninjabrainbot.calculator.stronghold.RingIterator;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 
 public class ApproximatedDensity {
 	

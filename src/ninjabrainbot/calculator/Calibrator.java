@@ -1,19 +1,21 @@
 package ninjabrainbot.calculator;
 
 import java.awt.AWTException;
-import java.util.ArrayList;
 
+import ninjabrainbot.calculator.statistics.Posterior;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.ISet;
 
-public class Calibrator {
+public class Calibrator implements IDisposable {
 	
 	KeyPresser keyPresser;
 	int delay = 150; // key press delay
 	
 	Calculator triangulator;
 	boolean calibrating;
-	ArrayList<Throw> eyeThrows;
+	ThrowSet eyeThrows;
 	boolean ready; 
 	
 	Chunk stronghold;
@@ -21,7 +23,7 @@ public class Calibrator {
 	double lastZ;
 
 	public Calibrator() {
-		triangulator = new Calculator(0.5);
+		triangulator = new Calculator();
 		calibrating = false;
 	}
 
@@ -31,12 +33,12 @@ public class Calibrator {
 
 	public void startCalibrating() throws AWTException {
 		calibrating = true;
-		eyeThrows = new ArrayList<Throw>();
+		eyeThrows = new ThrowSet();
 		keyPresser = new KeyPresser();
 		ready = false;
 	}
 
-	public void add(Throw t) throws InterruptedException {
+	public void add(IThrow t) throws InterruptedException {
 		if (!ready) {
 			keyPresser.releaseF3C();
 			doCommand("clear");
@@ -46,14 +48,14 @@ public class Calibrator {
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
 				doCommand("say "+ I18n.get("calibrator.you_moved"));
-				tp(lastX, lastZ, t.alpha, -31.2);
+				tp(lastX, lastZ, t.alpha(), -31.2);
 				return;
 			}
 			eyeThrows.add(t);
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				Posterior posterior = triangulator.getPosterior(eyeThrows, null);
+				Posterior posterior = triangulator.getPosterior(eyeThrows);
 				prediction = posterior.getMostProbableChunk();
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;
@@ -63,12 +65,12 @@ public class Calibrator {
 				closest = stronghold;
 				prediction = stronghold;
 			}
-			double deltaX = closest.x * 16 + 8 - t.x;
-			double deltaZ = closest.z * 16 + 8 - t.z;
-			double phi = t.alpha * Math.PI / 180.0;
+			double deltaX = closest.x * 16 + 8 - t.x();
+			double deltaZ = closest.z * 16 + 8 - t.z();
+			double phi = t.alpha() * Math.PI / 180.0;
 			double perpendicularDistance = 100.0;
-			double nextX = t.x + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
-			double nextZ = t.z + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
+			double nextX = t.x() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
+			double nextZ = t.z() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			tp(nextX, nextZ, nextAlpha, -31.2);
@@ -80,15 +82,16 @@ public class Calibrator {
 		int i = eyeThrows.size() - 1;
 		if (i == -1)
 			return;
-		Throw last = eyeThrows.get(i);
-		Throw t = new Throw(last.x, last.z, last.alpha + delta, 0, last.correction + delta, false);
-		eyeThrows.remove(last);
-		eyeThrows.add(t);
+		IThrow last = eyeThrows.get(i);
+//		IThrow t = new Throw(last.x(), last.z(), last.alpha() + delta, 0, last.correction() + delta, false);
+//		eyeThrows.remove(last);
+//		eyeThrows.add(t);
+		// TODO
 	}
 	
-	private double distanceFromIntendedPosition(Throw t) {
-		double dx = lastX - t.x;
-		double dz = lastZ - t.z;
+	private double distanceFromIntendedPosition(IThrow t) {
+		double dx = lastX - t.x();
+		double dz = lastZ - t.z();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
 	
@@ -155,7 +158,7 @@ public class Calibrator {
 		return stronghold.getAngleErrors(eyeThrows);
 	}
 	
-	public ArrayList<Throw> getThrows() {
+	public ISet<IThrow> getThrows() {
 		return eyeThrows;
 	}
 	
@@ -171,6 +174,11 @@ public class Calibrator {
 		keyPresser = null;
 		calibrating = false;
 		stronghold = null;
+	}
+	
+	@Override
+	public void dispose() {
+		eyeThrows.dispose();
 	}
 	
 }

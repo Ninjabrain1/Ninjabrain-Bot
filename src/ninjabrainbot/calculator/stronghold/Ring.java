@@ -1,4 +1,4 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.stronghold;
 
 import java.util.List;
 import java.util.stream.Collectors;

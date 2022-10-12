@@ -1,12 +1,10 @@
 package ninjabrainbot;
 
-import ninjabrainbot.calculator.ApproximatedDensity;
-import ninjabrainbot.calculator.StrongholdConstants;
+import ninjabrainbot.calculator.statistics.ApproximatedDensity;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
-import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.NinjabrainBotPreferences;
-import ninjabrainbot.io.UpdateChecker;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
@@ -25,17 +23,8 @@ public class Main {
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
 		Profiler.stopAndStart("Initialize GUI");
-		GUI gui = new GUI();
-		Profiler.stopAndStart("Start clipboard reader");
-		ClipboardReader clipboardReader = new ClipboardReader(gui);
-		Thread clipboardThread = new Thread(clipboardReader);
-		Profiler.stopAndStart("Start keyboard listener");
-		KeyboardListener.init(gui, clipboardReader);
-		clipboardThread.start();
+		new GUI();
 		Profiler.stop();
-		if (preferences.checkForUpdates.get()) {
-			UpdateChecker.check(gui);
-		}
 		Profiler.print();
 	}
 

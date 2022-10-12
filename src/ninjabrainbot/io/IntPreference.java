@@ -2,9 +2,9 @@ package ninjabrainbot.io;
 
 import java.util.prefs.Preferences;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.util.Modifiable;
 
-public class IntPreference {
+public class IntPreference extends Modifiable<Integer> {
 
 	Preferences pref;
 
@@ -20,12 +20,11 @@ public class IntPreference {
 	public int get() {
 		return value;
 	}
-	
+
 	public void set(int value) {
 		this.value = value;
 		pref.putInt(key, value);
+		whenModified.notifySubscribers(value);
 	}
-
-	public void onChangedByUser(GUI gui) { }
 
 }

@@ -23,19 +23,26 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.BlindResult;
 import ninjabrainbot.calculator.Calculator;
 import ninjabrainbot.calculator.CalculatorResult;
-import ninjabrainbot.calculator.DivineContext;
-import ninjabrainbot.calculator.DivineResult;
-import ninjabrainbot.calculator.Fossil;
+import ninjabrainbot.calculator.DataState;
+import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.IThrow;
+import ninjabrainbot.calculator.StandardStdProfile;
 import ninjabrainbot.calculator.Throw;
+import ninjabrainbot.calculator.blind.BlindResult;
+import ninjabrainbot.calculator.divine.DivineContext;
+import ninjabrainbot.calculator.divine.DivineResult;
+import ninjabrainbot.calculator.divine.Fossil;
 import ninjabrainbot.gui.components.CalibrationPanel;
 import ninjabrainbot.gui.components.EnderEyePanel;
 import ninjabrainbot.gui.components.MainButtonPanel;
 import ninjabrainbot.gui.components.MainTextArea;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.io.AutoResetTimer;
+import ninjabrainbot.io.ClipboardReader;
+import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
@@ -46,13 +53,8 @@ import ninjabrainbot.util.Profiler;
  */
 public class GUI {
 
-	private final MainTextArea mainTextArea;
-	private final EnderEyePanel enderEyePanel;
-
 	public NinjabrainBotFrame frame;
 	public OptionsFrame optionsFrame;
-	private final NotificationsFrame notificationsFrame;
-	private final CalibrationPanel calibrationPanel;
 
 	public Theme theme;
 	public SizePreference size;
@@ -63,37 +65,35 @@ public class GUI {
 	private long lastOverlayUpdate = System.currentTimeMillis();
 	private final long minOverlayUpdateDelayMillis = 1000;
 	public Timer autoResetTimer;
-	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
-
-	public static final int MAX_THROWS = 10;
-	private final Calculator calculator;
-	private ArrayList<Throw> eyeThrows;
-	private ArrayList<Throw> eyeThrowsLast;
-	private Throw playerPos;
-	private Throw playerPosLast;
-	private DivineContext divineContext;
-	private DivineContext divineContextLast;
-
 	private boolean targetLocked = false;
 
 	private Font font;
 	private HashMap<String, Font> fonts;
 
 	public final File OBS_OVERLAY;
+	
+	private final IDataState dataState;
 
 	public GUI() {
+		ClipboardReader clipboardReader = new ClipboardReader();
+		Thread clipboardThread = new Thread(clipboardReader);
+		KeyboardListener.init(clipboardReader);
+		clipboardThread.start();
+		
+		setupHotkeys();
+		setupSettingsSubscriptions();
+		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), new StandardStdProfile());
+		
+		
+		// OLD
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
 		font = new Font(null, Font.BOLD, 25);
 		Locale.setDefault(Locale.US);
 		themedComponents = new ArrayList<>();
-		calculator = new Calculator();
-		eyeThrows = new ArrayList<>();
-		eyeThrowsLast = new ArrayList<>();
 
 		Profiler.start("Create frame");
 		frame = new NinjabrainBotFrame(this);
-		notificationsFrame = frame.getNotificationsFrame();
 
 		OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
@@ -110,26 +110,12 @@ public class GUI {
 		ImageIcon img = new ImageIcon(iconURL);
 		frame.setIconImage(img.getImage());
 
-		Profiler.stopAndStart("Create gui components");
-		// Main text
-		Profiler.stopAndStart("Create main text area");
-		mainTextArea = new MainTextArea(this);
-		frame.add(mainTextArea);
-
-		// "Throws" text
-		Profiler.stopAndStart("Create main button area");
-		MainButtonPanel mainButtonPanel = new MainButtonPanel(this);
-		frame.add(mainButtonPanel);
-
-		// Throw panels
-		Profiler.stopAndStart("Create throw panels");
-		enderEyePanel = new EnderEyePanel(this);
-		frame.add(enderEyePanel);
+		
 
 		// Settings window
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(this);
-		calibrationPanel = optionsFrame.getCalibrationPanel();
+		frame.getSettingsButton().addActionListener(__ -> toggleOptionsWindow());
 		Profiler.stop();
 
 		Profiler.stopAndStart("Update fonts and colors");
@@ -139,16 +125,9 @@ public class GUI {
 		checkIfOffScreen(frame);
 		Profiler.stopAndStart("Set visible");
 		frame.setVisible(true);
-		Profiler.stopAndStart("Set translucency");
-		setTranslucent(Main.preferences.translucent.get());
 
 		// Auto reset timer
-		autoResetTimer = new Timer(AUTO_RESET_DELAY, p -> {
-			if (!targetLocked)
-				resetThrows();
-			autoResetTimer.restart();
-			autoResetTimer.stop();
-		});
+		autoResetTimer = new AutoResetTimer(dataState);
 		overlayHideTimer = new Timer((int) (Main.preferences.overlayHideDelay.get() * 1000f), p -> {
 			clearOBSOverlay();
 		});
@@ -157,24 +136,74 @@ public class GUI {
 			SwingUtilities.invokeLater(() -> updateOBSOverlay());
 		});
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
+		
+		// Shutdown hook
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				Main.preferences.windowX.set(frame.getX());
+				Main.preferences.windowY.set(frame.getY());
+				clearOBSOverlay();
+			}
+		});
+	}
+	
+	private void setupHotkeys() {
+		Main.preferences.hotkeyReset.whenTriggered().subscribe(__ -> resetCalculatorIfNotLocked());
+		Main.preferences.hotkeyUndo.whenTriggered().subscribe(__ -> undoIfNotLocked());
+		Main.preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(0.01));
+		Main.preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(-0.01));
+		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> toggleAltStdOnLastThrowIfNotLocked());
+		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
+	}
+	
+	private void setupSettingsSubscriptions() {
+		Main.preferences.overlayHideDelay.whenModified().subscribe(__ -> updateOBSOverlay());
+		Main.preferences.overlayAutoHide.whenModified().subscribe(__ -> updateOBSOverlay());
+		Main.preferences.overlayHideWhenLocked.whenModified().subscribe(__ -> updateOBSOverlay());
+		Main.preferences.useOverlay.whenModified().subscribe(b -> setOverlayEnabled(b));
+		Main.preferences.autoReset.whenModified().subscribe(b -> onAutoResetEnabledChanged(b));
+		Main.preferences.theme.whenModified().subscribe(__ -> updateTheme());
+		Main.preferences.size.whenModified().subscribe(__ -> updateSizePreference());
+	}
+	
+	private void resetCalculatorIfNotLocked() {
+		if (!targetLocked)
+			dataState.reset();
 	}
 
-	public void setTranslucent(boolean t) {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		if (gd.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT)) {
-			frame.setOpacity(t ? 0.75f : 1.0f);
+	private void undoIfNotLocked() {
+		// TODO
+	}
+
+	private void changeLastAngleIfNotLocked(double delta) {
+		if (!targetLocked)
+			dataState.getThrowSet().getLast().addCorrection(delta);
+	}
+	
+	private void toggleAltStdOnLastThrowIfNotLocked() {
+		if (!targetLocked && dataState.getThrowSet().size() != 0) {
+			IThrow last = dataState.getThrowSet().getLast();
+			int stdProfile = last.getStdProfileNumber();
+			switch (stdProfile) {
+			case StandardStdProfile.NORMAL:
+				last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
+				break;
+			case StandardStdProfile.ALTERNATIVE:
+				last.setStdProfileNumber(StandardStdProfile.NORMAL);
+				break;
+			case StandardStdProfile.MANUAL:
+				break;
+			}
 		}
 	}
 
-	public void setAlwaysOnTop(boolean b) {
-		frame.setAlwaysOnTop(b);
-		optionsFrame.setAlwaysOnTop(b);
-		notificationsFrame.setAlwaysOnTop(b);
-	}
-
-	public void setNotificationsEnabled(boolean b) {
-		frame.getNotificationsButton().setVisible(b && frame.getNotificationsButton().hasURL());
+	private void onAutoResetEnabledChanged(boolean b) {
+		if (b) {
+			autoResetTimer.start();
+		} else {
+			autoResetTimer.stop();
+		}
 	}
 
 	public void updateTheme() {
@@ -188,20 +217,6 @@ public class GUI {
 		updateFontsAndColors();
 		updateBounds();
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-	}
-
-	public void setNetherCoordsEnabled(boolean b) {
-		mainTextArea.setNetherCoordsEnabled(b);
-	}
-
-	public void setAngleErrorsEnabled(boolean b) {
-		enderEyePanel.setAngleErrorsEnabled(b);
-		updateBounds();
-	}
-
-	public void setAngleUpdatesEnabled(boolean b) {
-		mainTextArea.setAngleUpdatesEnabled(b);
-		updateBounds();
 	}
 
 	private Font loadFont() {
@@ -273,7 +288,7 @@ public class GUI {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
 
-	public void toggleOptionsWindow() {
+	private void toggleOptionsWindow() {
 		if (optionsFrame.isVisible()) {
 			optionsFrame.close();
 		} else {
@@ -283,147 +298,8 @@ public class GUI {
 		}
 	}
 
-	public void toggleMinimized() {
-		frame.toggleMinimized();
-	}
-
-	public void resetThrows() {
-		mainTextArea.onReset();
-		if (eyeThrows.size() > 0 || divineContext != null) {
-			ArrayList<Throw> temp = eyeThrowsLast;
-			eyeThrowsLast = eyeThrows;
-			eyeThrows = temp;
-			eyeThrows.clear();
-			divineContextLast = divineContext;
-			divineContext = null;
-			playerPosLast = playerPos;
-			playerPos = null;
-			setTargetLocked(false);
-		}
-		onThrowsUpdated();
-	}
-
-	public void undo() {
-		setTargetLocked(false);
-		ArrayList<Throw> temp = eyeThrowsLast;
-		eyeThrowsLast = eyeThrows;
-		eyeThrows = temp;
-		DivineContext temp2 = divineContextLast;
-		divineContextLast = divineContext;
-		divineContext = temp2;
-		Throw temp3 = playerPosLast;
-		playerPosLast = playerPos;
-		playerPos = temp3;
-		onThrowsUpdated();
-	}
-
-	public void removeThrow(Throw t) {
-		if (eyeThrows.contains(t)) {
-			saveThrowsForUndo();
-			eyeThrows.remove(t);
-			onThrowsUpdated();
-		}
-	}
-
-	public void removeDivineContext() {
-		if (divineContext != null) {
-			saveThrowsForUndo();
-			divineContext = null;
-			onThrowsUpdated();
-		}
-	}
-
-	private void processClipboardUpdate(String clipboard) {
-		Throw t = Throw.parseF3C(clipboard);
-		if (!calibrationPanel.isCalibrating()) {
-			int i = eyeThrows.size();
-			if (t != null) {
-				if (t.isNether()) {
-					if (i > 0) {
-						updateWithNewPlayerPos(t);
-					} else {
-						BlindResult result = calculator.blind(t.toBlind(), divineContext, true);
-						mainTextArea.setResult(result, this);
-						if (Main.preferences.autoReset.get()) {
-							autoResetTimer.restart();
-						}
-						SwingUtilities.invokeLater(() -> updateOBSOverlay());
-					}
-					return;
-				}
-				if (i < MAX_THROWS) {
-					if (i > 0 && (targetLocked || t.lookingBelowHorizon())) {
-						updateWithNewPlayerPos(t);
-					} else if (!targetLocked && !t.lookingBelowHorizon()) {
-						updateWithNewThrow(t, i);
-					}
-				}
-			} else {
-				Fossil f = Fossil.parseF3I(clipboard);
-				if (f != null) {
-					saveThrowsForUndo();
-					divineContext = new DivineContext(f);
-					onThrowsUpdated();
-				}
-			}
-		} else {
-			if (t != null) {
-				try {
-					calibrationPanel.add(t);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void updateWithNewThrow(Throw t, int index) {
-		saveThrowsForUndo();
-		eyeThrows.add(t);
-		enderEyePanel.setThrow(index, t);
-		playerPos = t;
-		onThrowsUpdated();
-	}
-
-	private void updateWithNewPlayerPos(Throw updateThrow) {
-		saveThrowsForUndo();
-		playerPos = updateThrow;
-		onThrowsUpdated();
-	}
-
-	public void changeLastAngle(double delta) {
-		if (!calibrationPanel.isCalibrating()) {
-			int i = eyeThrows.size() - 1;
-			if (i == -1) {
-				return;
-			}
-			Throw last = eyeThrows.get(i);
-			Throw t = new Throw(last.x, last.z, last.alpha + delta, last.beta, last.correction + delta, last.altStd,
-					last.isNether(), last.manualInput);
-			saveThrowsForUndo();
-			eyeThrows.remove(last);
-			eyeThrows.add(t);
-			enderEyePanel.setThrow(i, t);
-			onThrowsUpdated();
-		} else {
-			calibrationPanel.changeLastAngle(delta);
-		}
-	}
-
-	public void toggleLastSTD() {
-		if (!calibrationPanel.isCalibrating()) {
-			int i = eyeThrows.size() - 1;
-			if (i == -1) {
-				return;
-			}
-			Throw last = eyeThrows.get(i);
-			Throw t = last.withToggledSTD();
-			saveThrowsForUndo();
-			eyeThrows.remove(last);
-			eyeThrows.add(t);
-			enderEyePanel.setThrow(i, t);
-			onThrowsUpdated();
-		}
+	private void removeThrow(Throw t) {
+		dataState.getThrowSet().remove(t);
 	}
 
 	private void setTargetLocked(boolean locked) {
@@ -432,31 +308,11 @@ public class GUI {
 		if (!locked && Main.preferences.autoReset.get()) {
 			autoResetTimer.restart();
 		}
-		updateBounds();
-		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-	}
-
-	public void toggleTargetLocked() {
-		if (!mainTextArea.isIdle()) {
-			setTargetLocked(!targetLocked);
-		}
-	}
-
-	public boolean isTargetLocked() {
-		return targetLocked;
-	}
-
-	private void setUpdateURL(VersionURL url) {
-		frame.setURL(url);
-	}
-
-	public void recalculateStronghold() {
-		onThrowsUpdated();
 	}
 
 	private void onThrowsUpdated() {
 		if (eyeThrows.size() == 0 && divineContext != null) {
-			DivineResult result = calculator.divine(divineContext.fossil);
+			DivineResult result = calculator.divine();
 			mainTextArea.setResult(result, this);
 			enderEyePanel.setErrors(null);
 		} else {
@@ -464,7 +320,7 @@ public class GUI {
 			double[] errors = null;
 			if (eyeThrows.size() >= 1) {
 				System.out.println(playerPos);
-				result = calculator.triangulate(eyeThrows, divineContext, playerPos);
+				result = calculator.triangulate(eyeThrows);
 				if (result.success()) {
 					errors = result.getAngleErrors();
 				}
@@ -482,25 +338,6 @@ public class GUI {
 		updateBounds();
 		// Update overlay
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-	}
-
-	public void onClipboardUpdated(String newClipboard) {
-		SwingUtilities.invokeLater(() -> processClipboardUpdate(newClipboard));
-	}
-
-	public void onNewUpdateAvailable(VersionURL url) {
-		SwingUtilities.invokeLater(() -> setUpdateURL(url));
-	}
-
-	private void saveThrowsForUndo() {
-		eyeThrowsLast.clear();
-		eyeThrowsLast.addAll(eyeThrows);
-		divineContextLast = divineContext;
-		playerPosLast = playerPos;
-	}
-
-	public Calculator getTriangulator() {
-		return this.calculator;
 	}
 
 	private void checkIfOffScreen(JFrame frame) {
@@ -541,7 +378,7 @@ public class GUI {
 		}
 	}
 
-	public void clearOBSOverlay() {
+	private void clearOBSOverlay() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			try {
@@ -555,16 +392,12 @@ public class GUI {
 		}
 	}
 
-	public void setOverlayEnabled(boolean b) {
+	private void setOverlayEnabled(boolean b) {
 		if (b) {
 			updateOBSOverlay();
 		} else {
 			OBS_OVERLAY.delete();
 		}
-	}
-
-	public void onOverlaySettingsChanged() {
-		updateOBSOverlay();
 	}
 
 }

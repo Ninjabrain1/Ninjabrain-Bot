@@ -11,7 +11,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.Throw;
+import ninjabrainbot.calculator.IThrow;
+import ninjabrainbot.calculator.IThrowSet;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
@@ -23,7 +24,7 @@ public class ThrowPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 	
-	private Throw t;
+	private IThrow t;
 	private JLabel x;
 	private JLabel z;
 	private JLabel alpha;
@@ -35,11 +36,7 @@ public class ThrowPanel extends ThemedPanel {
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
 
-	public ThrowPanel(GUI gui) {
-		this(gui, null);
-	}
-
-	public ThrowPanel(GUI gui, Throw t) {
+	public ThrowPanel(GUI gui, IThrowSet throwSet) {
 		super(gui);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
@@ -67,18 +64,18 @@ public class ThrowPanel extends ThemedPanel {
 		add(error);
 		setLayout(null);
 		setThrow(t);
-		removeButton.addActionListener(p -> gui.removeThrow(this.t));
+		removeButton.addActionListener(p -> throwSet.remove(this.t));
 	}
 	
-	public void setAngleErrorsEnabled(boolean e) {
+	protected void setAngleErrorsEnabled(boolean e) {
 		errorsEnabled = e;
 	}
 
-	public void setError(double d) {
+	protected void setError(double d) {
 		error.setText(String.format(Locale.US, "%.3f", d));
 	}
 	
-	public void setError(String s) {
+	protected void setError(String s) {
 		error.setText(s);
 	}
 	
@@ -178,7 +175,7 @@ public class ThrowPanel extends ThemedPanel {
 		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
 	}
 	
-	public void setThrow(Throw t) {
+	public void setThrow(IThrow t) {
 		if (t == null) {
 			x.setText(null);
 			z.setText(null);
@@ -187,13 +184,13 @@ public class ThrowPanel extends ThemedPanel {
 			removeButton.setVisible(false);
 			correctionSgn = 0;
 		} else {
-			x.setText(String.format(Locale.US, "%.2f", t.x));
-			z.setText(String.format(Locale.US, "%.2f", t.z));
-			alpha.setText(String.format(Locale.US, "%.2f", t.alpha - t.correction));
-			correctionSgn = Math.abs(t.correction) < 1e-7 ? 0 : (t.correction > 0 ? 1 : -1);
+			x.setText(String.format(Locale.US, "%.2f", t.x()));
+			z.setText(String.format(Locale.US, "%.2f", t.z()));
+			alpha.setText(String.format(Locale.US, "%.2f", t.alpha() - t.correction()));
+			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, t.correction > 0 ? "+%.2f" : "%.2f", t.correction));
-				correction.setForeground(t.correction > 0 ? colorPos : colorNeg);
+				correction.setText(String.format(Locale.US, t.correction() > 0 ? "+%.2f" : "%.2f", t.correction()));
+				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);
 			}
@@ -205,18 +202,16 @@ public class ThrowPanel extends ThemedPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		// Paint dot if special std
 		if (t != null) {
-			if (t.manualInput) {
-				int a = 3;
-				int b = 2;
-				g.setColor(Color.CYAN);
-				g.fillRect(b, b, a, a);
-			} else if (t.altStd) {
-				int a = 3;
-				int b = 2;
+			if (t.getStdProfileNumber() == 1) {
 				g.setColor(Color.RED);
-				g.fillRect(b, b, a, a);
+			} else if (t.getStdProfileNumber() == 2) {
+				g.setColor(Color.CYAN);
 			}
+			int a = 3;
+			int b = 2;
+			g.fillRect(b, b, a, a);
 		}
 	}
 	

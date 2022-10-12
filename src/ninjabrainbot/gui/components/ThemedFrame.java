@@ -6,13 +6,17 @@ import javax.swing.JFrame;
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
+import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.SubscriptionHandler;
 
-public class ThemedFrame extends JFrame {
+public class ThemedFrame extends JFrame implements IDisposable {
 
 	private static final long serialVersionUID = -9103006492414835286L;
 
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
+
+	protected SubscriptionHandler sh;
 	
 	public ThemedFrame(GUI gui, String title) {
 		super(title);
@@ -37,7 +41,14 @@ public class ThemedFrame extends JFrame {
 	
 	public void updateBounds(GUI gui) {
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
-		titletextLabel.setBounds((titlebarHeight - gui.size.TEXT_SIZE_TITLE_LARGE)/2, 0, titletextLabel.getPreferredSize().width, titlebarHeight);
+		titletextLabel.setBounds((titlebarHeight - gui.size.TEXT_SIZE_TITLE_LARGE) / 2, 0,
+				titletextLabel.getPreferredSize().width, titlebarHeight);
 	}
-	
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		sh.dispose();
+	}
+
 }

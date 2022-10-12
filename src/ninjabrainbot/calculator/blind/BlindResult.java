@@ -1,5 +1,6 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.blind;
 
+import ninjabrainbot.calculator.stronghold.Ring;
 import ninjabrainbot.util.Pair;
 
 public class BlindResult {

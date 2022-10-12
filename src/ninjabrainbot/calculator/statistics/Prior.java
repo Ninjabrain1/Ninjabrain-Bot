@@ -1,8 +1,13 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.statistics;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
+import ninjabrainbot.calculator.Chunk;
+import ninjabrainbot.calculator.divine.IDivineContext;
+import ninjabrainbot.calculator.stronghold.Ring;
+import ninjabrainbot.calculator.stronghold.RingIterator;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
 
 public class Prior implements IPrior {
@@ -11,13 +16,13 @@ public class Prior implements IPrior {
 	int radius;
 	int x0, z0, x1, z1;
 	Chunk[] chunks;
-	DivineContext divineContext;
+	IDivineContext divineContext;
 	
 	public Prior() {
 		this(0, 0, StrongholdConstants.maxChunk, null);
 	}
 	
-	public Prior(int centerX, int centerZ, int radius, DivineContext divineContext) {
+	public Prior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
 		setInitialSize(centerX, centerZ, radius);

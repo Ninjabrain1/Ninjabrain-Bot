@@ -14,11 +14,10 @@ import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.Subscription;
 
-/**
- * JComponent for showing a Throw.
- */
-public class ChunkPanelHeader extends ThemedPanel {
+public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -5271531617019225933L;
 	
@@ -30,6 +29,8 @@ public class ChunkPanelHeader extends ThemedPanel {
 	private JLabel[] labels;
 	
 	GUI gui;
+	
+	Subscription strongholdDisplayTypeChangedSubscription;
 
 	public ChunkPanelHeader(GUI gui) {
 		super(gui, true);
@@ -52,6 +53,7 @@ public class ChunkPanelHeader extends ThemedPanel {
 		add(nether);
 		updateHeaderText();
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
+		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> updateHeaderText());
 	}
 	
 	@Override
@@ -112,6 +114,11 @@ public class ChunkPanelHeader extends ThemedPanel {
 	@Override
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_STRONG;
+	}
+	
+	@Override
+	public void dispose() {
+		strongholdDisplayTypeChangedSubscription.cancel();
 	}
 	
 }

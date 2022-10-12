@@ -1,4 +1,4 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.divine;
 
 public class DivineCoord {
 	

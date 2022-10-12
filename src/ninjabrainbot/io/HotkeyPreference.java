@@ -3,7 +3,10 @@ package ninjabrainbot.io;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
-import ninjabrainbot.gui.GUI;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+
+import ninjabrainbot.util.ISubscribable;
+import ninjabrainbot.util.ObservableProperty;
 
 public class HotkeyPreference {
 	
@@ -13,12 +16,15 @@ public class HotkeyPreference {
 
 	IntPreference modifier;
 	IntPreference code;
+	
+	private ObservableProperty<NativeKeyEvent> whenTriggered;
 
 	public HotkeyPreference(String key, Preferences pref) {
 		this.pref = pref;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);
 		hotkeys.add(this);
+		whenTriggered = new ObservableProperty<NativeKeyEvent>();
 	}
 
 	public int getCode() {
@@ -36,9 +42,13 @@ public class HotkeyPreference {
 	public synchronized void setModifier(int value) {
 		modifier.set(value);
 	}
-
-	public void onChangedByUser(GUI gui) { }
 	
-	public void execute(GUI gui) { }
+	public final void execute(NativeKeyEvent e) {
+		whenTriggered.notifySubscribers(e);
+	}
+	
+	public ISubscribable<NativeKeyEvent> whenTriggered(){
+		return whenTriggered;
+	}
 
 }

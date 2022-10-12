@@ -1,16 +1,17 @@
 package ninjabrainbot.gui.components;
 
-import java.util.List;
-
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 
-import ninjabrainbot.calculator.DivineContext;
+import ninjabrainbot.Main;
+import ninjabrainbot.calculator.IThrow;
+import ninjabrainbot.calculator.IThrowSet;
 import ninjabrainbot.calculator.Throw;
+import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.TextAnimator;
+import ninjabrainbot.util.ISet;
 
-public class EnderEyePanel extends JPanel implements ThemedComponent {
+public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	private static final long serialVersionUID = 5595933968395207468L;
 
@@ -22,35 +23,39 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 	
 	private TextAnimator textAnimator;
 
-	public EnderEyePanel(GUI gui) {
+	public EnderEyePanel(GUI gui, IThrowSet throwSet, IDivineContext divineContext) {
 		gui.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		throwPanelHeader = new ThrowPanelHeader(gui);
 		add(throwPanelHeader);
-		divineContextPanel = new DivineContextPanel(gui);
+		divineContextPanel = new DivineContextPanel(gui, divineContext);
 		add(divineContextPanel);
-		throwPanels = new ThrowPanel[GUI.MAX_THROWS];
-		for (int i = 0; i < GUI.MAX_THROWS; i++) {
-			throwPanels[i] = new ThrowPanel(gui);
+		throwPanels = new ThrowPanel[throwSet.maxCapacity()];
+		for (int i = 0; i < throwSet.maxCapacity(); i++) {
+			throwPanels[i] = new ThrowPanel(gui, throwSet);
 			add(throwPanels[i]);
 		}
 		textAnimator = new TextAnimator(gui, 200);
+		// Subscriptions
+		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
+		sh.add(throwSet.whenModified().subscribe(ts -> setThrows(ts)));
 	}
 	
-	public void setAngleErrorsEnabled(boolean b) {
+	private void setAngleErrorsEnabled(boolean b) {
 		throwPanelHeader.setAngleErrorsEnabled(b);
 		for (ThrowPanel p : throwPanels) {
 			p.setAngleErrorsEnabled(b);
 		}
+		whenSizeModified.notifySubscribers(this);
 	}
 
-	public void setThrow(int i, Throw t) {
+	private void setThrow(int i, Throw t) {
 		throwPanels[i].setThrow(t);
 		textAnimator.setJThrowPanel(throwPanels[i]);
 	}
 
-	public void setErrors(double[] errors) {
+	private void setErrors(double[] errors) {
 		for (int i = 0; i < throwPanels.length; i++) {
 			ThrowPanel throwPanel = throwPanels[i];
 			if (errors != null && i < errors.length)
@@ -60,11 +65,10 @@ public class EnderEyePanel extends JPanel implements ThemedComponent {
 		}
 	}
 
-	public void setThrows(List<Throw> eyeThrows, DivineContext dc) {
-		divineContextPanel.setDivineContext(dc);
+	private void setThrows(ISet<IThrow> throwSet) {
 		for (int i = 0; i < throwPanels.length; i++) {
 			ThrowPanel throwPanel = throwPanels[i];
-			throwPanel.setThrow(i < eyeThrows.size() ? eyeThrows.get(i) : null);
+			throwPanel.setThrow(i < throwSet.size() ? throwSet.get(i) : null);
 		}
 	}
 

@@ -2,9 +2,9 @@ package ninjabrainbot.io;
 
 import java.util.prefs.Preferences;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.util.Modifiable;
 
-public class FloatPreference {
+public class FloatPreference extends Modifiable<Float> {
 
 	Preferences pref;
 
@@ -42,8 +42,7 @@ public class FloatPreference {
 			value = min;
 		this.value = value;
 		pref.putFloat(key, value);
+		whenModified.notifySubscribers(value);
 	}
-
-	public void onChangedByUser(GUI gui) { }
 
 }

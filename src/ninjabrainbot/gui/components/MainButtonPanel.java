@@ -11,6 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
@@ -19,12 +21,17 @@ public class MainButtonPanel extends ThemedPanel {
 	
 	private static final long serialVersionUID = -8143875137607726122L;
 	
+	IDataState dataState;
+	IDataStateHandler dataStateHandler;
+	
 	private JLabel throwsLabel;
 	private FlatButton resetButton;
 	private FlatButton undoButton;
 	
-	public MainButtonPanel(GUI gui) {
+	public MainButtonPanel(GUI gui, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(gui);
+		this.dataState = dataState;
+		this.dataStateHandler = dataStateHandler;
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
@@ -72,13 +79,13 @@ public class MainButtonPanel extends ThemedPanel {
 	
 	private FlatButton getResetButton(GUI gui) {
 		FlatButton button = new FlatButton(gui, I18n.get("reset"));
-		button.addActionListener(p -> gui.resetThrows());
+		button.addActionListener(p -> dataState.reset());
 		return button;
 	}
 	
 	private FlatButton getUndoButton(GUI gui) {
 		FlatButton button = new FlatButton(gui, I18n.get("undo"));
-		button.addActionListener(p -> gui.undo());
+		button.addActionListener(p -> dataStateHandler.undo());
 		return button;
 	}
 	

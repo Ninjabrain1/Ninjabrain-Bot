@@ -1,4 +1,4 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.divine;
 
 public class Fossil {
 
@@ -28,6 +28,11 @@ public class Fossil {
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Fossil && ((Fossil)obj).x == x;
 	}
 
 }

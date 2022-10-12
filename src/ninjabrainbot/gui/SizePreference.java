@@ -19,8 +19,6 @@ public abstract class SizePreference {
 	public int ANGLE_COLUMN_WIDTH;
 	public int WINDOW_ROUNDING;
 
-	public static final int NUM_DETAILED_PANELS = 5;
-
 	public static final HashMap<String, SizePreference> SIZES = new HashMap<String, SizePreference>();
 	public static final SizePreference REGULAR = new RegularSize();
 	public static final SizePreference LARGE = new LargeSize();

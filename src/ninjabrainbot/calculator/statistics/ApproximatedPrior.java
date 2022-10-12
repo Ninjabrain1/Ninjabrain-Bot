@@ -1,5 +1,9 @@
-package ninjabrainbot.calculator;
+package ninjabrainbot.calculator.statistics;
 
+import ninjabrainbot.calculator.divine.IDivineContext;
+import ninjabrainbot.calculator.stronghold.Ring;
+import ninjabrainbot.calculator.stronghold.RingIterator;
+import ninjabrainbot.calculator.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
 
 /**
@@ -12,7 +16,7 @@ public class ApproximatedPrior extends Prior {
 		super();
 	}
 
-	public ApproximatedPrior(int centerX, int centerZ, int radius, DivineContext divineContext) {
+	public ApproximatedPrior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		super(centerX, centerZ, radius, divineContext);
 	}
 	

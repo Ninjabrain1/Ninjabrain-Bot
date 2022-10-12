@@ -59,6 +59,9 @@ public class NotificationsFrame extends ThemedFrame {
 		FlatButton changelogButton = new FlatButton(gui, I18n.get("notificationsframe.changelog_button"));
 		changelogButton.addActionListener(p -> openReleasePage());
 		mainPanel.add(changelogButton);
+		
+		// Subscriptions
+		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 	}
 	
 	@Override
