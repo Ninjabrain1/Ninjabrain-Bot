@@ -18,6 +18,8 @@ public interface IDataState {
 	public IObservable<DivineResult> whenDivineResultChanged();
 
 	public IObservable<Boolean> whenLockedChanged();
+	
+	public IObservable<ResultType> whenResultTypeChanged();
 
 	public void toggleLocked();
 

@@ -6,6 +6,7 @@ import java.util.List;
 import ninjabrainbot.calculator.blind.BlindPosition;
 import ninjabrainbot.calculator.blind.BlindResult;
 import ninjabrainbot.calculator.divine.DivineResult;
+import ninjabrainbot.calculator.divine.Fossil;
 import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.calculator.statistics.ApproximatedPrior;
 import ninjabrainbot.calculator.statistics.Posterior;
@@ -32,7 +33,7 @@ public class Calculator implements ICalculator {
 	@Override
 	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos) {
 		if (eyeThrows.size() == 0)
-			return new CalculatorResult();
+			return null;
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
 		Posterior posterior = new Posterior(eyeThrows, divineContext);
@@ -95,7 +96,8 @@ public class Calculator implements ICalculator {
 
 	@Override
 	public DivineResult divine() {
-		return new DivineResult(divineContext.getFossil());
+		Fossil f = divineContext.getFossil();
+		return f != null ? new DivineResult(f) : null;
 	}
 
 	private double getHighrollProbability(double x, double z, int distanceThreshold) {

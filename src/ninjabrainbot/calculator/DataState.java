@@ -25,6 +25,7 @@ public class DataState implements IDataState, IDisposable {
 	private ObservableField<ICalculatorResult> calculatorResult = new ObservableField<ICalculatorResult>(null);
 	private ObservableField<BlindResult> blindResult = new ObservableField<BlindResult>(null);
 	private ObservableField<DivineResult> divineResult = new ObservableField<DivineResult>(null);
+	private ObservableField<ResultType> resultType = new ObservableField<ResultType>(ResultType.NONE);
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
@@ -40,6 +41,7 @@ public class DataState implements IDataState, IDisposable {
 		throwStream.subscribe(t -> onNewThrow(t));
 		fossilStream.subscribe(f -> divineContext.setFossil(f));
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
+		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
 		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(Main.preferences.mcVersion.whenModified().subscribe(__ -> recalculateStronghold()));
 	}
@@ -73,6 +75,11 @@ public class DataState implements IDataState, IDisposable {
 	public IObservable<Boolean> whenLockedChanged() {
 		return locked;
 	}
+	
+	@Override
+	public IObservable<ResultType> whenResultTypeChanged() {
+		return resultType;
+	}
 
 	@Override
 	public void reset() {
@@ -97,6 +104,16 @@ public class DataState implements IDataState, IDisposable {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
+		resultType.set(calculatorResult.get() != null ? ResultType.TRIANGULATION : ResultType.NONE);
+	}
+	
+	private void onFossilChanged() {
+		if (throwSet.size() != 0) {
+			recalculateStronghold();
+		} else {
+			divineResult.set(calculator.divine());
+			resultType.set(divineResult.get() != null ? ResultType.DIVINE : ResultType.NONE);
+		}
 	}
 
 	private void onNewThrow(IThrow t) {
@@ -105,8 +122,10 @@ public class DataState implements IDataState, IDisposable {
 			return;
 		}
 		if (t.isNether()) {
-			if (throwSet.size() == 0)
+			if (throwSet.size() == 0) {
 				blindResult.set(calculator.blind(new BlindPosition(t)));
+				resultType.set(ResultType.BLIND);
+			}
 			else
 				setPlayerPos(t);
 			return;

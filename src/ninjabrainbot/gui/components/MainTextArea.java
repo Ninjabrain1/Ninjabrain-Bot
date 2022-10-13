@@ -21,6 +21,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.calculator.ICalculatorResult;
 import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.ResultType;
 import ninjabrainbot.calculator.blind.BlindResult;
 import ninjabrainbot.calculator.divine.DivineResult;
 import ninjabrainbot.calculator.stronghold.Ring;
@@ -40,8 +41,10 @@ public class MainTextArea extends ResizablePanel {
 
 	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET";
 
+	IDataState dataState;
+
 	GUI gui;
-	
+
 	BasicTriangulationPanel basicTriangulation;
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
@@ -52,6 +55,7 @@ public class MainTextArea extends ResizablePanel {
 
 	public MainTextArea(GUI gui, IDataState dataState) {
 		this.gui = gui;
+		this.dataState = dataState;
 		layout = new CardLayout();
 		idle = true;
 		setLayout(layout);
@@ -65,41 +69,69 @@ public class MainTextArea extends ResizablePanel {
 		add(blind, BLIND);
 		add(divine, DIVINE);
 		setOpaque(false);
-		layout.show(this, Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
-		setupSubscriptions(dataState);
+		layout.show(this,
+				Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+		setupSubscriptions();
+		updateResult();
 	}
-	
-	private void setupSubscriptions(IDataState dataState) {
+
+	private void setupSubscriptions() {
 		// Settings
 		sh.add(Main.preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
 		sh.add(Main.preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
+		sh.add(Main.preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
 		// Data state
 		sh.add(dataState.whenCalculatorResultChanged().subscribe(result -> setResult(result)));
+		sh.add(dataState.whenBlindResultChanged().subscribe(result -> setResult(result)));
+		sh.add(dataState.whenDivineResultChanged().subscribe(result -> setResult(result)));
+		sh.add(dataState.whenResultTypeChanged().subscribe(__ -> updateResult()));
+	}
+
+	private void onViewTypeChanged() {
+		updateResult();
+		whenSizeModified.notifySubscribers(this);
+	}
+
+	private void updateResult() {
+		ResultType rt = dataState.whenResultTypeChanged().get();
+		switch (rt) {
+		case NONE:
+			setResult((ICalculatorResult) null);
+			break;
+		case TRIANGULATION:
+			setResult(dataState.whenCalculatorResultChanged().get());
+			break;
+		case BLIND:
+			setResult(dataState.whenBlindResultChanged().get());
+			break;
+		case DIVINE:
+			setResult(dataState.whenDivineResultChanged().get());
+			break;
+		}
 	}
 
 	private void setResult(ICalculatorResult result) {
-		if (result == null && blind.isVisible()) {
+		if (dataState.whenResultTypeChanged().get() != ResultType.TRIANGULATION
+				&& dataState.whenResultTypeChanged().get() != ResultType.NONE)
 			return;
-		}
-		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+		if (dataState.whenResultTypeChanged().get() == ResultType.TRIANGULATION && result == null)
+			return;
+		if (dataState.whenResultTypeChanged().get() == ResultType.NONE && result != null)
+			return;
+		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
 			basicTriangulation.updateColors(gui);
 			layout.show(this, TRIANGULATION);
 		} else {
-			if (result != null && !result.success()) {
-				basicTriangulation.setResult(result);
-				basicTriangulation.updateColors(gui);
-				layout.show(this, TRIANGULATION);
-			} else {
-				detailedTriangulation.setResult(result);
-				detailedTriangulation.updateColors(gui);
-				layout.show(this, TRIANGULATION_DETAILED);
-			}
+			detailedTriangulation.setResult(result);
+			detailedTriangulation.updateColors(gui);
+			layout.show(this, TRIANGULATION_DETAILED);
 		}
 		idle = result == null;
 	}
 
 	private void setResult(BlindResult result) {
+		assert dataState.whenResultTypeChanged().get() == ResultType.BLIND;
 		blind.setResult(result);
 		blind.updateColors(gui);
 		layout.show(this, BLIND);
@@ -107,6 +139,7 @@ public class MainTextArea extends ResizablePanel {
 	}
 
 	private void setResult(DivineResult result) {
+		assert dataState.whenResultTypeChanged().get() == ResultType.DIVINE;
 		divine.setResult(result);
 		divine.updateColors(gui);
 		layout.show(this, DIVINE);
@@ -121,20 +154,6 @@ public class MainTextArea extends ResizablePanel {
 		basicTriangulation.setAngleUpdatesEnabled(b);
 		detailedTriangulation.setAngleUpdatesEnabled(b);
 		whenSizeModified.notifySubscribers(this);
-	}
-
-	private void updateColors(GUI gui) {
-		basicTriangulation.updateColors(gui);
-		detailedTriangulation.updateColors(gui);
-		blind.updateColors(gui);
-	}
-
-	private void onReset() {
-		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
-			layout.show(this, TRIANGULATION);
-		} else {
-			layout.show(this, TRIANGULATION_DETAILED);
-		}
 	}
 
 	@Override
