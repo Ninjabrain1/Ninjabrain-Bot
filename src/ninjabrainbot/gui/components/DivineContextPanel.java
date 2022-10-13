@@ -13,12 +13,13 @@ import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.Subscription;
 
 /**
  * JComponent for showing a Throw.
  */
-public class DivineContextPanel extends ThemedPanel {
+public class DivineContextPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 
@@ -26,9 +27,10 @@ public class DivineContextPanel extends ThemedPanel {
 	private JLabel label;
 	private FlatButton removeButton;
 	
-	Subscription fossilSubscription; 
+	Subscription fossilSubscription;
+	Runnable whenVisibilityChanged;
 	
-	public DivineContextPanel(GUI gui, IDivineContext dc) {
+	public DivineContextPanel(GUI gui, IDivineContext dc, Runnable whenVisibilityChanged) {
 		super(gui);
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
@@ -48,8 +50,10 @@ public class DivineContextPanel extends ThemedPanel {
 		add(removeButton);
 		add(label);
 		setLayout(null);
+		onFossilChanged(dc.getFossil());
 		removeButton.addActionListener(p -> dc.resetFossil());
 		fossilSubscription = dc.whenFossilChanged().subscribe(fossil -> onFossilChanged(fossil));
+		this.whenVisibilityChanged = whenVisibilityChanged;
 	}
 
 	@Override
@@ -108,13 +112,19 @@ public class DivineContextPanel extends ThemedPanel {
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_SLIGHTLY_STRONG;
 	}
+	
+	@Override
+	public void dispose() {
+		fossilSubscription.cancel();
+	}
 
 	private void onFossilChanged(Fossil fossil) {
-		if (fossil == null) {
-			label.setText(null);
-		} else {
-			label.setText(I18n.get("divine") + I18n.get("fossil_number", fossil.x));
-			removeButton.setVisible(true);
+		label.setText(fossil == null ? null : (I18n.get("divine") + I18n.get("fossil_number", fossil.x)));
+		boolean newVisibility = fossil != null;
+		if (newVisibility != isVisible()) {
+			setVisible(newVisibility);
+			if (whenVisibilityChanged != null)
+				whenVisibilityChanged.run();
 		}
 	}
 

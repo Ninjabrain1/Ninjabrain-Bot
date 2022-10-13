@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
+import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -18,6 +19,7 @@ import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
+import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.IDisposable;
 
@@ -67,8 +69,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 		sh.add(Main.preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
 		// Components bounds changed
-		sh.add(mainTextArea.whenSizeModified.subscribe(__ -> updateBounds(gui)));
-		sh.add(enderEyePanel.whenSizeModified.subscribe(__ -> updateBounds(gui)));
+		sh.add(mainTextArea.whenSizeModified.subscribe(__ -> updateSize(gui)));
+		sh.add(enderEyePanel.whenSizeModified.subscribe(__ -> updateSize(gui)));
 		sh.add(dataState.whenLockedChanged().subscribe(b -> lockIcon.setVisible(b)));
 	}
 
@@ -154,6 +156,14 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		if (gd.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT)) {
 			setOpacity(t ? 0.75f : 1.0f);
 		}
+	}
+	
+	private void updateSize(GUI gui) {
+		int extraWidth = Main.preferences.showAngleUpdates.get()
+				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? gui.size.ANGLE_COLUMN_WIDTH : 0;
+		setSize(gui.size.WIDTH + extraWidth, getPreferredSize().height);
+		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), gui.size.WINDOW_ROUNDING,
+				gui.size.WINDOW_ROUNDING));
 	}
 	
 	@Override

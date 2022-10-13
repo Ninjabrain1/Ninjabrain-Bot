@@ -19,23 +19,29 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	private DivineContextPanel divineContextPanel;
 	
 	private TextAnimator textAnimator;
-
+	
 	public EnderEyePanel(GUI gui, IThrowSet throwSet, IDivineContext divineContext) {
 		gui.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		throwPanelHeader = new ThrowPanelHeader(gui);
 		add(throwPanelHeader);
-		divineContextPanel = new DivineContextPanel(gui, divineContext);
-		add(divineContextPanel);
 		throwPanels = new ThrowPanel[throwSet.maxCapacity()];
+		divineContextPanel = new DivineContextPanel(gui, divineContext, () -> whenDivineContextVisibilityUpdated());
+		add(divineContextPanel);
 		for (int i = 0; i < throwSet.maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(gui, throwSet, i);
+			throwPanels[i] = new ThrowPanel(gui, throwSet, i, () -> whenSizeModified.notifySubscribers(this));
 			add(throwPanels[i]);
 		}
+		throwPanels[2].setDivineContextPanel(divineContextPanel);
 		textAnimator = new TextAnimator(gui, 200);
 		// Subscriptions
 		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
+	}
+
+	private void whenDivineContextVisibilityUpdated() {
+		throwPanels[2].updateVisibility();
+		whenSizeModified.notifySubscribers(this);
 	}
 	
 	private void setAngleErrorsEnabled(boolean b) {
@@ -43,7 +49,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		for (ThrowPanel p : throwPanels) {
 			p.setAngleErrorsEnabled(b);
 		}
-		whenSizeModified.notifySubscribers(this);
 	}
 
 	private void setErrors(double[] errors) {
@@ -57,17 +62,12 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		divineContextPanel.setVisible(divineContextPanel.hasDivineContext());
-		int k = divineContextPanel.hasDivineContext() ? 1 : 0;
-		for (int i = 0; i < throwPanels.length; i++) {
-			ThrowPanel throwPanel = throwPanels[i];
-			throwPanel.setVisible(i < DEFAULT_SHOWN_THROWS - k || throwPanel.hasThrow());
-		}
-	}
-
-	@Override
 	public void updateColors(GUI gui) {
+	}
+	
+	
+	@Override
+	public void updateSize(GUI gui) {
 	}
 	
 	@Override
@@ -76,6 +76,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		for (ThrowPanel p : throwPanels) {
 			p.dispose();
 		}
+		divineContextPanel.dispose();
 	}
-	
 }

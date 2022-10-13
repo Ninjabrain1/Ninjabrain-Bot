@@ -46,6 +46,8 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	}
 
 	private void updateWithPlayerPos(IThrow playerPos) {
+		if (playerPos == null)
+			return;
 		distance = chunk.getDistance(playerPos);
 		double playerX = playerPos.x();
 		double playerZ = playerPos.z();

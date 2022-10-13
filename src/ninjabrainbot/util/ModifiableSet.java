@@ -54,8 +54,8 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		int index = set.indexOf(t);
 		if (set.remove(t)) {
 			subscriptions.remove(t).cancel();
-			for (int i = index; i < size(); i++) {
-				whenElementAtIndexModified.notifySubscribers(i < size()-1 ? set.get(i) : null, i);
+			for (int i = index; i < size() + 1; i++) {
+				whenElementAtIndexModified.notifySubscribers(i < size() ? set.get(i) : null, i);
 			}
 			whenModified.notifySubscribers(this);
 		}

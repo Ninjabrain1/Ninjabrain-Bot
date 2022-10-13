@@ -30,12 +30,13 @@ public class ObservableField<T> implements IObservable<T> {
 	}
 
 	public void set(T value) {
-		if (value == data || (value != null && value.equals(value)))
+		if (value == data || (value != null && value.equals(data)))
 			return;
 		data = value;
 		for (Consumer<T> subscriber : subscribers) {
 			subscriber.accept(data);
 		}
+		System.out.println(value);
 	}
 	
 	public T get() {

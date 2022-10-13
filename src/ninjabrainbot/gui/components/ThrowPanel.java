@@ -26,6 +26,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 	
+	DivineContextPanel divineContextPanel;
+	
+	private int index;
 	private IThrow t;
 	private JLabel x;
 	private JLabel z;
@@ -39,9 +42,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private Color colorNeg, colorPos;
 	
 	Subscription throwSetSubscription;
+	Runnable whenVisibilityChanged;
 
-	public ThrowPanel(GUI gui, IThrowSet throwSet, int index) {
+	public ThrowPanel(GUI gui, IThrowSet throwSet, int index, Runnable whenVisibilityChanged) {
 		super(gui);
+		this.index = index;
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
 		x = new JLabel((String) null, 0);
@@ -60,6 +65,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 				return theme.COLOR_NEUTRAL;
 			}
 		};
+		removeButton.setVisible(false);
 		add(removeButton);
 		add(x);
 		add(z);
@@ -67,9 +73,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		add(correction);
 		add(error);
 		setLayout(null);
-		setThrow(t);
+		updateVisibility();
+		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 		removeButton.addActionListener(p -> throwSet.remove(this.t));
 		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribe(t -> setThrow(t), index);
+		this.whenVisibilityChanged = whenVisibilityChanged;
 	}
 	
 	protected void setAngleErrorsEnabled(boolean e) {
@@ -180,7 +188,10 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
 	}
 	
-	public void setThrow(IThrow t) {
+	private void setThrow(IThrow t) {
+		if (this.t == t)
+			return;
+		this.t = t;
 		if (t == null) {
 			x.setText(null);
 			z.setText(null);
@@ -201,14 +212,25 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			}
 			removeButton.setVisible(true); 
 		}
-		this.t = t;
+		updateVisibility();
+		repaint(); // Update dot
+	}
+	
+	void updateVisibility() {
+		int k = (divineContextPanel != null && divineContextPanel.isVisible()) ? 1 : 0;
+		boolean newVisibility = index < 3 - k || hasThrow();
+		if (newVisibility != isVisible()) {
+			setVisible(newVisibility);
+			if (whenVisibilityChanged != null)
+				whenVisibilityChanged.run();
+		}
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// Paint dot if special std
-		if (t != null) {
+		if (t != null && t.getStdProfileNumber() != 0) {
 			if (t.getStdProfileNumber() == 1) {
 				g.setColor(Color.RED);
 			} else if (t.getStdProfileNumber() == 2) {
@@ -220,7 +242,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		}
 	}
 	
-	public boolean hasThrow() {
+	private boolean hasThrow() {
 		return t != null;
 	}
 
@@ -242,6 +264,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void dispose() {
 		throwSetSubscription.cancel();
+	}
+
+	public void setDivineContextPanel(DivineContextPanel divineContextPanel) {
+		this.divineContextPanel = divineContextPanel;
+		updateVisibility();
 	}
 	
 }

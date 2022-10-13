@@ -6,6 +6,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
+import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,7 @@ import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
+import ninjabrainbot.io.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
@@ -69,7 +71,7 @@ public class GUI {
 		
 		setupHotkeys();
 		setupSettingsSubscriptions();
-		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), new StandardStdProfile());
+		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), clipboardReader.whenNewFossilInputed(), new StandardStdProfile());
 		dataStateHandler = new DataStateHandler();
 		
 		// OLD
@@ -164,8 +166,11 @@ public class GUI {
 	}
 
 	private void changeLastAngleIfNotLocked(double delta) {
-		if (!targetLocked)
-			dataState.getThrowSet().getLast().addCorrection(delta);
+		if (!targetLocked && dataState.getThrowSet().size() != 0) {
+			IThrow last = dataState.getThrowSet().getLast();
+			if (last != null)
+				last.addCorrection(delta);
+		}
 	}
 	
 	private void toggleAltStdOnLastThrowIfNotLocked() {
@@ -243,30 +248,30 @@ public class GUI {
 	}
 
 	private void updateBounds() {
-//		for (ThemedComponent tc : themedComponents) {
-//			tc.updateSize(this);
-//		}
-//		updateFontsAndColors();
-//		frame.updateBounds(this);
-//		optionsFrame.updateBounds(this);
+		for (ThemedComponent tc : themedComponents) {
+			tc.updateSize(this);
+		}
+		updateFontsAndColors();
+		frame.updateBounds(this);
+		optionsFrame.updateBounds(this);
 //		notificationsFrame.updateBounds(this);
-//		int extraWidth = Main.preferences.showAngleUpdates.get()
-//				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
-//		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
-//		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
-//				size.WINDOW_ROUNDING));
+		int extraWidth = Main.preferences.showAngleUpdates.get()
+				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
+		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
+				size.WINDOW_ROUNDING));
 	}
 
 	private void updateFontsAndColors() {
-//		// Color and font
-//		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
-//		frame.setBackground(theme.COLOR_NEUTRAL);
-//		optionsFrame.updateFontsAndColors();
+		// Color and font
+		frame.getContentPane().setBackground(theme.COLOR_NEUTRAL);
+		frame.setBackground(theme.COLOR_NEUTRAL);
+		optionsFrame.updateFontsAndColors();
 //		notificationsFrame.updateFontsAndColors();
-//		for (ThemedComponent tc : themedComponents) {
-//			tc.updateColors(this);
-//			tc.updateSize(this);
-//		}
+		for (ThemedComponent tc : themedComponents) {
+			tc.updateColors(this);
+			tc.updateSize(this);
+		}
 	}
 
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);

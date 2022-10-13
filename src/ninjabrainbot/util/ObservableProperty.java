@@ -26,6 +26,7 @@ public class ObservableProperty<T> implements ISubscribable<T> {
 		for (Consumer<T> subscriber : subscribers) {
 			subscriber.accept(changed);
 		}
+		System.out.println(changed + ", " + changed.getClass());
 	}
 	
 	public int subscriberCount() {

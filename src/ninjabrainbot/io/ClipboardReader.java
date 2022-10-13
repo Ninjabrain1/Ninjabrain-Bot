@@ -28,6 +28,7 @@ public class ClipboardReader implements Runnable {
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
 		whenNewThrowInputed = new ObservableProperty<IThrow>();
+		whenNewFossilInputed = new ObservableProperty<Fossil>();
 	}
 
 	public void forceRead() {
@@ -56,13 +57,14 @@ public class ClipboardReader implements Runnable {
 				}
 			}
 			if (read) {
+				String clipboardString = null;
 				try {
-					String clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
-					if (!lastClipboardString.equals(clipboardString)) {
-						onClipboardUpdated(clipboardString);
-						lastClipboardString = clipboardString;
-					}
+					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
 				} catch (Exception e) {
+				}
+				if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
+					onClipboardUpdated(clipboardString);
+					lastClipboardString = clipboardString;
 				}
 			}
 			// Sleep 0.1 seconds

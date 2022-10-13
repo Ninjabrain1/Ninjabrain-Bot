@@ -5,6 +5,7 @@ import ninjabrainbot.calculator.blind.BlindPosition;
 import ninjabrainbot.calculator.blind.BlindResult;
 import ninjabrainbot.calculator.divine.DivineContext;
 import ninjabrainbot.calculator.divine.DivineResult;
+import ninjabrainbot.calculator.divine.Fossil;
 import ninjabrainbot.calculator.divine.IDivineContext;
 import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.IObservable;
@@ -19,19 +20,17 @@ public class DataState implements IDataState, IDisposable {
 
 	private DivineContext divineContext;
 	private ThrowSet throwSet;
-	private ObservableField<Boolean> locked;
-	private ObservableField<IThrow> playerPos;
-	private ObservableField<ICalculatorResult> calculatorResult;
-	private ObservableField<BlindResult> blindResult;
-	private ObservableField<DivineResult> divineResult;
+	private ObservableField<Boolean> locked = new ObservableField<Boolean>(false);
+	private ObservableField<IThrow> playerPos = new ObservableField<IThrow>(null);
+	private ObservableField<ICalculatorResult> calculatorResult = new ObservableField<ICalculatorResult>(null);
+	private ObservableField<BlindResult> blindResult = new ObservableField<BlindResult>(null);
+	private ObservableField<DivineResult> divineResult = new ObservableField<DivineResult>(null);
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataState(ICalculator calculator, ISubscribable<IThrow> throwStream, IStdProfile stdProfile) {
+	public DataState(ICalculator calculator, ISubscribable<IThrow> throwStream, ISubscribable<Fossil> fossilStream, IStdProfile stdProfile) {
 		divineContext = new DivineContext();
 		throwSet = new ThrowSet();
-		playerPos = new ObservableField<IThrow>(null);
-		calculatorResult = new ObservableField<ICalculatorResult>(null);
 
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
@@ -39,6 +38,7 @@ public class DataState implements IDataState, IDisposable {
 
 		// Subscriptions
 		throwStream.subscribe(t -> onNewThrow(t));
+		fossilStream.subscribe(f -> divineContext.setFossil(f));
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(Main.preferences.mcVersion.whenModified().subscribe(__ -> recalculateStronghold()));
@@ -88,12 +88,14 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public void dispose() {
 		sh.dispose();
-		calculatorResult.get().dispose();
+		if (calculatorResult.get() != null)
+			calculatorResult.get().dispose();
 		throwSet.dispose();
 	}
 
 	private void recalculateStronghold() {
-		calculatorResult.get().dispose();
+		if (calculatorResult.get() != null)
+			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
 	}
 
