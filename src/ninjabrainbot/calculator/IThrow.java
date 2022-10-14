@@ -2,6 +2,7 @@ package ninjabrainbot.calculator;
 
 import ninjabrainbot.calculator.statistics.IRay;
 import ninjabrainbot.util.IModifiable;
+import ninjabrainbot.util.ISubscribable;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 
@@ -15,6 +16,12 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 
 	public boolean isNether();
 	
+	public void setError(Double error);
+	
+	public Double error();
+	
+	public ISubscribable<Double> whenErrorChanged();
+	
 	public void addCorrection(double angle);
 	
 	public void setStdProfileNumber(int profileNumber);
@@ -25,6 +32,6 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 	
 	public default boolean isMcVersion1_12() {
 		return false;
-	};
+	}
 
 }

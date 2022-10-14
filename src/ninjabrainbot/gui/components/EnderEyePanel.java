@@ -13,13 +13,13 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	private static final long serialVersionUID = 5595933968395207468L;
 
 	public static final int DEFAULT_SHOWN_THROWS = 3;
-	
+
 	private ThrowPanelHeader throwPanelHeader;
 	private ThrowPanel[] throwPanels;
 	private DivineContextPanel divineContextPanel;
-	
+
 	private TextAnimator textAnimator;
-	
+
 	public EnderEyePanel(GUI gui, IThrowSet throwSet, IDivineContext divineContext) {
 		gui.registerThemedComponent(this);
 		setOpaque(false);
@@ -43,7 +43,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		throwPanels[2].updateVisibility();
 		whenSizeModified.notifySubscribers(this);
 	}
-	
+
 	private void setAngleErrorsEnabled(boolean b) {
 		throwPanelHeader.setAngleErrorsEnabled(b);
 		for (ThrowPanel p : throwPanels) {
@@ -51,25 +51,14 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		}
 	}
 
-	private void setErrors(double[] errors) {
-		for (int i = 0; i < throwPanels.length; i++) {
-			ThrowPanel throwPanel = throwPanels[i];
-			if (errors != null && i < errors.length)
-				throwPanel.setError(errors[i]);
-			else
-				throwPanel.setError("");
-		}
-	}
-
 	@Override
 	public void updateColors(GUI gui) {
 	}
-	
-	
+
 	@Override
 	public void updateSize(GUI gui) {
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();

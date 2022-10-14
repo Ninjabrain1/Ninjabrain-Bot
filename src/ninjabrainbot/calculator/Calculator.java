@@ -21,7 +21,7 @@ public class Calculator implements ICalculator {
 
 	private IDivineContext divineContext;
 	private CalculatorSettings settings;
-	
+
 	public Calculator() {
 		this(new CalculatorSettings());
 	}
@@ -65,10 +65,8 @@ public class Calculator implements ICalculator {
 		int deltaZ2 = -deltaX1;
 		double probability2 = getHighrollProbability(b.x + deltaX2, b.z + deltaZ2, distanceThreshold);
 		double probabilityDerivative2 = (probability2 - probability) / Math.sqrt(deltaX1 * deltaX1 + deltaZ1 * deltaZ1);
-		double probabilityDerivative = Math.sqrt(
-				probabilityDerivative1 * probabilityDerivative1 + probabilityDerivative2 * probabilityDerivative2);
-		double ninetiethPercentileDerivative = probabilityDerivative
-				* Math.sqrt(0.1 / (2 * probability * probability * probability)) * distanceThreshold;
+		double probabilityDerivative = Math.sqrt(probabilityDerivative1 * probabilityDerivative1 + probabilityDerivative2 * probabilityDerivative2);
+		double ninetiethPercentileDerivative = probabilityDerivative * Math.sqrt(0.1 / (2 * probability * probability * probability)) * distanceThreshold;
 		double avgDist = getAverageDistance(b.x, b.z, 10, 20);
 		double avgDist2 = getAverageDistance(b.x - h * Math.sin(phi_p), b.z + h * Math.cos(phi_p), 10, 20);
 		double avgDistDerivative = (avgDist2 - avgDist) / h;
@@ -87,11 +85,9 @@ public class Calculator implements ICalculator {
 		double optR = Math.sqrt(optX * optX + optZ * optZ);
 		optX *= optDist / optR;
 		optZ *= optDist / optR;
-		System.out.println(
-				"Time to calculate blind features: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
-		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative,
-				ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z), Coords.dist(optX, optZ, b.x, b.z),
-				optHighrollProb);
+		System.out.println("Time to calculate blind features: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z),
+				Coords.dist(optX, optZ, b.x, b.z), optHighrollProb);
 	}
 
 	@Override
@@ -106,8 +102,7 @@ public class Calculator implements ICalculator {
 		if (!settings.approximatedBlindCalculations) {
 			prior = new Prior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
 		} else {
-			prior = new ApproximatedPrior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1,
-					divineContext);
+			prior = new ApproximatedPrior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
 		}
 		for (Chunk c : prior.getChunks()) {
 			double dx = x * 8 - c.x * 16 + 8;

@@ -77,17 +77,17 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		IThrow t = Throw.parseF3C(clipboard);
+		final IThrow t = Throw.parseF3C(clipboard);
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		t = Throw1_12.parseF3C(clipboard);
-		if (t != null) {
+		final IThrow t2 = Throw1_12.parseF3C(clipboard);
+		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		Fossil f = Fossil.parseF3I(clipboard);
+		final Fossil f = Fossil.parseF3I(clipboard);
 		if (f != null) {
 			whenNewFossilInputed.notifySubscribers(f);
 		}

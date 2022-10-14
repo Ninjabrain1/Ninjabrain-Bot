@@ -1,5 +1,7 @@
 package ninjabrainbot.calculator;
 
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.blind.BlindPosition;
 import ninjabrainbot.calculator.blind.BlindResult;
@@ -75,7 +77,7 @@ public class DataState implements IDataState, IDisposable {
 	public IObservable<Boolean> whenLockedChanged() {
 		return locked;
 	}
-	
+
 	@Override
 	public IObservable<ResultType> whenResultTypeChanged() {
 		return resultType;
@@ -84,7 +86,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public void reset() {
 		throwSet.clear();
+		playerPos.set(null);
+		blindResult.set(null);
+		divineResult.set(null);
 		divineContext.clear();
+		resultType.set(ResultType.NONE);
 	}
 
 	@Override
@@ -104,9 +110,10 @@ public class DataState implements IDataState, IDisposable {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
+		throwSet.setAngleErrors(calculatorResult.get());
 		resultType.set(calculatorResult.get() != null ? ResultType.TRIANGULATION : ResultType.NONE);
 	}
-	
+
 	private void onFossilChanged() {
 		if (throwSet.size() != 0) {
 			recalculateStronghold();
@@ -117,28 +124,24 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	private void onNewThrow(IThrow t) {
-		if (locked.get()) {
-			setPlayerPos(t);
+		setPlayerPos(t);
+		if (locked.get())
 			return;
-		}
 		if (t.isNether()) {
 			if (throwSet.size() == 0) {
 				blindResult.set(calculator.blind(new BlindPosition(t)));
 				resultType.set(ResultType.BLIND);
 			}
-			else
-				setPlayerPos(t);
 			return;
 		}
-		t.setStdProfile(stdProfile);
-		if (t.lookingBelowHorizon() || !throwSet.add(t))
-			setPlayerPos(t);
+		if (!t.lookingBelowHorizon()) {
+			t.setStdProfile(stdProfile);
+			throwSet.add(t);
+		}
 	}
 
 	private void setPlayerPos(IThrow t) {
-		if (throwSet.size() > 0) {
-			playerPos.set(t);
-		}
+		playerPos.set(t);
 	}
 
 }

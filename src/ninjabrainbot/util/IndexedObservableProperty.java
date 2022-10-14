@@ -27,7 +27,7 @@ public class IndexedObservableProperty<T> implements IMultiSubscribable<T> {
 			if (subscriber.snd.intValue() == index)
 				subscriber.fst.accept(changed);
 		}
-		System.out.println(changed);
+		System.out.println("IndexedObservableProperty " + changed);
 	}
 	
 	public int subscriberCount() {

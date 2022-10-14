@@ -2,7 +2,9 @@ package ninjabrainbot.calculator;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.util.ISubscribable;
 import ninjabrainbot.util.Modifiable;
+import ninjabrainbot.util.ObservableField;
 import ninjabrainbot.util.Subscription;
 
 /**
@@ -19,6 +21,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	private double correction;
 
 	private Subscription stdProfileSubscription;
+	private ObservableField<Double> error = new ObservableField<Double>(0.0);
 
 	public Throw(double x, double z, double alpha, double beta, boolean nether) {
 		this.x = x;
@@ -123,6 +126,21 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	@Override
 	public double getStd() {
 		return std;
+	}
+	
+	@Override
+	public void setError(Double error) {
+		this.error.set(error);
+	}
+	
+	@Override
+	public Double error() {
+		return error.get();
+	}
+	
+	@Override
+	public ISubscribable<Double> whenErrorChanged() {
+		return error;
 	}
 
 	@Override

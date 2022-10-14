@@ -13,7 +13,7 @@ public class AutoResetTimer extends Timer implements IDisposable {
 	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
 
 	SubscriptionHandler sh = new SubscriptionHandler();
-	
+
 	public AutoResetTimer(IDataState dataState) {
 		super(AUTO_RESET_DELAY, null);
 		addActionListener(p -> {
@@ -25,7 +25,7 @@ public class AutoResetTimer extends Timer implements IDisposable {
 		sh.add(dataState.whenBlindResultChanged().subscribe(__ -> restart()));
 		sh.add(dataState.whenCalculatorResultChanged().subscribe(__ -> restart()));
 	}
-	
+
 	@Override
 	public void dispose() {
 		sh.dispose();

@@ -59,7 +59,7 @@ public class GUI {
 	private HashMap<String, Font> fonts;
 
 	public final File OBS_OVERLAY;
-	
+
 	private final IDataState dataState;
 	private final IDataStateHandler dataStateHandler;
 
@@ -68,12 +68,12 @@ public class GUI {
 		Thread clipboardThread = new Thread(clipboardReader);
 		KeyboardListener.init(clipboardReader);
 		clipboardThread.start();
-		
+
 		setupHotkeys();
 		setupSettingsSubscriptions();
 		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), clipboardReader.whenNewFossilInputed(), new StandardStdProfile());
 		dataStateHandler = new DataStateHandler();
-		
+
 		// OLD
 		theme = Theme.get(Main.preferences.theme.get());
 		size = SizePreference.get(Main.preferences.size.get());
@@ -99,8 +99,6 @@ public class GUI {
 		ImageIcon img = new ImageIcon(iconURL);
 		frame.setIconImage(img.getImage());
 
-		
-
 		// Settings window
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(this);
@@ -125,7 +123,7 @@ public class GUI {
 			SwingUtilities.invokeLater(() -> updateOBSOverlay());
 		});
 		SwingUtilities.invokeLater(() -> updateOBSOverlay());
-		
+
 		// Shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -136,7 +134,7 @@ public class GUI {
 			}
 		});
 	}
-	
+
 	private void setupHotkeys() {
 		Main.preferences.hotkeyReset.whenTriggered().subscribe(__ -> resetCalculatorIfNotLocked());
 		Main.preferences.hotkeyUndo.whenTriggered().subscribe(__ -> undoIfNotLocked());
@@ -145,7 +143,7 @@ public class GUI {
 		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> toggleAltStdOnLastThrowIfNotLocked());
 		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
 	}
-	
+
 	private void setupSettingsSubscriptions() {
 		Main.preferences.overlayHideDelay.whenModified().subscribe(__ -> updateOBSOverlay());
 		Main.preferences.overlayAutoHide.whenModified().subscribe(__ -> updateOBSOverlay());
@@ -155,7 +153,7 @@ public class GUI {
 		Main.preferences.theme.whenModified().subscribe(__ -> updateTheme());
 		Main.preferences.size.whenModified().subscribe(__ -> updateSizePreference());
 	}
-	
+
 	private void resetCalculatorIfNotLocked() {
 		if (!targetLocked)
 			dataState.reset();
@@ -172,7 +170,7 @@ public class GUI {
 				last.addCorrection(delta);
 		}
 	}
-	
+
 	private void toggleAltStdOnLastThrowIfNotLocked() {
 		if (!targetLocked && dataState.getThrowSet().size() != 0) {
 			IThrow last = dataState.getThrowSet().getLast();
@@ -214,8 +212,7 @@ public class GUI {
 	private Font loadFont() {
 		Font font = null;
 		try {
-			font = Font.createFont(Font.TRUETYPE_FONT,
-					Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -255,11 +252,9 @@ public class GUI {
 		frame.updateBounds(this);
 		optionsFrame.updateBounds(this);
 //		notificationsFrame.updateBounds(this);
-		int extraWidth = Main.preferences.showAngleUpdates.get()
-				&& Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
+		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? size.ANGLE_COLUMN_WIDTH : 0;
 		frame.setSize(size.WIDTH + extraWidth, frame.getPreferredSize().height);
-		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING,
-				size.WINDOW_ROUNDING));
+		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), size.WINDOW_ROUNDING, size.WINDOW_ROUNDING));
 	}
 
 	private void updateFontsAndColors() {

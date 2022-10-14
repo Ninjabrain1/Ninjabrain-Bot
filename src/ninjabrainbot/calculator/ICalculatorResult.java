@@ -1,15 +1,14 @@
 package ninjabrainbot.calculator;
 
+import java.util.List;
+
 import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.ModifiableSet;
 
 public interface ICalculatorResult extends IDisposable {
 	
 	public ChunkPrediction getBestPrediction();
 	
-	public ModifiableSet<ChunkPrediction> getTopPredictions();
-	
-	public double[] getAngleErrors();
+	public List<ChunkPrediction> getTopPredictions();
 	
 	public boolean success();
 	

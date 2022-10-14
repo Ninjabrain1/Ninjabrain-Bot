@@ -25,9 +25,9 @@ import ninjabrainbot.util.Subscription;
 public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
-	
+
 	DivineContextPanel divineContextPanel;
-	
+
 	private int index;
 	private IThrow t;
 	private JLabel x;
@@ -40,8 +40,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private boolean errorsEnabled;
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
-	
+
 	Subscription throwSetSubscription;
+	Subscription throwSubscription;
 	Runnable whenVisibilityChanged;
 
 	public ThrowPanel(GUI gui, IThrowSet throwSet, int index, Runnable whenVisibilityChanged) {
@@ -56,10 +57,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		error = new JLabel((String) null, 0);
 		removeButton = new FlatButton(gui, "–") {
 			static final long serialVersionUID = -7702064148275208581L;
+
 			@Override
 			public Color getHoverColor(Theme theme) {
 				return theme.COLOR_REMOVE_BUTTON_HOVER;
 			}
+
 			@Override
 			public Color getBackgroundColor(Theme theme) {
 				return theme.COLOR_NEUTRAL;
@@ -76,22 +79,18 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		updateVisibility();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 		removeButton.addActionListener(p -> throwSet.remove(this.t));
-		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribe(t -> setThrow(t), index);
+		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index);
 		this.whenVisibilityChanged = whenVisibilityChanged;
 	}
-	
-	protected void setAngleErrorsEnabled(boolean e) {
+
+	void setAngleErrorsEnabled(boolean e) {
 		errorsEnabled = e;
 	}
 
-	protected void setError(double d) {
-		error.setText(String.format(Locale.US, "%.3f", d));
+	private void updateError() {
+		error.setText(t == null || t.error() == null ? null : String.format(Locale.US, "%.3f", t.error()));
 	}
-	
-	protected void setError(String s) {
-		error.setText(s);
-	}
-	
+
 	@Override
 	public void setFont(Font font) {
 		super.setFont(font);
@@ -112,7 +111,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int w = width - 2*0 - height;
+		int w = width - 2 * 0 - height;
 		if (!errorsEnabled) {
 			if (this.x != null)
 				this.x.setBounds(0, 0, w / 3, height);
@@ -132,7 +131,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 				}
 			}
 			if (this.removeButton != null)
-				this.removeButton.setBounds(w, 0, height, height-1);
+				this.removeButton.setBounds(w, 0, height, height - 1);
 		} else {
 			if (this.x != null)
 				this.x.setBounds(0, 0, w / 4, height);
@@ -154,7 +153,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			if (this.error != null)
 				this.error.setBounds(0 + 3 * w / 4, 0, w / 4, height);
 			if (this.removeButton != null)
-				this.removeButton.setBounds(w, 0, height, height-1);
+				this.removeButton.setBounds(w, 0, height, height - 1);
 		}
 		error.setVisible(errorsEnabled);
 	}
@@ -173,7 +172,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		if (error != null)
 			error.setForeground(fg);
 	}
-	
+
 	@Override
 	public void updateColors(GUI gui) {
 		colorNeg = gui.theme.COLOR_NEGATIVE;
@@ -181,28 +180,30 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
 		super.updateColors(gui);
 	}
-	
+
 	@Override
 	public void updateSize(GUI gui) {
 		super.updateSize(gui);
 		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
 	}
-	
+
 	private void setThrow(IThrow t) {
-		if (this.t == t)
-			return;
-		this.t = t;
+		if (this.t != t) {
+			this.t = t;
+			updateSubscription();
+		}
 		if (t == null) {
 			x.setText(null);
 			z.setText(null);
 			alpha.setText(null);
 			correction.setText(null);
+			error.setText(null);
 			removeButton.setVisible(false);
 			correctionSgn = 0;
 		} else {
 			x.setText(String.format(Locale.US, "%.2f", t.x()));
 			z.setText(String.format(Locale.US, "%.2f", t.z()));
-			alpha.setText(String.format(Locale.US, "%.2f", t.alpha() - t.correction()));
+			alpha.setText(String.format(Locale.US, "%.2f", t.alpha_0()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
 				correction.setText(String.format(Locale.US, t.correction() > 0 ? "+%.2f" : "%.2f", t.correction()));
@@ -210,12 +211,22 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			} else {
 				correction.setText(null);
 			}
-			removeButton.setVisible(true); 
+			updateError();
+			removeButton.setVisible(true);
 		}
 		updateVisibility();
 		repaint(); // Update dot
 	}
-	
+
+	private void updateSubscription() {
+		if (throwSubscription != null) {
+			throwSubscription.cancel();
+			throwSubscription = null;
+		}
+		if (t != null)
+			throwSubscription = t.whenErrorChanged().subscribeEDT(__ -> updateError());
+	}
+
 	void updateVisibility() {
 		int k = (divineContextPanel != null && divineContextPanel.isVisible()) ? 1 : 0;
 		boolean newVisibility = index < 3 - k || hasThrow();
@@ -225,7 +236,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 				whenVisibilityChanged.run();
 		}
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -241,7 +252,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			g.fillRect(b, b, a, a);
 		}
 	}
-	
+
 	private boolean hasThrow() {
 		return t != null;
 	}
@@ -250,12 +261,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
 	}
-	
+
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_NEUTRAL;
 	}
-	
+
 	@Override
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_NEUTRAL;
@@ -264,11 +275,13 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void dispose() {
 		throwSetSubscription.cancel();
+		if (throwSubscription != null)
+			throwSubscription.cancel();
 	}
 
 	public void setDivineContextPanel(DivineContextPanel divineContextPanel) {
 		this.divineContextPanel = divineContextPanel;
 		updateVisibility();
 	}
-	
+
 }

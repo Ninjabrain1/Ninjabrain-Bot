@@ -39,13 +39,13 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 		this.fourfour_z = 16 * chunk.z + 4;
 		this.success = Double.isFinite(chunk.weight) && chunk.weight > 0.0005;
 		if (playerPos != null) {
-			updateWithPlayerPos(playerPos.get());
-			playerPosSubscription = playerPos.subscribe(pos -> updateWithPlayerPos(pos));
+			updateWithPlayerPos(playerPos.get(), false);
+			playerPosSubscription = playerPos.subscribe(pos -> updateWithPlayerPos(pos, true));
 			strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> whenModified.notifySubscribers(this));
 		}
 	}
 
-	private void updateWithPlayerPos(IThrow playerPos) {
+	private void updateWithPlayerPos(IThrow playerPos, boolean notify) {
 		if (playerPos == null)
 			return;
 		distance = chunk.getDistance(playerPos);
@@ -65,7 +65,8 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 
 		this.travelAngle = newAngle;
 		this.travelAngleDiff = finalDiff;
-		whenModified.notifySubscribers(this);
+		if (notify)
+			whenModified.notifySubscribers(this);
 	}
 
 	public int getDistance() {

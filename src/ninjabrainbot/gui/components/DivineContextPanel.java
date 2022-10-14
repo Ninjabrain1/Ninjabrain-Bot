@@ -52,7 +52,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		onFossilChanged(dc.getFossil());
 		removeButton.addActionListener(p -> dc.resetFossil());
-		fossilSubscription = dc.whenFossilChanged().subscribe(fossil -> onFossilChanged(fossil));
+		fossilSubscription = dc.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
 		this.whenVisibilityChanged = whenVisibilityChanged;
 	}
 
