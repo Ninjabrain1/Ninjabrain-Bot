@@ -16,8 +16,8 @@ public class TextAnimator implements ThemedComponent {
 	int duration;
 	ThrowPanel jtp;
 
-	public TextAnimator(GUI gui, int durationMillis) {
-		gui.registerThemedComponent(this);
+	public TextAnimator(StyleManager styleManager, int durationMillis) {
+		styleManager.registerThemedComponent(this);
 		this.start = Color.WHITE;
 		this.end = Color.WHITE;
 		this.duration = durationMillis;
@@ -53,12 +53,12 @@ public class TextAnimator implements ThemedComponent {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
+	public void updateSize(StyleManager styleManager) {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		setColors(gui.theme.TEXT_COLOR_STRONG, gui.theme.TEXT_COLOR_NEUTRAL);
+	public void updateColors(StyleManager styleManager) {
+		setColors(styleManager.theme.TEXT_COLOR_STRONG, styleManager.theme.TEXT_COLOR_NEUTRAL);
 	}
 
 }

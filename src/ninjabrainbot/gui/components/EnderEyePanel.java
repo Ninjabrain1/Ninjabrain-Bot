@@ -5,7 +5,7 @@ import javax.swing.BoxLayout;
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.IThrowSet;
 import ninjabrainbot.calculator.divine.IDivineContext;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.TextAnimator;
 
 public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
@@ -20,21 +20,21 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	private TextAnimator textAnimator;
 
-	public EnderEyePanel(GUI gui, IThrowSet throwSet, IDivineContext divineContext) {
-		gui.registerThemedComponent(this);
+	public EnderEyePanel(StyleManager styleManager, IThrowSet throwSet, IDivineContext divineContext) {
+		styleManager.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		throwPanelHeader = new ThrowPanelHeader(gui);
+		throwPanelHeader = new ThrowPanelHeader(styleManager);
 		add(throwPanelHeader);
 		throwPanels = new ThrowPanel[throwSet.maxCapacity()];
-		divineContextPanel = new DivineContextPanel(gui, divineContext, () -> whenDivineContextVisibilityUpdated());
+		divineContextPanel = new DivineContextPanel(styleManager, divineContext, () -> whenDivineContextVisibilityUpdated());
 		add(divineContextPanel);
 		for (int i = 0; i < throwSet.maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(gui, throwSet, i, () -> whenSizeModified.notifySubscribers(this));
+			throwPanels[i] = new ThrowPanel(styleManager, throwSet, i, () -> whenSizeModified.notifySubscribers(this));
 			add(throwPanels[i]);
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
-		textAnimator = new TextAnimator(gui, 200);
+		textAnimator = new TextAnimator(styleManager, 200);
 		// Subscriptions
 		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
 	}
@@ -52,11 +52,11 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
+	public void updateColors(StyleManager styleManager) {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
+	public void updateSize(StyleManager styleManager) {
 	}
 
 	@Override

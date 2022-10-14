@@ -13,7 +13,7 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.IThrowSet;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.IDisposable;
@@ -45,8 +45,8 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	Subscription throwSubscription;
 	Runnable whenVisibilityChanged;
 
-	public ThrowPanel(GUI gui, IThrowSet throwSet, int index, Runnable whenVisibilityChanged) {
-		super(gui);
+	public ThrowPanel(StyleManager styleManager, IThrowSet throwSet, int index, Runnable whenVisibilityChanged) {
+		super(styleManager);
 		this.index = index;
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
@@ -55,7 +55,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		alpha = new JLabel((String) null, 0);
 		correction = new JLabel((String) null, 0);
 		error = new JLabel((String) null, 0);
-		removeButton = new FlatButton(gui, "–") {
+		removeButton = new FlatButton(styleManager, "–") {
 			static final long serialVersionUID = -7702064148275208581L;
 
 			@Override
@@ -174,17 +174,17 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		colorNeg = gui.theme.COLOR_NEGATIVE;
-		colorPos = gui.theme.COLOR_POSITIVE;
-		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
-		super.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		colorNeg = styleManager.theme.COLOR_NEGATIVE;
+		colorPos = styleManager.theme.COLOR_POSITIVE;
+		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGER));
+		super.updateColors(styleManager);
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		super.updateSize(gui);
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
+	public void updateSize(StyleManager styleManager) {
+		super.updateSize(styleManager);
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
 
 	private void setThrow(IThrow t) {

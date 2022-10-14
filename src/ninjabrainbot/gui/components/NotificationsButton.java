@@ -5,10 +5,11 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.NotificationsFrame;
 import ninjabrainbot.io.UpdateChecker;
 import ninjabrainbot.io.VersionURL;
@@ -19,7 +20,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 
 	private static final long serialVersionUID = -352194555884422473L;
 
-	GUI gui;
+	StyleManager styleManager;
 	NotificationsFrame notificationsFrame;
 
 	// Pulsing
@@ -30,12 +31,12 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 
 	SubscriptionHandler sh;
 
-	public NotificationsButton(GUI gui) {
-		super(gui, new ImageIcon(Main.class.getResource("/resources/notifications_icon.png")));
-		this.gui = gui;
-		addActionListener(p -> toggleNotificationsWindow());
+	public NotificationsButton(StyleManager styleManager, JFrame parent) {
+		super(styleManager, new ImageIcon(Main.class.getResource("/resources/notifications_icon.png")));
+		this.styleManager = styleManager;
+		addActionListener(p -> toggleNotificationsWindow(parent));
 		setVisible(false);
-		notificationsFrame = new NotificationsFrame(gui);
+		notificationsFrame = new NotificationsFrame(styleManager);
 		// Subscriptions
 		sh = new SubscriptionHandler();
 		sh.add(Main.preferences.checkForUpdates.whenModified().subscribe(b -> onUpdatesEnabledChanged(b)));
@@ -107,12 +108,12 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 		super.setBounds(x, y, width, height);
 	}
 
-	private void toggleNotificationsWindow() {
+	private void toggleNotificationsWindow(JFrame parent) {
 		if (notificationsFrame.isVisible()) {
 			notificationsFrame.setVisible(false);
 		} else {
 			notificationsFrame.setVisible(true);
-			Rectangle bounds = gui.frame.getBounds();
+			Rectangle bounds = parent.getBounds();
 			notificationsFrame.setLocation(bounds.x + 10, bounds.y + 30);
 		}
 	}

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.Theme;
 
 /**
@@ -23,8 +23,8 @@ public class TitleBarPanel extends ThemedPanel {
 
 	ArrayList<JButton> buttons;
 	
-	public TitleBarPanel(GUI gui, final JFrame frame) {
-		super(gui);
+	public TitleBarPanel(StyleManager styleManager, final JFrame frame) {
+		super(styleManager);
 		buttons = new ArrayList<JButton>();
 		this.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -58,9 +58,9 @@ public class TitleBarPanel extends ThemedPanel {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_TITLE_LARGE + gui.size.PADDING_TITLE * 2 + 1));
-		super.updateSize(gui);
+	public void updateSize(StyleManager styleManager) {
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_TITLE_LARGE + styleManager.size.PADDING_TITLE * 2 + 1));
+		super.updateSize(styleManager);
 	}
 
 	@Override

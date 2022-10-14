@@ -25,8 +25,8 @@ public class Histogram extends ThemedPanel {
 	int labelsHeight = 20;
 	int margin = 20;
 	
-	public Histogram(GUI gui, float min, float max, int numBins) {
-		super(gui);
+	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
+		super(styleManager);
 		this.min = min;
 		this.max = max;
 		this.numBins = numBins;
@@ -34,13 +34,13 @@ public class Histogram extends ThemedPanel {
 		maxCount = 0;
 		ticks = new ArrayList<JLabel>();
 		floatTicks = new ArrayList<Float>();
-		addTick(gui, 0);
-		addTick(gui, min);
-		addTick(gui, max);
+		addTick(styleManager, 0);
+		addTick(styleManager, min);
+		addTick(styleManager, max);
 	}
 	
-	private void addTick(GUI gui, float tick) {
-		ThemedLabel l = new ThemedLabel(gui, "" + tick);
+	private void addTick(StyleManager styleManager, float tick) {
+		ThemedLabel l = new ThemedLabel(styleManager, "" + tick);
 		ticks.add(l);
 		floatTicks.add(tick);
 		add(l);
@@ -78,11 +78,11 @@ public class Histogram extends ThemedPanel {
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
-		super.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		super.updateColors(styleManager);
 //		setBorder(BorderFactory.createLineBorder(gui.theme.COLOR_STRONGER, 1));
-		histColor = gui.theme.COLOR_SATURATED;
-		lineColor = gui.theme.COLOR_STRONGEST;
+		histColor = styleManager.theme.COLOR_SATURATED;
+		lineColor = styleManager.theme.COLOR_STRONGEST;
 	}
 	
 	@Override

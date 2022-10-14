@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
@@ -27,7 +27,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 	protected Color bgCol, hoverCol;
 	private ImageIcon icon, icon_inverted;
 	
-	public FlatButton(GUI gui, ImageIcon img) {
+	public FlatButton(StyleManager styleManager, ImageIcon img) {
 		super();
 		setBorderPainted(false);
 		setFocusPainted(false);
@@ -62,10 +62,10 @@ public class FlatButton extends JButton implements ThemedComponent {
 		    	label.setBackground(bgCol);
 		    }
 		});
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 	}
 	
-	public FlatButton(GUI gui, String text) {
+	public FlatButton(StyleManager styleManager, String text) {
 		super();
 		setBorderPainted(false);
 		setFocusPainted(false);
@@ -89,7 +89,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 		    	label.setBackground(bgCol);
 		    }
 		});
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 	}
 	
 	@Override
@@ -131,17 +131,17 @@ public class FlatButton extends JButton implements ThemedComponent {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), true));
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
-		Color hg = getHoverColor(gui.theme);
+	public void updateColors(StyleManager styleManager) {
+		Color bg = getBackgroundColor(styleManager.theme);
+		Color hg = getHoverColor(styleManager.theme);
 		setColors(bg, hg);
-		label.setForeground(getForegroundColor(gui.theme));
-		label.setIcon(gui.theme.BLACK_ICONS ? icon_inverted : icon);
+		label.setForeground(getForegroundColor(styleManager.theme));
+		label.setIcon(styleManager.theme.BLACK_ICONS ? icon_inverted : icon);
 	}
 	
 	public int getTextSize(SizePreference p) {

@@ -9,7 +9,7 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.ColumnLayout;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.io.NinjabrainBotPreferences;
@@ -28,13 +28,13 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	private JLabel angle;
 	private JLabel[] labels;
 	
-	GUI gui;
+	StyleManager styleManager;
 	
 	Subscription strongholdDisplayTypeChangedSubscription;
 
-	public ChunkPanelHeader(GUI gui) {
-		super(gui, true);
-		this.gui = gui;
+	public ChunkPanelHeader(StyleManager styleManager) {
+		super(styleManager, true);
+		this.styleManager = styleManager;
 		setOpaque(true);
 		location = new JLabel("", 0);
 		certainty = new JLabel(I18n.get("certainty_2"), 0);
@@ -90,15 +90,15 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
-		setBorder(new MatteBorder(0, 0, 2, 0, gui.theme.COLOR_STRONGEST));
-		super.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
+		super.updateColors(styleManager);
 	}
 	
 	@Override
-	public void updateSize(GUI gui) {
-		super.updateSize(gui);
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_MEDIUM + gui.size.PADDING_THIN * 2));
+	public void updateSize(StyleManager styleManager) {
+		super.updateSize(styleManager);
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_MEDIUM + styleManager.size.PADDING_THIN * 2));
 	}
 
 	@Override

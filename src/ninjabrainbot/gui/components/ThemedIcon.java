@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 
 public class ThemedIcon extends ThemedLabel {
 
@@ -14,8 +14,8 @@ public class ThemedIcon extends ThemedLabel {
 
 	private ImageIcon icon, icon_inverted;
 
-	public ThemedIcon(GUI gui, ImageIcon img) {
-		super(gui);
+	public ThemedIcon(StyleManager styleManager, ImageIcon img) {
+		super(styleManager);
 		setIcon(img);
 		setHorizontalAlignment(SwingConstants.LEFT);
 		
@@ -34,9 +34,9 @@ public class ThemedIcon extends ThemedLabel {
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
-		super.updateColors(gui);
-		setIcon(gui.theme.BLACK_ICONS ? icon_inverted : icon);
+	public void updateColors(StyleManager styleManager) {
+		super.updateColors(styleManager);
+		setIcon(styleManager.theme.BLACK_ICONS ? icon_inverted : icon);
 	}
 
 }

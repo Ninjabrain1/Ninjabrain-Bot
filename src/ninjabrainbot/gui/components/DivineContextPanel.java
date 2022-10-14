@@ -9,7 +9,7 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.calculator.divine.Fossil;
 import ninjabrainbot.calculator.divine.IDivineContext;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
@@ -30,11 +30,11 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	Subscription fossilSubscription;
 	Runnable whenVisibilityChanged;
 	
-	public DivineContextPanel(GUI gui, IDivineContext dc, Runnable whenVisibilityChanged) {
-		super(gui);
+	public DivineContextPanel(StyleManager styleManager, IDivineContext dc, Runnable whenVisibilityChanged) {
+		super(styleManager);
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
-		removeButton = new FlatButton(gui, "–") {
+		removeButton = new FlatButton(styleManager, "–") {
 			static final long serialVersionUID = -7702064148275208581L;
 
 			@Override
@@ -83,15 +83,15 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGEST));
-		super.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGEST));
+		super.updateColors(styleManager);
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		super.updateSize(gui);
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
+	public void updateSize(StyleManager styleManager) {
+		super.updateSize(styleManager);
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
 
 	public boolean hasDivineContext() {

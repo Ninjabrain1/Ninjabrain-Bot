@@ -1,7 +1,5 @@
 package ninjabrainbot.calculator;
 
-import javax.swing.SwingUtilities;
-
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.blind.BlindPosition;
 import ninjabrainbot.calculator.blind.BlindResult;
@@ -59,27 +57,27 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IObservable<ICalculatorResult> whenCalculatorResultChanged() {
+	public IObservable<ICalculatorResult> calculatorResult() {
 		return calculatorResult;
 	}
 
 	@Override
-	public IObservable<BlindResult> whenBlindResultChanged() {
+	public IObservable<BlindResult> blindResult() {
 		return blindResult;
 	}
 
 	@Override
-	public IObservable<DivineResult> whenDivineResultChanged() {
+	public IObservable<DivineResult> divineResult() {
 		return divineResult;
 	}
 
 	@Override
-	public IObservable<Boolean> whenLockedChanged() {
+	public IObservable<Boolean> locked() {
 		return locked;
 	}
 
 	@Override
-	public IObservable<ResultType> whenResultTypeChanged() {
+	public IObservable<ResultType> resultType() {
 		return resultType;
 	}
 

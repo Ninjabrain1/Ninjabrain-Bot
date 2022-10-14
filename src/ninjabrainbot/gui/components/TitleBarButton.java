@@ -4,19 +4,19 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.Theme;
 
 public class TitleBarButton extends FlatButton {
 
 	private static final long serialVersionUID = -8794077055512451437L;
 	
-	public TitleBarButton(GUI gui, ImageIcon img) {
-		super(gui, img);
+	public TitleBarButton(StyleManager styleManager, ImageIcon img) {
+		super(styleManager, img);
 	}
 	
-	public TitleBarButton(GUI gui, String str) {
-		super(gui, str);
+	public TitleBarButton(StyleManager styleManager, String str) {
+		super(styleManager, str);
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.ChunkPrediction;
 import ninjabrainbot.gui.ColumnLayout;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.IDisposable;
@@ -29,21 +29,21 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private ColorMapLabel angle;
 	private ILabel[] labels;
 
-	GUI gui;
+	StyleManager styleManager;
 	double lastColor;
 
 	Subscription chunkPredictionSubscription;
 
-	public ChunkPanel(GUI gui) {
-		this(gui, null);
+	public ChunkPanel(StyleManager styleManager) {
+		this(styleManager, null);
 	}
 
-	public ChunkPanel(GUI gui, ChunkPrediction p) {
-		super(gui);
-		this.gui = gui;
+	public ChunkPanel(StyleManager styleManager, ChunkPrediction p) {
+		super(styleManager);
+		this.styleManager = styleManager;
 		setOpaque(true);
-		location = new ThemedLabel(gui, true);
-		certainty = new ThemedLabel(gui, true) {
+		location = new ThemedLabel(styleManager, true);
+		certainty = new ThemedLabel(styleManager, true) {
 			private static final long serialVersionUID = -6995689057641195351L;
 
 			@Override
@@ -51,9 +51,9 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 				return theme.CERTAINTY_COLOR_MAP.get(lastColor);
 			}
 		};
-		distance = new ThemedLabel(gui, true);
-		nether = new ThemedLabel(gui, true);
-		angle = new ColorMapLabel(gui, true, true);
+		distance = new ThemedLabel(styleManager, true);
+		nether = new ThemedLabel(styleManager, true);
+		angle = new ColorMapLabel(styleManager, true, true);
 		labels = new ILabel[] { location, certainty, distance, nether, angle };
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(location, 2f);
@@ -95,11 +95,11 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		setBorder(new MatteBorder(0, 0, 1, 0, gui.theme.COLOR_STRONGER));
-		super.updateColors(gui);
-		angle.updateColor(gui);
-		certainty.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGER));
+		super.updateColors(styleManager);
+		angle.updateColor(styleManager);
+		certainty.updateColors(styleManager);
 	}
 
 	public void setPrediciton(ChunkPrediction p) {
@@ -123,7 +123,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private void setText(ChunkPrediction p) {
 		location.setText(p.formatLocation());
 		certainty.setText(p.formatCertainty());
-		certainty.setForeground(gui.theme.CERTAINTY_COLOR_MAP.get(p.chunk.weight));
+		certainty.setForeground(styleManager.theme.CERTAINTY_COLOR_MAP.get(p.chunk.weight));
 		distance.setText(p.formatDistance());
 		nether.setText(p.formatNether());
 		angle.setText(p.formatTravelAngle(false));
@@ -132,9 +132,9 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		super.updateSize(gui);
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_MEDIUM + gui.size.PADDING_THIN * 2));
+	public void updateSize(StyleManager styleManager) {
+		super.updateSize(styleManager);
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_MEDIUM + styleManager.size.PADDING_THIN * 2));
 	}
 
 	@Override

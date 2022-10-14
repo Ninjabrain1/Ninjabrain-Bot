@@ -11,15 +11,15 @@ public interface IDataState {
 
 	public IThrowSet getThrowSet();
 
-	public IObservable<ICalculatorResult> whenCalculatorResultChanged();
+	public IObservable<ICalculatorResult> calculatorResult();
 
-	public IObservable<BlindResult> whenBlindResultChanged();
+	public IObservable<BlindResult> blindResult();
 	
-	public IObservable<DivineResult> whenDivineResultChanged();
+	public IObservable<DivineResult> divineResult();
 
-	public IObservable<Boolean> whenLockedChanged();
+	public IObservable<Boolean> locked();
 	
-	public IObservable<ResultType> whenResultTypeChanged();
+	public IObservable<ResultType> resultType();
 
 	public void toggleLocked();
 

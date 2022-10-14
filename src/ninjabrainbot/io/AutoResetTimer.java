@@ -21,9 +21,9 @@ public class AutoResetTimer extends Timer implements IDisposable {
 			restart();
 			stop();
 		});
-		sh.add(dataState.whenLockedChanged().subscribe(__ -> restart()));
-		sh.add(dataState.whenBlindResultChanged().subscribe(__ -> restart()));
-		sh.add(dataState.whenCalculatorResultChanged().subscribe(__ -> restart()));
+		sh.add(dataState.locked().subscribe(__ -> restart()));
+		sh.add(dataState.blindResult().subscribe(__ -> restart()));
+		sh.add(dataState.calculatorResult().subscribe(__ -> restart()));
 	}
 
 	@Override

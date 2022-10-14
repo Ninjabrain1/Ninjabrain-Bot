@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
@@ -13,25 +13,25 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 	
-	public ThemedPanel(GUI gui) {
-		this(gui, false);
+	public ThemedPanel(StyleManager styleManager) {
+		this(styleManager, false);
 	}
 	
-	public ThemedPanel(GUI gui, boolean bold) {
+	public ThemedPanel(StyleManager styleManager, boolean bold) {
 		super();
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 		this.bold = bold;
 	}
 	
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), !bold));
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold));
 	}
 	
-	public void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
+	public void updateColors(StyleManager styleManager) {
+		Color bg = getBackgroundColor(styleManager.theme);
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(gui.theme);
+		Color fg = getForegroundColor(styleManager.theme);
 		if (fg != null)
 			setForeground(fg);
 	}

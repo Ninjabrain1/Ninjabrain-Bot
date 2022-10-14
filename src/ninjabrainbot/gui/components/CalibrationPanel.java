@@ -22,7 +22,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Calibrator;
 import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.Throw;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.Histogram;
 import ninjabrainbot.gui.OptionsFrame;
 import ninjabrainbot.gui.SizePreference;
@@ -36,7 +36,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	
 	Calibrator calibrator;
 	
-	GUI gui;
+	StyleManager styleManager;
 	OptionsFrame optionsFrame;
 	TitleBarPanel titlebarPanel;
 	JLabel titletextLabel;
@@ -49,19 +49,19 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	JLabel std;
 	static final int errorAreaWidth = 100;
 	
-	public CalibrationPanel(GUI gui, OptionsFrame frame) {
-		this.gui = gui;
-		gui.registerThemedComponent(this);
+	public CalibrationPanel(StyleManager styleManager, OptionsFrame frame) {
+		this.styleManager = styleManager;
+		styleManager.registerThemedComponent(this);
 		optionsFrame = frame;
 		calibrator = new Calibrator();
 		setOpaque(false);
 		setLayout(null);
 		setVisible(false);
 		
-		titlebarPanel = new TitleBarPanel(gui, frame);
+		titlebarPanel = new TitleBarPanel(styleManager, frame);
 		titlebarPanel.setLayout(null);
 		add(titlebarPanel);
-		titletextLabel = new ThemedLabel(gui, I18n.get("calibrator.title_text_label"), true) {
+		titletextLabel = new ThemedLabel(styleManager, I18n.get("calibrator.title_text_label"), true) {
 			private static final long serialVersionUID = -1284032833229918460L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -77,11 +77,11 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		add(panel);
 		labels = new InstructionLabel[] {
-				new InstructionLabel(gui, I18n.get("calibrator.command_label")),
-				new InstructionLabel(gui, I18n.get("calibrator.throw_label")),
-				new InstructionLabel(gui, I18n.get("calibrator.measure_label")),
+				new InstructionLabel(styleManager, I18n.get("calibrator.command_label")),
+				new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
+				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")),
 		};
-		ThemedLabel explanation = new ThemedLabel(gui, "<html><div style='text-align: center;'>"+I18n.get("calibrator.explanation")+"</div></html>") {
+		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>"+I18n.get("calibrator.explanation")+"</div></html>") {
 			private static final long serialVersionUID = -5378176835369680709L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -91,7 +91,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		explanation.setAlignmentX(0.5f);
 		panel.add(explanation);
 		panel.add(Box.createVerticalStrut(5));
-		panel.add(new Divider(gui));
+		panel.add(new Divider(styleManager));
 		panel.add(Box.createVerticalStrut(5));
 		for (InstructionLabel l : labels) {
 			panel.add(l);
@@ -101,23 +101,23 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel2.setOpaque(false);
 		panel2.setLayout(new BorderLayout());
 		panel.add(panel2);
-		errors = new ErrorTextArea(gui, new JTextArea());
+		errors = new ErrorTextArea(styleManager, new JTextArea());
 		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
 		rightPanel = new JPanel();
 		rightPanel.setOpaque(false);
 		rightPanel.setLayout(new GridLayout(3, 1, 0, 0));
-		std = new ThemedLabel(gui);
+		std = new ThemedLabel(styleManager);
 		std.setOpaque(false);
 		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
-		JLabel l1 = new ThemedLabel(gui, I18n.get("calibrator.l1"));
-		JButton done = new FlatButton(gui, I18n.get("calibrator.done"));
+		JLabel l1 = new ThemedLabel(styleManager, I18n.get("calibrator.l1"));
+		JButton done = new FlatButton(styleManager, I18n.get("calibrator.done"));
 		done.addActionListener(p -> done());
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		std.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(l1);
 		rightPanel.add(std);
 		rightPanel.add(done);
-		hist = new Histogram(gui, -0.03f, 0.03f, 11);
+		hist = new Histogram(styleManager, -0.03f, 0.03f, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
@@ -154,7 +154,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		super.setBounds(x, y, width, height);
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
 		titlebarPanel.setBounds(0, 0, width, titlebarHeight);
-		titletextLabel.setBounds((titlebarHeight - gui.size.TEXT_SIZE_TITLE_LARGE)/2, 0, 300, titlebarHeight);
+		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE)/2, 0, 300, titlebarHeight);
 		int cancelButtonWidth = cancelButton.getPreferredSize().width;
 		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, titlebarHeight);
 		panel.setBounds(0, titlebarHeight, width, height - titlebarHeight);
@@ -171,15 +171,15 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 //	}
 	
 	private FlatButton getCancelButton() {
-		FlatButton button = new TitleBarButton(gui, I18n.get("calibrator.cancel")) {
+		FlatButton button = new TitleBarButton(styleManager, I18n.get("calibrator.cancel")) {
 			private static final long serialVersionUID = 4380111129291481489L;
 			@Override
 			public Color getHoverColor(Theme theme) {
 				return theme.COLOR_EXIT_BUTTON_HOVER;
 			}
 			@Override
-			public void updateSize(GUI gui) {
-				setFont(gui.fontSize(getTextSize(gui.size), false));
+			public void updateSize(StyleManager styleManager) {
+				setFont(styleManager.fontSize(getTextSize(styleManager.size), false));
 			}
 		};
 		button.addActionListener(p -> optionsFrame.stopCalibrating());
@@ -189,7 +189,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	private void setHighlighted(int i) {
 		for (int j = 0; j < labels.length; j++) {
 			labels[j].setHighlighted(i == j);
-			labels[j].updateColors(gui);
+			labels[j].updateColors(styleManager);
 		}
 	}
 
@@ -251,12 +251,12 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
+	public void updateColors(StyleManager styleManager) {
 	}
 	
 	@Override
-	public void updateSize(GUI gui) {
-		panel.setBorder(new EmptyBorder(gui.size.PADDING, 2 * gui.size.PADDING, 2 * gui.size.PADDING, 2 * gui.size.PADDING));
+	public void updateSize(StyleManager styleManager) {
+		panel.setBorder(new EmptyBorder(styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING));
 	}
 	
 }
@@ -267,8 +267,8 @@ class InstructionLabel extends ThemedLabel {
 
 	private boolean highlighted;
 	
-	public InstructionLabel(GUI gui, String text) {
-		super(gui, "<html><div style='text-align: center;'>" + text + "</div></html>");
+	public InstructionLabel(StyleManager styleManager, String text) {
+		super(styleManager, "<html><div style='text-align: center;'>" + text + "</div></html>");
 		setHorizontalAlignment(SwingConstants.CENTER);
 		setAlignmentX(0.5f);
 	}
@@ -290,27 +290,27 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 	
 	final JTextArea area;
 	
-	public ErrorTextArea(GUI gui, JTextArea textArea) {
+	public ErrorTextArea(StyleManager styleManager, JTextArea textArea) {
 		super(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		area = textArea;
 		area.setEditable(false);
 		area.setOpaque(false);
 		getViewport().setOpaque(false);
 		area.setBorder(null);
-		setBorder(BorderFactory.createLineBorder(getBackgroundColor(gui.theme), 1));
+		setBorder(BorderFactory.createLineBorder(getBackgroundColor(styleManager.theme), 1));
 		setOpaque(false);
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 	}
 	
 	@Override
-	public void updateSize(GUI gui) {
-		area.setFont(gui.fontSize(getTextSize(gui.size), true));
+	public void updateSize(StyleManager styleManager) {
+		area.setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		area.setForeground(getForegroundColor(gui.theme));
-		setBorder(BorderFactory.createLineBorder(getBackgroundColor(gui.theme), 1));
+	public void updateColors(StyleManager styleManager) {
+		area.setForeground(getForegroundColor(styleManager.theme));
+		setBorder(BorderFactory.createLineBorder(getBackgroundColor(styleManager.theme), 1));
 	}
 	
 	public Color getForegroundColor(Theme theme) {

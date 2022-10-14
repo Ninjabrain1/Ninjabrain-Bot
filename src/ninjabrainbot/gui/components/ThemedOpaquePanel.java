@@ -2,7 +2,7 @@ package ninjabrainbot.gui.components;
 
 import java.awt.Color;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.Theme;
 
 public class ThemedOpaquePanel extends ThemedPanel {
@@ -10,12 +10,12 @@ public class ThemedOpaquePanel extends ThemedPanel {
 	
 	private static final long serialVersionUID = 6139785742324691300L;
 
-	public ThemedOpaquePanel(GUI gui) {
-		super(gui);
+	public ThemedOpaquePanel(StyleManager styleManager) {
+		super(styleManager);
 	}
 	
-	public ThemedOpaquePanel(GUI gui, boolean bold) {
-		super(gui, bold);
+	public ThemedOpaquePanel(StyleManager styleManager, boolean bold) {
+		super(styleManager, bold);
 	}
 	
 	public Color getBackgroundColor(Theme theme) {

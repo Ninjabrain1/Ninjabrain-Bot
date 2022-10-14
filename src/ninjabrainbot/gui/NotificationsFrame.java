@@ -27,22 +27,20 @@ public class NotificationsFrame extends ThemedFrame {
 	
 	static final int PADDING = 6;
 	
-	GUI gui;
 	VersionURL url;
 	
 	JPanel mainPanel;
 	ThemedLabel label;
 
-	public NotificationsFrame(GUI gui) {
-		super(gui, I18n.get("notificationsframe.new_version_available"));
-		this.gui = gui;
-		titlebarPanel.addButton(getExitButton());
+	public NotificationsFrame(StyleManager styleManager) {
+		super(styleManager, I18n.get("notificationsframe.new_version_available"));
+		titlebarPanel.addButton(getExitButton(styleManager));
 		mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
 		add(mainPanel);
-		label = new ThemedLabel(gui, "") {
+		label = new ThemedLabel(styleManager, "") {
 			private static final long serialVersionUID = 4168366004174721821L;
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -52,11 +50,11 @@ public class NotificationsFrame extends ThemedFrame {
 		label.setVerticalAlignment(SwingConstants.TOP);
 		mainPanel.add(label);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		FlatButton downloadButton = new FlatButton(gui, I18n.get("notificationsframe.download_button"));
+		FlatButton downloadButton = new FlatButton(styleManager, I18n.get("notificationsframe.download_button"));
 		downloadButton.addActionListener(p -> openURL());
 		mainPanel.add(downloadButton);
 		mainPanel.add(Box.createVerticalStrut(PADDING));
-		FlatButton changelogButton = new FlatButton(gui, I18n.get("notificationsframe.changelog_button"));
+		FlatButton changelogButton = new FlatButton(styleManager, I18n.get("notificationsframe.changelog_button"));
 		changelogButton.addActionListener(p -> openReleasePage());
 		mainPanel.add(changelogButton);
 		
@@ -65,22 +63,23 @@ public class NotificationsFrame extends ThemedFrame {
 	}
 	
 	@Override
-	public void updateBounds(GUI gui) {
-		super.updateBounds(gui);
-		label.setMaximumSize(new Dimension(gui.size.WIDTH, Integer.MAX_VALUE));
-		setSize(gui.size.WIDTH * 7/8, gui.size.WIDTH * 5/8);
-		setShape(new RoundRectangle2D.Double(0, 0, gui.size.WIDTH * 7/8, gui.size.WIDTH * 5/8, gui.size.WINDOW_ROUNDING, gui.size.WINDOW_ROUNDING));
+	public void updateBounds(StyleManager styleManager) {
+		super.updateBounds(styleManager);
+		label.setMaximumSize(new Dimension(styleManager.size.WIDTH, Integer.MAX_VALUE));
+		setSize(styleManager.size.WIDTH * 7/8, styleManager.size.WIDTH * 5/8);
+		setShape(new RoundRectangle2D.Double(0, 0, styleManager.size.WIDTH * 7/8, styleManager.size.WIDTH * 5/8, styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}
 	
-	public void updateFontsAndColors() {
-		getContentPane().setBackground(gui.theme.COLOR_NEUTRAL);
-		setBackground(gui.theme.COLOR_NEUTRAL);
+	@Override
+	public void updateFontsAndColors(StyleManager styleManager) {
+		getContentPane().setBackground(styleManager.theme.COLOR_NEUTRAL);
+		setBackground(styleManager.theme.COLOR_NEUTRAL);
 	}
 	
-	private FlatButton getExitButton() {
+	private FlatButton getExitButton(StyleManager styleManager) {
 		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(gui, img) {
+		FlatButton button = new TitleBarButton(styleManager, img) {
 			private static final long serialVersionUID = 4380111129291481489L;
 			@Override
 			public Color getHoverColor(Theme theme) {
@@ -110,7 +109,7 @@ public class NotificationsFrame extends ThemedFrame {
 	public void setURL(VersionURL url) {
 		this.url = url;
 		label.setText("<html>"+ I18n.get("notificationsframe.update_text", url.tag) +"</html>");
-		updateBounds(gui);
+//		updateBounds(gui);
 	}
 
 	public Object getURL() {

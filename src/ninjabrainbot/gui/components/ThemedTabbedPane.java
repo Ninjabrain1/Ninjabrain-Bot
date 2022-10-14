@@ -9,7 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
@@ -18,17 +18,17 @@ public class ThemedTabbedPane extends ThemedPanel {
 	private static final long serialVersionUID = -3291029177930511395L;
 	
 	ArrayList<TabButton> tabs;
-	GUI gui;
+	StyleManager styleManager;
 	JPanel tabPanel;
 	JPanel mainPanel;
 	
-	public ThemedTabbedPane(GUI gui) {
-		super(gui);
-		this.gui = gui;
+	public ThemedTabbedPane(StyleManager styleManager) {
+		super(styleManager);
+		this.styleManager = styleManager;
 		tabs = new ArrayList<TabButton>();
 //		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setLayout(null);
-		tabPanel = new ThemedOpaquePanel(gui) {
+		tabPanel = new ThemedOpaquePanel(styleManager) {
 			private static final long serialVersionUID = -9131114034270325589L;
 			@Override
 			public Color getBackgroundColor(Theme theme) {
@@ -47,7 +47,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 	public void addTab(String title, JComponent component) {
 		mainPanel.add(component);
 		component.setVisible(tabs.size() == 0);
-		TabButton tabButton = new TabButton(this.gui, this, title, component);
+		TabButton tabButton = new TabButton(this.styleManager, this, title, component);
 		tabs.add(tabButton);
 		tabPanel.add(tabButton);
 	}
@@ -59,14 +59,14 @@ public class ThemedTabbedPane extends ThemedPanel {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), true));
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		setBackground(getBackgroundColor(gui.theme));
-		setForeground(getForegroundColor(gui.theme));
+	public void updateColors(StyleManager styleManager) {
+		setBackground(getBackgroundColor(styleManager.theme));
+		setForeground(getForegroundColor(styleManager.theme));
 	}
 	
 	public int getTextSize(SizePreference p) {
@@ -107,8 +107,8 @@ class TabButton extends FlatButton {
 	
 	Color a, b, c;
 	
-	public TabButton(GUI gui, ThemedTabbedPane parent, String title, JComponent component) {
-		super(gui, title);
+	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
+		super(styleManager, title);
 		this.parent = parent;
 		this.component = component;
 		label.setCursor(null);
@@ -125,11 +125,11 @@ class TabButton extends FlatButton {
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
-		super.updateColors(gui);
+	public void updateColors(StyleManager styleManager) {
+		super.updateColors(styleManager);
 		a = this.hoverCol;
 		b = this.bgCol;
-		c = gui.theme.COLOR_NEUTRAL;
+		c = styleManager.theme.COLOR_NEUTRAL;
 		refreshColor();
 	}
 	

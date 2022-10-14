@@ -12,7 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
@@ -20,7 +20,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	
 	private static final long serialVersionUID = 1167120412326064670L;
 
-	public DecimalTextField(GUI gui, float value, float min, float max) {
+	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
 		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
 		setBorder(BorderFactory.createEmptyBorder());
 		setAlignmentX(1);
@@ -44,7 +44,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 			}
 		};
 		addChangeListener(listener);
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 	}
 	
 	public void hideSpinnerArrows() {
@@ -64,16 +64,16 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), true));
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
+	public void updateColors(StyleManager styleManager) {
+		Color bg = getBackgroundColor(styleManager.theme);
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(gui.theme);
+		Color fg = getForegroundColor(styleManager.theme);
 		if (fg != null) {
 			setForeground(fg);
 		}

@@ -9,7 +9,7 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.calculator.Throw;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 import ninjabrainbot.util.I18n;
@@ -28,12 +28,12 @@ public class ThrowPanelHeader extends ThemedPanel {
 	
 	private boolean errorsEnabled;
 	
-	public ThrowPanelHeader(GUI gui) {
-		this(gui, null);
+	public ThrowPanelHeader(StyleManager styleManager) {
+		this(styleManager, null);
 	}
 
-	public ThrowPanelHeader(GUI gui, Throw t) {
-		super(gui, true);
+	public ThrowPanelHeader(StyleManager styleManager, Throw t) {
+		super(styleManager, true);
 		setOpaque(true);
 		errorsEnabled = Main.preferences.showAngleErrors.get();
 		x = new JLabel("x", 0);
@@ -90,15 +90,15 @@ public class ThrowPanelHeader extends ThemedPanel {
 	}
 	
 	@Override
-	public void updateSize(GUI gui) {
-		super.updateSize(gui);
-		setPreferredSize(new Dimension(gui.size.WIDTH, gui.size.TEXT_SIZE_SMALL + gui.size.PADDING_THIN * 2));
+	public void updateSize(StyleManager styleManager) {
+		super.updateSize(styleManager);
+		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
 	
 	@Override
-	public void updateColors(GUI gui) {
-		super.updateColors(gui);
-		setBorder(new MatteBorder(0, 0, 2, 0, gui.theme.COLOR_STRONGEST));
+	public void updateColors(StyleManager styleManager) {
+		super.updateColors(styleManager);
+		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
 	}
 	
 	@Override

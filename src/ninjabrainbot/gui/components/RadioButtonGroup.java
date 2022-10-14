@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JRadioButton;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.gui.StyleManager;
 import ninjabrainbot.gui.SizePreference;
 import ninjabrainbot.gui.Theme;
 
@@ -19,8 +19,8 @@ public class RadioButtonGroup extends ThemedPanel {
 	
 	private static final long serialVersionUID = 7355615566096074105L;
 
-	public RadioButtonGroup(GUI gui, String[] options, String selected) {
-		super(gui);
+	public RadioButtonGroup(StyleManager styleManager, String[] options, String selected) {
+		super(styleManager);
 		setOpaque(false);
         ButtonGroup group = new ButtonGroup();
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -32,7 +32,7 @@ public class RadioButtonGroup extends ThemedPanel {
             }
         };
         for (String s : options) {
-        	JRadioButton button = new ThemedRadioButton(gui, s);
+        	JRadioButton button = new ThemedRadioButton(styleManager, s);
         	if (selected == s)
         		button.setSelected(true);
         	button.addActionListener(listener);
@@ -57,9 +57,9 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_rollover_icon.png"));
 	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_selected_rollover_icon.png"));
 	
-	public ThemedRadioButton(GUI gui, String text) {
+	public ThemedRadioButton(StyleManager styleManager, String text) {
 		super(text);
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 		setOpaque(false);
 		setBorderPainted(false);
 		setFocusPainted(false);
@@ -72,15 +72,15 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		setRolloverSelectedIcon(selected_rollover_icon);
 	}
 	
-	public final void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), true));
+	public final void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 	
-	public final void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
+	public final void updateColors(StyleManager styleManager) {
+		Color bg = getBackgroundColor(styleManager.theme);
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(gui.theme);
+		Color fg = getForegroundColor(styleManager.theme);
 		if (fg != null)
 			setForeground(fg);
 	}
