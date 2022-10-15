@@ -1,9 +1,9 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.Modifiable;
-import ninjabrainbot.util.Subscription;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.Modifiable;
+import ninjabrainbot.event.Subscription;
 
 public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdProfile, IDisposable {
 

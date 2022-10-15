@@ -10,8 +10,8 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.endereye.Throw1_12;
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.ObservableProperty;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
 
 public class ClipboardReader implements Runnable {
 

@@ -1,7 +1,9 @@
-package ninjabrainbot.util;
+package ninjabrainbot.event;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+
+import ninjabrainbot.util.Pair;
 
 public class IndexedObservableProperty<T> implements IMultiSubscribable<T> {
 

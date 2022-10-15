@@ -41,11 +41,11 @@ import ninjabrainbot.gui.panels.settings.ThemedTabbedPane;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.BooleanPreference;
-import ninjabrainbot.io.FloatPreference;
-import ninjabrainbot.io.HotkeyPreference;
 import ninjabrainbot.io.KeyboardListener;
-import ninjabrainbot.io.MultipleChoicePreference;
+import ninjabrainbot.io.preferences.BooleanPreference;
+import ninjabrainbot.io.preferences.FloatPreference;
+import ninjabrainbot.io.preferences.HotkeyPreference;
+import ninjabrainbot.io.preferences.MultipleChoicePreference;
 import ninjabrainbot.util.I18n;
 
 public class OptionsFrame extends ThemedFrame {

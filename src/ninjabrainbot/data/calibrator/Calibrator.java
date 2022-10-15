@@ -7,9 +7,9 @@ import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.statistics.Posterior;
 import ninjabrainbot.data.stronghold.Chunk;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.ISet;
 
 public class Calibrator implements IDisposable {

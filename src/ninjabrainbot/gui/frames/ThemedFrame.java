@@ -4,12 +4,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.SubscriptionHandler;
 
 public class ThemedFrame extends JFrame implements IDisposable {
 

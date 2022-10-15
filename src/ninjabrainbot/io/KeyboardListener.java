@@ -9,6 +9,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.io.preferences.HotkeyPreference;
 
 public class KeyboardListener implements NativeKeyListener {
 

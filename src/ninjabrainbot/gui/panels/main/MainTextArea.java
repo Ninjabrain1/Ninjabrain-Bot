@@ -24,6 +24,8 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.data.stronghold.Ring;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.ColorMapLabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ResizablePanel;
@@ -31,11 +33,9 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.Pair;
-import ninjabrainbot.util.Subscription;
 
 public class MainTextArea extends ResizablePanel {
 

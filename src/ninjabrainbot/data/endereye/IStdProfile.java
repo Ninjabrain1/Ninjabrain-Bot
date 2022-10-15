@@ -1,6 +1,6 @@
 package ninjabrainbot.data.endereye;
 
-import ninjabrainbot.util.IModifiable;
+import ninjabrainbot.event.IModifiable;
 
 public interface IStdProfile extends IModifiable<IStdProfile> {
 

@@ -4,13 +4,13 @@ import java.util.Locale;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.Modifiable;
+import ninjabrainbot.event.Subscription;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.IObservable;
 import ninjabrainbot.util.ISet;
-import ninjabrainbot.util.Modifiable;
-import ninjabrainbot.util.Subscription;
 
 public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDisposable {
 

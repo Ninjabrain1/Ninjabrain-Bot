@@ -3,7 +3,7 @@ package ninjabrainbot.data.calculator;
 import java.util.List;
 
 import ninjabrainbot.data.stronghold.ChunkPrediction;
-import ninjabrainbot.util.IDisposable;
+import ninjabrainbot.event.IDisposable;
 
 public interface ICalculatorResult extends IDisposable {
 

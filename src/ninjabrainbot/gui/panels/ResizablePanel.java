@@ -2,11 +2,11 @@ package ninjabrainbot.gui.panels;
 
 import javax.swing.JPanel;
 
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.IModifiable;
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.ObservableProperty;
-import ninjabrainbot.util.SubscriptionHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IModifiable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.event.SubscriptionHandler;
 
 public class ResizablePanel extends JPanel implements IModifiable<ResizablePanel>, IDisposable {
 

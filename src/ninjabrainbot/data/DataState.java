@@ -13,11 +13,11 @@ import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.IObservable;
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.ObservableField;
-import ninjabrainbot.util.SubscriptionHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
 

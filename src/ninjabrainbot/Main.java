@@ -4,7 +4,7 @@ import ninjabrainbot.data.statistics.ApproximatedDensity;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.io.KeyboardListener;
-import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 

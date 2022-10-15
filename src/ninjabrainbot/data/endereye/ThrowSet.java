@@ -1,7 +1,7 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.util.ModifiableSet;
+import ninjabrainbot.event.ModifiableSet;
 
 public class ThrowSet extends ModifiableSet<IThrow> implements IThrowSet {
 

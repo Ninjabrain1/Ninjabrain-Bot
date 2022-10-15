@@ -8,15 +8,15 @@ import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.Subscription;
 
 public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 

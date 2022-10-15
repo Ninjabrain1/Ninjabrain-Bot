@@ -1,7 +1,7 @@
 package ninjabrainbot.data.divine;
 
 import ninjabrainbot.data.blind.BlindPosition;
-import ninjabrainbot.util.ISubscribable;
+import ninjabrainbot.event.ISubscribable;
 
 public interface IDivineContext {
 

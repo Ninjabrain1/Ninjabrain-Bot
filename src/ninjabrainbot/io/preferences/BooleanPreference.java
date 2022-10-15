@@ -1,8 +1,8 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.preferences;
 
 import java.util.prefs.Preferences;
 
-import ninjabrainbot.util.Modifiable;
+import ninjabrainbot.event.Modifiable;
 
 public class BooleanPreference extends Modifiable<Boolean> {
 

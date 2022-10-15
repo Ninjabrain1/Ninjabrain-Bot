@@ -1,8 +1,8 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.data.statistics.IRay;
-import ninjabrainbot.util.IModifiable;
-import ninjabrainbot.util.ISubscribable;
+import ninjabrainbot.event.IModifiable;
+import ninjabrainbot.event.ISubscribable;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 

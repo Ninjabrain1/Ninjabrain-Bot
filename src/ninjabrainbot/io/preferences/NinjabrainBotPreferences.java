@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.preferences;
 
 import java.util.prefs.Preferences;
 

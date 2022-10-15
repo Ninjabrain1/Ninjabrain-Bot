@@ -5,8 +5,8 @@ import javax.swing.Timer;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.SubscriptionHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.SubscriptionHandler;
 
 public class AutoResetTimer extends Timer implements IDisposable {
 

@@ -1,11 +1,11 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.Modifiable;
-import ninjabrainbot.util.ObservableField;
-import ninjabrainbot.util.Subscription;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.Modifiable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.Subscription;
 
 /**
  * Represents an eye of ender throw.

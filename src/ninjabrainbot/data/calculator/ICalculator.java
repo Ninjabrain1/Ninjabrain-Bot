@@ -5,7 +5,7 @@ import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.util.IObservable;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.ISet;
 
 public interface ICalculator {

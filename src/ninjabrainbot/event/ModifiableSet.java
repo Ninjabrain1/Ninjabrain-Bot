@@ -1,4 +1,4 @@
-package ninjabrainbot.util;
+package ninjabrainbot.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;

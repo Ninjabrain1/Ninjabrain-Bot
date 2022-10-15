@@ -2,9 +2,9 @@ package ninjabrainbot.data.divine;
 
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.stronghold.Ring;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.util.Coords;
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.ObservableField;
 
 public class DivineContext implements IDivineContext {
 

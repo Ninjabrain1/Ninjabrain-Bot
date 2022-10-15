@@ -14,8 +14,8 @@ import ninjabrainbot.data.statistics.Posterior;
 import ninjabrainbot.data.statistics.Prior;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.Coords;
-import ninjabrainbot.util.IObservable;
 import ninjabrainbot.util.ISet;
 import ninjabrainbot.util.Pair;
 

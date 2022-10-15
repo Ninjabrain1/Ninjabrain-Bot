@@ -2,7 +2,7 @@ package ninjabrainbot.data.calibrator;
 
 import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.util.Unmodifiable;
+import ninjabrainbot.event.Unmodifiable;
 
 public class CalibratorStdProfile extends Unmodifiable<IStdProfile> implements IStdProfile {
 

@@ -1,4 +1,4 @@
-package ninjabrainbot.util;
+package ninjabrainbot.event;
 
 public class Modifiable<T> implements IModifiable<T> {
 

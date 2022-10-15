@@ -9,14 +9,14 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.Subscription;
 
 /**
  * JComponent for showing a Throw.

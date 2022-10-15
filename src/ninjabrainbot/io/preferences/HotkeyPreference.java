@@ -1,12 +1,12 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.preferences;
 
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
-import ninjabrainbot.util.ISubscribable;
-import ninjabrainbot.util.ObservableProperty;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
 
 public class HotkeyPreference {
 

@@ -1,4 +1,4 @@
-package ninjabrainbot.util;
+package ninjabrainbot.event;
 
 /**
  * Represents a variable that can be observed but not set. Changes to the

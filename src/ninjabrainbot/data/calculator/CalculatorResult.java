@@ -7,7 +7,7 @@ import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.statistics.Posterior;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
-import ninjabrainbot.util.IObservable;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.ISet;
 
 public class CalculatorResult implements ICalculatorResult {

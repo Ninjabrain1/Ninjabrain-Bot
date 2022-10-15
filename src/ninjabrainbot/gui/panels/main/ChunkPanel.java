@@ -8,6 +8,8 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.ColorMapLabel;
 import ninjabrainbot.gui.components.ILabel;
 import ninjabrainbot.gui.components.ThemedLabel;
@@ -16,8 +18,6 @@ import ninjabrainbot.gui.style.ColumnLayout;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.util.IDisposable;
-import ninjabrainbot.util.Subscription;
 
 /**
  * JComponent for showing a Throw.

@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.NotificationsButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
@@ -27,9 +28,8 @@ import ninjabrainbot.gui.panels.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.IDisposable;
 
 public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
