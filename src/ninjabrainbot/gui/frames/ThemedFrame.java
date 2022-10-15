@@ -1,5 +1,8 @@
 package ninjabrainbot.gui.frames;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
@@ -10,6 +13,7 @@ import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.util.Profiler;
 
 public class ThemedFrame extends JFrame implements IDisposable {
 
@@ -49,6 +53,16 @@ public class ThemedFrame extends JFrame implements IDisposable {
 	}
 
 	public void updateFontsAndColors(StyleManager styleManager) {
+	}
+
+	public void checkIfOffScreen() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		for (GraphicsDevice gd : ge.getScreenDevices()) {
+			if (gd.getDefaultConfiguration().getBounds().contains(getBounds())) {
+				return;
+			}
+		}
+		setLocation(100, 100);
 	}
 
 	@Override

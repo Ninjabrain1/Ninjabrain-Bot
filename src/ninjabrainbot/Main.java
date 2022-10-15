@@ -1,5 +1,7 @@
 package ninjabrainbot;
 
+import java.util.Locale;
+
 import ninjabrainbot.data.statistics.ApproximatedDensity;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
@@ -23,6 +25,7 @@ public class Main {
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
 		Profiler.stopAndStart("Initialize GUI");
+		Locale.setDefault(Locale.US);
 		new GUI();
 		Profiler.stop();
 		Profiler.print();

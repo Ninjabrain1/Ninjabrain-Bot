@@ -30,6 +30,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.Profiler;
 
 public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
@@ -81,6 +82,10 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	public AbstractButton getSettingsButton() {
 		return settingsButton;
+	}
+
+	public boolean isIdle() {
+		return mainTextArea.isIdle();
 	}
 
 	private void setupSubscriptions(StyleManager styleManager, IDataState dataState) {

@@ -1,10 +1,5 @@
 package ninjabrainbot.gui;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-
-import javax.swing.JFrame;
-
 import ninjabrainbot.Main;
 import ninjabrainbot.data.DataState;
 import ninjabrainbot.data.DataStateHandler;
@@ -18,6 +13,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
+import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.util.Profiler;
 
 /**
@@ -27,6 +23,7 @@ public class GUI {
 
 	private ClipboardReader clipboardReader;
 	private AutoResetTimer autoResetTimer;
+	private OBSOverlay obsOverlay;
 
 	private StyleManager styleManager;
 	private NinjabrainBotFrame ninjabrainBotFrame;
@@ -44,7 +41,7 @@ public class GUI {
 
 	private void initInputMethods() {
 		clipboardReader = new ClipboardReader();
-		Thread clipboardThread = new Thread(clipboardReader);
+		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader);
 		clipboardThread.start();
 
@@ -71,8 +68,9 @@ public class GUI {
 	}
 
 	private void postInit() {
-		checkIfOffScreen(ninjabrainBotFrame);
+		ninjabrainBotFrame.checkIfOffScreen();
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, dataState);
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 	}
 
@@ -84,27 +82,15 @@ public class GUI {
 		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
 		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
 	}
-
-	private void checkIfOffScreen(JFrame frame) {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		for (GraphicsDevice gd : ge.getScreenDevices()) {
-			if (gd.getDefaultConfiguration().getBounds().contains(frame.getBounds())) {
-				return;
-			}
-		}
-		frame.setLocation(100, 100);
-	}
-
+	
 	private Thread onShutdown() {
-		return new Thread() {
+		return new Thread("Shutdown") {
 			@Override
 			public void run() {
 				Main.preferences.windowX.set(ninjabrainBotFrame.getX());
 				Main.preferences.windowY.set(ninjabrainBotFrame.getY());
-//				clearOBSOverlay(); TODO
+				obsOverlay.clear();
 				autoResetTimer.dispose();
-				ninjabrainBotFrame.dispose();
-				optionsFrame.dispose();
 			}
 		};
 	}

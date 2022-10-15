@@ -42,6 +42,7 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.KeyboardListener;
+import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.FloatPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
@@ -227,7 +228,7 @@ public class OptionsFrame extends ThemedFrame {
 			}
 		};
 		ac2.add(overlayExplanation, constraints);
-		ac2.add(new ThemedTextArea(styleManager, styleManager.OBS_OVERLAY.getAbsolutePath()), constraints);
+		ac2.add(new ThemedTextArea(styleManager, OBSOverlay.OBS_OVERLAY.getAbsolutePath()), constraints);
 		constraints.insets = new Insets(0, 0, 0, 0);
 		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
 		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_hide_locked"), Main.preferences.overlayHideWhenLocked), constraints);
