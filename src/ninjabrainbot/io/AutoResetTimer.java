@@ -3,6 +3,7 @@ package ninjabrainbot.io;
 import javax.swing.Timer;
 
 import ninjabrainbot.calculator.IDataState;
+import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.SubscriptionHandler;
 
@@ -14,10 +15,10 @@ public class AutoResetTimer extends Timer implements IDisposable {
 
 	SubscriptionHandler sh = new SubscriptionHandler();
 
-	public AutoResetTimer(IDataState dataState) {
+	public AutoResetTimer(IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(AUTO_RESET_DELAY, null);
 		addActionListener(p -> {
-			dataState.reset();
+			dataStateHandler.resetIfNotLocked();
 			restart();
 			stop();
 		});

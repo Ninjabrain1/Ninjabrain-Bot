@@ -2,7 +2,6 @@ package ninjabrainbot.gui;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -13,7 +12,6 @@ import ninjabrainbot.calculator.DataState;
 import ninjabrainbot.calculator.DataStateHandler;
 import ninjabrainbot.calculator.IDataState;
 import ninjabrainbot.calculator.IDataStateHandler;
-import ninjabrainbot.calculator.IThrow;
 import ninjabrainbot.calculator.StandardStdProfile;
 import ninjabrainbot.gui.components.NinjabrainBotFrame;
 import ninjabrainbot.io.AutoResetTimer;
@@ -55,7 +53,7 @@ public class GUI {
 
 	private void initDataState() {
 		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), clipboardReader.whenNewFossilInputed(), new StandardStdProfile());
-		dataStateHandler = new DataStateHandler();
+		dataStateHandler = new DataStateHandler(dataState);
 	}
 
 	private void initWindows() {
@@ -74,55 +72,21 @@ public class GUI {
 
 	private void postInit() {
 		checkIfOffScreen(ninjabrainBotFrame);
-		autoResetTimer = new AutoResetTimer(dataState);
+		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 	}
 
 	private void setupHotkeys() {
-		Main.preferences.hotkeyReset.whenTriggered().subscribe(__ -> resetCalculatorIfNotLocked());
-		Main.preferences.hotkeyUndo.whenTriggered().subscribe(__ -> undoIfNotLocked());
-		Main.preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(0.01));
-		Main.preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(-0.01));
-		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> toggleAltStdOnLastThrowIfNotLocked());
+		Main.preferences.hotkeyReset.whenTriggered().subscribe(__ -> dataStateHandler.resetIfNotLocked());
+		Main.preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
+		Main.preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(0.01));
+		Main.preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
+		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
 		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
 	}
 
 	private void setupSettingsSubscriptions() {
 		Main.preferences.autoReset.whenModified().subscribe(b -> onAutoResetEnabledChanged(b));
-	}
-
-	private void resetCalculatorIfNotLocked() {
-		if (!dataState.locked().get())
-			dataState.reset();
-	}
-
-	private void undoIfNotLocked() {
-		// TODO
-	}
-
-	private void changeLastAngleIfNotLocked(double delta) {
-		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-			IThrow last = dataState.getThrowSet().getLast();
-			if (last != null)
-				last.addCorrection(delta);
-		}
-	}
-
-	private void toggleAltStdOnLastThrowIfNotLocked() {
-		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-			IThrow last = dataState.getThrowSet().getLast();
-			int stdProfile = last.getStdProfileNumber();
-			switch (stdProfile) {
-			case StandardStdProfile.NORMAL:
-				last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
-				break;
-			case StandardStdProfile.ALTERNATIVE:
-				last.setStdProfileNumber(StandardStdProfile.NORMAL);
-				break;
-			case StandardStdProfile.MANUAL:
-				break;
-			}
-		}
 	}
 
 	private void onAutoResetEnabledChanged(boolean b) {

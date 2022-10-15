@@ -79,7 +79,7 @@ public class MainButtonPanel extends ThemedPanel {
 	
 	private FlatButton getResetButton(StyleManager styleManager) {
 		FlatButton button = new FlatButton(styleManager, I18n.get("reset"));
-		button.addActionListener(p -> dataState.reset());
+		button.addActionListener(p -> dataStateHandler.reset());
 		return button;
 	}
 	
