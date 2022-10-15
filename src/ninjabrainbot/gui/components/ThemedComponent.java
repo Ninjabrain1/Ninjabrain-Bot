@@ -1,6 +1,6 @@
 package ninjabrainbot.gui.components;
 
-import ninjabrainbot.gui.StyleManager;
+import ninjabrainbot.gui.style.StyleManager;
 
 public interface ThemedComponent {
 	

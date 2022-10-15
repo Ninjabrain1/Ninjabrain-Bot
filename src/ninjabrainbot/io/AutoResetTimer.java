@@ -3,8 +3,8 @@ package ninjabrainbot.io;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.IDataState;
-import ninjabrainbot.calculator.IDataStateHandler;
+import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.SubscriptionHandler;
 

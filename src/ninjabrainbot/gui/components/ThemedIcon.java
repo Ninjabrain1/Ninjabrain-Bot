@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-import ninjabrainbot.gui.StyleManager;
+import ninjabrainbot.gui.style.StyleManager;
 
 public class ThemedIcon extends ThemedLabel {
 

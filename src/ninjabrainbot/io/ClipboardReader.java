@@ -6,10 +6,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.calculator.IThrow;
-import ninjabrainbot.calculator.Throw;
-import ninjabrainbot.calculator.Throw1_12;
-import ninjabrainbot.calculator.divine.Fossil;
+import ninjabrainbot.data.divine.Fossil;
+import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.endereye.Throw;
+import ninjabrainbot.data.endereye.Throw1_12;
 import ninjabrainbot.util.ISubscribable;
 import ninjabrainbot.util.ObservableProperty;
 

@@ -12,9 +12,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
-import ninjabrainbot.gui.StyleManager;
-import ninjabrainbot.gui.SizePreference;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.Theme;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
 	

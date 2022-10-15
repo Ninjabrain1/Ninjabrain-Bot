@@ -4,8 +4,8 @@ import java.awt.Color;
 
 import javax.swing.JSeparator;
 
-import ninjabrainbot.gui.StyleManager;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.Theme;
 
 public class Divider extends JSeparator implements ThemedComponent {
 	

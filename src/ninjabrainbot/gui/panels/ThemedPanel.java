@@ -1,40 +1,27 @@
-package ninjabrainbot.gui.components;
+package ninjabrainbot.gui.panels;
 
 import java.awt.Color;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 
+import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 
-public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
+public class ThemedPanel extends JPanel implements ThemedComponent {
 	
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 	
-	public ThemedLabel(StyleManager styleManager) {
-		this(styleManager, "");
-	}
-
-	public ThemedLabel(StyleManager styleManager, boolean centered) {
-		this(styleManager, "", false, centered);
+	public ThemedPanel(StyleManager styleManager) {
+		this(styleManager, false);
 	}
 	
-	public ThemedLabel(StyleManager styleManager, String text) {
-		this(styleManager, text, false);
-	}
-	
-	public ThemedLabel(StyleManager styleManager, String text, boolean bold) {
-		this(styleManager, text, bold, false);
-	}
-	
-	public ThemedLabel(StyleManager styleManager, String text, boolean bold, boolean centered) {
-		super(text);
+	public ThemedPanel(StyleManager styleManager, boolean bold) {
+		super();
 		styleManager.registerThemedComponent(this);
 		this.bold = bold;
-		setHorizontalAlignment(centered ? SwingConstants.CENTER : SwingConstants.LEFT);
 	}
 	
 	public void updateSize(StyleManager styleManager) {
@@ -59,7 +46,7 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 	}
 	
 	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+		return null;
 	}
 	
 }

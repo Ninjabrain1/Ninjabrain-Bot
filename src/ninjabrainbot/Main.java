@@ -1,7 +1,7 @@
 package ninjabrainbot;
 
-import ninjabrainbot.calculator.statistics.ApproximatedDensity;
-import ninjabrainbot.calculator.stronghold.StrongholdConstants;
+import ninjabrainbot.data.statistics.ApproximatedDensity;
+import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.NinjabrainBotPreferences;

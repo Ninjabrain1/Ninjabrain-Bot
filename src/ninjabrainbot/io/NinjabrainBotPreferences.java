@@ -3,8 +3,8 @@ package ninjabrainbot.io;
 import java.util.prefs.Preferences;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.SizePreference;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 public class NinjabrainBotPreferences {
