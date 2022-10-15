@@ -25,7 +25,7 @@ import ninjabrainbot.util.Profiler;
 public class GUI {
 
 	private ClipboardReader clipboardReader;
-	private Timer autoResetTimer;
+	private AutoResetTimer autoResetTimer;
 
 	private StyleManager styleManager;
 	private NinjabrainBotFrame ninjabrainBotFrame;
@@ -37,7 +37,7 @@ public class GUI {
 	public GUI() {
 		initInputMethods();
 		initDataState();
-		initWindows();
+		initUI();
 		postInit();
 	}
 
@@ -48,7 +48,6 @@ public class GUI {
 		clipboardThread.start();
 
 		setupHotkeys();
-		setupSettingsSubscriptions();
 	}
 
 	private void initDataState() {
@@ -56,7 +55,7 @@ public class GUI {
 		dataStateHandler = new DataStateHandler(dataState);
 	}
 
-	private void initWindows() {
+	private void initUI() {
 		styleManager = new StyleManager();
 		Profiler.stopAndStart("Create frame");
 		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, dataState, dataStateHandler);
@@ -85,17 +84,6 @@ public class GUI {
 		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
 	}
 
-	private void setupSettingsSubscriptions() {
-		Main.preferences.autoReset.whenModified().subscribe(b -> onAutoResetEnabledChanged(b));
-	}
-
-	private void onAutoResetEnabledChanged(boolean b) {
-		if (b)
-			autoResetTimer.start();
-		else
-			autoResetTimer.stop();
-	}
-
 	private void checkIfOffScreen(JFrame frame) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		for (GraphicsDevice gd : ge.getScreenDevices()) {
@@ -113,6 +101,9 @@ public class GUI {
 				Main.preferences.windowX.set(ninjabrainBotFrame.getX());
 				Main.preferences.windowY.set(ninjabrainBotFrame.getY());
 //				clearOBSOverlay(); TODO
+				autoResetTimer.dispose();
+				ninjabrainBotFrame.dispose();
+				optionsFrame.dispose();
 			}
 		};
 	}

@@ -2,6 +2,7 @@ package ninjabrainbot.io;
 
 import javax.swing.Timer;
 
+import ninjabrainbot.Main;
 import ninjabrainbot.calculator.IDataState;
 import ninjabrainbot.calculator.IDataStateHandler;
 import ninjabrainbot.util.IDisposable;
@@ -25,6 +26,14 @@ public class AutoResetTimer extends Timer implements IDisposable {
 		sh.add(dataState.locked().subscribe(__ -> restart()));
 		sh.add(dataState.blindResult().subscribe(__ -> restart()));
 		sh.add(dataState.calculatorResult().subscribe(__ -> restart()));
+		sh.add(Main.preferences.autoReset.whenModified().subscribe(b -> onAutoResetEnabledChanged(b)));
+	}
+
+	private void onAutoResetEnabledChanged(boolean b) {
+		if (b)
+			start();
+		else
+			stop();
 	}
 
 	@Override
