@@ -28,10 +28,10 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	private IDivineContext dc;
 	private JLabel label;
 	private FlatButton removeButton;
-	
+
 	Subscription fossilSubscription;
 	Runnable whenVisibilityChanged;
-	
+
 	public DivineContextPanel(StyleManager styleManager, IDivineContext dc, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		setOpaque(true);
@@ -114,7 +114,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_SLIGHTLY_STRONG;
 	}
-	
+
 	@Override
 	public void dispose() {
 		fossilSubscription.cancel();

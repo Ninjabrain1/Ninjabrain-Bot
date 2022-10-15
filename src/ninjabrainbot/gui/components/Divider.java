@@ -8,7 +8,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 
 public class Divider extends JSeparator implements ThemedComponent {
-	
+
 	private static final long serialVersionUID = 4116749757122783747L;
 
 	public Divider(StyleManager styleManager) {
@@ -24,9 +24,9 @@ public class Divider extends JSeparator implements ThemedComponent {
 		setBackground(getBackgroundColor(styleManager.theme));
 		setForeground(getBackgroundColor(styleManager.theme));
 	}
-	
+
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONGEST;
 	}
-	
+
 }

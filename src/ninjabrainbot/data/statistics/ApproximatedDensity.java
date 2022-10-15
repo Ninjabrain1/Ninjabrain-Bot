@@ -7,11 +7,11 @@ import ninjabrainbot.data.stronghold.RingIterator;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 
 public class ApproximatedDensity {
-	
+
 	private static final int deltaR = 1; // discretisation step size (in chunks)
 	private static double[] density; // approximated density
 	private static double[] cumulative_r_space; // approximated density
-	
+
 	public static void init() {
 		if (density != null)
 			return;
@@ -46,7 +46,7 @@ public class ApproximatedDensity {
 		}
 		for (int i = 0; i < filter.length; i++) {
 			filter[i] = filter[i] / sum;
-			//System.out.println(filter[i]);
+			// System.out.println(filter[i]);
 		}
 		// convolve
 		double[] densityPreSnapping = density;
@@ -66,7 +66,7 @@ public class ApproximatedDensity {
 			cumulative_r_space[i] = cumsum;
 		}
 	}
-	
+
 	public static double density(double cx, double cz) {
 		init();
 		double d2 = cx * cx + cz * cz;
@@ -74,9 +74,9 @@ public class ApproximatedDensity {
 		double t = k - (int) k;
 		int i0 = (int) k;
 		int i1 = (int) k + 1;
-		return i1 < density.length ? (1.0 - t) * density[i0]  + t * density[i1] : 0;
+		return i1 < density.length ? (1.0 - t) * density[i0] + t * density[i1] : 0;
 	}
-	
+
 	public static double cumulativePolar(double r) {
 		if (r < 0)
 			return 0;
@@ -85,7 +85,7 @@ public class ApproximatedDensity {
 		double t = k - (int) k;
 		int i0 = (int) k;
 		int i1 = (int) k + 1;
-		return i1 < cumulative_r_space.length ? (1.0 - t) * cumulative_r_space[i0]  + t * cumulative_r_space[i1] : cumulative_r_space[cumulative_r_space.length - 1];
+		return i1 < cumulative_r_space.length ? (1.0 - t) * cumulative_r_space[i0] + t * cumulative_r_space[i1] : cumulative_r_space[cumulative_r_space.length - 1];
 	}
-	
+
 }

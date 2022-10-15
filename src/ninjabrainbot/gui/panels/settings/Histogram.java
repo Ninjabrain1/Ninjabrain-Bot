@@ -19,14 +19,14 @@ public class Histogram extends ThemedPanel {
 	private int maxCount;
 	private float min, max;
 	private int numBins;
-	
+
 	ArrayList<JLabel> ticks;
 	ArrayList<Float> floatTicks;
 	Color histColor = Color.black;
 	Color lineColor = Color.black;
 	int labelsHeight = 20;
 	int margin = 20;
-	
+
 	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
 		super(styleManager);
 		this.min = min;
@@ -40,16 +40,16 @@ public class Histogram extends ThemedPanel {
 		addTick(styleManager, min);
 		addTick(styleManager, max);
 	}
-	
+
 	private void addTick(StyleManager styleManager, float tick) {
 		ThemedLabel l = new ThemedLabel(styleManager, "" + tick);
 		ticks.add(l);
 		floatTicks.add(tick);
 		add(l);
 	}
-	
+
 	private void addData(float f) {
-		float t = (f - min)/(max - min);
+		float t = (f - min) / (max - min);
 		int bin = (int) (t * numBins);
 		if (bin < 0)
 			bin = 0;
@@ -68,17 +68,17 @@ public class Histogram extends ThemedPanel {
 		float delta = (float) w / numBins;
 		g.setColor(histColor);
 		for (int i = 0; i < numBins; i++) {
-			g.fillRect(margin + (int) (i*delta), getHeight() - labelsHeight, (int) ((i+1)*delta) - (int) (i*delta), -counts[i] * a);
+			g.fillRect(margin + (int) (i * delta), getHeight() - labelsHeight, (int) ((i + 1) * delta) - (int) (i * delta), -counts[i] * a);
 		}
 		g.setColor(lineColor);
-		g.drawLine(getWidth()/2, 0, getWidth()/2, getHeight() - labelsHeight);
+		g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight() - labelsHeight);
 		g.drawLine(margin, getHeight() - labelsHeight, getWidth() - margin, getHeight() - labelsHeight);
 		for (int i = 0; i < ticks.size(); i++) {
-			float t = (floatTicks.get(i) - min)/(max - min);
-			ticks.get(i).setLocation(margin + (int)(t * w) - ticks.get(i).getWidth()/2, getHeight() - labelsHeight);
+			float t = (floatTicks.get(i) - min) / (max - min);
+			ticks.get(i).setLocation(margin + (int) (t * w) - ticks.get(i).getWidth() / 2, getHeight() - labelsHeight);
 		}
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 		super.updateColors(styleManager);
@@ -86,22 +86,22 @@ public class Histogram extends ThemedPanel {
 		histColor = styleManager.theme.COLOR_SATURATED;
 		lineColor = styleManager.theme.COLOR_STRONGEST;
 	}
-	
+
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_NEUTRAL;
 	}
-	
+
 	public void clear() {
 		counts = new int[numBins];
 		maxCount = 0;
 	}
-	
+
 	public void setData(double[] angleErrors) {
 		counts = new int[numBins];
 		maxCount = 0;
 		for (double d : angleErrors) {
-			addData((float)d);
+			addData((float) d);
 		}
 		repaint();
 	}

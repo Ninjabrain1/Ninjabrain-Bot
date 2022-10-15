@@ -175,8 +175,7 @@ public class Posterior {
 				continue;
 			boolean sameRing = ring_chunk.ring == ring.ring;
 			double ak = ring_chunk.innerRadius;
-			double dphi = sameRing ? (2.0 / (2.0 * K + 1) * 15 * Math.sqrt(2) / ak)
-					: (2.0 / (2.0 * K + 1) * Math.PI / ring.numStrongholds);
+			double dphi = sameRing ? (2.0 / (2.0 * K + 1) * 15 * Math.sqrt(2) / ak) : (2.0 / (2.0 * K + 1) * Math.PI / ring.numStrongholds);
 			for (int l = 0; l < ring.numStrongholds; l++) {
 				if (sameRing && l == 0) {
 					continue;
@@ -189,8 +188,7 @@ public class Posterior {
 		return closestStrongholdProbability;
 	}
 
-	private double integral(Ring ring, int l, double phi_prime, double dphi, double phi_p, double r_p, double d_i,
-			boolean sameRingAsChunk) {
+	private double integral(Ring ring, int l, double phi_prime, double dphi, double phi_p, double r_p, double d_i, boolean sameRingAsChunk) {
 		double phi_prime_l_mu = phi_prime + (l * 2 * Math.PI / ring.numStrongholds);
 		double pdfint = 0;
 		double integral = 0;
@@ -198,8 +196,7 @@ public class Posterior {
 			double delta_phi = k * dphi;
 			double pdf = 0;
 			if (sameRingAsChunk) {
-				pdf = Math.pow(1 + delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5)
-						* Math.pow(1 - delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5);
+				pdf = Math.pow(1 + delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5) * Math.pow(1 - delta_phi * ring.innerRadius / (15 * Math.sqrt(2)), 4.5);
 			} else {
 				pdf = 1;
 			}
@@ -221,8 +218,7 @@ public class Posterior {
 					R0 = ring.outerRadiusPostSnapping;
 				if (R1 < ring.innerRadiusPostSnapping)
 					R1 = ring.innerRadiusPostSnapping;
-				integral += pdf * (ApproximatedDensity.cumulativePolar(R1) - ApproximatedDensity.cumulativePolar(R0))
-						* dphi / ring.numStrongholds;
+				integral += pdf * (ApproximatedDensity.cumulativePolar(R1) - ApproximatedDensity.cumulativePolar(R0)) * dphi / ring.numStrongholds;
 			} // else integrand is 0
 		}
 		integral /= pdfint;

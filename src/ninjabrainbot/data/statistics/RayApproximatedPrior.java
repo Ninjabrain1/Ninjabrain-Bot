@@ -15,7 +15,7 @@ public class RayApproximatedPrior implements IPrior {
 
 	ArrayList<Chunk> chunks;
 	IDivineContext divineContext;
-	
+
 	public RayApproximatedPrior(IRay r, IDivineContext divineContext) {
 		this(r, 1.0 / 180.0 * Math.PI, divineContext); // 1 degree tolerance
 	}
@@ -24,9 +24,9 @@ public class RayApproximatedPrior implements IPrior {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
 		construct(r, tolerance);
-		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
+		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
-	
+
 	private void construct(IRay r, double tolerance) {
 		double range = 5000.0 / 16;
 		chunks = new ArrayList<Chunk>();
@@ -51,7 +51,7 @@ public class RayApproximatedPrior implements IPrior {
 		boolean rightPositive = majorPositive ? vk - uk > 0 : uk - vk > 0;
 		int i = (int) (majorPositive ? Math.ceil(iter_start_major) : Math.floor(iter_start_major));
 		while ((majorX ? (i - iter_start_major) / dx : (i - iter_start_major) / dz) < range) {
-		//while (i - iter_start_major < range) {
+			// while (i - iter_start_major < range) {
 			double minor_u = origin_minor + uk * (i - origin_major);
 			double minor_v = origin_minor + vk * (i - origin_major);
 			int j = (int) (rightPositive ? Math.ceil(minor_u) : Math.floor(minor_u));
@@ -68,7 +68,7 @@ public class RayApproximatedPrior implements IPrior {
 			i += majorPositive ? 1 : -1;
 		}
 	}
-	
+
 	protected double strongholdDensity(double cx, double cz) {
 		double d2 = cx * cx + cz * cz;
 		double relativeWeight = 1.0;
@@ -88,7 +88,7 @@ public class RayApproximatedPrior implements IPrior {
 		}
 		return relativeWeight * ApproximatedDensity.density(cx, cz);
 	}
-	
+
 	/**
 	 * Returns the major coord at which to start looking for chunks to add to the
 	 * prior. If the player is outside the 8th ring this is necessary because the
@@ -126,8 +126,8 @@ public class RayApproximatedPrior implements IPrior {
 	}
 
 	/**
-	 * Returns the magnitude of the vector pointing orthogonally from u to a (positive = right). u is a
-	 * unit vector.
+	 * Returns the magnitude of the vector pointing orthogonally from u to a
+	 * (positive = right). u is a unit vector.
 	 */
 	private double orthogonalComponent(double ax, double az, double ux, double uz) {
 		double u_par_mag = ux * ax + uz * az;
@@ -138,7 +138,7 @@ public class RayApproximatedPrior implements IPrior {
 		double u_orth_mag = uz * u_orth_x - ux * u_orth_z;
 		return u_orth_mag;
 	}
-	
+
 	/**
 	 * Projects a onto the unit vector u and returns the major component.
 	 */
@@ -146,7 +146,7 @@ public class RayApproximatedPrior implements IPrior {
 		double proj_mag = ax * ux + az * uz;
 		return majorX ? (ux * proj_mag) : (uz * proj_mag);
 	}
-	
+
 	private double findCircleIntersection(double ox, double oz, double ux, double uz, double r, boolean majorX) {
 		double o_dot_u = ox * ux + oz * uz;
 		double a = o_dot_u * o_dot_u + r * r - ox * ox - oz * oz;

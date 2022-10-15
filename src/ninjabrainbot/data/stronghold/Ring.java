@@ -7,9 +7,9 @@ import java.util.stream.StreamSupport;
 import ninjabrainbot.util.Pair;
 
 public class Ring {
-	
+
 	public static final List<Ring> rings = StreamSupport.stream(new RingIterator().spliterator(), false).collect(Collectors.toList());
-	
+
 	public final int numStrongholds;
 	public final int ring;
 	// Ring radiuses before snapping (in chunks)
@@ -18,7 +18,7 @@ public class Ring {
 	// after snapping
 	public final double innerRadiusPostSnapping;
 	public final double outerRadiusPostSnapping;
-	
+
 	public Ring(int strongholdsInRing, int ring) {
 		this.numStrongholds = strongholdsInRing;
 		this.ring = ring;
@@ -27,14 +27,14 @@ public class Ring {
 		this.innerRadiusPostSnapping = this.innerRadius - (StrongholdConstants.snappingRadius + 1.0) * Math.sqrt(2);
 		this.outerRadiusPostSnapping = this.outerRadius + (StrongholdConstants.snappingRadius + 1.0) * Math.sqrt(2);
 	}
-	
+
 	public static Ring get(int i) {
 		if (i >= 0 && i < StrongholdConstants.numRings) {
 			return rings.get(i);
 		}
 		return null;
 	}
-	
+
 	public static Ring get(double chunkR) {
 		for (int k = 0; k < rings.size(); k++) {
 			if (rings.get(k).inRing(chunkR)) {
@@ -43,8 +43,8 @@ public class Ring {
 		}
 		return null;
 	}
-	
-	public static Pair<Ring, Ring> getClosestRings(double cx, double cz){
+
+	public static Pair<Ring, Ring> getClosestRings(double cx, double cz) {
 		double r = Math.sqrt(cx * cx + cz * cz);
 		Ring closest = Ring.get(0);
 		Ring nextClosest = Ring.get(1);
@@ -73,13 +73,13 @@ public class Ring {
 		}
 		return new Pair<Ring, Ring>(closest, nextClosest);
 	}
-	
+
 	public double centerRadius() {
 		return (outerRadius + innerRadius) / 2.0;
 	}
-	
+
 	public boolean inRing(double chunkR) {
 		return chunkR >= this.innerRadiusPostSnapping && chunkR <= this.outerRadiusPostSnapping;
 	}
-	
+
 }

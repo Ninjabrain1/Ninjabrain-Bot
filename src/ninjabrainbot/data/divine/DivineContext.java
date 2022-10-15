@@ -22,7 +22,7 @@ public class DivineContext implements IDivineContext {
 	public Fossil getFossil() {
 		return fossil.get();
 	}
-	
+
 	@Override
 	public void resetFossil() {
 		setFossil(null);
@@ -37,12 +37,12 @@ public class DivineContext implements IDivineContext {
 	public ISubscribable<Fossil> whenFossilChanged() {
 		return fossil;
 	}
-	
+
 	public void setFossil(Fossil f) {
 		onFossilChanged(f);
 		fossil.set(f);
 	}
-	
+
 	public void clear() {
 		setFossil(null);
 	}
@@ -105,7 +105,7 @@ public class DivineContext implements IDivineContext {
 			change -= 2 * Math.PI;
 		return Math.abs(change);
 	}
-	
+
 	private void onFossilChanged(Fossil fossil) {
 		if (fossil == null) {
 			phiMin = 0;

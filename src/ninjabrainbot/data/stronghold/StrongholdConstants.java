@@ -8,12 +8,13 @@ public class StrongholdConstants {
 	public static final int distParam = 32;
 	public static final int numStrongholds = 128;
 	public static final int numRings = 8;
-	public static final int maxChunk = (int) (distParam * ((4 + (numRings - 1) * 6) + 0.5f*2.5f) + 2 * snappingRadius + 1);
-	
+	public static final int maxChunk = (int) (distParam * ((4 + (numRings - 1) * 6) + 0.5f * 2.5f) + 2 * snappingRadius + 1);
+
 	private static int strongholdCenterChunkCoord;
-	
+
 	/**
-	 * Returns the maximum distance the stronghold can be from the given position (in blocks).
+	 * Returns the maximum distance the stronghold can be from the given position
+	 * (in blocks).
 	 */
 	public static double getMaxDistance(double x, double z) {
 		double r = Math.sqrt(x * x + z * z) / 16.0;
@@ -25,16 +26,16 @@ public class StrongholdConstants {
 			if (max < maxDistance)
 				maxDistance = max;
 		}
-		return (maxDistance + Math.sqrt(2) * (snappingRadius + 0.5))  * 16.0;
+		return (maxDistance + Math.sqrt(2) * (snappingRadius + 0.5)) * 16.0;
 	}
-	
+
 	public static void updateStrongholdChunkCoord() {
 		boolean pre1_19 = Main.preferences.mcVersion.get() == Main.preferences.mcVersion.getChoices()[0];
 		strongholdCenterChunkCoord = pre1_19 ? 8 : 0;
 	}
-	
+
 	public static int getStrongholdChunkCoord() {
 		return strongholdCenterChunkCoord;
 	};
-	
+
 }

@@ -29,7 +29,7 @@ public class IndexedObservableProperty<T> implements IMultiSubscribable<T> {
 		}
 		System.out.println("IndexedObservableProperty " + changed);
 	}
-	
+
 	public int subscriberCount() {
 		return subscribers.size();
 	}

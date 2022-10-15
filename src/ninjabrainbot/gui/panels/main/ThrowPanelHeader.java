@@ -21,14 +21,14 @@ import ninjabrainbot.util.I18n;
 public class ThrowPanelHeader extends ThemedPanel {
 
 	private static final long serialVersionUID = -1159034678242273505L;
-	
+
 	private JLabel x;
 	private JLabel z;
 	private JLabel alpha;
 	private JLabel error;
-	
+
 	private boolean errorsEnabled;
-	
+
 	public ThrowPanelHeader(StyleManager styleManager) {
 		this(styleManager, null);
 	}
@@ -47,7 +47,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 		add(error);
 		setLayout(null);
 	}
-	
+
 	public void setAngleErrorsEnabled(boolean e) {
 		errorsEnabled = e;
 	}
@@ -68,7 +68,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int w = width - 2*0 - height;
+		int w = width - 2 * 0 - height;
 		int y0 = -1;
 		if (!errorsEnabled) {
 			if (this.x != null)
@@ -89,19 +89,19 @@ public class ThrowPanelHeader extends ThemedPanel {
 		}
 		error.setVisible(errorsEnabled);
 	}
-	
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		super.updateSize(styleManager);
 		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 		super.updateColors(styleManager);
 		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
 	}
-	
+
 	@Override
 	public void setForeground(Color fg) {
 		super.setForeground(fg);

@@ -14,18 +14,19 @@ public class BlindResult {
 	public final double improveDirection;
 	public final double improveDistance;
 	public final double optHighrollProb;
-	
+
 	public static final Pair<Float, String> EXCELLENT = new Pair<Float, String>(1.0f, "blind_excellent");
 	public static final Pair<Float, String> HIGHROLL_GOOD = new Pair<Float, String>(0.9f, "blind_good_highroll");
 	public static final Pair<Float, String> HIGHROLL_SUFFICIENT = new Pair<Float, String>(0.7f, "blind_okay_highroll");
 	public static final Pair<Float, String> UNDESIRABLE = new Pair<Float, String>(0.5f, "blind_bad_in_ring");
 	public static final Pair<Float, String> BAD = new Pair<Float, String>(0.2f, "blind_bad");
 	public static final Pair<Float, String> NOT_IN_RING = new Pair<Float, String>(0.0f, "blind_not_in_ring");
-	
+
 	/**
 	 * Creates a blind result.
 	 */
-	public BlindResult(double x, double z, double highrollProbability, double highrollThreshold, double avgDistance, double avgDistanceDerivative, double ninetiethPercentileDerivative, double improveDirection, double improveDistance, double optHighrollProb) {
+	public BlindResult(double x, double z, double highrollProbability, double highrollThreshold, double avgDistance, double avgDistanceDerivative, double ninetiethPercentileDerivative,
+			double improveDirection, double improveDistance, double optHighrollProb) {
 		this.x = x;
 		this.z = z;
 		this.highrollProbability = highrollProbability;
@@ -37,7 +38,7 @@ public class BlindResult {
 		this.improveDistance = improveDistance;
 		this.improveDirection = improveDirection;
 	}
-	
+
 	public Pair<Float, String> evaluation() {
 		if (Ring.get(Math.sqrt(x * x + z * z) / 2.0) == null)
 			return NOT_IN_RING;

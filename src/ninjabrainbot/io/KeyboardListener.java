@@ -11,14 +11,14 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import ninjabrainbot.Main;
 
 public class KeyboardListener implements NativeKeyListener {
-	
+
 	public static boolean registered = false;
 	public static KeyboardListener instance;
-	
+
 	BiConsumer<Integer, Integer> consumer;
 	ClipboardReader clr;
 	boolean f3Held = false;
-	
+
 	public static void preInit() {
 		try {
 			System.setProperty("jnativehook.lib.path", System.getProperty("java.io.tmpdir"));
@@ -41,26 +41,26 @@ public class KeyboardListener implements NativeKeyListener {
 			}
 		});
 	}
-	
+
 	public static void init(ClipboardReader clr) {
 		if (registered) {
 			instance = new KeyboardListener(clr);
 			GlobalScreen.addNativeKeyListener(instance);
 		}
 	}
-	
-	KeyboardListener(ClipboardReader clr){
+
+	KeyboardListener(ClipboardReader clr) {
 		super();
 		this.clr = clr;
 	}
-	
+
 	public synchronized void setConsumer(BiConsumer<Integer, Integer> consumer) {
 		if (this.consumer != null) {
 			this.consumer.accept(-1, -1);
 		}
 		this.consumer = consumer;
 	}
-	
+
 	public synchronized void cancelConsumer() {
 		if (this.consumer != null) {
 			this.consumer.accept(-1, -1);
@@ -92,12 +92,12 @@ public class KeyboardListener implements NativeKeyListener {
 			}
 		}
 	}
-	
+
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		if (Main.preferences.altClipboardReader.get() && e.getRawCode() == KeyEvent.VK_F3) {
 			f3Held = false;
 		}
 	}
-	
+
 }

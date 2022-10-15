@@ -55,7 +55,7 @@ public class StyleManager {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(font);
 		fonts = new HashMap<>();
-		
+
 		overlayHideTimer = new Timer((int) (Main.preferences.overlayHideDelay.get() * 1000f), p -> {
 			clearOBSOverlay();
 		});
@@ -122,7 +122,7 @@ public class StyleManager {
 	public void registerThemedComponent(ThemedComponent c) {
 		themedComponents.add(c);
 	}
-	
+
 	public void registerThemedFrame(ThemedFrame f) {
 		themedFrames.add(f);
 	}

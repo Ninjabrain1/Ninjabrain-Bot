@@ -19,7 +19,7 @@ public class ApproximatedPrior extends Prior {
 	public ApproximatedPrior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		super(centerX, centerZ, radius, divineContext);
 	}
-	
+
 	/**
 	 * Test the accuracy of of the approximated prior.
 	 */
@@ -48,7 +48,8 @@ public class ApproximatedPrior extends Prior {
 				relError -= 1f;
 				if (relError > largestRelError)
 					largestRelError = relError;
-				// errors.add(new Pair<Double, String>(relError, "x: " + (i % size1d - radius) + ", z: " + (i / size1d - radius)));
+				// errors.add(new Pair<Double, String>(relError, "x: " + (i % size1d - radius) +
+				// ", z: " + (i / size1d - radius)));
 				numNonZeroChunks++;
 				double error = prior.chunks[i].weight - chunks[i].weight;
 				totalSquaredError += error * error;
@@ -60,8 +61,8 @@ public class ApproximatedPrior extends Prior {
 //		for (Pair<Double, String> p : errors) {
 //			System.out.println(p.fst + p.snd);
 //		}
-		System.out.println("Average non-zero weight: " + sum/numNonZeroChunks);
-		System.out.println("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError/numNonZeroChunks));
+		System.out.println("Average non-zero weight: " + sum / numNonZeroChunks);
+		System.out.println("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError / numNonZeroChunks));
 		System.out.println("Largest relative error: " + largestRelError);
 		System.out.println("False negative count: " + falseNegativeCount);
 		System.out.println("Prior sum: " + sump);
@@ -89,19 +90,20 @@ public class ApproximatedPrior extends Prior {
 				relativeWeight = 0;
 			relativeWeight *= divineContext.relativeDensity();
 		}
-		// Post snapping circle radiuses (dont have to be exact, tighter margins only affect performance, not the result)
+		// Post snapping circle radiuses (dont have to be exact, tighter margins only
+		// affect performance, not the result)
 		double c0_ps = ring.innerRadius - 2 * StrongholdConstants.snappingRadius;
 		double c1_ps = ring.outerRadius + 2 * StrongholdConstants.snappingRadius;
 		if (d2 < c0_ps * c0_ps || d2 > c1_ps * c1_ps)
 			return 0;
 		return relativeWeight * ApproximatedDensity.density(cx, cz);
 	}
-	
+
 	@Override
 	protected int discretisationPointsPerChunkSide() {
 		return 2;
 	}
-	
+
 	@Override
 	protected int margin() {
 		return StrongholdConstants.snappingRadius;

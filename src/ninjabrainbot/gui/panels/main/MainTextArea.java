@@ -497,5 +497,3 @@ class DivinePanel extends ThemedPanel {
 	}
 
 }
-
-

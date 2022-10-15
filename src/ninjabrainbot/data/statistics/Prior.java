@@ -17,11 +17,11 @@ public class Prior implements IPrior {
 	int x0, z0, x1, z1;
 	Chunk[] chunks;
 	IDivineContext divineContext;
-	
+
 	public Prior() {
 		this(0, 0, StrongholdConstants.maxChunk, null);
 	}
-	
+
 	public Prior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
@@ -35,9 +35,9 @@ public class Prior implements IPrior {
 		}
 		setInitialWeights();
 		smoothWeights();
-		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0)/1000f + " seconds.");
+		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
-	
+
 	/**
 	 * Calculates weights (prior probabilities) for all chunks in the domain.
 	 */
@@ -50,7 +50,7 @@ public class Prior implements IPrior {
 			int xEnd = (c1 < x1 ? c1 : x1);
 			int zStart = (-c1 > z0 ? -c1 : z0);
 			int zEnd = (c1 < z1 ? c1 : z1);
-			int innerThreshold = (int) ((c0 - 1)/Math.sqrt(2)) - 10;
+			int innerThreshold = (int) ((c0 - 1) / Math.sqrt(2)) - 10;
 			for (int i = xStart; i <= xEnd; i++) {
 				for (int j = zStart; j <= zEnd; j++) {
 					// Skip ahead if inside inner part of ring
@@ -62,7 +62,8 @@ public class Prior implements IPrior {
 							}
 						}
 					}
-					// Approximate integral by discretising the chunk into 4 points (centered at (0,0), not (8,8))
+					// Approximate integral by discretising the chunk into 4 points (centered at
+					// (0,0), not (8,8))
 					int n = discretisationPointsPerChunkSide();
 					double weight = 0;
 					if (n == 1) {
@@ -82,7 +83,7 @@ public class Prior implements IPrior {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns offset weights for biome snapping.
 	 */
@@ -94,7 +95,7 @@ public class Prior implements IPrior {
 		}
 		return offsetWeights;
 	}
-	
+
 	/**
 	 * Simulates biome snapping to smooth the weights.
 	 */
@@ -112,7 +113,7 @@ public class Prior implements IPrior {
 		int oldSize1d = size1d;
 		int oldX0 = x0;
 		int oldZ0 = z0;
-		setSize((x0 + x1)/2, (z0 + z1)/2, this.radius);
+		setSize((x0 + x1) / 2, (z0 + z1) / 2, this.radius);
 		chunks = new Chunk[size1d * size1d];
 		for (int i = x0; i <= x1; i++) {
 			for (int j = z0; j <= z1; j++) {
@@ -136,15 +137,15 @@ public class Prior implements IPrior {
 			}
 		}
 	}
-	
+
 	protected int discretisationPointsPerChunkSide() {
 		return 5;
 	}
-	
+
 	protected int margin() {
 		return 0;
 	}
-	
+
 	/**
 	 * Density (pdf) of strongholds at chunk coords (cx, cy), in the given ring.
 	 */
@@ -162,7 +163,7 @@ public class Prior implements IPrior {
 		}
 		return 0;
 	}
-	
+
 	protected void setInitialSize(int centerX, int centerZ, int radius) {
 		this.radius = radius;
 		x0 = centerX - radius - StrongholdConstants.snappingRadius;
@@ -171,7 +172,7 @@ public class Prior implements IPrior {
 		z1 = centerZ + radius + StrongholdConstants.snappingRadius;
 		size1d = 2 * (radius + StrongholdConstants.snappingRadius) + 1;
 	}
-	
+
 	protected void setSize(int centerX, int centerZ, int radius) {
 		this.radius = radius;
 		x0 = centerX - radius;
@@ -180,18 +181,18 @@ public class Prior implements IPrior {
 		z1 = centerZ + radius;
 		size1d = 2 * radius + 1;
 	}
-	
+
 	private boolean inBounds(int i, int j) {
 		return i >= x0 && i <= x1 && j >= z0 && j <= z1;
 	}
-	
+
 	private int idx(int i, int j) {
 		return 1 * (j - z0) + (i - x0) * size1d;
 	}
-	
+
 	@Override
 	public Iterable<Chunk> getChunks() {
 		return Arrays.asList(chunks);
 	}
-	
+
 }

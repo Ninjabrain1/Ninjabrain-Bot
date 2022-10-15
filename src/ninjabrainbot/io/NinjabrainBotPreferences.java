@@ -90,7 +90,8 @@ public class NinjabrainBotPreferences {
 		// Multiple choice
 		strongholdDisplayType = new MultipleChoicePreference("stronghold_display_type", FOURFOUR, new int[] { 0, 1, 2 }, new String[] { FOURFOUR, EIGHTEIGHT, CHUNK }, pref);
 		theme = new MultipleChoicePreference("theme", Theme.DARK.name, new int[] { 0, 1, 2 }, new String[] { Theme.LIGHT.name, Theme.DARK.name, Theme.BLUE.name }, pref);
-		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] { 0, 1, 2 }, new String[] { SizePreference.REGULAR.name, SizePreference.LARGE.name, SizePreference.EXTRALARGE.name }, pref);
+		size = new MultipleChoicePreference("size", SizePreference.REGULAR.name, new int[] { 0, 1, 2 },
+				new String[] { SizePreference.REGULAR.name, SizePreference.LARGE.name, SizePreference.EXTRALARGE.name }, pref);
 		view = new MultipleChoicePreference("view", BASIC, new int[] { 0, 1 }, new String[] { BASIC, DETAILED }, pref);
 		language = new MultipleChoicePreference("language", I18n.getDefaultName(), I18n.getLanguageIDs(), I18n.getLanguageNames(), pref);
 		mcVersion = new MultipleChoicePreference("mc_version", PRE_119, new int[] { 0, 1 }, new String[] { PRE_119, POST_119 }, pref);

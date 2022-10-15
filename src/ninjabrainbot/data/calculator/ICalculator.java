@@ -17,5 +17,5 @@ public interface ICalculator {
 	public DivineResult divine();
 
 	public void setDivineContext(IDivineContext divineContext);
-	
+
 }

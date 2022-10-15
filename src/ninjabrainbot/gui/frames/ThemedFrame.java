@@ -19,7 +19,7 @@ public class ThemedFrame extends JFrame implements IDisposable {
 	protected ThemedLabel titletextLabel;
 
 	protected SubscriptionHandler sh = new SubscriptionHandler();
-	
+
 	public ThemedFrame(StyleManager styleManager, String title) {
 		super(title);
 		styleManager.registerThemedFrame(this);
@@ -30,6 +30,7 @@ public class ThemedFrame extends JFrame implements IDisposable {
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(styleManager, title, true) {
 			private static final long serialVersionUID = 1508931943984181857L;
+
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_LARGE;
@@ -41,13 +42,12 @@ public class ThemedFrame extends JFrame implements IDisposable {
 	public TitleBarPanel getTitleBar() {
 		return titlebarPanel;
 	}
-	
+
 	public void updateBounds(StyleManager styleManager) {
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
-		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE) / 2, 0,
-				titletextLabel.getPreferredSize().width, titlebarHeight);
+		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE) / 2, 0, titletextLabel.getPreferredSize().width, titlebarHeight);
 	}
-	
+
 	public void updateFontsAndColors(StyleManager styleManager) {
 	}
 

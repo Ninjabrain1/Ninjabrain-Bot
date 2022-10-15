@@ -23,14 +23,14 @@ import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
 
-public class NotificationsFrame extends ThemedFrame {	
-	
+public class NotificationsFrame extends ThemedFrame {
+
 	private static final long serialVersionUID = 1767257205939839293L;
-	
+
 	static final int PADDING = 6;
-	
+
 	VersionURL url;
-	
+
 	JPanel mainPanel;
 	ThemedLabel label;
 
@@ -44,6 +44,7 @@ public class NotificationsFrame extends ThemedFrame {
 		add(mainPanel);
 		label = new ThemedLabel(styleManager, "") {
 			private static final long serialVersionUID = 4168366004174721821L;
+
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
@@ -59,30 +60,31 @@ public class NotificationsFrame extends ThemedFrame {
 		FlatButton changelogButton = new FlatButton(styleManager, I18n.get("notificationsframe.changelog_button"));
 		changelogButton.addActionListener(p -> openReleasePage());
 		mainPanel.add(changelogButton);
-		
+
 		// Subscriptions
 		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 	}
-	
+
 	@Override
 	public void updateBounds(StyleManager styleManager) {
 		super.updateBounds(styleManager);
 		label.setMaximumSize(new Dimension(styleManager.size.WIDTH, Integer.MAX_VALUE));
-		setSize(styleManager.size.WIDTH * 7/8, styleManager.size.WIDTH * 5/8);
-		setShape(new RoundRectangle2D.Double(0, 0, styleManager.size.WIDTH * 7/8, styleManager.size.WIDTH * 5/8, styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
+		setSize(styleManager.size.WIDTH * 7 / 8, styleManager.size.WIDTH * 5 / 8);
+		setShape(new RoundRectangle2D.Double(0, 0, styleManager.size.WIDTH * 7 / 8, styleManager.size.WIDTH * 5 / 8, styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}
-	
+
 	@Override
 	public void updateFontsAndColors(StyleManager styleManager) {
 		getContentPane().setBackground(styleManager.theme.COLOR_NEUTRAL);
 		setBackground(styleManager.theme.COLOR_NEUTRAL);
 	}
-	
+
 	private FlatButton getExitButton(StyleManager styleManager) {
 		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(styleManager, img) {
 			private static final long serialVersionUID = 4380111129291481489L;
+
 			@Override
 			public Color getHoverColor(Theme theme) {
 				return theme.COLOR_EXIT_BUTTON_HOVER;
@@ -99,7 +101,7 @@ public class NotificationsFrame extends ThemedFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void openReleasePage() {
 		try {
 			Desktop.getDesktop().browse(new URL(url.html_url).toURI());
@@ -110,12 +112,12 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public void setURL(VersionURL url) {
 		this.url = url;
-		label.setText("<html>"+ I18n.get("notificationsframe.update_text", url.tag) +"</html>");
+		label.setText("<html>" + I18n.get("notificationsframe.update_text", url.tag) + "</html>");
 //		updateBounds(gui);
 	}
 
 	public Object getURL() {
 		return url;
 	}
-	
+
 }

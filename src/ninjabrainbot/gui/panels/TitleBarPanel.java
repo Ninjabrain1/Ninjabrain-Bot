@@ -22,7 +22,7 @@ public class TitleBarPanel extends ThemedPanel {
 	private Point initialClick;
 
 	ArrayList<JButton> buttons;
-	
+
 	public TitleBarPanel(StyleManager styleManager, final JFrame frame) {
 		super(styleManager);
 		buttons = new ArrayList<JButton>();
@@ -48,7 +48,7 @@ public class TitleBarPanel extends ThemedPanel {
 			}
 		});
 	}
-	
+
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
@@ -67,10 +67,10 @@ public class TitleBarPanel extends ThemedPanel {
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONGEST;
 	}
-	
+
 	public void addButton(JButton button) {
 		add(button);
 		buttons.add(button);
 	}
-	
+
 }

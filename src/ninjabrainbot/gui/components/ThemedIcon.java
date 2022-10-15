@@ -18,7 +18,7 @@ public class ThemedIcon extends ThemedLabel {
 		super(styleManager);
 		setIcon(img);
 		setHorizontalAlignment(SwingConstants.LEFT);
-		
+
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.createGraphics();
 		// paint the Icon to the BufferedImage.
@@ -27,12 +27,12 @@ public class ThemedIcon extends ThemedLabel {
 		for (int i = 0; i < bi.getWidth(); i++) {
 			for (int j = 0; j < bi.getHeight(); j++) {
 				bi.setRGB(i, j, ((200 << 16) | (200 << 8) | 200) ^ bi.getRGB(i, j));
-			}			
+			}
 		}
 		icon = img;
 		icon_inverted = new ImageIcon(bi);
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 		super.updateColors(styleManager);

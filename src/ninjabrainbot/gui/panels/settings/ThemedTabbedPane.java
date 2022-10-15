@@ -17,14 +17,14 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 
 public class ThemedTabbedPane extends ThemedPanel {
-	
+
 	private static final long serialVersionUID = -3291029177930511395L;
-	
+
 	ArrayList<TabButton> tabs;
 	StyleManager styleManager;
 	JPanel tabPanel;
 	JPanel mainPanel;
-	
+
 	public ThemedTabbedPane(StyleManager styleManager) {
 		super(styleManager);
 		this.styleManager = styleManager;
@@ -33,6 +33,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 		setLayout(null);
 		tabPanel = new ThemedOpaquePanel(styleManager) {
 			private static final long serialVersionUID = -9131114034270325589L;
+
 			@Override
 			public Color getBackgroundColor(Theme theme) {
 				return theme.COLOR_STRONGER;
@@ -46,7 +47,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 		add(tabPanel);
 		add(mainPanel);
 	}
-	
+
 	public void addTab(String title, JComponent component) {
 		mainPanel.add(component);
 		component.setVisible(tabs.size() == 0);
@@ -54,7 +55,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 		tabs.add(tabButton);
 		tabPanel.add(tabButton);
 	}
-	
+
 	void setVisible(TabButton tab) {
 		for (TabButton t : tabs) {
 			t.setComponentVisible(tab == t);
@@ -71,19 +72,19 @@ public class ThemedTabbedPane extends ThemedPanel {
 		setBackground(getBackgroundColor(styleManager.theme));
 		setForeground(getForegroundColor(styleManager.theme));
 	}
-	
+
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
 	}
-	
+
 	public Color getBackgroundColor(Theme theme) {
 		return null;
 	}
-	
+
 	public Color getForegroundColor(Theme theme) {
 		return null;
 	}
-	
+
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
@@ -91,7 +92,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 		tabPanel.setBounds(0, 0, width, tabPanelHeight);
 		mainPanel.setBounds(0, tabPanelHeight, width, height - tabPanelHeight);
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize() {
 		if (tabs.size() == 0)
@@ -99,17 +100,18 @@ public class ThemedTabbedPane extends ThemedPanel {
 		Dimension reference = tabs.get(0).component.getPreferredSize();
 		return new Dimension(reference.width, reference.height + tabPanel.getPreferredSize().height);
 	}
-	
+
 }
+
 class TabButton extends FlatButton {
 
 	private static final long serialVersionUID = 1874343984790503904L;
-	
+
 	ThemedTabbedPane parent;
 	JComponent component;
-	
+
 	Color a, b, c;
-	
+
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
 		super(styleManager, title);
 		this.parent = parent;
@@ -117,16 +119,16 @@ class TabButton extends FlatButton {
 		label.setCursor(null);
 		addActionListener(p -> onClicked());
 	}
-	
+
 	void setComponentVisible(boolean bool) {
 		component.setVisible(bool);
 		refreshColor();
 	}
-	
+
 	private void onClicked() {
 		parent.setVisible(this);
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 		super.updateColors(styleManager);
@@ -135,7 +137,7 @@ class TabButton extends FlatButton {
 		c = styleManager.theme.COLOR_NEUTRAL;
 		refreshColor();
 	}
-	
+
 	private void refreshColor() {
 		if (component.isVisible()) {
 			this.hoverCol = c;
@@ -146,10 +148,10 @@ class TabButton extends FlatButton {
 		}
 		setColors(bgCol, hoverCol);
 	}
-	
+
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONGER;
 	}
-	
+
 }

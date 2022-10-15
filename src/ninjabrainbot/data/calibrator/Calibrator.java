@@ -13,15 +13,15 @@ import ninjabrainbot.util.IDisposable;
 import ninjabrainbot.util.ISet;
 
 public class Calibrator implements IDisposable {
-	
+
 	KeyPresser keyPresser;
 	int delay = 150; // key press delay
-	
+
 	Calculator triangulator;
 	boolean calibrating;
 	ThrowSet eyeThrows;
-	boolean ready; 
-	
+	boolean ready;
+
 	Chunk stronghold;
 	double lastX;
 	double lastZ;
@@ -51,7 +51,7 @@ public class Calibrator implements IDisposable {
 			ready = true;
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
-				doCommand("say "+ I18n.get("calibrator.you_moved"));
+				doCommand("say " + I18n.get("calibrator.you_moved"));
 				tp(lastX, lastZ, t.alpha(), -31.2);
 				return;
 			}
@@ -81,27 +81,27 @@ public class Calibrator implements IDisposable {
 			return;
 		}
 	}
-	
+
 	public void changeLastAngle(double delta) {
 		int i = eyeThrows.size() - 1;
 		if (i == -1)
 			return;
 		eyeThrows.get(i).addCorrection(delta);
 	}
-	
+
 	private double distanceFromIntendedPosition(IThrow t) {
 		double dx = lastX - t.x();
 		double dz = lastZ - t.z();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
-	
+
 	private void doCommand(String command) throws InterruptedException {
 		keyPresser.openCommand();
 		Thread.sleep(delay);
 		keyPresser.paste(command);
 		keyPresser.enter();
 	}
-	
+
 	private void tp(double x, double z, double alpha, double theta) throws InterruptedException {
 		// tp
 		keyPresser.openCommand();
@@ -122,14 +122,14 @@ public class Calibrator implements IDisposable {
 		lastX = x;
 		lastZ = z;
 	}
-	
+
 	private double getAlpha(Chunk strongholdChunk, double x, double z) {
 		double deltax = strongholdChunk.x * 16 + 8 - x;
 		double deltaz = strongholdChunk.z * 16 + 8 - z;
 		double alpha = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		return alpha;
 	}
-	
+
 	private double getSTD(Chunk result) {
 		double[] errors = result.getAngleErrors(eyeThrows);
 		// Assume 0 mean
@@ -138,47 +138,47 @@ public class Calibrator implements IDisposable {
 			sqSum += e * e;
 		}
 		// Unbiased (approximately, otherwise requires the gamma function)
-		// If it is not assumed that the mean is 0, replace 0.5 with 1.5 
+		// If it is not assumed that the mean is 0, replace 0.5 with 1.5
 		return Math.sqrt(sqSum / (errors.length - 0.5));
 	}
-	
+
 	public boolean isStrongholdDetermined() {
 		return stronghold != null;
 	}
-	
+
 	public double getSTD() {
 		if (stronghold == null)
 			return -1;
 		return getSTD(stronghold);
 	}
-	
+
 	public double[] getErrors() {
 		if (stronghold == null)
 			return null;
 		return stronghold.getAngleErrors(eyeThrows);
 	}
-	
+
 	public ISet<IThrow> getThrows() {
 		return eyeThrows;
 	}
-	
+
 	public boolean isReady() {
 		return ready;
 	}
-	
+
 	public int getNumThrows() {
 		return eyeThrows.size();
 	}
-	
+
 	public void stop() {
 		keyPresser = null;
 		calibrating = false;
 		stronghold = null;
 	}
-	
+
 	@Override
 	public void dispose() {
 		eyeThrows.dispose();
 	}
-	
+
 }

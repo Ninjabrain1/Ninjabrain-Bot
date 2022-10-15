@@ -29,10 +29,10 @@ public class Fossil {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof Fossil && ((Fossil)obj).x == x;
+		return obj instanceof Fossil && ((Fossil) obj).x == x;
 	}
 
 }

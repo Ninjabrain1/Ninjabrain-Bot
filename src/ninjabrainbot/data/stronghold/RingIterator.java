@@ -6,7 +6,7 @@ import java.util.Iterator;
  * Iterates over the stronghold rings.
  */
 public class RingIterator implements Iterator<Ring>, Iterable<Ring> {
-		
+
 	int strongholdsInRing = 1;
 	int currentStrongholds = 0;
 	int ring = -1;
@@ -29,7 +29,5 @@ public class RingIterator implements Iterator<Ring>, Iterable<Ring> {
 	public Iterator<Ring> iterator() {
 		return this;
 	}
-	
+
 }
-
-

@@ -27,7 +27,7 @@ public abstract class SizePreference {
 	public static SizePreference get(String name) {
 		return SIZES.getOrDefault(name, REGULAR);
 	}
-	
+
 	public SizePreference(String name) {
 		this.name = name;
 		SIZES.put(name, this);
@@ -67,7 +67,7 @@ class LargeSize extends SizePreference {
 		ANGLE_COLUMN_WIDTH = 110;
 		WINDOW_ROUNDING = 7;
 	}
-	
+
 }
 
 class ExtraLargeSize extends SizePreference {
@@ -85,5 +85,5 @@ class ExtraLargeSize extends SizePreference {
 		ANGLE_COLUMN_WIDTH = 160;
 		WINDOW_ROUNDING = 7;
 	}
-	
+
 }

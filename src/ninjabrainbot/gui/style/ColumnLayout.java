@@ -12,18 +12,18 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 	private static final long serialVersionUID = -2688561683995591776L;
 
 	int hgap;
-	
+
 	HashMap<Component, Float> relativeWidths;
-	
+
 	public ColumnLayout(int hgap) {
 		this.hgap = hgap;
 		relativeWidths = new HashMap<Component, Float>();
 	}
-	
+
 	public void setRelativeWidth(Component comp, float w) {
 		relativeWidths.put(comp, w);
 	}
-	
+
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
 	}
@@ -49,8 +49,7 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 					h = d.height;
 				}
 			}
-			return new Dimension(insets.left + insets.right + ncomponents * w + (ncomponents - 1) * hgap,
-					insets.top + insets.bottom + h);
+			return new Dimension(insets.left + insets.right + ncomponents * w + (ncomponents - 1) * hgap, insets.top + insets.bottom + h);
 		}
 	}
 

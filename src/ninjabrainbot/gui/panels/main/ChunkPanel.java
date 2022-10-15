@@ -123,7 +123,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 			p.whenModified().subscribe(pred -> setText(pred));
 		}
 	}
-	
+
 	private void setText(ChunkPrediction p) {
 		location.setText(p.formatLocation());
 		certainty.setText(p.formatCertainty());
@@ -155,7 +155,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_SLIGHTLY_STRONG;
 	}
-	
+
 	@Override
 	public void dispose() {
 		if (chunkPredictionSubscription != null)

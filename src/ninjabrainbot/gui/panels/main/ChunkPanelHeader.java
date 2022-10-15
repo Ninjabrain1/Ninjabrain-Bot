@@ -21,16 +21,16 @@ import ninjabrainbot.util.Subscription;
 public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -5271531617019225933L;
-	
+
 	private JLabel location;
 	private JLabel certainty;
 	private JLabel distance;
 	private JLabel nether;
 	private JLabel angle;
 	private JLabel[] labels;
-	
+
 	StyleManager styleManager;
-	
+
 	Subscription strongholdDisplayTypeChangedSubscription;
 
 	public ChunkPanelHeader(StyleManager styleManager) {
@@ -42,7 +42,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		distance = new JLabel(I18n.get("dist"), 0);
 		nether = new JLabel(I18n.get("nether"), 0);
 		angle = new JLabel(I18n.get("angle"), 0);
-		labels = new JLabel[] {location, certainty, distance, nether, angle};
+		labels = new JLabel[] { location, certainty, distance, nether, angle };
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(location, 2f);
 		layout.setRelativeWidth(nether, 1.8f);
@@ -56,7 +56,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> updateHeaderText());
 	}
-	
+
 	@Override
 	public void setFont(Font font) {
 		super.setFont(font);
@@ -77,7 +77,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 			}
 		}
 	}
-	
+
 	public void updateHeaderText() {
 		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? I18n.get("chunk") : I18n.get("location"));
 	}
@@ -89,13 +89,13 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 			remove(angle);
 		}
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
 		super.updateColors(styleManager);
 	}
-	
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		super.updateSize(styleManager);
@@ -106,20 +106,20 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
 	}
-	
+
 	@Override
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONG;
 	}
-	
+
 	@Override
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_STRONG;
 	}
-	
+
 	@Override
 	public void dispose() {
 		strongholdDisplayTypeChangedSubscription.cancel();
 	}
-	
+
 }

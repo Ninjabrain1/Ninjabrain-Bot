@@ -46,7 +46,7 @@ public class TextAnimator implements ThemedComponent {
 		int a = (int) (end.getAlpha() * t + start.getAlpha() * (1.0f - t));
 		return new Color(r, g, b, a);
 	}
-	
+
 	public void setColors(Color start, Color end) {
 		this.start = start;
 		this.end = end;

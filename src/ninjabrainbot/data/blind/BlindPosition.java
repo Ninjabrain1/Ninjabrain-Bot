@@ -9,9 +9,9 @@ public class BlindPosition {
 		this.x = x;
 		this.z = z;
 	}
-	
+
 	public BlindPosition(IRay ray) {
 		this(ray.x(), ray.z());
 	}
-	
+
 }

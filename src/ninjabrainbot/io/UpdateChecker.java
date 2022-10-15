@@ -107,7 +107,7 @@ public class UpdateChecker implements Runnable {
 		}
 		System.out.println("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
-	
+
 	private static int[] getSemanticVersion(String s) {
 		try {
 			Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
@@ -120,14 +120,15 @@ public class UpdateChecker implements Runnable {
 				}
 				return version;
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Returns 1 if a is newer than b, -1 if b is newer than a, and 0 if they are equivalent
+	 * Returns 1 if a is newer than b, -1 if b is newer than a, and 0 if they are
+	 * equivalent
 	 */
 	private static int compareVersions(int[] a, int[] b) {
 		if (a == b)

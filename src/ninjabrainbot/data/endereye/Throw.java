@@ -48,8 +48,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	 * null otherwise.
 	 */
 	public static IThrow parseF3C(String string) {
-		if (!(string.startsWith("/execute in minecraft:overworld run tp @s")
-				|| string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
+		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
 		String[] substrings = string.split(" ");
@@ -127,17 +126,17 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	public double getStd() {
 		return std;
 	}
-	
+
 	@Override
 	public void setError(Double error) {
 		this.error.set(error);
 	}
-	
+
 	@Override
 	public Double error() {
 		return error.get();
 	}
-	
+
 	@Override
 	public ISubscribable<Double> whenErrorChanged() {
 		return error;
@@ -150,7 +149,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	}
 
 	private void updateStd() {
-		if(stdProfile == null)
+		if (stdProfile == null)
 			return;
 		double newStd = stdProfile.getStd(stdProfileNumber);
 		if (newStd == std)

@@ -9,14 +9,14 @@ import ninjabrainbot.util.ISubscribable;
 import ninjabrainbot.util.ObservableProperty;
 
 public class HotkeyPreference {
-	
+
 	public static ArrayList<HotkeyPreference> hotkeys = new ArrayList<HotkeyPreference>();
-	
+
 	Preferences pref;
 
 	IntPreference modifier;
 	IntPreference code;
-	
+
 	private ObservableProperty<NativeKeyEvent> whenTriggered;
 
 	public HotkeyPreference(String key, Preferences pref) {
@@ -30,24 +30,24 @@ public class HotkeyPreference {
 	public int getCode() {
 		return code.get();
 	}
-	
+
 	public int getModifier() {
 		return modifier.get();
 	}
-	
+
 	public synchronized void setCode(int value) {
 		code.set(value);
 	}
-	
+
 	public synchronized void setModifier(int value) {
 		modifier.set(value);
 	}
-	
+
 	public final void execute(NativeKeyEvent e) {
 		whenTriggered.notifySubscribers(e);
 	}
-	
-	public ISubscribable<NativeKeyEvent> whenTriggered(){
+
+	public ISubscribable<NativeKeyEvent> whenTriggered() {
 		return whenTriggered;
 	}
 

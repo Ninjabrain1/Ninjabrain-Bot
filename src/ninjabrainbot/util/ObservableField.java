@@ -12,7 +12,7 @@ public class ObservableField<T> implements IObservable<T> {
 	public ObservableField() {
 		this(null);
 	}
-	
+
 	public ObservableField(T data) {
 		subscribers = new ArrayList<Consumer<T>>();
 		this.data = data;
@@ -38,7 +38,7 @@ public class ObservableField<T> implements IObservable<T> {
 		}
 		System.out.println(value);
 	}
-	
+
 	public T get() {
 		return data;
 	}

@@ -10,16 +10,16 @@ public class DataStateHandler implements IDataStateHandler {
 	public DataStateHandler(IDataState dataState) {
 		this.dataState = dataState;
 	}
-	
+
 	public void reset() {
 		dataState.reset();
 	}
-	
+
 	public void resetIfNotLocked() {
 		if (!dataState.locked().get())
 			reset();
 	}
-	
+
 	public void undo() {
 		// TODO
 	}

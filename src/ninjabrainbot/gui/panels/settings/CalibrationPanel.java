@@ -38,9 +38,9 @@ import ninjabrainbot.util.ISet;
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private static final long serialVersionUID = 1739847622825900761L;
-	
+
 	Calibrator calibrator;
-	
+
 	StyleManager styleManager;
 	OptionsFrame optionsFrame;
 	TitleBarPanel titlebarPanel;
@@ -53,7 +53,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	JPanel rightPanel;
 	JLabel std;
 	static final int errorAreaWidth = 100;
-	
+
 	public CalibrationPanel(StyleManager styleManager, OptionsFrame frame) {
 		this.styleManager = styleManager;
 		styleManager.registerThemedComponent(this);
@@ -62,12 +62,13 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		setOpaque(false);
 		setLayout(null);
 		setVisible(false);
-		
+
 		titlebarPanel = new TitleBarPanel(styleManager, frame);
 		titlebarPanel.setLayout(null);
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(styleManager, I18n.get("calibrator.title_text_label"), true) {
 			private static final long serialVersionUID = -1284032833229918460L;
+
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_LARGE;
@@ -76,18 +77,16 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		titlebarPanel.add(titletextLabel);
 		cancelButton = getCancelButton();
 		titlebarPanel.add(cancelButton);
-		
+
 		panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		add(panel);
-		labels = new InstructionLabel[] {
-				new InstructionLabel(styleManager, I18n.get("calibrator.command_label")),
-				new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
-				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")),
-		};
-		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>"+I18n.get("calibrator.explanation")+"</div></html>") {
+		labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
+				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
+		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>" + I18n.get("calibrator.explanation") + "</div></html>") {
 			private static final long serialVersionUID = -5378176835369680709L;
+
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
@@ -127,7 +126,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
 	}
-	
+
 	public void startCalibrating() {
 		try {
 			calibrator.startCalibrating();
@@ -137,7 +136,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void cancel() {
 		if (calibrator.isCalibrating()) {
 			calibrator.stop();
@@ -145,7 +144,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			hist.clear();
 		}
 	}
-	
+
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD();
@@ -153,18 +152,18 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			optionsFrame.stopCalibrating();
 		}
 	}
-	
+
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
 		titlebarPanel.setBounds(0, 0, width, titlebarHeight);
-		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE)/2, 0, 300, titlebarHeight);
+		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE) / 2, 0, 300, titlebarHeight);
 		int cancelButtonWidth = cancelButton.getPreferredSize().width;
 		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, titlebarHeight);
 		panel.setBounds(0, titlebarHeight, width, height - titlebarHeight);
 	}
-	
+
 //	@Override
 //	public void setSize(int width, int height) {
 //		super.setSize(width, height);
@@ -174,14 +173,16 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 //		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, GUI.TITLE_BAR_HEIGHT);
 //		panel.setBounds(0, GUI.TITLE_BAR_HEIGHT, width, height - GUI.TITLE_BAR_HEIGHT);
 //	}
-	
+
 	private FlatButton getCancelButton() {
 		FlatButton button = new TitleBarButton(styleManager, I18n.get("calibrator.cancel")) {
 			private static final long serialVersionUID = 4380111129291481489L;
+
 			@Override
 			public Color getHoverColor(Theme theme) {
 				return theme.COLOR_EXIT_BUTTON_HOVER;
 			}
+
 			@Override
 			public void updateSize(StyleManager styleManager) {
 				setFont(styleManager.fontSize(getTextSize(styleManager.size), false));
@@ -190,7 +191,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		button.addActionListener(p -> optionsFrame.stopCalibrating());
 		return button;
 	}
-	
+
 	private void setHighlighted(int i) {
 		for (int j = 0; j < labels.length; j++) {
 			labels[j].setHighlighted(i == j);
@@ -211,7 +212,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		setHighlighted(stage);
 		updateHistogram();
 	}
-	
+
 	public void changeLastAngle(double delta) {
 		if (calibrator.getNumThrows() > 0) {
 			calibrator.changeLastAngle(delta);
@@ -222,7 +223,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	public boolean isCalibrating() {
 		return calibrator.isCalibrating();
 	}
-	
+
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
 			std.setText(String.format("%.3f", calibrator.getSTD()));
@@ -243,7 +244,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			hist.setData(angleErrors);
 		} else {
 			StringBuilder b = new StringBuilder();
-			ISet<IThrow>  eyeThrows = calibrator.getThrows();
+			ISet<IThrow> eyeThrows = calibrator.getThrows();
 			for (IThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
 					b.append(String.format(t.correction() < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha() - t.correction(), t.correction()));
@@ -254,16 +255,16 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			errors.area.setText(b.toString());
 		}
 	}
-	
+
 	@Override
 	public void updateColors(StyleManager styleManager) {
 	}
-	
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		panel.setBorder(new EmptyBorder(styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING));
 	}
-	
+
 }
 
 class InstructionLabel extends ThemedLabel {
@@ -271,30 +272,30 @@ class InstructionLabel extends ThemedLabel {
 	private static final long serialVersionUID = 6451818182019649869L;
 
 	private boolean highlighted;
-	
+
 	public InstructionLabel(StyleManager styleManager, String text) {
 		super(styleManager, "<html><div style='text-align: center;'>" + text + "</div></html>");
 		setHorizontalAlignment(SwingConstants.CENTER);
 		setAlignmentX(0.5f);
 	}
-	
+
 	public void setHighlighted(boolean b) {
 		highlighted = b;
 	}
-	
+
 	@Override
 	public Color getForegroundColor(Theme theme) {
 		return highlighted ? theme.TEXT_COLOR_STRONG : theme.TEXT_COLOR_WEAK;
 	}
-	
+
 }
 
 class ErrorTextArea extends JScrollPane implements ThemedComponent {
 
 	private static final long serialVersionUID = 1059206057989769872L;
-	
+
 	final JTextArea area;
-	
+
 	public ErrorTextArea(StyleManager styleManager, JTextArea textArea) {
 		super(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		area = textArea;
@@ -306,7 +307,7 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		setOpaque(false);
 		styleManager.registerThemedComponent(this);
 	}
-	
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		area.setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
@@ -317,11 +318,11 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		area.setForeground(getForegroundColor(styleManager.theme));
 		setBorder(BorderFactory.createLineBorder(getBackgroundColor(styleManager.theme), 1));
 	}
-	
+
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_NEUTRAL;
 	}
-	
+
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONGER;
 	}
@@ -329,6 +330,5 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_TINY;
 	}
-	
-}
 
+}

@@ -12,10 +12,11 @@ public class ColorMap {
 	public ColorMap(Color... colors) {
 		this.colors = colors;
 	}
-	
+
 	/**
 	 * 
-	 * @param t a number in [0, 1]. If t is outside the range it will be set to the closest number in [0, 1].
+	 * @param t a number in [0, 1]. If t is outside the range it will be set to the
+	 *          closest number in [0, 1].
 	 * @return The value of the color map at t.
 	 */
 	public Color get(double t) {
@@ -29,7 +30,7 @@ public class ColorMap {
 		i1 = Math.max(Math.min(i1, n), 0);
 		return getInterpolatedColor((float) (t - Math.floor(t)), colors[i0], colors[i1]);
 	}
-	
+
 	private Color getInterpolatedColor(float t, Color c0, Color c1) {
 		int r = (int) (c1.getRed() * t + c0.getRed() * (1.0f - t));
 		int g = (int) (c1.getGreen() * t + c0.getGreen() * (1.0f - t));

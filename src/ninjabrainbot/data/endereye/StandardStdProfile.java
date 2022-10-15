@@ -15,11 +15,9 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 	private Subscription[] subs;
 
 	public StandardStdProfile() {
-		stds = new double[] { Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get(),
-				Main.preferences.sigmaManual.get() };
+		stds = new double[] { Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get(), Main.preferences.sigmaManual.get() };
 		subs = new Subscription[] { Main.preferences.sigma.whenModified().subscribe(newStd -> setStd(NORMAL, newStd)),
-				Main.preferences.sigmaAlt.whenModified().subscribe(newStd -> setStd(ALTERNATIVE, newStd)),
-				Main.preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)) };
+				Main.preferences.sigmaAlt.whenModified().subscribe(newStd -> setStd(ALTERNATIVE, newStd)), Main.preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)) };
 	}
 
 	@Override

@@ -16,11 +16,11 @@ public interface IDataState {
 	public IObservable<ICalculatorResult> calculatorResult();
 
 	public IObservable<BlindResult> blindResult();
-	
+
 	public IObservable<DivineResult> divineResult();
 
 	public IObservable<Boolean> locked();
-	
+
 	public IObservable<ResultType> resultType();
 
 	public void toggleLocked();

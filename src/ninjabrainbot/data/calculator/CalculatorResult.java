@@ -11,7 +11,7 @@ import ninjabrainbot.util.IObservable;
 import ninjabrainbot.util.ISet;
 
 public class CalculatorResult implements ICalculatorResult {
-	
+
 	private final ChunkPrediction bestPrediction;
 	private final List<ChunkPrediction> topPredictions;
 
@@ -19,31 +19,31 @@ public class CalculatorResult implements ICalculatorResult {
 		bestPrediction = new ChunkPrediction();
 		topPredictions = new ArrayList<ChunkPrediction>();
 	}
-	
+
 	public CalculatorResult(Posterior posterior, ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos, int numPredictions) {
 		// Find chunk with largest posterior probability
 		Chunk predictedChunk = posterior.getMostProbableChunk();
 		bestPrediction = new ChunkPrediction(predictedChunk, playerPos);
 		topPredictions = createTopPredictions(posterior, playerPos, numPredictions);
 	}
-	
+
 	@Override
 	public ChunkPrediction getBestPrediction() {
 		return bestPrediction;
 	}
-	
+
 	@Override
 	public List<ChunkPrediction> getTopPredictions() {
 		return topPredictions;
 	}
-	
+
 	@Override
 	public boolean success() {
 		return bestPrediction.success;
 	}
-	
+
 	private List<ChunkPrediction> createTopPredictions(Posterior posterior, IObservable<IThrow> playerPos, int amount) {
-		List<ChunkPrediction> topPredictions = new ArrayList<ChunkPrediction>(); 
+		List<ChunkPrediction> topPredictions = new ArrayList<ChunkPrediction>();
 		List<Chunk> topChunks = posterior.getChunks();
 		topChunks.sort((a, b) -> -Double.compare(a.weight, b.weight));
 		for (Chunk c : topChunks) {
@@ -61,5 +61,5 @@ public class CalculatorResult implements ICalculatorResult {
 			for (ChunkPrediction p : topPredictions)
 				p.dispose();
 	}
-	
+
 }

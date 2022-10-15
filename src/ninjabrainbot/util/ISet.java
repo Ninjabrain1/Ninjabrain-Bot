@@ -6,7 +6,7 @@ public interface ISet<T> extends Iterable<T> {
 	 * @return true if something was added to the set.
 	 */
 	public boolean add(T t);
-	
+
 	/**
 	 * @return true if something was added to the set.
 	 */
@@ -19,7 +19,7 @@ public interface ISet<T> extends Iterable<T> {
 	public int size();
 
 	public T get(int index);
-	
+
 	public default T getLast() {
 		return get(size() - 1);
 	}

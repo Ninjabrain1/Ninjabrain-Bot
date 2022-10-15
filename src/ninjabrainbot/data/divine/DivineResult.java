@@ -4,11 +4,11 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 
 public class DivineResult {
-	
+
 	public final Fossil fossil;
 	public final DivineCoord[] safe;
 	public final DivineCoord[] highroll;
-	
+
 	public DivineResult(Fossil fossil) {
 		this.fossil = fossil;
 		Ring ring = Ring.get(0);
@@ -24,15 +24,15 @@ public class DivineResult {
 			highroll[i] = new DivineCoord(Math.round((float) (highroll_r * Math.cos(phi))), Math.round((float) (highroll_r * Math.sin(phi))));
 		}
 	}
-	
+
 	public String formatSafeCoords() {
 		return format(safe);
 	}
-	
+
 	public String formatHighrollCoords() {
 		return format(highroll);
 	}
-	
+
 	private String format(DivineCoord[] coords) {
 		String[] substrings = new String[coords.length];
 		for (int i = 0; i < coords.length; i++) {
@@ -40,5 +40,5 @@ public class DivineResult {
 		}
 		return String.join(", ", substrings);
 	}
-	
+
 }

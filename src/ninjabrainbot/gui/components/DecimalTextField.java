@@ -17,7 +17,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
-	
+
 	private static final long serialVersionUID = 1167120412326064670L;
 
 	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
@@ -29,7 +29,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		ChangeListener listener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				try {
-					double newSigma = (double)((JSpinner)e.getSource()).getValue();
+					double newSigma = (double) ((JSpinner) e.getSource()).getValue();
 					if (newSigma > max) {
 						newSigma = max;
 						setValue(newSigma);
@@ -46,13 +46,14 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		addChangeListener(listener);
 		styleManager.registerThemedComponent(this);
 	}
-	
+
 	public void hideSpinnerArrows() {
 		Dimension d = getPreferredSize();
 		setUI(new BasicSpinnerUI() {
 			protected Component createNextButton() {
 				return null;
 			}
+
 			protected Component createPreviousButton() {
 				return null;
 			}
@@ -78,13 +79,13 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 			setForeground(fg);
 		}
 	}
-	
+
 	@Override
 	public void setBackground(Color bg) {
 		super.setBackground(bg);
 		getEditor().getComponent(0).setBackground(bg);
 	}
-	
+
 	@Override
 	public void setForeground(Color bg) {
 		super.setForeground(bg);
@@ -92,17 +93,17 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		field.setForeground(bg);
 		field.setCaretColor(bg);
 	}
-	
+
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
 	}
-	
+
 	public Color getBackgroundColor(Theme theme) {
 		return theme.COLOR_STRONG;
 	}
-	
+
 	public Color getForegroundColor(Theme theme) {
 		return theme.TEXT_COLOR_STRONG;
 	}
-	
+
 }

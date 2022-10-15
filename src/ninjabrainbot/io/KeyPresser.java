@@ -9,10 +9,10 @@ import java.awt.event.KeyEvent;
 import java.util.Locale;
 
 public class KeyPresser {
-	
+
 	Robot robot;
 	final int CTRL_KEYCODE;
-	
+
 	public KeyPresser() throws AWTException {
 		robot = new Robot();
 		String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
@@ -22,7 +22,7 @@ public class KeyPresser {
 			CTRL_KEYCODE = KeyEvent.VK_CONTROL;
 		}
 	}
-	
+
 	public void paste(String s) {
 //		System.out.println(1);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -40,24 +40,23 @@ public class KeyPresser {
 		robot.keyRelease(KeyEvent.VK_V);
 //		System.out.println(8);
 	}
-	
+
 	public void releaseF3C() {
 		robot.keyRelease(KeyEvent.VK_F3);
 		robot.keyRelease(KeyEvent.VK_C);
 	}
-	
+
 	public void openCommand() {
 		press(KeyEvent.VK_K);
 	}
-	
+
 	public void enter() {
 		press(KeyEvent.VK_ENTER);
 	}
-	
+
 	public void press(int key) {
 		robot.keyPress(key);
 		robot.keyRelease(key);
 	}
-	
-}
 
+}

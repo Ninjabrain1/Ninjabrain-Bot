@@ -4,7 +4,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.data.DataState;

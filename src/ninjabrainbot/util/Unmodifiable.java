@@ -3,9 +3,9 @@ package ninjabrainbot.util;
 import java.util.function.Consumer;
 
 public class Unmodifiable<T> implements IModifiable<T> {
-	
+
 	protected ISubscribable<T> whenModified;
-	
+
 	public Unmodifiable() {
 		whenModified = new ISubscribable<T>() {
 			@Override
