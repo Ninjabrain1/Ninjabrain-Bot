@@ -49,6 +49,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	public NinjabrainBotFrame(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(styleManager, TITLE_TEXT);
+		Profiler.start("NinjabrainBotFrame");
 		setLocation(Main.preferences.windowX.get(), Main.preferences.windowY.get()); // Set window position
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTranslucent(Main.preferences.translucent.get());
@@ -57,6 +58,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		createTitleBar(styleManager);
 		createComponents(styleManager, dataState, dataStateHandler);
 		setupSubscriptions(styleManager, dataState);
+		Profiler.stop();
 	}
 
 	@Override

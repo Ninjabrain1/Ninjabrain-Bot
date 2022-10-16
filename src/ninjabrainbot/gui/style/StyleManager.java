@@ -38,7 +38,6 @@ public class StyleManager {
 	}
 	
 	private void initFonts() {
-		Profiler.stopAndStart("Load fonts");
 		font = loadFont();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(font);
@@ -127,8 +126,11 @@ public class StyleManager {
 	}
 
 	public void init() {
+		Profiler.start("Fonts and colors");
 		updateFontsAndColors();
+		Profiler.stopAndStart("Bounds");
 		updateBounds();
+		Profiler.stop();
 	}
 
 }

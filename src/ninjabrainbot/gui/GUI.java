@@ -15,6 +15,7 @@ import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.util.Profiler;
+import ninjabrainbot.util.Progress;
 
 /**
  * Main class for the user interface.
@@ -40,38 +41,55 @@ public class GUI {
 	}
 
 	private void initInputMethods() {
+		Progress.setTask("Starting clipboard reader", 0.01f);
+		Profiler.start("Init clipboard reader");
 		clipboardReader = new ClipboardReader();
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader);
 		clipboardThread.start();
 
+		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
+		Profiler.stop();
 	}
 
 	private void initDataState() {
+		Progress.setTask("Creating calculator data", 0.02f);
+		Profiler.start("Init DataState");
 		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), clipboardReader.whenNewFossilInputed(), new StandardStdProfile());
 		dataStateHandler = new DataStateHandler(dataState);
+		Profiler.stop();
 	}
 
 	private void initUI() {
+		Progress.setTask("Loading themes", 0.15f);
+		Profiler.start("Init StyleManager");
 		styleManager = new StyleManager();
+
+		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
 		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, dataState, dataStateHandler);
 
+		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(styleManager);
 		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> optionsFrame.toggleWindow(ninjabrainBotFrame));
 
+		Progress.setTask("Settings fonts and colors", 0.99f);
 		Profiler.stopAndStart("Init fonts, colors, bounds");
 		styleManager.init();
-		ninjabrainBotFrame.setVisible(true);
+		Profiler.stop();
 	}
 
 	private void postInit() {
+		Progress.setTask("Finishing up gui", 1f);
+		Profiler.start("Post init");
 		ninjabrainBotFrame.checkIfOffScreen();
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, dataState);
+		ninjabrainBotFrame.setVisible(true);
 		Runtime.getRuntime().addShutdownHook(onShutdown());
+		Profiler.stop();
 	}
 
 	private void setupHotkeys() {
@@ -82,7 +100,7 @@ public class GUI {
 		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
 		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
 	}
-	
+
 	private Thread onShutdown() {
 		return new Thread("Shutdown") {
 			@Override
