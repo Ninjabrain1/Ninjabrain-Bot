@@ -1,16 +1,17 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.data.DataComponent;
+import ninjabrainbot.data.IModificationLock;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.Modifiable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.Subscription;
 
 /**
  * Represents an eye of ender throw.
  */
-public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
+public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable {
 
 	private final double x, z, alpha_0, beta;
 	private final boolean nether;
@@ -23,7 +24,8 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	private Subscription stdProfileSubscription;
 	private ObservableField<Double> error = new ObservableField<Double>(0.0);
 
-	public Throw(double x, double z, double alpha, double beta, boolean nether) {
+	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+		super(modificationLock);
 		this.x = x;
 		this.z = z;
 		alpha = alpha % 360.0;
@@ -47,7 +49,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	 * Returns a Throw object if the given string is the result of an F3+C command,
 	 * null otherwise.
 	 */
-	public static IThrow parseF3C(String string) {
+	public static IThrow parseF3C(String string, IModificationLock modificationLock) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -61,7 +63,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 			double alpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
 			alpha += Main.preferences.crosshairCorrection.get();
-			return new Throw(x, z, alpha, beta, nether);
+			return new Throw(x, z, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
@@ -145,7 +147,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 	@Override
 	public void addCorrection(double angle) {
 		correction += angle;
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 	}
 
 	private void updateStd() {
@@ -155,7 +157,7 @@ public class Throw extends Modifiable<IThrow> implements IThrow, IDisposable {
 		if (newStd == std)
 			return;
 		std = newStd;
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 	}
 
 	@Override

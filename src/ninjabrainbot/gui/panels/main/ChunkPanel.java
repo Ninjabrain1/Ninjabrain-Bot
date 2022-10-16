@@ -26,6 +26,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 
+	private ChunkPrediction currentPrediction;
+
 	private ThemedLabel location;
 	private ThemedLabel certainty;
 	private ThemedLabel distance;
@@ -36,7 +38,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	StyleManager styleManager;
 	double lastColor;
 
-	Subscription chunkPredictionSubscription;
+	private Subscription chunkPredictionSubscription;
+	private Subscription strongholdDisplayTypeChangedSubscription;
 
 	public ChunkPanel(StyleManager styleManager) {
 		this(styleManager, null);
@@ -69,8 +72,9 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		add(distance);
 		add(nether);
 		add(angle);
-		setPrediciton(p);
+		setPrediction(p);
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
+		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
 	}
 
 	@Override
@@ -106,7 +110,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		certainty.updateColors(styleManager);
 	}
 
-	public void setPrediciton(ChunkPrediction p) {
+	public void setPrediction(ChunkPrediction p) {
+		currentPrediction = p;
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.cancel();
 		if (p == null) {
@@ -160,6 +165,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.cancel();
+		strongholdDisplayTypeChangedSubscription.cancel();
 	}
 
 }

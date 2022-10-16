@@ -5,47 +5,44 @@ import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
 import ninjabrainbot.data.calculator.ICalculatorResult;
+import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.divine.IDivineContext;
-import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
 
-	private ICalculator calculator;
-	private IStdProfile stdProfile;
+	private final ICalculator calculator;
 
-	private DivineContext divineContext;
-	private ThrowSet throwSet;
-	private ObservableField<Boolean> locked = new ObservableField<Boolean>(false);
-	private ObservableField<IThrow> playerPos = new ObservableField<IThrow>(null);
-	private ObservableField<ICalculatorResult> calculatorResult = new ObservableField<ICalculatorResult>(null);
-	private ObservableField<BlindResult> blindResult = new ObservableField<BlindResult>(null);
-	private ObservableField<DivineResult> divineResult = new ObservableField<DivineResult>(null);
-	private ObservableField<ResultType> resultType = new ObservableField<ResultType>(ResultType.NONE);
+	private final ObservableField<Boolean> locked = new ObservableField<Boolean>(false);
+	private final DivineContext divineContext;
+
+	private final ThrowSet throwSet;
+	private final ObservableField<IThrow> playerPos = new ObservableField<IThrow>(null);
+
+	private final ObservableField<ResultType> resultType = new ObservableField<ResultType>(ResultType.NONE);
+	private final ObservableField<ICalculatorResult> calculatorResult = new ObservableField<ICalculatorResult>(null);
+	private final ObservableField<BlindResult> blindResult = new ObservableField<BlindResult>(null);
+	private final ObservableField<DivineResult> divineResult = new ObservableField<DivineResult>(null);
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataState(ICalculator calculator, ISubscribable<IThrow> throwStream, ISubscribable<Fossil> fossilStream, IStdProfile stdProfile) {
+	public DataState(ICalculator calculator) {
 		divineContext = new DivineContext();
 		throwSet = new ThrowSet();
 
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
-		this.stdProfile = stdProfile;
 
 		// Subscriptions
-		throwStream.subscribe(t -> onNewThrow(t));
-		fossilStream.subscribe(f -> divineContext.setFossil(f));
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
 		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
@@ -127,25 +124,17 @@ public class DataState implements IDataState, IDisposable {
 		}
 	}
 
-	private void onNewThrow(IThrow t) {
-		setPlayerPos(t);
-		if (locked.get())
-			return;
-		if (t.isNether()) {
-			if (throwSet.size() == 0) {
-				blindResult.set(calculator.blind(new BlindPosition(t)));
-				resultType.set(ResultType.BLIND);
-			}
-			return;
-		}
-		if (!t.lookingBelowHorizon()) {
-			t.setStdProfile(stdProfile);
-			throwSet.add(t);
-		}
+	void setFossil(Fossil f) {
+		divineContext.setFossil(f);
 	}
 
-	private void setPlayerPos(IThrow t) {
+	void setPlayerPos(IThrow t) {
 		playerPos.set(t);
+	}
+	
+	void setBlindPosition(BlindPosition t) {
+		blindResult.set(calculator.blind(t));
+		resultType.set(ResultType.BLIND);
 	}
 
 }

@@ -32,7 +32,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		if (set.add(t)) {
 			subscriptions.put(t, t.whenModified().subscribe(elem -> onElementModified(elem)));
 			whenElementAtIndexModified.notifySubscribers(t, size() - 1);
-			whenModified.notifySubscribers(this);
+			notifySubscribers(this);
 			return true;
 		}
 		return false;
@@ -45,7 +45,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		for (int i = index; i < size(); i++) {
 			whenElementAtIndexModified.notifySubscribers(set.get(i), i);
 		}
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 		return true;
 	}
 
@@ -57,7 +57,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 			for (int i = index; i < size() + 1; i++) {
 				whenElementAtIndexModified.notifySubscribers(i < size() ? set.get(i) : null, i);
 			}
-			whenModified.notifySubscribers(this);
+			notifySubscribers(this);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		for (int i = 0; i < n; i++) {
 			whenElementAtIndexModified.notifySubscribers(null, i);
 		}
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 
 	@Override
 	public void dispose() {
-		assert whenModified.subscriberCount() == 0;
+		assert subscriberCount() == 0;
 		for (Subscription s : subscriptions.values()) {
 			s.cancel();
 		}
@@ -98,7 +98,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 	private void onElementModified(T element) {
 		int index = set.indexOf(element);
 		whenElementAtIndexModified.notifySubscribers(element, index);
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 	}
 
 }

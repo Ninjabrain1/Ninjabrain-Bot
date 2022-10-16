@@ -42,7 +42,7 @@ public class FloatPreference extends Modifiable<Float> {
 			value = min;
 		this.value = value;
 		pref.putFloat(key, value);
-		whenModified.notifySubscribers(value);
+		notifySubscribers(value);
 	}
 
 }

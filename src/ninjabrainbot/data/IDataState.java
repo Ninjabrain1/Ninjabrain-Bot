@@ -2,6 +2,7 @@ package ninjabrainbot.data;
 
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
+import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrowSet;

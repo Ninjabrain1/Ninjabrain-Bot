@@ -6,6 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.data.IModificationLock;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -20,10 +21,12 @@ public class ClipboardReader implements Runnable {
 
 	private AtomicBoolean forceReadLater;
 
+	private IModificationLock modificationLock;
 	private ObservableProperty<IThrow> whenNewThrowInputed;
 	private ObservableProperty<Fossil> whenNewFossilInputed;
 
-	public ClipboardReader() {
+	public ClipboardReader(IModificationLock modificationLock) {
+		this.modificationLock = modificationLock;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
@@ -77,12 +80,12 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard);
+		final IThrow t = Throw.parseF3C(clipboard, modificationLock);
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard);
+		final IThrow t2 = Throw1_12.parseF3C(clipboard, modificationLock);
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;

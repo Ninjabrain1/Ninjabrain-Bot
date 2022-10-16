@@ -60,7 +60,7 @@ public class OBSOverlay {
 		drawAndWriteToFile();
 		lastOverlayUpdate = time;
 	}
-	
+
 	public void clear() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);

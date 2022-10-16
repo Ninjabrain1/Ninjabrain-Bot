@@ -18,9 +18,9 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
+import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.data.stronghold.Ring;
@@ -302,14 +302,14 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 		header.updateHeaderText();
 		if (result == null) {
 			for (ChunkPanel p : panels) {
-				p.setPrediciton(null);
+				p.setPrediction(null);
 			}
 			return;
 		}
 		List<ChunkPrediction> predictions = result.getTopPredictions();
 		for (int i = 0; i < NUM_DETAILED_PANELS; i++) {
 			ChunkPanel p = panels.get(i);
-			p.setPrediciton(predictions.get(i));
+			p.setPrediction(predictions.get(i));
 		}
 	}
 

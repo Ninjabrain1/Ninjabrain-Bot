@@ -1,16 +1,36 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.blind.BlindPosition;
+import ninjabrainbot.data.calculator.Calculator;
+import ninjabrainbot.data.divine.Fossil;
+import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.StandardStdProfile;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.event.SubscriptionHandler;
 
-public class DataStateHandler implements IDataStateHandler {
+public class DataStateHandler implements IDataStateHandler, IDisposable, IModificationLock {
 
-	private IDataState dataState;
+	private final IStdProfile stdProfile;
 
-	public DataStateHandler(IDataState dataState) {
-		this.dataState = dataState;
+	private DataState dataState;
+
+	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
+
+	private SubscriptionHandler sh = new SubscriptionHandler();
+
+	public DataStateHandler(IStdProfile stdProfile) {
+		this.stdProfile = stdProfile;
+		dataState = new DataState(new Calculator());
 	}
 
+	@Override
+	public IDataState getDataState() {
+		return dataState;
+	}
+	
 	public void reset() {
 		dataState.reset();
 	}
@@ -52,6 +72,51 @@ public class DataStateHandler implements IDataStateHandler {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void addThrowStream(ISubscribable<IThrow> stream) {
+		stream.subscribe(t -> onNewThrow(t));
+	}
+
+	@Override
+	public void addFossilStream(ISubscribable<Fossil> stream) {
+		stream.subscribe(f -> dataState.setFossil(f));
+	}
+
+	@Override
+	public ISubscribable<IDataState> whenDataStateModified() {
+		return whenDataStateModified;
+	}
+	
+	@Override
+	public IModificationLock getModificationLock() {
+		return this;
+	}
+	
+	@Override
+	public boolean isLocked() {
+		return false;
+	}
+
+	private void onNewThrow(IThrow t) {
+		dataState.setPlayerPos(t);
+		if (dataState.locked().get())
+			return;
+		if (t.isNether()) {
+			if (dataState.getThrowSet().size() == 0)
+				dataState.setBlindPosition(new BlindPosition(t));
+			return;
+		}
+		if (!t.lookingBelowHorizon()) {
+			t.setStdProfile(stdProfile);
+			dataState.getThrowSet().add(t);
+		}
+	}
+	
+	@Override
+	public void dispose() {
+		sh.dispose();
 	}
 
 }

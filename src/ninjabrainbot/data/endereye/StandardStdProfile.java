@@ -34,7 +34,7 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 		if (stds[id] == std)
 			return;
 		stds[id] = std;
-		whenModified.notifySubscribers(this);
+		notifySubscribers(this);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class BooleanPreference extends Modifiable<Boolean> {
 	public void set(boolean value) {
 		this.value = value;
 		pref.putBoolean(key, value);
-		whenModified.notifySubscribers(value);
+		notifySubscribers(value);
 	}
 
 }

@@ -32,7 +32,7 @@ public class Main {
 		Profiler.stopAndStart("Calculate approximated density");
 		ApproximatedDensity.init();
 		
-		Progress.setTask("Calculating approximated stronghold density", 0.07f);
+		Progress.setTask("Starting keyboard listener", 0.07f);
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
 		

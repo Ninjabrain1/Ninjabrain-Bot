@@ -1,11 +1,8 @@
 package ninjabrainbot.gui;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.DataState;
 import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.endereye.StandardStdProfile;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
@@ -30,34 +27,36 @@ public class GUI {
 	private NinjabrainBotFrame ninjabrainBotFrame;
 	private OptionsFrame optionsFrame;
 
+	private DataStateHandler dataStateHandler;
 	private IDataState dataState;
-	private IDataStateHandler dataStateHandler;
 
 	public GUI() {
-		initInputMethods();
 		initDataState();
+		initInputMethods();
 		initUI();
 		postInit();
 	}
+	
+	private void initDataState() {
+		Progress.setTask("Creating calculator data", 0.01f);
+		Profiler.start("Init DataState");
+		dataStateHandler = new DataStateHandler(new StandardStdProfile());
+		dataState = dataStateHandler.getDataState();
+		Profiler.stop();
+	}
 
 	private void initInputMethods() {
-		Progress.setTask("Starting clipboard reader", 0.01f);
+		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
-		clipboardReader = new ClipboardReader();
+		clipboardReader = new ClipboardReader(dataStateHandler.getModificationLock());
+		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
+		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader);
 		clipboardThread.start();
 
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
-		Profiler.stop();
-	}
-
-	private void initDataState() {
-		Progress.setTask("Creating calculator data", 0.02f);
-		Profiler.start("Init DataState");
-		dataState = new DataState(new Calculator(), clipboardReader.whenNewThrowInputed(), clipboardReader.whenNewFossilInputed(), new StandardStdProfile());
-		dataStateHandler = new DataStateHandler(dataState);
 		Profiler.stop();
 	}
 
@@ -109,6 +108,7 @@ public class GUI {
 				Main.preferences.windowY.set(ninjabrainBotFrame.getY());
 				obsOverlay.clear();
 				autoResetTimer.dispose();
+				dataStateHandler.dispose();
 			}
 		};
 	}

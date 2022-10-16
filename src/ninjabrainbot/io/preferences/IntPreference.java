@@ -24,7 +24,7 @@ public class IntPreference extends Modifiable<Integer> {
 	public void set(int value) {
 		this.value = value;
 		pref.putInt(key, value);
-		whenModified.notifySubscribers(value);
+		notifySubscribers(value);
 	}
 
 }

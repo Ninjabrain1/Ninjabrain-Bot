@@ -22,7 +22,6 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	private double travelAngleDiff;
 
 	private Subscription playerPosSubscription;
-	private Subscription strongholdDisplayTypeChangedSubscription;
 
 	/**
 	 * Creates a failed triangulation result.
@@ -42,7 +41,6 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 		if (playerPos != null) {
 			updateWithPlayerPos(playerPos.get(), false);
 			playerPosSubscription = playerPos.subscribe(pos -> updateWithPlayerPos(pos, true));
-			strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> whenModified.notifySubscribers(this));
 		}
 	}
 
@@ -67,7 +65,7 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 		this.travelAngle = newAngle;
 		this.travelAngleDiff = finalDiff;
 		if (notify)
-			whenModified.notifySubscribers(this);
+			notifySubscribers(this);
 	}
 
 	public int getDistance() {
@@ -150,8 +148,6 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	public void dispose() {
 		if (playerPosSubscription != null)
 			playerPosSubscription.cancel();
-		if (strongholdDisplayTypeChangedSubscription != null)
-			strongholdDisplayTypeChangedSubscription.cancel();
 	}
 
 }

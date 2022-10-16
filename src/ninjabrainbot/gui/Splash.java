@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 public class Splash {
 
-	SplashScreen splash;
+	SplashScreen splashScreen;
 	Graphics2D g;
 	
 	private Timer timer;
@@ -29,12 +29,12 @@ public class Splash {
 	private static final Color TEXT_COLOR = LOADING_BAR_COLOR;
 
 	public Splash() {
-		splash = SplashScreen.getSplashScreen();
-		if (splash == null) {
+		splashScreen = SplashScreen.getSplashScreen();
+		if (splashScreen == null) {
 			System.err.println("Could not load splash screen");
 			return;
 		}
-		g = splash.createGraphics();
+		g = splashScreen.createGraphics();
 		g.setFont(new Font("Arial", Font.PLAIN, LOADING_PROGRESS_FONT_SIZE));
 		if (g == null) {
 			System.err.println("Could not create graphics for splash screen");
@@ -64,7 +64,7 @@ public class Splash {
 	private void render(String text, float percentage) {
 		if (checkIfStopped())
 			return;
-		Rectangle r = splash.getBounds();
+		Rectangle r = splashScreen.getBounds();
 		g.setComposite(AlphaComposite.Clear);
 		g.fillRect(PADDING, r.height - LOADING_BAR_HEIGHT - LOADING_PROGRESS_FONT_SIZE - PADDING, 400, LOADING_PROGRESS_FONT_SIZE + PADDING);
 		g.setPaintMode();
@@ -72,21 +72,21 @@ public class Splash {
 		g.drawString(text + "...", PADDING, r.height - LOADING_BAR_HEIGHT - PADDING - 2);
 		g.setColor(LOADING_BAR_COLOR);
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
-		splash.update();
+		splashScreen.update();
 	}
 	
 	private void render(float percentage) {
 		if (checkIfStopped())
 			return;
-		Rectangle r = splash.getBounds();
+		Rectangle r = splashScreen.getBounds();
 		g.setPaintMode();
 		g.setColor(LOADING_BAR_COLOR);
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
-		splash.update();
+		splashScreen.update();
 	}
 	
 	private boolean checkIfStopped() {
-		if (!splash.isVisible()) {
+		if (!splashScreen.isVisible()) {
 			timer.stop();
 			return true;
 		}

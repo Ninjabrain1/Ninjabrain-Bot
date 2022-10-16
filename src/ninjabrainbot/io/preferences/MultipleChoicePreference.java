@@ -36,7 +36,7 @@ public class MultipleChoicePreference extends Modifiable<String> {
 	public void set(String value) {
 		this.value = value;
 		pref.putInt(key, choice2id.get(value));
-		whenModified.notifySubscribers(value);
+		notifySubscribers(value);
 	}
 
 	public String[] getChoices() {
