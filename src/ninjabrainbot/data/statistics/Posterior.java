@@ -13,7 +13,6 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.ISet;
-import ninjabrainbot.util.Profiler;
 
 public class Posterior {
 
@@ -21,18 +20,13 @@ public class Posterior {
 	ArrayList<Chunk> chunks;
 
 	public Posterior(ISet<IThrow> eyeThrows, IDivineContext divineContext) {
-		Profiler.clear();
-		Profiler.start("Calculate posterior");
-		Profiler.start("Calculate prior");
 		double sigma0 = eyeThrows.get(0).getStd();
 		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext);
-		Profiler.stopAndStart("Determine constants");
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x();
 		double pz = eyeThrows.get(0).z();
 		double maxDist = StrongholdConstants.getMaxDistance(px, pz) / 16.0;
 		double maxDist2 = maxDist * maxDist;
-		Profiler.stopAndStart("Copy chunks from prior");
 		for (Chunk c : prior.getChunks()) {
 			Chunk clone = c.clone();
 			double dx = clone.x - px / 16.0;
@@ -42,15 +36,11 @@ public class Posterior {
 			}
 			chunks.add(clone);
 		}
-		Profiler.stopAndStart("Measurement error conditioning");
 		for (IThrow t : eyeThrows) {
 			condition(t);
 		}
-		Profiler.stopAndStart("Closest stronghold conditioning");
 		if (Main.preferences.useAdvStatistics.get())
 			closestStrongholdCondition(eyeThrows.get(0), 0.001);
-		Profiler.stop();
-		Profiler.print();
 	}
 
 	public void condition(IThrow t) {
@@ -124,12 +114,9 @@ public class Posterior {
 	 */
 	private void closestStrongholdCondition(IThrow t, double probabilityTheshold) {
 		// Update weights
-//		chunks.forEach((chunk) -> closestStrongholdCondition(chunk, t));
-		Profiler.start("Sort chunks");
 		chunks.sort((c1, c2) -> -Double.compare(c1.weight, c2.weight));
 		double totalClosestStrongholdProbability = 0;
 		int samples = 0;
-		Profiler.stopAndStart("Calculate closest stronghold probability");
 		for (int i = 0; i < chunks.size(); i++) {
 			Chunk c = chunks.get(i);
 			if (i < 100 || c.weight > probabilityTheshold) {
@@ -141,7 +128,6 @@ public class Posterior {
 																			// chunks that dont matter
 			}
 		}
-		Profiler.stopAndStart("Normalize");
 		// Normalize
 		double weightSum = 0.0;
 		for (Chunk chunk : chunks) {
@@ -149,7 +135,6 @@ public class Posterior {
 		}
 		final double totalWeight = weightSum;
 		chunks.forEach((chunk) -> chunk.weight /= totalWeight);
-		Profiler.stop();
 	}
 
 	int K = 7;

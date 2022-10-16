@@ -22,8 +22,11 @@ public class Splash {
 	private String progressString;
 
 	private static final int LOADING_BAR_HEIGHT = 12;
-	private static final int LOADING_PROGRESS_FONT_SIZE = 14;
-	private static final int PADDING = 5;
+	private static final int LOADING_PROGRESS_FONT_SIZE = 12;
+	private static final int PADDING = 4;
+	
+	private static final Color LOADING_BAR_COLOR = new Color(249, 255, 173);
+	private static final Color TEXT_COLOR = LOADING_BAR_COLOR;
 
 	public Splash() {
 		splash = SplashScreen.getSplashScreen();
@@ -45,6 +48,7 @@ public class Splash {
 					render(progressRate * dt); // interpolate
 				else
 					render(progressString, progressRate * dt); // interpolate
+				progressString = null;
 			}
 		});
 		timer.start();
@@ -64,9 +68,9 @@ public class Splash {
 		g.setComposite(AlphaComposite.Clear);
 		g.fillRect(PADDING, r.height - LOADING_BAR_HEIGHT - LOADING_PROGRESS_FONT_SIZE - PADDING, 400, LOADING_PROGRESS_FONT_SIZE + PADDING);
 		g.setPaintMode();
-		g.setColor(Color.WHITE);
-		g.drawString(text + "...", PADDING, r.height - LOADING_BAR_HEIGHT - PADDING);
-		g.setColor(Color.YELLOW);
+		g.setColor(TEXT_COLOR);
+		g.drawString(text + "...", PADDING, r.height - LOADING_BAR_HEIGHT - PADDING - 2);
+		g.setColor(LOADING_BAR_COLOR);
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
 		splash.update();
 	}
@@ -76,7 +80,7 @@ public class Splash {
 			return;
 		Rectangle r = splash.getBounds();
 		g.setPaintMode();
-		g.setColor(Color.YELLOW);
+		g.setColor(LOADING_BAR_COLOR);
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
 		splash.update();
 	}
