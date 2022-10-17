@@ -1,6 +1,8 @@
 package ninjabrainbot.data.divine;
 
 import ninjabrainbot.data.blind.BlindPosition;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
@@ -12,8 +14,8 @@ public class DivineContext implements IDivineContext {
 
 	private ObservableField<Fossil> fossil;
 
-	public DivineContext() {
-		fossil = new ObservableField<Fossil>();
+	public DivineContext(IModificationLock modificationLock) {
+		fossil = new LockableField<Fossil>(modificationLock);
 		phiMin = 0;
 		phiMax = 2.0 * Math.PI;
 	}

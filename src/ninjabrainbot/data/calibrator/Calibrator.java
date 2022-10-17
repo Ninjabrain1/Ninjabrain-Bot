@@ -3,6 +3,7 @@ package ninjabrainbot.data.calibrator;
 import java.awt.AWTException;
 
 import ninjabrainbot.data.calculator.Calculator;
+import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.statistics.Posterior;
@@ -37,7 +38,7 @@ public class Calibrator implements IDisposable {
 
 	public void startCalibrating() throws AWTException {
 		calibrating = true;
-		eyeThrows = new ThrowSet();
+		eyeThrows = new ThrowSet(new AlwaysUnlocked());
 		keyPresser = new KeyPresser();
 		ready = false;
 	}

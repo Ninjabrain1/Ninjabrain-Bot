@@ -6,7 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.IModificationLock;
+import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;

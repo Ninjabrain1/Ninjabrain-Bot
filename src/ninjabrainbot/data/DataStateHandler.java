@@ -2,8 +2,10 @@ package ninjabrainbot.data;
 
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.calculator.Calculator;
+import ninjabrainbot.data.datalock.ILock;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.datalock.ModificationLock;
 import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.StandardStdProfile;
 import ninjabrainbot.event.IDisposable;
@@ -11,66 +13,83 @@ import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.SubscriptionHandler;
 
-public class DataStateHandler implements IDataStateHandler, IDisposable, IModificationLock {
+public class DataStateHandler implements IDataStateHandler, IDisposable {
 
-	private final IStdProfile stdProfile;
+	private final StandardStdProfile stdProfile;
 
 	private DataState dataState;
-
+	private ModificationLock modificationLock;
 	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataStateHandler(IStdProfile stdProfile) {
-		this.stdProfile = stdProfile;
-		dataState = new DataState(new Calculator());
+	public DataStateHandler() {
+		this.stdProfile = new StandardStdProfile();
+		modificationLock = new ModificationLock();
+		dataState = new DataState(new Calculator(), modificationLock);
 	}
 
-	@Override
-	public IDataState getDataState() {
-		return dataState;
-	}
-	
-	public void reset() {
-		dataState.reset();
+	public synchronized void reset() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.reset();
+		}
 	}
 
-	public void resetIfNotLocked() {
+	public synchronized void resetIfNotLocked() {
 		if (!dataState.locked().get())
 			reset();
 	}
 
-	public void undo() {
-		// TODO
+	public synchronized void undo() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+
+		}
 	}
 
-	public void undoIfNotLocked() {
+	public synchronized void undoIfNotLocked() {
 		if (!dataState.locked().get())
 			undo();
 	}
 
-	public void changeLastAngleIfNotLocked(double delta) {
+	public synchronized void changeLastAngleIfNotLocked(double delta) {
 		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
 			IThrow last = dataState.getThrowSet().getLast();
-			if (last != null)
-				last.addCorrection(delta);
+			if (last != null) {
+				try (ILock lock = modificationLock.acquireWritePermission()) {
+					last.addCorrection(delta);
+				}
+			}
 		}
 	}
 
-	public void toggleAltStdOnLastThrowIfNotLocked() {
-		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-			IThrow last = dataState.getThrowSet().getLast();
-			int stdProfile = last.getStdProfileNumber();
-			switch (stdProfile) {
-			case StandardStdProfile.NORMAL:
-				last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
-				break;
-			case StandardStdProfile.ALTERNATIVE:
-				last.setStdProfileNumber(StandardStdProfile.NORMAL);
-				break;
-			case StandardStdProfile.MANUAL:
-				break;
+	public synchronized void toggleAltStdOnLastThrowIfNotLocked() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
+				IThrow last = dataState.getThrowSet().getLast();
+				int stdProfile = last.getStdProfileNumber();
+				switch (stdProfile) {
+				case StandardStdProfile.NORMAL:
+					last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
+					break;
+				case StandardStdProfile.ALTERNATIVE:
+					last.setStdProfileNumber(StandardStdProfile.NORMAL);
+					break;
+				case StandardStdProfile.MANUAL:
+					break;
+				}
 			}
+		}
+	}
+
+	public synchronized void setFossil(Fossil f) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setFossil(f);
+		}
+	}
+
+	public synchronized void toggleLocked() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.toggleLocked();
 		}
 	}
 
@@ -81,39 +100,41 @@ public class DataStateHandler implements IDataStateHandler, IDisposable, IModifi
 
 	@Override
 	public void addFossilStream(ISubscribable<Fossil> stream) {
-		stream.subscribe(f -> dataState.setFossil(f));
+		stream.subscribe(f -> setFossil(f));
+	}
+
+	@Override
+	public IDataState getDataState() {
+		return dataState;
 	}
 
 	@Override
 	public ISubscribable<IDataState> whenDataStateModified() {
 		return whenDataStateModified;
 	}
-	
+
 	@Override
 	public IModificationLock getModificationLock() {
-		return this;
-	}
-	
-	@Override
-	public boolean isLocked() {
-		return false;
+		return modificationLock;
 	}
 
-	private void onNewThrow(IThrow t) {
-		dataState.setPlayerPos(t);
-		if (dataState.locked().get())
-			return;
-		if (t.isNether()) {
-			if (dataState.getThrowSet().size() == 0)
-				dataState.setBlindPosition(new BlindPosition(t));
-			return;
-		}
-		if (!t.lookingBelowHorizon()) {
-			t.setStdProfile(stdProfile);
-			dataState.getThrowSet().add(t);
+	private synchronized void onNewThrow(IThrow t) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setPlayerPos(t);
+			if (dataState.locked().get())
+				return;
+			if (t.isNether()) {
+				if (dataState.getThrowSet().size() == 0)
+					dataState.setBlindPosition(new BlindPosition(t));
+				return;
+			}
+			if (!t.lookingBelowHorizon()) {
+				t.setStdProfile(stdProfile);
+				dataState.getThrowSet().add(t);
+			}
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		sh.dispose();

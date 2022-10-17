@@ -1,8 +1,8 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.DataComponent;
-import ninjabrainbot.data.IModificationLock;
+import ninjabrainbot.data.datalock.DataComponent;
+import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;

@@ -1,4 +1,4 @@
-package ninjabrainbot.gui;
+package ninjabrainbot.gui.splash;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -15,16 +15,17 @@ public class Splash {
 
 	SplashScreen splashScreen;
 	Graphics2D g;
-	
+
 	private Timer timer;
 	private long startTime;
 	private float progressRate;
+	private float maxProgress;
 	private String progressString;
 
 	private static final int LOADING_BAR_HEIGHT = 12;
 	private static final int LOADING_PROGRESS_FONT_SIZE = 12;
 	private static final int PADDING = 4;
-	
+
 	private static final Color LOADING_BAR_COLOR = new Color(249, 255, 173);
 	private static final Color TEXT_COLOR = LOADING_BAR_COLOR;
 
@@ -44,10 +45,11 @@ public class Splash {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				float dt = (System.currentTimeMillis() - startTime) / 1000f;
+				float progress = Math.min(progressRate * dt, maxProgress);
 				if (progressString == null)
-					render(progressRate * dt); // interpolate
+					render(progress); // interpolate
 				else
-					render(progressString, progressRate * dt); // interpolate
+					render(progressString, progress); // interpolate
 				progressString = null;
 			}
 		});
@@ -55,12 +57,13 @@ public class Splash {
 		startTime = System.currentTimeMillis();
 	}
 
-	public void setProgress(String text, float percentage) {
+	public void setProgress(String text, float percentage, float nextPercentage) {
 		float dt = (System.currentTimeMillis() - startTime) / 1000f;
 		progressRate = percentage / dt;
+		maxProgress = nextPercentage;
 		progressString = text;
 	}
-	
+
 	private void render(String text, float percentage) {
 		if (checkIfStopped())
 			return;
@@ -74,7 +77,7 @@ public class Splash {
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
 		splashScreen.update();
 	}
-	
+
 	private void render(float percentage) {
 		if (checkIfStopped())
 			return;
@@ -84,7 +87,7 @@ public class Splash {
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
 		splashScreen.update();
 	}
-	
+
 	private boolean checkIfStopped() {
 		if (!splashScreen.isVisible()) {
 			timer.stop();

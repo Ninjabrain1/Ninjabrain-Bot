@@ -1,9 +1,14 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.event.ModifiableSet;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.datalock.LockableSet;
 
-public class ThrowSet extends ModifiableSet<IThrow> implements IThrowSet {
+public class ThrowSet extends LockableSet<IThrow> implements IThrowSet {
+
+	public ThrowSet(IModificationLock modificationLock) {
+		super(modificationLock);
+	}
 
 	@Override
 	public int maxCapacity() {

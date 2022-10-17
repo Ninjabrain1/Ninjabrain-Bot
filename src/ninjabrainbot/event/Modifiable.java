@@ -12,11 +12,11 @@ public class Modifiable<T> implements IModifiable<T> {
 	public ISubscribable<T> whenModified() {
 		return whenModified;
 	}
-	
+
 	protected void notifySubscribers(T value) {
 		whenModified.notifySubscribers(value);
 	}
-	
+
 	protected int subscriberCount() {
 		return whenModified.subscriberCount();
 	}

@@ -1,7 +1,7 @@
 package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.IModificationLock;
+import ninjabrainbot.data.datalock.IModificationLock;
 
 public class Throw1_12 extends Throw {
 

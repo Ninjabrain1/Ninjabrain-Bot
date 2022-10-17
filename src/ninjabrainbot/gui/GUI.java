@@ -6,13 +6,13 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.endereye.StandardStdProfile;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
+import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.util.Profiler;
-import ninjabrainbot.util.Progress;
 
 /**
  * Main class for the user interface.
@@ -36,11 +36,11 @@ public class GUI {
 		initUI();
 		postInit();
 	}
-	
+
 	private void initDataState() {
 		Progress.setTask("Creating calculator data", 0.01f);
 		Profiler.start("Init DataState");
-		dataStateHandler = new DataStateHandler(new StandardStdProfile());
+		dataStateHandler = new DataStateHandler();
 		dataState = dataStateHandler.getDataState();
 		Profiler.stop();
 	}
@@ -97,7 +97,7 @@ public class GUI {
 		Main.preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(0.01));
 		Main.preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
 		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
-		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataState.toggleLocked());
+		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
 	}
 
 	private Thread onShutdown() {

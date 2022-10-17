@@ -32,11 +32,11 @@ public class StyleManager {
 		font = new Font(null, Font.BOLD, 25);
 		themedComponents = new ArrayList<>();
 		themedFrames = new ArrayList<>();
-		
+
 		initFonts();
 		setupSettingsSubscriptions();
 	}
-	
+
 	private void initFonts() {
 		font = loadFont();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -74,7 +74,7 @@ public class StyleManager {
 		for (ThemedFrame tf : themedFrames) {
 			tf.updateBounds(this);
 		}
-		//updateFontsAndColors();
+		// updateFontsAndColors();
 	}
 
 	private void updateFontsAndColors() {
@@ -90,20 +90,20 @@ public class StyleManager {
 	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
-	
+
 	private void updateTheme() {
 		theme = Theme.get(Main.preferences.theme.get());
 		updateFontsAndColors();
 //		updateOBSOverlay();
 	}
-	
+
 	private void updateSizePreference() {
 		size = SizePreference.get(Main.preferences.size.get());
 		updateFontsAndColors();
 		updateBounds();
 //		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
-	
+
 	private Font loadFont() {
 		Font font = null;
 		try {

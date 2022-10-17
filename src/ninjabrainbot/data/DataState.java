@@ -6,6 +6,8 @@ import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.ResultType;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
@@ -22,22 +24,27 @@ public class DataState implements IDataState, IDisposable {
 
 	private final ICalculator calculator;
 
-	private final ObservableField<Boolean> locked = new ObservableField<Boolean>(false);
 	private final DivineContext divineContext;
-
 	private final ThrowSet throwSet;
-	private final ObservableField<IThrow> playerPos = new ObservableField<IThrow>(null);
+	private final ObservableField<IThrow> playerPos;
+	private final ObservableField<Boolean> locked;
 
-	private final ObservableField<ResultType> resultType = new ObservableField<ResultType>(ResultType.NONE);
-	private final ObservableField<ICalculatorResult> calculatorResult = new ObservableField<ICalculatorResult>(null);
-	private final ObservableField<BlindResult> blindResult = new ObservableField<BlindResult>(null);
-	private final ObservableField<DivineResult> divineResult = new ObservableField<DivineResult>(null);
+	private final ObservableField<ResultType> resultType;
+	private final ObservableField<ICalculatorResult> calculatorResult;
+	private final ObservableField<BlindResult> blindResult;
+	private final ObservableField<DivineResult> divineResult;
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataState(ICalculator calculator) {
-		divineContext = new DivineContext();
-		throwSet = new ThrowSet();
+	public DataState(ICalculator calculator, IModificationLock modificationLock) {
+		divineContext = new DivineContext(modificationLock);
+		throwSet = new ThrowSet(modificationLock);
+		playerPos = new LockableField<IThrow>(modificationLock);
+		locked = new LockableField<Boolean>(false, modificationLock);
+		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
+		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
+		blindResult = new LockableField<BlindResult>(modificationLock);
+		divineResult = new LockableField<DivineResult>(modificationLock);
 
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
@@ -131,7 +138,7 @@ public class DataState implements IDataState, IDisposable {
 	void setPlayerPos(IThrow t) {
 		playerPos.set(t);
 	}
-	
+
 	void setBlindPosition(BlindPosition t) {
 		blindResult.set(calculator.blind(t));
 		resultType.set(ResultType.BLIND);
