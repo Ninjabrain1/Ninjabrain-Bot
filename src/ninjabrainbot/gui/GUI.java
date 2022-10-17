@@ -3,7 +3,6 @@ package ninjabrainbot.gui;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.endereye.StandardStdProfile;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -85,7 +84,7 @@ public class GUI {
 		Profiler.start("Post init");
 		ninjabrainBotFrame.checkIfOffScreen();
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
-		obsOverlay = new OBSOverlay(ninjabrainBotFrame, dataState);
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, dataStateHandler);
 		ninjabrainBotFrame.setVisible(true);
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 		Profiler.stop();
@@ -106,7 +105,7 @@ public class GUI {
 			public void run() {
 				Main.preferences.windowX.set(ninjabrainBotFrame.getX());
 				Main.preferences.windowY.set(ninjabrainBotFrame.getY());
-				obsOverlay.clear();
+				obsOverlay.dispose();
 				autoResetTimer.dispose();
 				dataStateHandler.dispose();
 			}

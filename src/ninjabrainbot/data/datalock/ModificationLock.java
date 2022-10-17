@@ -6,8 +6,8 @@ public class ModificationLock implements IModificationLock {
 
 		@Override
 		public void close() {
-			System.out.println("locked");
 			locked = true;
+			whenModificationFinished.run();
 		}
 
 	}
@@ -15,8 +15,13 @@ public class ModificationLock implements IModificationLock {
 	private Lock lock = new Lock();
 	private boolean locked = true;
 
+	Runnable whenModificationFinished;
+
+	public ModificationLock(Runnable whenModificationFinished) {
+		this.whenModificationFinished = whenModificationFinished;
+	}
+
 	public ILock acquireWritePermission() {
-		System.out.println("unlocked");
 		locked = false;
 		return lock;
 	}

@@ -8,13 +8,16 @@ import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 
-public class OBSOverlay {
+public class OBSOverlay implements IDisposable {
 
 	private NinjabrainBotFrame ninjabrainBotFrame;
-	private IDataState dataState;
+	private IObservable<Boolean> calculatorLocked;
 
 	private Timer overlayClearTimer;
 	private Timer overlayUpdateTimer;
@@ -23,9 +26,12 @@ public class OBSOverlay {
 
 	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");;
 
-	public OBSOverlay(NinjabrainBotFrame frame, IDataState dataState) {
+	SubscriptionHandler sh = new SubscriptionHandler();
+
+	public OBSOverlay(NinjabrainBotFrame frame, IDataStateHandler dataStateHandler) {
 		this.ninjabrainBotFrame = frame;
-		this.dataState = dataState;
+		this.calculatorLocked = dataStateHandler.getDataState().locked();
+		sh.add(dataStateHandler.whenDataStateModified().subscribeEDT(__ -> markShouldUpdate()));
 		createClearTimer();
 		createUpdateTimer();
 		setupSettingsSubscriptions();
@@ -44,13 +50,13 @@ public class OBSOverlay {
 	}
 
 	private void setupSettingsSubscriptions() {
-		Main.preferences.overlayHideDelay.whenModified().subscribe(__ -> markShouldUpdate());
-		Main.preferences.overlayAutoHide.whenModified().subscribe(__ -> markShouldUpdate());
-		Main.preferences.overlayHideWhenLocked.whenModified().subscribe(__ -> markShouldUpdate());
-		Main.preferences.useOverlay.whenModified().subscribe(b -> setOverlayEnabled(b));
+		sh.add(Main.preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(Main.preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(Main.preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(Main.preferences.useOverlay.whenModified().subscribeEDT(b -> setOverlayEnabled(b)));
 	}
 
-	public void markShouldUpdate() {
+	private void markShouldUpdate() {
 		long time = System.currentTimeMillis();
 		long timeSinceLastUpdate = time - lastOverlayUpdate;
 		if (timeSinceLastUpdate < minOverlayUpdateDelayMillis - 10) {
@@ -61,7 +67,7 @@ public class OBSOverlay {
 		lastOverlayUpdate = time;
 	}
 
-	public void clear() {
+	private void clear() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			write(img);
@@ -79,7 +85,7 @@ public class OBSOverlay {
 	private void drawAndWriteToFile() {
 		if (Main.preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && dataState.locked().get();
+			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && calculatorLocked.get();
 			if (!ninjabrainBotFrame.isIdle() && !hideBecauseLocked) {
 				ninjabrainBotFrame.paint(img.createGraphics());
 				resetClearTimer();
@@ -111,6 +117,12 @@ public class OBSOverlay {
 		} else {
 			OBS_OVERLAY.delete();
 		}
+	}
+
+	@Override
+	public void dispose() {
+		sh.dispose();
+		clear();
 	}
 
 }

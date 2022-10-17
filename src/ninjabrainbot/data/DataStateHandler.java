@@ -25,7 +25,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	public DataStateHandler() {
 		this.stdProfile = new StandardStdProfile();
-		modificationLock = new ModificationLock();
+		modificationLock = new ModificationLock(() -> whenDataStateModified.notifySubscribers(dataState));
 		dataState = new DataState(new Calculator(), modificationLock);
 	}
 
@@ -93,6 +93,23 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
+	private synchronized void onNewThrow(IThrow t) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setPlayerPos(t);
+			if (dataState.locked().get())
+				return;
+			if (t.isNether()) {
+				if (dataState.getThrowSet().size() == 0)
+					dataState.setBlindPosition(new BlindPosition(t));
+				return;
+			}
+			if (!t.lookingBelowHorizon()) {
+				t.setStdProfile(stdProfile);
+				dataState.getThrowSet().add(t);
+			}
+		}
+	}
+
 	@Override
 	public void addThrowStream(ISubscribable<IThrow> stream) {
 		stream.subscribe(t -> onNewThrow(t));
@@ -116,23 +133,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	@Override
 	public IModificationLock getModificationLock() {
 		return modificationLock;
-	}
-
-	private synchronized void onNewThrow(IThrow t) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setPlayerPos(t);
-			if (dataState.locked().get())
-				return;
-			if (t.isNether()) {
-				if (dataState.getThrowSet().size() == 0)
-					dataState.setBlindPosition(new BlindPosition(t));
-				return;
-			}
-			if (!t.lookingBelowHorizon()) {
-				t.setStdProfile(stdProfile);
-				dataState.getThrowSet().add(t);
-			}
-		}
 	}
 
 	@Override
