@@ -50,6 +50,13 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		if (!dataState.locked().get())
 			undo();
 	}
+	
+	@Override
+	public void removeThrow(IThrow t) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.getThrowSet().remove(t);
+		}
+	}
 
 	public synchronized void changeLastAngleIfNotLocked(double delta) {
 		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {

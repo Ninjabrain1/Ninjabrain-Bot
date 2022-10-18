@@ -18,6 +18,8 @@ public interface IDataStateHandler {
 	void undo();
 
 	void undoIfNotLocked();
+	
+	void removeThrow(IThrow t);
 
 	void changeLastAngleIfNotLocked(double delta);
 

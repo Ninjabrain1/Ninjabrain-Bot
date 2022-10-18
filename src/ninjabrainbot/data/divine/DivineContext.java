@@ -55,6 +55,8 @@ public class DivineContext implements IDivineContext {
 	 * phi has to be in the range [-pi, pi]
 	 */
 	public double angleOffsetFromSector(double phi) {
+		if (fossil.get() == null)
+			return 0;
 		int n = Ring.get(0).numStrongholds;
 		double minOffset = Math.PI;
 		for (int i = 0; i < n; i++) {
@@ -74,6 +76,10 @@ public class DivineContext implements IDivineContext {
 	 * (0,0)
 	 */
 	public BlindPosition getClosestCoords(double x, double z, double r) {
+		if (fossil.get() == null) {
+			double multiplier = r / Coords.dist(x, z, 0, 0);
+			return new BlindPosition(x * multiplier, z * multiplier);
+		}
 		int n = Ring.get(0).numStrongholds;
 		double minDist2 = Double.MAX_VALUE;
 		double phi = (phiMin + phiMax) * 0.5;

@@ -3,8 +3,8 @@ package ninjabrainbot.gui.panels.main;
 import javax.swing.BoxLayout;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.IDivineContext;
-import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.gui.components.TextAnimator;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ResizablePanel;
@@ -22,17 +22,17 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	private TextAnimator textAnimator;
 
-	public EnderEyePanel(StyleManager styleManager, IThrowSet throwSet, IDivineContext divineContext) {
+	public EnderEyePanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IDivineContext divineContext) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		throwPanelHeader = new ThrowPanelHeader(styleManager);
 		add(throwPanelHeader);
-		throwPanels = new ThrowPanel[throwSet.maxCapacity()];
+		throwPanels = new ThrowPanel[dataStateHandler.getDataState().getThrowSet().maxCapacity()];
 		divineContextPanel = new DivineContextPanel(styleManager, divineContext, () -> whenDivineContextVisibilityUpdated());
 		add(divineContextPanel);
-		for (int i = 0; i < throwSet.maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(styleManager, throwSet, i, () -> whenSizeModified.notifySubscribers(this));
+		for (int i = 0; i < dataStateHandler.getDataState().getThrowSet().maxCapacity(); i++) {
+			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, i, () -> whenSizeModified.notifySubscribers(this));
 			add(throwPanels[i]);
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);

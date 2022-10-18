@@ -93,12 +93,12 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public void reset() {
+		resultType.set(ResultType.NONE);
 		throwSet.clear();
 		playerPos.set(null);
 		blindResult.set(null);
 		divineResult.set(null);
 		divineContext.clear();
-		resultType.set(ResultType.NONE);
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class DataState implements IDataState, IDisposable {
 			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
 		throwSet.setAngleErrors(calculatorResult.get());
-		resultType.set(calculatorResult.get() != null ? ResultType.TRIANGULATION : ResultType.NONE);
+		resultType.set(calculatorResult.get() == null ? ResultType.NONE : calculatorResult().get().success() ? ResultType.TRIANGULATION : ResultType.FAILED);
 	}
 
 	private void onFossilChanged() {

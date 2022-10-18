@@ -98,6 +98,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		// Components bounds changed
 		sh.add(mainTextArea.whenModified().subscribe(__ -> updateSize(styleManager)));
 		sh.add(enderEyePanel.whenModified().subscribe(__ -> updateSize(styleManager)));
+		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
 
@@ -127,15 +128,15 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(notificationsButton);
 	}
 
-	private void createComponents(StyleManager styleManager, IDataState dataState, IDataStateHandler dataHandler) {
+	private void createComponents(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
 		// Main text
 		mainTextArea = new MainTextArea(styleManager, dataState);
 		add(mainTextArea);
 		// "Throws" text + buttons
-		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataHandler);
+		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataStateHandler);
 		add(mainButtonPanel);
 		// Throw panels
-		enderEyePanel = new EnderEyePanel(styleManager, dataState.getThrowSet(), dataState.getDivineContext());
+		enderEyePanel = new EnderEyePanel(styleManager, dataStateHandler, dataState.getDivineContext());
 		add(enderEyePanel);
 	}
 
@@ -187,6 +188,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private void updateSize(StyleManager styleManager) {
+		System.out.println("UPDATE BOUNDS");
 		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));

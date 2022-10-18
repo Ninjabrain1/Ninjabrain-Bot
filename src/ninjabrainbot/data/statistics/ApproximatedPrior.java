@@ -79,7 +79,7 @@ public class ApproximatedPrior extends Prior {
 	protected double strongholdDensity(double cx, double cz, Ring ring) {
 		double d2 = cx * cx + cz * cz;
 		double relativeWeight = 1.0;
-		if (ring.ring == 0 && divineContext != null) {
+		if (ring.ring == 0 && divineContext.getFossil() != null) {
 			double phi = Coords.getPhi(cx, cz);
 			relativeWeight = -divineContext.angleOffsetFromSector(phi) / (StrongholdConstants.snappingRadius * 1.5 / Math.sqrt(d2)); // 1.5 ~ sqrt(2) + a small margin
 			relativeWeight = (1.0 + relativeWeight) * 0.5;

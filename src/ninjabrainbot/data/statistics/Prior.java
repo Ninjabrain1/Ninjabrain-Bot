@@ -150,14 +150,14 @@ public class Prior implements IPrior {
 	 * Density (pdf) of strongholds at chunk coords (cx, cy), in the given ring.
 	 */
 	protected double strongholdDensity(double cx, double cz, Ring ring) {
-		if (ring.ring == 0 && divineContext != null) {
+		if (ring.ring == 0 && divineContext.getFossil() != null) {
 			double phi = Coords.getPhi(cx, cz);
 			if (divineContext.angleOffsetFromSector(phi) > 0) {
 				return 0;
 			}
 		}
 		double d2 = cx * cx + cz * cz;
-		double relDensity = divineContext != null ? divineContext.relativeDensity() : 1.0;
+		double relDensity = divineContext.relativeDensity();
 		if (d2 > ring.innerRadius * ring.innerRadius && d2 < ring.outerRadius * ring.outerRadius) {
 			return relDensity * ring.numStrongholds / (2.0 * Math.PI * (ring.outerRadius - ring.innerRadius) * Math.sqrt(d2));
 		}

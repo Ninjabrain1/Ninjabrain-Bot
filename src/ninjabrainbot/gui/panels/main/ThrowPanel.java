@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.event.IDisposable;
@@ -47,7 +48,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	Subscription throwSubscription;
 	Runnable whenVisibilityChanged;
 
-	public ThrowPanel(StyleManager styleManager, IThrowSet throwSet, int index, Runnable whenVisibilityChanged) {
+	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, int index, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		this.index = index;
 		setOpaque(true);
@@ -79,8 +80,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		add(error);
 		setLayout(null);
 		updateVisibility();
+		IThrowSet throwSet = dataStateHandler.getDataState().getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
-		removeButton.addActionListener(p -> throwSet.remove(this.t));
+		removeButton.addActionListener(p -> dataStateHandler.removeThrow(this.t));
 		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index);
 		this.whenVisibilityChanged = whenVisibilityChanged;
 	}
