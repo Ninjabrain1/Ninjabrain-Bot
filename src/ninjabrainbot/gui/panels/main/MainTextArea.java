@@ -108,21 +108,20 @@ public class MainTextArea extends ResizablePanel {
 	private void setResult(ICalculatorResult result) {
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
-//			basicTriangulation.updateColors(styleManager);
 		} else {
 			detailedTriangulation.setResult(result);
-//			detailedTriangulation.updateColors(styleManager);
+			detailedTriangulation.updateColors(styleManager);
 		}
 	}
 
 	private void setResult(BlindResult result) {
 		blind.setResult(result);
-//		blind.updateColors(styleManager);
+		blind.updateColors(styleManager);
 	}
 
 	private void setResult(DivineResult result) {
 		divine.setResult(result);
-//		divine.updateColors(styleManager);
+		divine.updateColors(styleManager);
 	}
 
 	private void setNetherCoordsEnabled(boolean b) {
