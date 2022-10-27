@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.frames;
 
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.geom.RoundRectangle2D;
@@ -8,18 +7,15 @@ import java.net.URL;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.util.I18n;
 
@@ -36,7 +32,6 @@ public class NotificationsFrame extends ThemedFrame {
 
 	public NotificationsFrame(StyleManager styleManager) {
 		super(styleManager, I18n.get("notificationsframe.new_version_available"));
-		titlebarPanel.addButton(getExitButton(styleManager));
 		mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -79,19 +74,9 @@ public class NotificationsFrame extends ThemedFrame {
 		setBackground(styleManager.theme.COLOR_NEUTRAL);
 	}
 
-	private FlatButton getExitButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(styleManager, img) {
-			private static final long serialVersionUID = 4380111129291481489L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-		};
-		button.addActionListener(p -> setVisible(false));
-		return button;
+	@Override
+	protected void onExitButtonClicked() {
+		setVisible(false);
 	}
 
 	private void openURL() {

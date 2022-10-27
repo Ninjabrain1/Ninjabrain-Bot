@@ -44,8 +44,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private MainTextArea mainTextArea;
 	private EnderEyePanel enderEyePanel;
 
-	public static final String TITLE_TEXT = I18n.get("title");
-	public static final String VERSION_TEXT = "v" + Main.VERSION;
+	private static final String TITLE_TEXT = I18n.get("title");
+	private static final String VERSION_TEXT = "v" + Main.VERSION;
 
 	public NinjabrainBotFrame(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(styleManager, TITLE_TEXT);
@@ -120,12 +120,16 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		lockIcon.setVisible(false);
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
-		titlebarPanel.addButton(createExitButton(styleManager));
 		titlebarPanel.addButton(createMinimizeButton(styleManager));
 		settingsButton = createSettingsButton(styleManager);
 		titlebarPanel.addButton(settingsButton);
 		notificationsButton = new NotificationsButton(styleManager, this);
 		titlebarPanel.addButton(notificationsButton);
+	}
+
+	@Override
+	protected void onExitButtonClicked() {
+		System.exit(0);
 	}
 
 	private void createComponents(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
@@ -138,21 +142,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		// Throw panels
 		enderEyePanel = new EnderEyePanel(styleManager, dataStateHandler, dataState.getDivineContext());
 		add(enderEyePanel);
-	}
-
-	private FlatButton createExitButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(styleManager, img) {
-			private static final long serialVersionUID = -5122431392273627666L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-		};
-		button.addActionListener(p -> System.exit(0));
-		return button;
 	}
 
 	private FlatButton createMinimizeButton(StyleManager styleManager) {
@@ -188,7 +177,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private void updateSize(StyleManager styleManager) {
-		System.out.println("UPDATE BOUNDS");
 		int extraWidth = Main.preferences.showAngleUpdates.get() && Main.preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));

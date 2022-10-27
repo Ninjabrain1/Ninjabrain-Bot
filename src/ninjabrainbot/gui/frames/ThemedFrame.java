@@ -1,24 +1,29 @@
 package ninjabrainbot.gui.frames;
 
+import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.net.URL;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.gui.buttons.FlatButton;
+import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.util.Profiler;
+import ninjabrainbot.gui.style.Theme;
 
-public class ThemedFrame extends JFrame implements IDisposable {
+public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	private static final long serialVersionUID = -9103006492414835286L;
-
+	
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
@@ -41,7 +46,25 @@ public class ThemedFrame extends JFrame implements IDisposable {
 			}
 		};
 		titlebarPanel.add(titletextLabel);
+		titlebarPanel.addButton(createExitButton(styleManager));
 	}
+	
+	private FlatButton createExitButton(StyleManager styleManager) {
+		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
+		ImageIcon img = new ImageIcon(iconURL);
+		FlatButton button = new TitleBarButton(styleManager, img) {
+			private static final long serialVersionUID = 4380111129291481489L;
+
+			@Override
+			public Color getHoverColor(Theme theme) {
+				return theme.COLOR_EXIT_BUTTON_HOVER;
+			}
+		};
+		button.addActionListener(__ -> onExitButtonClicked());
+		return button;
+	}
+
+	protected abstract void onExitButtonClicked();
 
 	public TitleBarPanel getTitleBar() {
 		return titlebarPanel;

@@ -11,11 +11,9 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.net.URL;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,7 +27,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.CustomCheckbox;
 import ninjabrainbot.gui.components.DecimalTextField;
 import ninjabrainbot.gui.components.ThemedLabel;
@@ -56,11 +53,10 @@ public class OptionsFrame extends ThemedFrame {
 	private StyleManager styleManager;
 	private ThemedTabbedPane tabbedPane;
 	private CalibrationPanel calibrationPanel;
-	private FlatButton exitButton;
-	private TextboxPanel sigma;
-	private TextboxPanel sigmaAlt;
+	private FloatPreferencePanel sigma;
+	private FloatPreferencePanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
-	private TextboxPanel overlayResetDelay;
+	private FloatPreferencePanel overlayResetDelay;
 
 	static int WINDOW_WIDTH = 560;
 	static int COLUMN_WIDTH = WINDOW_WIDTH / 2;
@@ -83,8 +79,6 @@ public class OptionsFrame extends ThemedFrame {
 		tabbedPane.addTab(I18n.get("settings.language"), getLanguagePanel());
 
 		// Title bar
-		exitButton = getExitButton();
-		titlebarPanel.addButton(exitButton);
 		titlebarPanel.setFocusable(true);
 
 		// Subscriptions
@@ -141,7 +135,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 
 		// Left advanced column
-		sigma = new TextboxPanel(styleManager, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
+		sigma = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
 		column1.add(sigma);
 		JButton calibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation")) {
 			private static final long serialVersionUID = -673676238214760361L;
@@ -154,9 +148,9 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
 		column1.add(calibrateButton);
-		column1.add(new TextboxPanel(styleManager, I18n.get("settings.standard_deviation_manual"), Main.preferences.sigmaManual));
+		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation_manual"), Main.preferences.sigmaManual));
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
-		sigmaAlt = new TextboxPanel(styleManager, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
+		sigmaAlt = new FloatPreferencePanel(styleManager, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
 		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());
 		column1.add(sigmaAlt);
 		if (KeyboardListener.registered) {
@@ -164,7 +158,7 @@ public class OptionsFrame extends ThemedFrame {
 			sigmaAltHotkey.setEnabled(Main.preferences.useAltStd.get());
 			column1.add(sigmaAltHotkey);
 		}
-		column2.add(new TextboxPanel(styleManager, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
+		column2.add(new FloatPreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_updates"), Main.preferences.showAngleUpdates));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
@@ -233,7 +227,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
 		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_hide_locked"), Main.preferences.overlayHideWhenLocked), constraints);
 		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_auto_hide"), Main.preferences.overlayAutoHide), constraints);
-		overlayResetDelay = new TextboxPanel(styleManager, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
+		overlayResetDelay = new FloatPreferencePanel(styleManager, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
 		overlayResetDelay.setEnabled(Main.preferences.overlayAutoHide.get());
 		ac2.add(overlayResetDelay, constraints);
 
@@ -295,19 +289,9 @@ public class OptionsFrame extends ThemedFrame {
 		setBackground(styleManager.theme.COLOR_NEUTRAL);
 	}
 
-	private FlatButton getExitButton() {
-		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(styleManager, img) {
-			private static final long serialVersionUID = 4380111129291481489L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-		};
-		button.addActionListener(p -> close());
-		return button;
+	@Override
+	protected void onExitButtonClicked() {
+		close();
 	}
 
 	public void close() {
@@ -391,7 +375,7 @@ class CheckboxPanel extends ThemedPanel {
 
 }
 
-class TextboxPanel extends ThemedPanel {
+class FloatPreferencePanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
 
@@ -399,7 +383,7 @@ class TextboxPanel extends ThemedPanel {
 	DecimalTextField textfield;
 	FloatPreference preference;
 
-	public TextboxPanel(StyleManager styleManager, String description, FloatPreference preference) {
+	public FloatPreferencePanel(StyleManager styleManager, String description, FloatPreference preference) {
 		super(styleManager);
 		this.preference = preference;
 		setLayout(new FlowLayout(FlowLayout.LEFT));

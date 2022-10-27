@@ -22,7 +22,7 @@ public abstract class Theme {
 	public Color COLOR_POSITIVE;
 	public Color COLOR_NEGATIVE;
 	public boolean BLACK_ICONS;
-	public ColorMap CERTAINTY_COLOR_MAP;
+	public transient ColorMap CERTAINTY_COLOR_MAP;
 
 	public static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
 	public static final Theme LIGHT = new LightTheme();

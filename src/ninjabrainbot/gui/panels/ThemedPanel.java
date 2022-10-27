@@ -42,7 +42,7 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 	}
 
 	public Color getBackgroundColor(Theme theme) {
-		return null;
+		return theme.COLOR_NEUTRAL;
 	}
 
 	public Color getForegroundColor(Theme theme) {

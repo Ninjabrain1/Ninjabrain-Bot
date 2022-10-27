@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Profiler {
 
-	private static boolean enabled = true;
+	private static boolean enabled = false;
 	static Timer root = new Timer(null, "root");
 	static Timer active = root;
 

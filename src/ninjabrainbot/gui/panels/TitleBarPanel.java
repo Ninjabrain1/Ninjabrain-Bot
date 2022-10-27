@@ -68,9 +68,10 @@ public class TitleBarPanel extends ThemedPanel {
 		return theme.COLOR_STRONGEST;
 	}
 
-	public void addButton(JButton button) {
+	public JButton addButton(JButton button) {
 		add(button);
 		buttons.add(button);
+		return button;
 	}
 
 }

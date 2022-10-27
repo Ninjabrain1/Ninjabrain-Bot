@@ -108,9 +108,9 @@ public class MainTextArea extends ResizablePanel {
 	private void setResult(ICalculatorResult result) {
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
+			basicTriangulation.updateColors(styleManager);
 		} else {
 			detailedTriangulation.setResult(result);
-			detailedTriangulation.updateColors(styleManager);
 		}
 	}
 
