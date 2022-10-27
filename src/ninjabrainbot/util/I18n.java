@@ -29,17 +29,26 @@ public class I18n {
 
 	private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
 
+	private static ResourceBundle DEFAULT_BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", Locale.US, new UTF8Control());;
 	static {
 		LANGUAGE_CONFIG.add(Locale.US);
 		LANGUAGE_CONFIG.add(Locale.KOREA);
 		LANGUAGE_CONFIG.add(Locale.SIMPLIFIED_CHINESE);
 		LANGUAGE_CONFIG.add(Locale.ITALY);
+		LANGUAGE_CONFIG.add(Locale.JAPAN);
+		LANGUAGE_CONFIG.add(Locale.TRADITIONAL_CHINESE);
+		// add language ja_RYU
+		LANGUAGE_CONFIG.add(new Locale("ja", "RYU"));
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);
 		BUNDLE = ResourceBundle.getBundle("resources/lang/I18n", LANGUAGE, new UTF8Control());
 		for (Locale value : LANGUAGE_CONFIG) {
-			LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
+			try{
+				LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
+			} catch (Exception ignored){
+				LANGUAGE_NAMES.add(DEFAULT_BUNDLE.getString("settings.language." + value));
+			}
 		}
 	}
 	
