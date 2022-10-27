@@ -20,10 +20,14 @@ public class RadioButtonGroup extends ThemedPanel {
 	private static final long serialVersionUID = 7355615566096074105L;
 
 	public RadioButtonGroup(GUI gui, String[] options, String selected) {
+		this(gui, options, selected, false);
+	}
+
+	public RadioButtonGroup(GUI gui, String[] options, String selected, boolean verticalRadioButtons) {
 		super(gui);
 		setOpaque(false);
         ButtonGroup group = new ButtonGroup();
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.Y_AXIS : BoxLayout.X_AXIS));
         ActionListener listener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
