@@ -23,7 +23,7 @@ import ninjabrainbot.gui.style.Theme;
 public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	private static final long serialVersionUID = -9103006492414835286L;
-	
+
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
@@ -48,7 +48,7 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 		titlebarPanel.add(titletextLabel);
 		titlebarPanel.addButton(createExitButton(styleManager));
 	}
-	
+
 	private FlatButton createExitButton(StyleManager styleManager) {
 		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);

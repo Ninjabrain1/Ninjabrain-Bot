@@ -50,7 +50,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		if (!dataState.locked().get())
 			undo();
 	}
-	
+
 	@Override
 	public void removeThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {

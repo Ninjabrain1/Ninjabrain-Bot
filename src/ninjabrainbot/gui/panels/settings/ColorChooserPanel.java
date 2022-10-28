@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels;
+package ninjabrainbot.gui.panels.settings;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import ninjabrainbot.event.ISubscribable;
@@ -22,7 +21,6 @@ public class ColorChooserPanel extends JPanel {
 	private static final int WIDTH = 256;
 	private static final int HEIGHT = WIDTH;
 	private static final int BAR_WIDTH = 20;
-	private static final int GAP = 10;
 	private ColorPanel colorPanel;
 	private ColorBar colorBar;
 	private ObservableField<Color> color;
@@ -33,8 +31,7 @@ public class ColorChooserPanel extends JPanel {
 		colorPanel = new ColorPanel(WIDTH, HEIGHT);
 		colorBar = new ColorBar(BAR_WIDTH, HEIGHT);
 		setColor(Color.BLACK);
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-		setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
+		setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		add(colorPanel, BorderLayout.CENTER);
 		add(colorBar, BorderLayout.LINE_END);
 
@@ -59,7 +56,7 @@ public class ColorChooserPanel extends JPanel {
 	}
 
 	public void setColor(Color c) {
-		if (colorsAreSame(c,color.get()))
+		if (colorsAreSame(c, color.get()))
 			return;
 		colorPanel.setCursor(c);
 		colorPanel.setColorPropertyValue(c);
@@ -67,7 +64,7 @@ public class ColorChooserPanel extends JPanel {
 		colorBar.setColorPropertyValue(c);
 		color.set(c);
 	}
-	
+
 	private boolean colorsAreSame(Color a, Color b) {
 		if (a == null || b == null)
 			return a == b;
@@ -141,7 +138,7 @@ abstract class ColorPanelBase extends JPanel {
 		}
 		return c;
 	}
-	
+
 	public Color getColor() {
 		return getColor(cursor_);
 	}

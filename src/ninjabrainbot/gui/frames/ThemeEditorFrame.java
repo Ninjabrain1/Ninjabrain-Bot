@@ -1,13 +1,11 @@
 package ninjabrainbot.gui.frames;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.geom.RoundRectangle2D;
 
-import ninjabrainbot.gui.components.HexThemedTextField;
-import ninjabrainbot.gui.panels.ColorChooserPanel;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.panels.settings.ColorPickerPanel;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class ThemeEditorFrame extends ThemedFrame {
@@ -20,13 +18,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 		add(panel);
 		panel.setLayout(new FlowLayout());
 
-		ColorChooserPanel colorChooserPanel = new ColorChooserPanel();
-		HexThemedTextField hexTextField = new HexThemedTextField(styleManager);
-		colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color));
-		hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text)));
-
-		panel.add(colorChooserPanel);
-		panel.add(hexTextField);
+		panel.add(new ColorPickerPanel(styleManager));
 	}
 
 	@Override

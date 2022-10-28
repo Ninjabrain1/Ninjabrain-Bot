@@ -13,7 +13,7 @@ public class HexThemedTextField extends ThemedTextField {
 		super(styleManager);
 		setPreferredSize(styleManager);
 	}
-	
+
 	@Override
 	protected String preProcessText(String text) {
 		text = text.toUpperCase();
@@ -23,7 +23,7 @@ public class HexThemedTextField extends ThemedTextField {
 			text = text + "0";
 		return text;
 	}
-	
+
 	@Override
 	protected boolean verifyInput(String text) {
 		return text.matches("^#(?:[0-9A-F]{6})$");
@@ -38,13 +38,13 @@ public class HexThemedTextField extends ThemedTextField {
 		if (validatedProcessedText.get() == null || !hex.contentEquals(validatedProcessedText.get()))
 			setText(hex);
 	}
-	
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		super.updateSize(styleManager);
 		setPreferredSize(styleManager);
 	}
-	
+
 	private void setPreferredSize(StyleManager styleManager) {
 		int ts = getTextSize(styleManager.size);
 		setPreferredSize(new Dimension(ts * 5, ts + 2));
