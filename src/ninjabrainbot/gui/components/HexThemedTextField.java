@@ -34,7 +34,9 @@ public class HexThemedTextField extends ThemedTextField {
 	}
 
 	public void setColor(Color c) {
-		setText(toHex(c));
+		String hex = toHex(c);
+		if (validatedProcessedText.get() == null || !hex.contentEquals(validatedProcessedText.get()))
+			setText(hex);
 	}
 	
 	@Override

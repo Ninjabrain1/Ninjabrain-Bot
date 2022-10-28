@@ -21,7 +21,7 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 
 	private static final long serialVersionUID = 1363577002580584264L;
 
-	private ObservableField<String> validatedProcessedText = new ObservableField<String>();
+	protected ObservableField<String> validatedProcessedText = new ObservableField<String>();
 
 	public ThemedTextField(StyleManager styleManager) {
 		super();

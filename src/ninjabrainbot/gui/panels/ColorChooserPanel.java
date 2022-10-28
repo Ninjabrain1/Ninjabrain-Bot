@@ -32,8 +32,7 @@ public class ColorChooserPanel extends JPanel {
 		color = new ObservableField<Color>();
 		colorPanel = new ColorPanel(WIDTH, HEIGHT);
 		colorBar = new ColorBar(BAR_WIDTH, HEIGHT);
-		setColor(new Color(0.3f, 0.1f, 0.8f));
-//		setLayout(new BorderLayout(GAP, GAP));
+		setColor(Color.BLACK);
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
 		add(colorPanel, BorderLayout.CENTER);
@@ -115,7 +114,6 @@ abstract class ColorPanelBase extends JPanel {
 		};
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-		// setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
 	@Override
@@ -240,8 +238,8 @@ class ColorPanel extends ColorPanelBase {
 
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
-				float s = ((float) j) / (float) w;
-				float b = (h - (float) i) / (float) h;
+				float s = ((float) j) / (float) (w - 1);
+				float b = (h - 1 - (float) i) / (float) (h - 1);
 				int rgb = Color.getHSBColor(hue, s, b).getRGB();
 				img.setRGB(j, i, rgb);
 			}
@@ -252,10 +250,8 @@ class ColorPanel extends ColorPanelBase {
 	@Override
 	public void setCursor(Color color) {
 		float[] hsv = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-		cursor_.y = (int) (height * (1f - hsv[2])) - 1;
-		cursor_.x = (int) (width * hsv[1]) - 1;
-		System.out.println(hsv[1]);
-		System.out.println(hsv[2]);
+		cursor_.y = (int) ((height - 1) * (1f - hsv[2]));
+		cursor_.x = (int) ((width - 1) * hsv[1]);
 	}
 
 }
