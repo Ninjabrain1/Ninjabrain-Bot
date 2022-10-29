@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedOpaquePanel;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
@@ -22,7 +23,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 
 	ArrayList<TabButton> tabs;
 	StyleManager styleManager;
-	JPanel tabPanel;
+	ThemedPanel tabPanel;
 	JPanel mainPanel;
 
 	public ThemedTabbedPane(StyleManager styleManager) {
@@ -31,14 +32,8 @@ public class ThemedTabbedPane extends ThemedPanel {
 		tabs = new ArrayList<TabButton>();
 //		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setLayout(null);
-		tabPanel = new ThemedOpaquePanel(styleManager) {
-			private static final long serialVersionUID = -9131114034270325589L;
-
-			@Override
-			public Color getBackgroundColor(Theme theme) {
-				return theme.COLOR_STRONGER;
-			}
-		};
+		tabPanel = new ThemedOpaquePanel(styleManager);
+		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
 		tabPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -65,12 +60,6 @@ public class ThemedTabbedPane extends ThemedPanel {
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
-	}
-
-	@Override
-	public void updateColors(StyleManager styleManager) {
-		setBackground(getBackgroundColor(styleManager.theme));
-		setForeground(getForegroundColor(styleManager.theme));
 	}
 
 	public int getTextSize(SizePreference p) {
@@ -111,6 +100,8 @@ class TabButton extends FlatButton {
 	JComponent component;
 
 	Color a, b, c;
+	
+	ConfigurableColor cColor;
 
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
 		super(styleManager, title);
@@ -118,6 +109,8 @@ class TabButton extends FlatButton {
 		this.component = component;
 		label.setCursor(null);
 		addActionListener(p -> onClicked());
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		cColor = styleManager.currentTheme.COLOR_NEUTRAL;
 	}
 
 	void setComponentVisible(boolean bool) {
@@ -130,11 +123,11 @@ class TabButton extends FlatButton {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
+	public void updateColors() {
+		super.updateColors();
 		a = this.hoverCol;
 		b = this.bgCol;
-		c = styleManager.theme.COLOR_NEUTRAL;
+		c = cColor.color();
 		refreshColor();
 	}
 
@@ -147,11 +140,6 @@ class TabButton extends FlatButton {
 			this.bgCol = b;
 		}
 		setColors(bgCol, hoverCol);
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGER;
 	}
 
 }

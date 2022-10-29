@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.panels.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -16,7 +15,6 @@ import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 class DivinePanel extends ThemedPanel {
@@ -80,6 +78,8 @@ class DivinePanel extends ThemedPanel {
 		add(panel1);
 		add(panel2);
 		add(Box.createGlue());
+		
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
 	public void setResult(DivineResult result) {
@@ -91,12 +91,6 @@ class DivinePanel extends ThemedPanel {
 			highrollLabels[i].setText(result.highroll[i].toString());
 		}
 	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
-	}
-
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		setPreferredSize(new Dimension(0, 3 * (styleManager.size.PADDING + styleManager.size.TEXT_SIZE_MEDIUM) + 2 * styleManager.size.PADDING_THIN));

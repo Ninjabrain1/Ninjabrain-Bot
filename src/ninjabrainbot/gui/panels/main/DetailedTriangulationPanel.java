@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.panels.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 
@@ -35,6 +33,8 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 			panels.add(panel);
 			add(panel);
 		}
+
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
 	public void setResult(ICalculatorResult result) {
@@ -58,17 +58,12 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
+	public void updateColors() {
+		super.updateColors();
 		for (int i = 0; i < NUM_DETAILED_PANELS; i++) {
 			ChunkPanel p = panels.get(i);
-			p.updateColors(styleManager);
+			p.updateColors();
 		}
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
 	}
 
 	@Override

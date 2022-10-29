@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class Histogram extends ThemedPanel {
 
@@ -27,6 +27,9 @@ public class Histogram extends ThemedPanel {
 	int labelsHeight = 20;
 	int margin = 20;
 
+	private ConfigurableColor histCol;
+	private ConfigurableColor lineCol;
+
 	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
 		super(styleManager);
 		this.min = min;
@@ -39,6 +42,9 @@ public class Histogram extends ThemedPanel {
 		addTick(styleManager, 0);
 		addTick(styleManager, min);
 		addTick(styleManager, max);
+		
+		histCol = styleManager.currentTheme.COLOR_SATURATED;
+		lineCol = styleManager.currentTheme.COLOR_STRONGEST;
 	}
 
 	private void addTick(StyleManager styleManager, float tick) {
@@ -80,16 +86,10 @@ public class Histogram extends ThemedPanel {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-//		setBorder(BorderFactory.createLineBorder(gui.theme.COLOR_STRONGER, 1));
-		histColor = styleManager.theme.COLOR_SATURATED;
-		lineColor = styleManager.theme.COLOR_STRONGEST;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
+	public void updateColors() {
+		super.updateColors();
+		histColor = histCol.color();
+		lineColor = lineCol.color();
 	}
 
 	public void clear() {

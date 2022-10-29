@@ -1,6 +1,5 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
@@ -52,8 +51,6 @@ public class DataState implements IDataState, IDisposable {
 		// Subscriptions
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
-		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
-		sh.add(Main.preferences.mcVersion.whenModified().subscribe(__ -> recalculateStronghold()));
 	}
 
 	@Override
@@ -114,7 +111,7 @@ public class DataState implements IDataState, IDisposable {
 		throwSet.dispose();
 	}
 
-	private void recalculateStronghold() {
+	public void recalculateStronghold() {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));

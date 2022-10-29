@@ -1,5 +1,6 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.Main;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.datalock.ILock;
@@ -27,6 +28,9 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		this.stdProfile = new StandardStdProfile();
 		modificationLock = new ModificationLock(() -> whenDataStateModified.notifySubscribers(dataState));
 		dataState = new DataState(new Calculator(), modificationLock);
+		
+		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
+		sh.add(Main.preferences.mcVersion.whenModified().subscribe(__ -> recalculateStronghold()));
 	}
 
 	public synchronized void reset() {
@@ -114,6 +118,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				t.setStdProfile(stdProfile);
 				dataState.getThrowSet().add(t);
 			}
+		}
+	}
+	
+	private synchronized void recalculateStronghold() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.recalculateStronghold();
 		}
 	}
 

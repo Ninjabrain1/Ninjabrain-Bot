@@ -10,9 +10,9 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 /**
@@ -28,6 +28,8 @@ public class ThrowPanelHeader extends ThemedPanel {
 	private JLabel error;
 
 	private boolean errorsEnabled;
+	
+	ConfigurableColor lineColor;
 
 	public ThrowPanelHeader(StyleManager styleManager) {
 		this(styleManager, null);
@@ -46,6 +48,9 @@ public class ThrowPanelHeader extends ThemedPanel {
 		add(alpha);
 		add(error);
 		setLayout(null);
+		lineColor = styleManager.currentTheme.COLOR_STRONGEST;
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_STRONG);
 	}
 
 	public void setAngleErrorsEnabled(boolean e) {
@@ -97,9 +102,9 @@ public class ThrowPanelHeader extends ThemedPanel {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
+	public void updateColors() {
+		super.updateColors();
+		setBorder(new MatteBorder(0, 0, 2, 0, lineColor.color()));
 	}
 
 	@Override
@@ -118,16 +123,6 @@ public class ThrowPanelHeader extends ThemedPanel {
 	@Override
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
-	}
-
-	@Override
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
 	}
 
 }

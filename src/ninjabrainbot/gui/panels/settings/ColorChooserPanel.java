@@ -71,6 +71,10 @@ public class ColorChooserPanel extends JPanel {
 		return a.getRGB() == b.getRGB();
 	}
 
+	public Color getColor() {
+		return color.get();
+	}
+
 }
 
 abstract class ColorPanelBase extends JPanel {

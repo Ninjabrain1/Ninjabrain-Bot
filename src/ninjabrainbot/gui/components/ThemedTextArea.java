@@ -5,14 +5,17 @@ import java.awt.Dimension;
 
 import javax.swing.JTextArea;
 
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class ThemedTextArea extends JTextArea implements ThemedComponent {
 
 	private static final long serialVersionUID = -1769219771406000716L;
 	public boolean bold;
+
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
 
 	public ThemedTextArea(StyleManager styleManager) {
 		this(styleManager, "");
@@ -28,17 +31,20 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		this.bold = bold;
 		setEditable(false);
 		setLineWrap(false);
+
+		bgCol = styleManager.currentTheme.COLOR_STRONG;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
 	}
 
 	public void updateSize(StyleManager styleManager) {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold));
 	}
 
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
+		Color fg = getForegroundColor();
 		if (fg != null)
 			setForeground(fg);
 	}
@@ -47,12 +53,20 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 	@Override

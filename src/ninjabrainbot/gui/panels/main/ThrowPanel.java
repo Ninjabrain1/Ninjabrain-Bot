@@ -18,9 +18,9 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 /**
  * JComponent for showing a Throw.
@@ -48,6 +48,10 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	Subscription throwSubscription;
 	Runnable whenVisibilityChanged;
 
+	private ConfigurableColor negCol;
+	private ConfigurableColor posCol;
+	private ConfigurableColor lineCol;
+
 	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, int index, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		this.index = index;
@@ -58,19 +62,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		alpha = new JLabel((String) null, 0);
 		correction = new JLabel((String) null, 0);
 		error = new JLabel((String) null, 0);
-		removeButton = new FlatButton(styleManager, "–") {
-			static final long serialVersionUID = -7702064148275208581L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_REMOVE_BUTTON_HOVER;
-			}
-
-			@Override
-			public Color getBackgroundColor(Theme theme) {
-				return theme.COLOR_NEUTRAL;
-			}
-		};
+		removeButton = new FlatButton(styleManager, "–");
+		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
+		removeButton.setHoverColor(styleManager.currentTheme.COLOR_REMOVE_BUTTON_HOVER);
 		removeButton.setVisible(false);
 		add(removeButton);
 		add(x);
@@ -85,6 +79,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		removeButton.addActionListener(p -> dataStateHandler.removeThrow(this.t));
 		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index);
 		this.whenVisibilityChanged = whenVisibilityChanged;
+
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
+		negCol = styleManager.currentTheme.COLOR_NEGATIVE;
+		posCol = styleManager.currentTheme.COLOR_POSITIVE;
+		lineCol = styleManager.currentTheme.COLOR_STRONGER;
 	}
 
 	void setAngleErrorsEnabled(boolean e) {
@@ -178,11 +178,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		colorNeg = styleManager.theme.COLOR_NEGATIVE;
-		colorPos = styleManager.theme.COLOR_POSITIVE;
-		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGER));
-		super.updateColors(styleManager);
+	public void updateColors() {
+		colorNeg = negCol.color();
+		colorPos = posCol.color();
+		setBorder(new MatteBorder(0, 0, 1, 0, lineCol.color()));
+		super.updateColors();
 	}
 
 	@Override
@@ -264,16 +264,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
-	}
-
-	@Override
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_NEUTRAL;
 	}
 
 	@Override

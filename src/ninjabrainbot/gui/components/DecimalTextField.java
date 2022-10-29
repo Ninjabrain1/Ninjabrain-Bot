@@ -12,13 +12,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
 
 	private static final long serialVersionUID = 1167120412326064670L;
+
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
 
 	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
 		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
@@ -45,6 +48,9 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		};
 		addChangeListener(listener);
 		styleManager.registerThemedComponent(this);
+
+		bgCol = styleManager.currentTheme.COLOR_STRONG;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
 	}
 
 	public void hideSpinnerArrows() {
@@ -70,11 +76,11 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
+		Color fg = getForegroundColor();
 		if (fg != null) {
 			setForeground(fg);
 		}
@@ -98,12 +104,20 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 }

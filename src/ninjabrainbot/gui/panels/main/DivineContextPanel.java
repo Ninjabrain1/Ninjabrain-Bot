@@ -13,9 +13,9 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 /**
@@ -32,23 +32,15 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	Subscription fossilSubscription;
 	Runnable whenVisibilityChanged;
 
+	private ConfigurableColor borderCol;
+
 	public DivineContextPanel(StyleManager styleManager, IDivineContext dc, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
-		removeButton = new FlatButton(styleManager, "–") {
-			static final long serialVersionUID = -7702064148275208581L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_REMOVE_BUTTON_HOVER;
-			}
-
-			@Override
-			public Color getBackgroundColor(Theme theme) {
-				return theme.COLOR_STRONGER;
-			}
-		};
+		removeButton = new FlatButton(styleManager, "–");
+		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		removeButton.setForegroundColor(styleManager.currentTheme.COLOR_REMOVE_BUTTON_HOVER);
 		add(removeButton);
 		add(label);
 		setLayout(null);
@@ -56,6 +48,10 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		removeButton.addActionListener(p -> dc.resetFossil());
 		fossilSubscription = dc.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
 		this.whenVisibilityChanged = whenVisibilityChanged;
+
+		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 	}
 
 	@Override
@@ -85,9 +81,9 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGEST));
-		super.updateColors(styleManager);
+	public void updateColors() {
+		setBorder(new MatteBorder(0, 0, 1, 0, borderCol.color()));
+		super.updateColors();
 	}
 
 	@Override
@@ -103,16 +99,6 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGER;
-	}
-
-	@Override
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_SLIGHTLY_STRONG;
 	}
 
 	@Override

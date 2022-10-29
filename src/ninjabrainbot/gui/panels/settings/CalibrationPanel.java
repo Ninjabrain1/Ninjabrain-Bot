@@ -29,9 +29,9 @@ import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.panels.TitleBarPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
 
@@ -179,15 +179,11 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			private static final long serialVersionUID = 4380111129291481489L;
 
 			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-
-			@Override
 			public void updateSize(StyleManager styleManager) {
 				setFont(styleManager.fontSize(getTextSize(styleManager.size), false));
 			}
 		};
+		button.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		button.addActionListener(p -> optionsFrame.stopCalibrating());
 		return button;
 	}
@@ -195,7 +191,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	private void setHighlighted(int i) {
 		for (int j = 0; j < labels.length; j++) {
 			labels[j].setHighlighted(i == j);
-			labels[j].updateColors(styleManager);
+			labels[j].updateColors();
 		}
 	}
 
@@ -257,7 +253,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
+	public void updateColors() {
 	}
 
 	@Override
@@ -273,10 +269,15 @@ class InstructionLabel extends ThemedLabel {
 
 	private boolean highlighted;
 
+	ConfigurableColor highlightedCol;
+
 	public InstructionLabel(StyleManager styleManager, String text) {
 		super(styleManager, "<html><div style='text-align: center;'>" + text + "</div></html>");
 		setHorizontalAlignment(SwingConstants.CENTER);
 		setAlignmentX(0.5f);
+
+		highlightedCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
 	}
 
 	public void setHighlighted(boolean b) {
@@ -284,8 +285,8 @@ class InstructionLabel extends ThemedLabel {
 	}
 
 	@Override
-	public Color getForegroundColor(Theme theme) {
-		return highlighted ? theme.TEXT_COLOR_STRONG : theme.TEXT_COLOR_WEAK;
+	public Color getForegroundColor() {
+		return highlighted ? highlightedCol.color() : super.getForegroundColor();
 	}
 
 }
@@ -296,6 +297,9 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 
 	final JTextArea area;
 
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
+
 	public ErrorTextArea(StyleManager styleManager, JTextArea textArea) {
 		super(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		area = textArea;
@@ -303,9 +307,12 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		area.setOpaque(false);
 		getViewport().setOpaque(false);
 		area.setBorder(null);
-		setBorder(BorderFactory.createLineBorder(getBackgroundColor(styleManager.theme), 1));
 		setOpaque(false);
 		styleManager.registerThemedComponent(this);
+
+		bgCol = styleManager.currentTheme.COLOR_STRONGER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
+		setBorder(BorderFactory.createLineBorder(getBackgroundColor(), 1));
 	}
 
 	@Override
@@ -314,17 +321,25 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		area.setForeground(getForegroundColor(styleManager.theme));
-		setBorder(BorderFactory.createLineBorder(getBackgroundColor(styleManager.theme), 1));
+	public void updateColors() {
+		area.setForeground(getForegroundColor());
+		setBorder(BorderFactory.createLineBorder(getBackgroundColor(), 1));
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_NEUTRAL;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGER;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 	public int getTextSize(SizePreference p) {

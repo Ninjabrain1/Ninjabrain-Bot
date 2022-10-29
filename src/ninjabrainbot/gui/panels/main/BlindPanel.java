@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.panels.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,7 +14,6 @@ import ninjabrainbot.gui.components.ColorMapLabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Pair;
 
@@ -44,6 +42,8 @@ class BlindPanel extends ThemedPanel {
 		add(distanceLabel, gbc);
 		gbc.weighty = 1;
 		add(Box.createGlue(), gbc);
+		
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
 	public void setResult(BlindResult result) {
@@ -62,15 +62,10 @@ class BlindPanel extends ThemedPanel {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-		certaintyPanel.updateColor(styleManager);
-		evalLabel.updateColor(styleManager);
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
+	public void updateColors() {
+		super.updateColors();
+		certaintyPanel.updateColor();
+		evalLabel.updateColor();
 	}
 
 	@Override

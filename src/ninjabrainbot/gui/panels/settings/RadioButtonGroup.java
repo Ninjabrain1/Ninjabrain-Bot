@@ -13,9 +13,9 @@ import javax.swing.JRadioButton;
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class RadioButtonGroup extends ThemedPanel {
 
@@ -60,6 +60,9 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_rollover_icon.png"));
 	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_selected_rollover_icon.png"));
 
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
+
 	public ThemedRadioButton(StyleManager styleManager, String text) {
 		super(text);
 		styleManager.registerThemedComponent(this);
@@ -73,31 +76,41 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		setPressedIcon(pressed_icon);
 		setRolloverIcon(rollover_icon);
 		setRolloverSelectedIcon(selected_rollover_icon);
+
+		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
 	}
 
 	public final void updateSize(StyleManager styleManager) {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
-	public final void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
-		if (bg != null)
-			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
-		if (fg != null)
-			setForeground(fg);
+	@Override
+	public final void updateColors() {
+		Color bg = getBackgroundColor();
+		setBackground(bg);
+		Color fg = getForegroundColor();
+		setForeground(fg);
 	}
 
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return null;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 }

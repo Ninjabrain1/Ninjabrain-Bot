@@ -54,7 +54,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
+	public void updateColors() {
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import ninjabrainbot.util.Profiler;
 
 public class StyleManager {
 
-	public Theme theme;
+	public CurrentTheme currentTheme;
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 	private final ArrayList<ThemedFrame> themedFrames;
@@ -27,7 +27,8 @@ public class StyleManager {
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);
 
 	public StyleManager() {
-		theme = Theme.get(Main.preferences.theme.get());
+		currentTheme = new CurrentTheme();
+		currentTheme.setTheme(Theme.get(Main.preferences.theme.get()));
 		size = SizePreference.get(Main.preferences.size.get());
 		font = new Font(null, Font.BOLD, 25);
 		themedComponents = new ArrayList<>();
@@ -79,10 +80,10 @@ public class StyleManager {
 
 	private void updateFontsAndColors() {
 		for (ThemedFrame tf : themedFrames) {
-			tf.updateFontsAndColors(this);
+			tf.updateFontsAndColors();
 		}
 		for (ThemedComponent tc : themedComponents) {
-			tc.updateColors(this);
+			tc.updateColors();
 			tc.updateSize(this);
 		}
 	}
@@ -92,7 +93,7 @@ public class StyleManager {
 	}
 
 	private void updateTheme() {
-		theme = Theme.get(Main.preferences.theme.get());
+		currentTheme.setTheme(Theme.get(Main.preferences.theme.get()));
 		updateFontsAndColors();
 //		updateOBSOverlay();
 	}

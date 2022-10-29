@@ -13,9 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.util.Wrapper;
 
 /**
  * Custom button with 'flat' graphics, otherwise behaves like a JButton.
@@ -28,6 +29,11 @@ public class FlatButton extends JButton implements ThemedComponent {
 	protected Color bgCol, hoverCol;
 	private ImageIcon icon, icon_inverted;
 
+	private ConfigurableColor bgColor;
+	private ConfigurableColor fgColor;
+	private ConfigurableColor hoverColor;
+	private Wrapper<Boolean> blackIcons;
+
 	public FlatButton(StyleManager styleManager, ImageIcon img) {
 		super();
 		setBorderPainted(false);
@@ -35,6 +41,11 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setContentAreaFilled(false);
 		setBorder(null);
 		setFocusable(false);
+
+		bgColor = styleManager.currentTheme.COLOR_STRONG;
+		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
+		blackIcons = styleManager.currentTheme.BLACK_ICONS;
 
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.createGraphics();
@@ -73,6 +84,11 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setContentAreaFilled(false);
 		setBorder(null);
 		setFocusable(false);
+
+		bgColor = styleManager.currentTheme.COLOR_STRONG;
+		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
+		blackIcons = styleManager.currentTheme.BLACK_ICONS;
 
 		label = new JLabel(text);
 		label.setOpaque(true);
@@ -138,28 +154,40 @@ public class FlatButton extends JButton implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
-		Color hg = getHoverColor(styleManager.theme);
+	public void updateColors() {
+		Color bg = getBackgroundColor();
+		Color hg = getHoverColor();
 		setColors(bg, hg);
-		label.setForeground(getForegroundColor(styleManager.theme));
-		label.setIcon(styleManager.theme.BLACK_ICONS ? icon_inverted : icon);
+		label.setForeground(getForegroundColor());
+		label.setIcon(blackIcons.get() ? icon_inverted : icon);
 	}
 
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgColor = color;
 	}
 
-	public Color getHoverColor(Theme theme) {
-		return theme.COLOR_SLIGHTLY_STRONG;
+	public void setHoverColor(ConfigurableColor color) {
+		hoverColor = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgColor = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgColor.color();
+	}
+
+	protected Color getHoverColor() {
+		return hoverColor.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgColor.color();
 	}
 
 }

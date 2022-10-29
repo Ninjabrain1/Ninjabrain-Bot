@@ -5,14 +5,17 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class ThemedPanel extends JPanel implements ThemedComponent {
 
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
+
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
 
 	public ThemedPanel(StyleManager styleManager) {
 		this(styleManager, false);
@@ -22,31 +25,41 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 		super();
 		styleManager.registerThemedComponent(this);
 		this.bold = bold;
+
+		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 
 	public void updateSize(StyleManager styleManager) {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold));
 	}
 
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
-		if (bg != null)
-			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
-		if (fg != null)
-			setForeground(fg);
+	@Override
+	public void updateColors() {
+		Color bg = getBackgroundColor();
+		setBackground(bg);
+		Color fg = getForegroundColor();
+		setForeground(fg);
 	}
 
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return null;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 }

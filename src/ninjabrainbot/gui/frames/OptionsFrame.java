@@ -35,9 +35,9 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.CalibrationPanel;
 import ninjabrainbot.gui.panels.settings.RadioButtonGroup;
 import ninjabrainbot.gui.panels.settings.ThemedTabbedPane;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.preferences.BooleanPreference;
@@ -284,12 +284,6 @@ public class OptionsFrame extends ThemedFrame {
 	}
 
 	@Override
-	public void updateFontsAndColors(StyleManager styleManager) {
-		getContentPane().setBackground(styleManager.theme.COLOR_NEUTRAL);
-		setBackground(styleManager.theme.COLOR_NEUTRAL);
-	}
-
-	@Override
 	protected void onExitButtonClicked() {
 		close();
 	}
@@ -318,14 +312,14 @@ public class OptionsFrame extends ThemedFrame {
 
 	private void setAltSigmaEnabled(boolean b) {
 		sigmaAlt.setEnabled(b);
-		sigmaAlt.descLabel.updateColors(styleManager);
+		sigmaAlt.descLabel.updateColors();
 		sigmaAltHotkey.setEnabled(b);
-		sigmaAltHotkey.descLabel.updateColors(styleManager);
+		sigmaAltHotkey.descLabel.updateColors();
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {
 		overlayResetDelay.setEnabled(b);
-		overlayResetDelay.descLabel.updateColors(styleManager);
+		overlayResetDelay.descLabel.updateColors();
 	}
 
 }
@@ -383,6 +377,8 @@ class FloatPreferencePanel extends ThemedPanel {
 	DecimalTextField textfield;
 	FloatPreference preference;
 
+	ConfigurableColor disabledCol;
+
 	public FloatPreferencePanel(StyleManager styleManager, String description, FloatPreference preference) {
 		super(styleManager);
 		this.preference = preference;
@@ -396,11 +392,11 @@ class FloatPreferencePanel extends ThemedPanel {
 			}
 
 			@Override
-			public Color getForegroundColor(Theme theme) {
+			public Color getForegroundColor() {
 				if (textfield.isEnabled()) {
-					return super.getForegroundColor(theme);
+					return super.getForegroundColor();
 				}
-				return theme.TEXT_COLOR_WEAK;
+				return disabledCol.color();
 			}
 		};
 		textfield = new DecimalTextField(styleManager, preference.get(), preference.min(), preference.max()) {
@@ -419,6 +415,8 @@ class FloatPreferencePanel extends ThemedPanel {
 		add(descLabel);
 		add(textfield);
 		setOpaque(false);
+
+		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
 	}
 
 	public void updateValue() {
@@ -479,6 +477,8 @@ class HotkeyPanel extends ThemedPanel {
 	HotkeyPreference preference;
 	boolean editing = false;
 
+	ConfigurableColor disabledCol;
+
 	public HotkeyPanel(StyleManager styleManager, String description, HotkeyPreference preference) {
 		super(styleManager);
 		this.preference = preference;
@@ -493,11 +493,11 @@ class HotkeyPanel extends ThemedPanel {
 			}
 
 			@Override
-			public Color getForegroundColor(Theme theme) {
+			public Color getForegroundColor() {
 				if (button.isEnabled()) {
-					return super.getForegroundColor(theme);
+					return super.getForegroundColor();
 				}
-				return theme.TEXT_COLOR_WEAK;
+				return disabledCol.color();
 			}
 		};
 		descLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -516,6 +516,8 @@ class HotkeyPanel extends ThemedPanel {
 		add(descLabel);
 		add(button);
 		setOpaque(false);
+
+		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
 	}
 
 	private void clicked() {

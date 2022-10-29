@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.frames;
 
-import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
@@ -27,7 +26,6 @@ import ninjabrainbot.gui.panels.main.MainButtonPanel;
 import ninjabrainbot.gui.panels.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
@@ -36,7 +34,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private static final long serialVersionUID = -8033268694989543737L;
 
-	private JLabel versiontextLabel;
+	private ThemedLabel versiontextLabel;
 	private NotificationsButton notificationsButton;
 	private JButton settingsButton;
 	private JLabel lockIcon;
@@ -76,12 +74,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}
 
-	@Override
-	public void updateFontsAndColors(StyleManager styleManager) {
-		getContentPane().setBackground(styleManager.theme.COLOR_NEUTRAL);
-		setBackground(styleManager.theme.COLOR_NEUTRAL);
-	}
-
 	public AbstractButton getSettingsButton() {
 		return settingsButton;
 	}
@@ -110,12 +102,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_SMALL;
 			}
-
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.TEXT_COLOR_WEAK;
-			}
 		};
+		versiontextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
 		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/resources/lock_icon.png")));
 		lockIcon.setVisible(false);
 		titlebarPanel.add(versiontextLabel);

@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.panels;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -12,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 /**
  * A JPanel that allows the user to drag the application window.
@@ -47,6 +45,7 @@ public class TitleBarPanel extends ThemedPanel {
 				frame.setLocation(X, Y);
 			}
 		});
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGEST);
 	}
 
 	@Override
@@ -61,11 +60,6 @@ public class TitleBarPanel extends ThemedPanel {
 	public void updateSize(StyleManager styleManager) {
 		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_TITLE_LARGE + styleManager.size.PADDING_TITLE * 2 + 1));
 		super.updateSize(styleManager);
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGEST;
 	}
 
 	public JButton addButton(JButton button) {

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
 import ninjabrainbot.gui.panels.main.ThrowPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class TextAnimator implements ThemedComponent {
@@ -15,12 +16,18 @@ public class TextAnimator implements ThemedComponent {
 	Color start, end;
 	int duration;
 	ThrowPanel jtp;
+	
+	ConfigurableColor startCol;
+	ConfigurableColor endCol;
 
 	public TextAnimator(StyleManager styleManager, int durationMillis) {
 		styleManager.registerThemedComponent(this);
 		this.start = Color.WHITE;
 		this.end = Color.WHITE;
 		this.duration = durationMillis;
+
+		startCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		endCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 
 	public void setJThrowPanel(ThrowPanel jtp) {
@@ -57,8 +64,8 @@ public class TextAnimator implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		setColors(styleManager.theme.TEXT_COLOR_STRONG, styleManager.theme.TEXT_COLOR_NEUTRAL);
+	public void updateColors() {
+		setColors(startCol.color(), endCol.color());
 	}
 
 }

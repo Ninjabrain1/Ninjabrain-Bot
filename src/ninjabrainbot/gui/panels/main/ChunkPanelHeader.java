@@ -12,9 +12,9 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
@@ -32,6 +32,8 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	StyleManager styleManager;
 
 	Subscription strongholdDisplayTypeChangedSubscription;
+
+	private ConfigurableColor borderCol;
 
 	public ChunkPanelHeader(StyleManager styleManager) {
 		super(styleManager, true);
@@ -55,6 +57,10 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		updateHeaderText();
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> updateHeaderText());
+
+		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_STRONG);
 	}
 
 	@Override
@@ -91,9 +97,9 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		setBorder(new MatteBorder(0, 0, 2, 0, styleManager.theme.COLOR_STRONGEST));
-		super.updateColors(styleManager);
+	public void updateColors() {
+		setBorder(new MatteBorder(0, 0, 2, 0, borderCol.color()));
+		super.updateColors();
 	}
 
 	@Override
@@ -105,16 +111,6 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	@Override
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
-	}
-
-	@Override
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
 	}
 
 	@Override

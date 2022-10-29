@@ -21,8 +21,6 @@ public class MainTextArea extends ResizablePanel {
 
 	IDataState dataState;
 
-	StyleManager styleManager;
-
 	BasicTriangulationPanel basicTriangulation;
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
@@ -32,7 +30,6 @@ public class MainTextArea extends ResizablePanel {
 	CardLayout layout;
 
 	public MainTextArea(StyleManager styleManager, IDataState dataState) {
-		this.styleManager = styleManager;
 		this.dataState = dataState;
 		layout = new CardLayout();
 		idle = true;
@@ -72,10 +69,10 @@ public class MainTextArea extends ResizablePanel {
 		ICalculatorResult result = dataState.calculatorResult().get();
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
-			basicTriangulation.updateColors(styleManager);
+			basicTriangulation.updateColors();
 		} else {
 			detailedTriangulation.setResult(result);
-			detailedTriangulation.updateColors(styleManager);
+			detailedTriangulation.updateColors();
 		}
 		updateResult();
 		revalidate();
@@ -108,7 +105,7 @@ public class MainTextArea extends ResizablePanel {
 	private void setResult(ICalculatorResult result) {
 		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
-			basicTriangulation.updateColors(styleManager);
+			basicTriangulation.updateColors();
 		} else {
 			detailedTriangulation.setResult(result);
 		}
@@ -116,12 +113,12 @@ public class MainTextArea extends ResizablePanel {
 
 	private void setResult(BlindResult result) {
 		blind.setResult(result);
-		blind.updateColors(styleManager);
+		blind.updateColors();
 	}
 
 	private void setResult(DivineResult result) {
 		divine.setResult(result);
-		divine.updateColors(styleManager);
+		divine.updateColors();
 	}
 
 	private void setNetherCoordsEnabled(boolean b) {

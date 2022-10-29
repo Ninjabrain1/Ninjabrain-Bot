@@ -13,15 +13,18 @@ import javax.swing.text.PlainDocument;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class ThemedTextField extends JTextField implements ThemedComponent {
 
 	private static final long serialVersionUID = 1363577002580584264L;
 
 	protected ObservableField<String> validatedProcessedText = new ObservableField<String>();
+
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
 
 	public ThemedTextField(StyleManager styleManager) {
 		super();
@@ -38,6 +41,9 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 				setText(preProcessText(getText()));
 			}
 		});
+
+		bgCol = styleManager.currentTheme.COLOR_STRONG;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
 	}
 
 	protected String preProcessText(String text) {
@@ -56,25 +62,17 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
+		Color fg = getForegroundColor();
 		if (fg != null)
 			setForeground(fg);
 	}
 
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
-	}
-
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
-	}
-
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
 	}
 
 	class InputVerifier extends DocumentFilter {
@@ -116,5 +114,21 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 				validatedProcessedText.set(newText);
 			}
 		}
+	}
+
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
+	}
+
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 }

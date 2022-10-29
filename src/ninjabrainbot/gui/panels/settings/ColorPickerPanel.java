@@ -33,6 +33,7 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 
 		colorChooserPanel = new ColorChooserPanel();
 		HexThemedTextField hexTextField = new HexThemedTextField(styleManager);
+		hexTextField.setColor(colorChooserPanel.getColor());
 
 		JPanel hexPanel = new ThemedPanel(styleManager);
 		hexPanel.setLayout(new FlowLayout(FlowLayout.LEFT));

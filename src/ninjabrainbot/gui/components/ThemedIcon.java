@@ -7,12 +7,15 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.util.Wrapper;
 
 public class ThemedIcon extends ThemedLabel {
 
 	private static final long serialVersionUID = 6219710623002938323L;
 
 	private ImageIcon icon, icon_inverted;
+	
+	private Wrapper<Boolean> blackIcons;
 
 	public ThemedIcon(StyleManager styleManager, ImageIcon img) {
 		super(styleManager);
@@ -31,12 +34,14 @@ public class ThemedIcon extends ThemedLabel {
 		}
 		icon = img;
 		icon_inverted = new ImageIcon(bi);
+		
+		blackIcons = styleManager.currentTheme.BLACK_ICONS;
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-		setIcon(styleManager.theme.BLACK_ICONS ? icon_inverted : icon);
+	public void updateColors() {
+		super.updateColors();
+		setIcon(blackIcons.get() ? icon_inverted : icon);
 	}
 
 }

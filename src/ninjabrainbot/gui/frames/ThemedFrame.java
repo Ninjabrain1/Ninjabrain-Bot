@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.frames;
 
-import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.net.URL;
@@ -16,9 +15,9 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public abstract class ThemedFrame extends JFrame implements IDisposable {
 
@@ -26,6 +25,8 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
+
+	ConfigurableColor bgCol;
 
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 
@@ -47,19 +48,15 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 		};
 		titlebarPanel.add(titletextLabel);
 		titlebarPanel.addButton(createExitButton(styleManager));
+
+		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
 	}
 
 	private FlatButton createExitButton(StyleManager styleManager) {
 		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(styleManager, img) {
-			private static final long serialVersionUID = 4380111129291481489L;
-
-			@Override
-			public Color getHoverColor(Theme theme) {
-				return theme.COLOR_EXIT_BUTTON_HOVER;
-			}
-		};
+		FlatButton button = new TitleBarButton(styleManager, img);
+		button.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		button.addActionListener(__ -> onExitButtonClicked());
 		return button;
 	}
@@ -75,7 +72,9 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE) / 2, 0, titletextLabel.getPreferredSize().width, titlebarHeight);
 	}
 
-	public void updateFontsAndColors(StyleManager styleManager) {
+	public void updateFontsAndColors() {
+		getContentPane().setBackground(bgCol.color());
+		setBackground(bgCol.color());
 	}
 
 	public void checkIfOffScreen() {

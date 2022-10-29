@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.panels.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Locale;
 
@@ -17,7 +16,6 @@ import ninjabrainbot.gui.components.ColorMapLabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
@@ -51,6 +49,8 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		add(netherLabel);
 		add(currentAngleLabel);
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
+		
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
 	public void setResult(ICalculatorResult result) {
@@ -90,15 +90,10 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-		certaintyPanel.updateColor(styleManager);
-		currentAngleLabel.updateColor(styleManager);
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_NEUTRAL;
+	public void updateColors() {
+		super.updateColors();
+		certaintyPanel.updateColor();
+		currentAngleLabel.updateColor();
 	}
 
 	@Override

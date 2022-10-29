@@ -11,13 +11,14 @@ import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.ColorMapLabel;
+import ninjabrainbot.gui.components.ColoredLabel;
 import ninjabrainbot.gui.components.ILabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 /**
  * JComponent for showing a Throw.
@@ -29,7 +30,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private ChunkPrediction currentPrediction;
 
 	private ThemedLabel location;
-	private ThemedLabel certainty;
+	private ColoredLabel certainty;
 	private ThemedLabel distance;
 	private ThemedLabel nether;
 	private ColorMapLabel angle;
@@ -41,6 +42,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private Subscription chunkPredictionSubscription;
 	private Subscription strongholdDisplayTypeChangedSubscription;
 
+	private ConfigurableColor borderCol;
+
 	public ChunkPanel(StyleManager styleManager) {
 		this(styleManager, null);
 	}
@@ -50,14 +53,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		this.styleManager = styleManager;
 		setOpaque(true);
 		location = new ThemedLabel(styleManager, true);
-		certainty = new ThemedLabel(styleManager, true) {
-			private static final long serialVersionUID = -6995689057641195351L;
-
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.CERTAINTY_COLOR_MAP.get(lastColor);
-			}
-		};
+		certainty = new ColoredLabel(styleManager, true);
 		distance = new ThemedLabel(styleManager, true);
 		nether = new ThemedLabel(styleManager, true);
 		angle = new ColorMapLabel(styleManager, true, true);
@@ -75,6 +71,10 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		setPrediction(p);
 		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
 		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
+
+		borderCol = styleManager.currentTheme.COLOR_STRONGER;
+		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 	}
 
 	@Override
@@ -103,11 +103,11 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		setBorder(new MatteBorder(0, 0, 1, 0, styleManager.theme.COLOR_STRONGER));
-		super.updateColors(styleManager);
-		angle.updateColor(styleManager);
-		certainty.updateColors(styleManager);
+	public void updateColors() {
+		setBorder(new MatteBorder(0, 0, 1, 0, borderCol.color()));
+		super.updateColors();
+		angle.updateColor();
+		certainty.updateColors();
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -131,8 +131,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private void setText(ChunkPrediction p) {
 		location.setText(p.formatLocation());
-		certainty.setText(p.formatCertainty());
-		certainty.setForeground(styleManager.theme.CERTAINTY_COLOR_MAP.get(p.chunk.weight));
+		certainty.setText(p.formatCertainty(), (float) p.chunk.weight);
 		distance.setText(p.formatDistance());
 		nether.setText(p.formatNether());
 		angle.setText(p.formatTravelAngle(false));
@@ -149,16 +148,6 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_MEDIUM;
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_SLIGHTLY_WEAK;
-	}
-
-	@Override
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_SLIGHTLY_STRONG;
 	}
 
 	@Override

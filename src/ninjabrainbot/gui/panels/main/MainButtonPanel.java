@@ -1,12 +1,10 @@
 package ninjabrainbot.gui.panels.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -16,8 +14,8 @@ import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends ThemedPanel {
@@ -27,9 +25,11 @@ public class MainButtonPanel extends ThemedPanel {
 	IDataState dataState;
 	IDataStateHandler dataStateHandler;
 
-	private JLabel throwsLabel;
+	private ThemedLabel throwsLabel;
 	private FlatButton resetButton;
 	private FlatButton undoButton;
+
+	private ConfigurableColor borderCol;
 
 	public MainButtonPanel(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(styleManager);
@@ -38,43 +38,38 @@ public class MainButtonPanel extends ThemedPanel {
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
-		throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true) {
-			private static final long serialVersionUID = -9014547502923743608L;
-
-			@Override
-			public Color getForegroundColor(Theme theme) {
-				return theme.TEXT_COLOR_NEUTRAL;
-			}
-		};
+		throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
+		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		resetButton = getResetButton(styleManager);
 		undoButton = getUndoButton(styleManager);
 		add(throwsLabel);
 		add(Box.createHorizontalGlue());
 		add(undoButton);
 		add(resetButton);
-	}
 
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 	}
 
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		setPreferredSize(new Dimension(0, 24));
-		setBorder(getBorder(styleManager));
+		setBorder(getBorder(styleManager.size.PADDING));
 		super.updateSize(styleManager);
 	}
 
 	@Override
-	public void updateColors(StyleManager styleManager) {
-		super.updateColors(styleManager);
-		setBorder(getBorder(styleManager));
+	public void updateColors() {
+		super.updateColors();
+		setBorder(getBorder(lastPadding));
 	}
 
-	private Border getBorder(StyleManager styleManager) {
-		Border b1 = new MatteBorder(1, 0, 0, 0, styleManager.theme.COLOR_STRONGEST);
-		Border b2 = new EmptyBorder(0, styleManager.size.PADDING, 0, 0);
+	private int lastPadding;
+
+	private Border getBorder(int padding) {
+		lastPadding = padding;
+		Border b1 = new MatteBorder(1, 0, 0, 0, borderCol.color());
+		Border b2 = new EmptyBorder(0, padding, 0, 0);
 		return BorderFactory.createCompoundBorder(b1, b2);
 	}
 

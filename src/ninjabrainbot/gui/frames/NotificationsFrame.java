@@ -69,12 +69,6 @@ public class NotificationsFrame extends ThemedFrame {
 	}
 
 	@Override
-	public void updateFontsAndColors(StyleManager styleManager) {
-		getContentPane().setBackground(styleManager.theme.COLOR_NEUTRAL);
-		setBackground(styleManager.theme.COLOR_NEUTRAL);
-	}
-
-	@Override
 	protected void onExitButtonClicked() {
 		setVisible(false);
 	}

@@ -1,11 +1,8 @@
 package ninjabrainbot.gui.buttons;
 
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
 
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class TitleBarButton extends FlatButton {
 
@@ -13,20 +10,14 @@ public class TitleBarButton extends FlatButton {
 
 	public TitleBarButton(StyleManager styleManager, ImageIcon img) {
 		super(styleManager, img);
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGEST);
+		setHoverColor(styleManager.currentTheme.COLOR_STRONGER);
 	}
 
 	public TitleBarButton(StyleManager styleManager, String str) {
 		super(styleManager, str);
-	}
-
-	@Override
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGEST;
-	}
-
-	@Override
-	public Color getHoverColor(Theme theme) {
-		return theme.COLOR_STRONGER;
+		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGEST);
+		setHoverColor(styleManager.currentTheme.COLOR_STRONGER);
 	}
 
 }

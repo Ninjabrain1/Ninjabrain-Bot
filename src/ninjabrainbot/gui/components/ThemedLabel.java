@@ -5,14 +5,17 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
 
 public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
+
+	private ConfigurableColor bgCol;
+	private ConfigurableColor fgCol;
 
 	public ThemedLabel(StyleManager styleManager) {
 		this(styleManager, "");
@@ -35,17 +38,21 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 		styleManager.registerThemedComponent(this);
 		this.bold = bold;
 		setHorizontalAlignment(centered ? SwingConstants.CENTER : SwingConstants.LEFT);
+
+		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
 	}
 
 	public void updateSize(StyleManager styleManager) {
 		setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold));
 	}
 
-	public void updateColors(StyleManager styleManager) {
-		Color bg = getBackgroundColor(styleManager.theme);
+	@Override
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(styleManager.theme);
+		Color fg = getForegroundColor();
 		if (fg != null)
 			setForeground(fg);
 	}
@@ -54,12 +61,20 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return null;
+	public void setBackgroundColor(ConfigurableColor color) {
+		bgCol = color;
 	}
 
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+	public void setForegroundColor(ConfigurableColor color) {
+		fgCol = color;
+	}
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
 	}
 
 }
