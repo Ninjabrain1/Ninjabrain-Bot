@@ -79,13 +79,15 @@ public class Splash {
 	}
 
 	private void render(float percentage) {
-		if (checkIfStopped())
-			return;
 		Rectangle r = splashScreen.getBounds();
 		g.setPaintMode();
 		g.setColor(LOADING_BAR_COLOR);
 		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
-		splashScreen.update();
+		synchronized (SplashScreen.class) {
+			if (checkIfStopped())
+				return;
+			splashScreen.update();
+		}
 	}
 
 	private boolean checkIfStopped() {
