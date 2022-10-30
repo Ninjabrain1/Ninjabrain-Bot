@@ -1,27 +1,31 @@
 package ninjabrainbot.gui.style;
 
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.util.Wrapper;
 
 public class CurrentTheme {
 	
-	public final ConfigurableColor COLOR_STRONGEST = new ConfigurableColor();
-	public final ConfigurableColor COLOR_STRONGER = new ConfigurableColor();
-	public final ConfigurableColor COLOR_STRONG = new ConfigurableColor();
-	public final ConfigurableColor COLOR_SLIGHTLY_STRONG = new ConfigurableColor();
-	public final ConfigurableColor COLOR_NEUTRAL = new ConfigurableColor();
-	public final ConfigurableColor COLOR_SLIGHTLY_WEAK = new ConfigurableColor();
-	public final ConfigurableColor COLOR_EXIT_BUTTON_HOVER = new ConfigurableColor();
-	public final ConfigurableColor COLOR_REMOVE_BUTTON_HOVER = new ConfigurableColor();
-	public final ConfigurableColor TEXT_COLOR_STRONG = new ConfigurableColor();
-	public final ConfigurableColor TEXT_COLOR_SLIGHTLY_STRONG = new ConfigurableColor();
-	public final ConfigurableColor TEXT_COLOR_NEUTRAL = new ConfigurableColor();
-	public final ConfigurableColor TEXT_COLOR_WEAK = new ConfigurableColor();
-	public final ConfigurableColor COLOR_SATURATED = new ConfigurableColor();
-	public final ConfigurableColor COLOR_POSITIVE = new ConfigurableColor();
-	public final ConfigurableColor COLOR_NEGATIVE = new ConfigurableColor();
+	public final WrappedColor COLOR_STRONGEST = new WrappedColor();
+	public final WrappedColor COLOR_STRONGER = new WrappedColor();
+	public final WrappedColor COLOR_STRONG = new WrappedColor();
+	public final WrappedColor COLOR_SLIGHTLY_STRONG = new WrappedColor();
+	public final WrappedColor COLOR_NEUTRAL = new WrappedColor();
+	public final WrappedColor COLOR_SLIGHTLY_WEAK = new WrappedColor();
+	public final WrappedColor COLOR_EXIT_BUTTON_HOVER = new WrappedColor();
+	public final WrappedColor COLOR_REMOVE_BUTTON_HOVER = new WrappedColor();
+	public final WrappedColor TEXT_COLOR_STRONG = new WrappedColor();
+	public final WrappedColor TEXT_COLOR_SLIGHTLY_STRONG = new WrappedColor();
+	public final WrappedColor TEXT_COLOR_NEUTRAL = new WrappedColor();
+	public final WrappedColor TEXT_COLOR_WEAK = new WrappedColor();
+	public final WrappedColor COLOR_SATURATED = new WrappedColor();
+	public final WrappedColor COLOR_POSITIVE = new WrappedColor();
+	public final WrappedColor COLOR_NEGATIVE = new WrappedColor();
 	
 	public final Wrapper<Boolean> BLACK_ICONS = new Wrapper<>();
 	public final Wrapper<ColorMap> CERTAINTY_COLOR_MAP = new Wrapper<>();
+	
+	private ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
 	
 	public void setTheme(Theme theme) {
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
@@ -42,6 +46,13 @@ public class CurrentTheme {
 		
 		BLACK_ICONS.set(theme.BLACK_ICONS);
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
+		
+		whenModified.notifySubscribers(this);
 	}
+
+	public ISubscribable<CurrentTheme> whenModified() {
+		return whenModified;
+	}
+	
 	
 }

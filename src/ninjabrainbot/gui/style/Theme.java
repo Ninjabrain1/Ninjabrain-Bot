@@ -3,26 +3,29 @@ package ninjabrainbot.gui.style;
 import java.awt.Color;
 import java.util.HashMap;
 
+import ninjabrainbot.util.Wrapper;
+
 public abstract class Theme {
 
 	public String name;
-	public Color COLOR_STRONGEST;
-	public Color COLOR_STRONGER;
-	public Color COLOR_STRONG;
-	public Color COLOR_SLIGHTLY_STRONG;
-	public Color COLOR_NEUTRAL;
-	public Color COLOR_SLIGHTLY_WEAK;
-	public Color COLOR_EXIT_BUTTON_HOVER;
-	public Color COLOR_REMOVE_BUTTON_HOVER;
-	public Color TEXT_COLOR_STRONG;
-	public Color TEXT_COLOR_SLIGHTLY_STRONG;
-	public Color TEXT_COLOR_NEUTRAL;
-	public Color TEXT_COLOR_WEAK;
-	public Color COLOR_SATURATED;
-	public Color COLOR_POSITIVE;
-	public Color COLOR_NEGATIVE;
-	public boolean BLACK_ICONS;
-	public ColorMap CERTAINTY_COLOR_MAP;
+	public WrappedColor COLOR_STRONGEST;
+	public WrappedColor COLOR_STRONGER;
+	public WrappedColor COLOR_STRONG;
+	public WrappedColor COLOR_SLIGHTLY_STRONG;
+	public WrappedColor COLOR_NEUTRAL;
+	public WrappedColor COLOR_SLIGHTLY_WEAK;
+	public WrappedColor COLOR_EXIT_BUTTON_HOVER;
+	public WrappedColor COLOR_REMOVE_BUTTON_HOVER;
+	public WrappedColor TEXT_COLOR_STRONG;
+	public WrappedColor TEXT_COLOR_SLIGHTLY_STRONG;
+	public WrappedColor TEXT_COLOR_NEUTRAL;
+	public WrappedColor TEXT_COLOR_WEAK;
+	public WrappedColor COLOR_SATURATED;
+	public WrappedColor COLOR_POSITIVE;
+	public WrappedColor COLOR_NEGATIVE;
+
+	public Wrapper<Boolean> BLACK_ICONS;
+	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
 
 	public static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
 	public static final Theme LIGHT = new LightTheme();
@@ -38,76 +41,94 @@ public abstract class Theme {
 		THEMES.put(name, this);
 	}
 
+	protected WrappedColor createColor(Color color) {
+		WrappedColor c = new WrappedColor();
+		c.set(color);
+		return c;
+	}
+	
+	protected Wrapper<Boolean> createBoolean(boolean bool) {
+		Wrapper<Boolean> b = new Wrapper<Boolean>();
+		b.set(bool);
+		return b;
+	}
+	
+	protected Wrapper<ColorMap> createColorMap(ColorMap colorMap) {
+		Wrapper<ColorMap> cmap = new Wrapper<ColorMap>();
+		cmap.set(colorMap);
+		return cmap;
+	}
+	
 }
 
 class LightTheme extends Theme {
 	public LightTheme() {
 		super("Light");
-		COLOR_NEUTRAL = Color.decode("#F5F5F5");
-		COLOR_STRONGER = Color.decode("#D8D8D8");
-		COLOR_EXIT_BUTTON_HOVER = Color.decode("#F04747");
-		COLOR_STRONGEST = Color.decode("#C1C1C1");
-		COLOR_SLIGHTLY_STRONG = Color.decode("#EFEFEF");
-		COLOR_SLIGHTLY_WEAK = Color.decode("#F9F9F9");
-		TEXT_COLOR_STRONG = Color.BLACK;
-		TEXT_COLOR_SLIGHTLY_STRONG = Color.decode("#191919");
-		TEXT_COLOR_WEAK = Color.decode("#888888");
-		TEXT_COLOR_NEUTRAL = Color.DARK_GRAY;
-		COLOR_STRONG = Color.decode("#E5E5E5");
-		COLOR_REMOVE_BUTTON_HOVER = Color.decode("#F04747");
-		COLOR_SATURATED = Color.decode("#BAD7EF");
-		COLOR_POSITIVE = Color.decode("#1E9910");
-		COLOR_NEGATIVE = Color.decode("#991017");
-		
-		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.decode("#BFBF00"), Color.decode("#00CE29"));
-		BLACK_ICONS = true;
+		COLOR_NEUTRAL = createColor(Color.decode("#F5F5F5"));
+		COLOR_STRONGER = createColor(Color.decode("#D8D8D8"));
+		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		COLOR_STRONGEST = createColor(Color.decode("#C1C1C1"));
+		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#EFEFEF"));
+		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#F9F9F9"));
+		TEXT_COLOR_STRONG = createColor(Color.BLACK);
+		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#191919"));
+		TEXT_COLOR_WEAK = createColor(Color.decode("#888888"));
+		TEXT_COLOR_NEUTRAL = createColor(Color.DARK_GRAY);
+		COLOR_STRONG = createColor(Color.decode("#E5E5E5"));
+		COLOR_REMOVE_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		COLOR_SATURATED = createColor(Color.decode("#BAD7EF"));
+		COLOR_POSITIVE = createColor(Color.decode("#1E9910"));
+		COLOR_NEGATIVE = createColor(Color.decode("#991017"));
+
+		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.decode("#BFBF00"), Color.decode("#00CE29")));
+		BLACK_ICONS = createBoolean(true);
 	}
 }
 
 class DarkTheme extends Theme {
 	public DarkTheme() {
 		super("Dark");
-		COLOR_NEUTRAL = Color.decode("#33383D");
-		COLOR_STRONGEST = Color.decode("#212529");
-		COLOR_EXIT_BUTTON_HOVER = Color.decode("#F04747");
-		COLOR_STRONGER = Color.decode("#2A2E32");
-		COLOR_SLIGHTLY_STRONG = Color.decode("#31353A");
-		COLOR_SLIGHTLY_WEAK = Color.decode("#373C42");
-		TEXT_COLOR_STRONG = Color.WHITE;
-		TEXT_COLOR_SLIGHTLY_STRONG = Color.decode("#E5E5E5");
-		TEXT_COLOR_WEAK = Color.GRAY;
-		TEXT_COLOR_NEUTRAL = Color.LIGHT_GRAY;
-		COLOR_STRONG = Color.decode("#2D3238");
-		COLOR_REMOVE_BUTTON_HOVER = Color.decode("#F04747");
-		COLOR_SATURATED = Color.decode("#57EBA3");
-		COLOR_POSITIVE = Color.decode("#75CC6C");
-		COLOR_NEGATIVE = Color.decode("#CC6E72");
-		
-		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29"));
-		BLACK_ICONS = false;
+		COLOR_NEUTRAL = createColor(Color.decode("#33383D"));
+		COLOR_STRONGEST = createColor(Color.decode("#212529"));
+		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		COLOR_STRONGER = createColor(Color.decode("#2A2E32"));
+		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"));
+		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#373C42"));
+		TEXT_COLOR_STRONG = createColor(Color.WHITE);
+		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
+		TEXT_COLOR_WEAK = createColor(Color.GRAY);
+		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
+		COLOR_STRONG = createColor(Color.decode("#2D3238"));
+		COLOR_REMOVE_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
+		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
+		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
+
+		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
+		BLACK_ICONS = createBoolean(false);
 	}
 }
 
 class BlueTheme extends Theme {
 	public BlueTheme() {
 		super("Blue");
-		COLOR_STRONGEST = Color.decode("#1C1C27");
-		COLOR_STRONGER = Color.decode("#212130");
-		COLOR_STRONG = Color.decode("#252538");
-		COLOR_SLIGHTLY_STRONG = Color.decode("#27273D");
-		COLOR_NEUTRAL = Color.decode("#28293D");
-		COLOR_SLIGHTLY_WEAK = Color.decode("#2B2D44");
-		COLOR_EXIT_BUTTON_HOVER = Color.decode("#F04747");
-		TEXT_COLOR_STRONG = Color.WHITE;
-		TEXT_COLOR_SLIGHTLY_STRONG = Color.decode("#E5E5E5");
-		TEXT_COLOR_WEAK = Color.GRAY;
-		TEXT_COLOR_NEUTRAL = Color.LIGHT_GRAY;
-		COLOR_REMOVE_BUTTON_HOVER = Color.decode("#F04747");
-		COLOR_SATURATED = Color.decode("#57EBA3");
-		COLOR_POSITIVE = Color.decode("#75CC6C");
-		COLOR_NEGATIVE = Color.decode("#CC6E72");
-		
-		CERTAINTY_COLOR_MAP = new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29"));
-		BLACK_ICONS = false;
+		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"));
+		COLOR_STRONGER = createColor(Color.decode("#212130"));
+		COLOR_STRONG = createColor(Color.decode("#252538"));
+		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#27273D"));
+		COLOR_NEUTRAL = createColor(Color.decode("#28293D"));
+		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#2B2D44"));
+		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		TEXT_COLOR_STRONG = createColor(Color.WHITE);
+		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
+		TEXT_COLOR_WEAK = createColor(Color.GRAY);
+		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
+		COLOR_REMOVE_BUTTON_HOVER = createColor(Color.decode("#F04747"));
+		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
+		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
+		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
+
+		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
+		BLACK_ICONS = createBoolean(false);
 	}
 }

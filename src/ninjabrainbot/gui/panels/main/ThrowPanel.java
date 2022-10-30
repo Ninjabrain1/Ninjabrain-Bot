@@ -18,7 +18,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -48,9 +48,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	Subscription throwSubscription;
 	Runnable whenVisibilityChanged;
 
-	private ConfigurableColor negCol;
-	private ConfigurableColor posCol;
-	private ConfigurableColor lineCol;
+	private WrappedColor negCol;
+	private WrappedColor posCol;
+	private WrappedColor lineCol;
 
 	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, int index, Runnable whenVisibilityChanged) {
 		super(styleManager);

@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -14,8 +14,8 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ThemedPanel(StyleManager styleManager) {
 		this(styleManager, false);
@@ -46,11 +46,11 @@ public class ThemedPanel extends JPanel implements ThemedComponent {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

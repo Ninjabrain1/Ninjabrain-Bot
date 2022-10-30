@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
 import ninjabrainbot.gui.panels.main.ThrowPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class TextAnimator implements ThemedComponent {
@@ -17,8 +17,8 @@ public class TextAnimator implements ThemedComponent {
 	int duration;
 	ThrowPanel jtp;
 	
-	ConfigurableColor startCol;
-	ConfigurableColor endCol;
+	WrappedColor startCol;
+	WrappedColor endCol;
 
 	public TextAnimator(StyleManager styleManager, int durationMillis) {
 		styleManager.registerThemedComponent(this);

@@ -1,5 +1,6 @@
 package ninjabrainbot.gui.frames;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.geom.RoundRectangle2D;
@@ -18,7 +19,16 @@ public class ThemeEditorFrame extends ThemedFrame {
 		add(panel);
 		panel.setLayout(new FlowLayout());
 
-		panel.add(new ColorPickerPanel(styleManager));
+		ColorPickerPanel colorPickerPanel = new ColorPickerPanel(styleManager);
+		
+		panel.add(colorPickerPanel);
+		
+		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(styleManager, color));
+	}
+	
+	private void onColorChanged(StyleManager styleManager, Color color) {
+		styleManager.getCustomTheme().COLOR_NEUTRAL.set(color);
+		styleManager.currentTheme.setTheme(styleManager.getCustomTheme());
 	}
 
 	@Override

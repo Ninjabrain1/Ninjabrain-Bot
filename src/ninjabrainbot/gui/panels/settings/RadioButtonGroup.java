@@ -13,7 +13,7 @@ import javax.swing.JRadioButton;
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -60,8 +60,8 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_rollover_icon.png"));
 	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/resources/radio_selected_rollover_icon.png"));
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ThemedRadioButton(StyleManager styleManager, String text) {
 		super(text);
@@ -97,11 +97,11 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -14,8 +14,8 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ThemedLabel(StyleManager styleManager) {
 		this(styleManager, "");
@@ -61,11 +61,11 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

@@ -14,7 +14,7 @@ import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.util.I18n;
 
@@ -29,7 +29,7 @@ public class MainButtonPanel extends ThemedPanel {
 	private FlatButton resetButton;
 	private FlatButton undoButton;
 
-	private ConfigurableColor borderCol;
+	private WrappedColor borderCol;
 
 	public MainButtonPanel(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(styleManager);

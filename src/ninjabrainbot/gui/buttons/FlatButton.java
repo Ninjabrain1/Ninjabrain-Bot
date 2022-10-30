@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.util.Wrapper;
@@ -29,9 +29,9 @@ public class FlatButton extends JButton implements ThemedComponent {
 	protected Color bgCol, hoverCol;
 	private ImageIcon icon, icon_inverted;
 
-	private ConfigurableColor bgColor;
-	private ConfigurableColor fgColor;
-	private ConfigurableColor hoverColor;
+	private WrappedColor bgColor;
+	private WrappedColor fgColor;
+	private WrappedColor hoverColor;
 	private Wrapper<Boolean> blackIcons;
 
 	public FlatButton(StyleManager styleManager, ImageIcon img) {
@@ -166,15 +166,15 @@ public class FlatButton extends JButton implements ThemedComponent {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgColor = color;
 	}
 
-	public void setHoverColor(ConfigurableColor color) {
+	public void setHoverColor(WrappedColor color) {
 		hoverColor = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgColor = color;
 	}
 

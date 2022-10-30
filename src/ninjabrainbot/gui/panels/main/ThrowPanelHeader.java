@@ -10,7 +10,7 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.util.I18n;
@@ -29,7 +29,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 
 	private boolean errorsEnabled;
 	
-	ConfigurableColor lineColor;
+	WrappedColor lineColor;
 
 	public ThrowPanelHeader(StyleManager styleManager) {
 		this(styleManager, null);

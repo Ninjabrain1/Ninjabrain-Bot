@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JTextArea;
 
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -14,8 +14,8 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 	private static final long serialVersionUID = -1769219771406000716L;
 	public boolean bold;
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ThemedTextArea(StyleManager styleManager) {
 		this(styleManager, "");
@@ -53,11 +53,11 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

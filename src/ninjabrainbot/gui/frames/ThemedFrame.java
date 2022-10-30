@@ -15,7 +15,7 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -26,7 +26,7 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
-	ConfigurableColor bgCol;
+	WrappedColor bgCol;
 
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 

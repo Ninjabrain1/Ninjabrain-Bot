@@ -1,17 +1,14 @@
 package ninjabrainbot.gui.style;
 
-import java.awt.Color;
-
 public class ConfigurableColor {
-
-	private Color color;
-
-	public void set(Color color) {
+	
+	public final WrappedColor color;
+	
+	public final String name;
+	
+	public ConfigurableColor(WrappedColor color, String name) {
 		this.color = color;
+		this.name = name;
 	}
-
-	public Color color() {
-		return color;
-	}
-
+	
 }

@@ -20,7 +20,8 @@ public class StyleManager {
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 	private final ArrayList<ThemedFrame> themedFrames;
-
+	
+	private CustomTheme customTheme;
 	private Font font;
 	private HashMap<String, Font> fonts;
 
@@ -48,6 +49,7 @@ public class StyleManager {
 	private void setupSettingsSubscriptions() {
 		Main.preferences.theme.whenModified().subscribe(__ -> updateTheme());
 		Main.preferences.size.whenModified().subscribe(__ -> updateSizePreference());
+		currentTheme.whenModified().subscribe(__ -> updateFontsAndColors());
 	}
 
 	public Font fontSize(float size, boolean light) {
@@ -91,10 +93,15 @@ public class StyleManager {
 	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
+	
+	public CustomTheme getCustomTheme() {
+		if (customTheme == null)
+			customTheme = new CustomTheme();
+		return customTheme;
+	}
 
 	private void updateTheme() {
 		currentTheme.setTheme(Theme.get(Main.preferences.theme.get()));
-		updateFontsAndColors();
 //		updateOBSOverlay();
 	}
 

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedOpaquePanel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
@@ -101,7 +101,7 @@ class TabButton extends FlatButton {
 
 	Color a, b, c;
 	
-	ConfigurableColor cColor;
+	WrappedColor cColor;
 
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
 		super(styleManager, title);

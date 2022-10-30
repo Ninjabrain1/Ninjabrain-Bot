@@ -12,7 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -20,8 +20,8 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 
 	private static final long serialVersionUID = 1167120412326064670L;
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
 		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
@@ -104,11 +104,11 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		return p.TEXT_SIZE_SMALL;
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

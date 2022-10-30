@@ -16,7 +16,7 @@ import ninjabrainbot.gui.components.ILabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -42,7 +42,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private Subscription chunkPredictionSubscription;
 	private Subscription strongholdDisplayTypeChangedSubscription;
 
-	private ConfigurableColor borderCol;
+	private WrappedColor borderCol;
 
 	public ChunkPanel(StyleManager styleManager) {
 		this(styleManager, null);

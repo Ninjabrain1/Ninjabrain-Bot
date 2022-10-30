@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class Histogram extends ThemedPanel {
@@ -27,8 +27,8 @@ public class Histogram extends ThemedPanel {
 	int labelsHeight = 20;
 	int margin = 20;
 
-	private ConfigurableColor histCol;
-	private ConfigurableColor lineCol;
+	private WrappedColor histCol;
+	private WrappedColor lineCol;
 
 	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
 		super(styleManager);

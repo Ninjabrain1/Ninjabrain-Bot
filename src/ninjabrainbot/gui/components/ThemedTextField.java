@@ -13,7 +13,7 @@ import javax.swing.text.PlainDocument;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -23,8 +23,8 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 
 	protected ObservableField<String> validatedProcessedText = new ObservableField<String>();
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ThemedTextField(StyleManager styleManager) {
 		super();
@@ -116,11 +116,11 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 		}
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

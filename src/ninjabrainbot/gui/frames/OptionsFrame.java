@@ -35,7 +35,7 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.CalibrationPanel;
 import ninjabrainbot.gui.panels.settings.RadioButtonGroup;
 import ninjabrainbot.gui.panels.settings.ThemedTabbedPane;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
@@ -377,7 +377,7 @@ class FloatPreferencePanel extends ThemedPanel {
 	DecimalTextField textfield;
 	FloatPreference preference;
 
-	ConfigurableColor disabledCol;
+	WrappedColor disabledCol;
 
 	public FloatPreferencePanel(StyleManager styleManager, String description, FloatPreference preference) {
 		super(styleManager);
@@ -477,7 +477,7 @@ class HotkeyPanel extends ThemedPanel {
 	HotkeyPreference preference;
 	boolean editing = false;
 
-	ConfigurableColor disabledCol;
+	WrappedColor disabledCol;
 
 	public HotkeyPanel(StyleManager styleManager, String description, HotkeyPreference preference) {
 		super(styleManager);

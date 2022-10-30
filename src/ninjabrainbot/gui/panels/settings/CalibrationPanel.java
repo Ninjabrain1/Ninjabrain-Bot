@@ -29,7 +29,7 @@ import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.panels.TitleBarPanel;
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.util.I18n;
@@ -269,7 +269,7 @@ class InstructionLabel extends ThemedLabel {
 
 	private boolean highlighted;
 
-	ConfigurableColor highlightedCol;
+	WrappedColor highlightedCol;
 
 	public InstructionLabel(StyleManager styleManager, String text) {
 		super(styleManager, "<html><div style='text-align: center;'>" + text + "</div></html>");
@@ -297,8 +297,8 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 
 	final JTextArea area;
 
-	private ConfigurableColor bgCol;
-	private ConfigurableColor fgCol;
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
 
 	public ErrorTextArea(StyleManager styleManager, JTextArea textArea) {
 		super(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -326,11 +326,11 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		setBorder(BorderFactory.createLineBorder(getBackgroundColor(), 1));
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
-	public void setForegroundColor(ConfigurableColor color) {
+	public void setForegroundColor(WrappedColor color) {
 		fgCol = color;
 	}
 

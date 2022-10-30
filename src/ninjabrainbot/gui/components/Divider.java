@@ -4,14 +4,14 @@ import java.awt.Color;
 
 import javax.swing.JSeparator;
 
-import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class Divider extends JSeparator implements ThemedComponent {
 
 	private static final long serialVersionUID = 4116749757122783747L;
 
-	private ConfigurableColor bgCol;
+	private WrappedColor bgCol;
 
 	public Divider(StyleManager styleManager) {
 		styleManager.registerThemedComponent(this);
@@ -28,7 +28,7 @@ public class Divider extends JSeparator implements ThemedComponent {
 		setForeground(getBackgroundColor());
 	}
 
-	public void setBackgroundColor(ConfigurableColor color) {
+	public void setBackgroundColor(WrappedColor color) {
 		bgCol = color;
 	}
 
