@@ -65,28 +65,32 @@ public class Splash {
 	}
 
 	private void render(String text, float percentage) {
-		if (checkIfStopped())
-			return;
-		Rectangle r = splashScreen.getBounds();
-		g.setComposite(AlphaComposite.Clear);
-		g.fillRect(PADDING, r.height - LOADING_BAR_HEIGHT - LOADING_PROGRESS_FONT_SIZE - PADDING, 400, LOADING_PROGRESS_FONT_SIZE + PADDING);
-		g.setPaintMode();
-		g.setColor(TEXT_COLOR);
-		g.drawString(text + "...", PADDING, r.height - LOADING_BAR_HEIGHT - PADDING - 2);
-		g.setColor(LOADING_BAR_COLOR);
-		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
-		splashScreen.update();
-	}
-
-	private void render(float percentage) {
-		Rectangle r = splashScreen.getBounds();
-		g.setPaintMode();
-		g.setColor(LOADING_BAR_COLOR);
-		g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
 		synchronized (SplashScreen.class) {
 			if (checkIfStopped())
 				return;
-			splashScreen.update();
+			Rectangle r = splashScreen.getBounds();
+			g.setComposite(AlphaComposite.Clear);
+			g.fillRect(PADDING, r.height - LOADING_BAR_HEIGHT - LOADING_PROGRESS_FONT_SIZE - PADDING, 400, LOADING_PROGRESS_FONT_SIZE + PADDING);
+			g.setPaintMode();
+			g.setColor(TEXT_COLOR);
+			g.drawString(text + "...", PADDING, r.height - LOADING_BAR_HEIGHT - PADDING - 2);
+			g.setColor(LOADING_BAR_COLOR);
+			g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
+			if (splashScreen.isVisible())
+				splashScreen.update();
+		}
+	}
+
+	private void render(float percentage) {
+		synchronized (SplashScreen.class) {
+			if (checkIfStopped())
+				return;
+			Rectangle r = splashScreen.getBounds();
+			g.setPaintMode();
+			g.setColor(LOADING_BAR_COLOR);
+			g.fillRect(0, r.height - LOADING_BAR_HEIGHT, (int) (r.width * percentage), LOADING_BAR_HEIGHT);
+			if (splashScreen.isVisible())
+				splashScreen.update();
 		}
 	}
 
