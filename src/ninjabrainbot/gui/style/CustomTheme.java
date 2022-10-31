@@ -30,6 +30,10 @@ public class CustomTheme extends Theme {
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 		BLACK_ICONS = createBoolean(false);
 	}
+	
+	public ArrayList<ConfigurableColor> getConfigurableColors(){
+		return configurableColors;
+	}
 
 	@Override
 	protected WrappedColor createColor(Color color) {

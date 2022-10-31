@@ -47,6 +47,10 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 		sh.add(colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color)));
 		sh.add(hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text))));
 	}
+	
+	public void setColor(Color color) {
+		colorChooserPanel.setColor(color);
+	}
 
 	public ISubscribable<Color> whenColorChanged() {
 		return colorChooserPanel.whenColorChanged();
