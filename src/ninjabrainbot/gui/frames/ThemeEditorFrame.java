@@ -6,7 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.geom.RoundRectangle2D;
 
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.panels.settings.ColorPickerPanel;
+import ninjabrainbot.gui.panels.settings.themeeditor.ColorPickerPanel;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class ThemeEditorFrame extends ThemedFrame {
