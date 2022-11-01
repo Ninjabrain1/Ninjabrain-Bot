@@ -11,7 +11,10 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.themeeditor.ColorPickerPanel;
 import ninjabrainbot.gui.panels.settings.themeeditor.ConfigurableColorPanel;
 import ninjabrainbot.gui.style.ConfigurableColor;
+import ninjabrainbot.gui.style.CustomTheme;
+import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.Theme;
 
 public class ThemeEditorFrame extends ThemedFrame {
 
@@ -19,9 +22,15 @@ public class ThemeEditorFrame extends ThemedFrame {
 	
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
+	
+	private StyleManager previewStyleManager;
+	private CustomTheme customTheme;
 
 	public ThemeEditorFrame(StyleManager styleManager, String title) {
 		super(styleManager, title);
+		customTheme = Theme.getCustomTheme();
+		previewStyleManager = new StyleManager(customTheme, SizePreference.REGULAR);
+				
 		ThemedPanel panel = new ThemedPanel(styleManager);
 		add(panel);
 		panel.setLayout(new FlowLayout());
@@ -30,15 +39,17 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 		panel.add(getConfigurableColorsPanel(styleManager));
 		panel.add(colorPickerPanel);
+		
+		previewStyleManager.init();
 
-		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(styleManager, color));
+		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(color));
 	}
 
 	private ThemedPanel getConfigurableColorsPanel(StyleManager styleManager) {
 		ThemedPanel panel = new ThemedPanel(styleManager);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		for (ConfigurableColor cc : styleManager.getCustomTheme().getConfigurableColors()) {
-			ConfigurableColorPanel ccPanel = new ConfigurableColorPanel(styleManager, cc);
+		for (ConfigurableColor cc : customTheme.getConfigurableColors()) {
+			ConfigurableColorPanel ccPanel = new ConfigurableColorPanel(styleManager, previewStyleManager, cc);
 			ccPanel.addActionListener(__ -> setSelectedConfigurableColorPanel(ccPanel));
 			panel.add(ccPanel);
 		}
@@ -54,10 +65,10 @@ public class ThemeEditorFrame extends ThemedFrame {
 		colorPickerPanel.setColor(configurableColorPanel != null ? configurableColorPanel.getConfigurableColor().color.color() : Color.WHITE);
 	}
 	
-	private void onColorChanged(StyleManager styleManager, Color color) {
+	private void onColorChanged(Color color) {
 		if (selectedPanel != null)
 		selectedPanel.getConfigurableColor().color.set(color);
-		styleManager.currentTheme.setTheme(styleManager.getCustomTheme());
+		previewStyleManager.currentTheme.setTheme(customTheme);
 	}
 
 	@Override

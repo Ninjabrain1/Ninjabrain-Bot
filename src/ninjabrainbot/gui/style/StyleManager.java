@@ -20,23 +20,22 @@ public class StyleManager {
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 	private final ArrayList<ThemedFrame> themedFrames;
-	
-	private CustomTheme customTheme;
+
 	private Font font;
 	private HashMap<String, Font> fonts;
 
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);
 
-	public StyleManager() {
+	public StyleManager(Theme theme, SizePreference size) {
 		currentTheme = new CurrentTheme();
-		currentTheme.setTheme(Theme.get(Main.preferences.theme.get()));
-		size = SizePreference.get(Main.preferences.size.get());
+		currentTheme.setTheme(theme);
+		this.size = size;
 		font = new Font(null, Font.BOLD, 25);
 		themedComponents = new ArrayList<>();
 		themedFrames = new ArrayList<>();
 
 		initFonts();
-		setupSettingsSubscriptions();
+		currentTheme.whenModified().subscribe(__ -> updateFontsAndColors());
 	}
 
 	private void initFonts() {
@@ -44,12 +43,6 @@ public class StyleManager {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(font);
 		fonts = new HashMap<>();
-	}
-
-	private void setupSettingsSubscriptions() {
-		Main.preferences.theme.whenModified().subscribe(__ -> updateTheme());
-		Main.preferences.size.whenModified().subscribe(__ -> updateSizePreference());
-		currentTheme.whenModified().subscribe(__ -> updateFontsAndColors());
 	}
 
 	public Font fontSize(float size, boolean light) {
@@ -93,20 +86,9 @@ public class StyleManager {
 	public int getTextWidth(String text, Font font) {
 		return (int) font.getStringBounds(text, frc).getWidth();
 	}
-	
-	public CustomTheme getCustomTheme() {
-		if (customTheme == null)
-			customTheme = new CustomTheme();
-		return customTheme;
-	}
 
-	private void updateTheme() {
-		currentTheme.setTheme(Theme.get(Main.preferences.theme.get()));
-//		updateOBSOverlay();
-	}
-
-	private void updateSizePreference() {
-		size = SizePreference.get(Main.preferences.size.get());
+	public void setSizePreference(SizePreference size) {
+		this.size = size;
 		updateFontsAndColors();
 		updateBounds();
 //		SwingUtilities.invokeLater(() -> updateOBSOverlay());

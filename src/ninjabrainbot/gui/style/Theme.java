@@ -31,6 +31,13 @@ public abstract class Theme {
 	public static final Theme LIGHT = new LightTheme();
 	public static final Theme DARK = new DarkTheme();
 	public static final Theme BLUE = new BlueTheme();
+	private static CustomTheme CUSTOM;
+	
+	public static CustomTheme getCustomTheme() {
+		if (CUSTOM == null)
+			CUSTOM = new CustomTheme();
+		return CUSTOM;
+	}
 
 	public static Theme get(String name) {
 		return THEMES.getOrDefault(name, DARK);

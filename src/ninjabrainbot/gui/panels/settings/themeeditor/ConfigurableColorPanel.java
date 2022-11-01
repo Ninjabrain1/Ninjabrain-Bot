@@ -20,11 +20,11 @@ public class ConfigurableColorPanel extends ThemedPanel {
 
 	private FlatButton colorName;
 
-	public ConfigurableColorPanel(StyleManager styleManager, ConfigurableColor configurableColor) {
+	public ConfigurableColorPanel(StyleManager styleManager, StyleManager previewStyleManager, ConfigurableColor configurableColor) {
 		super(styleManager);
 		this.configurableColor = configurableColor;
 
-		ThemedPanel colorPreview = new ColorPreviewPanel(styleManager, configurableColor);
+		ThemedPanel colorPreview = new ColorPreviewPanel(previewStyleManager, configurableColor);
 		colorName = new FlatButton(styleManager, configurableColor.name);
 
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

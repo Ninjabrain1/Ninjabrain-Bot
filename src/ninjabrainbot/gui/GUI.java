@@ -7,7 +7,9 @@ import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.frames.ThemeEditorFrame;
 import ninjabrainbot.gui.splash.Progress;
+import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
@@ -63,7 +65,9 @@ public class GUI {
 	private void initUI() {
 		Progress.setTask("Loading themes", 0.15f);
 		Profiler.start("Init StyleManager");
-		styleManager = new StyleManager();
+		styleManager = new StyleManager(Theme.get(Main.preferences.theme.get()), SizePreference.get(Main.preferences.size.get()));
+		Main.preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
+		Main.preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme)));
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
