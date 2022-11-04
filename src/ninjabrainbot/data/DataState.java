@@ -129,7 +129,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 	
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
-		if (!calculatorResult.success()) {
+		if (calculatorResult == null || !calculatorResult.success()) {
 			topPrediction.set(null);
 			return;
 		}

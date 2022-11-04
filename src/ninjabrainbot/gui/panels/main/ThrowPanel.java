@@ -101,6 +101,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		lastTopPrediction = p;
 		if (chunkPredictionModifiedSubscription != null)
 			chunkPredictionModifiedSubscription.cancel();
+		chunkPredictionModifiedSubscription = null;
 		if (p != null)
 			chunkPredictionModifiedSubscription = p.whenModified().subscribe(pred -> updateError(pred));
 		updateError(p);

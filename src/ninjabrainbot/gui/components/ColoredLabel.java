@@ -26,6 +26,7 @@ public class ColoredLabel extends ThemedLabel {
 	public void setText(String text, float color) {
 		lastColor = color;
 		setText(text);
+		updateColors();
 	}
 
 	@Override
