@@ -67,18 +67,21 @@ public class Chunk {
 	public double[] getAngleErrors(ISet<IThrow> eyeThrows) {
 		double[] errors = new double[eyeThrows.size()];
 		for (int i = 0; i < errors.length; i++) {
-			IThrow t = eyeThrows.get(i);
-			double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x();
-			double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z();
-			double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
-			double delta = (t.alpha() - gamma) % 360.0;
-			if (delta < -180)
-				delta += 360;
-			if (delta > 180)
-				delta -= 360;
-			errors[i] = delta;
+			errors[i] = getAngleError(eyeThrows.get(i));
 		}
 		return errors;
+	}
+
+	public double getAngleError(IThrow t) {
+		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x();
+		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z();
+		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
+		double delta = (t.alpha() - gamma) % 360.0;
+		if (delta < -180)
+			delta += 360;
+		if (delta > 180)
+			delta -= 360;
+		return delta;
 	}
 
 }

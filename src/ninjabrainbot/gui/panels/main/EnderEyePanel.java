@@ -5,7 +5,6 @@ import javax.swing.BoxLayout;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.IDivineContext;
-import ninjabrainbot.gui.components.TextAnimator;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
@@ -20,8 +19,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	private ThrowPanel[] throwPanels;
 	private DivineContextPanel divineContextPanel;
 
-	private TextAnimator textAnimator;
-
 	public EnderEyePanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IDivineContext divineContext) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(false);
@@ -32,11 +29,10 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		divineContextPanel = new DivineContextPanel(styleManager, divineContext, () -> whenDivineContextVisibilityUpdated());
 		add(divineContextPanel);
 		for (int i = 0; i < dataStateHandler.getDataState().getThrowSet().maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, i, () -> whenSizeModified.notifySubscribers(this));
+			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, dataStateHandler.getDataState().topPrediction(), i, () -> whenSizeModified.notifySubscribers(this));
 			add(throwPanels[i]);
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
-		textAnimator = new TextAnimator(styleManager, 200);
 		// Subscriptions
 		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
 	}

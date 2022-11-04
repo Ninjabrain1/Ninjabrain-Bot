@@ -82,8 +82,9 @@ public class Splash {
 	}
 
 	private void render(float percentage) {
+		checkIfStopped();
 		synchronized (SplashScreen.class) {
-			if (checkIfStopped())
+			if (!splashScreen.isVisible())
 				return;
 			Rectangle r = splashScreen.getBounds();
 			g.setPaintMode();

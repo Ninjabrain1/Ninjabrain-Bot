@@ -1,6 +1,5 @@
 package ninjabrainbot.data.endereye;
 
-import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableSet;
 
@@ -27,20 +26,6 @@ public class ThrowSet extends LockableSet<IThrow> implements IThrowSet {
 		if (size() < maxCapacity())
 			return super.insert(t, index);
 		return false;
-	}
-
-	public void setAngleErrors(ICalculatorResult result) {
-		if (result == null || !result.success()) {
-			for (IThrow t : this)
-				t.setError(null);
-			return;
-		}
-		double[] angleErrors = result.getBestPrediction().getAngleErrors(this);
-		int i = 0;
-		for (IThrow t : this) {
-			t.setError(angleErrors[i]);
-			i++;
-		}
 	}
 
 }

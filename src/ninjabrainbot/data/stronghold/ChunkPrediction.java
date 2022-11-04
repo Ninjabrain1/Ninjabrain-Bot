@@ -143,6 +143,10 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	public double[] getAngleErrors(ISet<IThrow> eyeThrows) {
 		return chunk.getAngleErrors(eyeThrows);
 	}
+	
+	public double getAngleError(IThrow t) {
+		return t == null ? -1 : chunk.getAngleError(t);
+	}
 
 	@Override
 	public void dispose() {

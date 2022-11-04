@@ -7,9 +7,13 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.BoxLayout;
 
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.themeeditor.ColorPickerPanel;
 import ninjabrainbot.gui.panels.settings.themeeditor.ConfigurableColorPanel;
+import ninjabrainbot.gui.panels.settings.themeeditor.FramePreviewPanel;
+import ninjabrainbot.gui.panels.settings.themeeditor.PreviewCalculatorResult;
+import ninjabrainbot.gui.panels.settings.themeeditor.PreviewDataStateHandler;
 import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.SizePreference;
@@ -19,10 +23,11 @@ import ninjabrainbot.gui.style.Theme;
 public class ThemeEditorFrame extends ThemedFrame {
 
 	private static final long serialVersionUID = -7008829231721934904L;
-	
+
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
-	
+	private FramePreviewPanel ninBotPreview;
+
 	private StyleManager previewStyleManager;
 	private CustomTheme customTheme;
 
@@ -30,17 +35,23 @@ public class ThemeEditorFrame extends ThemedFrame {
 		super(styleManager, title);
 		customTheme = Theme.getCustomTheme();
 		previewStyleManager = new StyleManager(customTheme, SizePreference.REGULAR);
-				
+
 		ThemedPanel panel = new ThemedPanel(styleManager);
+		panel.setOpaque(false);
 		add(panel);
 		panel.setLayout(new FlowLayout());
 
 		colorPickerPanel = new ColorPickerPanel(styleManager);
 
+		IDataStateHandler dataStateHandler = new PreviewDataStateHandler(new PreviewCalculatorResult());
+		ninBotPreview = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, dataStateHandler.getDataState(), dataStateHandler));
+
 		panel.add(getConfigurableColorsPanel(styleManager));
 		panel.add(colorPickerPanel);
-		
+		panel.add(ninBotPreview);
+
 		previewStyleManager.init();
+		ninBotPreview.postInit();
 
 		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(color));
 	}
@@ -64,11 +75,13 @@ public class ThemeEditorFrame extends ThemedFrame {
 			configurableColorPanel.setSelected(true);
 		colorPickerPanel.setColor(configurableColorPanel != null ? configurableColorPanel.getConfigurableColor().color.color() : Color.WHITE);
 	}
-	
+
 	private void onColorChanged(Color color) {
 		if (selectedPanel != null)
-		selectedPanel.getConfigurableColor().color.set(color);
+			selectedPanel.getConfigurableColor().color.set(color);
 		previewStyleManager.currentTheme.setTheme(customTheme);
+
+		ninBotPreview.renderImage();
 	}
 
 	@Override

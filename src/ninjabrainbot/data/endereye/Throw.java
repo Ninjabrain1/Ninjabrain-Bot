@@ -4,8 +4,6 @@ import ninjabrainbot.Main;
 import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.Subscription;
 
 /**
@@ -22,7 +20,6 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	private double correction;
 
 	private Subscription stdProfileSubscription;
-	private ObservableField<Double> error = new ObservableField<Double>(0.0);
 
 	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
 		super(modificationLock);
@@ -127,21 +124,6 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	@Override
 	public double getStd() {
 		return std;
-	}
-
-	@Override
-	public void setError(Double error) {
-		this.error.set(error);
-	}
-
-	@Override
-	public Double error() {
-		return error.get();
-	}
-
-	@Override
-	public ISubscribable<Double> whenErrorChanged() {
-		return error;
 	}
 
 	@Override

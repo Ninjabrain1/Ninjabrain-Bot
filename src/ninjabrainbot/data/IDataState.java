@@ -6,6 +6,7 @@ import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrowSet;
+import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 
 public interface IDataState {
@@ -15,6 +16,8 @@ public interface IDataState {
 	public IThrowSet getThrowSet();
 
 	public IObservable<ICalculatorResult> calculatorResult();
+
+	public IObservable<ChunkPrediction> topPrediction();
 
 	public IObservable<BlindResult> blindResult();
 

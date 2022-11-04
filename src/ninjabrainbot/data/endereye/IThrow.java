@@ -2,7 +2,6 @@ package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.data.statistics.IRay;
 import ninjabrainbot.event.IModifiable;
-import ninjabrainbot.event.ISubscribable;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 
@@ -15,12 +14,6 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 	public boolean lookingBelowHorizon();
 
 	public boolean isNether();
-
-	public void setError(Double error);
-
-	public Double error();
-
-	public ISubscribable<Double> whenErrorChanged();
 
 	public void addCorrection(double angle);
 

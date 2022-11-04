@@ -14,6 +14,7 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
@@ -30,6 +31,7 @@ public class DataState implements IDataState, IDisposable {
 
 	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
+	private final ObservableField<ChunkPrediction> topPrediction;
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
 
@@ -38,10 +40,12 @@ public class DataState implements IDataState, IDisposable {
 	public DataState(ICalculator calculator, IModificationLock modificationLock) {
 		divineContext = new DivineContext(modificationLock);
 		throwSet = new ThrowSet(modificationLock);
+
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
+		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
 		blindResult = new LockableField<BlindResult>(modificationLock);
 		divineResult = new LockableField<DivineResult>(modificationLock);
 
@@ -66,6 +70,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<ICalculatorResult> calculatorResult() {
 		return calculatorResult;
+	}
+
+	@Override
+	public IObservable<ChunkPrediction> topPrediction() {
+		return topPrediction;
 	}
 
 	@Override
@@ -115,8 +124,16 @@ public class DataState implements IDataState, IDisposable {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
-		throwSet.setAngleErrors(calculatorResult.get());
+		updateTopPrediction(calculatorResult.get());
 		resultType.set(calculatorResult.get() == null ? ResultType.NONE : calculatorResult().get().success() ? ResultType.TRIANGULATION : ResultType.FAILED);
+	}
+	
+	private void updateTopPrediction(ICalculatorResult calculatorResult) {
+		if (!calculatorResult.success()) {
+			topPrediction.set(null);
+			return;
+		}
+		topPrediction.set(calculatorResult.getBestPrediction());
 	}
 
 	private void onFossilChanged() {
