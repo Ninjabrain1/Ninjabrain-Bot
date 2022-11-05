@@ -1,17 +1,15 @@
 package ninjabrainbot.io.preferences;
 
-import java.util.prefs.Preferences;
-
 import ninjabrainbot.event.Modifiable;
 
 public class BooleanPreference extends Modifiable<Boolean> {
 
-	Preferences pref;
+	IPreferenceSource pref;
 
 	String key;
 	boolean value;
 
-	public BooleanPreference(String key, boolean defaultValue, Preferences pref) {
+	public BooleanPreference(String key, boolean defaultValue, IPreferenceSource pref) {
 		this.pref = pref;
 		this.key = key;
 		value = pref.getBoolean(key, defaultValue);

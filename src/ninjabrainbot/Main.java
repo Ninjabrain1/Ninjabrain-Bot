@@ -9,13 +9,13 @@ import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.splash.Splash;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.SavedPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
 public class Main {
 
 	public static final String VERSION = "1.4.0";
-	public static NinjabrainBotPreferences preferences;
 
 	public static void main(String[] args) {
 		Progress.init(new Splash());
@@ -25,7 +25,7 @@ public class Main {
 
 		Progress.setTask("Loading preferences", 0.03f);
 		Profiler.stopAndStart("Initialize preferences");
-		preferences = new NinjabrainBotPreferences();
+		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new SavedPreferences());
 		StrongholdConstants.updateStrongholdChunkCoord();
 
 		Progress.setTask("Calculating approximated stronghold density", 0.04f);
@@ -39,7 +39,7 @@ public class Main {
 		Progress.startCompoundTask("", 1f);
 		Profiler.stopAndStart("Initialize GUI");
 		Locale.setDefault(Locale.US);
-		new GUI();
+		new GUI(preferences);
 		Progress.endCompoundTask();
 
 		Profiler.stop();

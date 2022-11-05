@@ -69,6 +69,10 @@ public class I18n {
 		}
 		return languageNames;
 	}
+	
+	public static String getLanguageName(Locale locale) {
+		return BUNDLE.getString("settings.language." + locale.toString());
+	}
 
 	public static int[] getLanguageIDs() {
 		final int[] languageIds = new int[LANGUAGE_NAMES.size()];

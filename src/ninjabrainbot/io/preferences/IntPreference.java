@@ -1,17 +1,15 @@
 package ninjabrainbot.io.preferences;
 
-import java.util.prefs.Preferences;
-
 import ninjabrainbot.event.Modifiable;
 
 public class IntPreference extends Modifiable<Integer> {
 
-	Preferences pref;
+	IPreferenceSource pref;
 
 	String key;
 	int value;
 
-	public IntPreference(String key, int defaultValue, Preferences pref) {
+	public IntPreference(String key, int defaultValue, IPreferenceSource pref) {
 		this.pref = pref;
 		this.key = key;
 		value = pref.getInt(key, defaultValue);

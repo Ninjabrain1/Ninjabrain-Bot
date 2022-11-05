@@ -1,6 +1,5 @@
 package ninjabrainbot.gui;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
@@ -14,6 +13,7 @@ import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Profiler;
 
 /**
@@ -21,6 +21,8 @@ import ninjabrainbot.util.Profiler;
  */
 public class GUI {
 
+	private NinjabrainBotPreferences preferences;
+	
 	private ClipboardReader clipboardReader;
 	private AutoResetTimer autoResetTimer;
 	private OBSOverlay obsOverlay;
@@ -32,7 +34,8 @@ public class GUI {
 	private DataStateHandler dataStateHandler;
 	private IDataState dataState;
 
-	public GUI() {
+	public GUI(NinjabrainBotPreferences preferences) {
+		this.preferences = preferences;
 		initDataState();
 		initInputMethods();
 		initUI();
@@ -65,13 +68,13 @@ public class GUI {
 	private void initUI() {
 		Progress.setTask("Loading themes", 0.15f);
 		Profiler.start("Init StyleManager");
-		styleManager = new StyleManager(Theme.get(Main.preferences.theme.get()), SizePreference.get(Main.preferences.size.get()));
-		Main.preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
-		Main.preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme)));
+		styleManager = new StyleManager(Theme.get(preferences.theme.get()), SizePreference.get(preferences.size.get()));
+		preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
+		preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme)));
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, dataState, dataStateHandler);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, dataStateHandler, preferences);
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
@@ -97,20 +100,20 @@ public class GUI {
 	}
 
 	private void setupHotkeys() {
-		Main.preferences.hotkeyReset.whenTriggered().subscribe(__ -> dataStateHandler.resetIfNotLocked());
-		Main.preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
-		Main.preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(0.01));
-		Main.preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
-		Main.preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
-		Main.preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
+		preferences.hotkeyReset.whenTriggered().subscribe(__ -> dataStateHandler.resetIfNotLocked());
+		preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
+		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(0.01));
+		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
+		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
+		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
 	}
 
 	private Thread onShutdown() {
 		return new Thread("Shutdown") {
 			@Override
 			public void run() {
-				Main.preferences.windowX.set(ninjabrainBotFrame.getX());
-				Main.preferences.windowY.set(ninjabrainBotFrame.getY());
+				preferences.windowX.set(ninjabrainBotFrame.getX());
+				preferences.windowY.set(ninjabrainBotFrame.getY());
 				obsOverlay.dispose();
 				autoResetTimer.dispose();
 				dataStateHandler.dispose();

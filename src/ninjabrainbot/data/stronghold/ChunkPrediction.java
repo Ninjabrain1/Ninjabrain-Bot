@@ -2,13 +2,12 @@ package ninjabrainbot.data.stronghold;
 
 import java.util.Locale;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Modifiable;
 import ninjabrainbot.event.Subscription;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
 
@@ -80,34 +79,30 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 		return travelAngleDiff;
 	}
 
-	public String format() {
-		final String key = Main.preferences.strongholdDisplayType.get();
-		switch (key) {
-		case NinjabrainBotPreferences.FOURFOUR:
+	public String format(StrongholdDisplayType strongholdDisplayType) {
+		switch (strongholdDisplayType) {
+		case FOURFOUR:
 			return I18n.get("location_blocks", fourfour_x, fourfour_z, distance);
-		case NinjabrainBotPreferences.EIGHTEIGHT:
+		case EIGHTEIGHT:
 			return I18n.get("location_blocks", fourfour_x + 4, fourfour_z + 4, distance);
+		case CHUNK:
+			return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 		default:
 			break;
-		}
-		if (key.equals(NinjabrainBotPreferences.CHUNK)) {
-			return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 		}
 		return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 	}
 
-	public String formatLocation() {
-		final String key = Main.preferences.strongholdDisplayType.get();
-		switch (key) {
-		case NinjabrainBotPreferences.FOURFOUR:
+	public String formatLocation(StrongholdDisplayType strongholdDisplayType) {
+		switch (strongholdDisplayType) {
+		case FOURFOUR:
 			return String.format(Locale.US, "(%d, %d)", fourfour_x, fourfour_z);
-		case NinjabrainBotPreferences.EIGHTEIGHT:
+		case EIGHTEIGHT:
 			return String.format(Locale.US, "(%d, %d)", fourfour_x + 4, fourfour_z + 4);
+		case CHUNK:
+			return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
 		default:
 			break;
-		}
-		if (key.equals(NinjabrainBotPreferences.CHUNK)) {
-			return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
 		}
 		return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
 	}
@@ -143,7 +138,7 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	public double[] getAngleErrors(ISet<IThrow> eyeThrows) {
 		return chunk.getAngleErrors(eyeThrows);
 	}
-	
+
 	public double getAngleError(IThrow t) {
 		return t == null ? -1 : chunk.getAngleError(t);
 	}

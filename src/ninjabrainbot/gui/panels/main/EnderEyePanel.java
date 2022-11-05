@@ -2,12 +2,12 @@ package ninjabrainbot.gui.panels.main;
 
 import javax.swing.BoxLayout;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
@@ -19,7 +19,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	private ThrowPanel[] throwPanels;
 	private DivineContextPanel divineContextPanel;
 
-	public EnderEyePanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IDivineContext divineContext) {
+	public EnderEyePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler, IDivineContext divineContext) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -34,7 +34,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
 		// Subscriptions
-		sh.add(Main.preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
+		sh.add(preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
 	}
 
 	private void whenDivineContextVisibilityUpdated() {

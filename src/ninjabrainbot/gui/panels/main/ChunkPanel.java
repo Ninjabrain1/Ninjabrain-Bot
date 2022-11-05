@@ -6,7 +6,6 @@ import java.awt.Font;
 
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
@@ -16,9 +15,11 @@ import ninjabrainbot.gui.components.ILabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.MultipleChoicePreference;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * JComponent for showing a Throw.
@@ -27,6 +28,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 
+	private MultipleChoicePreference strongholdDisplayType;
+	
 	private ChunkPrediction currentPrediction;
 
 	private ThemedLabel location;
@@ -44,13 +47,14 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private WrappedColor borderCol;
 
-	public ChunkPanel(StyleManager styleManager) {
-		this(styleManager, null);
+	public ChunkPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
+		this(styleManager, preferences, null);
 	}
 
-	public ChunkPanel(StyleManager styleManager, ChunkPrediction p) {
+	public ChunkPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, ChunkPrediction p) {
 		super(styleManager);
 		this.styleManager = styleManager;
+		strongholdDisplayType = preferences.strongholdDisplayType;
 		setOpaque(true);
 		location = new ThemedLabel(styleManager, true);
 		certainty = new ColoredLabel(styleManager, true);
@@ -69,8 +73,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		add(nether);
 		add(angle);
 		setPrediction(p);
-		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
-		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
+		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
+		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
 
 		borderCol = styleManager.currentTheme.COLOR_STRONGER;
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
@@ -130,7 +134,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void setText(ChunkPrediction p) {
-		location.setText(p.formatLocation());
+		location.setText(p.formatLocation(strongholdDisplayType));
 		certainty.setText(p.formatCertainty(), (float) p.chunk.weight);
 		distance.setText(p.formatDistance());
 		nether.setText(p.formatNether());

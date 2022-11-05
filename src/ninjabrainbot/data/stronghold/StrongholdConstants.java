@@ -1,6 +1,6 @@
 package ninjabrainbot.data.stronghold;
 
-import ninjabrainbot.Main;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences.McVersion;
 
 public class StrongholdConstants {
 
@@ -29,8 +29,8 @@ public class StrongholdConstants {
 		return (maxDistance + Math.sqrt(2) * (snappingRadius + 0.5)) * 16.0;
 	}
 
-	public static void updateStrongholdChunkCoord() {
-		boolean pre1_19 = Main.preferences.mcVersion.get() == Main.preferences.mcVersion.getChoices()[0];
+	public static void updateStrongholdChunkCoord(McVersion version) {
+		boolean pre1_19 = version == McVersion.PRE_119;
 		strongholdCenterChunkCoord = pre1_19 ? 8 : 0;
 	}
 

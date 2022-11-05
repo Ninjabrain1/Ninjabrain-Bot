@@ -13,29 +13,29 @@ import javax.swing.JRadioButton;
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 
 public class RadioButtonGroup extends ThemedPanel {
 
 	private static final long serialVersionUID = 7355615566096074105L;
 
-	public RadioButtonGroup(StyleManager styleManager, String[] options, String selected) {
+	public RadioButtonGroup(StyleManager styleManager, IMultipleChoicePreferenceDataType[] options, IMultipleChoicePreferenceDataType selected) {
 		super(styleManager);
 		setOpaque(false);
 		ButtonGroup group = new ButtonGroup();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JRadioButton btn = (JRadioButton) e.getSource();
-				onChanged(btn.getText());
-			}
-		};
-		for (String s : options) {
-			JRadioButton button = new ThemedRadioButton(styleManager, s);
-			if (selected == s)
+		for (IMultipleChoicePreferenceDataType option : options) {
+			ActionListener listener = new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					onChanged(option);
+				}
+			};
+			JRadioButton button = new ThemedRadioButton(styleManager, option.choiceName());
+			if (selected == option)
 				button.setSelected(true);
 			button.addActionListener(listener);
 			group.add(button);
@@ -44,7 +44,7 @@ public class RadioButtonGroup extends ThemedPanel {
 		}
 	}
 
-	public void onChanged(String newValue) {
+	public void onChanged(IMultipleChoicePreferenceDataType newValue) {
 
 	}
 

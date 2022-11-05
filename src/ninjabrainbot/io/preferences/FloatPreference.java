@@ -1,17 +1,15 @@
 package ninjabrainbot.io.preferences;
 
-import java.util.prefs.Preferences;
-
 import ninjabrainbot.event.Modifiable;
 
 public class FloatPreference extends Modifiable<Float> {
 
-	Preferences pref;
+	IPreferenceSource pref;
 
 	String key;
 	float value, max, min;
 
-	public FloatPreference(String key, float defaultValue, float minValue, float maxValue, Preferences pref) {
+	public FloatPreference(String key, float defaultValue, float minValue, float maxValue, IPreferenceSource pref) {
 		this.pref = pref;
 		this.key = key;
 		value = pref.getFloat(key, defaultValue);

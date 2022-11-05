@@ -1,7 +1,6 @@
 package ninjabrainbot.io.preferences;
 
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
@@ -12,14 +11,14 @@ public class HotkeyPreference {
 
 	public static ArrayList<HotkeyPreference> hotkeys = new ArrayList<HotkeyPreference>();
 
-	Preferences pref;
+	IPreferenceSource pref;
 
 	IntPreference modifier;
 	IntPreference code;
 
 	private ObservableProperty<NativeKeyEvent> whenTriggered;
 
-	public HotkeyPreference(String key, Preferences pref) {
+	public HotkeyPreference(String key, IPreferenceSource pref) {
 		this.pref = pref;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);

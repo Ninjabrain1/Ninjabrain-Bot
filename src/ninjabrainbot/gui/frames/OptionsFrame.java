@@ -25,7 +25,6 @@ import javax.swing.text.View;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.CustomCheckbox;
 import ninjabrainbot.gui.components.DecimalTextField;
@@ -35,20 +34,24 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.CalibrationPanel;
 import ninjabrainbot.gui.panels.settings.RadioButtonGroup;
 import ninjabrainbot.gui.panels.settings.ThemedTabbedPane;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.FloatPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
+import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 import ninjabrainbot.io.preferences.MultipleChoicePreference;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
 public class OptionsFrame extends ThemedFrame {
 
 	private static final long serialVersionUID = 8033865173874423916L;
+	
+	private NinjabrainBotPreferences preferences;
 
 	private StyleManager styleManager;
 	private ThemedTabbedPane tabbedPane;
@@ -64,9 +67,10 @@ public class OptionsFrame extends ThemedFrame {
 
 	private static final String TITLE_TEXT = I18n.get("settings");
 
-	public OptionsFrame(StyleManager styleManager) {
+	public OptionsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, TITLE_TEXT);
 		this.styleManager = styleManager;
+		this.preferences = preferences;
 		setLayout(null);
 		tabbedPane = new ThemedTabbedPane(styleManager);
 		add(tabbedPane);
@@ -82,9 +86,9 @@ public class OptionsFrame extends ThemedFrame {
 		titlebarPanel.setFocusable(true);
 
 		// Subscriptions
-		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
-		sh.add(Main.preferences.useAltStd.whenModified().subscribe(b -> setAltSigmaEnabled(b)));
-		sh.add(Main.preferences.overlayAutoHide.whenModified().subscribe(b -> setOverlayAutoHideEnabled(b)));
+		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		sh.add(preferences.useAltStd.whenModified().subscribe(b -> setAltSigmaEnabled(b)));
+		sh.add(preferences.overlayAutoHide.whenModified().subscribe(b -> setOverlayAutoHideEnabled(b)));
 	}
 
 	private JPanel getBasicPanel() {
@@ -102,20 +106,20 @@ public class OptionsFrame extends ThemedFrame {
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 
 		// Column 1
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.show_nether_coordinates"), Main.preferences.showNetherCoords));
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.auto_reset"), Main.preferences.autoReset));
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.always_on_top"), Main.preferences.alwaysOnTop));
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.translucent_window"), Main.preferences.translucent));
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.notify_when_a_new_version_is_available"), Main.preferences.checkForUpdates));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.show_nether_coordinates"), preferences.showNetherCoords));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.auto_reset"), preferences.autoReset));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.always_on_top"), preferences.alwaysOnTop));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.translucent_window"), preferences.translucent));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.notify_when_a_new_version_is_available"), preferences.checkForUpdates));
 		column1.add(Box.createGlue());
 
 		// Column 2
 		column2.add(Box.createVerticalStrut(10));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.display_stronghold_location_using"), Main.preferences.strongholdDisplayType));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.view_type"), Main.preferences.view));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.theme"), Main.preferences.theme));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.window_size"), Main.preferences.size));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.mc_version"), Main.preferences.mcVersion));
+		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.display_stronghold_location_using"), preferences.strongholdDisplayType));
+		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.view_type"), preferences.view));
+		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.theme"), preferences.theme));
+		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.window_size"), preferences.size));
+		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.mc_version"), preferences.mcVersion));
 		column2.add(Box.createGlue());
 		return mainPanel;
 	}
@@ -135,7 +139,7 @@ public class OptionsFrame extends ThemedFrame {
 		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 
 		// Left advanced column
-		sigma = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), Main.preferences.sigma);
+		sigma = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma);
 		column1.add(sigma);
 		JButton calibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation")) {
 			private static final long serialVersionUID = -673676238214760361L;
@@ -148,21 +152,21 @@ public class OptionsFrame extends ThemedFrame {
 		calibrateButton.addActionListener(p -> startCalibrating());
 		calibrateButton.setAlignmentX(0.5f);
 		column1.add(calibrateButton);
-		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation_manual"), Main.preferences.sigmaManual));
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_standard_deviation_toggle"), Main.preferences.useAltStd));
-		sigmaAlt = new FloatPreferencePanel(styleManager, I18n.get("settings.alt_standard_deviation"), Main.preferences.sigmaAlt);
-		sigmaAlt.setEnabled(Main.preferences.useAltStd.get());
+		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation_manual"), preferences.sigmaManual));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_standard_deviation_toggle"), preferences.useAltStd));
+		sigmaAlt = new FloatPreferencePanel(styleManager, I18n.get("settings.alt_standard_deviation"), preferences.sigmaAlt);
+		sigmaAlt.setEnabled(preferences.useAltStd.get());
 		column1.add(sigmaAlt);
 		if (KeyboardListener.registered) {
-			sigmaAltHotkey = new HotkeyPanel(styleManager, I18n.get("settings.alt_std_on_last_angle"), Main.preferences.hotkeyAltStd);
-			sigmaAltHotkey.setEnabled(Main.preferences.useAltStd.get());
+			sigmaAltHotkey = new HotkeyPanel(styleManager, I18n.get("settings.alt_std_on_last_angle"), preferences.hotkeyAltStd);
+			sigmaAltHotkey.setEnabled(preferences.useAltStd.get());
 			column1.add(sigmaAltHotkey);
 		}
-		column2.add(new FloatPreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), Main.preferences.crosshairCorrection));
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), Main.preferences.showAngleErrors));
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_updates"), Main.preferences.showAngleUpdates));
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), Main.preferences.useAdvStatistics));
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), Main.preferences.altClipboardReader));
+		column2.add(new FloatPreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), preferences.crosshairCorrection));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), preferences.showAngleErrors));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_updates"), preferences.showAngleUpdates));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
 		column2.add(Box.createGlue());
 		return mainPanel;
 	}
@@ -181,12 +185,12 @@ public class OptionsFrame extends ThemedFrame {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.weightx = 1;
 		if (KeyboardListener.registered) {
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("settings.up_001_to_last_angle"), Main.preferences.hotkeyIncrement), constraints);
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("settings.down_001_to_last_angle"), Main.preferences.hotkeyDecrement), constraints);
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("reset"), Main.preferences.hotkeyReset), constraints);
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("undo"), Main.preferences.hotkeyUndo), constraints);
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("lock"), Main.preferences.hotkeyLock), constraints);
-			ac2.add(new HotkeyPanel(styleManager, I18n.get("hide_show_window"), Main.preferences.hotkeyMinimize), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("settings.up_001_to_last_angle"), preferences.hotkeyIncrement), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("settings.down_001_to_last_angle"), preferences.hotkeyDecrement), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("reset"), preferences.hotkeyReset), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("undo"), preferences.hotkeyUndo), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("lock"), preferences.hotkeyLock), constraints);
+			ac2.add(new HotkeyPanel(styleManager, I18n.get("hide_show_window"), preferences.hotkeyMinimize), constraints);
 		}
 		constraints.weighty = 1;
 		ac2.add(Box.createGlue(), constraints);
@@ -224,11 +228,11 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.add(overlayExplanation, constraints);
 		ac2.add(new ThemedTextArea(styleManager, OBSOverlay.OBS_OVERLAY.getAbsolutePath()), constraints);
 		constraints.insets = new Insets(0, 0, 0, 0);
-		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_enable"), Main.preferences.useOverlay), constraints);
-		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_hide_locked"), Main.preferences.overlayHideWhenLocked), constraints);
-		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_auto_hide"), Main.preferences.overlayAutoHide), constraints);
-		overlayResetDelay = new FloatPreferencePanel(styleManager, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
-		overlayResetDelay.setEnabled(Main.preferences.overlayAutoHide.get());
+		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_enable"), preferences.useOverlay), constraints);
+		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_hide_locked"), preferences.overlayHideWhenLocked), constraints);
+		ac2.add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_auto_hide"), preferences.overlayAutoHide), constraints);
+		overlayResetDelay = new FloatPreferencePanel(styleManager, I18n.get("settings.overlay_auto_hide_duration"), preferences.overlayHideDelay);
+		overlayResetDelay.setEnabled(preferences.overlayAutoHide.get());
 		ac2.add(overlayResetDelay, constraints);
 
 		constraints.weighty = 1;
@@ -242,7 +246,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.setAlignmentX(0);
 		ac2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		ac2.setBorder(new EmptyBorder(0, PADDING, PADDING, PADDING));
-		ac2.add(new RadioButtonPanel(styleManager, I18n.get("settings.language.hint"), Main.preferences.language));
+		ac2.add(new RadioButtonPanel(styleManager, I18n.get("settings.language.hint"), preferences.language));
 		return ac2;
 	}
 
@@ -437,9 +441,9 @@ class RadioButtonPanel extends ThemedPanel {
 
 	JLabel descLabel;
 	RadioButtonGroup radioButtomGroup;
-	MultipleChoicePreference preference;
+	MultipleChoicePreference<?> preference;
 
-	public RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference preference) {
+	public RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<?> preference) {
 		super(styleManager);
 		this.preference = preference;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -455,7 +459,7 @@ class RadioButtonPanel extends ThemedPanel {
 			private static final long serialVersionUID = -1357640224921308648L;
 
 			@Override
-			public void onChanged(String newValue) {
+			public void onChanged(IMultipleChoicePreferenceDataType newValue) {
 				preference.set(newValue);
 			}
 		};
