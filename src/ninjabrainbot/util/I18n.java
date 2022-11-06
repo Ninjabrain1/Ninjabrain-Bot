@@ -21,6 +21,9 @@ import ninjabrainbot.Main;
  */
 public class I18n {
 
+	// add language ja_RYU
+	public static final Locale ja_RYU = new Locale("ja", "RYU");
+	
 	private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
 
 	private static ResourceBundle BUNDLE = null;
@@ -37,8 +40,7 @@ public class I18n {
 		LANGUAGE_CONFIG.add(Locale.ITALY);
 		LANGUAGE_CONFIG.add(Locale.JAPAN);
 		LANGUAGE_CONFIG.add(Locale.TRADITIONAL_CHINESE);
-		// add language ja_RYU
-		LANGUAGE_CONFIG.add(new Locale("ja", "RYU"));
+		LANGUAGE_CONFIG.add(ja_RYU);
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);
