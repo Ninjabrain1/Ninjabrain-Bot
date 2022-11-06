@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings.themeeditor;
+package ninjabrainbot.gui.settings.themeeditor.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings.themeeditor;
+package ninjabrainbot.gui.settings.themeeditor.panels;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

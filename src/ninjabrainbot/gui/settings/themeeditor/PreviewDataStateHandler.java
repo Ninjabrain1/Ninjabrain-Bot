@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings.themeeditor;
+package ninjabrainbot.gui.settings.themeeditor;
 
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;

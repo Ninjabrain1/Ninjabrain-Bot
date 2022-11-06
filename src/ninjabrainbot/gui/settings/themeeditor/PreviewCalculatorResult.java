@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings.themeeditor;
+package ninjabrainbot.gui.settings.themeeditor;
 
 import java.util.ArrayList;
 import java.util.List;

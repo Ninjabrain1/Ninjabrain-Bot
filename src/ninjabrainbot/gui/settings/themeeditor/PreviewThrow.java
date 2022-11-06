@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings.themeeditor;
+package ninjabrainbot.gui.settings.themeeditor;
 
 import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
