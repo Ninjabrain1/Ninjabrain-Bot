@@ -23,10 +23,14 @@ public class RadioButtonGroup extends ThemedPanel {
 	private static final long serialVersionUID = 7355615566096074105L;
 
 	public RadioButtonGroup(StyleManager styleManager, IMultipleChoicePreferenceDataType[] options, IMultipleChoicePreferenceDataType selected) {
+		this(styleManager, options, selected, false);
+	}
+
+	public RadioButtonGroup(StyleManager styleManager, IMultipleChoicePreferenceDataType[] options, IMultipleChoicePreferenceDataType selected, boolean verticalRadioButtons) {
 		super(styleManager);
 		setOpaque(false);
 		ButtonGroup group = new ButtonGroup();
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.Y_AXIS : BoxLayout.X_AXIS));
 		for (IMultipleChoicePreferenceDataType option : options) {
 			ActionListener listener = new ActionListener() {
 				@Override
