@@ -8,13 +8,15 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
-import ninjabrainbot.Main;
+import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 
 public class KeyboardListener implements NativeKeyListener {
 
 	public static boolean registered = false;
 	public static KeyboardListener instance;
+	
+	private BooleanPreference useAltClipboardReader;
 
 	BiConsumer<Integer, Integer> consumer;
 	ClipboardReader clr;
@@ -43,16 +45,17 @@ public class KeyboardListener implements NativeKeyListener {
 		});
 	}
 
-	public static void init(ClipboardReader clr) {
+	public static void init(ClipboardReader clr, BooleanPreference useAltClipboardReader) {
 		if (registered) {
-			instance = new KeyboardListener(clr);
+			instance = new KeyboardListener(clr, useAltClipboardReader);
 			GlobalScreen.addNativeKeyListener(instance);
 		}
 	}
 
-	KeyboardListener(ClipboardReader clr) {
+	KeyboardListener(ClipboardReader clr, BooleanPreference useAltClipboardReader) {
 		super();
 		this.clr = clr;
+		this.useAltClipboardReader = useAltClipboardReader;
 	}
 
 	public synchronized void setConsumer(BiConsumer<Integer, Integer> consumer) {
@@ -85,7 +88,7 @@ public class KeyboardListener implements NativeKeyListener {
 			}
 		}
 		// Alt clipboard reader
-		if (Main.preferences.altClipboardReader.get()) {
+		if (useAltClipboardReader.get()) {
 			if (e.getRawCode() == KeyEvent.VK_F3) {
 				f3Held = true;
 			} else if (f3Held && e.getRawCode() == KeyEvent.VK_C) {
@@ -96,7 +99,7 @@ public class KeyboardListener implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
-		if (Main.preferences.altClipboardReader.get() && e.getRawCode() == KeyEvent.VK_F3) {
+		if (useAltClipboardReader.get() && e.getRawCode() == KeyEvent.VK_F3) {
 			f3Held = false;
 		}
 	}

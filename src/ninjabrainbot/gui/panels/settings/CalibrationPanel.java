@@ -18,7 +18,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.calibrator.Calibrator;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -29,9 +28,10 @@ import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.panels.TitleBarPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
 
@@ -42,6 +42,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	Calibrator calibrator;
 
 	StyleManager styleManager;
+	NinjabrainBotPreferences preferences;
 	OptionsFrame optionsFrame;
 	TitleBarPanel titlebarPanel;
 	JLabel titletextLabel;
@@ -54,9 +55,10 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	JLabel std;
 	static final int errorAreaWidth = 100;
 
-	public CalibrationPanel(StyleManager styleManager, OptionsFrame frame) {
-		this.styleManager = styleManager;
+	public CalibrationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, OptionsFrame frame) {
 		styleManager.registerThemedComponent(this);
+		this.styleManager = styleManager;
+		this.preferences = preferences;
 		optionsFrame = frame;
 		calibrator = new Calibrator();
 		setOpaque(false);
@@ -147,8 +149,8 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
-			float std = (float) calibrator.getSTD();
-			Main.preferences.sigma.set(std);
+			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
+			preferences.sigma.set(std);
 			optionsFrame.stopCalibrating();
 		}
 	}
@@ -222,9 +224,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
-			std.setText(String.format("%.3f", calibrator.getSTD()));
+			std.setText(String.format("%.3f", calibrator.getSTD(preferences.mcVersion.get())));
 			StringBuilder b = new StringBuilder();
-			double[] angleErrors = calibrator.getErrors();
+			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
 			ISet<IThrow> eyeThrows = calibrator.getThrows();
 			for (int i = 0; i < angleErrors.length; i++) {
 				IThrow t = eyeThrows.get(i);

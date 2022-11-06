@@ -19,6 +19,9 @@ import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class ThemeEditorFrame extends ThemedFrame {
 
@@ -31,8 +34,8 @@ public class ThemeEditorFrame extends ThemedFrame {
 	private StyleManager previewStyleManager;
 	private CustomTheme customTheme;
 
-	public ThemeEditorFrame(StyleManager styleManager, String title) {
-		super(styleManager, title);
+	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
+		super(styleManager, preferences, title);
 		customTheme = Theme.getCustomTheme();
 		previewStyleManager = new StyleManager(customTheme, SizePreference.REGULAR);
 
@@ -43,8 +46,9 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 		colorPickerPanel = new ColorPickerPanel(styleManager);
 
-		IDataStateHandler dataStateHandler = new PreviewDataStateHandler(new PreviewCalculatorResult());
-		ninBotPreview = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, dataStateHandler.getDataState(), dataStateHandler));
+		NinjabrainBotPreferences previewPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
+		IDataStateHandler dataStateHandler = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119));
+		ninBotPreview = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences, dataStateHandler));
 
 		panel.add(getConfigurableColorsPanel(styleManager));
 		panel.add(colorPickerPanel);

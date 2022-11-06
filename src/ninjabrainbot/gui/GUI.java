@@ -45,7 +45,7 @@ public class GUI {
 	private void initDataState() {
 		Progress.setTask("Creating calculator data", 0.01f);
 		Profiler.start("Init DataState");
-		dataStateHandler = new DataStateHandler();
+		dataStateHandler = new DataStateHandler(preferences);
 		dataState = dataStateHandler.getDataState();
 		Profiler.stop();
 	}
@@ -53,11 +53,11 @@ public class GUI {
 	private void initInputMethods() {
 		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
-		clipboardReader = new ClipboardReader(dataStateHandler.getModificationLock());
+		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock());
 		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
 		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
-		KeyboardListener.init(clipboardReader);
+		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
 		clipboardThread.start();
 
 		Profiler.stopAndStart("Setup hotkeys");
@@ -68,19 +68,19 @@ public class GUI {
 	private void initUI() {
 		Progress.setTask("Loading themes", 0.15f);
 		Profiler.start("Init StyleManager");
-		styleManager = new StyleManager(Theme.get(preferences.theme.get()), SizePreference.get(preferences.size.get()));
+		styleManager = new StyleManager(Theme.get(preferences.theme.get().choiceName()), SizePreference.get(preferences.size.get()));
 		preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
-		preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme)));
+		preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme.choiceName())));
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, dataStateHandler, preferences);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler);
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
-		optionsFrame = new OptionsFrame(styleManager);
+		optionsFrame = new OptionsFrame(styleManager, preferences);
 		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> optionsFrame.toggleWindow(ninjabrainBotFrame));
-		new ThemeEditorFrame(styleManager, "Theme Editor").setVisible(true);
+		new ThemeEditorFrame(styleManager, preferences, "Theme Editor").setVisible(true);
 
 		Progress.setTask("Settings fonts and colors", 0.99f);
 		Profiler.stopAndStart("Init fonts, colors, bounds");
@@ -91,10 +91,15 @@ public class GUI {
 	private void postInit() {
 		Progress.setTask("Finishing up gui", 1f);
 		Profiler.start("Post init");
-		ninjabrainBotFrame.checkIfOffScreen();
+		
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
-		obsOverlay = new OBSOverlay(ninjabrainBotFrame, dataStateHandler);
+		preferences.autoReset.whenModified().subscribe(b -> autoResetTimer.setAutoResetEnabled(b));
+		
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataStateHandler);
+		
+		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);
+		
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 		Profiler.stop();
 	}

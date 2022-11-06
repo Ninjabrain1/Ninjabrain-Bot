@@ -1,8 +1,9 @@
 package ninjabrainbot.gui.style;
 
-import ninjabrainbot.util.I18n;
-
 import java.util.HashMap;
+
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.SizeSetting;
+import ninjabrainbot.util.I18n;
 
 public abstract class SizePreference {
 
@@ -19,25 +20,25 @@ public abstract class SizePreference {
 	public int ANGLE_COLUMN_WIDTH;
 	public int WINDOW_ROUNDING;
 
-	public static final HashMap<String, SizePreference> SIZES = new HashMap<String, SizePreference>();
+	public static final HashMap<SizeSetting, SizePreference> SIZES = new HashMap<SizeSetting, SizePreference>();
 	public static final SizePreference REGULAR = new RegularSize();
 	public static final SizePreference LARGE = new LargeSize();
 	public static final SizePreference EXTRALARGE = new ExtraLargeSize();
 
-	public static SizePreference get(String name) {
-		return SIZES.getOrDefault(name, REGULAR);
+	public static SizePreference get(SizeSetting sizeSetting) {
+		return SIZES.getOrDefault(sizeSetting, REGULAR);
 	}
 
-	public SizePreference(String name) {
+	public SizePreference(String name, SizeSetting sizeSetting) {
 		this.name = name;
-		SIZES.put(name, this);
+		SIZES.put(sizeSetting, this);
 	}
 
 }
 
 class RegularSize extends SizePreference {
 	public RegularSize() {
-		super(I18n.get("small"));
+		super(I18n.get("small"), SizeSetting.SMALL);
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 14;
@@ -54,7 +55,7 @@ class RegularSize extends SizePreference {
 
 class LargeSize extends SizePreference {
 	public LargeSize() {
-		super(I18n.get("medium"));
+		super(I18n.get("medium"), SizeSetting.MEDIUM);
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 16;
@@ -72,7 +73,7 @@ class LargeSize extends SizePreference {
 
 class ExtraLargeSize extends SizePreference {
 	public ExtraLargeSize() {
-		super(I18n.get("large"));
+		super(I18n.get("large"), SizeSetting.LARGE);
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 24;

@@ -7,12 +7,12 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.util.I18n;
 
 /**
@@ -31,14 +31,14 @@ public class ThrowPanelHeader extends ThemedPanel {
 	
 	WrappedColor lineColor;
 
-	public ThrowPanelHeader(StyleManager styleManager) {
-		this(styleManager, null);
+	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors) {
+		this(styleManager, showAngleErrors, null);
 	}
 
-	public ThrowPanelHeader(StyleManager styleManager, Throw t) {
+	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors, Throw t) {
 		super(styleManager, true);
 		setOpaque(true);
-		errorsEnabled = Main.preferences.showAngleErrors.get();
+		errorsEnabled = showAngleErrors.get();
 		x = new JLabel("x", 0);
 		z = new JLabel("z", 0);
 		alpha = new JLabel(I18n.get("angle"), 0);
@@ -55,6 +55,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 
 	public void setAngleErrorsEnabled(boolean e) {
 		errorsEnabled = e;
+		error.setVisible(errorsEnabled);
 	}
 
 	@Override

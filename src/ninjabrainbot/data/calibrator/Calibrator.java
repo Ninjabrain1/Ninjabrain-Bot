@@ -10,6 +10,7 @@ import ninjabrainbot.data.statistics.Posterior;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.KeyPresser;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
 
@@ -131,8 +132,8 @@ public class Calibrator implements IDisposable {
 		return alpha;
 	}
 
-	private double getSTD(Chunk result) {
-		double[] errors = result.getAngleErrors(eyeThrows);
+	private double getSTD(McVersion version, Chunk result) {
+		double[] errors = result.getAngleErrors(version, eyeThrows);
 		// Assume 0 mean
 		double sqSum = 0;
 		for (double e : errors) {
@@ -147,16 +148,16 @@ public class Calibrator implements IDisposable {
 		return stronghold != null;
 	}
 
-	public double getSTD() {
+	public double getSTD(McVersion version) {
 		if (stronghold == null)
 			return -1;
-		return getSTD(stronghold);
+		return getSTD(version, stronghold);
 	}
 
-	public double[] getErrors() {
+	public double[] getErrors(McVersion version) {
 		if (stronghold == null)
 			return null;
-		return stronghold.getAngleErrors(eyeThrows);
+		return stronghold.getAngleErrors(version, eyeThrows);
 	}
 
 	public ISet<IThrow> getThrows() {

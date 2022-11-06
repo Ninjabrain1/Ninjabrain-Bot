@@ -54,7 +54,7 @@ public class MultipleChoicePreferenceDataTypes {
 	}
 
 	public enum StrongholdDisplayType implements IMultipleChoicePreferenceDataType {
-		FOURFOUR(I18n.get("(4, 4)")), EIGHTEIGHT(I18n.get("(8, 8)")), CHUNK(I18n.get("chunk"));
+		FOURFOUR("(4, 4)"), EIGHTEIGHT("(8, 8)"), CHUNK(I18n.get("chunk"));
 
 		final String name;
 

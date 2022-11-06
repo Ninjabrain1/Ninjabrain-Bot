@@ -68,13 +68,13 @@ public class OptionsFrame extends ThemedFrame {
 	private static final String TITLE_TEXT = I18n.get("settings");
 
 	public OptionsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
-		super(styleManager, TITLE_TEXT);
+		super(styleManager, preferences, TITLE_TEXT);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		setLayout(null);
 		tabbedPane = new ThemedTabbedPane(styleManager);
 		add(tabbedPane);
-		calibrationPanel = new CalibrationPanel(styleManager, this);
+		calibrationPanel = new CalibrationPanel(styleManager, preferences, this);
 		add(calibrationPanel);
 		tabbedPane.addTab(I18n.get("settings.basic"), getBasicPanel());
 		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());

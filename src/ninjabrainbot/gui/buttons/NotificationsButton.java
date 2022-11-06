@@ -15,6 +15,7 @@ import ninjabrainbot.gui.frames.NotificationsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.UpdateChecker;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class NotificationsButton extends TitleBarButton implements IDisposable {
 
@@ -22,6 +23,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 
 	StyleManager styleManager;
 	NotificationsFrame notificationsFrame;
+	NinjabrainBotPreferences preferences;
 
 	// Pulsing
 	int i;
@@ -31,16 +33,17 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 
 	SubscriptionHandler sh;
 
-	public NotificationsButton(StyleManager styleManager, JFrame parent) {
+	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
 		super(styleManager, new ImageIcon(Main.class.getResource("/resources/notifications_icon.png")));
 		this.styleManager = styleManager;
+		this.preferences = preferences;
 		addActionListener(p -> toggleNotificationsWindow(parent));
 		setVisible(false);
-		notificationsFrame = new NotificationsFrame(styleManager);
+		notificationsFrame = new NotificationsFrame(styleManager, preferences);
 		// Subscriptions
 		sh = new SubscriptionHandler();
-		sh.add(Main.preferences.checkForUpdates.whenModified().subscribe(b -> onUpdatesEnabledChanged(b)));
-		if (Main.preferences.checkForUpdates.get()) {
+		sh.add(preferences.checkForUpdates.whenModified().subscribe(b -> onUpdatesEnabledChanged(b)));
+		if (preferences.checkForUpdates.get()) {
 			UpdateChecker.check(url -> setURL(url));
 		}
 	}
@@ -52,7 +55,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 	}
 
 	private void setURL(VersionURL url) {
-		setVisible(Main.preferences.checkForUpdates.get());
+		setVisible(preferences.checkForUpdates.get());
 		notificationsFrame.setURL(url);
 	}
 

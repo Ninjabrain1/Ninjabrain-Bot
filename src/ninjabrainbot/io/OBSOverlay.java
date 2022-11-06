@@ -7,15 +7,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class OBSOverlay implements IDisposable {
 
+	private NinjabrainBotPreferences preferences;
 	private NinjabrainBotFrame ninjabrainBotFrame;
 	private IObservable<Boolean> calculatorLocked;
 
@@ -28,8 +29,9 @@ public class OBSOverlay implements IDisposable {
 
 	SubscriptionHandler sh = new SubscriptionHandler();
 
-	public OBSOverlay(NinjabrainBotFrame frame, IDataStateHandler dataStateHandler) {
+	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		this.ninjabrainBotFrame = frame;
+		this.preferences = preferences;
 		this.calculatorLocked = dataStateHandler.getDataState().locked();
 		sh.add(dataStateHandler.whenDataStateModified().subscribeEDT(__ -> markShouldUpdate()));
 		createClearTimer();
@@ -39,7 +41,7 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void createClearTimer() {
-		overlayClearTimer = new Timer((int) (Main.preferences.overlayHideDelay.get() * 1000f), p -> clear());
+		overlayClearTimer = new Timer((int) (preferences.overlayHideDelay.get() * 1000f), p -> clear());
 	}
 
 	private void createUpdateTimer() {
@@ -50,10 +52,10 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void setupSettingsSubscriptions() {
-		sh.add(Main.preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(Main.preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(Main.preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(Main.preferences.useOverlay.whenModified().subscribeEDT(b -> setOverlayEnabled(b)));
+		sh.add(preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		sh.add(preferences.useOverlay.whenModified().subscribeEDT(b -> setOverlayEnabled(b)));
 	}
 
 	private void markShouldUpdate() {
@@ -68,10 +70,10 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void clear() {
-		if (Main.preferences.useOverlay.get()) {
+		if (preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			write(img);
-			if (Main.preferences.overlayAutoHide.get()) {
+			if (preferences.overlayAutoHide.get()) {
 				overlayClearTimer.stop();
 			}
 		}
@@ -83,9 +85,9 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void drawAndWriteToFile() {
-		if (Main.preferences.useOverlay.get()) {
+		if (preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			boolean hideBecauseLocked = Main.preferences.overlayHideWhenLocked.get() && calculatorLocked.get();
+			boolean hideBecauseLocked = preferences.overlayHideWhenLocked.get() && calculatorLocked.get();
 			if (!ninjabrainBotFrame.isIdle() && !hideBecauseLocked) {
 				ninjabrainBotFrame.paint(img.createGraphics());
 				resetClearTimer();
@@ -95,8 +97,8 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void resetClearTimer() {
-		if (Main.preferences.overlayAutoHide.get()) {
-			overlayClearTimer.setInitialDelay((int) (Main.preferences.overlayHideDelay.get() * 1000f));
+		if (preferences.overlayAutoHide.get()) {
+			overlayClearTimer.setInitialDelay((int) (preferences.overlayHideDelay.get() * 1000f));
 			overlayClearTimer.restart();
 		} else {
 			overlayClearTimer.stop();

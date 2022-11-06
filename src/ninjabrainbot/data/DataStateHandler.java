@@ -1,8 +1,8 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.calculator.Calculator;
+import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.datalock.ILock;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.ModificationLock;
@@ -13,10 +13,13 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private final StandardStdProfile stdProfile;
+	private final CalculatorSettings calculatorSettings;
 
 	private DataState dataState;
 	private ModificationLock modificationLock;
@@ -24,13 +27,17 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataStateHandler() {
-		this.stdProfile = new StandardStdProfile();
+	public DataStateHandler(NinjabrainBotPreferences preferences) {
+		this.stdProfile = new StandardStdProfile(preferences);
 		modificationLock = new ModificationLock(() -> whenDataStateModified.notifySubscribers(dataState));
-		dataState = new DataState(new Calculator(), modificationLock);
-		
-		sh.add(Main.preferences.useAdvStatistics.whenModified().subscribe(__ -> recalculateStronghold()));
-		sh.add(Main.preferences.mcVersion.whenModified().subscribe(__ -> recalculateStronghold()));
+
+		calculatorSettings = new CalculatorSettings();
+		calculatorSettings.useAdvStatistics = preferences.useAdvStatistics.get();
+		calculatorSettings.version = preferences.mcVersion.get();
+		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
+
+		sh.add(preferences.useAdvStatistics.whenModified().subscribe(newValue -> onUseAdvStatisticsChanged(newValue)));
+		sh.add(preferences.mcVersion.whenModified().subscribe(newValue -> onMcVersionChanged(newValue)));
 	}
 
 	public synchronized void reset() {
@@ -120,8 +127,16 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 			}
 		}
 	}
-	
-	private synchronized void recalculateStronghold() {
+
+	private synchronized void onUseAdvStatisticsChanged(boolean newValue) {
+		calculatorSettings.useAdvStatistics = newValue;
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.recalculateStronghold();
+		}
+	}
+
+	private synchronized void onMcVersionChanged(McVersion newValue) {
+		calculatorSettings.version = newValue;
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.recalculateStronghold();
 		}

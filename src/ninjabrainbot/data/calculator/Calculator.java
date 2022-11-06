@@ -38,15 +38,15 @@ public class Calculator implements ICalculator {
 			return null;
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(eyeThrows, divineContext);
+		Posterior posterior = new Posterior(eyeThrows, divineContext, settings.useAdvStatistics, settings.version);
 		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
-		return new CalculatorResult(posterior, eyeThrows, playerPos, settings.numberOfReturnedPredictions);
+		return new CalculatorResult(posterior, eyeThrows, playerPos, settings.numberOfReturnedPredictions, settings.version);
 	}
 
 	public Posterior getPosterior(ISet<IThrow> eyeThrows) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(eyeThrows, divineContext);
+		Posterior posterior = new Posterior(eyeThrows, divineContext, settings.useAdvStatistics, settings.version);
 		return posterior;
 	}
 

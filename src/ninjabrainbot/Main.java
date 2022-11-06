@@ -3,7 +3,6 @@ package ninjabrainbot;
 import java.util.Locale;
 
 import ninjabrainbot.data.statistics.ApproximatedDensity;
-import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.splash.Splash;
@@ -26,7 +25,6 @@ public class Main {
 		Progress.setTask("Loading preferences", 0.03f);
 		Profiler.stopAndStart("Initialize preferences");
 		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new SavedPreferences());
-		StrongholdConstants.updateStrongholdChunkCoord();
 
 		Progress.setTask("Calculating approximated stronghold density", 0.04f);
 		Profiler.stopAndStart("Calculate approximated density");

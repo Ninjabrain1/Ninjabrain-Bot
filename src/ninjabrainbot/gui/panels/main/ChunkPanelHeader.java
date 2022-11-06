@@ -7,14 +7,14 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.ColumnLayout;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
@@ -35,7 +35,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 
 	private WrappedColor borderCol;
 
-	public ChunkPanelHeader(StyleManager styleManager) {
+	public ChunkPanelHeader(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, true);
 		this.styleManager = styleManager;
 		setOpaque(true);
@@ -54,9 +54,9 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		add(certainty);
 		add(distance);
 		add(nether);
-		updateHeaderText();
-		setAngleUpdatesEnabled(Main.preferences.showAngleUpdates.get());
-		strongholdDisplayTypeChangedSubscription = Main.preferences.strongholdDisplayType.whenModified().subscribe(__ -> updateHeaderText());
+		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
+		updateHeaderText(preferences.strongholdDisplayType.get());
+		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(newValue -> updateHeaderText(newValue));
 
 		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
 		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
@@ -84,8 +84,8 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		}
 	}
 
-	public void updateHeaderText() {
-		location.setText(Main.preferences.strongholdDisplayType.get() == NinjabrainBotPreferences.CHUNK ? I18n.get("chunk") : I18n.get("location"));
+	public void updateHeaderText(StrongholdDisplayType sdt) {
+		location.setText(sdt == StrongholdDisplayType.CHUNK ? I18n.get("chunk") : I18n.get("location"));
 	}
 
 	public void setAngleUpdatesEnabled(boolean b) {

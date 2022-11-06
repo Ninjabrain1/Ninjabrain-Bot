@@ -11,12 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
 public class NotificationsFrame extends ThemedFrame {
@@ -30,8 +30,8 @@ public class NotificationsFrame extends ThemedFrame {
 	JPanel mainPanel;
 	ThemedLabel label;
 
-	public NotificationsFrame(StyleManager styleManager) {
-		super(styleManager, I18n.get("notificationsframe.new_version_available"));
+	public NotificationsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
+		super(styleManager, preferences, I18n.get("notificationsframe.new_version_available"));
 		mainPanel = new JPanel();
 		mainPanel.setOpaque(false);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -57,7 +57,7 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.add(changelogButton);
 
 		// Subscriptions
-		sh.add(Main.preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 	}
 
 	@Override

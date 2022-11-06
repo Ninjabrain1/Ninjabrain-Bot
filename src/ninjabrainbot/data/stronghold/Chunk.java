@@ -3,6 +3,7 @@ package ninjabrainbot.data.stronghold;
 import java.util.Objects;
 
 import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.ISet;
 
 public class Chunk {
@@ -52,29 +53,29 @@ public class Chunk {
 	 * Returns the distance (number of blocks) to the predicted location from the
 	 * given throw.
 	 */
-	public int getDistance(IThrow t) {
+	public int getDistance(McVersion version, IThrow t) {
 		double playerX = t.x();
 		double playerZ = t.z();
 		if (t.isNether()) {
 			playerX *= 8;
 			playerZ *= 8;
 		}
-		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord() - playerX;
-		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord() - playerZ;
+		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - playerX;
+		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord(version) - playerZ;
 		return (int) (Math.sqrt(deltax * deltax + deltaz * deltaz) / (t.isNether() ? 8.0 : 1.0));
 	}
 
-	public double[] getAngleErrors(ISet<IThrow> eyeThrows) {
+	public double[] getAngleErrors(McVersion version, ISet<IThrow> eyeThrows) {
 		double[] errors = new double[eyeThrows.size()];
 		for (int i = 0; i < errors.length; i++) {
-			errors[i] = getAngleError(eyeThrows.get(i));
+			errors[i] = getAngleError(version, eyeThrows.get(i));
 		}
 		return errors;
 	}
 
-	public double getAngleError(IThrow t) {
-		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x();
-		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z();
+	public double getAngleError(McVersion version, IThrow t) {
+		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.x();
+		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.z();
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
 		double delta = (t.alpha() - gamma) % 360.0;
 		if (delta < -180)

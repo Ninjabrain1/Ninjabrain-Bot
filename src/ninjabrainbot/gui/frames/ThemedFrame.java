@@ -16,6 +16,7 @@ import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -30,11 +31,11 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 
-	public ThemedFrame(StyleManager styleManager, String title) {
+	public ThemedFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
 		super(title);
 		styleManager.registerThemedFrame(this);
 		setUndecorated(true); // Remove borders
-		setAlwaysOnTop(Main.preferences.alwaysOnTop.get()); // Always focused
+		setAlwaysOnTop(preferences.alwaysOnTop.get()); // Always focused
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		titlebarPanel = new TitleBarPanel(styleManager, this);
 		add(titlebarPanel);

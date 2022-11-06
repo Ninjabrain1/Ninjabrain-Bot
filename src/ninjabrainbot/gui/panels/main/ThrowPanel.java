@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
@@ -23,6 +22,7 @@ import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.BooleanPreference;
 
 /**
  * JComponent for showing a Throw.
@@ -57,13 +57,13 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private WrappedColor posCol;
 	private WrappedColor lineCol;
 
-	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged) {
+	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, BooleanPreference showAngleErrors) {
 		super(styleManager);
 		this.index = index;
 		this.whenVisibilityChanged = whenVisibilityChanged;
 
 		setOpaque(true);
-		errorsEnabled = Main.preferences.showAngleErrors.get();
+		errorsEnabled = showAngleErrors.get();
 		x = new JLabel((String) null, 0);
 		z = new JLabel((String) null, 0);
 		alpha = new JLabel((String) null, 0);
@@ -109,6 +109,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	void setAngleErrorsEnabled(boolean e) {
 		errorsEnabled = e;
+		error.setVisible(errorsEnabled);
 	}
 
 	private void updateError(ChunkPrediction p) {

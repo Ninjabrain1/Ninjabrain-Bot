@@ -19,6 +19,7 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.io.preferences.MultipleChoicePreference;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
@@ -28,7 +29,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
 
-	private MultipleChoicePreference strongholdDisplayType;
+	private MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
 	
 	private ChunkPrediction currentPrediction;
 
@@ -134,7 +135,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void setText(ChunkPrediction p) {
-		location.setText(p.formatLocation(strongholdDisplayType));
+		location.setText(p.formatLocation(strongholdDisplayType.get()));
 		certainty.setText(p.formatCertainty(), (float) p.chunk.weight);
 		distance.setText(p.formatDistance());
 		nether.setText(p.formatNether());

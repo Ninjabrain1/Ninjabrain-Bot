@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import ninjabrainbot.event.Modifiable;
 
-public class MultipleChoicePreference<T extends IMultipleChoicePreferenceDataType> extends Modifiable<IMultipleChoicePreferenceDataType> {
+public class MultipleChoicePreference<T extends IMultipleChoicePreferenceDataType> extends Modifiable<T> {
 
 	IPreferenceSource pref;
 
@@ -48,14 +48,16 @@ public class MultipleChoicePreference<T extends IMultipleChoicePreferenceDataTyp
 		return choices_;
 	}
 
-	public IMultipleChoicePreferenceDataType get() {
-		return value;
+	@SuppressWarnings("unchecked")
+	public T get() {
+		return (T) value;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void set(IMultipleChoicePreferenceDataType value) {
 		this.value = value;
 		pref.putInt(key, choice2id.get(value));
-		notifySubscribers(value);
+		notifySubscribers((T) value);
 	}
 
 	public IMultipleChoicePreferenceDataType[] getChoices() {

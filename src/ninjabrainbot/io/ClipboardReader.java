@@ -5,7 +5,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
@@ -13,9 +12,12 @@ import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.endereye.Throw1_12;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ClipboardReader implements Runnable {
 
+	private NinjabrainBotPreferences preferences;
+	
 	Clipboard clipboard;
 	String lastClipboardString;
 
@@ -25,7 +27,8 @@ public class ClipboardReader implements Runnable {
 	private ObservableProperty<IThrow> whenNewThrowInputed;
 	private ObservableProperty<Fossil> whenNewFossilInputed;
 
-	public ClipboardReader(IModificationLock modificationLock) {
+	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
+		this.preferences = preferences;
 		this.modificationLock = modificationLock;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
@@ -49,8 +52,8 @@ public class ClipboardReader implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			boolean read = !Main.preferences.altClipboardReader.get();
-			if (Main.preferences.altClipboardReader.get() && forceReadLater.get()) {
+			boolean read = !preferences.altClipboardReader.get();
+			if (preferences.altClipboardReader.get() && forceReadLater.get()) {
 				read = true;
 				// Sleep 0.1 seconds to let the game update the clipboard
 				try {
@@ -80,12 +83,12 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard, modificationLock);
+		final IThrow t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard, modificationLock);
+		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;

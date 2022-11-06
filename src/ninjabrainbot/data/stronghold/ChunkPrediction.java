@@ -7,6 +7,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Modifiable;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
@@ -20,19 +21,22 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	private double travelAngle;
 	private double travelAngleDiff;
 
+	private McVersion version;
+
 	private Subscription playerPosSubscription;
 
 	/**
 	 * Creates a failed triangulation result.
 	 */
 	public ChunkPrediction() {
-		this(new Chunk(0, 0), null);
+		this(new Chunk(0, 0), null, McVersion.PRE_119);
 	}
 
 	/**
 	 * Creates a triangulation result.
 	 */
-	public ChunkPrediction(Chunk chunk, IObservable<IThrow> playerPos) {
+	public ChunkPrediction(Chunk chunk, IObservable<IThrow> playerPos, McVersion version) {
+		this.version = version;
 		this.chunk = chunk;
 		this.fourfour_x = 16 * chunk.x + 4;
 		this.fourfour_z = 16 * chunk.z + 4;
@@ -46,7 +50,7 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	private void updateWithPlayerPos(IThrow playerPos, boolean notify) {
 		if (playerPos == null)
 			return;
-		distance = chunk.getDistance(playerPos);
+		distance = chunk.getDistance(version, playerPos);
 		double playerX = playerPos.x();
 		double playerZ = playerPos.z();
 		if (playerPos.isNether()) {
@@ -136,11 +140,11 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	}
 
 	public double[] getAngleErrors(ISet<IThrow> eyeThrows) {
-		return chunk.getAngleErrors(eyeThrows);
+		return chunk.getAngleErrors(version, eyeThrows);
 	}
 
 	public double getAngleError(IThrow t) {
-		return t == null ? -1 : chunk.getAngleError(t);
+		return t == null ? -1 : chunk.getAngleError(version, t);
 	}
 
 	@Override

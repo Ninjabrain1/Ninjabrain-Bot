@@ -27,6 +27,7 @@ import ninjabrainbot.gui.panels.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
@@ -47,8 +48,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private static final String TITLE_TEXT = I18n.get("title");
 	private static final String VERSION_TEXT = "v" + Main.VERSION;
 
-	public NinjabrainBotFrame(StyleManager styleManager, IDataStateHandler dataStateHandler, NinjabrainBotPreferences preferences) {
-		super(styleManager, TITLE_TEXT);
+	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+		super(styleManager, preferences, TITLE_TEXT);
 		this.preferences = preferences;
 		Profiler.start("NinjabrainBotFrame");
 		setLocation(preferences.windowX.get(), preferences.windowY.get()); // Set window position
@@ -72,7 +73,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		int versionwidth = styleManager.getTextWidth(VERSION_TEXT, styleManager.fontSize(styleManager.size.TEXT_SIZE_TITLE_SMALL, false));
 		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
 		// Frame size
-		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
+		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(MainViewType.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}
@@ -114,7 +115,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(createMinimizeButton(styleManager));
 		settingsButton = createSettingsButton(styleManager);
 		titlebarPanel.addButton(settingsButton);
-		notificationsButton = new NotificationsButton(styleManager, this);
+		notificationsButton = new NotificationsButton(styleManager, this, preferences);
 		titlebarPanel.addButton(notificationsButton);
 	}
 
@@ -126,7 +127,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private void createComponents(StyleManager styleManager, IDataStateHandler dataStateHandler) {
 		IDataState dataState = dataStateHandler.getDataState();
 		// Main text
-		mainTextArea = new MainTextArea(styleManager, dataState);
+		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
 		add(mainTextArea);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataStateHandler);
@@ -169,7 +170,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private void updateSize(StyleManager styleManager) {
-		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(NinjabrainBotPreferences.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
+		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(MainViewType.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}

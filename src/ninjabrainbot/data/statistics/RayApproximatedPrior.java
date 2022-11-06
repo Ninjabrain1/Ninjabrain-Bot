@@ -6,6 +6,7 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Coords;
 
 /**
@@ -16,18 +17,18 @@ public class RayApproximatedPrior implements IPrior {
 	ArrayList<Chunk> chunks;
 	IDivineContext divineContext;
 
-	public RayApproximatedPrior(IRay r, IDivineContext divineContext) {
-		this(r, 1.0 / 180.0 * Math.PI, divineContext); // 1 degree tolerance
+	public RayApproximatedPrior(IRay r, IDivineContext divineContext, McVersion version) {
+		this(r, 1.0 / 180.0 * Math.PI, divineContext, version); // 1 degree tolerance
 	}
 
-	public RayApproximatedPrior(IRay r, double tolerance, IDivineContext divineContext) {
+	public RayApproximatedPrior(IRay r, double tolerance, IDivineContext divineContext, McVersion version) {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
-		construct(r, tolerance);
+		construct(r, tolerance, version);
 		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
 
-	private void construct(IRay r, double tolerance) {
+	private void construct(IRay r, double tolerance, McVersion version) {
 		double range = 5000.0 / 16;
 		chunks = new ArrayList<Chunk>();
 		double phi = r.alpha() / 180.0 * Math.PI;
@@ -43,8 +44,8 @@ public class RayApproximatedPrior implements IPrior {
 		boolean majorX = Math.cos(phi) * Math.cos(phi) < 0.5;
 		boolean majorPositive = majorX ? -Math.sin(phi) > 0 : Math.cos(phi) > 0;
 		// Subtract StrongholdChunkCoord to center grid at (8,8) (or 0,0 in 1.19).
-		double origin_major = ((majorX ? r.x() : r.z()) - StrongholdConstants.getStrongholdChunkCoord()) / 16.0;
-		double origin_minor = ((majorX ? r.z() : r.x()) - StrongholdConstants.getStrongholdChunkCoord()) / 16.0;
+		double origin_major = ((majorX ? r.x() : r.z()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
+		double origin_minor = ((majorX ? r.z() : r.x()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
 		double iter_start_major = getIterStartMajor(origin_major, origin_minor, ux, uz, vx, vz, majorX, majorPositive);
 		double uk = majorX ? uz / ux : ux / uz;
 		double vk = majorX ? vz / vx : vx / vz;

@@ -1,6 +1,5 @@
 package ninjabrainbot.data.endereye;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
@@ -46,7 +45,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	 * Returns a Throw object if the given string is the result of an F3+C command,
 	 * null otherwise.
 	 */
-	public static IThrow parseF3C(String string, IModificationLock modificationLock) {
+	public static IThrow parseF3C(String string, double crosshairCorrection, IModificationLock modificationLock) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -59,7 +58,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 			double z = Double.parseDouble(substrings[8]);
 			double alpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			alpha += Main.preferences.crosshairCorrection.get();
+			alpha += crosshairCorrection;
 			return new Throw(x, z, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;

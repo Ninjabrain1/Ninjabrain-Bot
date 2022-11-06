@@ -5,23 +5,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.ISet;
 
 public class Posterior {
 
+	private McVersion version;
+
 	IPrior prior;
 	ArrayList<Chunk> chunks;
 
-	public Posterior(ISet<IThrow> eyeThrows, IDivineContext divineContext) {
+	public Posterior(ISet<IThrow> eyeThrows, IDivineContext divineContext, boolean useAdvStatistics, McVersion version) {
+		this.version = version;
 		double sigma0 = eyeThrows.get(0).getStd();
-		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext);
+		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).x();
 		double pz = eyeThrows.get(0).z();
@@ -39,7 +42,7 @@ public class Posterior {
 		for (IThrow t : eyeThrows) {
 			condition(t);
 		}
-		if (Main.preferences.useAdvStatistics.get())
+		if (useAdvStatistics)
 			closestStrongholdCondition(eyeThrows.get(0), 0.001);
 	}
 
@@ -60,7 +63,7 @@ public class Posterior {
 	 * probability greater than the given tolerance.
 	 */
 	public double getMinDistance(double tolerance, IThrow position) {
-		return getClosestPossibleChunk(tolerance, position).getDistance(position);
+		return getClosestPossibleChunk(tolerance, position).getDistance(version, position);
 	}
 
 	/**
@@ -72,7 +75,7 @@ public class Posterior {
 		double minDist = Double.POSITIVE_INFINITY;
 		for (Chunk c : chunks) {
 			if (c.weight > tolerance) {
-				double dist = c.getDistance(position);
+				double dist = c.getDistance(version, position);
 				if (dist < minDist) {
 					minDist = dist;
 					closest = c;
@@ -92,8 +95,8 @@ public class Posterior {
 	}
 
 	private void updateConditionalProbability(Chunk chunk, IThrow t) {
-		double deltax = chunk.x * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.x();
-		double deltaz = chunk.z * 16 + StrongholdConstants.getStrongholdChunkCoord() - t.z();
+		double deltax = chunk.x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.x();
+		double deltaz = chunk.z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.z();
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		double delta = Math.abs((gamma - t.alpha()) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
@@ -141,8 +144,8 @@ public class Posterior {
 
 	private double closestStrongholdCondition(Chunk chunk, IThrow t) {
 		double closestStrongholdProbability = 1;
-		double deltax = chunk.x + (StrongholdConstants.getStrongholdChunkCoord() - t.x()) / 16.0;
-		double deltaz = chunk.z + (StrongholdConstants.getStrongholdChunkCoord() - t.z()) / 16.0;
+		double deltax = chunk.x + (StrongholdConstants.getStrongholdChunkCoord(version) - t.x()) / 16.0;
+		double deltaz = chunk.z + (StrongholdConstants.getStrongholdChunkCoord(version) - t.z()) / 16.0;
 		double r_p = Math.sqrt(t.x() * t.x() + t.z() * t.z()) / 16.0;
 		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
 		double phi_prime = Coords.getPhi(chunk.x, chunk.z);

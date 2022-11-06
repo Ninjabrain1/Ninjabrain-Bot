@@ -1,9 +1,9 @@
 package ninjabrainbot.data.endereye;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Modifiable;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdProfile, IDisposable {
 
@@ -14,10 +14,10 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 	private double[] stds;
 	private Subscription[] subs;
 
-	public StandardStdProfile() {
-		stds = new double[] { Main.preferences.sigma.get(), Main.preferences.sigmaAlt.get(), Main.preferences.sigmaManual.get() };
-		subs = new Subscription[] { Main.preferences.sigma.whenModified().subscribe(newStd -> setStd(NORMAL, newStd)),
-				Main.preferences.sigmaAlt.whenModified().subscribe(newStd -> setStd(ALTERNATIVE, newStd)), Main.preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)) };
+	public StandardStdProfile(NinjabrainBotPreferences preferences) {
+		stds = new double[] { preferences.sigma.get(), preferences.sigmaAlt.get(), preferences.sigmaManual.get() };
+		subs = new Subscription[] { preferences.sigma.whenModified().subscribe(newStd -> setStd(NORMAL, newStd)), preferences.sigmaAlt.whenModified().subscribe(newStd -> setStd(ALTERNATIVE, newStd)),
+				preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)) };
 	}
 
 	@Override

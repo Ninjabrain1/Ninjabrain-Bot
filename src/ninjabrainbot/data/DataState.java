@@ -127,7 +127,7 @@ public class DataState implements IDataState, IDisposable {
 		updateTopPrediction(calculatorResult.get());
 		resultType.set(calculatorResult.get() == null ? ResultType.NONE : calculatorResult().get().success() ? ResultType.TRIANGULATION : ResultType.FAILED);
 	}
-	
+
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
 		if (calculatorResult == null || !calculatorResult.success()) {
 			topPrediction.set(null);

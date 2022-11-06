@@ -3,7 +3,6 @@ package ninjabrainbot.gui.panels.main;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -11,6 +10,7 @@ import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.gui.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class MainTextArea extends ResizablePanel {
@@ -19,6 +19,8 @@ public class MainTextArea extends ResizablePanel {
 
 	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET";
 
+	private NinjabrainBotPreferences preferences;
+	
 	IDataState dataState;
 
 	BasicTriangulationPanel basicTriangulation;
@@ -29,14 +31,15 @@ public class MainTextArea extends ResizablePanel {
 	boolean idle;
 	CardLayout layout;
 
-	public MainTextArea(StyleManager styleManager, IDataState dataState) {
+	public MainTextArea(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState) {
+		this.preferences = preferences;
 		this.dataState = dataState;
 		layout = new CardLayout();
 		idle = true;
 		setLayout(layout);
 		setAlignmentX(0);
-		basicTriangulation = new BasicTriangulationPanel(styleManager);
-		detailedTriangulation = new DetailedTriangulationPanel(styleManager);
+		basicTriangulation = new BasicTriangulationPanel(styleManager, preferences);
+		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
 		add(basicTriangulation, TRIANGULATION);
@@ -44,7 +47,7 @@ public class MainTextArea extends ResizablePanel {
 		add(blind, BLIND);
 		add(divine, DIVINE);
 		setOpaque(false);
-		layout.show(this, Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+		layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
 		setupSubscriptions();
 
 		setResult(dataState.calculatorResult().get());
@@ -55,9 +58,9 @@ public class MainTextArea extends ResizablePanel {
 
 	private void setupSubscriptions() {
 		// Settings
-		sh.add(Main.preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
-		sh.add(Main.preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
-		sh.add(Main.preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
+		sh.add(preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
+		sh.add(preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
+		sh.add(preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
 		// Data state
 		sh.add(dataState.calculatorResult().subscribeEDT(result -> setResult(result)));
 		sh.add(dataState.blindResult().subscribeEDT(result -> setResult(result)));
@@ -67,7 +70,7 @@ public class MainTextArea extends ResizablePanel {
 
 	private void onViewTypeChanged() {
 		ICalculatorResult result = dataState.calculatorResult().get();
-		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
+		if (preferences.view.get() == MainViewType.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
 			basicTriangulation.updateColors();
 		} else {
@@ -84,14 +87,14 @@ public class MainTextArea extends ResizablePanel {
 		idle = false;
 		switch (rt) {
 		case NONE:
-			layout.show(this, Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+			layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
 			idle = true;
 			break;
 		case FAILED:
 			layout.show(this, TRIANGULATION);
 			break;
 		case TRIANGULATION:
-			layout.show(this, Main.preferences.view.get() == NinjabrainBotPreferences.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+			layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
 			break;
 		case BLIND:
 			layout.show(this, BLIND);
@@ -103,7 +106,7 @@ public class MainTextArea extends ResizablePanel {
 	}
 
 	private void setResult(ICalculatorResult result) {
-		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC || (result != null && !result.success())) {
+		if (preferences.view.get() == MainViewType.BASIC || (result != null && !result.success())) {
 			basicTriangulation.setResult(result);
 			basicTriangulation.updateColors();
 		} else {
@@ -133,7 +136,7 @@ public class MainTextArea extends ResizablePanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (Main.preferences.view.get() == NinjabrainBotPreferences.BASIC) {
+		if (preferences.view.get() == MainViewType.BASIC) {
 			return basicTriangulation.getPreferredSize();
 		} else {
 			return detailedTriangulation.getPreferredSize();
