@@ -53,7 +53,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		add(currentAngleLabel);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
 		
-		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
+		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(ICalculatorResult result) {

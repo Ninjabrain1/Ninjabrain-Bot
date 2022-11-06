@@ -20,25 +20,25 @@ public abstract class SizePreference {
 	public int ANGLE_COLUMN_WIDTH;
 	public int WINDOW_ROUNDING;
 
-	public static final HashMap<SizeSetting, SizePreference> SIZES = new HashMap<SizeSetting, SizePreference>();
+	public static final HashMap<String, SizePreference> SIZES = new HashMap<String, SizePreference>();
 	public static final SizePreference REGULAR = new RegularSize();
 	public static final SizePreference LARGE = new LargeSize();
 	public static final SizePreference EXTRALARGE = new ExtraLargeSize();
 
 	public static SizePreference get(SizeSetting sizeSetting) {
-		return SIZES.getOrDefault(sizeSetting, REGULAR);
+		return SIZES.getOrDefault(sizeSetting.choiceName(), REGULAR);
 	}
 
-	public SizePreference(String name, SizeSetting sizeSetting) {
+	public SizePreference(String name) {
 		this.name = name;
-		SIZES.put(sizeSetting, this);
+		SIZES.put(name, this);
 	}
 
 }
 
 class RegularSize extends SizePreference {
 	public RegularSize() {
-		super(I18n.get("small"), SizeSetting.SMALL);
+		super(I18n.get("small"));
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 14;
@@ -55,7 +55,7 @@ class RegularSize extends SizePreference {
 
 class LargeSize extends SizePreference {
 	public LargeSize() {
-		super(I18n.get("medium"), SizeSetting.MEDIUM);
+		super(I18n.get("medium"));
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 16;
@@ -73,7 +73,7 @@ class LargeSize extends SizePreference {
 
 class ExtraLargeSize extends SizePreference {
 	public ExtraLargeSize() {
-		super(I18n.get("large"), SizeSetting.LARGE);
+		super(I18n.get("large"));
 		TEXT_SIZE_TITLE_LARGE = 15;
 		TEXT_SIZE_TITLE_SMALL = 12;
 		TEXT_SIZE_MEDIUM = 24;

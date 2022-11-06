@@ -33,7 +33,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 //		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setLayout(null);
 		tabPanel = new ThemedOpaquePanel(styleManager);
-		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		tabPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -109,7 +109,7 @@ class TabButton extends FlatButton {
 		this.component = component;
 		label.setCursor(null);
 		addActionListener(p -> onClicked());
-		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		cColor = styleManager.currentTheme.COLOR_NEUTRAL;
 	}
 

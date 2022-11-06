@@ -47,7 +47,7 @@ public class MainButtonPanel extends ThemedPanel {
 		add(undoButton);
 		add(resetButton);
 
-		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
+		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 	}
 

@@ -48,7 +48,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 		add(alpha);
 		add(error);
 		setLayout(null);
-		lineColor = styleManager.currentTheme.COLOR_STRONGEST;
+		lineColor = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_STRONG);
 	}

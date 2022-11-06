@@ -77,7 +77,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
 		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
 
-		borderCol = styleManager.currentTheme.COLOR_STRONGER;
+		borderCol = styleManager.currentTheme.COLOR_DIVIDER;
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 	}

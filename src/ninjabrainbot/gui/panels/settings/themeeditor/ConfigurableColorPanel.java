@@ -1,9 +1,11 @@
 package ninjabrainbot.gui.panels.settings.themeeditor;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -25,11 +27,18 @@ public class ConfigurableColorPanel extends ThemedPanel {
 		this.configurableColor = configurableColor;
 
 		ThemedPanel colorPreview = new ColorPreviewPanel(previewStyleManager, configurableColor);
-		colorName = new FlatButton(styleManager, configurableColor.name);
+		colorName = new LeftAlignedButton(styleManager, configurableColor.name);
 
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		add(colorPreview);
-		add(colorName);
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridy = 0;
+		gbc.gridx = GridBagConstraints.RELATIVE;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0;
+		add(colorPreview, gbc);
+		gbc.weightx = 1;
+		add(colorName, gbc);
 
 		setBorder(new EmptyBorder(2, 2, 2, 2));
 	}
@@ -62,4 +71,15 @@ class ColorPreviewPanel extends ThemedPanel {
 		int textSize = getTextSize(styleManager.size);
 		setPreferredSize(new Dimension(textSize * 2, textSize * 2));
 	}
+}
+
+class LeftAlignedButton extends FlatButton {
+
+	private static final long serialVersionUID = 1439936402421359939L;
+
+	LeftAlignedButton(StyleManager styleManager, String name) {
+		super(styleManager, "  " + name);
+		label.setHorizontalAlignment(SwingConstants.LEFT);
+	}
+
 }

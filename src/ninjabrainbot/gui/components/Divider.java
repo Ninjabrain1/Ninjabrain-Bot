@@ -15,7 +15,7 @@ public class Divider extends JSeparator implements ThemedComponent {
 
 	public Divider(StyleManager styleManager) {
 		styleManager.registerThemedComponent(this);
-		bgCol = styleManager.currentTheme.COLOR_STRONGEST;
+		bgCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 	}
 
 	@Override

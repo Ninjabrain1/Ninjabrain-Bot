@@ -80,7 +80,7 @@ public class GUI {
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(styleManager, preferences);
 		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> optionsFrame.toggleWindow(ninjabrainBotFrame));
-		new ThemeEditorFrame(styleManager, preferences, "Theme Editor").setVisible(true);
+		new ThemeEditorFrame(styleManager, preferences).setVisible(true);
 
 		Progress.setTask("Settings fonts and colors", 0.99f);
 		Profiler.stopAndStart("Init fonts, colors, bounds");

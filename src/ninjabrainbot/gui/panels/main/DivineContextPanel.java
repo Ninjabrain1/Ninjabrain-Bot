@@ -39,8 +39,8 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
 		removeButton = new FlatButton(styleManager, "–");
-		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
-		removeButton.setForegroundColor(styleManager.currentTheme.COLOR_REMOVE_BUTTON_HOVER);
+		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
+		removeButton.setForegroundColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		add(removeButton);
 		add(label);
 		setLayout(null);
@@ -49,8 +49,8 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		fossilSubscription = dc.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
 		this.whenVisibilityChanged = whenVisibilityChanged;
 
-		borderCol = styleManager.currentTheme.COLOR_STRONGEST;
-		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGER);
+		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
+		setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 	}
 

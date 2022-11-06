@@ -71,7 +71,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		error = new JLabel((String) null, 0);
 		removeButton = new FlatButton(styleManager, "–");
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
-		removeButton.setHoverColor(styleManager.currentTheme.COLOR_REMOVE_BUTTON_HOVER);
+		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		removeButton.setVisible(false);
 		removeButton.addActionListener(p -> dataStateHandler.removeThrow(this.t));
 		add(removeButton);
@@ -94,7 +94,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		negCol = styleManager.currentTheme.COLOR_NEGATIVE;
 		posCol = styleManager.currentTheme.COLOR_POSITIVE;
-		lineCol = styleManager.currentTheme.COLOR_STRONGER;
+		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 	}
 
 	public void setPrediction(ChunkPrediction p) {

@@ -312,7 +312,7 @@ class ErrorTextArea extends JScrollPane implements ThemedComponent {
 		setOpaque(false);
 		styleManager.registerThemedComponent(this);
 
-		bgCol = styleManager.currentTheme.COLOR_STRONGER;
+		bgCol = styleManager.currentTheme.COLOR_DIVIDER;
 		fgCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 		setBorder(BorderFactory.createLineBorder(getBackgroundColor(), 1));
 	}

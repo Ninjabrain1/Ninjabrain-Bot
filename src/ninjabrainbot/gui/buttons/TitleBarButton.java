@@ -11,13 +11,13 @@ public class TitleBarButton extends FlatButton {
 	public TitleBarButton(StyleManager styleManager, ImageIcon img) {
 		super(styleManager, img);
 		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGEST);
-		setHoverColor(styleManager.currentTheme.COLOR_STRONGER);
+		setHoverColor(styleManager.currentTheme.COLOR_DIVIDER);
 	}
 
 	public TitleBarButton(StyleManager styleManager, String str) {
 		super(styleManager, str);
 		setBackgroundColor(styleManager.currentTheme.COLOR_STRONGEST);
-		setHoverColor(styleManager.currentTheme.COLOR_STRONGER);
+		setHoverColor(styleManager.currentTheme.COLOR_DIVIDER);
 	}
 
 }

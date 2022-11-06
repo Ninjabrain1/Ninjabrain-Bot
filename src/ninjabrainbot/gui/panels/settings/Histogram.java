@@ -44,7 +44,7 @@ public class Histogram extends ThemedPanel {
 		addTick(styleManager, max);
 		
 		histCol = styleManager.currentTheme.COLOR_SATURATED;
-		lineCol = styleManager.currentTheme.COLOR_STRONGEST;
+		lineCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 	}
 
 	private void addTick(StyleManager styleManager, float tick) {
