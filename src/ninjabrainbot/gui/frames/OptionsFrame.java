@@ -455,7 +455,7 @@ class RadioButtonPanel extends ThemedPanel {
 				return p.TEXT_SIZE_SMALL;
 			}
 		};
-		radioButtomGroup = new RadioButtonGroup(styleManager, preference.getChoices(), preference.get()) {
+		radioButtomGroup = new RadioButtonGroup(styleManager, preference.getChoices(), preference.get(), preference.getChoices().length >= 4) {
 			private static final long serialVersionUID = -1357640224921308648L;
 
 			@Override
