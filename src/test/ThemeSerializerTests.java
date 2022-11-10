@@ -65,7 +65,7 @@ public class ThemeSerializerTests {
 	}
 
 	public void deserialize_serialize_shouldBeIdenticalToOriginal() {
-		String string = "a71`Wb9BDhc:be4d:2Tme8B4`f71`Wgl4M7hooooiiNGUjP820k`<30lMLa\\mc6ib";
+		String string = "a71`Wb9BDhc:be4d:2Tme8B4`f71`Wgl4M7noooohooooiiNGUjP820k`<30lMLa\\mc6ib";
 		assert ThemeSerializer.serialize(ThemeSerializer.deserialize(string)).contentEquals(string);
 	}
 
@@ -89,6 +89,7 @@ public class ThemeSerializerTests {
 		assert colorsAreEqual(a.TEXT_COLOR_SLIGHTLY_STRONG.color(), b.TEXT_COLOR_SLIGHTLY_STRONG.color());
 		assert colorsAreEqual(a.TEXT_COLOR_STRONG.color(), b.TEXT_COLOR_STRONG.color());
 		assert colorsAreEqual(a.TEXT_COLOR_WEAK.color(), b.TEXT_COLOR_WEAK.color());
+		assert colorsAreEqual(a.ICON_COLOR.color(), b.ICON_COLOR.color());
 	}
 
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_blue() {
@@ -111,6 +112,7 @@ public class ThemeSerializerTests {
 		assert colorsAreEqual(a.TEXT_COLOR_SLIGHTLY_STRONG.color(), b.TEXT_COLOR_SLIGHTLY_STRONG.color());
 		assert colorsAreEqual(a.TEXT_COLOR_STRONG.color(), b.TEXT_COLOR_STRONG.color());
 		assert colorsAreEqual(a.TEXT_COLOR_WEAK.color(), b.TEXT_COLOR_WEAK.color());
+		assert colorsAreEqual(a.ICON_COLOR.color(), b.ICON_COLOR.color());
 	}
 
 	private boolean colorsAreEqual(Color a, Color b) {
