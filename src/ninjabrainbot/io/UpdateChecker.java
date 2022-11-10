@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.util.Logger;
 
 public class UpdateChecker implements Runnable {
 
@@ -48,7 +49,6 @@ public class UpdateChecker implements Runnable {
 		con.setRequestProperty("accept", "application/vnd.github.v3+json");
 		con.setDoOutput(true);
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//		System.out.println(con.getResponseMessage());
 		StringBuffer response = new StringBuffer();
 		String inputLine;
 		while ((inputLine = in.readLine()) != null)
@@ -105,7 +105,7 @@ public class UpdateChecker implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
 
 	private static int[] getSemanticVersion(String s) {

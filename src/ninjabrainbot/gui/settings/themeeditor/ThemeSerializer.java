@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.CustomTheme;
-import ninjabrainbot.gui.style.Theme;
 
 public class ThemeSerializer {
 
@@ -44,7 +43,7 @@ public class ThemeSerializer {
 	}
 
 	private static ParseResult parseThemeString_v1_4_0(String string) {
-		if (string.length() % 5 != 0)
+		if (string.length() % 5 != 0 || string.length() == 0)
 			return new ParseResult();
 		ArrayList<Character> tags = new ArrayList<>();
 		ArrayList<Color> colors = new ArrayList<>();
@@ -64,12 +63,13 @@ public class ThemeSerializer {
 		return new ParseResult(tags, colors);
 	}
 
-	private static String serializeColor(Color c) {
+	public static String serializeColor(Color c) {
 		return serializeInt(c.getRGB(), 24);
 	}
 
-	private static Color deserializeColor(String s) throws IllegalArgumentException {
-		assert s.length() == 4;
+	public static Color deserializeColor(String s) throws IllegalArgumentException {
+		if (s.length() != 4)
+			return null;
 		return new Color(deserializeInt(s));
 	}
 
@@ -102,11 +102,6 @@ public class ThemeSerializer {
 		if (value < 0 || value >= 64)
 			throw new IllegalArgumentException();
 		return value;
-	}
-
-	public static void main(String[] args) {
-		assert serialize(deserialize(serialize(Theme.getCustomTheme()))).contentEquals(serialize(Theme.getCustomTheme()));
-		System.out.println("All tests passed.");
 	}
 
 }

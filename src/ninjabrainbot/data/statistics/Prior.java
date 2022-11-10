@@ -9,6 +9,7 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.RingIterator;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
+import ninjabrainbot.util.Logger;
 
 public class Prior implements IPrior {
 
@@ -35,7 +36,7 @@ public class Prior implements IPrior {
 		}
 		setInitialWeights();
 		smoothWeights();
-		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
 
 	/**

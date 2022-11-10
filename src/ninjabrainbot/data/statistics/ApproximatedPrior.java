@@ -5,6 +5,7 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.RingIterator;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.util.Coords;
+import ninjabrainbot.util.Logger;
 
 /**
  * A prior that approximates biome snapping as opposed to calculating it
@@ -24,10 +25,10 @@ public class ApproximatedPrior extends Prior {
 	 * Test the accuracy of of the approximated prior.
 	 */
 	public void evaluateError() {
-		System.out.println("Evaluating approximated prior.");
-		System.out.println("Constructing true prior...");
+		Logger.log("Evaluating approximated prior.");
+		Logger.log("Constructing true prior...");
 		Prior prior = new Prior();
-		System.out.println("Comparing approximation to true prior...");
+		Logger.log("Comparing approximation to true prior...");
 		double largestRelError = 0;
 		double sump = 0;
 		double sum = 0;
@@ -38,8 +39,8 @@ public class ApproximatedPrior extends Prior {
 		for (int i = 0; i < chunks.length; i++) {
 			if (prior.chunks[i].weight != 0) {
 				if (chunks[i].weight == 0) {
-					System.out.println("x: " + (i % size1d - radius) + ", z: " + (i / size1d - radius));
-					System.out.println(prior.chunks[i].weight);
+					Logger.log("x: " + (i % size1d - radius) + ", z: " + (i / size1d - radius));
+					Logger.log(prior.chunks[i].weight);
 					falseNegativeCount++;
 				}
 				double relError = chunks[i].weight / prior.chunks[i].weight;
@@ -59,20 +60,20 @@ public class ApproximatedPrior extends Prior {
 		}
 //		errors.sort((Pair<Double, String> p1, Pair<Double, String> p2) -> Double.compare(p1.fst, p2.fst));
 //		for (Pair<Double, String> p : errors) {
-//			System.out.println(p.fst + p.snd);
+//			Logger.log(p.fst + p.snd);
 //		}
-		System.out.println("Average non-zero weight: " + sum / numNonZeroChunks);
-		System.out.println("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError / numNonZeroChunks));
-		System.out.println("Largest relative error: " + largestRelError);
-		System.out.println("False negative count: " + falseNegativeCount);
-		System.out.println("Prior sum: " + sump);
-		System.out.println("Approx prior sum: " + sum);
+		Logger.log("Average non-zero weight: " + sum / numNonZeroChunks);
+		Logger.log("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError / numNonZeroChunks));
+		Logger.log("Largest relative error: " + largestRelError);
+		Logger.log("False negative count: " + falseNegativeCount);
+		Logger.log("Prior sum: " + sump);
+		Logger.log("Approx prior sum: " + sum);
 		RingIterator ringIterator = new RingIterator();
 		Ring ring = ringIterator.next();
-		System.out.println("Density at 1600: Approx: " + strongholdDensity(100, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(100, 0, ring));
+		Logger.log("Density at 1600: Approx: " + strongholdDensity(100, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(100, 0, ring));
 		ring = ringIterator.next();
 		ring = ringIterator.next();
-		System.out.println("Density at 8000: Approx: " + strongholdDensity(500, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(500, 0, ring));
+		Logger.log("Density at 8000: Approx: " + strongholdDensity(500, 0, ring) + ", True (pre snapping): " + super.strongholdDensity(500, 0, ring));
 	}
 
 	@Override

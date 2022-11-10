@@ -8,7 +8,7 @@ public class CustomTheme extends Theme {
 	private ArrayList<ConfigurableColor> configurableColors = new ArrayList<ConfigurableColor>();
 
 	public CustomTheme() {
-		super("Custom");
+		super("Dark");
 		configurableColors = new ArrayList<ConfigurableColor>();
 
 		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"), "Title bar", "a");
@@ -26,7 +26,7 @@ public class CustomTheme extends Theme {
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"), "Subpixel -", "m");
 		
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#27273D"), COLOR_STRONG);
-		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
+		COLOR_SATURATED = createColor(Color.decode("#57EBA3"), COLOR_STRONG);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 		BLACK_ICONS = createBoolean(false);
@@ -39,13 +39,11 @@ public class CustomTheme extends Theme {
 		COLOR_NEUTRAL.set(theme.COLOR_NEUTRAL);
 		COLOR_DIVIDER.set(theme.COLOR_DIVIDER);
 		COLOR_DIVIDER_DARK.set(theme.COLOR_DIVIDER_DARK);
-		COLOR_SLIGHTLY_STRONG.set(theme.COLOR_SLIGHTLY_STRONG);
 		COLOR_EXIT_BUTTON_HOVER.set(theme.COLOR_EXIT_BUTTON_HOVER);
 		TEXT_COLOR_STRONG.set(theme.TEXT_COLOR_STRONG);
 		TEXT_COLOR_SLIGHTLY_STRONG.set(theme.TEXT_COLOR_SLIGHTLY_STRONG);
 		TEXT_COLOR_WEAK.set(theme.TEXT_COLOR_WEAK);
 		TEXT_COLOR_NEUTRAL.set(theme.TEXT_COLOR_NEUTRAL);
-		COLOR_SATURATED.set(theme.COLOR_SATURATED);
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
 

@@ -8,6 +8,7 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.StrongholdConstants;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Coords;
+import ninjabrainbot.util.Logger;
 
 /**
  * A prior computed only close to a ray.
@@ -25,7 +26,7 @@ public class RayApproximatedPrior implements IPrior {
 		long t0 = System.currentTimeMillis();
 		this.divineContext = divineContext;
 		construct(r, tolerance, version);
-		System.out.println("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to construct prior: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
 
 	private void construct(IRay r, double tolerance, McVersion version) {

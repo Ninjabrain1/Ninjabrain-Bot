@@ -46,7 +46,6 @@ public class ApproximatedDensity {
 		}
 		for (int i = 0; i < filter.length; i++) {
 			filter[i] = filter[i] / sum;
-			// System.out.println(filter[i]);
 		}
 		// convolve
 		double[] densityPreSnapping = density;

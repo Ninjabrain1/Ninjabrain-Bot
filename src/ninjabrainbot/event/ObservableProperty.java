@@ -3,6 +3,8 @@ package ninjabrainbot.event;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import ninjabrainbot.util.Logger;
+
 public class ObservableProperty<T> implements ISubscribable<T> {
 
 	protected ArrayList<Consumer<T>> subscribers;
@@ -26,7 +28,7 @@ public class ObservableProperty<T> implements ISubscribable<T> {
 		for (Consumer<T> subscriber : subscribers) {
 			subscriber.accept(changed);
 		}
-		System.out.println(changed + ", " + changed.getClass());
+		Logger.log(changed + ", " + changed.getClass());
 	}
 
 	public int subscriberCount() {

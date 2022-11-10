@@ -17,6 +17,7 @@ import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.ISet;
+import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Pair;
 
 public class Calculator implements ICalculator {
@@ -39,7 +40,7 @@ public class Calculator implements ICalculator {
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
 		Posterior posterior = new Posterior(eyeThrows, divineContext, settings.useAdvStatistics, settings.version);
-		System.out.println("Time to triangulate: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to triangulate: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 		return new CalculatorResult(posterior, eyeThrows, playerPos, settings.numberOfReturnedPredictions, settings.version);
 	}
 
@@ -87,7 +88,7 @@ public class Calculator implements ICalculator {
 		double optR = Math.sqrt(optX * optX + optZ * optZ);
 		optX *= optDist / optR;
 		optZ *= optDist / optR;
-		System.out.println("Time to calculate blind features: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to calculate blind features: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z),
 				Coords.dist(optX, optZ, b.x, b.z), optHighrollProb);
 	}

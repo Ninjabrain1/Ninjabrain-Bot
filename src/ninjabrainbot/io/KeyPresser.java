@@ -24,21 +24,13 @@ public class KeyPresser {
 	}
 
 	public void paste(String s) {
-//		System.out.println(1);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-//		System.out.println(2);
 		StringSelection selection = new StringSelection(s);
-//		System.out.println(3);
 		clipboard.setContents(selection, null);
-//		System.out.println(4);
 		robot.keyPress(CTRL_KEYCODE);
-//		System.out.println(5);
 		robot.keyPress(KeyEvent.VK_V);
-//		System.out.println(6);
 		robot.keyRelease(CTRL_KEYCODE);
-//		System.out.println(7);
 		robot.keyRelease(KeyEvent.VK_V);
-//		System.out.println(8);
 	}
 
 	public void releaseF3C() {
