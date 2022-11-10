@@ -21,8 +21,8 @@ public class CurrentTheme {
 	public final WrappedColor COLOR_SATURATED = new WrappedColor();
 	public final WrappedColor COLOR_POSITIVE = new WrappedColor();
 	public final WrappedColor COLOR_NEGATIVE = new WrappedColor();
+	public final WrappedColor ICON_COLOR = new WrappedColor();
 
-	public final Wrapper<Boolean> BLACK_ICONS = new Wrapper<>();
 	public final Wrapper<ColorMap> CERTAINTY_COLOR_MAP = new Wrapper<>();
 
 	private ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
@@ -43,8 +43,8 @@ public class CurrentTheme {
 		COLOR_SATURATED.set(theme.COLOR_SATURATED);
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
+		ICON_COLOR.set(theme.ICON_COLOR);
 
-		BLACK_ICONS.set(theme.BLACK_ICONS);
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 
 		whenModified.notifySubscribers(this);

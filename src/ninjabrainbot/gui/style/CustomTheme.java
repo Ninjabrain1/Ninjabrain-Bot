@@ -8,16 +8,17 @@ public class CustomTheme extends Theme {
 	private ArrayList<ConfigurableColor> configurableColors = new ArrayList<ConfigurableColor>();
 
 	public CustomTheme() {
-		super("Dark");
+		super("Custom");
 		configurableColors = new ArrayList<ConfigurableColor>();
 
 		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"), "Title bar", "a");
-		COLOR_STRONG = createColor(Color.decode("#252538"), "Header background", "b");
+		COLOR_STRONG = createColor(Color.decode("#2D3238"), "Header background", "b");
 		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#2B2D44"), "Result background", "c");
 		COLOR_NEUTRAL = createColor(Color.decode("#28293D"), "Throws background", "d");
 		COLOR_DIVIDER = createColor(Color.decode("#212130"), "Dividers", "e");
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#1C1C27"), "Header Dividers", "f");
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"), "Exit button hover", "g");
+		ICON_COLOR = createColor(Color.WHITE, "Icon color", "n");
 		TEXT_COLOR_STRONG = createColor(Color.WHITE, "Text", "h");
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"), "Divine text", "i");
 		TEXT_COLOR_WEAK = createColor(Color.GRAY, "Version text", "j");
@@ -25,11 +26,12 @@ public class CustomTheme extends Theme {
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"), "Subpixel +", "l");
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"), "Subpixel -", "m");
 		
-		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#27273D"), COLOR_STRONG);
+		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"), COLOR_STRONG);
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"), COLOR_STRONG);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
-		BLACK_ICONS = createBoolean(false);
+		
+		setFromTheme(Theme.BLUE);
 	}
 	
 	public void setFromTheme(Theme theme) {
@@ -46,8 +48,8 @@ public class CustomTheme extends Theme {
 		TEXT_COLOR_NEUTRAL.set(theme.TEXT_COLOR_NEUTRAL);
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
+		ICON_COLOR.set(theme.ICON_COLOR);
 
-		BLACK_ICONS.set(theme.BLACK_ICONS);
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 	}
 

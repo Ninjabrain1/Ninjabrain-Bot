@@ -4,19 +4,17 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.components.ThemedIcon;
+import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.util.Wrapper;
+import ninjabrainbot.gui.style.WrappedColor;
 
 /**
  * Custom button with 'flat' graphics, otherwise behaves like a JButton.
@@ -25,14 +23,12 @@ public class FlatButton extends JButton implements ThemedComponent {
 
 	private static final long serialVersionUID = 3274726146609442471L;
 
-	protected JLabel label; // Graphical element
+	protected ThemedLabel label; // Graphical element
 	protected Color bgCol, hoverCol;
-	private ImageIcon icon, icon_inverted;
 
 	private WrappedColor bgColor;
 	private WrappedColor fgColor;
 	private WrappedColor hoverColor;
-	private Wrapper<Boolean> blackIcons;
 
 	public FlatButton(StyleManager styleManager, ImageIcon img) {
 		super();
@@ -45,21 +41,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		bgColor = styleManager.currentTheme.COLOR_STRONG;
 		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
-		blackIcons = styleManager.currentTheme.BLACK_ICONS;
 
-		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.createGraphics();
-		// paint the Icon to the BufferedImage.
-		img.paintIcon(null, g, 0, 0);
-		g.dispose();
-		for (int i = 0; i < bi.getWidth(); i++) {
-			for (int j = 0; j < bi.getHeight(); j++) {
-				bi.setRGB(i, j, ((200 << 16) | (200 << 8) | 200) ^ bi.getRGB(i, j));
-			}
-		}
-		icon = img;
-		icon_inverted = new ImageIcon(bi);
-		label = new JLabel(icon);
+		label = new ThemedIcon(styleManager, img);
 		label.setOpaque(true);
 		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.add(label);
@@ -88,9 +71,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		bgColor = styleManager.currentTheme.COLOR_STRONG;
 		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
-		blackIcons = styleManager.currentTheme.BLACK_ICONS;
 
-		label = new JLabel(text);
+		label = new ThemedLabel(styleManager, text);
 		label.setOpaque(true);
 		label.setForeground(Color.WHITE);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -159,7 +141,6 @@ public class FlatButton extends JButton implements ThemedComponent {
 		Color hg = getHoverColor();
 		setColors(bg, hg);
 		label.setForeground(getForegroundColor());
-		label.setIcon(blackIcons.get() ? icon_inverted : icon);
 	}
 
 	public int getTextSize(SizePreference p) {

@@ -23,8 +23,8 @@ public abstract class Theme {
 	public WrappedColor COLOR_SATURATED;
 	public WrappedColor COLOR_POSITIVE;
 	public WrappedColor COLOR_NEGATIVE;
+	public WrappedColor ICON_COLOR;
 
-	public Wrapper<Boolean> BLACK_ICONS;
 	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
 
 	public static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
@@ -86,9 +86,9 @@ class LightTheme extends Theme {
 		COLOR_SATURATED = createColor(Color.decode("#BAD7EF"));
 		COLOR_POSITIVE = createColor(Color.decode("#1E9910"));
 		COLOR_NEGATIVE = createColor(Color.decode("#991017"));
+		ICON_COLOR = createColor(Color.decode("#373737"));
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.decode("#BFBF00"), Color.decode("#00CE29")));
-		BLACK_ICONS = createBoolean(true);
 	}
 }
 
@@ -110,9 +110,9 @@ class DarkTheme extends Theme {
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
+		ICON_COLOR = createColor(Color.WHITE);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
-		BLACK_ICONS = createBoolean(false);
 	}
 }
 
@@ -134,8 +134,8 @@ class BlueTheme extends Theme {
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
+		ICON_COLOR = createColor(Color.WHITE);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
-		BLACK_ICONS = createBoolean(false);
 	}
 }
