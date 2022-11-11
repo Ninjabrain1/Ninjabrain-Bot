@@ -3,7 +3,6 @@ package ninjabrainbot.event;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Pair;
 
 public class IndexedObservableProperty<T> implements IMultiSubscribable<T> {
@@ -30,7 +29,6 @@ public class IndexedObservableProperty<T> implements IMultiSubscribable<T> {
 			if (subscriber.snd.intValue() == index)
 				subscriber.fst.accept(changed);
 		}
-		Logger.log("IndexedObservableProperty " + changed);
 	}
 
 	public int subscriberCount() {

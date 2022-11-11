@@ -3,8 +3,6 @@ package ninjabrainbot.event;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import ninjabrainbot.util.Logger;
-
 public class ObservableField<T> implements IObservable<T> {
 
 	private T data;
@@ -38,7 +36,6 @@ public class ObservableField<T> implements IObservable<T> {
 		for (Consumer<T> subscriber : subscribers) {
 			subscriber.accept(data);
 		}
-		Logger.log(value);
 	}
 
 	public T get() {

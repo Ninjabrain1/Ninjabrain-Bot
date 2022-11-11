@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class Histogram extends ThemedPanel {
 

@@ -13,8 +13,8 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.SubscriptionHandler;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 

@@ -5,9 +5,9 @@ import java.awt.Dimension;
 
 import javax.swing.JTextArea;
 
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class ThemedTextArea extends JTextArea implements ThemedComponent {
 

@@ -5,9 +5,9 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class ThemedPanel extends JPanel implements ThemedComponent {
 

@@ -125,13 +125,19 @@ public class ThemeEditorFrame extends ThemedFrame {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		ArrayList<IThrow> eyeThrows = new ArrayList<>();
-		eyeThrows.add(Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.39 -31.75", 0, new AlwaysUnlocked()));
-		eyeThrows.add(Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -331.77 -31.75", 0, new AlwaysUnlocked()));
+		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", 0, new AlwaysUnlocked());
+		t1.addCorrection(0.01);
+		t1.setStdProfileNumber(1);
+		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", 0, new AlwaysUnlocked());
+		t2.addCorrection(-0.01);
+		t2.setStdProfileNumber(2);
+		eyeThrows.add(t1);
+		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);
 		
 		NinjabrainBotPreferences previewPreferences1 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences1.view.set(MainViewType.BASIC);
-		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, f);
+		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null);
 		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, dataStateHandler1));
 
 		NinjabrainBotPreferences previewPreferences2 = new NinjabrainBotPreferences(new UnsavedPreferences());

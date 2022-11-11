@@ -15,10 +15,10 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.TitleBarPanel;
-import ninjabrainbot.gui.style.WrappedColor;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedFrame extends JFrame implements IDisposable {
 

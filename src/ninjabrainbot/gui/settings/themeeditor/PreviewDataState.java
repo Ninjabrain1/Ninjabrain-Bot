@@ -35,6 +35,7 @@ public class PreviewDataState implements IDataState {
 	public PreviewDataState(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
 		this();
 		calculatorResult.set(result);
+		topPrediction.set(result.getBestPrediction());
 		for (IThrow t : eyeThrows) {
 			throwSet.add(t);
 		}

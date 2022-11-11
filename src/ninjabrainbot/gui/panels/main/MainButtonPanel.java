@@ -14,8 +14,8 @@ import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends ThemedPanel {

@@ -13,9 +13,9 @@ import javax.swing.text.PlainDocument;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class ThemedTextField extends JTextField implements ThemedComponent {
 

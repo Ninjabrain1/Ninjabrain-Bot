@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
 import ninjabrainbot.gui.panels.main.ThrowPanel;
-import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class TextAnimator implements ThemedComponent {
 
