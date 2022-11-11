@@ -10,10 +10,12 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.Divider;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
@@ -70,11 +72,11 @@ public class ThemeEditorFrame extends ThemedFrame {
 		ThemedPanel panel = new ThemedPanel(styleManager);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		
+
 		panel.add(createHeader(styleManager, "Select color to edit:"));
 		panel.add(new Divider(styleManager));
 		panel.add(Box.createVerticalStrut(10));
-		
+
 		for (ConfigurableColor cc : customTheme.getConfigurableColors()) {
 			ConfigurableColorPanel ccPanel = new ConfigurableColorPanel(styleManager, previewStyleManager, cc);
 			ccPanel.addActionListener(__ -> setSelectedConfigurableColorPanel(ccPanel));
@@ -92,6 +94,9 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 		colorPickerPanel = new ColorPickerPanel(styleManager);
 
+		FlatButton selectPresetButton = new FlatButton(styleManager, "Select preset");
+		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -100,6 +105,8 @@ public class ThemeEditorFrame extends ThemedFrame {
 		gbc.weighty = 0;
 		panel.add(createHeader(styleManager, "Color:"), gbc);
 		panel.add(new Divider(styleManager), gbc);
+
+		panel.add(selectPresetButton, gbc);
 		panel.add(colorPickerPanel, gbc);
 		gbc.weighty = 1;
 		panel.add(Box.createGlue(), gbc);
@@ -140,6 +147,15 @@ public class ThemeEditorFrame extends ThemedFrame {
 		return panel;
 	}
 
+	private void openSelectPresetDialog() {
+		Object[] themes = Theme.THEMES.values().toArray();
+		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any changes you have made will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
+		if (chosenTheme == null)
+			return;
+		customTheme.setFromTheme(chosenTheme);
+		updateComponents();
+	}
+
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
 		if (selectedPanel != null)
 			selectedPanel.setSelected(false);
@@ -152,8 +168,16 @@ public class ThemeEditorFrame extends ThemedFrame {
 	private void onColorChanged(Color color) {
 		if (selectedPanel != null)
 			selectedPanel.getConfigurableColor().color.set(color);
-		previewStyleManager.currentTheme.setTheme(customTheme);
+		updateComponents();
+	}
 
+	private void updateComponents() {
+		previewStyleManager.currentTheme.setTheme(customTheme);
+		if (selectedPanel != null) {
+			Color c = selectedPanel.getConfigurableColor().color.color();
+			colorPickerPanel.setColor(c);
+		}
+		
 		ninBotPreviewBasic.renderImage();
 		ninBotPreviewDetailed.renderImage();
 	}

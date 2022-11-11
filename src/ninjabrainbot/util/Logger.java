@@ -10,7 +10,7 @@ public class Logger {
 	}
 
 	public static void log(Object o) {
-		log(o.toString());
+		log(o == null ? null : o.toString());
 	}
 
 }

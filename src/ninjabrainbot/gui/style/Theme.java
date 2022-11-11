@@ -65,6 +65,11 @@ public abstract class Theme {
 		cmap.set(colorMap);
 		return cmap;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 }
 
