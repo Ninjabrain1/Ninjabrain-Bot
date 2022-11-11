@@ -149,7 +149,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	private void openSelectPresetDialog() {
 		Object[] themes = Theme.THEMES.values().toArray();
-		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any changes you have made will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
+		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any unsaved changes will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
 		customTheme.setFromTheme(chosenTheme);
