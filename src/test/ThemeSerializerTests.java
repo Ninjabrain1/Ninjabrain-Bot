@@ -9,7 +9,7 @@ import ninjabrainbot.gui.style.Theme;
 public class ThemeSerializerTests {
 
 	public void serialize() {
-		CustomTheme theme = Theme.getCustomTheme();
+		CustomTheme theme = new CustomTheme();
 		String serialized = ThemeSerializer.serialize(theme);
 		assert ThemeSerializer.serialize(ThemeSerializer.deserialize(serialized)).contentEquals(serialized);
 	}
@@ -70,7 +70,7 @@ public class ThemeSerializerTests {
 	}
 
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_light() {
-		CustomTheme a = Theme.getCustomTheme();
+		CustomTheme a = new CustomTheme();
 		a.setFromTheme(Theme.LIGHT);
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());
@@ -93,7 +93,7 @@ public class ThemeSerializerTests {
 	}
 
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_blue() {
-		CustomTheme a = Theme.getCustomTheme();
+		CustomTheme a = new CustomTheme();
 		a.setFromTheme(Theme.BLUE);
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());

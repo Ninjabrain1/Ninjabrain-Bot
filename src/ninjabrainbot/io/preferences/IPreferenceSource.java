@@ -14,4 +14,8 @@ public interface IPreferenceSource {
 
 	void putBoolean(String key, boolean value);
 
+	String getString(String key, String defaultValue);
+
+	void putString(String key, String value);
+
 }

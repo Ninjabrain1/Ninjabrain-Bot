@@ -39,6 +39,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference useOverlay;
 	public BooleanPreference overlayAutoHide;
 	public BooleanPreference overlayHideWhenLocked;
+	public StringPreference customThemesString;
 	public MultipleChoicePreference<ThemeSetting> theme;
 	public MultipleChoicePreference<SizeSetting> size;
 	public MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
@@ -48,7 +49,7 @@ public class NinjabrainBotPreferences {
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
-		// Hotkeys
+		// Hotkey
 		windowX = new IntPreference("window_x", 100, source);
 		windowY = new IntPreference("window_y", 100, source);
 		hotkeyIncrement = new HotkeyPreference("hotkey_increment", source);
@@ -58,7 +59,7 @@ public class NinjabrainBotPreferences {
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", source);
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
-		// Floats
+		// Float
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
 		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
@@ -78,6 +79,8 @@ public class NinjabrainBotPreferences {
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
+		// String
+		customThemesString = new StringPreference("custom_themes", "", source);
 		// Multiple choice
 		theme = new MultipleChoicePreference<ThemeSetting>("theme", ThemeSetting.DARK, new int[] { 0, 1, 2, 3 },
 				new ThemeSetting[] { ThemeSetting.LIGHT, ThemeSetting.DARK, ThemeSetting.BLUE, ThemeSetting.CUSTOM }, source);

@@ -29,4 +29,13 @@ public class UnsavedPreferences implements IPreferenceSource {
 	public void putBoolean(String key, boolean value) {
 	}
 
+	@Override
+	public String getString(String key, String defaultValue) {
+		return defaultValue;
+	}
+
+	@Override
+	public void putString(String key, String value) {
+	}
+
 }

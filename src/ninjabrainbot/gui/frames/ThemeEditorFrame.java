@@ -26,6 +26,7 @@ import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.settings.themeeditor.PreviewDataStateHandler;
+import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.settings.themeeditor.panels.ColorPickerPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.ConfigurableColorPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.FramePreviewPanel;
@@ -43,6 +44,8 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	private static final long serialVersionUID = -7008829231721934904L;
 
+	private NinjabrainBotPreferences preferences;
+
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
 
@@ -55,8 +58,9 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, preferences, "Theme Editor");
+		this.preferences = preferences;
 		previewTheme = new CustomTheme();
-		customTheme = Theme.getCustomTheme();
+		customTheme = Theme.getCustomTheme(preferences);
 		previewStyleManager = new StyleManager(previewTheme, SizePreference.REGULAR);
 
 		ThemedPanel panel = new ThemedPanel(styleManager);
@@ -181,6 +185,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	private void saveTheme() {
 		customTheme.setFromTheme(previewTheme);
+		preferences.customThemesString.set(ThemeSerializer.serialize(customTheme));
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {

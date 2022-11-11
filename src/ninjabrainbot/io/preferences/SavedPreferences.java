@@ -7,11 +7,11 @@ import ninjabrainbot.Main;
 public class SavedPreferences implements IPreferenceSource {
 
 	Preferences pref;
-	
+
 	public SavedPreferences() {
 		pref = Preferences.userNodeForPackage(Main.class);
 	}
-	
+
 	@Override
 	public int getInt(String key, int defaultValue) {
 		return pref.getInt(key, defaultValue);
@@ -40,6 +40,16 @@ public class SavedPreferences implements IPreferenceSource {
 	@Override
 	public void putBoolean(String key, boolean value) {
 		pref.putBoolean(key, value);
+	}
+
+	@Override
+	public String getString(String key, String defaultValue) {
+		return pref.get(key, defaultValue);
+	}
+
+	@Override
+	public void putString(String key, String value) {
+		pref.put(key, value);
 	}
 
 }
