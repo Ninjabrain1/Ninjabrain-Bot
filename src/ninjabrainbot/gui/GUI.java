@@ -22,7 +22,7 @@ import ninjabrainbot.util.Profiler;
 public class GUI {
 
 	private NinjabrainBotPreferences preferences;
-	
+
 	private ClipboardReader clipboardReader;
 	private AutoResetTimer autoResetTimer;
 	private OBSOverlay obsOverlay;
@@ -91,15 +91,15 @@ public class GUI {
 	private void postInit() {
 		Progress.setTask("Finishing up gui", 1f);
 		Profiler.start("Post init");
-		
+
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
 		preferences.autoReset.whenModified().subscribe(b -> autoResetTimer.setAutoResetEnabled(b));
-		
+
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataStateHandler);
-		
+
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);
-		
+
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 		Profiler.stop();
 	}
