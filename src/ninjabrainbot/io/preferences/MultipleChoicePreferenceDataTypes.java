@@ -25,7 +25,7 @@ public class MultipleChoicePreferenceDataTypes {
 	}
 
 	public enum ThemeSetting implements IMultipleChoicePreferenceDataType {
-		LIGHT(Theme.LIGHT.name), DARK(Theme.DARK.name), BLUE(Theme.BLUE.name);
+		LIGHT(Theme.LIGHT.name), DARK(Theme.DARK.name), BLUE(Theme.BLUE.name), CUSTOM("Custom");
 
 		final String name;
 

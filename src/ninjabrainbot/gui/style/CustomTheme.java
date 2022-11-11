@@ -51,6 +51,8 @@ public class CustomTheme extends Theme {
 		ICON_COLOR.set(theme.ICON_COLOR);
 
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
+		
+		whenModified.notifySubscribers(this);
 	}
 
 	public ArrayList<ConfigurableColor> getConfigurableColors() {

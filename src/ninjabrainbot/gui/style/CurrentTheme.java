@@ -2,6 +2,7 @@ package ninjabrainbot.gui.style;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.Wrapper;
 
 public class CurrentTheme {
@@ -27,6 +28,9 @@ public class CurrentTheme {
 
 	private ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
 
+	private Subscription themeSubscription;
+	private Theme theme;
+
 	public void setTheme(Theme theme) {
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
 		COLOR_DIVIDER.set(theme.COLOR_DIVIDER);
@@ -47,7 +51,17 @@ public class CurrentTheme {
 
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 
+		updateSubscription(theme);
 		whenModified.notifySubscribers(this);
+	}
+
+	private void updateSubscription(Theme newTheme) {
+		if (theme == newTheme)
+			return;
+		theme = newTheme;
+		if (themeSubscription != null)
+			themeSubscription.cancel();
+		themeSubscription = newTheme.whenModified().subscribe(t -> setTheme(t));
 	}
 
 	public ISubscribable<CurrentTheme> whenModified() {

@@ -3,6 +3,8 @@ package ninjabrainbot.gui.style;
 import java.awt.Color;
 import java.util.HashMap;
 
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
@@ -26,6 +28,8 @@ public abstract class Theme {
 	public WrappedColor ICON_COLOR;
 
 	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
+	
+	protected ObservableProperty<Theme> whenModified;
 
 	public static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
 	public static final Theme LIGHT = new LightTheme();
@@ -46,6 +50,7 @@ public abstract class Theme {
 	public Theme(String name) {
 		this.name = name;
 		THEMES.put(name, this);
+		whenModified = new ObservableProperty<Theme>();
 	}
 
 	protected WrappedColor createColor(Color color) {
@@ -69,6 +74,10 @@ public abstract class Theme {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public ISubscribable<Theme> whenModified() {
+		return whenModified;
 	}
 
 }

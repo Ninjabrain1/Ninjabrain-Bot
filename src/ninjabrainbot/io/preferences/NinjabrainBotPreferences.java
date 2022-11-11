@@ -79,7 +79,8 @@ public class NinjabrainBotPreferences {
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
 		// Multiple choice
-		theme = new MultipleChoicePreference<ThemeSetting>("theme", ThemeSetting.DARK, new int[] { 0, 1, 2 }, new ThemeSetting[] { ThemeSetting.LIGHT, ThemeSetting.DARK, ThemeSetting.BLUE }, source);
+		theme = new MultipleChoicePreference<ThemeSetting>("theme", ThemeSetting.DARK, new int[] { 0, 1, 2, 3 },
+				new ThemeSetting[] { ThemeSetting.LIGHT, ThemeSetting.DARK, ThemeSetting.BLUE, ThemeSetting.CUSTOM }, source);
 		size = new MultipleChoicePreference<SizeSetting>("size", SizeSetting.SMALL, new int[] { 0, 1, 2 }, new SizeSetting[] { SizeSetting.SMALL, SizeSetting.MEDIUM, SizeSetting.LARGE }, source);
 		strongholdDisplayType = new MultipleChoicePreference<StrongholdDisplayType>("stronghold_display_type", StrongholdDisplayType.FOURFOUR, new int[] { 0, 1, 2 },
 				new StrongholdDisplayType[] { StrongholdDisplayType.FOURFOUR, StrongholdDisplayType.EIGHTEIGHT, StrongholdDisplayType.CHUNK }, source);

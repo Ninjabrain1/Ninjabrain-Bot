@@ -50,12 +50,14 @@ public class ThemeEditorFrame extends ThemedFrame {
 	private FramePreviewPanel ninBotPreviewDetailed;
 
 	private StyleManager previewStyleManager;
-	private CustomTheme customTheme;
+	private CustomTheme customTheme; // theme that is saved
+	private CustomTheme previewTheme; // used for previewing
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, preferences, "Theme Editor");
+		previewTheme = new CustomTheme();
 		customTheme = Theme.getCustomTheme();
-		previewStyleManager = new StyleManager(customTheme, SizePreference.REGULAR);
+		previewStyleManager = new StyleManager(previewTheme, SizePreference.REGULAR);
 
 		ThemedPanel panel = new ThemedPanel(styleManager);
 		panel.setOpaque(false);
@@ -82,10 +84,10 @@ public class ThemeEditorFrame extends ThemedFrame {
 		panel.add(new Divider(styleManager));
 		panel.add(Box.createVerticalStrut(10));
 
-		for (ConfigurableColor cc : customTheme.getConfigurableColors()) {
+		for (ConfigurableColor cc : previewTheme.getConfigurableColors()) {
 			ConfigurableColorPanel ccPanel = new ConfigurableColorPanel(styleManager, previewStyleManager, cc);
 			ccPanel.addActionListener(__ -> setSelectedConfigurableColorPanel(ccPanel));
-			if (cc == customTheme.getConfigurableColors().get(0))
+			if (cc == previewTheme.getConfigurableColors().get(0))
 				setSelectedConfigurableColorPanel(ccPanel);
 			panel.add(ccPanel);
 		}
@@ -102,6 +104,9 @@ public class ThemeEditorFrame extends ThemedFrame {
 		FlatButton selectPresetButton = new FlatButton(styleManager, "Select preset");
 		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());
 
+		FlatButton saveButton = new FlatButton(styleManager, "Save");
+		saveButton.addActionListener(__ -> saveTheme());
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -112,6 +117,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 		panel.add(new Divider(styleManager), gbc);
 
 		panel.add(selectPresetButton, gbc);
+		panel.add(saveButton, gbc);
 		panel.add(colorPickerPanel, gbc);
 		gbc.weighty = 1;
 		panel.add(Box.createGlue(), gbc);
@@ -134,7 +140,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);
-		
+
 		NinjabrainBotPreferences previewPreferences1 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences1.view.set(MainViewType.BASIC);
 		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null);
@@ -169,8 +175,12 @@ public class ThemeEditorFrame extends ThemedFrame {
 		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any unsaved changes will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
-		customTheme.setFromTheme(chosenTheme);
+		previewTheme.setFromTheme(chosenTheme);
 		updateComponents();
+	}
+
+	private void saveTheme() {
+		customTheme.setFromTheme(previewTheme);
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
@@ -189,12 +199,12 @@ public class ThemeEditorFrame extends ThemedFrame {
 	}
 
 	private void updateComponents() {
-		previewStyleManager.currentTheme.setTheme(customTheme);
+		previewStyleManager.currentTheme.setTheme(previewTheme);
 		if (selectedPanel != null) {
 			Color c = selectedPanel.getConfigurableColor().color.color();
 			colorPickerPanel.setColor(c);
 		}
-		
+
 		ninBotPreviewBasic.renderImage();
 		ninBotPreviewDetailed.renderImage();
 	}
@@ -221,7 +231,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 	protected void onExitButtonClicked() {
 		dispose();
 	}
-	
+
 	@Override
 	public void dispose() {
 		ninBotPreviewBasic.dispose();

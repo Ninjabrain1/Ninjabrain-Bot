@@ -113,7 +113,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		System.out.println(t + " " + p);
 		error.setText(t == null || p == null ? null : String.format(Locale.US, "%.3f", p.getAngleError(t)));
 	}
 
