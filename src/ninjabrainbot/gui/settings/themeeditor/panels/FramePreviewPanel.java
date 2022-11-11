@@ -14,19 +14,19 @@ public class FramePreviewPanel extends JPanel {
 	private JFrame frame;
 
 	private BufferedImage img;
-	
+
 	public FramePreviewPanel(JFrame frame) {
 		this.frame = frame;
 		frame.setSize(frame.getPreferredSize());
 		frame.addNotify();
 		frame.doLayout();
 	}
-	
+
 	public void postInit() {
 		img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		renderImage();
 	}
-	
+
 	public void renderImage() {
 		frame.getContentPane().paint(img.createGraphics());
 		repaint();
@@ -41,6 +41,10 @@ public class FramePreviewPanel extends JPanel {
 	@Override
 	public Dimension getPreferredSize() {
 		return frame.getSize();
+	}
+
+	public void dispose() {
+		frame.dispose();
 	}
 
 }

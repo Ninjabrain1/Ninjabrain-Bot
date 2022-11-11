@@ -1,5 +1,7 @@
 package ninjabrainbot.gui.settings.themeeditor;
 
+import java.util.List;
+
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -17,8 +19,8 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	
 	private PreviewDataState dataState;
 	
-	public PreviewDataStateHandler(ICalculatorResult result) {
-		dataState = new PreviewDataState(result);
+	public PreviewDataStateHandler(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
+		dataState = new PreviewDataState(result, eyeThrows, f);
 	}
 	
 	@Override

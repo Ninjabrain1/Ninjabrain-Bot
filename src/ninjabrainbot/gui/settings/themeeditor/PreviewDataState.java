@@ -1,5 +1,7 @@
 package ninjabrainbot.gui.settings.themeeditor;
 
+import java.util.List;
+
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -9,7 +11,9 @@ import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
+import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
@@ -27,12 +31,16 @@ public class PreviewDataState implements IDataState {
 	private final ObservableField<ChunkPrediction> topPrediction;
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
-	
-	public PreviewDataState(ICalculatorResult result) {
+
+	public PreviewDataState(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
 		this();
 		calculatorResult.set(result);
+		for (IThrow t : eyeThrows) {
+			throwSet.add(t);
+		}
+		divineContext.setFossil(f);
 	}
-	
+
 	public PreviewDataState() {
 		IModificationLock modificationLock = new AlwaysUnlocked();
 		divineContext = new DivineContext(modificationLock);
@@ -44,7 +52,7 @@ public class PreviewDataState implements IDataState {
 		blindResult = new LockableField<BlindResult>(modificationLock);
 		divineResult = new LockableField<DivineResult>(modificationLock);
 	}
-	
+
 	@Override
 	public IDivineContext getDivineContext() {
 		return divineContext;
@@ -59,7 +67,7 @@ public class PreviewDataState implements IDataState {
 	public IObservable<ICalculatorResult> calculatorResult() {
 		return calculatorResult;
 	}
-	
+
 	@Override
 	public IObservable<ChunkPrediction> topPrediction() {
 		return topPrediction;
