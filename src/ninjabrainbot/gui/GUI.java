@@ -68,9 +68,10 @@ public class GUI {
 	private void initUI() {
 		Progress.setTask("Loading themes", 0.15f);
 		Profiler.start("Init StyleManager");
-		styleManager = new StyleManager(Theme.get(preferences.theme.get().choiceName()), SizePreference.get(preferences.size.get()));
+		Theme.loadThemes(preferences);
+		styleManager = new StyleManager(Theme.get(preferences.theme.get()), SizePreference.get(preferences.size.get()));
 		preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
-		preferences.theme.whenModified().subscribe(theme -> styleManager.currentTheme.setTheme(Theme.get(theme.choiceName())));
+		preferences.theme.whenModified().subscribe(theme_uid -> styleManager.currentTheme.setTheme(Theme.get(theme_uid)));
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");

@@ -1,11 +1,13 @@
 package ninjabrainbot.gui.style;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
+import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Wrapper;
 
@@ -31,32 +33,91 @@ public abstract class Theme {
 
 	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
 
+	protected int uid;
+	protected boolean loaded = false;
 	protected ObservableProperty<Theme> whenModified;
 
-	public static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
-	public static final Theme LIGHT = new LightTheme();
-	public static final Theme DARK = new DarkTheme();
-	public static final Theme BLUE = new BlueTheme();
-	private static CustomTheme CUSTOM;
+	protected static final HashMap<Integer, Theme> THEMES = new HashMap<Integer, Theme>();
+	protected static final ArrayList<Theme> STANDARD_THEMES = new ArrayList<Theme>();
+	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<CustomTheme>();
+	protected static final SubscriptionHandler sh = new SubscriptionHandler();
 
-	public static CustomTheme getCustomTheme(NinjabrainBotPreferences preferences) {
-		if (CUSTOM == null) {
-			CUSTOM = ThemeSerializer.deserialize(preferences.customThemesString.get());
-			if (CUSTOM == null)
-				CUSTOM = new CustomTheme();
+	public static int light_uid = 1;
+	public static int dark_uid = 2;
+	public static int blue_uid = 3;
+	private static Theme dark;
+
+	public static void loadThemes(NinjabrainBotPreferences preferences) {
+		dark = new DarkTheme();
+		addStandardTheme(dark);
+		addStandardTheme(new LightTheme());
+		addStandardTheme(new BlueTheme());
+
+		System.out.println(preferences.customThemesString.get());
+		addCustomTheme(new CustomTheme("Custom!", preferences.customThemesString.get(), -1), preferences);
+	}
+
+	private static void addStandardTheme(Theme theme) {
+		assert !THEMES.containsKey(theme.uid);
+		THEMES.put(theme.uid, theme);
+		STANDARD_THEMES.add(theme);
+	}
+
+	private static void addCustomTheme(CustomTheme theme, NinjabrainBotPreferences preferences) {
+		assert !THEMES.containsKey(theme.uid);
+		THEMES.put(theme.uid, theme);
+		CUSTOM_THEMES.add(theme);
+		sh.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
+	}
+	
+	private static void serializeCustomThemes(NinjabrainBotPreferences preferences) {
+		StringBuilder names = new StringBuilder();
+		StringBuilder themeStrings = new StringBuilder();
+		
+		boolean first = true;
+		for (CustomTheme c : CUSTOM_THEMES) {
+			String name = c.name.replace(".", "");
+			String themeString = c.getThemeString();
+			assert !themeString.contains(".");
+			if (!first) {
+				names.append(".");
+				themeStrings.append(".");
+			}
+			names.append(name);
+			themeStrings.append(themeString);
 		}
-		return CUSTOM;
+		preferences.customThemesNames.set(names.toString());
+		preferences.customThemesString.set(themeStrings.toString());
 	}
 
-	public static Theme get(String name) {
-		return THEMES.getOrDefault(name, DARK);
+	public static Theme get(int uid) {
+		Theme theme = THEMES.getOrDefault(uid, dark);
+		if (!theme.loaded)
+			theme.loadTheme();
+		return theme;
 	}
 
-	public Theme(String name) {
+	public static CustomTheme getCustomTheme(int uid) {
+		Theme theme = THEMES.getOrDefault(uid, dark);
+		if (!theme.loaded)
+			theme.loadTheme();
+		if (!(theme instanceof CustomTheme))
+			return null;
+		return (CustomTheme) theme;
+	}
+
+	public Theme(String name, int uid) {
+		this.uid = uid;
 		this.name = name;
-		THEMES.put(name, this);
 		whenModified = new ObservableProperty<Theme>();
-		System.out.println(name);
+	}
+
+	public static List<Theme> getStandardThemes() {
+		for (Theme t : STANDARD_THEMES) {
+			if (!t.loaded)
+				t.loadTheme();
+		}
+		return STANDARD_THEMES;
 	}
 
 	protected WrappedColor createColor(Color color) {
@@ -86,11 +147,17 @@ public abstract class Theme {
 		return whenModified;
 	}
 
+	protected abstract void loadTheme();
+
 }
 
 class LightTheme extends Theme {
 	public LightTheme() {
-		super("Light");
+		super("Light", light_uid);
+	}
+
+	@Override
+	protected void loadTheme() {
 		COLOR_NEUTRAL = createColor(Color.decode("#F5F5F5"));
 		COLOR_DIVIDER = createColor(Color.decode("#D8D8D8"));
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#C1C1C1"));
@@ -114,7 +181,11 @@ class LightTheme extends Theme {
 
 class DarkTheme extends Theme {
 	public DarkTheme() {
-		super("Dark");
+		super("Dark", dark_uid);
+	}
+
+	@Override
+	protected void loadTheme() {
 		COLOR_NEUTRAL = createColor(Color.decode("#33383D"));
 		COLOR_STRONGEST = createColor(Color.decode("#212529"));
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
@@ -138,7 +209,11 @@ class DarkTheme extends Theme {
 
 class BlueTheme extends Theme {
 	public BlueTheme() {
-		super("Blue");
+		super("Blue", blue_uid);
+	}
+
+	@Override
+	protected void loadTheme() {
 		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"));
 		COLOR_DIVIDER = createColor(Color.decode("#212130"));
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#1C1C27"));

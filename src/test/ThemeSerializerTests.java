@@ -71,7 +71,7 @@ public class ThemeSerializerTests {
 
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_light() {
 		CustomTheme a = new CustomTheme();
-		a.setFromTheme(Theme.LIGHT);
+		a.setFromTheme(Theme.get(Theme.light_uid));
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());
 		assert colorsAreEqual(a.COLOR_DIVIDER_DARK.color(), b.COLOR_DIVIDER_DARK.color());
@@ -94,7 +94,7 @@ public class ThemeSerializerTests {
 
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_blue() {
 		CustomTheme a = new CustomTheme();
-		a.setFromTheme(Theme.BLUE);
+		a.setFromTheme(Theme.get(Theme.blue_uid));
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());
 		assert colorsAreEqual(a.COLOR_DIVIDER_DARK.color(), b.COLOR_DIVIDER_DARK.color());

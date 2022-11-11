@@ -3,7 +3,6 @@ package ninjabrainbot.io.preferences;
 import java.util.Locale;
 
 import ninjabrainbot.gui.style.SizePreference;
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.util.I18n;
 
 public class MultipleChoicePreferenceDataTypes {
@@ -15,21 +14,6 @@ public class MultipleChoicePreferenceDataTypes {
 		final String name;
 
 		Language(String string) {
-			name = string;
-		}
-
-		@Override
-		public String choiceName() {
-			return name;
-		}
-	}
-
-	public enum ThemeSetting implements IMultipleChoicePreferenceDataType {
-		LIGHT(Theme.LIGHT.name), DARK(Theme.DARK.name), BLUE(Theme.BLUE.name), CUSTOM("Custom");
-
-		final String name;
-
-		ThemeSetting(String string) {
 			name = string;
 		}
 

@@ -117,7 +117,6 @@ public class OptionsFrame extends ThemedFrame {
 		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.display_stronghold_location_using"), preferences.strongholdDisplayType));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.view_type"), preferences.view));
-		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.theme"), preferences.theme));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.window_size"), preferences.size));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.mc_version"), preferences.mcVersion));
 		column2.add(Box.createGlue());

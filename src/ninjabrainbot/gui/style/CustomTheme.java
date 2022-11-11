@@ -3,12 +3,23 @@ package ninjabrainbot.gui.style;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
+
 public class CustomTheme extends Theme {
 
 	private ArrayList<ConfigurableColor> configurableColors = new ArrayList<ConfigurableColor>();
 
+	private ObservableField<String> themeString = new ObservableField<String>();
+
 	public CustomTheme() {
-		super("Custom");
+		this("temp", "", 0);
+	}
+	
+	public CustomTheme(String name, String themeString, int uid) {
+		super("Custom", uid);
+		this.themeString.set(themeString);
 		configurableColors = new ArrayList<ConfigurableColor>();
 
 		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"), "Title bar", "a");
@@ -25,16 +36,23 @@ public class CustomTheme extends Theme {
 		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY, "Throws text", "k");
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"), "Subpixel +", "l");
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"), "Subpixel -", "m");
-		
+
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"), COLOR_STRONG);
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"), COLOR_STRONG);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
-		
-		setFromTheme(Theme.BLUE);
+
+		setFromTheme(Theme.get(dark_uid));
 	}
-	
+
+	@Override
+	protected void loadTheme() {
+		setFromTheme(ThemeSerializer.deserialize(themeString.get()));
+	}
+
 	public void setFromTheme(Theme theme) {
+		if (theme == null)
+			return;
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
 		COLOR_STRONG.set(theme.COLOR_STRONG);
 		COLOR_SLIGHTLY_WEAK.set(theme.COLOR_SLIGHTLY_WEAK);
@@ -52,7 +70,19 @@ public class CustomTheme extends Theme {
 
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 		
+		String newThemeString = ThemeSerializer.serialize(this);
+		if (!themeString.get().contentEquals(newThemeString))
+			themeString.set(newThemeString);
+
 		whenModified.notifySubscribers(this);
+	}
+	
+	public ISubscribable<String> whenThemeStringChanged(){
+		return themeString;
+	}
+	
+	public String getThemeString() {
+		return themeString.get();
 	}
 
 	public ArrayList<ConfigurableColor> getConfigurableColors() {
@@ -67,7 +97,7 @@ public class CustomTheme extends Theme {
 		parent.whenColorChanged().subscribe(c -> wc.set(new Color(clamp(c.getRed() + dr), clamp(c.getGreen() + dg), clamp(c.getBlue() + db))));
 		return wc;
 	}
-	
+
 	private static int clamp(int i) {
 		if (i < 0)
 			return 0;

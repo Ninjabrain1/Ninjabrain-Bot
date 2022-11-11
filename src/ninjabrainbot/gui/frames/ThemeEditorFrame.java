@@ -26,7 +26,6 @@ import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.settings.themeeditor.PreviewDataStateHandler;
-import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.settings.themeeditor.panels.ColorPickerPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.ConfigurableColorPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.FramePreviewPanel;
@@ -44,8 +43,6 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	private static final long serialVersionUID = -7008829231721934904L;
 
-	private NinjabrainBotPreferences preferences;
-
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
 
@@ -58,9 +55,8 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, preferences, "Theme Editor");
-		this.preferences = preferences;
 		previewTheme = new CustomTheme();
-		customTheme = Theme.getCustomTheme(preferences);
+		customTheme = Theme.getCustomTheme(-1);
 		previewStyleManager = new StyleManager(previewTheme, SizePreference.REGULAR);
 
 		ThemedPanel panel = new ThemedPanel(styleManager);
@@ -147,13 +143,13 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 		NinjabrainBotPreferences previewPreferences1 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences1.view.set(MainViewType.BASIC);
-		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null);
+		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, f);
 		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, dataStateHandler1));
 
 		NinjabrainBotPreferences previewPreferences2 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences2.view.set(MainViewType.DETAILED);
 		previewPreferences2.showAngleErrors.set(true);
-		IDataStateHandler dataStateHandler2 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, f);
+		IDataStateHandler dataStateHandler2 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null);
 		ninBotPreviewDetailed = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences2, dataStateHandler2));
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -175,7 +171,7 @@ public class ThemeEditorFrame extends ThemedFrame {
 	}
 
 	private void openSelectPresetDialog() {
-		Object[] themes = Theme.THEMES.values().toArray();
+		Object[] themes = Theme.getStandardThemes().toArray();
 		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any unsaved changes will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
@@ -185,7 +181,6 @@ public class ThemeEditorFrame extends ThemedFrame {
 
 	private void saveTheme() {
 		customTheme.setFromTheme(previewTheme);
-		preferences.customThemesString.set(ThemeSerializer.serialize(customTheme));
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
