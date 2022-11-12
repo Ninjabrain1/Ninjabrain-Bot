@@ -39,6 +39,7 @@ public class ThemePanel extends ThemedPanel {
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weighty = 1;
 		gbc.weightx = 1;
 		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_NEUTRAL), gbc);
 		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_SLIGHTLY_WEAK), gbc);
