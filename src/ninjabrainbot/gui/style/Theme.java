@@ -33,7 +33,7 @@ public abstract class Theme {
 
 	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
 
-	protected int uid;
+	public final int UID;
 	protected boolean loaded = false;
 	protected ObservableProperty<Theme> whenModified;
 
@@ -53,27 +53,26 @@ public abstract class Theme {
 		addStandardTheme(new LightTheme());
 		addStandardTheme(new BlueTheme());
 
-		System.out.println(preferences.customThemesString.get());
 		addCustomTheme(new CustomTheme("Custom!", preferences.customThemesString.get(), -1), preferences);
 	}
 
 	private static void addStandardTheme(Theme theme) {
-		assert !THEMES.containsKey(theme.uid);
-		THEMES.put(theme.uid, theme);
+		assert !THEMES.containsKey(theme.UID);
+		THEMES.put(theme.UID, theme);
 		STANDARD_THEMES.add(theme);
 	}
 
 	private static void addCustomTheme(CustomTheme theme, NinjabrainBotPreferences preferences) {
-		assert !THEMES.containsKey(theme.uid);
-		THEMES.put(theme.uid, theme);
+		assert !THEMES.containsKey(theme.UID);
+		THEMES.put(theme.UID, theme);
 		CUSTOM_THEMES.add(theme);
 		sh.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
 	}
-	
+
 	private static void serializeCustomThemes(NinjabrainBotPreferences preferences) {
 		StringBuilder names = new StringBuilder();
 		StringBuilder themeStrings = new StringBuilder();
-		
+
 		boolean first = true;
 		for (CustomTheme c : CUSTOM_THEMES) {
 			String name = c.name.replace(".", "");
@@ -107,7 +106,7 @@ public abstract class Theme {
 	}
 
 	public Theme(String name, int uid) {
-		this.uid = uid;
+		this.UID = uid;
 		this.name = name;
 		whenModified = new ObservableProperty<Theme>();
 	}
@@ -118,6 +117,14 @@ public abstract class Theme {
 				t.loadTheme();
 		}
 		return STANDARD_THEMES;
+	}
+	
+	public static List<CustomTheme> getCustomThemes() {
+		for (CustomTheme t : CUSTOM_THEMES) {
+			if (!t.loaded)
+				t.loadTheme();
+		}
+		return CUSTOM_THEMES;
 	}
 
 	protected WrappedColor createColor(Color color) {

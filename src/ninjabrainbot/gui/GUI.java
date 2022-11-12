@@ -4,7 +4,6 @@ import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
-import ninjabrainbot.gui.frames.ThemeEditorFrame;
 import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
@@ -81,7 +80,6 @@ public class GUI {
 		Profiler.stopAndStart("Create settings window");
 		optionsFrame = new OptionsFrame(styleManager, preferences);
 		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> optionsFrame.toggleWindow(ninjabrainBotFrame));
-		new ThemeEditorFrame(styleManager, preferences).setVisible(true);
 
 		Progress.setTask("Settings fonts and colors", 0.99f);
 		Profiler.stopAndStart("Init fonts, colors, bounds");

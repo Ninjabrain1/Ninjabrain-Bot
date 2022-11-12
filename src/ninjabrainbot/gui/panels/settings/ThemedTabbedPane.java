@@ -30,7 +30,6 @@ public class ThemedTabbedPane extends ThemedPanel {
 		super(styleManager);
 		this.styleManager = styleManager;
 		tabs = new ArrayList<TabButton>();
-//		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setLayout(null);
 		tabPanel = new ThemedOpaquePanel(styleManager);
 		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
@@ -86,7 +85,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 	public Dimension getPreferredSize() {
 		if (tabs.size() == 0)
 			return super.getPreferredSize();
-		Dimension reference = tabs.get(0).component.getPreferredSize();
+		Dimension reference = tabs.get(5).component.getPreferredSize();
 		return new Dimension(reference.width, reference.height + tabPanel.getPreferredSize().height);
 	}
 

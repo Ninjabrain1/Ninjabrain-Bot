@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.settings.themeeditor.panels;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
@@ -11,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.panels.settings.ColorPreviewPanel;
 import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -26,7 +26,7 @@ public class ConfigurableColorPanel extends ThemedPanel {
 		super(styleManager);
 		this.configurableColor = configurableColor;
 
-		ThemedPanel colorPreview = new ColorPreviewPanel(previewStyleManager, configurableColor);
+		ThemedPanel colorPreview = new ColorPreviewPanel(previewStyleManager, configurableColor.color);
 		colorName = new LeftAlignedButton(styleManager, configurableColor.name);
 
 		setLayout(new GridBagLayout());
@@ -53,23 +53,6 @@ public class ConfigurableColorPanel extends ThemedPanel {
 
 	public void setSelected(boolean b) {
 		setBorder(b ? new BevelBorder(BevelBorder.LOWERED) : new EmptyBorder(2, 2, 2, 2));
-	}
-}
-
-class ColorPreviewPanel extends ThemedPanel {
-
-	private static final long serialVersionUID = -204692569559526638L;
-
-	public ColorPreviewPanel(StyleManager styleManager, ConfigurableColor configurableColor) {
-		super(styleManager);
-		setBackgroundColor(configurableColor.color);
-	}
-
-	@Override
-	public void updateSize(StyleManager styleManager) {
-		super.updateSize(styleManager);
-		int textSize = getTextSize(styleManager.size);
-		setPreferredSize(new Dimension(textSize * 2, textSize * 2));
 	}
 }
 

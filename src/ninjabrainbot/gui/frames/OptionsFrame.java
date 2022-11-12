@@ -33,6 +33,7 @@ import ninjabrainbot.gui.components.ThemedTextArea;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.panels.settings.CalibrationPanel;
 import ninjabrainbot.gui.panels.settings.RadioButtonGroup;
+import ninjabrainbot.gui.panels.settings.ThemeSelectionPanel;
 import ninjabrainbot.gui.panels.settings.ThemedTabbedPane;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
@@ -78,6 +79,7 @@ public class OptionsFrame extends ThemedFrame {
 		add(calibrationPanel);
 		tabbedPane.addTab(I18n.get("settings.basic"), getBasicPanel());
 		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());
+		tabbedPane.addTab(I18n.get("settings.theme"), new ThemeSelectionPanel(styleManager, preferences));
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), getHotkeyPanel());
 		tabbedPane.addTab(I18n.get("settings.overlay"), getOBSPanel());
 		tabbedPane.addTab(I18n.get("settings.language"), getLanguagePanel());
