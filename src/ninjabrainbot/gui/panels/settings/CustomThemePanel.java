@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.panels.settings;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -23,7 +24,7 @@ public class CustomThemePanel extends ThemePanel {
 
 	WrappedColor dividerCol;
 
-	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
+	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme, ActionListener deleteAction) {
 		super(styleManager, preferences, theme);
 
 		dividerCol = theme.COLOR_DIVIDER_DARK;
@@ -38,6 +39,7 @@ public class CustomThemePanel extends ThemePanel {
 		deleteButton.setBackgroundColor(theme.COLOR_STRONG);
 		deleteButton.setHoverColor(theme.COLOR_EXIT_BUTTON_HOVER);
 		deleteButton.setForegroundColor(theme.TEXT_COLOR_STRONG);
+		deleteButton.addActionListener(deleteAction);
 
 		buttonPanel = new ThemedPanel(styleManager);
 		buttonPanel.setBackgroundColor(theme.COLOR_STRONG);

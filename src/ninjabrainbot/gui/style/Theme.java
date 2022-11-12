@@ -53,7 +53,18 @@ public abstract class Theme {
 		addStandardTheme(new LightTheme());
 		addStandardTheme(new BlueTheme());
 
-		addCustomTheme(new CustomTheme("Custom!", preferences.customThemesString.get(), -1), preferences);
+		loadCustomThemes(preferences);
+	}
+
+	private static void loadCustomThemes(NinjabrainBotPreferences preferences) {
+		String[] names = preferences.customThemesNames.get().split("\\.");
+		String[] themeStrings = preferences.customThemesString.get().split("\\.");
+		
+		for (int i = 0; i < themeStrings.length; i++) {
+			String themeString = themeStrings[i];
+			String name = i < names.length ? names[i] : "Custom theme";
+			addCustomTheme(new CustomTheme(name, themeString, -(i + 1)), preferences);
+		}
 	}
 
 	private static void addStandardTheme(Theme theme) {
@@ -82,6 +93,7 @@ public abstract class Theme {
 				names.append(".");
 				themeStrings.append(".");
 			}
+			first = false;
 			names.append(name);
 			themeStrings.append(themeString);
 		}
@@ -125,6 +137,15 @@ public abstract class Theme {
 				t.loadTheme();
 		}
 		return CUSTOM_THEMES;
+	}
+
+	public static void createCustomTheme(NinjabrainBotPreferences preferences) {
+		CustomTheme theme = new CustomTheme("New theme", "", -(CUSTOM_THEMES.size() + 1));
+		theme.setFromTheme(dark);
+		addCustomTheme(theme, preferences);
+	}
+
+	public static void deleteCustomTheme(NinjabrainBotPreferences preferences, CustomTheme theme) {
 	}
 
 	protected WrappedColor createColor(Color color) {
