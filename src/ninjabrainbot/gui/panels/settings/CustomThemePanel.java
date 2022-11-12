@@ -20,12 +20,12 @@ public class CustomThemePanel extends ThemePanel {
 	private static final long serialVersionUID = -7608715642093152581L;
 
 	ThemedPanel buttonPanel;
-	
+
 	WrappedColor dividerCol;
 
 	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
 		super(styleManager, preferences, theme);
-		
+
 		dividerCol = theme.COLOR_DIVIDER_DARK;
 
 		FlatButton editButton = new FlatButton(styleManager, "Edit");
@@ -56,6 +56,7 @@ public class CustomThemePanel extends ThemePanel {
 
 	private void editTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
 		ThemedDialog d = new ThemeEditorFrame(styleManager, preferences, owner, theme);
+		d.setLocation(owner.getX() -140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));
 	}
