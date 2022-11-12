@@ -2,8 +2,6 @@ package ninjabrainbot.gui.panels.settings;
 
 import java.awt.GridLayout;
 
-import javax.swing.border.LineBorder;
-
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.CustomTheme;
@@ -27,7 +25,6 @@ public class CustomThemePanel extends ThemePanel {
 		deleteButton.setForegroundColor(theme.TEXT_COLOR_STRONG);
 
 		ThemedPanel buttonPanel = new ThemedPanel(styleManager);
-		//buttonPanel.setBorder(new LineBorder(theme.COLOR_DIVIDER_DARK.color(), 1));
 		buttonPanel.setBackgroundColor(theme.COLOR_STRONG);
 		buttonPanel.setLayout(new GridLayout(1, 0));
 		buttonPanel.add(editButton);
