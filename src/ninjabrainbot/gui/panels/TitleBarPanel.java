@@ -2,13 +2,13 @@ package ninjabrainbot.gui.panels;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -21,7 +21,7 @@ public class TitleBarPanel extends ThemedPanel {
 
 	ArrayList<JButton> buttons;
 
-	public TitleBarPanel(StyleManager styleManager, final JFrame frame) {
+	public TitleBarPanel(StyleManager styleManager, final Window frame) {
 		super(styleManager);
 		buttons = new ArrayList<JButton>();
 		this.addMouseListener(new MouseAdapter() {

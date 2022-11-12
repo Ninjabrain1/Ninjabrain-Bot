@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
+import ninjabrainbot.gui.frames.ThemedDialog;
 import ninjabrainbot.gui.frames.ThemedFrame;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
@@ -20,6 +21,7 @@ public class StyleManager {
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 	private final ArrayList<ThemedFrame> themedFrames;
+	private final ArrayList<ThemedDialog> themedDialogs;
 
 	private Font font;
 	private HashMap<String, Font> fonts;
@@ -33,6 +35,7 @@ public class StyleManager {
 		font = new Font(null, Font.BOLD, 25);
 		themedComponents = new ArrayList<>();
 		themedFrames = new ArrayList<>();
+		themedDialogs = new ArrayList<>();
 
 		initFonts();
 		currentTheme.whenModified().subscribe(__ -> updateFontsAndColors());
@@ -63,6 +66,14 @@ public class StyleManager {
 		themedFrames.add(f);
 	}
 
+	public void registerThemedDialog(ThemedDialog d) {
+		themedDialogs.add(d);
+	}
+
+	public void unregisterThemedDialog(ThemedDialog d) {
+		themedDialogs.remove(d);
+	}
+
 	private void updateBounds() {
 		for (ThemedComponent tc : themedComponents) {
 			tc.updateSize(this);
@@ -70,11 +81,17 @@ public class StyleManager {
 		for (ThemedFrame tf : themedFrames) {
 			tf.updateBounds(this);
 		}
+		for (ThemedDialog tf : themedDialogs) {
+			tf.updateBounds(this);
+		}
 		// updateFontsAndColors();
 	}
 
 	private void updateFontsAndColors() {
 		for (ThemedFrame tf : themedFrames) {
+			tf.updateFontsAndColors();
+		}
+		for (ThemedDialog tf : themedDialogs) {
 			tf.updateFontsAndColors();
 		}
 		for (ThemedComponent tc : themedComponents) {

@@ -79,7 +79,7 @@ public class OptionsFrame extends ThemedFrame {
 		add(calibrationPanel);
 		tabbedPane.addTab(I18n.get("settings.basic"), getBasicPanel());
 		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());
-		tabbedPane.addTab(I18n.get("settings.theme"), new ThemeSelectionPanel(styleManager, preferences));
+		tabbedPane.addTab(I18n.get("settings.theme"), new ThemeSelectionPanel(styleManager, preferences, this));
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), getHotkeyPanel());
 		tabbedPane.addTab(I18n.get("settings.overlay"), getOBSPanel());
 		tabbedPane.addTab(I18n.get("settings.language"), getLanguagePanel());

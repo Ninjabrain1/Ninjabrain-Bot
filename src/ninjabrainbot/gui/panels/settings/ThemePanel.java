@@ -51,6 +51,7 @@ public class ThemePanel extends ThemedPanel {
 		add(colorPreviewPanels);
 
 		nameLabel.addActionListener(__ -> preferences.theme.set(theme.UID));
+		theme.whenModified().subscribe(__ -> styleManager.init());
 	}
 
 	@Override

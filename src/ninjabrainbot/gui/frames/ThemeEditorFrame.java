@@ -11,8 +11,10 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
@@ -39,7 +41,7 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
 
-public class ThemeEditorFrame extends ThemedFrame {
+public class ThemeEditorFrame extends ThemedDialog {
 
 	private static final long serialVersionUID = -7008829231721934904L;
 
@@ -53,10 +55,11 @@ public class ThemeEditorFrame extends ThemedFrame {
 	private CustomTheme customTheme; // theme that is saved
 	private CustomTheme previewTheme; // used for previewing
 
-	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
-		super(styleManager, preferences, "Theme Editor");
+	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
+		super(styleManager, preferences, owner, "Theme Editor");
+		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
-		customTheme = Theme.getCustomTheme(-1);
+		previewTheme.setFromTheme(customTheme);
 		previewStyleManager = new StyleManager(previewTheme, SizePreference.REGULAR);
 
 		ThemedPanel panel = new ThemedPanel(styleManager);
@@ -69,8 +72,8 @@ public class ThemeEditorFrame extends ThemedFrame {
 		panel.add(createPreviewsPanel(styleManager));
 
 		previewStyleManager.init();
-		ninBotPreviewBasic.postInit();
-		ninBotPreviewDetailed.postInit();
+		SwingUtilities.invokeLater(() -> ninBotPreviewBasic.postInit());
+		SwingUtilities.invokeLater(() -> ninBotPreviewDetailed.postInit());
 
 		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(color));
 	}

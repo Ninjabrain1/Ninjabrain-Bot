@@ -118,7 +118,7 @@ public abstract class Theme {
 		}
 		return STANDARD_THEMES;
 	}
-	
+
 	public static List<CustomTheme> getCustomThemes() {
 		for (CustomTheme t : CUSTOM_THEMES) {
 			if (!t.loaded)

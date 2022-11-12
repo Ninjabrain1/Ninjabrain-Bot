@@ -2,7 +2,12 @@ package ninjabrainbot.gui.panels.settings;
 
 import java.awt.GridLayout;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.gui.buttons.FlatButton;
+import ninjabrainbot.gui.frames.ThemeEditorFrame;
+import ninjabrainbot.gui.frames.ThemedDialog;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
@@ -12,13 +17,15 @@ public class CustomThemePanel extends ThemePanel {
 
 	private static final long serialVersionUID = -7608715642093152581L;
 
-	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, CustomTheme theme) {
+	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
 		super(styleManager, preferences, theme);
 
 		FlatButton editButton = new FlatButton(styleManager, "Edit");
 		editButton.setBackgroundColor(theme.COLOR_STRONG);
 		editButton.setHoverColor(theme.COLOR_SLIGHTLY_STRONG);
 		editButton.setForegroundColor(theme.TEXT_COLOR_STRONG);
+		editButton.addActionListener(__ -> editTheme(styleManager, preferences, owner, theme));
+
 		FlatButton deleteButton = new FlatButton(styleManager, "Delete");
 		deleteButton.setBackgroundColor(theme.COLOR_STRONG);
 		deleteButton.setHoverColor(theme.COLOR_EXIT_BUTTON_HOVER);
@@ -31,6 +38,12 @@ public class CustomThemePanel extends ThemePanel {
 		buttonPanel.add(deleteButton);
 
 		add(buttonPanel);
+	}
+
+	private void editTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
+		ThemedDialog d = new ThemeEditorFrame(styleManager, preferences, owner, theme);
+		styleManager.init();
+		SwingUtilities.invokeLater(() -> d.setVisible(true));
 	}
 
 }

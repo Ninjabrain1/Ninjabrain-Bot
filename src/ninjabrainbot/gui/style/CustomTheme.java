@@ -18,7 +18,7 @@ public class CustomTheme extends Theme {
 	}
 	
 	public CustomTheme(String name, String themeString, int uid) {
-		super("Custom", uid);
+		super(name, uid);
 		this.themeString.set(themeString);
 		configurableColors = new ArrayList<ConfigurableColor>();
 
@@ -42,7 +42,7 @@ public class CustomTheme extends Theme {
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 
-		setFromTheme(Theme.get(dark_uid));
+//		setFromTheme(Theme.get(dark_uid));
 	}
 
 	@Override

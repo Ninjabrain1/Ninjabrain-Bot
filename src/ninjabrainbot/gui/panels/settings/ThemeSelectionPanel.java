@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
@@ -17,19 +18,19 @@ public class ThemeSelectionPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = 7243421413680247952L;
 
-	public ThemeSelectionPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
+	public ThemeSelectionPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		super(styleManager);
 
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		ThemedScrollPane scrollPane = new ThemedScrollPane(styleManager, getThemesPanel(styleManager, preferences));
+		ThemedScrollPane scrollPane = new ThemedScrollPane(styleManager, getThemesPanel(styleManager, preferences, owner));
 		scrollPane.setBorder(new EmptyBorder(0, 0, 10, 0));
 		add(scrollPane, BorderLayout.CENTER);
 		add(new FlatButton(styleManager, "asd"), BorderLayout.PAGE_END);
 	}
 
-	private ThemedPanel getThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
+	private ThemedPanel getThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		ThemedPanel themesPanel = new ThemedPanel(styleManager);
 		themesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 		themesPanel.setLayout(new GridLayout(0, 3, 10, 10));
@@ -42,7 +43,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		customThemesPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		customThemesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		for (CustomTheme theme : Theme.getCustomThemes())
-			customThemesPanel.add(new CustomThemePanel(styleManager, preferences, theme));
+			customThemesPanel.add(new CustomThemePanel(styleManager, preferences, owner, theme));
 		
 		ThemedPanel panel = new ThemedPanel(styleManager);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
