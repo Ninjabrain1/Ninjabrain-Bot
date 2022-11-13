@@ -46,6 +46,7 @@ public abstract class Theme {
 	public static int dark_uid = 2;
 	public static int blue_uid = 3;
 	private static Theme dark;
+	private static int nextCustomThemeUID = -1;
 
 	public static void loadThemes(NinjabrainBotPreferences preferences) {
 		dark = new DarkTheme();
@@ -63,7 +64,7 @@ public abstract class Theme {
 		for (int i = 0; i < themeStrings.length; i++) {
 			String themeString = themeStrings[i];
 			String name = i < names.length ? names[i] : "Custom theme";
-			addCustomTheme(new CustomTheme(name, themeString, -(i + 1)), preferences);
+			addCustomTheme(new CustomTheme(name, themeString, nextCustomThemeUID), preferences);
 		}
 	}
 
@@ -75,6 +76,7 @@ public abstract class Theme {
 
 	private static void addCustomTheme(CustomTheme theme, NinjabrainBotPreferences preferences) {
 		assert !THEMES.containsKey(theme.UID);
+		nextCustomThemeUID--;
 		THEMES.put(theme.UID, theme);
 		CUSTOM_THEMES.add(theme);
 		sh.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
@@ -140,12 +142,18 @@ public abstract class Theme {
 	}
 
 	public static void createCustomTheme(NinjabrainBotPreferences preferences) {
-		CustomTheme theme = new CustomTheme("New theme", "", -(CUSTOM_THEMES.size() + 1));
+		CustomTheme theme = new CustomTheme("New theme", "", nextCustomThemeUID);
 		theme.setFromTheme(dark);
 		addCustomTheme(theme, preferences);
+		serializeCustomThemes(preferences);
 	}
 
-	public static void deleteCustomTheme(NinjabrainBotPreferences preferences, CustomTheme theme) {
+	public static void deleteCustomTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, CustomTheme theme) {
+		if (styleManager.currentTheme.isTheme(theme))
+			styleManager.currentTheme.setTheme(dark);
+		THEMES.remove(theme.UID);
+		CUSTOM_THEMES.remove(theme);
+		serializeCustomThemes(preferences);
 	}
 
 	protected WrappedColor createColor(Color color) {

@@ -38,6 +38,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.util.I18n;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
 
@@ -56,7 +57,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 	private CustomTheme previewTheme; // used for previewing
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
-		super(styleManager, preferences, owner, "Theme Editor");
+		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
 		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
 		previewTheme.setFromTheme(customTheme);
@@ -83,7 +84,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		panel.add(createHeader(styleManager, "Select color to edit:"));
+		panel.add(createHeader(styleManager, I18n.get("settings.themeeditor.selectcolor")));
 		panel.add(new Divider(styleManager));
 		panel.add(Box.createVerticalStrut(10));
 
@@ -104,10 +105,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		colorPickerPanel = new ColorPickerPanel(styleManager);
 
-		FlatButton selectPresetButton = new FlatButton(styleManager, "Select preset");
+		FlatButton selectPresetButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.selectpreset"));
 		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());
 
-		FlatButton saveButton = new FlatButton(styleManager, "Save");
+		FlatButton saveButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.save"));
 		saveButton.addActionListener(__ -> saveTheme());
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -116,7 +117,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weighty = 0;
-		panel.add(createHeader(styleManager, "Color:"), gbc);
+		panel.add(createHeader(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
 		panel.add(new Divider(styleManager), gbc);
 
 		panel.add(selectPresetButton, gbc);
@@ -175,7 +176,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 	private void openSelectPresetDialog() {
 		Object[] themes = Theme.getStandardThemes().toArray();
-		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, "Any unsaved changes will be lost.", "Select preset", JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
+		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, I18n.get("settings.themeeditor.any_unsaved_changes_will_be_lost"), I18n.get("settings.themeeditor.selectpreset"), JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
 		previewTheme.setFromTheme(chosenTheme);

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
@@ -14,6 +15,7 @@ import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.util.I18n;
 
 public class ThemeSelectionPanel extends ThemedPanel {
 
@@ -38,9 +40,9 @@ public class ThemeSelectionPanel extends ThemedPanel {
 
 		ThemedPanel buttonsPanel = new ThemedPanel(styleManager);
 		buttonsPanel.setLayout(new GridLayout(1, 0, 10, 0));
-		FlatButton createThemeButton = new FlatButton(styleManager, "Create new theme");
+		FlatButton createThemeButton = new FlatButton(styleManager, I18n.get("settings.theme.createNew"));
 		createThemeButton.addActionListener(__ -> createNewTheme(styleManager, preferences, owner));
-		FlatButton importThemeButton = new FlatButton(styleManager, "Import theme");
+		FlatButton importThemeButton = new FlatButton(styleManager, I18n.get("settings.theme.import"));
 		buttonsPanel.add(createThemeButton);
 		buttonsPanel.add(importThemeButton);
 
@@ -49,7 +51,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 	}
 
 	private void populateThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
-		TitledDivider standardThemesDivider = new TitledDivider(styleManager, "Default themes");
+		TitledDivider standardThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.defaultThemes"));
 		standardThemesDivider.setBorder(new EmptyBorder(0, 0, 10, 0));
 
 		ThemedPanel defaultThemesPanel = new ThemedPanel(styleManager);
@@ -58,7 +60,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		for (Theme theme : Theme.getStandardThemes())
 			defaultThemesPanel.add(new ThemePanel(styleManager, preferences, theme));
 
-		TitledDivider customThemesDivider = new TitledDivider(styleManager, "Custom themes");
+		TitledDivider customThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.customThemes"));
 		customThemesDivider.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		ThemedPanel customThemesPanel = new ThemedPanel(styleManager);
@@ -81,7 +83,10 @@ public class ThemeSelectionPanel extends ThemedPanel {
 	}
 	
 	private void deleteTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
-		Theme.deleteCustomTheme(preferences, theme);
+		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.name), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if (result != JOptionPane.YES_OPTION)
+			return;
+		Theme.deleteCustomTheme(styleManager, preferences, theme);
 		populateThemesPanel(styleManager, preferences, owner);
 		styleManager.init();
 	}
