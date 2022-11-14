@@ -24,7 +24,7 @@ public class TitledDivider extends ThemedPanel {
 		add(new ThemedLabel(styleManager, title), gbc);
 		gbc.weightx = 1;
 		add(new Divider(styleManager), gbc);
-		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
 }

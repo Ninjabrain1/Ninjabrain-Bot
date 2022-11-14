@@ -52,6 +52,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 
 	private void populateThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		TitledDivider standardThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.defaultThemes"));
+		standardThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 		standardThemesDivider.setBorder(new EmptyBorder(0, 0, 10, 0));
 
 		ThemedPanel defaultThemesPanel = new ThemedPanel(styleManager);
@@ -62,6 +63,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 
 		TitledDivider customThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.customThemes"));
 		customThemesDivider.setBorder(new EmptyBorder(10, 0, 10, 0));
+		customThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
 
 		ThemedPanel customThemesPanel = new ThemedPanel(styleManager);
 		customThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
@@ -75,15 +77,16 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		themesPanel.add(customThemesDivider);
 		themesPanel.add(customThemesPanel);
 	}
-	
+
 	private void createNewTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		Theme.createCustomTheme(preferences);
 		populateThemesPanel(styleManager, preferences, owner);
 		styleManager.init();
 	}
-	
+
 	private void deleteTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
-		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.name), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.name), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 		if (result != JOptionPane.YES_OPTION)
 			return;
 		Theme.deleteCustomTheme(styleManager, preferences, theme);

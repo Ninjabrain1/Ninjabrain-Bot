@@ -25,6 +25,7 @@ import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.Divider;
 import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.TitledDivider;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.settings.themeeditor.PreviewDataStateHandler;
@@ -84,8 +85,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		panel.add(createHeader(styleManager, I18n.get("settings.themeeditor.selectcolor")));
-		panel.add(new Divider(styleManager));
+		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.selectcolor")));
 		panel.add(Box.createVerticalStrut(10));
 
 		for (ConfigurableColor cc : previewTheme.getConfigurableColors()) {
@@ -117,9 +117,8 @@ public class ThemeEditorFrame extends ThemedDialog {
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weighty = 0;
-		panel.add(createHeader(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
-		panel.add(new Divider(styleManager), gbc);
-
+		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(selectPresetButton, gbc);
 		panel.add(saveButton, gbc);
 		panel.add(colorPickerPanel, gbc);
@@ -162,8 +161,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weighty = 0;
-		panel.add(createHeader(styleManager, "Preview:"), gbc);
-		panel.add(new Divider(styleManager), gbc);
+		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.preview")), gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(ninBotPreviewBasic, gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
