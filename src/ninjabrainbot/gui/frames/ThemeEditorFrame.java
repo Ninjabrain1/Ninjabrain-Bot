@@ -2,7 +2,6 @@ package ninjabrainbot.gui.frames;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -13,7 +12,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -23,8 +21,6 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.components.Divider;
-import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.components.TitledDivider;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
@@ -39,9 +35,9 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
-import ninjabrainbot.util.I18n;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.util.I18n;
 
 public class ThemeEditorFrame extends ThemedDialog {
 
@@ -174,7 +170,8 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 	private void openSelectPresetDialog() {
 		Object[] themes = Theme.getStandardThemes().toArray();
-		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, I18n.get("settings.themeeditor.any_unsaved_changes_will_be_lost"), I18n.get("settings.themeeditor.selectpreset"), JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
+		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, I18n.get("settings.themeeditor.any_unsaved_changes_will_be_lost"), I18n.get("settings.themeeditor.selectpreset"),
+				JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
 		previewTheme.setFromTheme(chosenTheme);
@@ -209,16 +206,6 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		ninBotPreviewBasic.renderImage();
 		ninBotPreviewDetailed.renderImage();
-	}
-
-	private ThemedPanel createHeader(StyleManager styleManager, String text) {
-		ThemedPanel panel = new ThemedPanel(styleManager);
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		ThemedLabel label = new ThemedLabel(styleManager, text, true, false);
-		label.setHorizontalAlignment(SwingConstants.LEFT);
-		label.setAlignmentX(0);
-		panel.add(label);
-		return panel;
 	}
 
 	@Override
