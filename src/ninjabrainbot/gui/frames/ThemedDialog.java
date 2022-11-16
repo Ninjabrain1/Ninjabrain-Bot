@@ -52,6 +52,7 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 				return p.TEXT_SIZE_TITLE_LARGE;
 			}
 		};
+		titletextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_TITLE);
 		titlebarPanel.add(titletextLabel);
 		titlebarPanel.addButton(createExitButton(styleManager));
 
