@@ -59,8 +59,8 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(newValue -> updateHeaderText(newValue));
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
-		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
-		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_STRONG);
+		setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_HEADER);
 	}
 
 	@Override

@@ -42,8 +42,8 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 			}
 		});
 
-		bgCol = styleManager.currentTheme.COLOR_STRONG;
-		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		bgCol = styleManager.currentTheme.COLOR_HEADER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_HEADER;
 	}
 
 	protected String preProcessText(String text) {

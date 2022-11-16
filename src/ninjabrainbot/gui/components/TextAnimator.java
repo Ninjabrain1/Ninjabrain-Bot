@@ -26,7 +26,7 @@ public class TextAnimator implements ThemedComponent {
 		this.end = Color.WHITE;
 		this.duration = durationMillis;
 
-		startCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		startCol = styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK;
 		endCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 

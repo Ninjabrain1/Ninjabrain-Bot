@@ -40,7 +40,7 @@ public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 		setHorizontalAlignment(centered ? SwingConstants.CENTER : SwingConstants.LEFT);
 
 		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
-		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 
 	public void updateSize(StyleManager styleManager) {

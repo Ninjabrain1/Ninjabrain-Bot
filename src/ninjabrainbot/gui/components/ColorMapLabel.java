@@ -2,16 +2,16 @@ package ninjabrainbot.gui.components;
 
 import java.awt.FlowLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class ColorMapLabel extends JPanel implements ILabel {
 
 	private static final long serialVersionUID = 8926205242557099213L;
 
-	public JLabel textLabel;
+	public ThemedLabel textLabel;
 	public ColoredLabel coloredLabel;
 
 	public ColorMapLabel(StyleManager styleManager, boolean textFirst) {
@@ -31,6 +31,10 @@ public class ColorMapLabel extends JPanel implements ILabel {
 			add(textLabel);
 		}
 		setAlignmentX(0);
+	}
+	
+	public void setForegroundColor(WrappedColor color) {
+		textLabel.setForegroundColor(color);
 	}
 
 	public void setColoredText(String text, float color) {

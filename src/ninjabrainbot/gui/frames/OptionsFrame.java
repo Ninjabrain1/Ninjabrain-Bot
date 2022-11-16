@@ -333,7 +333,7 @@ class CheckboxPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
 
-	JLabel descLabel;
+	ThemedLabel descLabel;
 	CustomCheckbox checkbox;
 	BooleanPreference preference;
 
@@ -351,11 +351,6 @@ class CheckboxPanel extends ThemedPanel {
 			}
 
 			public Dimension getPreferredSize() {
-//				View view = (View) getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
-//				view.setSize(t.getWidth() - 2 * OptionsFrame.PADDING - 32, 0);
-//				float w = view.getPreferredSpan(View.X_AXIS);
-//				float h = view.getPreferredSpan(View.Y_AXIS);
-//				return new java.awt.Dimension((int) Math.ceil(w), super.getPreferredSize().height);
 				return new Dimension(t.getWidth() - 2 * OptionsFrame.PADDING - 32, super.getPreferredSize().height);
 			}
 		};

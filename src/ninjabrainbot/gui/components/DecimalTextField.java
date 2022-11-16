@@ -49,8 +49,8 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		addChangeListener(listener);
 		styleManager.registerThemedComponent(this);
 
-		bgCol = styleManager.currentTheme.COLOR_STRONG;
-		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		bgCol = styleManager.currentTheme.COLOR_HEADER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_HEADER;
 	}
 
 	public void hideSpinnerArrows() {

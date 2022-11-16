@@ -32,13 +32,13 @@ public class CustomThemePanel extends ThemePanel {
 		FlatButton editButton = new FlatButton(styleManager, "Edit");
 		editButton.setBackgroundColor(theme.COLOR_STRONG);
 		editButton.setHoverColor(theme.COLOR_SLIGHTLY_STRONG);
-		editButton.setForegroundColor(theme.TEXT_COLOR_STRONG);
+		editButton.setForegroundColor(theme.TEXT_COLOR_SLIGHTLY_WEAK);
 		editButton.addActionListener(__ -> editTheme(styleManager, preferences, owner, theme));
 
 		FlatButton deleteButton = new FlatButton(styleManager, "Delete");
 		deleteButton.setBackgroundColor(theme.COLOR_STRONG);
 		deleteButton.setHoverColor(theme.COLOR_EXIT_BUTTON_HOVER);
-		deleteButton.setForegroundColor(theme.TEXT_COLOR_STRONG);
+		deleteButton.setForegroundColor(theme.TEXT_COLOR_SLIGHTLY_WEAK);
 		deleteButton.addActionListener(deleteAction);
 
 		buttonPanel = new ThemedPanel(styleManager);

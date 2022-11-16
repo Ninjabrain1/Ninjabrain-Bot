@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.Locale;
 
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -23,12 +22,12 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 	private static final long serialVersionUID = 5784318732643211103L;
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
-	
+
 	private NinjabrainBotPreferences preferences;
 
-	public JLabel maintextLabel;
+	public ThemedLabel maintextLabel;
 	public ColorMapLabel certaintyPanel;
-	public JLabel netherLabel;
+	public ThemedLabel netherLabel;
 	public ColorMapLabel currentAngleLabel;
 
 	Subscription chunkPredictionSubscription;
@@ -52,8 +51,11 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		add(netherLabel);
 		add(currentAngleLabel);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
-		
+
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
+		maintextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		netherLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(ICalculatorResult result) {

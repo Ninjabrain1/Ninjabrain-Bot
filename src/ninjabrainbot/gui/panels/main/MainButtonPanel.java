@@ -39,7 +39,7 @@ public class MainButtonPanel extends ThemedPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
 		throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
-		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
+		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_HEADER);
 		resetButton = getResetButton(styleManager);
 		undoButton = getUndoButton(styleManager);
 		add(throwsLabel);
@@ -48,7 +48,7 @@ public class MainButtonPanel extends ThemedPanel {
 		add(resetButton);
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
-		setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 	}
 
 	@Override

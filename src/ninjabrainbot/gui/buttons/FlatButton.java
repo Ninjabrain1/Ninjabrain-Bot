@@ -38,8 +38,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setBorder(null);
 		setFocusable(false);
 
-		bgColor = styleManager.currentTheme.COLOR_STRONG;
-		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		bgColor = styleManager.currentTheme.COLOR_HEADER;
+		fgColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
 
 		label = new ThemedIcon(styleManager, img);
@@ -68,8 +68,8 @@ public class FlatButton extends JButton implements ThemedComponent {
 		setBorder(null);
 		setFocusable(false);
 
-		bgColor = styleManager.currentTheme.COLOR_STRONG;
-		fgColor = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		bgColor = styleManager.currentTheme.COLOR_HEADER;
+		fgColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
 
 		label = new ThemedLabel(styleManager, text);

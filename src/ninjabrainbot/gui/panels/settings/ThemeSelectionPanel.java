@@ -32,7 +32,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		themesPanel = new ThemedPanel(styleManager);
 		themesPanel.setLayout(new BoxLayout(themesPanel, BoxLayout.Y_AXIS));
 		themesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		themesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		themesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		populateThemesPanel(styleManager, preferences, owner);
 
 		ThemedScrollPane scrollPane = new ThemedScrollPane(styleManager, themesPanel);
@@ -52,21 +52,21 @@ public class ThemeSelectionPanel extends ThemedPanel {
 
 	private void populateThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		TitledDivider standardThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.defaultThemes"));
-		standardThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		standardThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		standardThemesDivider.setBorder(new EmptyBorder(0, 0, 10, 0));
 
 		ThemedPanel defaultThemesPanel = new ThemedPanel(styleManager);
-		defaultThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		defaultThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		defaultThemesPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		for (Theme theme : Theme.getStandardThemes())
 			defaultThemesPanel.add(new ThemePanel(styleManager, preferences, theme));
 
 		TitledDivider customThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.customThemes"));
 		customThemesDivider.setBorder(new EmptyBorder(10, 0, 10, 0));
-		customThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		customThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 
 		ThemedPanel customThemesPanel = new ThemedPanel(styleManager);
-		customThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_STRONG);
+		customThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		customThemesPanel.setLayout(new GridLayout(0, 3, 10, 10));
 		for (CustomTheme theme : Theme.getCustomThemes())
 			customThemesPanel.add(new CustomThemePanel(styleManager, preferences, owner, theme, __ -> deleteTheme(styleManager, preferences, owner, theme)));

@@ -22,14 +22,15 @@ public abstract class Theme {
 	public WrappedColor COLOR_NEUTRAL;
 	public WrappedColor COLOR_SLIGHTLY_WEAK;
 	public WrappedColor COLOR_EXIT_BUTTON_HOVER;
-	public WrappedColor TEXT_COLOR_STRONG;
+	public WrappedColor TEXT_COLOR_SLIGHTLY_WEAK;
 	public WrappedColor TEXT_COLOR_SLIGHTLY_STRONG;
 	public WrappedColor TEXT_COLOR_NEUTRAL;
 	public WrappedColor TEXT_COLOR_WEAK;
+	public WrappedColor TEXT_COLOR_HEADER;
+	public WrappedColor TEXT_COLOR_TITLE;
 	public WrappedColor COLOR_SATURATED;
 	public WrappedColor COLOR_POSITIVE;
 	public WrappedColor COLOR_NEGATIVE;
-	public WrappedColor ICON_COLOR;
 
 	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
 
@@ -201,15 +202,16 @@ class LightTheme extends Theme {
 		COLOR_STRONGEST = createColor(Color.decode("#C1C1C1"));
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#EFEFEF"));
 		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#F9F9F9"));
-		TEXT_COLOR_STRONG = createColor(Color.BLACK);
+		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.BLACK);
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#191919"));
 		TEXT_COLOR_WEAK = createColor(Color.decode("#888888"));
 		TEXT_COLOR_NEUTRAL = createColor(Color.DARK_GRAY);
+		TEXT_COLOR_HEADER = createColor(Color.decode("#191919"));
 		COLOR_STRONG = createColor(Color.decode("#E5E5E5"));
 		COLOR_SATURATED = createColor(Color.decode("#BAD7EF"));
 		COLOR_POSITIVE = createColor(Color.decode("#1E9910"));
 		COLOR_NEGATIVE = createColor(Color.decode("#991017"));
-		ICON_COLOR = createColor(Color.decode("#373737"));
+		TEXT_COLOR_TITLE = createColor(Color.decode("#373737"));
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.decode("#BFBF00"), Color.decode("#00CE29")));
 	}
@@ -229,15 +231,16 @@ class DarkTheme extends Theme {
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#212529"));
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"));
 		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#373C42"));
-		TEXT_COLOR_STRONG = createColor(Color.WHITE);
+		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE);
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
 		TEXT_COLOR_WEAK = createColor(Color.GRAY);
 		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
+		TEXT_COLOR_HEADER = createColor(Color.decode("#E5E5E5"));
 		COLOR_STRONG = createColor(Color.decode("#2D3238"));
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
-		ICON_COLOR = createColor(Color.WHITE);
+		TEXT_COLOR_TITLE = createColor(Color.WHITE);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 	}
@@ -258,14 +261,15 @@ class BlueTheme extends Theme {
 		COLOR_NEUTRAL = createColor(Color.decode("#28293D"));
 		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#2B2D44"));
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
-		TEXT_COLOR_STRONG = createColor(Color.WHITE);
+		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE);
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
 		TEXT_COLOR_WEAK = createColor(Color.GRAY);
 		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
+		TEXT_COLOR_HEADER = createColor(Color.decode("#E5E5E5"));
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
-		ICON_COLOR = createColor(Color.WHITE);
+		TEXT_COLOR_TITLE = createColor(Color.WHITE);
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 	}

@@ -32,8 +32,8 @@ public class ThemedTextArea extends JTextArea implements ThemedComponent {
 		setEditable(false);
 		setLineWrap(false);
 
-		bgCol = styleManager.currentTheme.COLOR_STRONG;
-		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		bgCol = styleManager.currentTheme.COLOR_HEADER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_HEADER;
 	}
 
 	public void updateSize(StyleManager styleManager) {

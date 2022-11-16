@@ -22,7 +22,7 @@ public class ThemedIcon extends ThemedLabel {
 		super(styleManager);
 		setHorizontalAlignment(SwingConstants.CENTER);
 
-		iconColor = styleManager.currentTheme.ICON_COLOR;
+		iconColor = styleManager.currentTheme.TEXT_COLOR_TITLE;
 		icon = img;
 	}
 

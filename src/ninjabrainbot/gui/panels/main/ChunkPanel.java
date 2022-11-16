@@ -79,7 +79,12 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER;
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
-		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		
+		location.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		certainty.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		distance.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		nether.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
 	@Override

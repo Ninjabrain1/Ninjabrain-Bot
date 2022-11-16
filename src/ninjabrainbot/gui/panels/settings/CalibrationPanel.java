@@ -278,7 +278,7 @@ class InstructionLabel extends ThemedLabel {
 		setHorizontalAlignment(SwingConstants.CENTER);
 		setAlignmentX(0.5f);
 
-		highlightedCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		highlightedCol = styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK;
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
 	}
 

@@ -82,7 +82,7 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 		setRolloverSelectedIcon(selected_rollover_icon);
 
 		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
-		fgCol = styleManager.currentTheme.TEXT_COLOR_STRONG;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 
 	public final void updateSize(StyleManager styleManager) {

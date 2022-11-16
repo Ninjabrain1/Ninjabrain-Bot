@@ -29,11 +29,12 @@ public class CustomTheme extends Theme {
 		COLOR_DIVIDER = createColor(Color.decode("#212130"), "Dividers", "e");
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#1C1C27"), "Header Dividers", "f");
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"), "Exit button hover", "g");
-		ICON_COLOR = createColor(Color.WHITE, "Icon color", "n");
-		TEXT_COLOR_STRONG = createColor(Color.WHITE, "Text", "h");
+		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE, "Text", "h");
+		TEXT_COLOR_TITLE = createColor(Color.WHITE, "Title text", "n");
+		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY, "Throws text", "k");
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"), "Divine text", "i");
 		TEXT_COLOR_WEAK = createColor(Color.GRAY, "Version text", "j");
-		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY, "Throws text", "k");
+		TEXT_COLOR_HEADER = createColor(Color.decode("#E5E5E5"), "Header text", "o");
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"), "Subpixel +", "l");
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"), "Subpixel -", "m");
 
@@ -60,13 +61,14 @@ public class CustomTheme extends Theme {
 		COLOR_DIVIDER.set(theme.COLOR_DIVIDER);
 		COLOR_DIVIDER_DARK.set(theme.COLOR_DIVIDER_DARK);
 		COLOR_EXIT_BUTTON_HOVER.set(theme.COLOR_EXIT_BUTTON_HOVER);
-		TEXT_COLOR_STRONG.set(theme.TEXT_COLOR_STRONG);
+		TEXT_COLOR_SLIGHTLY_WEAK.set(theme.TEXT_COLOR_SLIGHTLY_WEAK);
 		TEXT_COLOR_SLIGHTLY_STRONG.set(theme.TEXT_COLOR_SLIGHTLY_STRONG);
 		TEXT_COLOR_WEAK.set(theme.TEXT_COLOR_WEAK);
 		TEXT_COLOR_NEUTRAL.set(theme.TEXT_COLOR_NEUTRAL);
+		TEXT_COLOR_HEADER.set(theme.TEXT_COLOR_HEADER);
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
-		ICON_COLOR.set(theme.ICON_COLOR);
+		TEXT_COLOR_TITLE.set(theme.TEXT_COLOR_TITLE);
 
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 		
