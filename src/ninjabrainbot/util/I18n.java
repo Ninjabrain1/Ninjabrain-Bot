@@ -37,8 +37,8 @@ public class I18n {
 		LANGUAGE_CONFIG.add(Locale.ITALY);
 		LANGUAGE_CONFIG.add(Locale.JAPAN);
 		LANGUAGE_CONFIG.add(Locale.TRADITIONAL_CHINESE);
-		// add language ja_RYU
 		LANGUAGE_CONFIG.add(new Locale("ja", "RYU"));
+		LANGUAGE_CONFIG.add(new Locale("ru", "RU"));
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);
