@@ -107,17 +107,23 @@ public class ThemeEditorFrame extends ThemedDialog {
 		FlatButton saveButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.save"));
 		saveButton.addActionListener(__ -> saveTheme());
 
+		FlatButton resetColorButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.reset_color"));
+		resetColorButton.addActionListener(__ -> resetColor());
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weighty = 0;
+
 		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(selectPresetButton, gbc);
 		panel.add(saveButton, gbc);
+		panel.add(resetColorButton, gbc);
 		panel.add(colorPickerPanel, gbc);
+
 		gbc.weighty = 1;
 		panel.add(Box.createGlue(), gbc);
 
@@ -180,6 +186,17 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 	private void saveTheme() {
 		customTheme.setFromTheme(previewTheme);
+	}
+
+	private void resetColor() {
+		if (selectedPanel == null)
+			return;
+		String uid = selectedPanel.getConfigurableColor().uid;
+		ConfigurableColor configurableColor = customTheme.getConfigurableColor(uid);
+		if (configurableColor != null) {
+			selectedPanel.getConfigurableColor().color.set(configurableColor.color);
+			updateComponents();
+		}
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
