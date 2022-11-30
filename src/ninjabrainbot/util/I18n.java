@@ -97,6 +97,10 @@ public class I18n {
 	public static String get(String key, Object... args) {
 		return String.format(BUNDLE.getString(key), args);
 	}
+	
+	public static boolean localeRequiresExtraSpace() {
+		return LANGUAGE == ru_RU;
+	}
 
 	public static class UTF8Control extends ResourceBundle.Control {
 		@Override

@@ -272,7 +272,7 @@ public class OptionsFrame extends ThemedFrame {
 	}
 
 	public void updateBounds(StyleManager styleManager) {
-		WINDOW_WIDTH = styleManager.size.WIDTH * 7 / 4;
+		WINDOW_WIDTH = styleManager.size.WIDTH / 4 * (I18n.localeRequiresExtraSpace() ? 8 : 7);
 		COLUMN_WIDTH = WINDOW_WIDTH / 2;
 		int titleBarHeight = titlebarPanel.getPreferredSize().height;
 		int panelHeight = tabbedPane.getPreferredSize().height;
