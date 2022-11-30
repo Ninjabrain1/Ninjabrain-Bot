@@ -23,6 +23,7 @@ public class I18n {
 
 	// add language ja_RYU
 	public static final Locale ja_RYU = new Locale("ja", "RYU");
+	public static final Locale ru_RU = new Locale("ru", "RU");
 	
 	private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
 
@@ -40,8 +41,8 @@ public class I18n {
 		LANGUAGE_CONFIG.add(Locale.ITALY);
 		LANGUAGE_CONFIG.add(Locale.JAPAN);
 		LANGUAGE_CONFIG.add(Locale.TRADITIONAL_CHINESE);
-		LANGUAGE_CONFIG.add(new Locale("ja", "RYU"));
-		LANGUAGE_CONFIG.add(new Locale("ru", "RU"));
+		LANGUAGE_CONFIG.add(ja_RYU);
+		LANGUAGE_CONFIG.add(ru_RU);
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);

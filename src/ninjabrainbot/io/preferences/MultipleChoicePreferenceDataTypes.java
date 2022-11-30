@@ -9,7 +9,7 @@ public class MultipleChoicePreferenceDataTypes {
 
 	public enum Language implements IMultipleChoicePreferenceDataType {
 		EN_US(I18n.getLanguageName(Locale.US)), KO_KR(I18n.getLanguageName(Locale.KOREA)), ZH_CN(I18n.getLanguageName(Locale.SIMPLIFIED_CHINESE)), IT_IT(I18n.getLanguageName(Locale.ITALY)),
-		JA_JP(I18n.getLanguageName(Locale.JAPAN)), ZH_TW(I18n.getLanguageName(Locale.TRADITIONAL_CHINESE)), JA_RYU(I18n.getLanguageName(I18n.ja_RYU));
+		JA_JP(I18n.getLanguageName(Locale.JAPAN)), ZH_TW(I18n.getLanguageName(Locale.TRADITIONAL_CHINESE)), JA_RYU(I18n.getLanguageName(I18n.ja_RYU)), RU_RU(I18n.getLanguageName(I18n.ru_RU));
 
 		final String name;
 
