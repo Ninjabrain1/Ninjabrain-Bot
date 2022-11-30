@@ -4,29 +4,36 @@ import java.awt.Color;
 
 import javax.swing.JSeparator;
 
-import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class Divider extends JSeparator implements ThemedComponent {
-	
+
 	private static final long serialVersionUID = 4116749757122783747L;
 
-	public Divider(GUI gui) {
-		gui.registerThemedComponent(this);
+	private WrappedColor bgCol;
+
+	public Divider(StyleManager styleManager) {
+		styleManager.registerThemedComponent(this);
+		bgCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
+	public void updateSize(StyleManager styleManager) {
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		setBackground(getBackgroundColor(gui.theme));
-		setForeground(getBackgroundColor(gui.theme));
+	public void updateColors() {
+		setBackground(getBackgroundColor());
+		setForeground(getBackgroundColor());
 	}
-	
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONGEST;
+
+	public void setBackgroundColor(WrappedColor color) {
+		bgCol = color;
 	}
-	
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
 }

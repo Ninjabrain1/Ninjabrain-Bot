@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,25 +13,25 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.gui.GUI;
+import ninjabrainbot.util.Logger;
 
 public class UpdateChecker implements Runnable {
 
-	static boolean hasChecked = false;
+	private static boolean hasChecked = false;
 
-	public static synchronized void check(GUI gui) {
+	public static synchronized void check(Consumer<VersionURL> urlConsumer) {
 		if (!hasChecked) {
 			hasChecked = true;
-			UpdateChecker updateChecker = new UpdateChecker(gui);
+			UpdateChecker updateChecker = new UpdateChecker(urlConsumer);
 			Thread t = new Thread(updateChecker);
 			t.start();
 		}
 	}
 
-	GUI gui;
+	Consumer<VersionURL> urlConsumer;
 
-	public UpdateChecker(GUI gui) {
-		this.gui = gui;
+	public UpdateChecker(Consumer<VersionURL> urlConsumer) {
+		this.urlConsumer = urlConsumer;
 	}
 
 	/**
@@ -48,7 +49,6 @@ public class UpdateChecker implements Runnable {
 		con.setRequestProperty("accept", "application/vnd.github.v3+json");
 		con.setDoOutput(true);
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//		System.out.println(con.getResponseMessage());
 		StringBuffer response = new StringBuffer();
 		String inputLine;
 		while ((inputLine = in.readLine()) != null)
@@ -101,13 +101,13 @@ public class UpdateChecker implements Runnable {
 		try {
 			VersionURL url = checkForUpdates();
 			if (url != null)
-				gui.onNewUpdateAvailable(url);
+				urlConsumer.accept(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
+		Logger.log("Time to check for updates: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 	}
-	
+
 	private static int[] getSemanticVersion(String s) {
 		try {
 			Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
@@ -120,14 +120,15 @@ public class UpdateChecker implements Runnable {
 				}
 				return version;
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Returns 1 if a is newer than b, -1 if b is newer than a, and 0 if they are equivalent
+	 * Returns 1 if a is newer than b, -1 if b is newer than a, and 0 if they are
+	 * equivalent
 	 */
 	private static int compareVersions(int[] a, int[] b) {
 		if (a == b)

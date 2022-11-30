@@ -5,59 +5,73 @@ import java.awt.Dimension;
 
 import javax.swing.JTextArea;
 
-import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.SizePreference;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class ThemedTextArea extends JTextArea implements ThemedComponent {
-	
+
 	private static final long serialVersionUID = -1769219771406000716L;
 	public boolean bold;
-	
-	public ThemedTextArea(GUI gui) {
-		this(gui, "");
+
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
+
+	public ThemedTextArea(StyleManager styleManager) {
+		this(styleManager, "");
 	}
-	
-	public ThemedTextArea(GUI gui, String text) {
-		this(gui, text, false);
+
+	public ThemedTextArea(StyleManager styleManager, String text) {
+		this(styleManager, text, false);
 	}
-	
-	public ThemedTextArea(GUI gui, String text, boolean bold) {
+
+	public ThemedTextArea(StyleManager styleManager, String text, boolean bold) {
 		super(text);
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
 		this.bold = bold;
 		setEditable(false);
 		setLineWrap(false);
+
+		bgCol = styleManager.currentTheme.COLOR_HEADER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_HEADER;
 	}
-	
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), !bold));
+
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold));
 	}
-	
-	public void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
+
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(gui.theme);
+		Color fg = getForegroundColor();
 		if (fg != null)
 			setForeground(fg);
 	}
-	
+
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
 	}
-	
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+
+	public void setBackgroundColor(WrappedColor color) {
+		bgCol = color;
 	}
-	
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+
+	public void setForegroundColor(WrappedColor color) {
+		fgCol = color;
 	}
-	
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(0, super.getPreferredSize().height);
 	}
-	
+
 }

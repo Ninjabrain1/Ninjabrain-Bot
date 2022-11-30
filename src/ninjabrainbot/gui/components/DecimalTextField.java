@@ -12,15 +12,18 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
-import ninjabrainbot.gui.GUI;
-import ninjabrainbot.gui.SizePreference;
-import ninjabrainbot.gui.Theme;
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
-	
+
 	private static final long serialVersionUID = 1167120412326064670L;
 
-	public DecimalTextField(GUI gui, float value, float min, float max) {
+	private WrappedColor bgCol;
+	private WrappedColor fgCol;
+
+	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
 		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
 		setBorder(BorderFactory.createEmptyBorder());
 		setAlignmentX(1);
@@ -29,7 +32,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		ChangeListener listener = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				try {
-					double newSigma = (double)((JSpinner)e.getSource()).getValue();
+					double newSigma = (double) ((JSpinner) e.getSource()).getValue();
 					if (newSigma > max) {
 						newSigma = max;
 						setValue(newSigma);
@@ -44,15 +47,19 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 			}
 		};
 		addChangeListener(listener);
-		gui.registerThemedComponent(this);
+		styleManager.registerThemedComponent(this);
+
+		bgCol = styleManager.currentTheme.COLOR_HEADER;
+		fgCol = styleManager.currentTheme.TEXT_COLOR_HEADER;
 	}
-	
+
 	public void hideSpinnerArrows() {
 		Dimension d = getPreferredSize();
 		setUI(new BasicSpinnerUI() {
 			protected Component createNextButton() {
 				return null;
 			}
+
 			protected Component createPreviousButton() {
 				return null;
 			}
@@ -64,27 +71,27 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	}
 
 	@Override
-	public void updateSize(GUI gui) {
-		setFont(gui.fontSize(getTextSize(gui.size), true));
+	public void updateSize(StyleManager styleManager) {
+		setFont(styleManager.fontSize(getTextSize(styleManager.size), true));
 	}
 
 	@Override
-	public void updateColors(GUI gui) {
-		Color bg = getBackgroundColor(gui.theme);
+	public void updateColors() {
+		Color bg = getBackgroundColor();
 		if (bg != null)
 			setBackground(bg);
-		Color fg = getForegroundColor(gui.theme);
+		Color fg = getForegroundColor();
 		if (fg != null) {
 			setForeground(fg);
 		}
 	}
-	
+
 	@Override
 	public void setBackground(Color bg) {
 		super.setBackground(bg);
 		getEditor().getComponent(0).setBackground(bg);
 	}
-	
+
 	@Override
 	public void setForeground(Color bg) {
 		super.setForeground(bg);
@@ -92,17 +99,25 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 		field.setForeground(bg);
 		field.setCaretColor(bg);
 	}
-	
+
 	public int getTextSize(SizePreference p) {
 		return p.TEXT_SIZE_SMALL;
 	}
-	
-	public Color getBackgroundColor(Theme theme) {
-		return theme.COLOR_STRONG;
+
+	public void setBackgroundColor(WrappedColor color) {
+		bgCol = color;
 	}
-	
-	public Color getForegroundColor(Theme theme) {
-		return theme.TEXT_COLOR_STRONG;
+
+	public void setForegroundColor(WrappedColor color) {
+		fgCol = color;
 	}
-	
+
+	protected Color getBackgroundColor() {
+		return bgCol.color();
+	}
+
+	protected Color getForegroundColor() {
+		return fgCol.color();
+	}
+
 }

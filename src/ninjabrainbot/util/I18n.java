@@ -21,6 +21,9 @@ import ninjabrainbot.Main;
  */
 public class I18n {
 
+	public static final Locale ja_RYU = new Locale("ja", "RYU");
+	public static final Locale ru_RU = new Locale("ru", "RU");
+	
 	private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
 
 	private static ResourceBundle BUNDLE = null;
@@ -37,8 +40,8 @@ public class I18n {
 		LANGUAGE_CONFIG.add(Locale.ITALY);
 		LANGUAGE_CONFIG.add(Locale.JAPAN);
 		LANGUAGE_CONFIG.add(Locale.TRADITIONAL_CHINESE);
-		LANGUAGE_CONFIG.add(new Locale("ja", "RYU"));
-		LANGUAGE_CONFIG.add(new Locale("ru", "RU"));
+		LANGUAGE_CONFIG.add(ja_RYU);
+		LANGUAGE_CONFIG.add(ru_RU);
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);
@@ -51,7 +54,7 @@ public class I18n {
 			}
 		}
 	}
-	
+
 	private static Locale getLanguageFromID(int id) {
 		if (id == -1) {
 			Locale def = Locale.getDefault();
@@ -71,14 +74,18 @@ public class I18n {
 
 	public static String[] getLanguageNames() {
 		final String[] languageNames = new String[LANGUAGE_NAMES.size()];
-    	int i = 0;
-    	for (String languageName : LANGUAGE_NAMES) {
-    		languageNames[i] = languageName;
-    		i++;
-    	}
-        return languageNames;
-    }
-    
+		int i = 0;
+		for (String languageName : LANGUAGE_NAMES) {
+			languageNames[i] = languageName;
+			i++;
+		}
+		return languageNames;
+	}
+
+	public static String getLanguageName(Locale locale) {
+		return BUNDLE.getString("settings.language." + locale.toString());
+	}
+
 	public static int[] getLanguageIDs() {
 		final int[] languageIds = new int[LANGUAGE_NAMES.size()];
 		for (int i = 0; i < languageIds.length; i++) {
@@ -87,39 +94,43 @@ public class I18n {
 		return languageIds;
 	}
 
-    public static String get(String key, Object... args) {
-        return String.format(BUNDLE.getString(key), args);
-    }
+	public static String get(String key, Object... args) {
+		return String.format(BUNDLE.getString(key), args);
+	}
+	
+	public static boolean localeRequiresExtraSpace() {
+		return LANGUAGE == ru_RU;
+	}
 
-    public static class UTF8Control extends ResourceBundle.Control {
-        @Override
-        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
-            // The below is a copy of the default implementation.
-            String bundleName = toBundleName(baseName, locale);
-            String resourceName = toResourceName(bundleName, "properties");
-            ResourceBundle bundle = null;
-            InputStream stream = null;
-            if (reload) {
-                URL url = loader.getResource(resourceName);
-                if (url != null) {
-                    URLConnection connection = url.openConnection();
-                    if (connection != null) {
-                        connection.setUseCaches(false);
-                        stream = connection.getInputStream();
-                    }
-                }
-            } else {
-                stream = loader.getResourceAsStream(resourceName);
-            }
-            if (stream != null) {
-                try {
-                    // Only this line is changed to make it to read properties files as UTF-8.
-                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, StandardCharsets.UTF_8));
-                } finally {
-                    stream.close();
-                }
-            }
-            return bundle;
-        }
-    }
+	public static class UTF8Control extends ResourceBundle.Control {
+		@Override
+		public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
+			// The below is a copy of the default implementation.
+			String bundleName = toBundleName(baseName, locale);
+			String resourceName = toResourceName(bundleName, "properties");
+			ResourceBundle bundle = null;
+			InputStream stream = null;
+			if (reload) {
+				URL url = loader.getResource(resourceName);
+				if (url != null) {
+					URLConnection connection = url.openConnection();
+					if (connection != null) {
+						connection.setUseCaches(false);
+						stream = connection.getInputStream();
+					}
+				}
+			} else {
+				stream = loader.getResourceAsStream(resourceName);
+			}
+			if (stream != null) {
+				try {
+					// Only this line is changed to make it to read properties files as UTF-8.
+					bundle = new PropertyResourceBundle(new InputStreamReader(stream, StandardCharsets.UTF_8));
+				} finally {
+					stream.close();
+				}
+			}
+			return bundle;
+		}
+	}
 }

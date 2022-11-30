@@ -10,7 +10,7 @@ import javax.swing.JCheckBox;
 import ninjabrainbot.Main;
 
 public class CustomCheckbox extends JCheckBox {
-	
+
 	private static final long serialVersionUID = -6503070977470692912L;
 
 	private static ImageIcon icon = new ImageIcon(Main.class.getResource("/resources/checkbox_icon.png"));
@@ -18,11 +18,11 @@ public class CustomCheckbox extends JCheckBox {
 	private static ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/resources/checkbox_pressed_icon.png"));
 	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/resources/checkbox_rollover_icon.png"));
 	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/resources/checkbox_selected_rollover_icon.png"));
-	
+
 	public CustomCheckbox() {
 		this(false);
 	}
-	
+
 	public CustomCheckbox(boolean ticked) {
 		setSelected(ticked);
 		setBorderPainted(false);
@@ -39,13 +39,13 @@ public class CustomCheckbox extends JCheckBox {
 		addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				boolean ticked = (boolean)((JCheckBox)e.getSource()).isSelected();
+				boolean ticked = (boolean) ((JCheckBox) e.getSource()).isSelected();
 				onChanged(ticked);
 			}
 		});
 	}
-	
+
 	public void onChanged(boolean ticked) {
 	}
-	
+
 }
