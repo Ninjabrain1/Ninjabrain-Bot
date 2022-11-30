@@ -21,7 +21,6 @@ import ninjabrainbot.Main;
  */
 public class I18n {
 
-	// add language ja_RYU
 	public static final Locale ja_RYU = new Locale("ja", "RYU");
 	public static final Locale ru_RU = new Locale("ru", "RU");
 	
@@ -82,7 +81,7 @@ public class I18n {
 		}
 		return languageNames;
 	}
-	
+
 	public static String getLanguageName(Locale locale) {
 		return BUNDLE.getString("settings.language." + locale.toString());
 	}
