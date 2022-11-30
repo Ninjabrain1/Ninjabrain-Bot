@@ -90,6 +90,15 @@ public class CustomTheme extends Theme {
 	public ArrayList<ConfigurableColor> getConfigurableColors() {
 		return configurableColors;
 	}
+	
+	public ConfigurableColor getConfigurableColor(String uid) {
+		for (ConfigurableColor configurableColor : configurableColors) {
+			if (uid.contentEquals(configurableColor.uid)) {
+				return configurableColor;
+			}
+		}
+		return null;
+	}
 
 	protected WrappedColor createColor(Color color, WrappedColor parent) {
 		WrappedColor wc = super.createColor(color);
