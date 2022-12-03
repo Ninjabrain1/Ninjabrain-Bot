@@ -65,7 +65,7 @@ public class ThemeSerializerTests {
 	}
 
 	public void deserialize_serialize_shouldBeIdenticalToOriginal() {
-		String string = "a71`Wb9BDhc:be4d:2Tme8B4`f71`Wgl4M7noooohooooiiNGUjP820k`<30lMLa\\mc6ib";
+		String string = "a71`Wb9BDhc:be4d:2Tme8B4`f71`Whoooonooook`<30iiNGUjP820oiNGUlMLa\\mc6ib";
 		assert ThemeSerializer.serialize(ThemeSerializer.deserialize(string)).contentEquals(string);
 	}
 

@@ -8,6 +8,9 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.Logger;
 
 public abstract class TestBase {
@@ -15,6 +18,7 @@ public abstract class TestBase {
 	public static void main(String[] args) {
 		try {
 			Logger.enabled = false;
+			Theme.loadThemes(new NinjabrainBotPreferences(new UnsavedPreferences()));
 			for (Class<?> c : findAllTests()) {
 				if (c == TestBase.class)
 					continue;

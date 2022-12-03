@@ -35,7 +35,7 @@ public class ThemeSerializer {
 			String uid = String.valueOf(tag);
 			Optional<ConfigurableColor> optionalCC = configurableColors.stream().filter(cc -> cc.uid.contentEquals(uid)).findFirst();
 			if (!optionalCC.isPresent())
-				return null;
+				continue;
 			ConfigurableColor cc = optionalCC.get();
 			cc.color.set(c);
 		}

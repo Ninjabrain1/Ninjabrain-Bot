@@ -16,7 +16,7 @@ public class CustomTheme extends Theme {
 	public CustomTheme() {
 		this("temp", "", 0);
 	}
-	
+
 	public CustomTheme(String name, String themeString, int uid) {
 		super(name, uid);
 		this.themeString.set(themeString);
@@ -28,7 +28,6 @@ public class CustomTheme extends Theme {
 		COLOR_NEUTRAL = createColor(Color.decode("#28293D"), "Throws background", "d");
 		COLOR_DIVIDER = createColor(Color.decode("#212130"), "Dividers", "e");
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#1C1C27"), "Header Dividers", "f");
-		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"), "Exit button hover", "g");
 		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE, "Text", "h");
 		TEXT_COLOR_TITLE = createColor(Color.WHITE, "Title text", "n");
 		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY, "Throws text", "k");
@@ -40,6 +39,8 @@ public class CustomTheme extends Theme {
 
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"), COLOR_STRONG);
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"), COLOR_STRONG);
+
+		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
 
 		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
 
@@ -71,18 +72,18 @@ public class CustomTheme extends Theme {
 		TEXT_COLOR_TITLE.set(theme.TEXT_COLOR_TITLE);
 
 		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
-		
+
 		String newThemeString = ThemeSerializer.serialize(this);
 		if (!themeString.get().contentEquals(newThemeString))
 			themeString.set(newThemeString);
 
 		whenModified.notifySubscribers(this);
 	}
-	
-	public ISubscribable<String> whenThemeStringChanged(){
+
+	public ISubscribable<String> whenThemeStringChanged() {
 		return themeString;
 	}
-	
+
 	public String getThemeString() {
 		return themeString.get();
 	}
@@ -90,7 +91,7 @@ public class CustomTheme extends Theme {
 	public ArrayList<ConfigurableColor> getConfigurableColors() {
 		return configurableColors;
 	}
-	
+
 	public ConfigurableColor getConfigurableColor(String uid) {
 		for (ConfigurableColor configurableColor : configurableColors) {
 			if (uid.contentEquals(configurableColor.uid)) {
