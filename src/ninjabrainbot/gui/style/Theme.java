@@ -43,9 +43,9 @@ public abstract class Theme {
 	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<CustomTheme>();
 	protected static final SubscriptionHandler sh = new SubscriptionHandler();
 
-	public static int light_uid = 1;
-	public static int dark_uid = 2;
-	public static int blue_uid = 3;
+	public static int dark_uid = 1;
+	public static int blue_uid = 2;
+	public static int light_uid = 3;
 	private static Theme dark;
 	private static int nextCustomThemeUID = -1;
 
