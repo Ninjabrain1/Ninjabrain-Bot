@@ -32,11 +32,24 @@ public class ColorMap {
 	}
 
 	private Color getInterpolatedColor(float t, Color c0, Color c1) {
-		int r = (int) (c1.getRed() * t + c0.getRed() * (1.0f - t));
-		int g = (int) (c1.getGreen() * t + c0.getGreen() * (1.0f - t));
-		int b = (int) (c1.getBlue() * t + c0.getBlue() * (1.0f - t));
-		int a = (int) (c1.getAlpha() * t + c0.getAlpha() * (1.0f - t));
-		return new Color(r, g, b, a);
+		float[] hsv0 = Color.RGBtoHSB(c0.getRed(), c0.getGreen(), c0.getBlue(), null);
+		float[] hsv1 = Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), null);
+		float h;
+		if (Math.abs(hsv0[0] - hsv1[0]) < 0.5f) {
+			h = hsv0[0] * t + hsv1[0] * (1.0f - t);
+		} else {
+			if (hsv0[0] < hsv1[0]) {
+				hsv0[0]++;
+			} else {
+				hsv1[0]++;
+			}
+			h = hsv0[0] * t + hsv1[0] * (1.0f - t);
+			if (h > 1)
+				h--;
+		}
+		float s = hsv0[1] * t + hsv1[1] * (1.0f - t);
+		float v = hsv0[2] * t + hsv1[2] * (1.0f - t);
+		return Color.getHSBColor(h, s, v);
 	}
 
 }

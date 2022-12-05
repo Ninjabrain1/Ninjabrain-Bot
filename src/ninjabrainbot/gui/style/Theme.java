@@ -22,17 +22,21 @@ public abstract class Theme {
 	public WrappedColor COLOR_NEUTRAL;
 	public WrappedColor COLOR_SLIGHTLY_WEAK;
 	public WrappedColor COLOR_EXIT_BUTTON_HOVER;
+
 	public WrappedColor TEXT_COLOR_SLIGHTLY_WEAK;
 	public WrappedColor TEXT_COLOR_SLIGHTLY_STRONG;
 	public WrappedColor TEXT_COLOR_NEUTRAL;
 	public WrappedColor TEXT_COLOR_WEAK;
 	public WrappedColor TEXT_COLOR_HEADER;
 	public WrappedColor TEXT_COLOR_TITLE;
+
 	public WrappedColor COLOR_SATURATED;
 	public WrappedColor COLOR_POSITIVE;
 	public WrappedColor COLOR_NEGATIVE;
 
-	public Wrapper<ColorMap> CERTAINTY_COLOR_MAP;
+	public WrappedColor COLOR_GRADIENT_0;
+	public WrappedColor COLOR_GRADIENT_50;
+	public WrappedColor COLOR_GRADIENT_100;
 
 	public final int UID;
 	protected boolean loaded = false;
@@ -61,7 +65,7 @@ public abstract class Theme {
 	private static void loadCustomThemes(NinjabrainBotPreferences preferences) {
 		String[] names = preferences.customThemesNames.get().split("\\.");
 		String[] themeStrings = preferences.customThemesString.get().split("\\.");
-		
+
 		for (int i = 0; i < themeStrings.length; i++) {
 			String themeString = themeStrings[i];
 			String name = i < names.length ? names[i] : "Custom theme";
@@ -169,12 +173,6 @@ public abstract class Theme {
 		return b;
 	}
 
-	protected Wrapper<ColorMap> createColorMap(ColorMap colorMap) {
-		Wrapper<ColorMap> cmap = new Wrapper<ColorMap>();
-		cmap.set(colorMap);
-		return cmap;
-	}
-
 	@Override
 	public String toString() {
 		return name;
@@ -213,7 +211,9 @@ class LightTheme extends Theme {
 		COLOR_NEGATIVE = createColor(Color.decode("#991017"));
 		TEXT_COLOR_TITLE = createColor(Color.decode("#373737"));
 
-		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.decode("#BFBF00"), Color.decode("#00CE29")));
+		COLOR_GRADIENT_0 = createColor(Color.RED);
+		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
+		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
 	}
 }
 
@@ -242,7 +242,9 @@ class DarkTheme extends Theme {
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
 		TEXT_COLOR_TITLE = createColor(Color.WHITE);
 
-		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
+		COLOR_GRADIENT_0 = createColor(Color.RED);
+		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
+		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
 	}
 }
 
@@ -271,6 +273,8 @@ class BlueTheme extends Theme {
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
 		TEXT_COLOR_TITLE = createColor(Color.WHITE);
 
-		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
+		COLOR_GRADIENT_0 = createColor(Color.RED);
+		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
+		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
 	}
 }

@@ -51,7 +51,7 @@ public class CurrentTheme {
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
 
-		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
+		CERTAINTY_COLOR_MAP.set(new ColorMap(theme.COLOR_GRADIENT_0.color(), theme.COLOR_GRADIENT_50.color(), theme.COLOR_GRADIENT_100.color()));
 
 		updateSubscription(theme);
 		whenModified.notifySubscribers(this);

@@ -37,14 +37,14 @@ public class CustomTheme extends Theme {
 		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"), "Subpixel +", "l");
 		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"), "Subpixel -", "m");
 
+		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"), "Certainty 100%", "r");
+		COLOR_GRADIENT_50 = createColor(Color.YELLOW, "Certainty 50%", "q");
+		COLOR_GRADIENT_0 = createColor(Color.RED, "Certainty 0%", "p");
+
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"), COLOR_STRONG);
 		COLOR_SATURATED = createColor(Color.decode("#57EBA3"), COLOR_STRONG);
 
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
-
-		CERTAINTY_COLOR_MAP = createColorMap(new ColorMap(Color.RED, Color.YELLOW, Color.decode("#00CE29")));
-
-//		setFromTheme(Theme.get(dark_uid));
 	}
 
 	@Override
@@ -70,8 +70,6 @@ public class CustomTheme extends Theme {
 		COLOR_POSITIVE.set(theme.COLOR_POSITIVE);
 		COLOR_NEGATIVE.set(theme.COLOR_NEGATIVE);
 		TEXT_COLOR_TITLE.set(theme.TEXT_COLOR_TITLE);
-
-		CERTAINTY_COLOR_MAP.set(theme.CERTAINTY_COLOR_MAP);
 
 		String newThemeString = ThemeSerializer.serialize(this);
 		if (!themeString.get().contentEquals(newThemeString))
