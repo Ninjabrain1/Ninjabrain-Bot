@@ -49,6 +49,7 @@ public class CustomTheme extends Theme {
 
 	@Override
 	protected void loadTheme() {
+		loaded = true;
 		setFromTheme(ThemeSerializer.deserialize(themeString.get()));
 	}
 
@@ -123,7 +124,7 @@ public class CustomTheme extends Theme {
 		configurableColors.add(new ConfigurableColor(wc, name, uid));
 		return wc;
 	}
-	
+
 	public boolean isEquivalentTo(CustomTheme other) {
 		if (other.configurableColors.size() != this.configurableColors.size())
 			return false;

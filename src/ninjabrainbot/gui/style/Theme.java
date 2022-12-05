@@ -193,6 +193,8 @@ class LightTheme extends Theme {
 
 	@Override
 	protected void loadTheme() {
+		loaded = true;
+		
 		COLOR_NEUTRAL = createColor(Color.decode("#F5F5F5"));
 		COLOR_DIVIDER = createColor(Color.decode("#D8D8D8"));
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#C1C1C1"));

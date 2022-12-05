@@ -58,7 +58,7 @@ public class CustomThemePanel extends ThemePanel {
 
 	private void editTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
 		ThemedDialog d = new ThemeEditorFrame(styleManager, preferences, owner, theme);
-		d.setLocation(owner.getX() -140, owner.getY() + 30);
+		d.setLocation(owner.getX() - 140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));
 	}

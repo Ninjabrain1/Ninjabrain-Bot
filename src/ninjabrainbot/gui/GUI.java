@@ -78,8 +78,7 @@ public class GUI {
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
-		optionsFrame = new OptionsFrame(styleManager, preferences);
-		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> optionsFrame.toggleWindow(ninjabrainBotFrame));
+		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> getOrCreateOptionsFrame().toggleWindow(ninjabrainBotFrame));
 
 		Progress.setTask("Settings fonts and colors", 0.99f);
 		Profiler.stopAndStart("Init fonts, colors, bounds");
@@ -110,6 +109,14 @@ public class GUI {
 		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
 		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
 		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
+	}
+
+	private OptionsFrame getOrCreateOptionsFrame() {
+		if (optionsFrame == null) {
+			optionsFrame = new OptionsFrame(styleManager, preferences);
+			styleManager.init();
+		}
+		return optionsFrame;
 	}
 
 	private Thread onShutdown() {
