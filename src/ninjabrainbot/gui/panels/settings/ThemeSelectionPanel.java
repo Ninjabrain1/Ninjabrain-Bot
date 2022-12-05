@@ -42,9 +42,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		buttonsPanel.setLayout(new GridLayout(1, 0, 10, 0));
 		FlatButton createThemeButton = new FlatButton(styleManager, I18n.get("settings.theme.createNew"));
 		createThemeButton.addActionListener(__ -> createNewTheme(styleManager, preferences, owner));
-		FlatButton importThemeButton = new FlatButton(styleManager, I18n.get("settings.theme.import"));
 		buttonsPanel.add(createThemeButton);
-		buttonsPanel.add(importThemeButton);
 
 		add(scrollPane, BorderLayout.CENTER);
 		add(buttonsPanel, BorderLayout.PAGE_END);

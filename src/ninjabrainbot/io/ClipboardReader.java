@@ -62,7 +62,7 @@ public class ClipboardReader implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (read) {
+			if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
 				String clipboardString = null;
 				try {
 					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);

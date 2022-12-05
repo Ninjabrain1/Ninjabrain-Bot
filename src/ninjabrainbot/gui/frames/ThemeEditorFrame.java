@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
@@ -25,6 +29,7 @@ import ninjabrainbot.gui.components.TitledDivider;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.settings.themeeditor.PreviewDataStateHandler;
+import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.settings.themeeditor.panels.ColorPickerPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.ConfigurableColorPanel;
 import ninjabrainbot.gui.settings.themeeditor.panels.FramePreviewPanel;
@@ -107,6 +112,12 @@ public class ThemeEditorFrame extends ThemedDialog {
 		FlatButton saveButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.save"));
 		saveButton.addActionListener(__ -> saveTheme());
 
+		FlatButton exportButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.copy_theme_string"));
+		exportButton.addActionListener(__ -> exportThemeToClipboard());
+
+		FlatButton importButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.paste_theme_string"));
+		importButton.addActionListener(__ -> importThemeFromClipboard());
+
 		FlatButton resetColorButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.reset_color"));
 		resetColorButton.addActionListener(__ -> resetColor());
 
@@ -122,6 +133,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.add(selectPresetButton, gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(saveButton, gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
+		panel.add(exportButton, gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
+		panel.add(importButton, gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.color")), gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
@@ -201,6 +216,29 @@ public class ThemeEditorFrame extends ThemedDialog {
 			selectedPanel.getConfigurableColor().color.set(configurableColor.color);
 			updateComponents();
 		}
+	}
+
+	private void exportThemeToClipboard() {
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(new StringSelection(previewTheme.getThemeString()), null);
+	}
+
+	private void importThemeFromClipboard() {
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+			try {
+				String clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
+				CustomTheme customTheme = ThemeSerializer.deserialize(clipboardString);
+				if (customTheme != null) {
+					previewTheme.setFromTheme(customTheme);
+					updateComponents();
+					return;
+				}
+			} catch (Exception e) {
+			}
+		}
+		JOptionPane.showMessageDialog(this, I18n.get("settings.themeeditor.clipboard_does_not_contain_a_theme_string"));
+
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
