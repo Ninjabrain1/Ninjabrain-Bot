@@ -123,5 +123,16 @@ public class CustomTheme extends Theme {
 		configurableColors.add(new ConfigurableColor(wc, name, uid));
 		return wc;
 	}
+	
+	public boolean isEquivalentTo(CustomTheme other) {
+		if (other.configurableColors.size() != this.configurableColors.size())
+			return false;
+		for (ConfigurableColor configurableColor : configurableColors) {
+			if (!other.getConfigurableColor(configurableColor.uid).color.isEquivalentTo(configurableColor.color)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

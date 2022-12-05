@@ -120,7 +120,11 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(selectPresetButton, gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(saveButton, gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
+		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.color")), gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(resetColorButton, gbc);
 		panel.add(colorPickerPanel, gbc);
 
@@ -235,6 +239,14 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 	@Override
 	protected void onExitButtonClicked() {
+		if (!customTheme.isEquivalentTo(previewTheme)) {
+			int result = JOptionPane.showConfirmDialog(this, I18n.get("settings.themeeditor.do_you_want_to_save"), I18n.get("settings.themeeditor.unsaved_changes"), JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+			if (result == JOptionPane.YES_OPTION)
+				saveTheme();
+			else if (result == JOptionPane.CANCEL_OPTION)
+				return;
+		}
 		dispose();
 	}
 

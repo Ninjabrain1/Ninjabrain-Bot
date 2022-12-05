@@ -32,5 +32,9 @@ public class WrappedColor {
 	public Color color() {
 		return color;
 	}
+	
+	public boolean isEquivalentTo(WrappedColor other) {
+		return color.getRGB() == other.color.getRGB();
+	}
 
 }
