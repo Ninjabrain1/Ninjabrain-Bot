@@ -35,20 +35,20 @@ public class ColorMap {
 		float[] hsv0 = Color.RGBtoHSB(c0.getRed(), c0.getGreen(), c0.getBlue(), null);
 		float[] hsv1 = Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), null);
 		float h;
-		if (Math.abs(hsv0[0] - hsv1[0]) < 0.5f) {
-			h = hsv0[0] * t + hsv1[0] * (1.0f - t);
+		if (Math.abs(hsv1[0] - hsv0[0]) < 0.5f) {
+			h = hsv1[0] * t + hsv0[0] * (1.0f - t);
 		} else {
-			if (hsv0[0] < hsv1[0]) {
-				hsv0[0]++;
-			} else {
+			if (hsv1[0] < hsv0[0]) {
 				hsv1[0]++;
+			} else {
+				hsv0[0]++;
 			}
-			h = hsv0[0] * t + hsv1[0] * (1.0f - t);
+			h = hsv1[0] * t + hsv0[0] * (1.0f - t);
 			if (h > 1)
 				h--;
 		}
-		float s = hsv0[1] * t + hsv1[1] * (1.0f - t);
-		float v = hsv0[2] * t + hsv1[2] * (1.0f - t);
+		float s = hsv1[1] * t + hsv0[1] * (1.0f - t);
+		float v = hsv1[2] * t + hsv0[2] * (1.0f - t);
 		return Color.getHSBColor(h, s, v);
 	}
 
