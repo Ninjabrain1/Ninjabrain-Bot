@@ -27,7 +27,7 @@ public class ThemePanel extends ThemedPanel {
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 
 		FlatButton nameLabel = new LeftAlignedButton(styleManager, theme.name);
-		nameLabel.setForegroundColor(theme.TEXT_COLOR_SLIGHTLY_WEAK);
+		nameLabel.setForegroundColor(theme.TEXT_COLOR_TITLE);
 		nameLabel.setHoverColor(theme.COLOR_STRONGEST);
 		nameLabel.setBackgroundColor(theme.COLOR_STRONGEST);
 		nameLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
