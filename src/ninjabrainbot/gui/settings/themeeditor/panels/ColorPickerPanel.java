@@ -1,17 +1,15 @@
 package ninjabrainbot.gui.settings.themeeditor.panels;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.components.HexThemedTextField;
-import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.LabeledField;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.util.I18n;
@@ -35,19 +33,13 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 		HexThemedTextField hexTextField = new HexThemedTextField(styleManager);
 		hexTextField.setColor(colorChooserPanel.getColor());
 
-		JPanel hexPanel = new ThemedPanel(styleManager);
-		hexPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		hexPanel.setAlignmentX(1);
-		hexPanel.add(new ThemedLabel(styleManager, I18n.get("settings.themeeditor.hex_colon")));
-		hexPanel.add(hexTextField);
-
-		add(hexPanel);
+		add(new LabeledField(styleManager, I18n.get("settings.themeeditor.hex_colon"), hexTextField, false));
 		add(colorChooserPanel);
 
 		sh.add(colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color)));
 		sh.add(hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text))));
 	}
-	
+
 	public void setColor(Color color) {
 		colorChooserPanel.setColor(color);
 	}

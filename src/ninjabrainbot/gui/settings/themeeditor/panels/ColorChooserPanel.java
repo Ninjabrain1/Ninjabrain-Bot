@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import javax.swing.Box;
 import javax.swing.JPanel;
 
 import ninjabrainbot.event.ISubscribable;
@@ -31,8 +32,9 @@ public class ColorChooserPanel extends JPanel {
 		colorPanel = new ColorPanel(WIDTH, HEIGHT);
 		colorBar = new ColorBar(BAR_WIDTH, HEIGHT);
 		setColor(Color.BLACK);
-		setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		add(colorPanel, BorderLayout.CENTER);
+		add(Box.createHorizontalStrut(5));
 		add(colorBar, BorderLayout.LINE_END);
 
 		colorBar.whenCursorChanged().subscribe(p -> onBarUpdated(p));
