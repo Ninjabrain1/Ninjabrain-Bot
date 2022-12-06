@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,10 @@ public abstract class TestBase {
 				Method m[] = c.getDeclaredMethods();
 				for (Method method : m) {
 					Object o = c.getConstructors()[0].newInstance(new Object[0]);
-					if (method.canAccess(o))
-					method.invoke(o, new Object[0]);
-					System.out.println("Test passed: " + c.getName() + "." + method.getName());
+					if (!Modifier.isPrivate(method.getModifiers()) && method.canAccess(o)) {
+						method.invoke(o, new Object[0]);
+						System.out.println("Test passed: " + c.getName() + "." + method.getName());
+					}
 				}
 			}
 			System.out.println("All tests passed.");
