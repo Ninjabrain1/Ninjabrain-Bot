@@ -54,6 +54,10 @@ public class CustomTheme extends Theme {
 	}
 
 	public void setFromTheme(Theme theme) {
+		setFromTheme(theme, false);
+	}
+
+	public void setFromTheme(Theme theme, boolean copyName) {
 		if (theme == null)
 			return;
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
@@ -75,6 +79,9 @@ public class CustomTheme extends Theme {
 		String newThemeString = ThemeSerializer.serialize(this);
 		if (!themeString.get().contentEquals(newThemeString))
 			themeString.set(newThemeString);
+
+		if (copyName)
+			name.set(theme.name.get());
 
 		whenModified.notifySubscribers(this);
 	}
@@ -128,12 +135,18 @@ public class CustomTheme extends Theme {
 	public boolean isEquivalentTo(CustomTheme other) {
 		if (other.configurableColors.size() != this.configurableColors.size())
 			return false;
+		if (!this.name.get().contentEquals(other.name.get()))
+			return false;
 		for (ConfigurableColor configurableColor : configurableColors) {
 			if (!other.getConfigurableColor(configurableColor.uid).color.isEquivalentTo(configurableColor.color)) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public void setName(String newName) {
+		this.name.set(newName);
 	}
 
 }

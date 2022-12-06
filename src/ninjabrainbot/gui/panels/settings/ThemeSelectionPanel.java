@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.TitledDivider;
+import ninjabrainbot.gui.panels.HorizontalRestrictedThemedPanel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
@@ -29,7 +30,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		themesPanel = new ThemedPanel(styleManager);
+		themesPanel = new HorizontalRestrictedThemedPanel(styleManager);
 		themesPanel.setLayout(new BoxLayout(themesPanel, BoxLayout.Y_AXIS));
 		themesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		themesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
@@ -83,7 +84,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 	}
 
 	private void deleteTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
-		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.name), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION,
+		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.toString()), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 		if (result != JOptionPane.YES_OPTION)
 			return;

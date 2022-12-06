@@ -25,6 +25,9 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.gui.buttons.FlatButton;
+import ninjabrainbot.gui.components.LabeledField;
+import ninjabrainbot.gui.components.LimitedThemedTextField;
+import ninjabrainbot.gui.components.ThemedTextField;
 import ninjabrainbot.gui.components.TitledDivider;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.settings.themeeditor.PreviewCalculatorResult;
@@ -62,7 +65,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
 		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
-		previewTheme.setFromTheme(customTheme);
+		previewTheme.setFromTheme(customTheme, true);
 		previewStyleManager = new StyleManager(previewTheme, SizePreference.REGULAR);
 
 		ThemedPanel panel = new ThemedPanel(styleManager);
@@ -106,6 +109,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		colorPickerPanel = new ColorPickerPanel(styleManager);
 
+		ThemedTextField nameField = new LimitedThemedTextField(styleManager, 16);
+		nameField.setText(customTheme.toString());
+		nameField.whenTextChanged().subscribe(newName -> previewTheme.setName(newName));
+		
 		FlatButton selectPresetButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.selectpreset"));
 		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());
 
@@ -129,6 +136,8 @@ public class ThemeEditorFrame extends ThemedDialog {
 		gbc.weighty = 0;
 
 		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.tools")), gbc);
+		panel.add(Box.createVerticalStrut(10), gbc);
+		panel.add(new LabeledField(styleManager, I18n.get("settings.themeeditor.name_colon"), nameField, true), gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
 		panel.add(selectPresetButton, gbc);
 		panel.add(Box.createVerticalStrut(10), gbc);
@@ -204,7 +213,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 	}
 
 	private void saveTheme() {
-		customTheme.setFromTheme(previewTheme);
+		customTheme.setFromTheme(previewTheme, true);
 	}
 
 	private void resetColor() {

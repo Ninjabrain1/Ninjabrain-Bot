@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -13,7 +14,8 @@ import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
 
-	public String name;
+	protected ObservableField<String> name = new ObservableField<String>();
+
 	public WrappedColor COLOR_STRONGEST;
 	public WrappedColor COLOR_DIVIDER;
 	public WrappedColor COLOR_DIVIDER_DARK;
@@ -85,6 +87,7 @@ public abstract class Theme {
 		THEMES.put(theme.UID, theme);
 		CUSTOM_THEMES.add(theme);
 		sh.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
+		sh.add(theme.whenNameChanged().subscribe(__ -> serializeCustomThemes(preferences)));
 	}
 
 	private static void serializeCustomThemes(NinjabrainBotPreferences preferences) {
@@ -93,7 +96,7 @@ public abstract class Theme {
 
 		boolean first = true;
 		for (CustomTheme c : CUSTOM_THEMES) {
-			String name = c.name.replace(".", "");
+			String name = c.name.get().replace(".", "");
 			String themeString = c.getThemeString();
 			assert !themeString.contains(".");
 			if (!first) {
@@ -106,6 +109,7 @@ public abstract class Theme {
 		}
 		preferences.customThemesNames.set(names.toString());
 		preferences.customThemesString.set(themeStrings.toString());
+		System.out.println("serialize");
 	}
 
 	public static Theme get(int uid) {
@@ -126,7 +130,7 @@ public abstract class Theme {
 
 	public Theme(String name, int uid) {
 		this.UID = uid;
-		this.name = name;
+		this.name.set(name);
 		whenModified = new ObservableProperty<Theme>();
 	}
 
@@ -175,11 +179,15 @@ public abstract class Theme {
 
 	@Override
 	public String toString() {
-		return name;
+		return name.get();
 	}
 
 	public ISubscribable<Theme> whenModified() {
 		return whenModified;
+	}
+
+	public ISubscribable<String> whenNameChanged() {
+		return name;
 	}
 
 	protected abstract void loadTheme();
@@ -194,7 +202,7 @@ class LightTheme extends Theme {
 	@Override
 	protected void loadTheme() {
 		loaded = true;
-		
+
 		COLOR_NEUTRAL = createColor(Color.decode("#F5F5F5"));
 		COLOR_DIVIDER = createColor(Color.decode("#D8D8D8"));
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#C1C1C1"));

@@ -28,7 +28,7 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 
 	public ThemedTextField(StyleManager styleManager) {
 		super();
-		setBorder(BorderFactory.createEmptyBorder());
+		setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 2));
 		setAlignmentX(1);
 		styleManager.registerThemedComponent(this);
 
@@ -67,8 +67,10 @@ public class ThemedTextField extends JTextField implements ThemedComponent {
 		if (bg != null)
 			setBackground(bg);
 		Color fg = getForegroundColor();
-		if (fg != null)
+		if (fg != null) {
 			setForeground(fg);
+			setCaretColor(fg);
+		}
 	}
 
 	public int getTextSize(SizePreference p) {
