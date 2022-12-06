@@ -86,7 +86,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.selectcolor")));
+		panel.add(new TitledDivider(styleManager, I18n.get("settings.themeeditor.selectedcolor")));
 		panel.add(Box.createVerticalStrut(10));
 
 		for (ConfigurableColor cc : previewTheme.getConfigurableColors()) {

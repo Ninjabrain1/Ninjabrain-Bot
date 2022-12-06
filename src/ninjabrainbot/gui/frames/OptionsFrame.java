@@ -51,7 +51,7 @@ import ninjabrainbot.util.I18n;
 public class OptionsFrame extends ThemedFrame {
 
 	private static final long serialVersionUID = 8033865173874423916L;
-	
+
 	private NinjabrainBotPreferences preferences;
 
 	private StyleManager styleManager;
