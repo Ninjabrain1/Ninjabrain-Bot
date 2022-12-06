@@ -19,8 +19,10 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	
 	private PreviewDataState dataState;
 	
-	public PreviewDataStateHandler(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
+	public PreviewDataStateHandler(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f, boolean locked) {
 		dataState = new PreviewDataState(result, eyeThrows, f);
+		if (locked)
+			dataState.toggleLocked();
 	}
 	
 	@Override

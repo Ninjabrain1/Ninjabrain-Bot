@@ -57,7 +57,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		setTranslucent(preferences.translucent.get());
 		setAppIcon();
 
-		createTitleBar(styleManager);
+		createTitleBar(styleManager, dataStateHandler.getDataState());
 		createComponents(styleManager, dataStateHandler);
 		setupSubscriptions(styleManager, dataStateHandler.getDataState());
 		Profiler.stop();
@@ -98,7 +98,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
 
-	private void createTitleBar(StyleManager styleManager) {
+	private void createTitleBar(StyleManager styleManager, IDataState dataState) {
 		versiontextLabel = new ThemedLabel(styleManager, VERSION_TEXT) {
 			private static final long serialVersionUID = 7210941876032010219L;
 
@@ -109,7 +109,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		};
 		versiontextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
 		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/resources/lock_icon.png")));
-		lockIcon.setVisible(false);
+		lockIcon.setVisible(dataState.locked().get());
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
 		titlebarPanel.addButton(createMinimizeButton(styleManager));

@@ -96,6 +96,7 @@ public class PreviewDataState implements IDataState {
 
 	@Override
 	public void toggleLocked() {
+		locked.set(!locked.get());
 	}
 
 	@Override
