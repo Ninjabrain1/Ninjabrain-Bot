@@ -24,10 +24,11 @@ public class DataState implements IDataState, IDisposable {
 
 	private final ICalculator calculator;
 
+	private final ObservableField<Boolean> locked;
+
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
 	private final ObservableField<IThrow> playerPos;
-	private final ObservableField<Boolean> locked;
 
 	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
@@ -126,6 +127,16 @@ public class DataState implements IDataState, IDisposable {
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
 		updateTopPrediction(calculatorResult.get());
 		resultType.set(calculatorResult.get() == null ? ResultType.NONE : calculatorResult().get().success() ? ResultType.TRIANGULATION : ResultType.FAILED);
+	}
+
+	public DataStateUndoData getUndoData() {
+		return new DataStateUndoData(throwSet, playerPos.get(), divineContext);
+	}
+
+	public void setFromUndoData(DataStateUndoData undoData) {
+		divineContext.setFossil(undoData.fossil);
+		throwSet.setFromList(undoData.eyeThrows);
+		playerPos.set(undoData.playerPos);
 	}
 
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {

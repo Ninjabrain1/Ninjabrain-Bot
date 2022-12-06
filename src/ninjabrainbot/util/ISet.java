@@ -1,5 +1,7 @@
 package ninjabrainbot.util;
 
+import java.util.List;
+
 public interface ISet<T> extends Iterable<T> {
 
 	/**
@@ -19,6 +21,10 @@ public interface ISet<T> extends Iterable<T> {
 	public int size();
 
 	public T get(int index);
+
+	public List<T> toList();
+
+	public void setFromList(List<T> list);
 
 	public default T getLast() {
 		return get(size() - 1);

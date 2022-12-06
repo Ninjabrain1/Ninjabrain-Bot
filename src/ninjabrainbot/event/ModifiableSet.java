@@ -3,6 +3,7 @@ package ninjabrainbot.event;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifiableSet<T>> implements IModifiableSet<T>, IDisposable {
 
@@ -85,6 +86,47 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 	@Override
 	public T get(int index) {
 		return set.get(index);
+	}
+
+	@Override
+	public void setFromList(List<T> list) {
+		int n = Math.max(set.size(), list.size());
+		if (n == 0)
+			return;
+		ArrayList<Integer> modifiedIndices = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			T t = list.get(i);
+			if (i < set.size() && set.get(i).equals(t))
+				continue;
+			subscriptions.put(t, t.whenModified().subscribe(elem -> onElementModified(elem)));
+			if (i < set.size()) {
+				subscriptions.remove(set.get(i)).cancel();
+				set.set(i, t);
+			} else {
+				set.add(i, t);
+			}
+			modifiedIndices.add(i);
+		}
+		while (set.size() > list.size()) {
+			int removeIndex = set.size() - 1;
+			T removed = set.remove(removeIndex);
+			subscriptions.remove(removed).cancel();
+			modifiedIndices.add(removeIndex);
+		}
+		for (int i : modifiedIndices) {
+			whenElementAtIndexModified.notifySubscribers(i < set.size() ? set.get(i) : null, i);
+		}
+		if (modifiedIndices.size() != 0)
+			notifySubscribers(this);
+	}
+
+	@Override
+	public List<T> toList() {
+		List<T> list = new ArrayList<T>();
+		for (T t : set) {
+			list.add(t);
+		}
+		return list;
 	}
 
 	@Override
