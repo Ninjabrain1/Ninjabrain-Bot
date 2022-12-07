@@ -34,7 +34,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: "test-results/junit/**/*.xml"
+        junit_files: "target/surefire-reports/**/*.xml"
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
