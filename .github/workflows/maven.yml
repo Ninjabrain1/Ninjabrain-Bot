@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Test with Maven
-      run: mvn test
+      run: mvn test --file pom.xml
     
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
