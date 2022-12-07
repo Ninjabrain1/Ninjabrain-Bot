@@ -38,7 +38,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		super(styleManager);
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
-		removeButton = new FlatButton(styleManager, "–");
+		removeButton = new FlatButton(styleManager, "-");
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);

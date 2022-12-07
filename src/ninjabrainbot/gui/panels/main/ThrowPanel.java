@@ -69,7 +69,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		alpha = new JLabel((String) null, 0);
 		correction = new JLabel((String) null, 0);
 		error = new JLabel((String) null, 0);
-		removeButton = new FlatButton(styleManager, "–");
+		removeButton = new FlatButton(styleManager, "-");
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
