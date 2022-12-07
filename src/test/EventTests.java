@@ -2,6 +2,9 @@ package test;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
@@ -12,6 +15,7 @@ import ninjabrainbot.event.ObservableField;
 
 public class EventTests {
 
+	@Test
 	public void modifiableSet_setFromList_shouldntRaiseChangeEvent() {
 		IModificationLock lock = new AlwaysUnlocked();
 		IModifiableSet<IThrow> set = new ModifiableSet<IThrow>();
@@ -34,7 +38,7 @@ public class EventTests {
 
 		set.whenElementAtIndexModified().subscribe(__ -> whenModifiedWasRaised.set(true), 4);
 		set.setFromList(list);
-		assert whenModifiedWasRaised.get() == false;
+		Assertions.assertFalse(whenModifiedWasRaised.get());
 	}
 
 	public void modifiableSet_setFromList_shouldRaiseChangeEvent() {
