@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import junit.framework.TestCase;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
@@ -15,7 +14,7 @@ import ninjabrainbot.event.IModifiableSet;
 import ninjabrainbot.event.ModifiableSet;
 import ninjabrainbot.event.ObservableField;
 
-public class EventTests extends TestCase {
+public class EventTests {
 
 	IModificationLock lock;
 	IModifiableSet<IThrow> set;
