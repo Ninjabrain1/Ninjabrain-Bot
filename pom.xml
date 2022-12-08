@@ -9,8 +9,6 @@
 	<name>Ninjabrain Bot</name>
 	<description>An accurate stronghold calculator for Minecraft speedrunning.</description>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>src</directory>
@@ -51,7 +49,6 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>5.9.1</version>
-			<!-- <scope>test</scope> -->
 		</dependency>
 	</dependencies>
 </project>

@@ -1,4 +1,4 @@
-package test;
+package ninjabrainbot;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

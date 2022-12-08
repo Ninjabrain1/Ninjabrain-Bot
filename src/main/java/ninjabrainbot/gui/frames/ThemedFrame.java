@@ -6,7 +6,6 @@ import java.net.URL;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
@@ -21,12 +20,10 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-public abstract class ThemedDialog extends JDialog implements IDisposable {
+public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	private static final long serialVersionUID = -9103006492414835286L;
 
-	private StyleManager styleManager;
-	
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
@@ -34,11 +31,9 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 
-	public ThemedDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, String title) {
-		super(owner, title);
-		this.styleManager = styleManager;
-		styleManager.registerThemedDialog(this);
-		setModal(true);
+	public ThemedFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
+		super(title);
+		styleManager.registerThemedFrame(this);
 		setUndecorated(true); // Remove borders
 		setAlwaysOnTop(preferences.alwaysOnTop.get()); // Always focused
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -60,7 +55,7 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 	}
 
 	private FlatButton createExitButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/resources/exit_icon.png");
+		URL iconURL = Main.class.getResource("/main/resources/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(styleManager, img);
 		button.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
@@ -98,7 +93,6 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 	public void dispose() {
 		super.dispose();
 		sh.dispose();
-		styleManager.unregisterThemedDialog(this);
 	}
 
 }

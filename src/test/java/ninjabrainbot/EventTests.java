@@ -1,10 +1,11 @@
-package test;
+package ninjabrainbot;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import junit.framework.TestCase;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
@@ -13,16 +14,23 @@ import ninjabrainbot.event.IModifiableSet;
 import ninjabrainbot.event.ModifiableSet;
 import ninjabrainbot.event.ObservableField;
 
-public class EventTests {
+public class EventTests extends TestCase {
 
-	@Test
-	public void modifiableSet_setFromList_shouldntRaiseChangeEvent() {
+	IModifiableSet<IThrow> set;
+
+	@Override
+	protected void setUp() throws Exception {
 		IModificationLock lock = new AlwaysUnlocked();
-		IModifiableSet<IThrow> set = new ModifiableSet<IThrow>();
+		set = new ModifiableSet<IThrow>();
+
 		set.add(new Throw(313, 277, 90, -31, false, lock));
 		set.add(new Throw(4, 2660, 30, -31, false, lock));
 		set.add(new Throw(670, 273, 20, -31, false, lock));
 		set.add(new Throw(1200, 243, -90, -31, false, lock));
+	}
+
+	@Test
+	public void modifiableSet_setFromList_shouldntRaiseChangeEvent() {
 
 		List<IThrow> list = set.toList();
 

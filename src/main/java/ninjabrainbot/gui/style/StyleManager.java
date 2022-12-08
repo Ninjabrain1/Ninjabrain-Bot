@@ -114,7 +114,7 @@ public class StyleManager {
 	private Font loadFont() {
 		Font font = null;
 		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/resources/OpenSans-Regular.ttf"));
+			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/main/resources/OpenSans-Regular.ttf"));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
