@@ -60,7 +60,7 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 	}
 
 	private FlatButton createExitButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/main/resources/exit_icon.png");
+		URL iconURL = Main.class.getResource("/exit_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(styleManager, img);
 		button.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);

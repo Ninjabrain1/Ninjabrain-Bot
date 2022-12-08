@@ -108,7 +108,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 			}
 		};
 		versiontextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
-		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/main/resources/lock_icon.png")));
+		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/lock_icon.png")));
 		lockIcon.setVisible(dataState.locked().get());
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
@@ -138,7 +138,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private FlatButton createMinimizeButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/main/resources/minimize_icon.png");
+		URL iconURL = Main.class.getResource("/minimize_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(styleManager, img);
 		button.addActionListener(p -> setState(JFrame.ICONIFIED));
@@ -146,7 +146,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private FlatButton createSettingsButton(StyleManager styleManager) {
-		URL iconURL = Main.class.getResource("/main/resources/settings_icon.png");
+		URL iconURL = Main.class.getResource("/settings_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		FlatButton button = new TitleBarButton(styleManager, img);
 		return button;
@@ -176,7 +176,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	}
 
 	private void setAppIcon() {
-		URL iconURL = Main.class.getResource("/main/resources/icon.png");
+		URL iconURL = Main.class.getResource("/icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		setIconImage(img.getImage());
 	}

@@ -32,7 +32,7 @@ public class I18n {
 
 	private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
 
-	private static ResourceBundle DEFAULT_BUNDLE = ResourceBundle.getBundle("main/resources/lang/I18n", Locale.US, new UTF8Control());;
+	private static ResourceBundle DEFAULT_BUNDLE = ResourceBundle.getBundle("lang/I18n", Locale.US, new UTF8Control());;
 	static {
 		LANGUAGE_CONFIG.add(Locale.US);
 		LANGUAGE_CONFIG.add(Locale.KOREA);
@@ -45,7 +45,7 @@ public class I18n {
 		final Preferences preferences = Preferences.userNodeForPackage(Main.class);
 		final Integer language = preferences.getInt("language", -1);
 		LANGUAGE = getLanguageFromID(language);
-		BUNDLE = ResourceBundle.getBundle("main/resources/lang/I18n", LANGUAGE, new UTF8Control());
+		BUNDLE = ResourceBundle.getBundle("lang/I18n", LANGUAGE, new UTF8Control());
 		for (Locale value : LANGUAGE_CONFIG) {
 			try{
 				LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));

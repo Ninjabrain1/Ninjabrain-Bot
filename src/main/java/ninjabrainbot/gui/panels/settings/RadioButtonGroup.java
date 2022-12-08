@@ -58,11 +58,11 @@ class ThemedRadioButton extends JRadioButton implements ThemedComponent {
 
 	private static final long serialVersionUID = 528589569573225972L;
 
-	private static ImageIcon icon = new ImageIcon(Main.class.getResource("/main/resources/radio_icon.png"));
-	private static ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/main/resources/radio_selected_icon.png"));
-	private static ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/main/resources/radio_pressed_icon.png"));
-	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/main/resources/radio_rollover_icon.png"));
-	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/main/resources/radio_selected_rollover_icon.png"));
+	private static ImageIcon icon = new ImageIcon(Main.class.getResource("/radio_icon.png"));
+	private static ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/radio_selected_icon.png"));
+	private static ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/radio_pressed_icon.png"));
+	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/radio_rollover_icon.png"));
+	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/radio_selected_rollover_icon.png"));
 
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;

@@ -34,7 +34,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 	SubscriptionHandler sh;
 
 	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
-		super(styleManager, new ImageIcon(Main.class.getResource("/main/resources/notifications_icon.png")));
+		super(styleManager, new ImageIcon(Main.class.getResource("/notifications_icon.png")));
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		addActionListener(p -> toggleNotificationsWindow(parent));
