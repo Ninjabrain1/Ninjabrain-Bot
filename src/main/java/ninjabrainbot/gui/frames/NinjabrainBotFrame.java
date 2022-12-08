@@ -34,7 +34,7 @@ import ninjabrainbot.util.Profiler;
 public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private static final long serialVersionUID = -8033268694989543737L;
-	
+
 	private NinjabrainBotPreferences preferences;
 
 	private ThemedLabel versiontextLabel;
@@ -68,8 +68,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		super.updateBounds(styleManager);
 		int titlewidth = styleManager.getTextWidth(TITLE_TEXT, styleManager.fontSize(styleManager.size.TEXT_SIZE_TITLE_LARGE, false));
 		int titlebarHeight = titlebarPanel.getPreferredSize().height;
-		versiontextLabel.setBounds(titlewidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, (styleManager.size.TEXT_SIZE_TITLE_LARGE - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2,
-				70, titlebarHeight);
+		versiontextLabel.setBounds(titlewidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, (styleManager.size.TEXT_SIZE_TITLE_LARGE - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 70, titlebarHeight);
 		int versionwidth = styleManager.getTextWidth(VERSION_TEXT, styleManager.fontSize(styleManager.size.TEXT_SIZE_TITLE_SMALL, false));
 		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
 		// Frame size

@@ -84,8 +84,7 @@ public class ThemeSelectionPanel extends ThemedPanel {
 	}
 
 	private void deleteTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
-		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.toString()), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
+		int result = JOptionPane.showConfirmDialog(owner, I18n.get("settings.theme.areyousure", theme.toString()), I18n.get("settings.theme.deletetheme"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if (result != JOptionPane.YES_OPTION)
 			return;
 		Theme.deleteCustomTheme(styleManager, preferences, theme);

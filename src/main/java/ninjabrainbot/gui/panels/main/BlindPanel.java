@@ -42,7 +42,7 @@ class BlindPanel extends ThemedPanel {
 		add(distanceLabel, gbc);
 		gbc.weighty = 1;
 		add(Box.createGlue(), gbc);
-		
+
 		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 

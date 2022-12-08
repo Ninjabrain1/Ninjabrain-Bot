@@ -32,7 +32,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private static final long serialVersionUID = -1522335220282509326L;
 
 	DivineContextPanel divineContextPanel;
-	
+
 	private ChunkPrediction lastTopPrediction;
 
 	private int index;

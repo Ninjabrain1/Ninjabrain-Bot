@@ -99,7 +99,7 @@ class TabButton extends FlatButton {
 	JComponent component;
 
 	Color a, b, c;
-	
+
 	WrappedColor cColor;
 
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {

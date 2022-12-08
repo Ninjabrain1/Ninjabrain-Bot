@@ -25,8 +25,8 @@ public class BlindResult {
 	/**
 	 * Creates a blind result.
 	 */
-	public BlindResult(double x, double z, double highrollProbability, double highrollThreshold, double avgDistance, double avgDistanceDerivative, double ninetiethPercentileDerivative,
-			double improveDirection, double improveDistance, double optHighrollProb) {
+	public BlindResult(double x, double z, double highrollProbability, double highrollThreshold, double avgDistance, double avgDistanceDerivative, double ninetiethPercentileDerivative, double improveDirection, double improveDistance,
+			double optHighrollProb) {
 		this.x = x;
 		this.z = z;
 		this.highrollProbability = highrollProbability;

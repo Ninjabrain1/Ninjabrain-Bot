@@ -78,7 +78,7 @@ class DivinePanel extends ThemedPanel {
 		add(panel1);
 		add(panel2);
 		add(Box.createGlue());
-		
+
 		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 	}
 
@@ -91,6 +91,7 @@ class DivinePanel extends ThemedPanel {
 			highrollLabels[i].setText(result.highroll[i].toString());
 		}
 	}
+
 	@Override
 	public void updateSize(StyleManager styleManager) {
 		setPreferredSize(new Dimension(0, 3 * (styleManager.size.PADDING + styleManager.size.TEXT_SIZE_MEDIUM) + 2 * styleManager.size.PADDING_THIN));

@@ -39,7 +39,7 @@ public class MultipleChoicePreference<T extends IMultipleChoicePreferenceDataTyp
 		}
 		throw new Error("Name " + name + " not found in enum.");
 	}
-	
+
 	private static IMultipleChoicePreferenceDataType[] nameToEnum(String[] choices, IMultipleChoicePreferenceDataType[] enumChoices) {
 		IMultipleChoicePreferenceDataType[] choices_ = new IMultipleChoicePreferenceDataType[choices.length];
 		for (int i = 0; i < choices_.length; i++) {

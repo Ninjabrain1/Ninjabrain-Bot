@@ -65,7 +65,7 @@ public class CurrentTheme {
 			themeSubscription.cancel();
 		themeSubscription = newTheme.whenModified().subscribe(t -> setTheme(t));
 	}
-	
+
 	public boolean isTheme(Theme theme) {
 		return this.theme == theme;
 	}

@@ -16,7 +16,7 @@ public class TextAnimator implements ThemedComponent {
 	Color start, end;
 	int duration;
 	ThrowPanel jtp;
-	
+
 	WrappedColor startCol;
 	WrappedColor endCol;
 

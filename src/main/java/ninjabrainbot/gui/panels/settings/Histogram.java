@@ -42,7 +42,7 @@ public class Histogram extends ThemedPanel {
 		addTick(styleManager, 0);
 		addTick(styleManager, min);
 		addTick(styleManager, max);
-		
+
 		histCol = styleManager.currentTheme.COLOR_SATURATED;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 	}

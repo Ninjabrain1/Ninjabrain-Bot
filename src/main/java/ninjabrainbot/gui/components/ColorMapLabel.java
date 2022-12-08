@@ -32,7 +32,7 @@ public class ColorMapLabel extends JPanel implements ILabel {
 		}
 		setAlignmentX(0);
 	}
-	
+
 	public void setForegroundColor(WrappedColor color) {
 		textLabel.setForegroundColor(color);
 	}

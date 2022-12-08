@@ -18,7 +18,7 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 	private static final long serialVersionUID = -9022636765337872342L;
 
 	private static final int NUM_DETAILED_PANELS = 5;
-	
+
 	private NinjabrainBotPreferences preferences;
 
 	private ChunkPanelHeader header;

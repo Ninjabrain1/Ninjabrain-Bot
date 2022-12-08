@@ -28,7 +28,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 	private JLabel error;
 
 	private boolean errorsEnabled;
-	
+
 	WrappedColor lineColor;
 
 	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors) {

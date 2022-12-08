@@ -16,15 +16,15 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 
 	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
 	private IModificationLock modificationLock = new AlwaysUnlocked();
-	
+
 	private PreviewDataState dataState;
-	
+
 	public PreviewDataStateHandler(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f, boolean locked) {
 		dataState = new PreviewDataState(result, eyeThrows, f);
 		if (locked)
 			dataState.toggleLocked();
 	}
-	
+
 	@Override
 	public IDataState getDataState() {
 		return dataState;

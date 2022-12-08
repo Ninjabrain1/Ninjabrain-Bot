@@ -72,7 +72,7 @@ class LeftAlignedButton extends FlatButton {
 		super(styleManager, "  " + name);
 		label.setHorizontalAlignment(SwingConstants.LEFT);
 	}
-	
+
 	@Override
 	public void setText(String text) {
 		super.setText("  " + text);

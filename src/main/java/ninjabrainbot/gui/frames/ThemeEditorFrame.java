@@ -112,7 +112,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		ThemedTextField nameField = new LimitedThemedTextField(styleManager, 16);
 		nameField.setText(customTheme.toString());
 		nameField.whenTextChanged().subscribe(newName -> previewTheme.setName(newName));
-		
+
 		FlatButton selectPresetButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.selectpreset"));
 		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());
 
@@ -204,8 +204,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 	private void openSelectPresetDialog() {
 		Object[] themes = Theme.getStandardThemes().toArray();
-		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, I18n.get("settings.themeeditor.any_unsaved_changes_will_be_lost"), I18n.get("settings.themeeditor.selectpreset"),
-				JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
+		Theme chosenTheme = (Theme) JOptionPane.showInputDialog(this, I18n.get("settings.themeeditor.any_unsaved_changes_will_be_lost"), I18n.get("settings.themeeditor.selectpreset"), JOptionPane.PLAIN_MESSAGE, null, themes, themes[0]);
 		if (chosenTheme == null)
 			return;
 		previewTheme.setFromTheme(chosenTheme);
@@ -287,8 +286,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 	@Override
 	protected void onExitButtonClicked() {
 		if (!customTheme.isEquivalentTo(previewTheme)) {
-			int result = JOptionPane.showConfirmDialog(this, I18n.get("settings.themeeditor.do_you_want_to_save"), I18n.get("settings.themeeditor.unsaved_changes"), JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE);
+			int result = JOptionPane.showConfirmDialog(this, I18n.get("settings.themeeditor.do_you_want_to_save"), I18n.get("settings.themeeditor.unsaved_changes"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			if (result == JOptionPane.YES_OPTION)
 				saveTheme();
 			else if (result == JOptionPane.CANCEL_OPTION)

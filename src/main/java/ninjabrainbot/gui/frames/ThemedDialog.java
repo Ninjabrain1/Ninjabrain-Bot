@@ -26,7 +26,7 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 	private static final long serialVersionUID = -9103006492414835286L;
 
 	private StyleManager styleManager;
-	
+
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 

@@ -15,7 +15,7 @@ public class KeyboardListener implements NativeKeyListener {
 
 	public static boolean registered = false;
 	public static KeyboardListener instance;
-	
+
 	private BooleanPreference useAltClipboardReader;
 
 	BiConsumer<Integer, Integer> consumer;

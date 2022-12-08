@@ -89,8 +89,7 @@ public class Calculator implements ICalculator {
 		optX *= optDist / optR;
 		optZ *= optDist / optR;
 		Logger.log("Time to calculate blind features: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
-		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z),
-				Coords.dist(optX, optZ, b.x, b.z), optHighrollProb);
+		return new BlindResult(b.x, b.z, probability, distanceThreshold, avgDist * 16, avgDistDerivative, ninetiethPercentileDerivative, Coords.getPhi(optX - b.x, optZ - b.z), Coords.dist(optX, optZ, b.x, b.z), optHighrollProb);
 	}
 
 	@Override

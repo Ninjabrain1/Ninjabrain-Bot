@@ -8,7 +8,7 @@ import ninjabrainbot.event.ObservableProperty;
 public class WrappedColor {
 
 	private Color color;
-	
+
 	private ObservableProperty<Color> whenColoChanged = new ObservableProperty<>();
 
 	public void set(WrappedColor other) {
@@ -17,22 +17,22 @@ public class WrappedColor {
 		this.color = other.color();
 		whenColoChanged.notifySubscribers(color);
 	}
-	
+
 	public void set(Color color) {
 		if (this.color == color)
 			return;
 		this.color = color;
 		whenColoChanged.notifySubscribers(color);
 	}
-	
-	public ISubscribable<Color> whenColorChanged(){
+
+	public ISubscribable<Color> whenColorChanged() {
 		return whenColoChanged;
 	}
 
 	public Color color() {
 		return color;
 	}
-	
+
 	public boolean isEquivalentTo(WrappedColor other) {
 		return color.getRGB() == other.color.getRGB();
 	}

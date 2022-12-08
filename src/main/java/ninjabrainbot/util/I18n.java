@@ -23,7 +23,7 @@ public class I18n {
 
 	public static final Locale ja_RYU = new Locale("ja", "RYU");
 	public static final Locale ru_RU = new Locale("ru", "RU");
-	
+
 	private static final List<Locale> LANGUAGE_CONFIG = new ArrayList<>();
 
 	private static ResourceBundle BUNDLE = null;
@@ -47,9 +47,9 @@ public class I18n {
 		LANGUAGE = getLanguageFromID(language);
 		BUNDLE = ResourceBundle.getBundle("lang/I18n", LANGUAGE, new UTF8Control());
 		for (Locale value : LANGUAGE_CONFIG) {
-			try{
+			try {
 				LANGUAGE_NAMES.add(BUNDLE.getString("settings.language." + value));
-			} catch (Exception ignored){
+			} catch (Exception ignored) {
 				LANGUAGE_NAMES.add(DEFAULT_BUNDLE.getString("settings.language." + value));
 			}
 		}
@@ -97,7 +97,7 @@ public class I18n {
 	public static String get(String key, Object... args) {
 		return String.format(BUNDLE.getString(key), args);
 	}
-	
+
 	public static boolean localeRequiresExtraSpace() {
 		return LANGUAGE == ru_RU;
 	}

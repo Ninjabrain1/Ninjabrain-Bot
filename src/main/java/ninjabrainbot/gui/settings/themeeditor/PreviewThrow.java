@@ -8,20 +8,20 @@ import ninjabrainbot.event.ObservableProperty;
 public class PreviewThrow implements IThrow {
 
 	private ISubscribable<IThrow> whenModified = new ObservableProperty<IThrow>();
-	
+
 	double x, z, alpha, correction;
-	
+
 	public PreviewThrow(double x, double z) {
 		this(x, z, 0, 0);
 	}
-	
+
 	public PreviewThrow(double x, double z, double alpha, double correction) {
 		this.x = x;
 		this.z = z;
 		this.alpha = alpha;
 		this.correction = correction;
 	}
-	
+
 	@Override
 	public double x() {
 		return x;

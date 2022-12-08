@@ -13,7 +13,7 @@ public class TitledDivider extends ThemedPanel {
 	public TitledDivider(StyleManager styleManager, String title) {
 		super(styleManager);
 		setLayout(new GridBagLayout());
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = GridBagConstraints.RELATIVE;
 		gbc.gridy = 0;

@@ -17,7 +17,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 public class ClipboardReader implements Runnable {
 
 	private NinjabrainBotPreferences preferences;
-	
+
 	Clipboard clipboard;
 	String lastClipboardString;
 
