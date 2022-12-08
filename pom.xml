@@ -10,6 +10,7 @@
 	<description>An accurate stronghold calculator for Minecraft speedrunning.</description>
 	<build>
 		<finalName>maven-unit-test</finalName>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
