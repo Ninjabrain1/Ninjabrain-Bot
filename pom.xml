@@ -9,7 +9,6 @@
 	<name>Ninjabrain Bot</name>
 	<description>An accurate stronghold calculator for Minecraft speedrunning.</description>
 	<build>
-		<finalName>maven-unit-test</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
@@ -22,10 +21,27 @@
 				</configuration>
 			</plugin>
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>ninjabrainbot.Main</mainClass>
+						</manifest>
+						<manifestEntries>
+							<SplashScreen-Image>splash.png</SplashScreen-Image>
+							<Built-By>Ninjabrain</Built-By>
+						</manifestEntries>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>

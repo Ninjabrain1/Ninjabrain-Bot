@@ -2,18 +2,34 @@ package ninjabrainbot;
 
 import java.awt.Color;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+
 import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
 
+@TestInstance(Lifecycle.PER_CLASS)
 public class ThemeSerializerTests {
 
+	@BeforeAll
+	public void setup() {
+		Theme.loadThemes(new NinjabrainBotPreferences(new UnsavedPreferences()));
+	}
+
+	@Test
 	public void serialize() {
 		CustomTheme theme = new CustomTheme();
 		String serialized = ThemeSerializer.serialize(theme);
 		assert ThemeSerializer.serialize(ThemeSerializer.deserialize(serialized)).contentEquals(serialized);
 	}
 
+	@Test
 	public void serializeColor() {
 		// https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
 		assert ThemeSerializer.serializeColor(Color.white).contentEquals("oooo");
@@ -23,6 +39,7 @@ public class ThemeSerializerTests {
 		assert ThemeSerializer.serializeColor(Color.blue).contentEquals("003o");
 	}
 
+	@Test
 	public void deserializeColor() {
 		// https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
 		assert colorsAreEqual(ThemeSerializer.deserializeColor("oooo"), Color.white);
@@ -32,12 +49,14 @@ public class ThemeSerializerTests {
 		assert colorsAreEqual(ThemeSerializer.deserializeColor("003o"), Color.blue);
 	}
 
+	@Test
 	public void deserizlizeColor_shouldFail() {
 		assert ThemeSerializer.deserializeColor("") == null;
 		assert ThemeSerializer.deserializeColor("00000") == null;
 		assert ThemeSerializer.deserializeColor("aaa") == null;
 	}
 
+	@Test
 	public void deserizlizeColor_shouldThrow() {
 		boolean thrown = false;
 		try {
@@ -64,11 +83,13 @@ public class ThemeSerializerTests {
 		assert thrown == true;
 	}
 
+	@Test
 	public void deserialize_serialize_shouldBeIdenticalToOriginal() {
 		String string = "a71`Wb9BDhc:be4d:2Tme8B4`f71`Whoooonooook`<30iiNGUjP820oiNGUlMLa\\mc6ibr0<hYqool0po`00";
-		assert ThemeSerializer.serialize(ThemeSerializer.deserialize(string)).contentEquals(string);
+		Assertions.assertEquals(ThemeSerializer.serialize(ThemeSerializer.deserialize(string)), string);
 	}
 
+	@Test
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_light() {
 		CustomTheme a = new CustomTheme();
 		a.setFromTheme(Theme.get(Theme.light_uid));
@@ -92,6 +113,7 @@ public class ThemeSerializerTests {
 		assert colorsAreEqual(a.TEXT_COLOR_TITLE.color(), b.TEXT_COLOR_TITLE.color());
 	}
 
+	@Test
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_blue() {
 		CustomTheme a = new CustomTheme();
 		a.setFromTheme(Theme.get(Theme.blue_uid));

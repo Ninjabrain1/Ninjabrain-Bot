@@ -23,6 +23,12 @@ public class Chunk {
 		this.z = z;
 		weight = w;
 	}
+	
+	public int chunkDistanceSquared(Chunk other) {
+		int dx = x - other.x;
+		int dz = z - other.z;
+		return dx * dx + dz * dz;
+	}
 
 	@Override
 	public int hashCode() {

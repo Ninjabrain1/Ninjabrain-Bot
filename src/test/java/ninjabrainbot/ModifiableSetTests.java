@@ -14,7 +14,7 @@ import ninjabrainbot.event.IModifiableSet;
 import ninjabrainbot.event.ModifiableSet;
 import ninjabrainbot.event.ObservableField;
 
-public class EventTests {
+public class ModifiableSetTests {
 
 	IModificationLock lock;
 	IModifiableSet<IThrow> set;
@@ -31,7 +31,7 @@ public class EventTests {
 	}
 
 	@Test
-	public void modifiableSet_setFromList_shouldntRaiseChangeEvent() {
+	public void setFromList_shouldNotRaiseChangeEvent() {
 		List<IThrow> list = set.toList();
 
 		ObservableField<Boolean> whenModifiedWasRaised = new ObservableField<Boolean>(false);
@@ -50,7 +50,7 @@ public class EventTests {
 	}
 
 	@Test
-	public void modifiableSet_setFromList_shouldRaiseChangeEvent() {
+	public void setFromList_shouldRaiseChangeEvent() {
 		// Arrange
 		List<IThrow> list = set.toList();
 		list.remove(2);
@@ -79,7 +79,7 @@ public class EventTests {
 	}
 
 	@Test
-	public void modifiableSet_add_shouldRaiseChangeEvent() {
+	public void add_shouldRaiseChangeEvent() {
 		// Arrange
 		ObservableField<Boolean> whenModifiedWasRaised = new ObservableField<Boolean>(false);
 		ObservableField<Boolean> whenModifiedWasRaised_idx0 = new ObservableField<Boolean>(false);
@@ -111,7 +111,7 @@ public class EventTests {
 	}
 
 	@Test
-	public void modifiableSet_remove_shouldRaiseChangeEvent() {
+	public void remove_shouldRaiseChangeEvent() {
 		// Arrange
 		ObservableField<Boolean> whenModifiedWasRaised = new ObservableField<Boolean>(false);
 		ObservableField<Boolean> whenModifiedWasRaised_idx0 = new ObservableField<Boolean>(false);

@@ -3,6 +3,8 @@ package ninjabrainbot.data.statistics;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import ninjabrainbot.data.datalock.AlwaysUnlocked;
+import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
@@ -20,7 +22,7 @@ public class Prior implements IPrior {
 	IDivineContext divineContext;
 
 	public Prior() {
-		this(0, 0, StrongholdConstants.maxChunk, null);
+		this(0, 0, StrongholdConstants.maxChunk, new DivineContext(new AlwaysUnlocked()));
 	}
 
 	public Prior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
