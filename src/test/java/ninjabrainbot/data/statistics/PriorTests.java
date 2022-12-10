@@ -1,7 +1,7 @@
 package ninjabrainbot.data.statistics;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,7 +70,7 @@ class PriorTests {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "128, 0, 3", "100, -100, 10", "-50, 111, 6", "-150, -10, 20"})
+	@CsvSource({ "128, 0, 3", "100, -100, 10", "-50, 111, 6", "-150, -10, 20" })
 	void probabilityAtGivenCoordsIsIndependentOfRadiusOfPrior(int x, int z, int radius) {
 		IPrior prior0 = new Prior(x, z, 0, divineContext);
 		IPrior prior = new Prior(x, z, radius, divineContext);
@@ -82,7 +82,7 @@ class PriorTests {
 				break;
 			}
 		}
-		
+
 		assertEquals(prior0.getChunks().iterator().next().weight, chunk.weight);
 	}
 
