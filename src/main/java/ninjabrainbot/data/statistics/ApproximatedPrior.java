@@ -27,9 +27,10 @@ public class ApproximatedPrior extends Prior {
 	public void evaluateError() {
 		Logger.log("Evaluating approximated prior.");
 		Logger.log("Constructing true prior...");
-		Prior prior = new Prior();
+		Prior prior = new Prior((x1 + x0) / 2, (z1 + z0) / 2, radius, divineContext);
 		Logger.log("Comparing approximation to true prior...");
 		double largestRelError = 0;
+		double largestError = 0;
 		double sump = 0;
 		double sum = 0;
 		int falseNegativeCount = 0;
@@ -47,12 +48,15 @@ public class ApproximatedPrior extends Prior {
 				if (relError < 1f)
 					relError = 1f / relError;
 				relError -= 1f;
-				if (relError > largestRelError)
+				if (relError > largestRelError )
 					largestRelError = relError;
 				// errors.add(new Pair<Double, String>(relError, "x: " + (i % size1d - radius) +
 				// ", z: " + (i / size1d - radius)));
 				numNonZeroChunks++;
 				double error = prior.chunks[i].weight - chunks[i].weight;
+				if (Math.abs(error) > largestError) {
+					largestError = Math.abs(error);
+				}
 				totalSquaredError += error * error;
 			}
 			sump += prior.chunks[i].weight;
@@ -65,6 +69,7 @@ public class ApproximatedPrior extends Prior {
 		Logger.log("Average non-zero weight: " + sum / numNonZeroChunks);
 		Logger.log("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError / numNonZeroChunks));
 		Logger.log("Largest relative error: " + largestRelError);
+		Logger.log("Largest error: " + largestError);
 		Logger.log("False negative count: " + falseNegativeCount);
 		Logger.log("Prior sum: " + sump);
 		Logger.log("Approx prior sum: " + sum);

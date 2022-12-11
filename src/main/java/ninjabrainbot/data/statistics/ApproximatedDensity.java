@@ -33,7 +33,7 @@ public class ApproximatedDensity {
 		for (int k = -StrongholdConstants.snappingRadius; k <= StrongholdConstants.snappingRadius; k++) {
 			int xOffsetWeight = offsetWeights.get(k);
 			for (int l = -StrongholdConstants.snappingRadius; l <= StrongholdConstants.snappingRadius; l++) {
-				int zOffsetWeight = offsetWeights.get(k);
+				int zOffsetWeight = offsetWeights.get(l);
 				int w = xOffsetWeight * zOffsetWeight;
 				int n = 200;
 				for (int i = 0; i < n; i++) {

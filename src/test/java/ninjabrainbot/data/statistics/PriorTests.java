@@ -28,7 +28,7 @@ class PriorTests {
 	}
 
 	@ParameterizedTest
-	@ValueSource(ints = { 0, 1, 2, 3 })
+	@ValueSource(ints = { 0, 1 })
 	void probabilitySumsToNumberOfStringholds(int ringNumber) {
 		Ring ring = Ring.get(ringNumber);
 		IPrior prior = new Prior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
