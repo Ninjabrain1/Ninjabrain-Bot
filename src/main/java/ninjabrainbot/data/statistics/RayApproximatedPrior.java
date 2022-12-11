@@ -63,7 +63,23 @@ public class RayApproximatedPrior implements IPrior {
 				j = StrongholdConstants.maxChunk;
 			while (rightPositive ? j < minor_v : j > minor_v && j <= StrongholdConstants.maxChunk && j >= -StrongholdConstants.maxChunk) {
 				Chunk chunk = majorX ? new Chunk(i, j) : new Chunk(j, i);
-				chunk.weight = strongholdDensity(chunk.x, chunk.z);
+				
+				int n = 2;
+				double weight = 0;
+				if (n == 1) {
+					weight = strongholdDensity(i, j);
+				} else {
+					for (int k = 0; k < n; k++) {
+						double x = i - 0.5 + k / (n - 1.0);
+						for (int l = 0; l < n; l++) {
+							double z = j - 0.5 + l / (n - 1.0);
+							weight += strongholdDensity(x, z);
+						}
+					}
+				}
+				weight /= (double) n * n; // Approximate percentage of chunk thats inside the ring
+
+				chunk.weight = weight;
 				chunks.add(chunk);
 				j += rightPositive ? 1 : -1;
 			}
@@ -72,9 +88,9 @@ public class RayApproximatedPrior implements IPrior {
 	}
 
 	protected double strongholdDensity(double cx, double cz) {
-		double d2 = cx * cx + cz * cz;
 		double relativeWeight = 1.0;
-		if (divineContext != null) {
+		if (divineContext.getFossil() != null) {
+			double d2 = cx * cx + cz * cz;
 			double chunkR = Math.sqrt(d2);
 			if (chunkR <= Ring.get(0).outerRadiusPostSnapping) {
 				double phi = Coords.getPhi(cx, cz);
