@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -19,11 +19,15 @@ import ninjabrainbot.util.TestUtils;
 
 class RayApproximatedPriorTests {
 
-	IDivineContext divineContext;
+	static IPrior truePrior;
+	static IDivineContext divineContext;
 
-	@BeforeEach
-	void setup() {
+	@BeforeAll
+	static void calculateTruePrior() {
 		divineContext = new DivineContext(new AlwaysUnlocked());
+		Ring ring = Ring.get(1);
+		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
+		truePrior = new Prior(0, 0, radius, divineContext);
 	}
 
 	@ParameterizedTest
@@ -69,12 +73,10 @@ class RayApproximatedPriorTests {
 	@CsvSource({ "8, 8, 0", "1000, -1000, 45", "-150, -10, 20" })
 	void testApproximationAccuracyFirstRing(double x, double z, double angle) {
 		Ring ring = Ring.get(0);
-		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
 		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);
 		double averageWeightInRing = ring.numStrongholds / ringArea;
 
 		IPrior rayApproximatedPrior = new RayApproximatedPrior(TestUtils.createRay(x, z, angle * Math.PI / 180), 10 * Math.PI / 180, divineContext, McVersion.PRE_119);
-		IPrior truePrior = new Prior(0, 0, radius, divineContext);
 
 		Map<Chunk, Chunk> expectedChunks = new HashMap<>();
 		for (Chunk chunk : truePrior.getChunks()) {
@@ -105,15 +107,13 @@ class RayApproximatedPriorTests {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "0, -5000, 25" })
+	@CsvSource({ "0, -5000, 25",  "-1000, 5000, -95",  "-4000, 300, -45",  "3000, -4000, -170" })
 	void testApproximationAccuracySecondRing(double x, double z, double angle) {
 		Ring ring = Ring.get(1);
-		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
 		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);
 		double averageWeightInRing = ring.numStrongholds / ringArea;
 
 		IPrior rayApproximatedPrior = new RayApproximatedPrior(TestUtils.createRay(x, z, angle * Math.PI / 180), 10 * Math.PI / 180, divineContext, McVersion.PRE_119);
-		IPrior truePrior = new Prior(0, 0, radius, divineContext);
 
 		Map<Chunk, Chunk> expectedChunks = new HashMap<>();
 		for (Chunk chunk : truePrior.getChunks()) {
