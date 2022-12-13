@@ -26,6 +26,8 @@ public class NinjabrainBotPreferences {
 	public FloatPreference sigmaAlt;
 	public FloatPreference sigmaManual;
 	public FloatPreference crosshairCorrection;
+	public FloatPreference resolutionHeight;
+	public FloatPreference sensitivity;
 	public FloatPreference overlayHideDelay;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -37,6 +39,8 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference useAdvStatistics;
 	public BooleanPreference altClipboardReader;
 	public BooleanPreference useAltStd;
+	public BooleanPreference useTallRes;
+	public BooleanPreference usePreciseAngle;
 	public BooleanPreference useOverlay;
 	public BooleanPreference overlayAutoHide;
 	public BooleanPreference overlayHideWhenLocked;
@@ -63,10 +67,12 @@ public class NinjabrainBotPreferences {
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
 		// Float
-		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
-		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
-		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
+		sigma = new FloatPreference("sigma", 0.1f, 0.0001f, 1f, source);
+		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.0001f, 1f, source);
+		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.0001f, 1f, source);
 		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, source);
+		resolutionHeight = new FloatPreference("window_height", 16384, 1f, 16384f, source);
+		sensitivity = new FloatPreference("sensitivity", 0.012727597f, 0f, 1f, source);
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
 		// Boolean
 		checkForUpdates = new BooleanPreference("check_for_updates", true, source);
@@ -79,6 +85,8 @@ public class NinjabrainBotPreferences {
 		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, source);
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);
+		useTallRes = new BooleanPreference("use_tall_res", false, source);
+		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
