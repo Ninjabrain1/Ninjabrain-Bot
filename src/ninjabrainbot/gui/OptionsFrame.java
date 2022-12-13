@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
@@ -54,6 +56,8 @@ public class OptionsFrame extends ThemedFrame {
 	private FlatButton exitButton;
 	private TextboxPanel sigma;
 	private TextboxPanel sigmaAlt;
+	private TextboxPanel resolutionHeight;
+	private TextboxPanel sensitivity;
 	private HotkeyPanel sigmaAltHotkey;
 	private TextboxPanel overlayResetDelay;
 
@@ -73,6 +77,7 @@ public class OptionsFrame extends ThemedFrame {
 		add(calibrationPanel);
 		tabbedPane.addTab(I18n.get("settings.basic"), getBasicPanel());
 		tabbedPane.addTab(I18n.get("settings.advanced"), getAdvancedPanel());
+		tabbedPane.addTab(I18n.get("settings.high_precision"), getHighPrecisionPanel());
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), getHotkeyPanel());
 		tabbedPane.addTab(I18n.get("settings.overlay"), getOBSPanel());
 		tabbedPane.addTab(I18n.get("settings.language"), getLanguagePanel());
@@ -162,6 +167,42 @@ public class OptionsFrame extends ThemedFrame {
 		return mainPanel;
 	}
 
+	private JPanel getHighPrecisionPanel() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setOpaque(false);
+		mainPanel.setLayout(new GridLayout(1, 2));
+		mainPanel.setBorder(new EmptyBorder(PADDING, PADDING, PADDING, PADDING));
+		JPanel column1 = new JPanel();
+		JPanel column2 = new JPanel();
+		column1.setOpaque(false);
+		column2.setOpaque(false);
+		mainPanel.add(column1);
+		mainPanel.add(column2);
+		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
+		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
+
+		// Tall Res Column
+		column1.add(new CheckboxPanel(gui, I18n.get("settings.tall_resolution"), Main.preferences.useTallRes));
+		resolutionHeight = new TextboxPanel(gui, I18n.get("settings.resolution_height"), Main.preferences.resolutionHeight);
+		resolutionHeight.setDecimals(0);
+		resolutionHeight.setEnabled(Main.preferences.useTallRes.get());
+		column1.add(resolutionHeight);
+		column1.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
+				new Dimension(0, Short.MAX_VALUE)));
+
+		// Precise Sens Column
+		column2.add(new CheckboxPanel(gui, I18n.get("settings.use_precise_angle"), Main.preferences.usePreciseAngle));
+		sensitivity = new TextboxPanel(gui, I18n.get("settings.sensitivity"), Main.preferences.sensitivity);
+		sensitivity.setWidth(100);
+		sensitivity.setDecimals(9);
+		sensitivity.setEnabled(Main.preferences.usePreciseAngle.get());
+		column2.add(sensitivity);
+		column2.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
+				new Dimension(0, Short.MAX_VALUE)));
+
+		return mainPanel;
+	}
+
 	private JPanel getHotkeyPanel() {
 		JPanel ac2 = new JPanel();
 		ac2.setOpaque(false);
@@ -222,6 +263,7 @@ public class OptionsFrame extends ThemedFrame {
 		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_hide_locked"), Main.preferences.overlayHideWhenLocked), constraints);
 		ac2.add(new CheckboxPanel(gui, I18n.get("settings.overlay_auto_hide"), Main.preferences.overlayAutoHide), constraints);
 		overlayResetDelay = new TextboxPanel(gui, I18n.get("settings.overlay_auto_hide_duration"), Main.preferences.overlayHideDelay);
+		overlayResetDelay.setDecimals(0);
 		overlayResetDelay.setEnabled(Main.preferences.overlayAutoHide.get());
 		ac2.add(overlayResetDelay, constraints);
 
@@ -308,6 +350,16 @@ public class OptionsFrame extends ThemedFrame {
 		return calibrationPanel;
 	}
 
+	public void setTallResolutionEnabled(boolean b) {
+		resolutionHeight.setEnabled(b);
+		resolutionHeight.descLabel.updateColors(gui);
+	}
+
+	public void setPreciseAngleEnabled(boolean b) {
+		sensitivity.setEnabled(b);
+		sensitivity.descLabel.updateColors(gui);
+	}
+
 	public void setAltSigmaEnabled(boolean b) {
 		sigmaAlt.setEnabled(b);
 		sigmaAlt.descLabel.updateColors(gui);
@@ -372,6 +424,7 @@ class TextboxPanel extends ThemedPanel {
 	ThemedLabel descLabel;
 	DecimalTextField textfield;
 	FloatPreference preference;
+	DecimalFormat format;
 
 	public TextboxPanel(GUI gui, String description, FloatPreference preference) {
 		super(gui);
@@ -394,11 +447,12 @@ class TextboxPanel extends ThemedPanel {
 		textfield = new DecimalTextField(gui, preference.get(), preference.min(), preference.max()) {
 			private static final long serialVersionUID = -1357640224921308648L;
 			@Override
-			public void onChanged(double newSigma) {
-				preference.set((float) newSigma);
+			public void onChanged(double newValue) {
+				preference.set(Float.parseFloat(format.format(newValue)));
 				preference.onChangedByUser(gui);
 			}
 		};
+		this.setDecimals(4);
 
 		Dimension size = textfield.getPreferredSize();
 		size.width = 60;
@@ -407,6 +461,21 @@ class TextboxPanel extends ThemedPanel {
 		add(descLabel);
 		add(textfield);
 		setOpaque(false);
+	}
+
+	public void setWidth(int width) {
+		Dimension size = textfield.getPreferredSize();
+		size.width = width;
+		textfield.setPreferredSize(size);
+	}
+
+	public void setDecimals(int decimals) {
+		String newFormat = "#";
+		if (decimals > 0) {
+			newFormat += "." + "#".repeat(decimals);
+		}
+		this.format = new DecimalFormat(newFormat);
+		textfield.setEditor(new JSpinner.NumberEditor(textfield, newFormat));
 	}
 
 	public void updateValue() {
