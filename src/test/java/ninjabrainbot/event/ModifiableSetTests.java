@@ -1,4 +1,4 @@
-package ninjabrainbot;
+package ninjabrainbot.event;
 
 import java.util.List;
 

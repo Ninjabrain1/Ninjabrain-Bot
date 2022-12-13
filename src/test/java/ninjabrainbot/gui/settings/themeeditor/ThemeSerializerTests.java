@@ -1,4 +1,4 @@
-package ninjabrainbot;
+package ninjabrainbot.gui.settings.themeeditor;
 
 import java.awt.Color;
 
