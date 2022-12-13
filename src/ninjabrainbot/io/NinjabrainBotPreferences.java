@@ -28,8 +28,6 @@ public class NinjabrainBotPreferences {
 	public FloatPreference sigmaAlt;
 	public FloatPreference sigmaManual;
 	public FloatPreference crosshairCorrection;
-	public FloatPreference resolutionHeight;
-	public FloatPreference sensitivity;
 	public FloatPreference overlayHideDelay;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -37,8 +35,6 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference showNetherCoords;
 	public BooleanPreference showAngleUpdates;
 	public BooleanPreference showAngleErrors;
-	public BooleanPreference useTallRes;
-	public BooleanPreference usePreciseAngle;
 	public BooleanPreference autoReset;
 	public BooleanPreference useAdvStatistics;
 	public BooleanPreference altClipboardReader;
@@ -131,21 +127,21 @@ public class NinjabrainBotPreferences {
 				SwingUtilities.invokeLater(() -> gui.toggleTargetLocked());
 			}
 		};
-		sigma = new FloatPreference("sigma", 0.1f, 0.0001f, 1f, pref) {
+		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigma(get());
 				gui.recalculateStronghold();
 			}
 		};
-		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.0001f, 1f, pref) {
+		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigmaAlt(get());
 				gui.recalculateStronghold();
 			}
 		};
-		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.0001f, 1f, pref) {
+		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.getTriangulator().setSigmaManual(get());
@@ -155,18 +151,6 @@ public class NinjabrainBotPreferences {
 		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, pref) {
 			@Override
 			public void onChangedByUser(GUI gui) {
-			}
-		};
-		resolutionHeight = new FloatPreference("resolution_height", 16384, 1f, 16384f, pref) {
-			@Override
-			public void onChangedByUser(GUI gui) {
-				gui.recalculateStronghold();
-			}
-		};
-		sensitivity = new FloatPreference("Sensitivity", 0.012727597f, 0f, 1f, pref) {
-			@Override
-			public void onChangedByUser(GUI gui) {
-				gui.recalculateStronghold();
 			}
 		};
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, pref) {
@@ -211,20 +195,6 @@ public class NinjabrainBotPreferences {
 			@Override
 			public void onChangedByUser(GUI gui) {
 				gui.setAngleErrorsEnabled(get());
-			}
-		};
-		useTallRes = new BooleanPreference("tall_resolution", false, pref) {
-			@Override
-			public void onChangedByUser(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.optionsFrame.setTallResolutionEnabled(get()));
-				gui.recalculateStronghold();
-			}
-		};
-		usePreciseAngle = new BooleanPreference("use_precise_angle", false, pref) {
-			@Override
-			public void onChangedByUser(GUI gui) {
-				SwingUtilities.invokeLater(() -> gui.optionsFrame.setPreciseAngleEnabled(get()));
-				gui.recalculateStronghold();
 			}
 		};
 		autoReset = new BooleanPreference("auto_reset", false, pref) {
