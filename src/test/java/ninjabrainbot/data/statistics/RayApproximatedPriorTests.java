@@ -107,7 +107,7 @@ class RayApproximatedPriorTests {
 	}
 
 	@ParameterizedTest
-	@CsvSource({ "0, -5000, 25",  "-1000, 5000, -95",  "-4000, 300, -45",  "3000, -4000, -170" })
+	@CsvSource({ "0, -5000, 25", "-1000, 5000, -95", "-4000, 300, -45", "3000, -4000, -170" })
 	void testApproximationAccuracySecondRing(double x, double z, double angle) {
 		Ring ring = Ring.get(1);
 		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);

@@ -63,7 +63,7 @@ public class RayApproximatedPrior implements IPrior {
 				j = StrongholdConstants.maxChunk;
 			while (rightPositive ? j < minor_v : j > minor_v && j <= StrongholdConstants.maxChunk && j >= -StrongholdConstants.maxChunk) {
 				Chunk chunk = majorX ? new Chunk(i, j) : new Chunk(j, i);
-				
+
 				int n = 2;
 				double weight = 0;
 				if (n == 1) {

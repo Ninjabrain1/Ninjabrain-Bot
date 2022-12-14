@@ -142,7 +142,7 @@ class ApproximatedPriorTests {
 		}
 		double meanError = totalError / numChunks;
 		double rootMeanSquare = Math.sqrt(totalSquaredError / numNonZeroChunks);
-		assertEquals(0, rootMeanSquare/averageWeightInRing, 0.015, "Relative RMS in ring exceeded maximum tolerance of 1.5%.");
+		assertEquals(0, rootMeanSquare / averageWeightInRing, 0.015, "Relative RMS in ring exceeded maximum tolerance of 1.5%.");
 		assertEquals(0, meanError, 1e-6, "Mean error exceeded maximum tolerance of 1 PPM.");
 	}
 

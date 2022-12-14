@@ -48,7 +48,7 @@ public class ApproximatedPrior extends Prior {
 				if (relError < 1f)
 					relError = 1f / relError;
 				relError -= 1f;
-				if (relError > largestRelError )
+				if (relError > largestRelError)
 					largestRelError = relError;
 				// errors.add(new Pair<Double, String>(relError, "x: " + (i % size1d - radius) +
 				// ", z: " + (i / size1d - radius)));
