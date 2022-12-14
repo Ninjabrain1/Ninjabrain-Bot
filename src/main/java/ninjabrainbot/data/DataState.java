@@ -59,6 +59,98 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
+	public void reset() {
+		throwSet.clear();
+		playerPos.set(null);
+		blindResult.set(null);
+		divineResult.set(null);
+		divineContext.clear();
+		updateResultType();
+	}
+
+	@Override
+	public void toggleLocked() {
+		locked.set(!locked.get());
+	}
+
+	@Override
+	public void dispose() {
+		sh.dispose();
+		if (calculatorResult.get() != null)
+			calculatorResult.get().dispose();
+		throwSet.dispose();
+	}
+
+	public void recalculateStronghold() {
+		if (calculatorResult.get() != null)
+			calculatorResult.get().dispose();
+		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
+		updateTopPrediction(calculatorResult.get());
+		updateResultType();
+	}
+
+	public DataStateUndoData getUndoData() {
+		return new DataStateUndoData(throwSet, playerPos.get(), divineContext);
+	}
+
+	public void setFromUndoData(DataStateUndoData undoData) {
+		divineContext.setFossil(undoData.fossil);
+		throwSet.setFromList(undoData.eyeThrows);
+		playerPos.set(undoData.playerPos);
+		updateResultType();
+	}
+
+	private void updateTopPrediction(ICalculatorResult calculatorResult) {
+		if (calculatorResult == null || !calculatorResult.success()) {
+			topPrediction.set(null);
+			return;
+		}
+		topPrediction.set(calculatorResult.getBestPrediction());
+	}
+
+	private void onFossilChanged() {
+		if (throwSet.size() != 0) {
+			recalculateStronghold();
+		} else {
+			divineResult.set(calculator.divine());
+		}
+		updateResultType();
+	}
+
+	void setFossil(Fossil f) {
+		divineContext.setFossil(f);
+	}
+
+	void setPlayerPos(IThrow t) {
+		playerPos.set(t);
+	}
+
+	void setBlindPosition(BlindPosition t) {
+		blindResult.set(calculator.blind(t));
+		updateResultType();
+	}
+
+	private void updateResultType() {
+		resultType.set(getExpectedResultType());
+	}
+
+	private ResultType getExpectedResultType() {
+		if (calculatorResult.get() != null && calculatorResult.get().success())
+			return ResultType.TRIANGULATION;
+
+		if (calculatorResult.get() != null)
+			return ResultType.FAILED;
+
+		if (playerPos.get() != null)
+			return ResultType.BLIND;
+
+		if (divineContext.getFossil() != null)
+			return ResultType.DIVINE;
+
+		return ResultType.NONE;
+	}
+
+	@Override
 	public IDivineContext getDivineContext() {
 		return divineContext;
 	}
@@ -96,77 +188,6 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
-	}
-
-	@Override
-	public void reset() {
-		resultType.set(ResultType.NONE);
-		throwSet.clear();
-		playerPos.set(null);
-		blindResult.set(null);
-		divineResult.set(null);
-		divineContext.clear();
-	}
-
-	@Override
-	public void toggleLocked() {
-		locked.set(!locked.get());
-	}
-
-	@Override
-	public void dispose() {
-		sh.dispose();
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
-		throwSet.dispose();
-	}
-
-	public void recalculateStronghold() {
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
-		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
-		updateTopPrediction(calculatorResult.get());
-		resultType.set(calculatorResult.get() == null ? ResultType.NONE : calculatorResult().get().success() ? ResultType.TRIANGULATION : ResultType.FAILED);
-	}
-
-	public DataStateUndoData getUndoData() {
-		return new DataStateUndoData(throwSet, playerPos.get(), divineContext);
-	}
-
-	public void setFromUndoData(DataStateUndoData undoData) {
-		divineContext.setFossil(undoData.fossil);
-		throwSet.setFromList(undoData.eyeThrows);
-		playerPos.set(undoData.playerPos);
-	}
-
-	private void updateTopPrediction(ICalculatorResult calculatorResult) {
-		if (calculatorResult == null || !calculatorResult.success()) {
-			topPrediction.set(null);
-			return;
-		}
-		topPrediction.set(calculatorResult.getBestPrediction());
-	}
-
-	private void onFossilChanged() {
-		if (throwSet.size() != 0) {
-			recalculateStronghold();
-		} else {
-			divineResult.set(calculator.divine());
-			resultType.set(divineResult.get() != null ? ResultType.DIVINE : ResultType.NONE);
-		}
-	}
-
-	void setFossil(Fossil f) {
-		divineContext.setFossil(f);
-	}
-
-	void setPlayerPos(IThrow t) {
-		playerPos.set(t);
-	}
-
-	void setBlindPosition(BlindPosition t) {
-		blindResult.set(calculator.blind(t));
-		resultType.set(ResultType.BLIND);
 	}
 
 }

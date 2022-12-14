@@ -1,13 +1,22 @@
 package ninjabrainbot.data.datalock;
 
+import java.util.function.Consumer;
+
 public class ModificationLock implements IModificationLock {
 
 	class Lock implements ILock {
 
+		boolean isUndoAction = false;
+
+		@Override
+		public void setUndoAction() {
+			isUndoAction = true;
+		}
+
 		@Override
 		public void close() {
 			locked = true;
-			whenModificationFinished.run();
+			whenModificationFinished.accept(isUndoAction);
 		}
 
 	}
@@ -15,14 +24,15 @@ public class ModificationLock implements IModificationLock {
 	private Lock lock = new Lock();
 	private boolean locked = true;
 
-	Runnable whenModificationFinished;
+	Consumer<Boolean> whenModificationFinished;
 
-	public ModificationLock(Runnable whenModificationFinished) {
+	public ModificationLock(Consumer<Boolean> whenModificationFinished) {
 		this.whenModificationFinished = whenModificationFinished;
 	}
 
 	public ILock acquireWritePermission() {
 		locked = false;
+		lock.isUndoAction = false;
 		return lock;
 	}
 

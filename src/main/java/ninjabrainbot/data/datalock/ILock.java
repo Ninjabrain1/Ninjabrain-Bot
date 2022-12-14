@@ -6,4 +6,6 @@ public interface ILock extends AutoCloseable {
 	default void close() {
 	}
 
+	void setUndoAction();
+
 }
