@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.event.IDisposable;
@@ -34,7 +35,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 
 	private WrappedColor borderCol;
 
-	public DivineContextPanel(StyleManager styleManager, IDivineContext dc, Runnable whenVisibilityChanged) {
+	public DivineContextPanel(StyleManager styleManager, IDivineContext divineContext, IDataStateHandler dataStateHandler, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		setOpaque(true);
 		label = new JLabel((String) null, 0);
@@ -45,9 +46,9 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		add(removeButton);
 		add(label);
 		setLayout(null);
-		onFossilChanged(dc.getFossil());
-		removeButton.addActionListener(p -> dc.resetFossil());
-		fossilSubscription = dc.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
+		onFossilChanged(divineContext.getFossil());
+		removeButton.addActionListener(p -> dataStateHandler.resetDivineContext());
+		fossilSubscription = divineContext.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
 		this.whenVisibilityChanged = whenVisibilityChanged;
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;

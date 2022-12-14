@@ -21,6 +21,8 @@ public interface IDataStateHandler {
 
 	void removeThrow(IThrow t);
 
+	void resetDivineContext();
+
 	void changeLastAngleIfNotLocked(double delta);
 
 	void toggleAltStdOnLastThrowIfNotLocked();

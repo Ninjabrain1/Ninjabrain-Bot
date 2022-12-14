@@ -56,6 +56,10 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
+	public void resetDivineContext() {
+	}
+
+	@Override
 	public void changeLastAngleIfNotLocked(double delta) {
 	}
 

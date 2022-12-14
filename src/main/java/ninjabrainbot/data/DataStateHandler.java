@@ -24,39 +24,46 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private DataState dataState;
 	private ModificationLock modificationLock;
 	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
+	private DataStateUndoHistory dataStateUndoHistory;
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences) {
 		this.stdProfile = new StandardStdProfile(preferences);
-		modificationLock = new ModificationLock(() -> whenDataStateModified.notifySubscribers(dataState));
+		modificationLock = new ModificationLock(wasUndoAction -> afterDataStateModified(wasUndoAction));
 
 		calculatorSettings = new CalculatorSettings();
 		calculatorSettings.useAdvStatistics = preferences.useAdvStatistics.get();
 		calculatorSettings.version = preferences.mcVersion.get();
 		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
+		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
 		sh.add(preferences.useAdvStatistics.whenModified().subscribe(newValue -> onUseAdvStatisticsChanged(newValue)));
 		sh.add(preferences.mcVersion.whenModified().subscribe(newValue -> onMcVersionChanged(newValue)));
 	}
 
+	@Override
 	public synchronized void reset() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.reset();
 		}
 	}
 
+	@Override
 	public synchronized void resetIfNotLocked() {
 		if (!dataState.locked().get())
 			reset();
 	}
 
+	@Override
 	public synchronized void undo() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
-
+			lock.setUndoAction();
+			dataState.setFromUndoData(dataStateUndoHistory.moveToPrevious());
 		}
 	}
 
+	@Override
 	public synchronized void undoIfNotLocked() {
 		if (!dataState.locked().get())
 			undo();
@@ -66,6 +73,13 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	public void removeThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.getThrowSet().remove(t);
+		}
+	}
+
+	@Override
+	public void resetDivineContext() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.getDivineContext().resetFossil();
 		}
 	}
 
@@ -80,6 +94,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
+	@Override
 	public synchronized void toggleAltStdOnLastThrowIfNotLocked() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
@@ -99,16 +114,17 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	public synchronized void setFossil(Fossil f) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setFossil(f);
-		}
-	}
-
 	public synchronized void toggleLocked() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.toggleLocked();
 		}
+	}
+
+	private void afterDataStateModified(boolean wasUndoAction) {
+		if (!wasUndoAction) {
+			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
+		}
+		whenDataStateModified.notifySubscribers(dataState);
 	}
 
 	private synchronized void onNewThrow(IThrow t) {
@@ -125,6 +141,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				t.setStdProfile(stdProfile);
 				dataState.getThrowSet().add(t);
 			}
+		}
+	}
+
+	private synchronized void setFossil(Fossil f) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setFossil(f);
 		}
 	}
 
