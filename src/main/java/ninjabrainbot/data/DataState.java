@@ -26,6 +26,8 @@ public class DataState implements IDataState, IDisposable {
 
 	private final ObservableField<Boolean> locked;
 
+	private final ObservableField<Boolean> enteringBoat;
+
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
 	private final ObservableField<IThrow> playerPos;
@@ -44,6 +46,7 @@ public class DataState implements IDataState, IDisposable {
 
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
+		enteringBoat = new LockableField<Boolean>(false, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
@@ -60,6 +63,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public void reset() {
+		enteringBoat.set(false);
 		throwSet.clear();
 		playerPos.set(null);
 		blindResult.set(null);
@@ -115,6 +119,10 @@ public class DataState implements IDataState, IDisposable {
 			divineResult.set(calculator.divine());
 		}
 		updateResultType();
+	}
+
+	void toggleEnteringBoat() {
+		enteringBoat.set(!enteringBoat.get());
 	}
 
 	void setFossil(Fossil f) {
@@ -188,6 +196,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
+	}
+
+	@Override
+	public IObservable<Boolean> enteringBoat() {
+		return enteringBoat;
 	}
 
 }

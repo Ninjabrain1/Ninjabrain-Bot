@@ -27,6 +27,8 @@ public interface IDataState {
 
 	public IObservable<ResultType> resultType();
 
+	public IObservable<Boolean> enteringBoat();
+
 	public void toggleLocked();
 
 	public void reset();

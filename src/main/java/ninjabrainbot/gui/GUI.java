@@ -108,6 +108,7 @@ public class GUI {
 		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(1, preferences));
 		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-1, preferences));
 		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
+		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> dataStateHandler.toggleEnteringBoatIfNotLocked());
 		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
 	}
 

@@ -127,6 +127,14 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		whenDataStateModified.notifySubscribers(dataState);
 	}
 
+	public synchronized void toggleEnteringBoatIfNotLocked() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			if (!dataState.locked().get()) {
+				dataState.toggleEnteringBoat();
+			}
+		}
+	}
+
 	private synchronized void onNewThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.setPlayerPos(t);
@@ -135,6 +143,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 			if (t.isNether()) {
 				if (dataState.getThrowSet().size() == 0)
 					dataState.setBlindPosition(new BlindPosition(t));
+				return;
+			}
+			if (dataState.enteringBoat().get()) {
+				// boat logic goes here
 				return;
 			}
 			if (!t.lookingBelowHorizon()) {

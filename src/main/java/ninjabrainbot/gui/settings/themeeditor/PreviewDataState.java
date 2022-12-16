@@ -26,6 +26,7 @@ public class PreviewDataState implements IDataState {
 	private final ThrowSet throwSet;
 	private final ObservableField<Boolean> locked;
 
+	private final ObservableField<Boolean> enteringBoat;
 	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
 	private final ObservableField<ChunkPrediction> topPrediction;
@@ -47,6 +48,7 @@ public class PreviewDataState implements IDataState {
 		divineContext = new DivineContext(modificationLock);
 		throwSet = new ThrowSet(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
+		enteringBoat = new LockableField<Boolean>(false, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
@@ -92,6 +94,11 @@ public class PreviewDataState implements IDataState {
 	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
+	}
+
+	@Override
+	public IObservable<Boolean> enteringBoat() {
+		return enteringBoat;
 	}
 
 	@Override
