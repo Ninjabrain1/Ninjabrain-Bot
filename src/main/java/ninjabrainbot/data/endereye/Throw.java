@@ -4,6 +4,7 @@ import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * Represents an eye of ender throw.
@@ -24,7 +25,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 		super(modificationLock);
 		this.x = x;
 		this.z = z;
-		alpha = alpha % 360.0;
+		alpha %= 360.0;
 		if (alpha < -180.0) {
 			alpha += 360.0;
 		} else if (alpha > 180.0) {
@@ -45,7 +46,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	 * Returns a Throw object if the given string is the result of an F3+C command,
 	 * null otherwise.
 	 */
-	public static IThrow parseF3C(String string, double crosshairCorrection, IModificationLock modificationLock) {
+	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -58,11 +59,28 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 			double z = Double.parseDouble(substrings[8]);
 			double alpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			alpha += crosshairCorrection;
+			alpha = getPreciseAlpha(alpha, preferences);
 			return new Throw(x, z, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
+	}
+
+	private static double getPreciseAlpha(double alpha, NinjabrainBotPreferences preferences) {
+		if (preferences.usePreciseAngle.get()) {
+			double sens = preferences.sensitivity.get();
+			double preMult = sens * 0.6f + 0.2f;
+			preMult = preMult * preMult * preMult * 8.0f;
+			double minInc = preMult * 0.15D;
+			alpha = Math.round(alpha / minInc) * preMult * 0.15D;
+		}
+
+		alpha += preferences.crosshairCorrection.get();
+
+		// Determined experimentally, exact cause unknown
+		alpha -= 0.00079 * Math.sin((alpha + 45) * Math.PI/180.0);
+
+		return alpha;
 	}
 
 	@Override
@@ -126,8 +144,14 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
-	public void addCorrection(double angle) {
-		correction += angle;
+	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences) {
+		double change = 0.01;
+		if (preferences.useTallRes.get()) {
+			final double toRad = Math.PI / 180.0;
+			change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
+		}
+		change *= multiplier;
+		correction += change;
 		notifySubscribers(this);
 	}
 

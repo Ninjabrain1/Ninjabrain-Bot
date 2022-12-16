@@ -4,6 +4,7 @@ import ninjabrainbot.data.endereye.IStdProfile;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class PreviewThrow implements IThrow {
 
@@ -68,7 +69,7 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public void addCorrection(double angle) {
+	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences) {
 	}
 
 	@Override

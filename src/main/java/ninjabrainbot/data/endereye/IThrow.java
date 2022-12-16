@@ -2,6 +2,7 @@ package ninjabrainbot.data.endereye;
 
 import ninjabrainbot.data.statistics.IRay;
 import ninjabrainbot.event.IModifiable;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 
@@ -15,7 +16,7 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 
 	public boolean isNether();
 
-	public void addCorrection(double angle);
+	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences);
 
 	public void setStdProfileNumber(int profileNumber);
 

@@ -56,6 +56,7 @@ public class OptionsFrame extends ThemedFrame {
 	private FloatPreferencePanel resolutionHeight;
 	private FloatPreferencePanel sensitivity;
 	private HotkeyPanel sigmaAltHotkey;
+	private HotkeyPanel enterBoatHotkey;
 	private FloatPreferencePanel overlayResetDelay;
 
 	static int WINDOW_WIDTH = 560;
@@ -187,7 +188,7 @@ public class OptionsFrame extends ThemedFrame {
 
 		// Tall Res Column
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.tall_resolution"), preferences.useTallRes));
-		resolutionHeight = new FloatPreferencePanel(styleManager, I18n.get("settings.window_height"), preferences.resolutionHeight);
+		resolutionHeight = new FloatPreferencePanel(styleManager, I18n.get("settings.resolution_height"), preferences.resolutionHeight);
 		resolutionHeight.setDecimals(0);
 		resolutionHeight.setEnabled(preferences.useTallRes.get());
 		column1.add(resolutionHeight);
@@ -201,6 +202,11 @@ public class OptionsFrame extends ThemedFrame {
 		sensitivity.setDecimals(9);
 		sensitivity.setEnabled(preferences.usePreciseAngle.get());
 		column2.add(sensitivity);
+		if (KeyboardListener.registered) {
+			enterBoatHotkey = new HotkeyPanel(styleManager, I18n.get("settings.enter_boat"), preferences.hotkeyBoat);
+			enterBoatHotkey.setEnabled(preferences.usePreciseAngle.get());
+			column2.add(enterBoatHotkey);
+		}
 		column2.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
 				new Dimension(0, Short.MAX_VALUE)));
 
@@ -308,7 +314,7 @@ public class OptionsFrame extends ThemedFrame {
 	}
 
 	public void updateBounds(StyleManager styleManager) {
-		WINDOW_WIDTH = styleManager.size.WIDTH / 4 * (I18n.localeRequiresExtraSpace() ? 8 : 7);
+		WINDOW_WIDTH = styleManager.size.WIDTH / 4 * (I18n.localeRequiresExtraSpace() ? 9 : 8);
 		COLUMN_WIDTH = WINDOW_WIDTH / 2;
 		int titleBarHeight = titlebarPanel.getPreferredSize().height;
 		int panelHeight = tabbedPane.getPreferredSize().height;
@@ -366,6 +372,8 @@ public class OptionsFrame extends ThemedFrame {
 	private void setPreciseAngleEnabled(boolean b) {
 		sensitivity.setEnabled(b);
 		sensitivity.descLabel.updateColors();
+		enterBoatHotkey.setEnabled(b);
+		enterBoatHotkey.descLabel.updateColors();
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {

@@ -69,12 +69,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	public synchronized void changeLastAngleIfNotLocked(double delta) {
+	public synchronized void changeLastAngleIfNotLocked(int multiplier, NinjabrainBotPreferences preferences) {
 		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
 			IThrow last = dataState.getThrowSet().getLast();
 			if (last != null) {
 				try (ILock lock = modificationLock.acquireWritePermission()) {
-					last.addCorrection(delta);
+					last.addCorrection(multiplier, preferences);
 				}
 			}
 		}

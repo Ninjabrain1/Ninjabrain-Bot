@@ -17,6 +17,7 @@ public class NinjabrainBotPreferences {
 	public IntPreference theme;
 	public HotkeyPreference hotkeyIncrement;
 	public HotkeyPreference hotkeyDecrement;
+	public HotkeyPreference hotkeyBoat;
 	public HotkeyPreference hotkeyReset;
 	public HotkeyPreference hotkeyUndo;
 	public HotkeyPreference hotkeyMinimize;
@@ -66,12 +67,13 @@ public class NinjabrainBotPreferences {
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", source);
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
+		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
 		// Float
 		sigma = new FloatPreference("sigma", 0.1f, 0.0001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.0001f, 1f, source);
 		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.0001f, 1f, source);
 		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, source);
-		resolutionHeight = new FloatPreference("window_height", 16384, 1f, 16384f, source);
+		resolutionHeight = new FloatPreference("resolution_height", 16384, 1f, 16384f, source);
 		sensitivity = new FloatPreference("sensitivity", 0.012727597f, 0f, 1f, source);
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
 		// Boolean

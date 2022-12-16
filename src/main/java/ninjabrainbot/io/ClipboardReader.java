@@ -83,12 +83,12 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
+		final IThrow t = Throw.parseF3C(clipboard, preferences, modificationLock);
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
+		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences, modificationLock);
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
