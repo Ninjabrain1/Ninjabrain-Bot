@@ -114,7 +114,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		error.setText(t == null || p == null ? null : String.format(Locale.US, "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, "%.4f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -231,7 +231,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			alpha.setText(String.format(Locale.US, "%.2f", t.alpha_0()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, t.correction() > 0 ? "+%.2f" : "%.2f", t.correction()));
+				correction.setText(String.format(Locale.US, t.correction() > 0 ? "+%.3f" : "%.3f", t.correction()));
 				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);

@@ -163,12 +163,13 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setLayout(new GridBagLayout());
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		ArrayList<IThrow> eyeThrows = new ArrayList<>();
-		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", 0, new AlwaysUnlocked());
-		t1.addCorrection(0.01);
+		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", defaultPreferences, new AlwaysUnlocked());
+		t1.addCorrection(1, defaultPreferences);
 		t1.setStdProfileNumber(1);
-		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", 0, new AlwaysUnlocked());
-		t2.addCorrection(-0.01);
+		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", defaultPreferences, new AlwaysUnlocked());
+		t2.addCorrection(-1, defaultPreferences);
 		t2.setStdProfileNumber(2);
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);

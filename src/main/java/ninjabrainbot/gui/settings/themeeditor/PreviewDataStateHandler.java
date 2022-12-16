@@ -11,6 +11,7 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class PreviewDataStateHandler implements IDataStateHandler {
 
@@ -60,7 +61,7 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void changeLastAngleIfNotLocked(double delta) {
+	public void changeLastAngleIfNotLocked(int multiplier, NinjabrainBotPreferences preferences) {
 	}
 
 	@Override
