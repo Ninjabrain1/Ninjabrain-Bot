@@ -27,6 +27,7 @@ public class DataState implements IDataState, IDisposable {
 	private final ObservableField<Boolean> locked;
 
 	private final ObservableField<Boolean> enteringBoat;
+	private final ObservableField<Float> boatAngle;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
@@ -47,6 +48,7 @@ public class DataState implements IDataState, IDisposable {
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
 		enteringBoat = new LockableField<Boolean>(false, modificationLock);
+		boatAngle = new LockableField<Float>(0f, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
@@ -64,6 +66,7 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public void reset() {
 		enteringBoat.set(false);
+		boatAngle.set(0f);
 		throwSet.clear();
 		playerPos.set(null);
 		blindResult.set(null);
@@ -102,6 +105,19 @@ public class DataState implements IDataState, IDisposable {
 		throwSet.setFromList(undoData.eyeThrows);
 		playerPos.set(undoData.playerPos);
 		updateResultType();
+	}
+
+	public boolean setBoatAngle(double angle) {
+		if (Math.abs(angle) > 360) return false;
+
+		float candidate = Math.round(angle / 1.40625) * 1.40625f;
+		double rounded = Math.round(100 * candidate) / 100.0;
+
+		if (rounded != angle) return false;
+
+		boatAngle.set(candidate);
+		enteringBoat.set(false);
+		return true;
 	}
 
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
@@ -201,6 +217,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<Boolean> enteringBoat() {
 		return enteringBoat;
+	}
+
+	@Override
+	public IObservable<Float> boatAngle() {
+		return boatAngle;
 	}
 
 }

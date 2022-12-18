@@ -49,6 +49,11 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
+	public double rawAlpha() {
+		return alpha;
+	}
+
+	@Override
 	public double alpha_0() {
 		return alpha;
 	}

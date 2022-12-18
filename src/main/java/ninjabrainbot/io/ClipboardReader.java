@@ -5,7 +5,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -23,13 +23,13 @@ public class ClipboardReader implements Runnable {
 
 	private AtomicBoolean forceReadLater;
 
-	private IModificationLock modificationLock;
+	private IDataStateHandler dataStateHandler;
 	private ObservableProperty<IThrow> whenNewThrowInputed;
 	private ObservableProperty<Fossil> whenNewFossilInputed;
 
-	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
+	public ClipboardReader(NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		this.preferences = preferences;
-		this.modificationLock = modificationLock;
+		this.dataStateHandler = dataStateHandler;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
@@ -83,12 +83,12 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard, preferences, modificationLock);
+		final IThrow t = Throw.parseF3C(clipboard, preferences, dataStateHandler);
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences, modificationLock);
+		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences, dataStateHandler);
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;

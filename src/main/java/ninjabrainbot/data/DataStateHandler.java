@@ -146,7 +146,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				return;
 			}
 			if (dataState.enteringBoat().get()) {
-				// boat logic goes here
+				dataState.setBoatAngle(t.rawAlpha());
 				return;
 			}
 			if (!t.lookingBelowHorizon()) {

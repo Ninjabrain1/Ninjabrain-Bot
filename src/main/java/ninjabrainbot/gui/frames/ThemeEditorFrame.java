@@ -20,7 +20,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -165,10 +164,11 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		ArrayList<IThrow> eyeThrows = new ArrayList<>();
-		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", defaultPreferences, new AlwaysUnlocked());
+		IDataStateHandler unlockedStateHandler = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null, false);
+		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", defaultPreferences, unlockedStateHandler);
 		t1.addCorrection(1, defaultPreferences);
 		t1.setStdProfileNumber(1);
-		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", defaultPreferences, new AlwaysUnlocked());
+		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", defaultPreferences, unlockedStateHandler);
 		t2.addCorrection(-1, defaultPreferences);
 		t2.setStdProfileNumber(2);
 		eyeThrows.add(t1);

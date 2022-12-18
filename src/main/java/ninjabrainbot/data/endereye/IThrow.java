@@ -8,6 +8,8 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 
 	public double getStd();
 
+	public double rawAlpha();
+
 	public double alpha_0();
 
 	public double correction();

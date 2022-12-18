@@ -1,5 +1,6 @@
 package ninjabrainbot.data.endereye;
 
+import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
@@ -11,7 +12,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable {
 
-	private final double x, z, alpha_0, beta;
+	private final double x, z, rawAlpha, alpha_0, beta;
 	private final boolean nether;
 
 	private IStdProfile stdProfile;
@@ -21,10 +22,15 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 
 	private Subscription stdProfileSubscription;
 
-	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+	public Throw (double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+		this(x, z, alpha, alpha, beta, nether, modificationLock);
+	}
+
+	public Throw(double x, double z, double rawAlpha, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
 		super(modificationLock);
 		this.x = x;
 		this.z = z;
+		this.rawAlpha = rawAlpha;
 		alpha %= 360.0;
 		if (alpha < -180.0) {
 			alpha += 360.0;
@@ -46,7 +52,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	 * Returns a Throw object if the given string is the result of an F3+C command,
 	 * null otherwise.
 	 */
-	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
+	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -57,22 +63,22 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 			boolean nether = substrings[2].equals("minecraft:the_nether");
 			double x = Double.parseDouble(substrings[6]);
 			double z = Double.parseDouble(substrings[8]);
-			double alpha = Double.parseDouble(substrings[9]);
+			double rawAlpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			alpha = getPreciseAlpha(alpha, preferences);
-			return new Throw(x, z, alpha, beta, nether, modificationLock);
+			double alpha = getPreciseAlpha(rawAlpha, preferences, dataStateHandler.getDataState().boatAngle().get());
+			return new Throw(x, z, rawAlpha, alpha, beta, nether, dataStateHandler.getModificationLock());
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
 	}
 
-	private static double getPreciseAlpha(double alpha, NinjabrainBotPreferences preferences) {
+	private static double getPreciseAlpha(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
 		if (preferences.usePreciseAngle.get()) {
 			double sens = preferences.sensitivity.get();
 			double preMult = sens * 0.6f + 0.2f;
 			preMult = preMult * preMult * preMult * 8.0f;
 			double minInc = preMult * 0.15D;
-			alpha = Math.round(alpha / minInc) * preMult * 0.15D;
+			alpha = boatAngle + Math.round((alpha - boatAngle) / minInc) * preMult * 0.15D;
 		}
 
 		alpha += preferences.crosshairCorrection.get();
@@ -126,6 +132,11 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	@Override
 	public double correction() {
 		return correction;
+	}
+
+	@Override
+	public double rawAlpha() {
+		return rawAlpha;
 	}
 
 	@Override

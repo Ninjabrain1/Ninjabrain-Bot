@@ -29,6 +29,8 @@ public interface IDataState {
 
 	public IObservable<Boolean> enteringBoat();
 
+	public IObservable<Float> boatAngle();
+
 	public void toggleLocked();
 
 	public void reset();
