@@ -16,14 +16,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.divine.DivineContext;
-import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.RingIterator;
 
 class ApproximatedPriorTests {
 
-	IDivineContext divineContext;
+	DivineContext divineContext;
 
 	@BeforeEach
 	void setup() {
@@ -51,6 +51,23 @@ class ApproximatedPriorTests {
 		}
 
 		assertEquals(totalProbability, totalStrongholds, totalStrongholds * 1e-4);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = { 0, 1, 2, 3 })
+	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {
+		divineContext.setFossil(new Fossil(fossil));
+		Ring ring = Ring.get(0);
+		IPrior prior = new ApproximatedPrior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
+
+		double totalProbability = 0;
+		for (Chunk chunk : prior.getChunks()) {
+			if (chunk.chunkDistanceSquared(new Chunk(0, 0)) > ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping)
+				continue;
+			totalProbability += chunk.weight;
+		}
+
+		assertEquals(totalProbability, ring.numStrongholds, ring.numStrongholds * 1e-4);
 	}
 
 	@ParameterizedTest

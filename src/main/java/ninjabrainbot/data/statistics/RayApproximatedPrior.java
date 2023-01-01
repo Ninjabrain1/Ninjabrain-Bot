@@ -67,12 +67,12 @@ public class RayApproximatedPrior implements IPrior {
 				int n = 2;
 				double weight = 0;
 				if (n == 1) {
-					weight = strongholdDensity(i, j);
+					weight = strongholdDensity(chunk.x, chunk.z);
 				} else {
 					for (int k = 0; k < n; k++) {
-						double x = i - 0.5 + k / (n - 1.0);
+						double x = chunk.x - 0.5 + k / (n - 1.0);
 						for (int l = 0; l < n; l++) {
-							double z = j - 0.5 + l / (n - 1.0);
+							double z = chunk.z - 0.5 + l / (n - 1.0);
 							weight += strongholdDensity(x, z);
 						}
 					}
