@@ -245,9 +245,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			ISet<IThrow> eyeThrows = calibrator.getThrows();
 			for (IThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(t.correction() < 0 ? "angle: %.3f %.3f\n" : "angle: %.3f +%.3f\n", t.alpha() - t.correction(), t.correction()));
+					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.alpha() - t.correction(), t.correction()));
 				} else {
-					b.append(String.format("angle: %.2f\n", t.alpha()));
+					b.append(String.format("Angle: %.2f\n", t.alpha()));
 				}
 			}
 			errors.area.setText(b.toString());
