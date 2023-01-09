@@ -54,9 +54,10 @@ public class OptionsFrame extends ThemedFrame {
 	private CalibrationPanel calibrationPanel;
 	private FloatPreferencePanel sigma;
 	private FloatPreferencePanel sigmaAlt;
+	private HotkeyPanel sigmaAltHotkey;
+	private CheckboxPanel sensitivityCheckbox;
 	private FloatPreferencePanel resolutionHeight;
 	private FloatPreferencePanel sensitivity;
-	private HotkeyPanel sigmaAltHotkey;
 	private HotkeyPanel enterBoatHotkey;
 	private FloatPreferencePanel overlayResetDelay;
 
@@ -197,15 +198,17 @@ public class OptionsFrame extends ThemedFrame {
 				new Dimension(0, Short.MAX_VALUE)));
 
 		// Precise Sens Column
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle));
+		sensitivityCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
+		sensitivityCheckbox.setEnabled(preferences.useTallRes.get());
+		column2.add(sensitivityCheckbox);
 		sensitivity = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivity"), preferences.sensitivity);
 		sensitivity.setWidth(100);
 		sensitivity.setDecimals(9);
-		sensitivity.setEnabled(preferences.usePreciseAngle.get());
+		sensitivity.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 		column2.add(sensitivity);
 		if (KeyboardListener.registered) {
 			enterBoatHotkey = new HotkeyPanel(styleManager, I18n.get("settings.enter_boat"), preferences.hotkeyBoat);
-			enterBoatHotkey.setEnabled(preferences.usePreciseAngle.get());
+			enterBoatHotkey.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 			column2.add(enterBoatHotkey);
 		}
 		column2.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
@@ -368,6 +371,9 @@ public class OptionsFrame extends ThemedFrame {
 	private void setTallResolutionEnabled(boolean b) {
 		resolutionHeight.setEnabled(b);
 		resolutionHeight.descLabel.updateColors();
+		sensitivityCheckbox.setEnabled(b);
+		sensitivityCheckbox.descLabel.updateColors();
+		setPreciseAngleEnabled(b && preferences.usePreciseAngle.get());
 	}
 
 	private void setPreciseAngleEnabled(boolean b) {
@@ -392,6 +398,8 @@ class CheckboxPanel extends ThemedPanel {
 	CustomCheckbox checkbox;
 	BooleanPreference preference;
 
+	WrappedColor disabledCol;
+
 	public CheckboxPanel(StyleManager styleManager, String description, BooleanPreference preference) {
 		super(styleManager);
 		this.preference = preference;
@@ -408,6 +416,14 @@ class CheckboxPanel extends ThemedPanel {
 			public Dimension getPreferredSize() {
 				return new Dimension(t.getWidth() - 2 * OptionsFrame.PADDING - 32, super.getPreferredSize().height);
 			}
+
+			@Override
+			public Color getForegroundColor() {
+				if (checkbox.isEnabled()) {
+					return super.getForegroundColor();
+				}
+				return disabledCol.color();
+			}
 		};
 		checkbox = new CustomCheckbox(preference.get()) {
 			private static final long serialVersionUID = 1507233642665292025L;
@@ -420,6 +436,14 @@ class CheckboxPanel extends ThemedPanel {
 		add(checkbox, BorderLayout.LINE_START);
 		add(descLabel, BorderLayout.CENTER);
 		setOpaque(false);
+
+		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		checkbox.setEnabled(enabled);
 	}
 
 }

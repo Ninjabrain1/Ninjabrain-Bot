@@ -73,7 +73,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	private static double getPreciseAlpha(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
-		if (preferences.usePreciseAngle.get()) {
+		if (preferences.useTallRes.get() && preferences.usePreciseAngle.get()) {
 			double sens = preferences.sensitivity.get();
 			double preMult = sens * 0.6f + 0.2f;
 			preMult = preMult * preMult * preMult * 8.0f;
