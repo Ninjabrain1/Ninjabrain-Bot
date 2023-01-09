@@ -96,7 +96,7 @@ class RayApproximatedPriorTests {
 			Chunk expected = expectedChunks.get(chunk);
 			if (expected == null)
 				continue;
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 5%, failed for chunk: " + chunk.toString());
+			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 10%, failed for chunk: " + chunk.toString());
 			numChunks++;
 			double error = chunk.weight - expected.weight;
 			totalError += error;

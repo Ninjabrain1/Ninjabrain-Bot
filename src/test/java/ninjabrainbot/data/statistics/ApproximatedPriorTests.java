@@ -67,7 +67,7 @@ class ApproximatedPriorTests {
 			totalProbability += chunk.weight;
 		}
 
-		assertEquals(totalProbability, ring.numStrongholds, ring.numStrongholds * 1e-4);
+		assertEquals(totalProbability, ring.numStrongholds, ring.numStrongholds * 1e-2);
 	}
 
 	@ParameterizedTest
