@@ -54,6 +54,7 @@ public class GUI {
 		Profiler.start("Init clipboard reader");
 		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock());
 		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
+		dataStateHandler.addBuriedTreasureStream(clipboardReader.whenNewBuriedTreasureInputed());
 		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);

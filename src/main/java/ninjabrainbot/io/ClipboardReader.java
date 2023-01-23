@@ -6,6 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.divine.BuriedTreasure;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -25,6 +26,7 @@ public class ClipboardReader implements Runnable {
 
 	private IModificationLock modificationLock;
 	private ObservableProperty<IThrow> whenNewThrowInputed;
+	private ObservableProperty<BuriedTreasure> whenNewBuriedTreasureInputed;
 	private ObservableProperty<Fossil> whenNewFossilInputed;
 
 	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
@@ -34,6 +36,7 @@ public class ClipboardReader implements Runnable {
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
 		whenNewThrowInputed = new ObservableProperty<IThrow>();
+		whenNewBuriedTreasureInputed = new ObservableProperty<BuriedTreasure>();
 		whenNewFossilInputed = new ObservableProperty<Fossil>();
 	}
 
@@ -43,6 +46,10 @@ public class ClipboardReader implements Runnable {
 
 	public ISubscribable<IThrow> whenNewThrowInputed() {
 		return whenNewThrowInputed;
+	}
+
+	public ISubscribable<BuriedTreasure> whenNewBuriedTreasureInputed() {
+		return whenNewBuriedTreasureInputed;
 	}
 
 	public ISubscribable<Fossil> whenNewFossilInputed() {
@@ -62,7 +69,7 @@ public class ClipboardReader implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+			if (read) { // && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)
 				String clipboardString = null;
 				try {
 					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
@@ -88,11 +95,17 @@ public class ClipboardReader implements Runnable {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
+
 		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
+		final BuriedTreasure bt = BuriedTreasure.parseF3I(clipboard);
+		if (bt != null) {
+			whenNewBuriedTreasureInputed.notifySubscribers(bt);
+		}
+
 		final Fossil f = Fossil.parseF3I(clipboard);
 		if (f != null) {
 			whenNewFossilInputed.notifySubscribers(f);

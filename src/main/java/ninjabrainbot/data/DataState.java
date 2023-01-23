@@ -7,6 +7,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.divine.BuriedTreasure;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
@@ -55,7 +56,7 @@ public class DataState implements IDataState, IDisposable {
 
 		// Subscriptions
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
-		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
+		sh.add(divineContext.whenPhiDistributionChanged().subscribe(__ -> onDivineStrongholdDistributionChanged()));
 	}
 
 	@Override
@@ -108,13 +109,17 @@ public class DataState implements IDataState, IDisposable {
 		topPrediction.set(calculatorResult.getBestPrediction());
 	}
 
-	private void onFossilChanged() {
+	private void onDivineStrongholdDistributionChanged() {
 		if (throwSet.size() != 0) {
 			recalculateStronghold();
 		} else {
 			divineResult.set(calculator.divine());
 		}
 		updateResultType();
+	}
+
+	void setBuriedTreasure(BuriedTreasure bt) {
+		divineContext.setBuriedTreasure(bt);
 	}
 
 	void setFossil(Fossil f) {

@@ -10,9 +10,13 @@ public interface IDivineContext {
 	 */
 	public Fossil getFossil();
 
-	public void resetFossil();
+	public void reset();
+
+	public ISubscribable<BuriedTreasure> whenBuriedTreasureChanged();
 
 	public ISubscribable<Fossil> whenFossilChanged();
+	
+	public ISubscribable<DivineContext> whenPhiDistributionChanged();
 
 	public boolean hasDivine();
 

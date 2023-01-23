@@ -6,6 +6,7 @@ import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.datalock.ILock;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.ModificationLock;
+import ninjabrainbot.data.divine.BuriedTreasure;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.StandardStdProfile;
@@ -79,7 +80,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	@Override
 	public synchronized void resetDivineContext() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.getDivineContext().resetFossil();
+			dataState.getDivineContext().reset();
 		}
 	}
 
@@ -144,6 +145,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
+	private synchronized void setBuriedTreasure(BuriedTreasure bt) {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setBuriedTreasure(bt);
+		}
+	}
+
 	private synchronized void setFossil(Fossil f) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.setFossil(f);
@@ -167,6 +174,11 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	@Override
 	public void addThrowStream(ISubscribable<IThrow> stream) {
 		stream.subscribe(t -> onNewThrow(t));
+	}
+
+	@Override
+	public void addBuriedTreasureStream(ISubscribable<BuriedTreasure> stream) {
+		stream.subscribe(bt -> setBuriedTreasure(bt));
 	}
 
 	@Override
