@@ -43,7 +43,7 @@ class BlindPanel extends ThemedPanel {
 		gbc.weighty = 1;
 		add(Box.createGlue(), gbc);
 
-		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
+		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(BlindResult result) {

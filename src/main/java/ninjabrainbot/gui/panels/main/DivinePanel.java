@@ -79,7 +79,7 @@ class DivinePanel extends ThemedPanel {
 		add(panel2);
 		add(Box.createGlue());
 
-		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
+		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(DivineResult result) {
