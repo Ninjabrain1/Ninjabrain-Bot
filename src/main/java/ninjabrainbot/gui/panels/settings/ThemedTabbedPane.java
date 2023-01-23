@@ -98,9 +98,7 @@ class TabButton extends FlatButton {
 	ThemedTabbedPane parent;
 	JComponent component;
 
-	Color a, b, c;
-
-	WrappedColor cColor;
+	WrappedColor selectedBackgroundColor, selectedTextColor;
 
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
 		super(styleManager, title);
@@ -109,12 +107,13 @@ class TabButton extends FlatButton {
 		label.setCursor(null);
 		addActionListener(p -> onClicked());
 		setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
-		cColor = styleManager.currentTheme.COLOR_NEUTRAL;
+		selectedBackgroundColor = styleManager.currentTheme.COLOR_NEUTRAL;
+		selectedTextColor = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
 
 	void setComponentVisible(boolean bool) {
 		component.setVisible(bool);
-		refreshColor();
+		updateColors();
 	}
 
 	private void onClicked() {
@@ -122,23 +121,24 @@ class TabButton extends FlatButton {
 	}
 
 	@Override
-	public void updateColors() {
-		super.updateColors();
-		a = this.hoverCol;
-		b = this.bgCol;
-		c = cColor.color();
-		refreshColor();
+	protected Color getHoverColor() {
+		if (component.isVisible())
+			return selectedBackgroundColor.color();
+		return super.getHoverColor();
 	}
 
-	private void refreshColor() {
-		if (component.isVisible()) {
-			this.hoverCol = c;
-			this.bgCol = c;
-		} else {
-			this.hoverCol = a;
-			this.bgCol = b;
-		}
-		setColors(bgCol, hoverCol);
+	@Override
+	protected Color getBackgroundColor() {
+		if (component.isVisible())
+			return selectedBackgroundColor.color();
+		return super.getBackgroundColor();
+	}
+
+	@Override
+	protected Color getForegroundColor() {
+		if (component.isVisible())
+			return selectedTextColor.color();
+		return super.getForegroundColor();
 	}
 
 }
