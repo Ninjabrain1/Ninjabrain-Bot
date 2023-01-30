@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.util.Locale;
 
 import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.blind.BlindResult;
@@ -23,7 +22,7 @@ class BlindPanel extends ThemedPanel {
 
 	public ColorMapLabel evalLabel;
 	public ColorMapLabel certaintyPanel;
-	public JLabel distanceLabel;
+	public ThemedLabel distanceLabel;
 
 	public BlindPanel(StyleManager styleManager) {
 		super(styleManager);
@@ -44,6 +43,9 @@ class BlindPanel extends ThemedPanel {
 		add(Box.createGlue(), gbc);
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
+		evalLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		distanceLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(BlindResult result) {

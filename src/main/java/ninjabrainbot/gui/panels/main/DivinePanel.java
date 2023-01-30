@@ -4,7 +4,6 @@ import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -22,9 +21,9 @@ class DivinePanel extends ThemedPanel {
 	private static final long serialVersionUID = 8846911396318732368L;
 
 	private JPanel panels[];
-	public JLabel fossilLabel;
-	public JLabel safeLabels[];
-	public JLabel highrollLabels[];
+	public ThemedLabel fossilLabel;
+	public ThemedLabel safeLabels[];
+	public ThemedLabel highrollLabels[];
 
 	public DivinePanel(StyleManager styleManager) {
 		super(styleManager);
@@ -42,20 +41,22 @@ class DivinePanel extends ThemedPanel {
 		layout0.setRelativeWidth(fossilLabel, 0.9f);
 		panel0.add(fossilLabel, 0);
 		for (int i = 0; i < n; i++) {
-			panel0.add(new ThemedLabel(styleManager, "s" + (i + 1), true, true));
+			ThemedLabel header = new ThemedLabel(styleManager, "s" + (i + 1), true, true);
+			header.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+			panel0.add(header);
 		}
 		JPanel panel1 = new ThemedPanel(styleManager);
 		ColumnLayout layout1 = new ColumnLayout(0);
 		panel1.setLayout(layout1);
 		panel1.setOpaque(false);
 		panels[1] = panel1;
-		JLabel safeLabel = new ThemedLabel(styleManager, I18n.get("divine_safe"));
+		ThemedLabel safeLabel = new ThemedLabel(styleManager, I18n.get("divine_safe"));
 		safeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		layout1.setRelativeWidth(safeLabel, 0.9f);
 		panel1.add(safeLabel);
 		safeLabels = new ThemedLabel[n];
 		for (int i = 0; i < n; i++) {
-			JLabel s = new ThemedLabel(styleManager, "", false, true);
+			ThemedLabel s = new ThemedLabel(styleManager, "", false, true);
 			safeLabels[i] = s;
 			panel1.add(s);
 		}
@@ -64,13 +65,13 @@ class DivinePanel extends ThemedPanel {
 		panel2.setLayout(layout2);
 		panel2.setOpaque(false);
 		panels[2] = panel2;
-		JLabel highrollLabel = new ThemedLabel(styleManager, I18n.get("divine_highroll"));
+		ThemedLabel highrollLabel = new ThemedLabel(styleManager, I18n.get("divine_highroll"));
 		highrollLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		layout2.setRelativeWidth(highrollLabel, 0.9f);
 		panel2.add(highrollLabel);
 		highrollLabels = new ThemedLabel[n];
 		for (int i = 0; i < n; i++) {
-			JLabel h = new ThemedLabel(styleManager, "", false, true);
+			ThemedLabel h = new ThemedLabel(styleManager, "", false, true);
 			highrollLabels[i] = h;
 			panel2.add(h);
 		}
@@ -80,6 +81,13 @@ class DivinePanel extends ThemedPanel {
 		add(Box.createGlue());
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
+		for (int i = 0; i < n; i++) {
+			safeLabels[i].setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+			highrollLabels[i].setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		}
+		fossilLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		safeLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		highrollLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setResult(DivineResult result) {

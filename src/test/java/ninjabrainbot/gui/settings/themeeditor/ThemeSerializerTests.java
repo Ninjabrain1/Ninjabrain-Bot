@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
