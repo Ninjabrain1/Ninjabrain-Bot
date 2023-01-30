@@ -3,6 +3,7 @@ package ninjabrainbot.gui.components;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.Box;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.style.StyleManager;
@@ -24,7 +25,7 @@ public class ColorMapLabel extends JPanel implements ILabel {
 		coloredLabel = new ColoredLabel(styleManager);
 		setLayout(new GridBagLayout());
 		setOpaque(false);
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = GridBagConstraints.RELATIVE;
 		gbc.gridy = 0;
@@ -33,13 +34,13 @@ public class ColorMapLabel extends JPanel implements ILabel {
 		gbc.weightx = 0;
 		if (textFirst) {
 			add(textLabel, gbc);
-			gbc.weightx = 1;
 			add(coloredLabel, gbc);
 		} else {
 			add(coloredLabel, gbc);
-			gbc.weightx = 1;
 			add(textLabel, gbc);
 		}
+		gbc.weightx = 1;
+		add(Box.createGlue(), gbc);
 		setAlignmentX(0);
 	}
 
