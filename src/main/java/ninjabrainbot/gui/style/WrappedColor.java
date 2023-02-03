@@ -36,5 +36,10 @@ public class WrappedColor {
 	public boolean isEquivalentTo(WrappedColor other) {
 		return color.getRGB() == other.color.getRGB();
 	}
+	
+	public String hex() {
+		Color c = color();
+		return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
+	}
 
 }

@@ -1,6 +1,5 @@
 package ninjabrainbot.io.preferences;
 
-import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.Language;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
@@ -53,7 +52,7 @@ public class NinjabrainBotPreferences {
 		// Integer
 		windowX = new IntPreference("window_x", 100, source);
 		windowY = new IntPreference("window_y", 100, source);
-		theme = new IntPreference("theme", Theme.dark_uid, source);
+		theme = new IntPreference("theme", 1, source);
 		// Hotkey
 		hotkeyIncrement = new HotkeyPreference("hotkey_increment", source);
 		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", source);
