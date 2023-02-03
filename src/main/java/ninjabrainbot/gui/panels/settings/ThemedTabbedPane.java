@@ -107,6 +107,7 @@ class TabButton extends FlatButton {
 		label.setCursor(null);
 		addActionListener(p -> onClicked());
 		setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
+		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 		selectedBackgroundColor = styleManager.currentTheme.COLOR_NEUTRAL;
 		selectedTextColor = styleManager.currentTheme.TEXT_COLOR_NEUTRAL;
 	}
