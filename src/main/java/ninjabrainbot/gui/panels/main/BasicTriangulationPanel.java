@@ -85,7 +85,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		maintextLabel.setText(prediction.format(preferences.strongholdDisplayType.get()));
 		certaintyPanel.setText(CERTAINTY_TEXT);
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.chunk.weight * 100.0), (float) prediction.chunk.weight);
-		netherLabel.setText(I18n.get("nether_coordinates", prediction.chunk.x * 2, prediction.chunk.z * 2, prediction.getDistance() / 8));
+		netherLabel.setText(I18n.get("nether_coordinates", prediction.chunk.x * 2, prediction.chunk.z * 2, prediction.getNetherDistance()));
 		currentAngleLabel.setText(prediction.formatTravelAngle(true));
 		currentAngleLabel.setColoredText(prediction.formatTravelAngleDiff(), prediction.getTravelAngleDiffColor());
 	}

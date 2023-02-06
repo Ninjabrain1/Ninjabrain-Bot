@@ -52,12 +52,12 @@ public class DataStateHandlerTests {
 		throwStream.notifySubscribers(TestUtils.createThrow(2000, 1000, -45));
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
-		double distanceAfterFirstThrow = dataState.calculatorResult().get().getBestPrediction().getDistance();
+		double distanceAfterFirstThrow = dataState.calculatorResult().get().getBestPrediction().getOverworldDistance();
 
 		throwStream.notifySubscribers(TestUtils.createThrowLookDown(2100, 1100, -45));
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
-		double distanceAfterSecondThrow = dataState.calculatorResult().get().getBestPrediction().getDistance();
+		double distanceAfterSecondThrow = dataState.calculatorResult().get().getBestPrediction().getOverworldDistance();
 		assertTrue(distanceAfterSecondThrow < distanceAfterFirstThrow);
 
 		throwStream.notifySubscribers(TestUtils.createThrow(2000, 1000, 45));
@@ -67,12 +67,12 @@ public class DataStateHandlerTests {
 		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
-		assertEquals(dataState.calculatorResult().get().getBestPrediction().getDistance(), distanceAfterSecondThrow);
+		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterSecondThrow);
 
 		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
-		assertEquals(dataState.calculatorResult().get().getBestPrediction().getDistance(), distanceAfterFirstThrow);
+		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterFirstThrow);
 
 		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
