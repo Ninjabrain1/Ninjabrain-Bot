@@ -91,8 +91,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 		sh.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
 		// Components bounds changed
-		sh.add(mainTextArea.whenModified().subscribe(__ -> updateSize(styleManager)));
-		sh.add(enderEyePanel.whenModified().subscribe(__ -> updateSize(styleManager)));
+		sh.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		sh.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
