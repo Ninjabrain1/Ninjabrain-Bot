@@ -17,12 +17,13 @@ import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.WrappedColor;
-import ninjabrainbot.io.preferences.BooleanPreference;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * JComponent for showing a Throw.
@@ -30,6 +31,9 @@ import ninjabrainbot.io.preferences.BooleanPreference;
 public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private static final long serialVersionUID = -1522335220282509326L;
+
+	protected SubscriptionHandler sh = new SubscriptionHandler();
+	private NinjabrainBotPreferences preferences;
 
 	DivineContextPanel divineContextPanel;
 
@@ -44,26 +48,25 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private JLabel error;
 	private FlatButton removeButton;
 
-	private boolean errorsEnabled;
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
 
-	private Subscription throwSetSubscription;
 	private Subscription chunkPredictionModifiedSubscription;
-	private Subscription chunkPredictionChangedSubscription;
 	private Runnable whenVisibilityChanged;
+
+	private ChunkPrediction lastPredictionForUpdatingError;
 
 	private WrappedColor negCol;
 	private WrappedColor posCol;
 	private WrappedColor lineCol;
 
-	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, BooleanPreference showAngleErrors) {
+	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, NinjabrainBotPreferences preferences) {
 		super(styleManager);
 		this.index = index;
 		this.whenVisibilityChanged = whenVisibilityChanged;
 
 		setOpaque(true);
-		errorsEnabled = showAngleErrors.get();
+		this.preferences = preferences;
 		x = new JLabel((String) null, 0);
 		z = new JLabel((String) null, 0);
 		alpha = new JLabel((String) null, 0);
@@ -86,16 +89,19 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 		IThrowSet throwSet = dataStateHandler.getDataState().getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
-		throwSetSubscription = throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index);
+		sh.add(throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index));
 
 		setPrediction(topResult.get());
-		chunkPredictionChangedSubscription = topResult.subscribe(result -> setPrediction(result));
+		sh.add(topResult.subscribe(result -> setPrediction(result)));
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		negCol = styleManager.currentTheme.COLOR_NEGATIVE;
 		posCol = styleManager.currentTheme.COLOR_POSITIVE;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
+
+		sh.add(preferences.showAngleErrors.whenModified().subscribe(b -> error.setVisible(b)));
+		sh.add(preferences.useTallRes.whenModified().subscribe(b -> whenTallResChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -108,13 +114,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		updateError(p);
 	}
 
-	void setAngleErrorsEnabled(boolean e) {
-		errorsEnabled = e;
-		error.setVisible(errorsEnabled);
-	}
-
 	private void updateError(ChunkPrediction p) {
-		error.setText(t == null || p == null ? null : String.format(Locale.US, "%.4f", p.getAngleError(t)));
+		lastPredictionForUpdatingError = p;
+		error.setText(t == null || p == null ? null : String.format(Locale.US, preferences.useTallRes.get() ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -138,7 +140,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 		int w = width - 2 * 0 - height;
-		if (!errorsEnabled) {
+		if (!preferences.showAngleErrors.get()) {
 			if (this.x != null)
 				this.x.setBounds(0, 0, w / 3, height);
 			if (this.z != null)
@@ -181,7 +183,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			if (this.removeButton != null)
 				this.removeButton.setBounds(w, 0, height, height - 1);
 		}
-		error.setVisible(errorsEnabled);
+		error.setVisible(preferences.showAngleErrors.get());
 	}
 
 	@Override
@@ -231,7 +233,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			alpha.setText(String.format(Locale.US, "%.2f", t.alpha_0()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, t.correction() > 0 ? "+%.3f" : "%.3f", t.correction()));
+				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.useTallRes.get() ? "%.3f" : "%.2f"), t.correction()));
 				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);
@@ -269,6 +271,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		}
 	}
 
+	private void whenTallResChanged() {
+		setThrow(t);
+		updateError(lastPredictionForUpdatingError);
+	}
+
 	private boolean hasThrow() {
 		return t != null;
 	}
@@ -280,10 +287,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	@Override
 	public void dispose() {
-		throwSetSubscription.cancel();
-		chunkPredictionChangedSubscription.cancel();
 		if (chunkPredictionModifiedSubscription != null)
 			chunkPredictionModifiedSubscription.cancel();
+		sh.dispose();
 	}
 
 	public void setDivineContextPanel(DivineContextPanel divineContextPanel) {
