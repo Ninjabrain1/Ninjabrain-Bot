@@ -1,6 +1,5 @@
 package ninjabrainbot.data.endereye;
 
-import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
@@ -22,7 +21,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 
 	private Subscription stdProfileSubscription;
 
-	public Throw (double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
 		this(x, z, alpha, alpha, beta, nether, modificationLock);
 	}
 
@@ -52,7 +51,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	 * Returns a Throw object if the given string is the result of an F3+C command,
 	 * null otherwise.
 	 */
-	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+	public static IThrow parseF3C(String string, double crosshairCorrection, IModificationLock modificationLock) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -65,26 +64,18 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 			double z = Double.parseDouble(substrings[8]);
 			double rawAlpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			double alpha = getPreciseAlpha(rawAlpha, preferences, dataStateHandler.getDataState().boatAngle().get());
-			return new Throw(x, z, rawAlpha, alpha, beta, nether, dataStateHandler.getModificationLock());
+			double alpha = getPreciseAlpha(rawAlpha, crosshairCorrection);
+			return new Throw(x, z, rawAlpha, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
 	}
 
-	private static double getPreciseAlpha(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
-		if (preferences.useTallRes.get() && preferences.usePreciseAngle.get()) {
-			double sens = preferences.sensitivity.get();
-			double preMult = sens * 0.6f + 0.2f;
-			preMult = preMult * preMult * preMult * 8.0f;
-			double minInc = preMult * 0.15D;
-			alpha = boatAngle + Math.round((alpha - boatAngle) / minInc) * preMult * 0.15D;
-		}
-
-		alpha += preferences.crosshairCorrection.get();
+	protected static double getPreciseAlpha(double alpha, double crosshairCorrection) {
+		alpha += crosshairCorrection;
 
 		// Determined experimentally, exact cause unknown
-		alpha -= 0.00079 * Math.sin((alpha + 45) * Math.PI/180.0);
+		alpha -= 0.00079 * Math.sin((alpha + 45) * Math.PI / 180.0);
 
 		return alpha;
 	}
@@ -155,13 +146,13 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
-	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences) {
+	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
 		double change = 0.01;
 		if (preferences.useTallRes.get()) {
 			final double toRad = Math.PI / 180.0;
 			change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
 		}
-		change *= multiplier;
+		change *= positive ? 1 : -1;
 		correction += change;
 		notifySubscribers(this);
 	}

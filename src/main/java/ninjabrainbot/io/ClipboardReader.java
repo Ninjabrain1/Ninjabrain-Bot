@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.Fossil;
+import ninjabrainbot.data.endereye.BoatThrow;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.endereye.Throw1_12;
@@ -83,12 +84,17 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard, preferences, dataStateHandler);
+		IThrow t = null;
+		if ((preferences.useTallRes.get() && preferences.usePreciseAngle.get() && dataStateHandler.getDataState().boatAngle().get() != null)) {
+			t = BoatThrow.parseF3C(clipboard, preferences, dataStateHandler);
+		} else {
+			t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), dataStateHandler.getModificationLock());
+		}
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;
 		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences, dataStateHandler);
+		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences.crosshairCorrection.get(), dataStateHandler.getModificationLock());
 		if (t2 != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;

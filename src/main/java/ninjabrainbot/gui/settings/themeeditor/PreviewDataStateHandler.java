@@ -61,7 +61,7 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void changeLastAngleIfNotLocked(int multiplier, NinjabrainBotPreferences preferences) {
+	public void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
 	}
 
 	@Override

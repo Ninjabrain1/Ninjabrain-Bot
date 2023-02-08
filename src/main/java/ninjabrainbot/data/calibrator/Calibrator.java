@@ -85,11 +85,11 @@ public class Calibrator implements IDisposable {
 		}
 	}
 
-	public void changeLastAngle(int multiplier, NinjabrainBotPreferences preferences) {
+	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
 		int i = eyeThrows.size() - 1;
 		if (i == -1)
 			return;
-		eyeThrows.get(i).addCorrection(multiplier, preferences);
+		eyeThrows.get(i).addCorrection(positive, preferences);
 	}
 
 	private double distanceFromIntendedPosition(IThrow t) {

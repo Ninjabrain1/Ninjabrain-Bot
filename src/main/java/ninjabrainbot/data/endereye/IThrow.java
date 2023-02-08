@@ -18,7 +18,7 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 
 	public boolean isNether();
 
-	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences);
+	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences);
 
 	public void setStdProfileNumber(int profileNumber);
 

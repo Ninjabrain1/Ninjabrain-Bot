@@ -74,7 +74,7 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public void addCorrection(int multiplier, NinjabrainBotPreferences preferences) {
+	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
 	}
 
 	@Override

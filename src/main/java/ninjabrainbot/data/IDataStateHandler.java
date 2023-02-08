@@ -24,7 +24,7 @@ public interface IDataStateHandler {
 
 	void resetDivineContext();
 
-	void changeLastAngleIfNotLocked(int multiplier, NinjabrainBotPreferences preferences);
+	void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences);
 
 	void toggleAltStdOnLastThrowIfNotLocked();
 

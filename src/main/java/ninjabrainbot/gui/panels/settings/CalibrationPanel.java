@@ -211,9 +211,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		updateHistogram();
 	}
 
-	public void changeLastAngle(int multiplier, NinjabrainBotPreferences preferences) {
+	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
 		if (calibrator.getNumThrows() > 0) {
-			calibrator.changeLastAngle(multiplier, preferences);
+			calibrator.changeLastAngle(positive, preferences);
 			updateHistogram();
 		}
 	}
