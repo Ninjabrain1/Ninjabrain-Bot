@@ -264,6 +264,8 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 				g.setColor(Color.RED);
 			} else if (t.getStdProfileNumber() == 2) {
 				g.setColor(Color.CYAN);
+			} else if (t.getStdProfileNumber() == 3) {
+				g.setColor(Color.GREEN);
 			}
 			int a = 3;
 			int b = 2;

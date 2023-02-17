@@ -112,8 +112,9 @@ public class DataState implements IDataState, IDisposable {
 			return false;
 
 		float candidate = Math.round(angle / 1.40625) * 1.40625f;
-		double rounded = Math.round(100 * candidate) / 100.0;
+		double rounded = Math.round( 100 * (candidate < 0 ? (candidate - 0.001f) : candidate)) / 100.0;
 
+		System.out.println(rounded + " " + angle + " " + candidate);
 		if (rounded != angle)
 			return false;
 

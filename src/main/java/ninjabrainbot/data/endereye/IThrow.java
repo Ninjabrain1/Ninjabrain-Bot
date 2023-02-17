@@ -30,4 +30,8 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 		return false;
 	}
 
+	public default boolean isBoatThrow() {
+		return false;
+	}
+
 }

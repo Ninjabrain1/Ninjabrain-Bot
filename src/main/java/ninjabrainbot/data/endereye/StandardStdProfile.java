@@ -10,14 +10,15 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 	public static final int NORMAL = 0;
 	public static final int ALTERNATIVE = 1;
 	public static final int MANUAL = 2;
+	public static final int BOAT = 3;
 
 	private double[] stds;
 	private Subscription[] subs;
 
 	public StandardStdProfile(NinjabrainBotPreferences preferences) {
-		stds = new double[] { preferences.sigma.get(), preferences.sigmaAlt.get(), preferences.sigmaManual.get() };
+		stds = new double[] { preferences.sigma.get(), preferences.sigmaAlt.get(), preferences.sigmaManual.get(), preferences.sigmaBoat.get() };
 		subs = new Subscription[] { preferences.sigma.whenModified().subscribe(newStd -> setStd(NORMAL, newStd)), preferences.sigmaAlt.whenModified().subscribe(newStd -> setStd(ALTERNATIVE, newStd)),
-				preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)) };
+				preferences.sigmaManual.whenModified().subscribe(newStd -> setStd(MANUAL, newStd)), preferences.sigmaBoat.whenModified().subscribe(newStd -> setStd(BOAT, newStd)) };
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 
 	@Override
 	public int getInitialProfileNumber(IThrow t) {
-		return t.isMcVersion1_12() ? MANUAL : NORMAL;
+		return t.isMcVersion1_12() ? MANUAL : t.isBoatThrow() ? BOAT : NORMAL;
 	}
 
 }

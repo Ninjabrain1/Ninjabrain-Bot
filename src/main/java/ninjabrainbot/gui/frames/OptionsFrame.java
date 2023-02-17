@@ -54,6 +54,7 @@ public class OptionsFrame extends ThemedFrame {
 	private CalibrationPanel calibrationPanel;
 	private FloatPreferencePanel sigma;
 	private FloatPreferencePanel sigmaAlt;
+	private FloatPreferencePanel sigmaBoat;
 	private HotkeyPanel sigmaAltHotkey;
 	private CheckboxPanel sensitivityCheckbox;
 	private FloatPreferencePanel resolutionHeight;
@@ -194,13 +195,13 @@ public class OptionsFrame extends ThemedFrame {
 		resolutionHeight.setDecimals(0);
 		resolutionHeight.setEnabled(preferences.useTallRes.get());
 		column1.add(resolutionHeight);
-		column1.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
-				new Dimension(0, Short.MAX_VALUE)));
+		column1.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, Short.MAX_VALUE), new Dimension(0, Short.MAX_VALUE)));
 
 		// Precise Sens Column
 		sensitivityCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
 		sensitivityCheckbox.setEnabled(preferences.useTallRes.get());
 		column2.add(sensitivityCheckbox);
+
 		sensitivity = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivity"), preferences.sensitivity);
 		sensitivity.setWidth(100);
 		sensitivity.setDecimals(9);
@@ -211,8 +212,12 @@ public class OptionsFrame extends ThemedFrame {
 			enterBoatHotkey.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 			column2.add(enterBoatHotkey);
 		}
-		column2.add(new Box.Filler(new Dimension(0,0), new Dimension(0,Short.MAX_VALUE),
-				new Dimension(0, Short.MAX_VALUE)));
+
+		sigmaBoat = new FloatPreferencePanel(styleManager, I18n.get("settings.boat_standard_deviation"), preferences.sigmaBoat);
+		sigmaBoat.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
+		column2.add(sigmaBoat);
+
+		column2.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, Short.MAX_VALUE), new Dimension(0, Short.MAX_VALUE)));
 
 		return mainPanel;
 	}
@@ -381,6 +386,7 @@ public class OptionsFrame extends ThemedFrame {
 		sensitivity.descLabel.updateColors();
 		enterBoatHotkey.setEnabled(b);
 		enterBoatHotkey.descLabel.updateColors();
+		sigmaBoat.setEnabled(b);
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {

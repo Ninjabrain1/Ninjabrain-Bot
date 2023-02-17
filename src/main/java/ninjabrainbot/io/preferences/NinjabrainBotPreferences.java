@@ -26,6 +26,7 @@ public class NinjabrainBotPreferences {
 	public FloatPreference sigma;
 	public FloatPreference sigmaAlt;
 	public FloatPreference sigmaManual;
+	public FloatPreference sigmaBoat;
 	public FloatPreference crosshairCorrection;
 	public FloatPreference resolutionHeight;
 	public FloatPreference sensitivity;
@@ -69,9 +70,10 @@ public class NinjabrainBotPreferences {
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
 		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
 		// Float
-		sigma = new FloatPreference("sigma", 0.1f, 0.0001f, 1f, source);
-		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.0001f, 1f, source);
-		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.0001f, 1f, source);
+		sigma = new FloatPreference("sigma", 0.03f, 0.001f, 1f, source);
+		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
+		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
+		sigmaBoat = new FloatPreference("sigma_boat", 0.001f, 0.0001f, 1f, source);
 		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, source);
 		resolutionHeight = new FloatPreference("resolution_height", 16384, 1f, 16384f, source);
 		sensitivity = new FloatPreference("sensitivity", 0.012727597f, 0f, 1f, source);
