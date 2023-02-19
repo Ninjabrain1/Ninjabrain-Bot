@@ -39,7 +39,6 @@ public class BoatThrow extends Throw {
 		double preMult = sens * 0.6f + 0.2f;
 		preMult = preMult * preMult * preMult * 8.0f;
 		double minInc = preMult * 0.15D;
-		System.out.println(minInc);
 		alpha = boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc;
 
 		return Throw.getPreciseAlpha(alpha, preferences.crosshairCorrection.get());

@@ -107,15 +107,14 @@ public class DataState implements IDataState, IDisposable {
 		updateResultType();
 	}
 
-	public boolean setBoatAngle(double angle) {
+	public boolean setBoatAngle(double angle, float boatErrorLimit) {
 		if (Math.abs(angle) > 360)
 			return false;
 
 		float candidate = Math.round(angle / 1.40625) * 1.40625f;
-		double rounded = Math.round( 100 * (candidate < 0 ? (candidate - 0.001f) : candidate)) / 100.0;
+		double rounded = Math.round(100 * candidate) / 100.0;
 
-		System.out.println(rounded + " " + angle + " " + candidate);
-		if (rounded != angle)
+		if (Math.abs(rounded - angle) > boatErrorLimit)
 			return false;
 
 		boatAngle.set(candidate);

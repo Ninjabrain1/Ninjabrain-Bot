@@ -30,6 +30,7 @@ public class NinjabrainBotPreferences {
 	public FloatPreference crosshairCorrection;
 	public FloatPreference resolutionHeight;
 	public FloatPreference sensitivity;
+	public FloatPreference boatErrorLimit;
 	public FloatPreference overlayHideDelay;
 	public BooleanPreference checkForUpdates;
 	public BooleanPreference translucent;
@@ -77,6 +78,7 @@ public class NinjabrainBotPreferences {
 		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, source);
 		resolutionHeight = new FloatPreference("resolution_height", 16384, 1f, 16384f, source);
 		sensitivity = new FloatPreference("sensitivity", 0.012727597f, 0f, 1f, source);
+		boatErrorLimit = new FloatPreference("boat_error", 0.03f, 0f, 0.7f, source);
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
 		// Boolean
 		checkForUpdates = new BooleanPreference("check_for_updates", true, source);

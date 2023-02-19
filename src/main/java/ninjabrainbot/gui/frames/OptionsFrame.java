@@ -59,6 +59,7 @@ public class OptionsFrame extends ThemedFrame {
 	private CheckboxPanel sensitivityCheckbox;
 	private FloatPreferencePanel resolutionHeight;
 	private FloatPreferencePanel sensitivity;
+	private FloatPreferencePanel boatErrorLimit;
 	private HotkeyPanel enterBoatHotkey;
 	private FloatPreferencePanel overlayResetDelay;
 
@@ -212,6 +213,10 @@ public class OptionsFrame extends ThemedFrame {
 			enterBoatHotkey.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 			column2.add(enterBoatHotkey);
 		}
+		boatErrorLimit = new FloatPreferencePanel(styleManager, I18n.get("settings.boat_error"), preferences.boatErrorLimit);
+		boatErrorLimit.setDecimals(2);
+		boatErrorLimit.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
+		column2.add(boatErrorLimit);
 
 		sigmaBoat = new FloatPreferencePanel(styleManager, I18n.get("settings.boat_standard_deviation"), preferences.sigmaBoat);
 		sigmaBoat.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
@@ -386,7 +391,10 @@ public class OptionsFrame extends ThemedFrame {
 		sensitivity.descLabel.updateColors();
 		enterBoatHotkey.setEnabled(b);
 		enterBoatHotkey.descLabel.updateColors();
+		boatErrorLimit.setEnabled(b);
+		boatErrorLimit.descLabel.updateColors();
 		sigmaBoat.setEnabled(b);
+		sigmaBoat.descLabel.updateColors();
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {
