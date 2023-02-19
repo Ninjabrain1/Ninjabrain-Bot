@@ -62,16 +62,16 @@ public class ClipboardReader implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-				String clipboardString = null;
-				try {
+			try {
+				if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+					String clipboardString = null;
 					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
-				} catch (Exception e) {
+					if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
+						onClipboardUpdated(clipboardString);
+						lastClipboardString = clipboardString;
+					}
 				}
-				if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
-					onClipboardUpdated(clipboardString);
-					lastClipboardString = clipboardString;
-				}
+			} catch (Exception e) {
 			}
 			// Sleep 0.1 seconds
 			try {

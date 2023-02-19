@@ -8,6 +8,7 @@ import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.io.ActiveInstanceListener;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
@@ -58,6 +59,13 @@ public class GUI {
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
 		clipboardThread.start();
+
+		Progress.setTask("Starting instance listener", 0.03f);
+		Profiler.start("Init instance listener");
+		ActiveInstanceListener activeInstanceListener = new ActiveInstanceListener();
+		activeInstanceListener.whenActiveMinecraftInstanceChanged().subscribe(__ -> dataStateHandler.resetIfNotLocked());
+		Thread activeInstanceListenerThread = new Thread(activeInstanceListener, "Active instance listener");
+		activeInstanceListenerThread.start();
 
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
