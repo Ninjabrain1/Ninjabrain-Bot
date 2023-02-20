@@ -55,20 +55,21 @@ public class ActiveInstanceListener implements Runnable {
 		lastForegroundWindowProcessId = processId;
 
 		String windowTitle = getWindowTitle(foregroundWindowHandle);
+		if (!isWindowMinecraft(foregroundWindowHandle, windowTitle))
+			return;
 
-		if (isWindowMinecraft(foregroundWindowHandle, windowTitle)) {
-			String minecraftDirectory = getMinecraftInstanceDirectoryFromProcessId(processId);
-			if (minecraftDirectory == null)
-				return;
+		String minecraftDirectory = getMinecraftInstanceDirectoryFromProcessId(processId);
+		if (minecraftDirectory == null)
+			return;
 
-			if (!minecraftInstances.containsKey(minecraftDirectory))
-				minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
+		if (!minecraftInstances.containsKey(minecraftDirectory))
+			minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
 
-			MinecraftInstance minecraftInstance = minecraftInstances.get(minecraftDirectory);
-			if (minecraftInstance.minecraftVersion == null)
-				minecraftInstance.minecraftVersion = GetMinecraftVersion(windowTitle);
-			activeMinecraftInstance.set(minecraftInstance);
-		}
+		MinecraftInstance minecraftInstance = minecraftInstances.get(minecraftDirectory);
+		if (minecraftInstance.minecraftVersion == null)
+			minecraftInstance.minecraftVersion = GetMinecraftVersion(windowTitle);
+
+		activeMinecraftInstance.set(minecraftInstance);
 	}
 
 	private String getWindowTitle(HWND windowHandle) {
