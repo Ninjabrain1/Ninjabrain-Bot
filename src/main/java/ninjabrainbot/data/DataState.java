@@ -122,7 +122,7 @@ public class DataState implements IDataState, IDisposable {
 		}
 
 		float candidate = Math.round(angle / 1.40625) * 1.40625f;
-		double rounded = Math.round(100 * candidate) / 100.0;
+		double rounded = Double.parseDouble(String.format("%.2f", candidate));
 
 		if (Math.abs(rounded - angle) > boatErrorLimit) {
 			boatAngle.set(null);
