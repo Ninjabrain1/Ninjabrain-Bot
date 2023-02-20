@@ -1,9 +1,9 @@
 package ninjabrainbot.io;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import com.sun.jna.Native;
 import com.sun.jna.platform.WindowUtils;
@@ -13,21 +13,25 @@ import com.sun.jna.ptr.IntByReference;
 
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class ActiveInstanceListener implements Runnable {
 
 	private int lastForegroundWindowProcessId = -1;
 
-	private ObservableField<File> activeMinecraftInstance;
+	private HashMap<String, MinecraftInstance> minecraftInstances;
+
+	private ObservableField<MinecraftInstance> activeMinecraftInstance;
 
 	public ActiveInstanceListener() {
-		activeMinecraftInstance = new ObservableField<File>(null);
+		minecraftInstances = new HashMap<>();
+		activeMinecraftInstance = new ObservableField<MinecraftInstance>(null);
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			poll();
+			pollForegroundWindow();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -36,11 +40,11 @@ public class ActiveInstanceListener implements Runnable {
 		}
 	}
 
-	public ISubscribable<File> whenActiveMinecraftInstanceChanged() {
+	public ISubscribable<MinecraftInstance> whenActiveMinecraftInstanceChanged() {
 		return activeMinecraftInstance;
 	}
 
-	private void poll() {
+	private void pollForegroundWindow() {
 		HWND foregroundWindowHandle = User32.INSTANCE.GetForegroundWindow();
 		if (foregroundWindowHandle == null)
 			return;
@@ -50,18 +54,28 @@ public class ActiveInstanceListener implements Runnable {
 			return;
 		lastForegroundWindowProcessId = processId;
 
-		if (isWindowMinecraft(foregroundWindowHandle)) {
-			activeMinecraftInstance.set(getMinecraftInstanceDirectoryFromProcessId(processId));
-			System.out.println(activeMinecraftInstance.get());
+		String windowTitle = getWindowTitle(foregroundWindowHandle);
+
+		if (isWindowMinecraft(foregroundWindowHandle, windowTitle)) {
+			String minecraftDirectory = getMinecraftInstanceDirectoryFromProcessId(processId);
+			if (!minecraftInstances.containsKey(minecraftDirectory))
+				minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
+
+			MinecraftInstance minecraftInstance = minecraftInstances.get(minecraftDirectory);
+			if (minecraftInstance.minecraftVersion == null)
+				minecraftInstance.minecraftVersion = GetMinecraftVersion(windowTitle);
+			activeMinecraftInstance.set(minecraftInstance);
 		}
 	}
 
-	private boolean isWindowMinecraft(HWND windowHandle) {
+	private String getWindowTitle(HWND windowHandle) {
 		char[] windowTitle = new char[1024 * 2];
-
 		User32.INSTANCE.GetWindowText(windowHandle, windowTitle, 1024);
+		return Native.toString(windowTitle);
+	}
 
-		if (!Native.toString(windowTitle).contains("Minecraft"))
+	private boolean isWindowMinecraft(HWND windowHandle, String windowTitle) {
+		if (!windowTitle.startsWith("Minecraft"))
 			return false;
 
 		if (!WindowUtils.getProcessFilePath(windowHandle).contains("javaw.exe"))
@@ -76,7 +90,7 @@ public class ActiveInstanceListener implements Runnable {
 		return pid.getValue();
 	}
 
-	private File getMinecraftInstanceDirectoryFromProcessId(int pid) {
+	private String getMinecraftInstanceDirectoryFromProcessId(int pid) {
 		Runtime runtime = Runtime.getRuntime();
 		String[] commands = { "jcmd", "" + pid, "VM.command_line" };
 		try {
@@ -102,15 +116,38 @@ public class ActiveInstanceListener implements Runnable {
 		return null;
 	}
 
-	private File getDotMinecraftDirectory(String nativesJvmArgument) {
+	private String getDotMinecraftDirectory(String nativesJvmArgument) {
 		int dotMinecraftIndex = nativesJvmArgument.lastIndexOf(".minecraft");
 		if (dotMinecraftIndex != -1)
-			return new File(nativesJvmArgument.substring(19, dotMinecraftIndex + 10));
+			return nativesJvmArgument.substring(19, dotMinecraftIndex + 10);
 
 		if (nativesJvmArgument.endsWith("natives"))
-			return new File(nativesJvmArgument.substring(19).replace("natives", ".minecraft"));
+			return nativesJvmArgument.substring(19).replace("natives", ".minecraft");
 
 		return null;
+	}
+
+	private McVersion GetMinecraftVersion(String windowTitle) {
+		String[] titleWords = windowTitle.split(" ");
+		if (titleWords.length <= 1)
+			return null;
+
+		String[] versionNumbers = titleWords[1].split("\\.");
+		if (versionNumbers.length <= 1)
+			return null;
+
+		String majorVersion = versionNumbers[0];
+		if (!majorVersion.contentEquals("1"))
+			return null;
+
+		int minorVersion;
+		try {
+			minorVersion = Integer.parseInt(versionNumbers[1]);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+
+		return minorVersion < 19 ? McVersion.PRE_119 : McVersion.POST_119;
 	}
 
 }
