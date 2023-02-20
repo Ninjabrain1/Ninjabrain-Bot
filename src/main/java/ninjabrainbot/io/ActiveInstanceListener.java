@@ -58,6 +58,9 @@ public class ActiveInstanceListener implements Runnable {
 
 		if (isWindowMinecraft(foregroundWindowHandle, windowTitle)) {
 			String minecraftDirectory = getMinecraftInstanceDirectoryFromProcessId(processId);
+			if (minecraftDirectory == null)
+				return;
+
 			if (!minecraftInstances.containsKey(minecraftDirectory))
 				minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
 
