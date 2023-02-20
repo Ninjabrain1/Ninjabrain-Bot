@@ -22,12 +22,17 @@ import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
 
+	public enum BoatState {
+		NONE, ERROR, MEASURING, VALID
+	}
+
 	private final ICalculator calculator;
 
 	private final ObservableField<Boolean> locked;
 
 	private final ObservableField<Boolean> enteringBoat;
 	private final ObservableField<Float> boatAngle;
+	private final ObservableField<BoatState> boatState;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
@@ -49,6 +54,7 @@ public class DataState implements IDataState, IDisposable {
 		locked = new LockableField<Boolean>(false, modificationLock);
 		enteringBoat = new LockableField<Boolean>(false, modificationLock);
 		boatAngle = new LockableField<Float>(null, modificationLock);
+		boatState = new LockableField<BoatState>(BoatState.NONE, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
@@ -67,6 +73,7 @@ public class DataState implements IDataState, IDisposable {
 	public void reset() {
 		enteringBoat.set(false);
 		boatAngle.set(null);
+		boatState.set(BoatState.NONE);
 		throwSet.clear();
 		playerPos.set(null);
 		blindResult.set(null);
@@ -108,17 +115,24 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	public boolean setBoatAngle(double angle, float boatErrorLimit) {
-		if (Math.abs(angle) > 360)
+		if (Math.abs(angle) > 360) {
+			boatAngle.set(null);
+			boatState.set(BoatState.ERROR);
 			return false;
+		}
 
 		float candidate = Math.round(angle / 1.40625) * 1.40625f;
 		double rounded = Math.round(100 * candidate) / 100.0;
 
-		if (Math.abs(rounded - angle) > boatErrorLimit)
+		if (Math.abs(rounded - angle) > boatErrorLimit) {
+			boatAngle.set(null);
+			boatState.set(BoatState.ERROR);
 			return false;
+		}
 
 		boatAngle.set(candidate);
 		enteringBoat.set(false);
+		boatState.set(BoatState.VALID);
 		return true;
 	}
 
@@ -141,6 +155,12 @@ public class DataState implements IDataState, IDisposable {
 
 	void toggleEnteringBoat() {
 		enteringBoat.set(!enteringBoat.get());
+		if (enteringBoat.get()) {
+			boatState.set(BoatState.MEASURING);
+		}
+		else {
+			boatState.set((boatAngle.get() == null) ? BoatState.NONE : BoatState.VALID);
+		}
 	}
 
 	void setFossil(Fossil f) {
@@ -224,6 +244,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<Float> boatAngle() {
 		return boatAngle;
+	}
+
+	@Override
+	public IObservable<BoatState> boatState() {
+		return boatState;
 	}
 
 }

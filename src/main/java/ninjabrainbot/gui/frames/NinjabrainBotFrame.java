@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.data.DataState.BoatState;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.event.IDisposable;
@@ -41,6 +42,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private NotificationsButton notificationsButton;
 	private JButton settingsButton;
 	private JLabel lockIcon;
+	private JLabel boatIcon;
 
 	private MainTextArea mainTextArea;
 	private EnderEyePanel enderEyePanel;
@@ -71,6 +73,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		versiontextLabel.setBounds(titlewidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, (styleManager.size.TEXT_SIZE_TITLE_LARGE - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 70, titlebarHeight);
 		int versionwidth = styleManager.getTextWidth(VERSION_TEXT, styleManager.fontSize(styleManager.size.TEXT_SIZE_TITLE_SMALL, false));
 		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
+		int lockwidth = lockIcon.getWidth();
+		boatIcon.setBounds(titlewidth + versionwidth + lockwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
 		// Frame size
 		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(MainViewType.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
@@ -95,6 +99,10 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(enderEyePanel.whenModified().subscribe(__ -> updateSize(styleManager)));
 		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
+		// Boat Icon
+		sh.add(preferences.useTallRes.whenModified().subscribe(b -> boatIcon.setVisible(b && preferences.usePreciseAngle.get())));
+		sh.add(preferences.usePreciseAngle.whenModified().subscribe(b -> boatIcon.setVisible(b)));
+		sh.add(dataState.boatState().subscribeEDT(b -> boatIcon.setIcon(getBoatIcon(b))));
 	}
 
 	private void createTitleBar(StyleManager styleManager, IDataState dataState) {
@@ -109,8 +117,11 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		versiontextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
 		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/lock_icon.png")));
 		lockIcon.setVisible(dataState.locked().get());
+		boatIcon = new ThemedIcon(styleManager, getBoatIcon(dataState.boatState().get()));
+		boatIcon.setVisible(preferences.useTallRes.get() && preferences.usePreciseAngle.get());
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
+		titlebarPanel.add(boatIcon);
 		titlebarPanel.addButton(createMinimizeButton(styleManager));
 		settingsButton = createSettingsButton(styleManager);
 		titlebarPanel.addButton(settingsButton);
@@ -178,6 +189,19 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		URL iconURL = Main.class.getResource("/icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
 		setIconImage(img.getImage());
+	}
+
+	private ImageIcon getBoatIcon(BoatState boatState) {
+		switch (boatState) {
+			case ERROR:
+				return new ImageIcon(Main.class.getResource("/boat_red.png"));
+			case MEASURING:
+				return new ImageIcon(Main.class.getResource("/boat_blue.png"));
+			case VALID:
+				return new ImageIcon(Main.class.getResource("/boat_green.png"));
+			default:
+				return new ImageIcon(Main.class.getResource("/boat_gray.png"));
+		}
 	}
 
 	@Override
