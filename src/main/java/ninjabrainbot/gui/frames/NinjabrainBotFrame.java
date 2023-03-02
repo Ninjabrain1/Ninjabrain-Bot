@@ -21,7 +21,8 @@ import ninjabrainbot.gui.buttons.NotificationsButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedIcon;
 import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.panels.main.EnderEyePanel;
+import ninjabrainbot.gui.panels.eyethrows.EnderEyePanel;
+import ninjabrainbot.gui.panels.information.InformationListPanel;
 import ninjabrainbot.gui.panels.main.MainButtonPanel;
 import ninjabrainbot.gui.panels.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
@@ -43,11 +44,14 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private JLabel lockIcon;
 
 	private MainTextArea mainTextArea;
+	private InformationListPanel informationTextPanel;
 	private EnderEyePanel enderEyePanel;
 
 	private static final String TITLE_TEXT = I18n.get("title");
 	private static final String VERSION_TEXT = "v" + Main.VERSION;
 
+	private StyleManager styleManager;
+	
 	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		super(styleManager, preferences, TITLE_TEXT);
 		this.preferences = preferences;
@@ -61,6 +65,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		createComponents(styleManager, dataStateHandler);
 		setupSubscriptions(styleManager, dataStateHandler.getDataState());
 		Profiler.stop();
+		
+		this.styleManager = styleManager;
 	}
 
 	@Override
@@ -92,6 +98,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
 		// Components bounds changed
 		sh.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		sh.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		sh.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
@@ -128,12 +135,21 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		// Main text
 		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
 		add(mainTextArea);
+		// Info and warnings
+		informationTextPanel = new InformationListPanel(styleManager, preferences, dataState);
+		add(informationTextPanel);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataStateHandler);
 		add(mainButtonPanel);
 		// Throw panels
 		enderEyePanel = new EnderEyePanel(styleManager, preferences, dataStateHandler, dataState.getDivineContext());
 		add(enderEyePanel);
+	}
+	
+	@Override
+	public void validate() {
+		super.validate();
+		updateSize(styleManager);
 	}
 
 	private FlatButton createMinimizeButton(StyleManager styleManager) {
