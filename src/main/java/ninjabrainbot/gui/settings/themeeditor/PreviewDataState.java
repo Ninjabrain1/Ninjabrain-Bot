@@ -9,6 +9,7 @@ import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.datalock.LockableList;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
@@ -16,9 +17,11 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.information.InformationMessage;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.ObservableList;
 
 public class PreviewDataState implements IDataState {
 
@@ -31,6 +34,8 @@ public class PreviewDataState implements IDataState {
 	private final ObservableField<ChunkPrediction> topPrediction;
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
+
+	private final ObservableList<InformationMessage> informationMessages;
 
 	public PreviewDataState(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
 		this();
@@ -52,6 +57,8 @@ public class PreviewDataState implements IDataState {
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
 		blindResult = new LockableField<BlindResult>(modificationLock);
 		divineResult = new LockableField<DivineResult>(modificationLock);
+
+		informationMessages = new LockableList<>(modificationLock);
 	}
 
 	@Override
@@ -101,6 +108,11 @@ public class PreviewDataState implements IDataState {
 
 	@Override
 	public void reset() {
+	}
+
+	@Override
+	public IObservable<List<InformationMessage>> informationMessages() {
+		return informationMessages;
 	}
 
 }

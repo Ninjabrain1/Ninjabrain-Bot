@@ -1,5 +1,7 @@
 package ninjabrainbot.data;
 
+import java.util.List;
+
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
@@ -7,6 +9,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.datalock.LockableList;
 import ninjabrainbot.data.divine.DivineContext;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
@@ -14,10 +17,13 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.information.InformationMessage;
+import ninjabrainbot.data.information.InformationType;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
@@ -36,6 +42,8 @@ public class DataState implements IDataState, IDisposable {
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
 
+	private final ObservableList<InformationMessage> informationMessages;
+
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
 	public DataState(ICalculator calculator, IModificationLock modificationLock) {
@@ -49,6 +57,8 @@ public class DataState implements IDataState, IDisposable {
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
 		blindResult = new LockableField<BlindResult>(modificationLock);
 		divineResult = new LockableField<DivineResult>(modificationLock);
+
+		informationMessages = new LockableList<InformationMessage>(modificationLock);
 
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
@@ -87,6 +97,7 @@ public class DataState implements IDataState, IDisposable {
 		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
 		updateTopPrediction(calculatorResult.get());
 		updateResultType();
+		informationMessages.add(new InformationMessage(InformationType.Info, "Detected unusually large error, you probably mismeasured one of the eyes, or your standard deviation is too low."));
 	}
 
 	public DataStateUndoData getUndoData() {
@@ -188,6 +199,11 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
+	}
+	
+	@Override
+	public IObservable<List<InformationMessage>> informationMessages() {
+		return informationMessages;
 	}
 
 }
