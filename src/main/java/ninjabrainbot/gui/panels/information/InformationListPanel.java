@@ -5,8 +5,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.SwingUtilities;
 
-import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.information.InformationMessage;
+import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
@@ -17,16 +17,16 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 	StyleManager styleManager;
 
-	public InformationListPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState) {
+	public InformationListPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, InformationMessageList informationMessageList) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(0);
 		this.styleManager = styleManager;
-		
-		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(dataState.informationMessages().get()));
 
-		dataState.informationMessages().subscribeEDT(informationMessages -> synchronizeInformationMessages(informationMessages));
+		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessageList.get()));
+
+		informationMessageList.subscribeEDT(informationMessages -> synchronizeInformationMessages(informationMessages));
 	}
 
 	private void synchronizeInformationMessages(List<InformationMessage> informationMessages) {
@@ -35,6 +35,7 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 			InformationTextPanel informationTextPanel = new InformationTextPanel(styleManager, informationMessage);
 			add(informationTextPanel);
 		}
+		revalidate();
 		whenSizeModified.notifySubscribers(this);
 	}
 

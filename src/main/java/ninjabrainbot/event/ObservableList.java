@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 public class ObservableList<T> implements IObservable<List<T>> {
 
-	private ArrayList<T> list;
+	protected ArrayList<T> list;
 
 	private ArrayList<Consumer<List<T>>> subscribers;
 
@@ -28,6 +28,11 @@ public class ObservableList<T> implements IObservable<List<T>> {
 
 	public void add(T element) {
 		list.add(element);
+		notifySubscribers();
+	}
+
+	public void remove(T element) {
+		list.remove(element);
 		notifySubscribers();
 	}
 

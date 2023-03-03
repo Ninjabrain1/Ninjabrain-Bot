@@ -39,6 +39,10 @@ public class ActiveInstanceListener implements Runnable {
 			}
 		}
 	}
+	
+	public MinecraftInstance getActiveMinecraftInstance() {
+		return activeMinecraftInstance.get();
+	}
 
 	public ISubscribable<MinecraftInstance> whenActiveMinecraftInstanceChanged() {
 		return activeMinecraftInstance;

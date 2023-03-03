@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.NotificationsButton;
@@ -51,8 +52,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private static final String VERSION_TEXT = "v" + Main.VERSION;
 
 	private StyleManager styleManager;
-	
-	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+
+	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler, InformationMessageList informationMessageList) {
 		super(styleManager, preferences, TITLE_TEXT);
 		this.preferences = preferences;
 		Profiler.start("NinjabrainBotFrame");
@@ -62,10 +63,10 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		setAppIcon();
 
 		createTitleBar(styleManager, dataStateHandler.getDataState());
-		createComponents(styleManager, dataStateHandler);
+		createComponents(styleManager, dataStateHandler, informationMessageList);
 		setupSubscriptions(styleManager, dataStateHandler.getDataState());
 		Profiler.stop();
-		
+
 		this.styleManager = styleManager;
 	}
 
@@ -130,13 +131,13 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		System.exit(0);
 	}
 
-	private void createComponents(StyleManager styleManager, IDataStateHandler dataStateHandler) {
+	private void createComponents(StyleManager styleManager, IDataStateHandler dataStateHandler, InformationMessageList informationMessageList) {
 		IDataState dataState = dataStateHandler.getDataState();
 		// Main text
 		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
 		add(mainTextArea);
 		// Info and warnings
-		informationTextPanel = new InformationListPanel(styleManager, preferences, dataState);
+		informationTextPanel = new InformationListPanel(styleManager, preferences, informationMessageList);
 		add(informationTextPanel);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataStateHandler);
@@ -145,7 +146,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		enderEyePanel = new EnderEyePanel(styleManager, preferences, dataStateHandler, dataState.getDivineContext());
 		add(enderEyePanel);
 	}
-	
+
 	@Override
 	public void validate() {
 		super.validate();
