@@ -4,6 +4,7 @@ import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.data.information.McVersionWarningProvider;
+import ninjabrainbot.data.information.MismeasureWarningProvider;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -83,6 +84,7 @@ public class GUI {
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceListener, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
 		Profiler.stop();
 	}
 
