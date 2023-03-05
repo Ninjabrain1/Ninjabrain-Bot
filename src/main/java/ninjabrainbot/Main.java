@@ -10,6 +10,7 @@ import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.SavedPreferences;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Profiler;
 
 public class Main {
@@ -20,7 +21,7 @@ public class Main {
 		Progress.init(new Splash());
 		Progress.setTask("Loading language", 0.02f);
 		Profiler.start("Initialize language");
-		System.out.println("lang info: " + I18n.get("lang"));
+		Logger.log("Language: " + I18n.get("lang"));
 
 		Progress.setTask("Loading preferences", 0.03f);
 		Profiler.stopAndStart("Initialize preferences");

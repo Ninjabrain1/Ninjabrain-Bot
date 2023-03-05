@@ -18,7 +18,6 @@ import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
-import ninjabrainbot.io.mcinstance.WindowsActiveInstanceListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Profiler;
 
