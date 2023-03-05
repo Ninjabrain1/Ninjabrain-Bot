@@ -12,11 +12,13 @@ import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.ActiveInstanceListener;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
+import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
+import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
+import ninjabrainbot.io.mcinstance.WindowsActiveInstanceListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Profiler;
 
@@ -28,7 +30,7 @@ public class GUI {
 	private NinjabrainBotPreferences preferences;
 
 	private ClipboardReader clipboardReader;
-	private ActiveInstanceListener activeInstanceListener;
+	private IActiveInstanceProvider activeInstanceProvider;
 	private AutoResetTimer autoResetTimer;
 	private OBSOverlay obsOverlay;
 
@@ -70,10 +72,8 @@ public class GUI {
 
 		Progress.setTask("Starting instance listener", 0.03f);
 		Profiler.start("Init instance listener");
-		activeInstanceListener = new ActiveInstanceListener();
-		activeInstanceListener.whenActiveMinecraftInstanceChanged().subscribe(__ -> dataStateHandler.resetIfNotLocked());
-		Thread activeInstanceListenerThread = new Thread(activeInstanceListener, "Active instance listener");
-		activeInstanceListenerThread.start();
+		activeInstanceProvider = ActiveInstanceProviderFactory.createPlatformSpecificActiveInstanceProvider();
+		activeInstanceProvider.whenActiveMinecraftInstanceChanged().subscribe(__ -> dataStateHandler.resetIfNotLocked());
 
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
@@ -84,7 +84,7 @@ public class GUI {
 		Progress.setTask("Initializing information message generators", 0.04f);
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
-		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceListener, preferences));
+		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
 		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
 		informationMessageList.AddInformationMessageProvider(new PortalLinkingInformationProvider(dataState));
 		Profiler.stop();

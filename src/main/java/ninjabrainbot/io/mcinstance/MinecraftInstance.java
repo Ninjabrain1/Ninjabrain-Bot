@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.mcinstance;
 
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 

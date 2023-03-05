@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.mcinstance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
-public class ActiveInstanceListener implements Runnable {
+public class WindowsActiveInstanceListener implements IActiveInstanceProvider, Runnable {
 
 	private int lastForegroundWindowProcessId = -1;
 
@@ -23,9 +23,12 @@ public class ActiveInstanceListener implements Runnable {
 
 	private ObservableField<MinecraftInstance> activeMinecraftInstance;
 
-	public ActiveInstanceListener() {
+	WindowsActiveInstanceListener() {
 		minecraftInstances = new HashMap<>();
 		activeMinecraftInstance = new ObservableField<MinecraftInstance>(null);
+
+		Thread activeInstanceListenerThread = new Thread(this, "Active instance listener");
+		activeInstanceListenerThread.start();
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class ActiveInstanceListener implements Runnable {
 			}
 		}
 	}
-	
+
 	public MinecraftInstance getActiveMinecraftInstance() {
 		return activeMinecraftInstance.get();
 	}
