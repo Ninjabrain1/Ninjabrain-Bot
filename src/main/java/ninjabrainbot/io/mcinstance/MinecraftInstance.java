@@ -4,11 +4,15 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class MinecraftInstance {
 
-	public final String directory;
+	public final String dotMinecraftDirectory;
+	public final String savesDirectory;
 	McVersion minecraftVersion;
 
-	public MinecraftInstance(String directory) {
-		this.directory = directory;
+	public MinecraftInstance(String dotMinecraftDirectory) {
+		if (dotMinecraftDirectory == null)
+			throw new IllegalArgumentException(".minecraft directory cannot be null");
+		this.dotMinecraftDirectory = dotMinecraftDirectory;
+		savesDirectory = dotMinecraftDirectory + "\\saves";
 		minecraftVersion = null;
 	}
 

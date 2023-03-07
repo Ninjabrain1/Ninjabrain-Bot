@@ -1,23 +1,30 @@
 package ninjabrainbot.io.mcinstance;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.event.ObservableField;
 
 public class UnsupportedOSActiveInstanceProvider implements IActiveInstanceProvider {
 
-	private ISubscribable<MinecraftInstance> currentInstance = new ObservableProperty<MinecraftInstance>();
+	private IObservable<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
+	private IObservable<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
 
 	UnsupportedOSActiveInstanceProvider() {
 	}
 
 	@Override
-	public ISubscribable<MinecraftInstance> whenActiveMinecraftInstanceChanged() {
+	public IObservable<MinecraftInstance> activeMinecraftInstance() {
 		return currentInstance;
 	}
 
 	@Override
-	public MinecraftInstance getActiveMinecraftInstance() {
-		return null;
+	public IObservable<IMinecraftWorldFile> activeMinecraftWorld() {
+		return currentWorldFile;
+	}
+
+	@Override
+	public ISubscribable<IMinecraftWorldFile> whenActiveMinecraftWorldModified() {
+		return currentWorldFile;
 	}
 
 }

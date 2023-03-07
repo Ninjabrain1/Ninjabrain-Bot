@@ -1,11 +1,14 @@
 package ninjabrainbot.io.mcinstance;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 
 public interface IActiveInstanceProvider {
 
-	ISubscribable<MinecraftInstance> whenActiveMinecraftInstanceChanged();
+	IObservable<MinecraftInstance> activeMinecraftInstance();
 
-	MinecraftInstance getActiveMinecraftInstance();
+	IObservable<IMinecraftWorldFile> activeMinecraftWorld();
+
+	ISubscribable<IMinecraftWorldFile> whenActiveMinecraftWorldModified();
 
 }

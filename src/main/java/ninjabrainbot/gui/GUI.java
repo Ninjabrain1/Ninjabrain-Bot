@@ -72,7 +72,7 @@ public class GUI {
 		Progress.setTask("Starting instance listener", 0.03f);
 		Profiler.start("Init instance listener");
 		activeInstanceProvider = ActiveInstanceProviderFactory.createPlatformSpecificActiveInstanceProvider();
-		activeInstanceProvider.whenActiveMinecraftInstanceChanged().subscribe(__ -> dataStateHandler.resetIfNotLocked());
+		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> dataStateHandler.resetIfNotLocked());
 
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();

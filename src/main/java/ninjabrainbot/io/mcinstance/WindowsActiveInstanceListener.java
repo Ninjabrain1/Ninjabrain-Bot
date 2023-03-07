@@ -11,6 +11,7 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.IntByReference;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
@@ -20,12 +21,15 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 	private int lastForegroundWindowProcessId = -1;
 
 	private HashMap<String, MinecraftInstance> minecraftInstances;
-
 	private ObservableField<MinecraftInstance> activeMinecraftInstance;
 
-	WindowsActiveInstanceListener() {
+	private SavesReader savesReader;
+
+	WindowsActiveInstanceListener() throws IOException {
 		minecraftInstances = new HashMap<>();
 		activeMinecraftInstance = new ObservableField<MinecraftInstance>(null);
+
+		savesReader = new SavesReader(activeMinecraftInstance);
 
 		Thread activeInstanceListenerThread = new Thread(this, "Active instance listener");
 		activeInstanceListenerThread.start();
@@ -34,6 +38,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 	@Override
 	public void run() {
 		while (true) {
+			savesReader.pollEvents();
 			pollForegroundWindow();
 			try {
 				Thread.sleep(1000);
@@ -43,12 +48,19 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		}
 	}
 
-	public MinecraftInstance getActiveMinecraftInstance() {
-		return activeMinecraftInstance.get();
+	@Override
+	public IObservable<MinecraftInstance> activeMinecraftInstance() {
+		return activeMinecraftInstance;
 	}
 
-	public ISubscribable<MinecraftInstance> whenActiveMinecraftInstanceChanged() {
-		return activeMinecraftInstance;
+	@Override
+	public IObservable<IMinecraftWorldFile> activeMinecraftWorld() {
+		return savesReader.activeMinecraftWorld();
+	}
+
+	@Override
+	public ISubscribable<IMinecraftWorldFile> whenActiveMinecraftWorldModified() {
+		return savesReader.whenActiveMinecraftWorldModified();
 	}
 
 	private void pollForegroundWindow() {
@@ -65,14 +77,14 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		if (!isWindowMinecraft(foregroundWindowHandle, windowTitle))
 			return;
 
-		String minecraftDirectory = getMinecraftInstanceDirectoryFromProcessId(processId);
-		if (minecraftDirectory == null)
+		String dotMinecraftDirectory = getDotMinecraftDirectoryFromProcessId(processId);
+		if (dotMinecraftDirectory == null)
 			return;
 
-		if (!minecraftInstances.containsKey(minecraftDirectory))
-			minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
+		if (!minecraftInstances.containsKey(dotMinecraftDirectory))
+			minecraftInstances.put(dotMinecraftDirectory, new MinecraftInstance(dotMinecraftDirectory));
 
-		MinecraftInstance minecraftInstance = minecraftInstances.get(minecraftDirectory);
+		MinecraftInstance minecraftInstance = minecraftInstances.get(dotMinecraftDirectory);
 		if (minecraftInstance.minecraftVersion == null)
 			minecraftInstance.minecraftVersion = GetMinecraftVersion(windowTitle);
 
@@ -101,7 +113,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		return pid.getValue();
 	}
 
-	private String getMinecraftInstanceDirectoryFromProcessId(int pid) {
+	private String getDotMinecraftDirectoryFromProcessId(int pid) {
 		Runtime runtime = Runtime.getRuntime();
 		String[] commands = { "jcmd", "" + pid, "VM.command_line" };
 		try {
