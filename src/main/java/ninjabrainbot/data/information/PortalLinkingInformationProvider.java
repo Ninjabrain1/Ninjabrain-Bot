@@ -27,7 +27,7 @@ public class PortalLinkingInformationProvider extends InformationMessageProvider
 		double approximatePortalNetherZ = t.z() / 8;
 		
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
-		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.getNetherX() + 0.5)), approximatePortalNetherZ - (bestPrediction.getNetherZ() + 0.5));
+		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.getNetherX() + 0.5)), Math.abs(approximatePortalNetherZ - (bestPrediction.getNetherZ() + 0.5)));
 		
 		return maxAxisDistance < 24; // if portals are 22 blocks away they wont link, but the precise location of blind portal is unknown, so use 1 chunk of margin.
 	}
