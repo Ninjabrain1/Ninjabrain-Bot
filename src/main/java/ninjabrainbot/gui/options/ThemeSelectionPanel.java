@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.settings;
+package ninjabrainbot.gui.options;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
