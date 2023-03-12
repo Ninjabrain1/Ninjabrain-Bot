@@ -1,8 +1,7 @@
-package ninjabrainbot.gui.options;
+package ninjabrainbot.gui.options.sections;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -33,7 +32,7 @@ public class ThemedTabbedPane extends ThemedPanel {
 		setLayout(null);
 		tabPanel = new ThemedOpaquePanel(styleManager);
 		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
-		tabPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.X_AXIS));
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		tabPanel.setOpaque(true);
@@ -85,8 +84,13 @@ public class ThemedTabbedPane extends ThemedPanel {
 	public Dimension getPreferredSize() {
 		if (tabs.size() == 0)
 			return super.getPreferredSize();
-		Dimension reference = tabs.get(5).component.getPreferredSize();
-		return new Dimension(reference.width, reference.height + tabPanel.getPreferredSize().height);
+		int maxComponentHeight = 0;
+		for (TabButton tabButton : tabs) {
+			int height = tabButton.component.getPreferredSize().height;
+			if (height > maxComponentHeight)
+				maxComponentHeight = height;
+		}
+		return new Dimension(0, maxComponentHeight + tabPanel.getPreferredSize().height);
 	}
 
 }
