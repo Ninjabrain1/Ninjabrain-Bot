@@ -29,7 +29,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		divineContextPanel = new DivineContextPanel(styleManager, divineContext, dataStateHandler, () -> whenDivineContextVisibilityUpdated());
 		add(divineContextPanel);
 		for (int i = 0; i < dataStateHandler.getDataState().getThrowSet().maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, dataStateHandler.getDataState().topPrediction(), i, () -> whenSizeModified.notifySubscribers(this), preferences.showAngleErrors);
+			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, dataStateHandler.getDataState().topPrediction(), i, () -> whenSizeModified.notifySubscribers(this), preferences);
 			add(throwPanels[i]);
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
@@ -44,9 +44,6 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	private void setAngleErrorsEnabled(boolean b) {
 		throwPanelHeader.setAngleErrorsEnabled(b);
-		for (ThrowPanel p : throwPanels) {
-			p.setAngleErrorsEnabled(b);
-		}
 	}
 
 	@Override

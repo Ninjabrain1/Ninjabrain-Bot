@@ -21,7 +21,7 @@ public class InformationTextPanel extends ThemedPanel {
 	private static final int iconMarginsHorizontal = 6, iconMarginsVertical = 4;
 
 	private WrappedColor borderColor;
-	
+
 	final InformationMessage informationMessage;
 
 	public InformationTextPanel(StyleManager styleManager, InformationMessage informationMessage) {
@@ -41,19 +41,19 @@ public class InformationTextPanel extends ThemedPanel {
 		super.updateColors();
 		setBorder(new MatteBorder(0, 0, 1, 0, borderColor.color()));
 	}
-	
+
 	private ImageIcon getIcon(InformationType informationType) {
 		String imagePath = null;
 		switch (informationType) {
-			case Info:
-				imagePath = "/info_icon.png";
-				break;
-			case Warning:
-				imagePath = "/warning_icon.png";
-				break;
-			case Error:
-				imagePath = null;
-				break;
+		case Info:
+			imagePath = "/info_icon.png";
+			break;
+		case Warning:
+			imagePath = "/warning_icon.png";
+			break;
+		case Error:
+			imagePath = null;
+			break;
 		}
 		return new ImageIcon(Main.class.getResource(imagePath));
 	}

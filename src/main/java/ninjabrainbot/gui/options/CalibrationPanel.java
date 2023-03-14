@@ -211,9 +211,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		updateHistogram();
 	}
 
-	public void changeLastAngle(double delta) {
+	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
 		if (calibrator.getNumThrows() > 0) {
-			calibrator.changeLastAngle(delta);
+			calibrator.changeLastAngle(positive, preferences);
 			updateHistogram();
 		}
 	}
@@ -224,7 +224,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
-			std.setText(String.format("%.3f", calibrator.getSTD(preferences.mcVersion.get())));
+			std.setText(String.format("%.4f", calibrator.getSTD(preferences.mcVersion.get())));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
 			ISet<IThrow> eyeThrows = calibrator.getThrows();
@@ -232,11 +232,11 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 				IThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
 				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.2f %.2f\n" : ": %.2f +%.2f\n"), t.alpha() - t.correction(), t.correction()));
+					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.3f %.3f\n" : ": %.3f +%.3f\n"), t.alpha() - t.correction(), t.correction()));
 				} else {
 					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.alpha()));
 				}
-				b.append(String.format(I18n.get("error") + ": %.3f\n", e));
+				b.append(String.format(I18n.get("error") + ": %.4f\n", e));
 			}
 			errors.area.setText(b.toString());
 			hist.setData(angleErrors);
@@ -245,7 +245,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			ISet<IThrow> eyeThrows = calibrator.getThrows();
 			for (IThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(t.correction() < 0 ? "Angle: %.2f %.2f\n" : "Angle: %.2f +%.2f\n", t.alpha() - t.correction(), t.correction()));
+					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.alpha() - t.correction(), t.correction()));
 				} else {
 					b.append(String.format("Angle: %.2f\n", t.alpha()));
 				}

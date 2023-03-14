@@ -18,6 +18,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 
+	private final NinjabrainBotPreferences preferences;
 	private final StandardStdProfile stdProfile;
 	private final CalculatorSettings calculatorSettings;
 
@@ -29,6 +30,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences) {
+		this.preferences = preferences;
 		this.stdProfile = new StandardStdProfile(preferences);
 		modificationLock = new ModificationLock(wasUndoAction -> afterDataStateModified(wasUndoAction));
 
@@ -83,12 +85,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	public synchronized void changeLastAngleIfNotLocked(double delta) {
+	public synchronized void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
 		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
 			IThrow last = dataState.getThrowSet().getLast();
 			if (last != null) {
 				try (ILock lock = modificationLock.acquireWritePermission()) {
-					last.addCorrection(delta);
+					last.addCorrection(positive, preferences);
 				}
 			}
 		}
@@ -127,6 +129,14 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		whenDataStateModified.notifySubscribers(dataState);
 	}
 
+	public synchronized void toggleEnteringBoatIfNotLocked() {
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			if (!dataState.locked().get()) {
+				dataState.toggleEnteringBoat();
+			}
+		}
+	}
+
 	private synchronized void onNewThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.setPlayerPos(t);
@@ -135,6 +145,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 			if (t.isNether()) {
 				if (dataState.getThrowSet().size() == 0)
 					dataState.setBlindPosition(new BlindPosition(t));
+				return;
+			}
+			if (dataState.enteringBoat().get()) {
+				dataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
 				return;
 			}
 			if (!t.lookingBelowHorizon()) {

@@ -47,7 +47,7 @@ public class OptionsFrame extends ThemedFrame {
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), new HotkeyOptionsPanel(styleManager, preferences));
 		tabbedPane.addTab(I18n.get("settings.overlay"), new ObsOptionsPanel(styleManager, preferences, sh));
 		tabbedPane.addTab(I18n.get("settings.language"), new LanguageOptionsPanel(styleManager, preferences));
-		tabbedPane.addTab(I18n.get("settings.optional_features"), new OptionalFeaturesPanel(styleManager, preferences));
+		tabbedPane.addTab(I18n.get("settings.optional_features"), new OptionalFeaturesPanel(styleManager, preferences, sh));
 
 		// Title bar
 		titlebarPanel.setFocusable(true);

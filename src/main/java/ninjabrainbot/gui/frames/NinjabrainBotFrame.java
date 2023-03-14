@@ -22,6 +22,7 @@ import ninjabrainbot.gui.buttons.NotificationsButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedIcon;
 import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.panels.BoatIcon;
 import ninjabrainbot.gui.panels.eyethrows.EnderEyePanel;
 import ninjabrainbot.gui.panels.information.InformationListPanel;
 import ninjabrainbot.gui.panels.main.MainButtonPanel;
@@ -124,6 +125,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(settingsButton);
 		notificationsButton = new NotificationsButton(styleManager, this, preferences);
 		titlebarPanel.addButton(notificationsButton);
+		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatState(), preferences, sh));
 	}
 
 	@Override

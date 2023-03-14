@@ -49,7 +49,7 @@ class PriorTests {
 
 		assertEquals(totalProbability, totalStrongholds, 1e-3);
 	}
-	
+
 	@ParameterizedTest
 	@ValueSource(ints = { 0, 2, 6, 13, 15 })
 	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {

@@ -4,6 +4,7 @@ import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public interface IDataStateHandler {
 
@@ -23,7 +24,7 @@ public interface IDataStateHandler {
 
 	void resetDivineContext();
 
-	void changeLastAngleIfNotLocked(double delta);
+	void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences);
 
 	void toggleAltStdOnLastThrowIfNotLocked();
 

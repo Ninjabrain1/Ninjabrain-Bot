@@ -14,6 +14,7 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -25,6 +26,10 @@ public class DataState implements IDataState, IDisposable {
 	private final ICalculator calculator;
 
 	private final ObservableField<Boolean> locked;
+
+	private final ObservableField<Boolean> enteringBoat;
+	private final ObservableField<Float> boatAngle;
+	private final ObservableField<BoatState> boatState;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
@@ -44,6 +49,9 @@ public class DataState implements IDataState, IDisposable {
 
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
+		enteringBoat = new LockableField<Boolean>(false, modificationLock);
+		boatAngle = new LockableField<Float>(null, modificationLock);
+		boatState = new LockableField<BoatState>(BoatState.NONE, modificationLock);
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
 		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
@@ -60,6 +68,9 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public void reset() {
+		enteringBoat.set(false);
+		boatAngle.set(null);
+		boatState.set(BoatState.NONE);
 		throwSet.clear();
 		playerPos.set(null);
 		blindResult.set(null);
@@ -100,6 +111,28 @@ public class DataState implements IDataState, IDisposable {
 		updateResultType();
 	}
 
+	public boolean setBoatAngle(double angle, float boatErrorLimit) {
+		if (Math.abs(angle) > 360) {
+			boatAngle.set(null);
+			boatState.set(BoatState.ERROR);
+			return false;
+		}
+
+		float candidate = Math.round(angle / 1.40625) * 1.40625f;
+		double rounded = Double.parseDouble(String.format("%.2f", candidate));
+
+		if (Math.abs(rounded - angle) > boatErrorLimit) {
+			boatAngle.set(null);
+			boatState.set(BoatState.ERROR);
+			return false;
+		}
+
+		boatAngle.set(candidate);
+		enteringBoat.set(false);
+		boatState.set(BoatState.VALID);
+		return true;
+	}
+
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
 		if (calculatorResult == null || !calculatorResult.success()) {
 			topPrediction.set(null);
@@ -115,6 +148,15 @@ public class DataState implements IDataState, IDisposable {
 			divineResult.set(calculator.divine());
 		}
 		updateResultType();
+	}
+
+	void toggleEnteringBoat() {
+		enteringBoat.set(!enteringBoat.get());
+		if (enteringBoat.get()) {
+			boatState.set(BoatState.MEASURING);
+		} else {
+			boatState.set((boatAngle.get() == null) ? BoatState.NONE : BoatState.VALID);
+		}
 	}
 
 	void setFossil(Fossil f) {
@@ -188,6 +230,21 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
+	}
+
+	@Override
+	public IObservable<Boolean> enteringBoat() {
+		return enteringBoat;
+	}
+
+	@Override
+	public IObservable<Float> boatAngle() {
+		return boatAngle;
+	}
+
+	@Override
+	public IObservable<BoatState> boatState() {
+		return boatState;
 	}
 
 }

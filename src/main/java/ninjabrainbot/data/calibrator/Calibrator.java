@@ -11,6 +11,7 @@ import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.ISet;
 
@@ -84,11 +85,11 @@ public class Calibrator implements IDisposable {
 		}
 	}
 
-	public void changeLastAngle(double delta) {
+	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
 		int i = eyeThrows.size() - 1;
 		if (i == -1)
 			return;
-		eyeThrows.get(i).addCorrection(delta);
+		eyeThrows.get(i).addCorrection(positive, preferences);
 	}
 
 	private double distanceFromIntendedPosition(IThrow t) {

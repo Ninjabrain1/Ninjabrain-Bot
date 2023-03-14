@@ -4,13 +4,14 @@ import ninjabrainbot.data.datalock.DataComponent;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * Represents an eye of ender throw.
  */
 public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable {
 
-	private final double x, z, alpha_0, beta;
+	private final double x, z, rawAlpha, alpha_0, beta;
 	private final boolean nether;
 
 	private IStdProfile stdProfile;
@@ -21,10 +22,15 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	private Subscription stdProfileSubscription;
 
 	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+		this(x, z, alpha, alpha, beta, nether, modificationLock);
+	}
+
+	public Throw(double x, double z, double rawAlpha, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
 		super(modificationLock);
 		this.x = x;
 		this.z = z;
-		alpha = alpha % 360.0;
+		this.rawAlpha = rawAlpha;
+		alpha %= 360.0;
 		if (alpha < -180.0) {
 			alpha += 360.0;
 		} else if (alpha > 180.0) {
@@ -56,13 +62,22 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 			boolean nether = substrings[2].equals("minecraft:the_nether");
 			double x = Double.parseDouble(substrings[6]);
 			double z = Double.parseDouble(substrings[8]);
-			double alpha = Double.parseDouble(substrings[9]);
+			double rawAlpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			alpha += crosshairCorrection;
-			return new Throw(x, z, alpha, beta, nether, modificationLock);
+			double alpha = getPreciseAlpha(rawAlpha, crosshairCorrection);
+			return new Throw(x, z, rawAlpha, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
+	}
+
+	protected static double getPreciseAlpha(double alpha, double crosshairCorrection) {
+		alpha += crosshairCorrection;
+
+		// Determined experimentally, exact cause unknown
+		alpha -= 0.00079 * Math.sin((alpha + 45) * Math.PI / 180.0);
+
+		return alpha;
 	}
 
 	@Override
@@ -111,6 +126,11 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
+	public double rawAlpha() {
+		return rawAlpha;
+	}
+
+	@Override
 	public double alpha_0() {
 		return alpha_0;
 	}
@@ -126,8 +146,14 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
-	public void addCorrection(double angle) {
-		correction += angle;
+	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
+		double change = 0.01;
+		if (preferences.useTallRes.get()) {
+			final double toRad = Math.PI / 180.0;
+			change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
+		}
+		change *= positive ? 1 : -1;
+		correction += change;
 		notifySubscribers(this);
 	}
 

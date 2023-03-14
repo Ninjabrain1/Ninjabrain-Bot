@@ -76,7 +76,7 @@ class RayApproximatedPriorTests {
 		divineContext.setFossil(new Fossil(fossil));
 		Ring ring = Ring.get(0);
 		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
-		
+
 		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);
 		double averageWeightInRing = ring.numStrongholds / ringArea * divineContext.relativeDensity();
 

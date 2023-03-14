@@ -52,7 +52,7 @@ class ApproximatedPriorTests {
 
 		assertEquals(totalProbability, totalStrongholds, totalStrongholds * 1e-4);
 	}
-	
+
 	@ParameterizedTest
 	@ValueSource(ints = { 0, 1, 2, 3 })
 	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {

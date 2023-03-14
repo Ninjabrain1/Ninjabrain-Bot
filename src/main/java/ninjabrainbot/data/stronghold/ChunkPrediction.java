@@ -152,11 +152,11 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	public double getAngleError(IThrow t) {
 		return t == null ? -1 : chunk.getAngleError(version, t);
 	}
-	
+
 	public int getNetherX() {
 		return chunk.x * 2;
 	}
-	
+
 	public int getNetherZ() {
 		return chunk.z * 2;
 	}

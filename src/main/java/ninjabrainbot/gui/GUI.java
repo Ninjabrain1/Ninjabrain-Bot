@@ -62,7 +62,7 @@ public class GUI {
 	private void initInputMethods() {
 		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
-		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock());
+		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock(), dataState.boatAngle());
 		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
 		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
@@ -130,9 +130,10 @@ public class GUI {
 	private void setupHotkeys() {
 		preferences.hotkeyReset.whenTriggered().subscribe(__ -> dataStateHandler.resetIfNotLocked());
 		preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
-		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(0.01));
-		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(-0.01));
+		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(true, preferences));
+		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(false, preferences));
 		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
+		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> dataStateHandler.toggleEnteringBoatIfNotLocked());
 		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
 	}
 

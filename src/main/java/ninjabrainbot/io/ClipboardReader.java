@@ -10,6 +10,8 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.endereye.Throw1_12;
+import ninjabrainbot.data.highprecision.BoatThrow;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -23,13 +25,15 @@ public class ClipboardReader implements Runnable {
 
 	private AtomicBoolean forceReadLater;
 
+	private IObservable<Float> boatAngle;
 	private IModificationLock modificationLock;
 	private ObservableProperty<IThrow> whenNewThrowInputed;
 	private ObservableProperty<Fossil> whenNewFossilInputed;
 
-	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock) {
+	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock, IObservable<Float> boatAngle) {
 		this.preferences = preferences;
 		this.modificationLock = modificationLock;
+		this.boatAngle = boatAngle;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
@@ -83,7 +87,12 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		final IThrow t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
+		IThrow t = null;
+		if ((preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatAngle.get() != null)) {
+			t = BoatThrow.parseF3C(clipboard, preferences, modificationLock, boatAngle.get());
+		} else {
+			t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
+		}
 		if (t != null) {
 			whenNewThrowInputed.notifySubscribers(t);
 			return;

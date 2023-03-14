@@ -1,5 +1,6 @@
 package ninjabrainbot.gui.panels;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
@@ -7,8 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-
-import javax.swing.JButton;
 
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -19,11 +18,11 @@ public class TitleBarPanel extends ThemedPanel {
 	private static final long serialVersionUID = 1284709910722728189L;
 	private Point initialClick;
 
-	ArrayList<JButton> buttons;
+	ArrayList<Component> buttons;
 
 	public TitleBarPanel(StyleManager styleManager, final Window frame) {
 		super(styleManager);
-		buttons = new ArrayList<JButton>();
+		buttons = new ArrayList<Component>();
 		this.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				initialClick = e.getPoint();
@@ -51,8 +50,11 @@ public class TitleBarPanel extends ThemedPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
+		x = width - height;
 		for (int i = 0; i < buttons.size(); i++) {
-			buttons.get(i).setBounds(width - (i + 1) * height, 0, height, height);
+			buttons.get(i).setBounds(x, 0, height, height);
+			if (buttons.get(i).isVisible())
+				x -= height;
 		}
 	}
 
@@ -62,7 +64,7 @@ public class TitleBarPanel extends ThemedPanel {
 		super.updateSize(styleManager);
 	}
 
-	public JButton addButton(JButton button) {
+	public <T extends Component> T addButton(T button) {
 		add(button);
 		buttons.add(button);
 		return button;
