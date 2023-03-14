@@ -1,6 +1,5 @@
 package ninjabrainbot.data.highprecision;
 
-import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
@@ -16,7 +15,7 @@ public class BoatThrow extends Throw {
 	 * Returns a BoatThrow object if the given string is the result of an F3+C
 	 * command, null otherwise.
 	 */
-	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+	public static IThrow parseF3C(String string, NinjabrainBotPreferences preferences, IModificationLock modificationLock, float currentBoatAngle) {
 		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
 			return null;
 		}
@@ -29,8 +28,8 @@ public class BoatThrow extends Throw {
 			double z = Double.parseDouble(substrings[8]);
 			double rawAlpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
-			double alpha = getPreciseAlpha(rawAlpha, preferences, dataStateHandler.getDataState().boatAngle().get());
-			return new BoatThrow(x, z, rawAlpha, alpha, beta, nether, dataStateHandler.getModificationLock());
+			double alpha = getPreciseAlpha(rawAlpha, preferences, currentBoatAngle);
+			return new BoatThrow(x, z, rawAlpha, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
