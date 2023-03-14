@@ -80,8 +80,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		versiontextLabel.setBounds(titlewidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, (styleManager.size.TEXT_SIZE_TITLE_LARGE - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 70, titlebarHeight);
 		int versionwidth = styleManager.getTextWidth(VERSION_TEXT, styleManager.fontSize(styleManager.size.TEXT_SIZE_TITLE_SMALL, false));
 		lockIcon.setBounds(titlewidth + versionwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
-		int lockwidth = lockIcon.getWidth();
-		boatIcon.setBounds(titlewidth + versionwidth + lockwidth + (titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_SMALL) / 2, 0, titlebarHeight, titlebarHeight);
 		// Frame size
 		int extraWidth = preferences.showAngleUpdates.get() && preferences.view.get().equals(MainViewType.DETAILED) ? styleManager.size.ANGLE_COLUMN_WIDTH : 0;
 		setSize(styleManager.size.WIDTH + extraWidth, getPreferredSize().height);
@@ -108,8 +106,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 		// Boat Icon
-		sh.add(preferences.useTallRes.whenModified().subscribe(b -> boatIcon.setVisible(b && preferences.usePreciseAngle.get())));
-		sh.add(preferences.usePreciseAngle.whenModified().subscribe(b -> boatIcon.setVisible(b)));
+		sh.add(preferences.useTallRes.whenModified().subscribeEDT(b -> boatIcon.setVisible(b && preferences.usePreciseAngle.get())));
+		sh.add(preferences.usePreciseAngle.whenModified().subscribeEDT(b -> boatIcon.setVisible(b)));
 		sh.add(dataState.boatState().subscribeEDT(b -> boatIcon.setIcon(getBoatIcon(b))));
 	}
 
@@ -129,12 +127,12 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		boatIcon.setVisible(preferences.useTallRes.get() && preferences.usePreciseAngle.get());
 		titlebarPanel.add(versiontextLabel);
 		titlebarPanel.add(lockIcon);
-		titlebarPanel.add(boatIcon);
 		titlebarPanel.addButton(createMinimizeButton(styleManager));
 		settingsButton = createSettingsButton(styleManager);
 		titlebarPanel.addButton(settingsButton);
 		notificationsButton = new NotificationsButton(styleManager, this, preferences);
 		titlebarPanel.addButton(notificationsButton);
+		titlebarPanel.addButton(boatIcon);
 	}
 
 	@Override
