@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.BoatThrow;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.endereye.Throw1_12;
+import ninjabrainbot.data.highprecision.BoatThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

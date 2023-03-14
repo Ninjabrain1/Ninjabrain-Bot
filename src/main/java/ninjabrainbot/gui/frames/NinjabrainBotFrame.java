@@ -13,9 +13,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.DataState.BoatState;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;

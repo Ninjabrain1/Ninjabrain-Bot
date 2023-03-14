@@ -2,7 +2,6 @@ package ninjabrainbot.gui.settings.themeeditor;
 
 import java.util.List;
 
-import ninjabrainbot.data.DataState.BoatState;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -17,6 +16,7 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;

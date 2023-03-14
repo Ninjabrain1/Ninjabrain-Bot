@@ -14,6 +14,7 @@ import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -21,10 +22,6 @@ import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
-
-	public enum BoatState {
-		NONE, ERROR, MEASURING, VALID
-	}
 
 	private final ICalculator calculator;
 

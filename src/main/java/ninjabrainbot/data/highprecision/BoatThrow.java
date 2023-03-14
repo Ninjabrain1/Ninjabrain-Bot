@@ -1,7 +1,9 @@
-package ninjabrainbot.data.endereye;
+package ninjabrainbot.data.highprecision;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class BoatThrow extends Throw {

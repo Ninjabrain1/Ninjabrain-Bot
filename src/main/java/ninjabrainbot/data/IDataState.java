@@ -1,12 +1,12 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.DataState.BoatState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrowSet;
+import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 
