@@ -157,8 +157,7 @@ public class DataState implements IDataState, IDisposable {
 		enteringBoat.set(!enteringBoat.get());
 		if (enteringBoat.get()) {
 			boatState.set(BoatState.MEASURING);
-		}
-		else {
+		} else {
 			boatState.set((boatAngle.get() == null) ? BoatState.NONE : BoatState.VALID);
 		}
 	}
