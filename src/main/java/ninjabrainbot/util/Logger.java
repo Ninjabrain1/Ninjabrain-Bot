@@ -6,7 +6,7 @@ public class Logger {
 
 	public static void log(String s) {
 		if (enabled)
-			System.out.println(s);
+			System.out.format("[%s] %s\n", Thread.currentThread().getName(), s);
 	}
 
 	public static void log(Object o) {

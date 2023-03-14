@@ -10,9 +10,6 @@ import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
-import ninjabrainbot.event.IModifiableSet;
-import ninjabrainbot.event.ModifiableSet;
-import ninjabrainbot.event.ObservableField;
 
 public class ModifiableSetTests {
 

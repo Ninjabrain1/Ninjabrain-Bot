@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.frames.ThemedDialog;
@@ -16,6 +18,8 @@ import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 
 public class StyleManager {
+
+	private boolean initialized = false;
 
 	public CurrentTheme currentTheme;
 	public SizePreference size;
@@ -60,6 +64,8 @@ public class StyleManager {
 
 	public void registerThemedComponent(ThemedComponent c) {
 		themedComponents.add(c);
+		if (initialized)
+			SwingUtilities.invokeLater(() -> initComponent(c));
 	}
 
 	public void registerThemedFrame(ThemedFrame f) {
@@ -84,7 +90,6 @@ public class StyleManager {
 		for (ThemedDialog tf : themedDialogs) {
 			tf.updateBounds(this);
 		}
-		// updateFontsAndColors();
 	}
 
 	private void updateFontsAndColors() {
@@ -108,7 +113,6 @@ public class StyleManager {
 		this.size = size;
 		updateFontsAndColors();
 		updateBounds();
-//		SwingUtilities.invokeLater(() -> updateOBSOverlay());
 	}
 
 	private Font loadFont() {
@@ -138,6 +142,12 @@ public class StyleManager {
 		Profiler.stopAndStart("Bounds");
 		updateBounds();
 		Profiler.stop();
+		initialized = true;
+	}
+
+	private void initComponent(ThemedComponent component) {
+		component.updateColors();
+		component.updateSize(this);
 	}
 
 }

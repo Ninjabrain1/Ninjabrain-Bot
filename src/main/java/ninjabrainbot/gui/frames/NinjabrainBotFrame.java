@@ -16,13 +16,15 @@ import ninjabrainbot.Main;
 import ninjabrainbot.data.DataState.BoatState;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.NotificationsButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedIcon;
 import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.panels.main.EnderEyePanel;
+import ninjabrainbot.gui.panels.eyethrows.EnderEyePanel;
+import ninjabrainbot.gui.panels.information.InformationListPanel;
 import ninjabrainbot.gui.panels.main.MainButtonPanel;
 import ninjabrainbot.gui.panels.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
@@ -45,12 +47,15 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private JLabel boatIcon;
 
 	private MainTextArea mainTextArea;
+	private InformationListPanel informationTextPanel;
 	private EnderEyePanel enderEyePanel;
 
 	private static final String TITLE_TEXT = I18n.get("title");
 	private static final String VERSION_TEXT = "v" + Main.VERSION;
 
-	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+	private StyleManager styleManager;
+
+	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler, InformationMessageList informationMessageList) {
 		super(styleManager, preferences, TITLE_TEXT);
 		this.preferences = preferences;
 		Profiler.start("NinjabrainBotFrame");
@@ -60,9 +65,11 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		setAppIcon();
 
 		createTitleBar(styleManager, dataStateHandler.getDataState());
-		createComponents(styleManager, dataStateHandler);
+		createComponents(styleManager, dataStateHandler, informationMessageList);
 		setupSubscriptions(styleManager, dataStateHandler.getDataState());
 		Profiler.stop();
+
+		this.styleManager = styleManager;
 	}
 
 	@Override
@@ -95,8 +102,9 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 		sh.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
 		// Components bounds changed
-		sh.add(mainTextArea.whenModified().subscribe(__ -> updateSize(styleManager)));
-		sh.add(enderEyePanel.whenModified().subscribe(__ -> updateSize(styleManager)));
+		sh.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		sh.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		sh.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		// Lock
 		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 		// Boat Icon
@@ -134,17 +142,26 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		System.exit(0);
 	}
 
-	private void createComponents(StyleManager styleManager, IDataStateHandler dataStateHandler) {
+	private void createComponents(StyleManager styleManager, IDataStateHandler dataStateHandler, InformationMessageList informationMessageList) {
 		IDataState dataState = dataStateHandler.getDataState();
 		// Main text
 		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
 		add(mainTextArea);
+		// Info and warnings
+		informationTextPanel = new InformationListPanel(styleManager, preferences, informationMessageList);
+		add(informationTextPanel);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, dataStateHandler);
 		add(mainButtonPanel);
 		// Throw panels
 		enderEyePanel = new EnderEyePanel(styleManager, preferences, dataStateHandler, dataState.getDivineContext());
 		add(enderEyePanel);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		updateSize(styleManager);
 	}
 
 	private FlatButton createMinimizeButton(StyleManager styleManager) {

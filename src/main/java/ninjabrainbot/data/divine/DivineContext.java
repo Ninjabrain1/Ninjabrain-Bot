@@ -3,6 +3,7 @@ package ninjabrainbot.data.divine;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.statistics.DiscretizedDensity;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
@@ -10,14 +11,13 @@ import ninjabrainbot.util.Coords;
 
 public class DivineContext implements IDivineContext {
 
-	private double phiMin, phiMax;
+	private DiscretizedDensity discretizedAngularDensity;
 
 	private ObservableField<Fossil> fossil;
 
 	public DivineContext(IModificationLock modificationLock) {
 		fossil = new LockableField<Fossil>(modificationLock);
-		phiMin = 0;
-		phiMax = 2.0 * Math.PI;
+		discretizedAngularDensity = new DiscretizedDensity(0, 2.0 * Math.PI);
 	}
 
 	@Override
@@ -49,26 +49,15 @@ public class DivineContext implements IDivineContext {
 		setFossil(null);
 	}
 
-	/**
-	 * Returns how the minimum angle which phi has to change to be within the divine
-	 * sector. If the angle is inside a sector the returned value will be negative.
-	 * phi has to be in the range [-pi, pi]
-	 */
-	public double angleOffsetFromSector(double phi) {
-		if (fossil.get() == null)
-			return 0;
-		int n = Ring.get(0).numStrongholds;
-		double minOffset = Math.PI;
-		for (int i = 0; i < n; i++) {
-			double phi_i = phi + i * 2.0 * Math.PI / n;
-			if (phi_i > Math.PI) {
-				phi_i -= 2.0 * Math.PI;
-			}
-			double offset = angleOffsetFromFirstSector(phi_i);
-			if (offset < minOffset)
-				minOffset = offset;
-		}
-		return minOffset;
+	@Override
+	public boolean hasDivine() {
+		return fossil.get() != null;
+	}
+
+	public double getDensityAtAngleBeforeSnapping(double phi) {
+		while (phi < 0)
+			phi += 2.0 * Math.PI;
+		return discretizedAngularDensity.getDensity(phi);
 	}
 
 	/**
@@ -82,7 +71,11 @@ public class DivineContext implements IDivineContext {
 		}
 		int n = Ring.get(0).numStrongholds;
 		double minDist2 = Double.MAX_VALUE;
-		double phi = (phiMin + phiMax) * 0.5;
+		int angleIndex = -4 + fossil.get().x;
+		if (angleIndex < 0) {
+			angleIndex += 16;
+		}
+		double phi = 2.0 * Math.PI * ((angleIndex + 0.5) / 16.0);
 		double optX = 0;
 		double optZ = 0;
 		for (int i = 0; i < n; i++) {
@@ -99,33 +92,37 @@ public class DivineContext implements IDivineContext {
 		return new BlindPosition(optX, optZ);
 	}
 
-	private double angleOffsetFromFirstSector(double phi) {
-		double phiCenter = 0.5 * (phiMin + phiMax);
-		double change = angleDiff(phi, phiCenter);
-		return change - (phiMax - phiCenter);
-	}
-
-	private double angleDiff(double a, double b) {
-		double change = a - b;
-		if (change < -Math.PI)
-			change += 2 * Math.PI;
-		if (change > Math.PI)
-			change -= 2 * Math.PI;
-		return Math.abs(change);
-	}
-
 	private void onFossilChanged(Fossil fossil) {
 		if (fossil == null) {
-			phiMin = 0;
-			phiMax = 2.0 * Math.PI;
+			discretizedAngularDensity.reset(1);
 			return;
 		}
-		int k = -4 + fossil.x;
-		if (k >= 8) {
-			k -= 16;
+		discretizedAngularDensity.reset(16 * 3);
+		int angleIndex = -4 + fossil.x;
+		if (angleIndex < 0) {
+			angleIndex += 16;
 		}
-		phiMin = 2.0 * Math.PI * (k / 16.0);
-		phiMax = 2.0 * Math.PI * ((k + 1) / 16.0);
+		double sectorPhiMin = 2.0 * Math.PI * ((angleIndex) / 16.0);
+		double sectorPhiMax = 2.0 * Math.PI * ((angleIndex + 1) / 16.0);
+		addDensityThreeStrongholds(sectorPhiMin, sectorPhiMax, 1.0);
+		discretizedAngularDensity.normalize();
+	}
+
+	private void addDensityThreeStrongholds(double minPhi, double maxPhi, double density) {
+		for (int i = 0; i < 3; i++) {
+			if (minPhi > 2 * Math.PI)
+				minPhi -= 2 * Math.PI;
+			if (maxPhi > 2 * Math.PI)
+				maxPhi -= 2 * Math.PI;
+			if (maxPhi >= minPhi) {
+				discretizedAngularDensity.addDensity(minPhi, maxPhi, 1.0);
+			} else {
+				discretizedAngularDensity.addDensity(minPhi, 2 * Math.PI, 1.0);
+				discretizedAngularDensity.addDensity(0, maxPhi, 1.0);
+			}
+			minPhi += 2.0 / 3.0 * Math.PI;
+			maxPhi += 2.0 / 3.0 * Math.PI;
+		}
 	}
 
 }

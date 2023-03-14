@@ -73,14 +73,14 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	}
 
 	@Override
-	public void removeThrow(IThrow t) {
+	public synchronized void removeThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.getThrowSet().remove(t);
 		}
 	}
 
 	@Override
-	public void resetDivineContext() {
+	public synchronized void resetDivineContext() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.getDivineContext().resetFossil();
 		}

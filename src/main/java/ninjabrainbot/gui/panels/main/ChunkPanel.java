@@ -142,7 +142,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	private void setText(ChunkPrediction p) {
 		location.setText(p.formatLocation(strongholdDisplayType.get()));
 		certainty.setText(p.formatCertainty(), (float) p.chunk.weight);
-		distance.setText(p.formatDistance());
+		distance.setText(p.formatDistanceInPlayersDimension());
 		nether.setText(p.formatNether());
 		angle.setText(p.formatTravelAngle(false));
 		angle.setColoredText(p.formatTravelAngleDiff(), p.getTravelAngleDiffColor());

@@ -9,8 +9,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
+import ninjabrainbot.gui.options.ColorPreviewPanel;
 import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.panels.settings.ColorPreviewPanel;
 import ninjabrainbot.gui.style.ConfigurableColor;
 import ninjabrainbot.gui.style.StyleManager;
 

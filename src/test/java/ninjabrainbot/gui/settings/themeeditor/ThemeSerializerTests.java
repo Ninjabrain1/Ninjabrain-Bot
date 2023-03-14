@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import ninjabrainbot.gui.settings.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.style.CustomTheme;
 import ninjabrainbot.gui.style.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -92,7 +91,7 @@ public class ThemeSerializerTests {
 	@Test
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_light() {
 		CustomTheme a = new CustomTheme();
-		a.setFromTheme(Theme.get(Theme.light_uid));
+		a.setFromTheme(Theme.get(3));
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());
 		assert colorsAreEqual(a.COLOR_DIVIDER_DARK.color(), b.COLOR_DIVIDER_DARK.color());
@@ -116,7 +115,7 @@ public class ThemeSerializerTests {
 	@Test
 	public void serialize_deserialize_shouldBeIdenticalToOriginal_blue() {
 		CustomTheme a = new CustomTheme();
-		a.setFromTheme(Theme.get(Theme.blue_uid));
+		a.setFromTheme(Theme.get(2));
 		CustomTheme b = ThemeSerializer.deserialize(ThemeSerializer.serialize(a));
 		assert colorsAreEqual(a.COLOR_DIVIDER.color(), b.COLOR_DIVIDER.color());
 		assert colorsAreEqual(a.COLOR_DIVIDER_DARK.color(), b.COLOR_DIVIDER_DARK.color());

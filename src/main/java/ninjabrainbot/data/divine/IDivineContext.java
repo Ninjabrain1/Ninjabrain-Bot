@@ -14,14 +14,11 @@ public interface IDivineContext {
 
 	public ISubscribable<Fossil> whenFossilChanged();
 
+	public boolean hasDivine();
+
 	public double relativeDensity();
 
-	/**
-	 * Returns how the minimum angle which phi has to change to be within the divine
-	 * sector. If the angle is inside a sector the returned value will be negative.
-	 * phi has to be in the range [-pi, pi]
-	 */
-	public double angleOffsetFromSector(double phi);
+	public double getDensityAtAngleBeforeSnapping(double phi);
 
 	/**
 	 * Returns the closest of the three divine coords that are a distance r from

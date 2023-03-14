@@ -1,6 +1,7 @@
-package ninjabrainbot.gui.panels.settings;
+package ninjabrainbot.gui.options;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
@@ -23,6 +24,8 @@ public class ThemeSelectionPanel extends ThemedPanel {
 	private static final long serialVersionUID = 7243421413680247952L;
 
 	private ThemedPanel themesPanel;
+
+	private ThemePanel firstThemePanel;
 
 	public ThemeSelectionPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
 		super(styleManager);
@@ -49,7 +52,16 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		add(buttonsPanel, BorderLayout.PAGE_END);
 	}
 
+	@Override
+	public Dimension getPreferredSize() {
+		if (firstThemePanel == null)
+			return super.getPreferredSize();
+
+		return new Dimension(0, firstThemePanel.getPreferredSize().height * 5);
+	}
+
 	private void populateThemesPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner) {
+		firstThemePanel = null;
 		TitledDivider standardThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.defaultThemes"));
 		standardThemesDivider.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		standardThemesDivider.setBorder(new EmptyBorder(0, 0, 10, 0));
@@ -57,8 +69,12 @@ public class ThemeSelectionPanel extends ThemedPanel {
 		ThemedPanel defaultThemesPanel = new ThemedPanel(styleManager);
 		defaultThemesPanel.setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
 		defaultThemesPanel.setLayout(new GridLayout(0, 3, 10, 10));
-		for (Theme theme : Theme.getStandardThemes())
-			defaultThemesPanel.add(new ThemePanel(styleManager, preferences, theme));
+		for (Theme theme : Theme.getStandardThemes()) {
+			ThemePanel themePanel = new ThemePanel(styleManager, preferences, theme);
+			defaultThemesPanel.add(themePanel);
+			if (firstThemePanel == null)
+				firstThemePanel = themePanel;
+		}
 
 		TitledDivider customThemesDivider = new TitledDivider(styleManager, I18n.get("settings.theme.customThemes"));
 		customThemesDivider.setBorder(new EmptyBorder(10, 0, 10, 0));

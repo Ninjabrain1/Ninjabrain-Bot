@@ -20,6 +20,7 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	private int distance;
 	private double travelAngle;
 	private double travelAngleDiff;
+	private boolean playerIsInNether;
 
 	private McVersion version;
 
@@ -50,7 +51,8 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 	private void updateWithPlayerPos(IThrow playerPos, boolean notify) {
 		if (playerPos == null)
 			return;
-		distance = chunk.getDistance(version, playerPos);
+		distance = chunk.getOverworldDistance(version, playerPos);
+		playerIsInNether = playerPos.isNether();
 		double playerX = playerPos.x();
 		double playerZ = playerPos.z();
 		if (playerPos.isNether()) {
@@ -71,8 +73,12 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 			notifySubscribers(this);
 	}
 
-	public int getDistance() {
+	public int getOverworldDistance() {
 		return distance;
+	}
+
+	public int getNetherDistance() {
+		return distance / 8;
 	}
 
 	public double getTravelAngle() {
@@ -115,8 +121,8 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 		return String.format(Locale.US, "%.1f%%", chunk.weight * 100);
 	}
 
-	public String formatDistance() {
-		return String.format(Locale.US, "%d", distance);
+	public String formatDistanceInPlayersDimension() {
+		return String.format(Locale.US, "%d", playerIsInNether ? getNetherDistance() : distance);
 	}
 
 	public String formatNether() {
@@ -145,6 +151,14 @@ public class ChunkPrediction extends Modifiable<ChunkPrediction> implements IDis
 
 	public double getAngleError(IThrow t) {
 		return t == null ? -1 : chunk.getAngleError(version, t);
+	}
+	
+	public int getNetherX() {
+		return chunk.x * 2;
+	}
+	
+	public int getNetherZ() {
+		return chunk.z * 2;
 	}
 
 	@Override

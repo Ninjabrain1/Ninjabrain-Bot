@@ -2,6 +2,10 @@ package ninjabrainbot.gui;
 
 import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.information.InformationMessageList;
+import ninjabrainbot.data.information.McVersionWarningProvider;
+import ninjabrainbot.data.information.MismeasureWarningProvider;
+import ninjabrainbot.data.information.PortalLinkingInformationProvider;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -12,6 +16,8 @@ import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
+import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
+import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Profiler;
 
@@ -23,6 +29,7 @@ public class GUI {
 	private NinjabrainBotPreferences preferences;
 
 	private ClipboardReader clipboardReader;
+	private IActiveInstanceProvider activeInstanceProvider;
 	private AutoResetTimer autoResetTimer;
 	private OBSOverlay obsOverlay;
 
@@ -33,10 +40,13 @@ public class GUI {
 	private DataStateHandler dataStateHandler;
 	private IDataState dataState;
 
+	private InformationMessageList informationMessageList;
+
 	public GUI(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
 		initDataState();
 		initInputMethods();
+		initDataProcessors();
 		initUI();
 		postInit();
 	}
@@ -59,8 +69,23 @@ public class GUI {
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
 		clipboardThread.start();
 
+		Progress.setTask("Starting instance listener", 0.03f);
+		Profiler.start("Init instance listener");
+		activeInstanceProvider = ActiveInstanceProviderFactory.createPlatformSpecificActiveInstanceProvider();
+		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> dataStateHandler.resetIfNotLocked());
+
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
+		Profiler.stop();
+	}
+
+	private void initDataProcessors() {
+		Progress.setTask("Initializing information message generators", 0.04f);
+		Profiler.start("Init info message generators");
+		informationMessageList = new InformationMessageList();
+		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
+		informationMessageList.AddInformationMessageProvider(new PortalLinkingInformationProvider(dataState));
 		Profiler.stop();
 	}
 
@@ -74,7 +99,7 @@ public class GUI {
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler, informationMessageList);
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");

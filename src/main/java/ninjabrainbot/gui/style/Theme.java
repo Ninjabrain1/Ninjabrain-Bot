@@ -49,9 +49,6 @@ public abstract class Theme {
 	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<CustomTheme>();
 	protected static final SubscriptionHandler sh = new SubscriptionHandler();
 
-	public static int dark_uid = 1;
-	public static int blue_uid = 2;
-	public static int light_uid = 3;
 	private static Theme dark;
 	private static int nextCustomThemeUID = -1;
 
@@ -60,6 +57,13 @@ public abstract class Theme {
 		addStandardTheme(dark);
 		addStandardTheme(new LightTheme());
 		addStandardTheme(new BlueTheme());
+		addStandardTheme(new BastionTheme());
+		addStandardTheme(new NetherbrickTheme());
+		addStandardTheme(new BambooTheme());
+		addStandardTheme(new NinjabrainTheme());
+		addStandardTheme(new CouriwayTheme());
+		addStandardTheme(new FeinbergTheme());
+		addStandardTheme(new DarklavenderTheme());
 
 		loadCustomThemes(preferences);
 	}
@@ -192,99 +196,4 @@ public abstract class Theme {
 
 	protected abstract void loadTheme();
 
-}
-
-class LightTheme extends Theme {
-	public LightTheme() {
-		super("Light", light_uid);
-	}
-
-	@Override
-	protected void loadTheme() {
-		loaded = true;
-
-		COLOR_NEUTRAL = createColor(Color.decode("#F5F5F5"));
-		COLOR_DIVIDER = createColor(Color.decode("#D8D8D8"));
-		COLOR_DIVIDER_DARK = createColor(Color.decode("#C1C1C1"));
-		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
-		COLOR_STRONGEST = createColor(Color.decode("#C1C1C1"));
-		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#EFEFEF"));
-		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#F9F9F9"));
-		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.BLACK);
-		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#191919"));
-		TEXT_COLOR_WEAK = createColor(Color.decode("#888888"));
-		TEXT_COLOR_NEUTRAL = createColor(Color.DARK_GRAY);
-		TEXT_COLOR_HEADER = createColor(Color.decode("#191919"));
-		COLOR_STRONG = createColor(Color.decode("#E5E5E5"));
-		COLOR_SATURATED = createColor(Color.decode("#BAD7EF"));
-		COLOR_POSITIVE = createColor(Color.decode("#1E9910"));
-		COLOR_NEGATIVE = createColor(Color.decode("#991017"));
-		TEXT_COLOR_TITLE = createColor(Color.decode("#373737"));
-
-		COLOR_GRADIENT_0 = createColor(Color.RED);
-		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
-		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
-	}
-}
-
-class DarkTheme extends Theme {
-	public DarkTheme() {
-		super("Dark", dark_uid);
-	}
-
-	@Override
-	protected void loadTheme() {
-		COLOR_NEUTRAL = createColor(Color.decode("#33383D"));
-		COLOR_STRONGEST = createColor(Color.decode("#212529"));
-		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
-		COLOR_DIVIDER = createColor(Color.decode("#2A2E32"));
-		COLOR_DIVIDER_DARK = createColor(Color.decode("#212529"));
-		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#31353A"));
-		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#373C42"));
-		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE);
-		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
-		TEXT_COLOR_WEAK = createColor(Color.GRAY);
-		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
-		TEXT_COLOR_HEADER = createColor(Color.decode("#E5E5E5"));
-		COLOR_STRONG = createColor(Color.decode("#2D3238"));
-		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
-		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
-		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
-		TEXT_COLOR_TITLE = createColor(Color.WHITE);
-
-		COLOR_GRADIENT_0 = createColor(Color.RED);
-		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
-		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
-	}
-}
-
-class BlueTheme extends Theme {
-	public BlueTheme() {
-		super("Blue", blue_uid);
-	}
-
-	@Override
-	protected void loadTheme() {
-		COLOR_STRONGEST = createColor(Color.decode("#1C1C27"));
-		COLOR_DIVIDER = createColor(Color.decode("#212130"));
-		COLOR_DIVIDER_DARK = createColor(Color.decode("#1C1C27"));
-		COLOR_STRONG = createColor(Color.decode("#252538"));
-		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#27273D"));
-		COLOR_NEUTRAL = createColor(Color.decode("#28293D"));
-		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#2B2D44"));
-		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
-		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.WHITE);
-		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#E5E5E5"));
-		TEXT_COLOR_WEAK = createColor(Color.GRAY);
-		TEXT_COLOR_NEUTRAL = createColor(Color.LIGHT_GRAY);
-		TEXT_COLOR_HEADER = createColor(Color.decode("#E5E5E5"));
-		COLOR_SATURATED = createColor(Color.decode("#57EBA3"));
-		COLOR_POSITIVE = createColor(Color.decode("#75CC6C"));
-		COLOR_NEGATIVE = createColor(Color.decode("#CC6E72"));
-		TEXT_COLOR_TITLE = createColor(Color.WHITE);
-
-		COLOR_GRADIENT_0 = createColor(Color.RED);
-		COLOR_GRADIENT_50 = createColor(Color.YELLOW);
-		COLOR_GRADIENT_100 = createColor(Color.decode("#00CE29"));
-	}
 }

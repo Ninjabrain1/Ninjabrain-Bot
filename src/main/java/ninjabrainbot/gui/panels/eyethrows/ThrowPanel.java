@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.panels.main;
+package ninjabrainbot.gui.panels.eyethrows;
 
 import java.awt.Color;
 import java.awt.Dimension;

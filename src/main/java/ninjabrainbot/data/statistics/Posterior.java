@@ -63,7 +63,7 @@ public class Posterior {
 	 * probability greater than the given tolerance.
 	 */
 	public double getMinDistance(double tolerance, IThrow position) {
-		return getClosestPossibleChunk(tolerance, position).getDistance(version, position);
+		return getClosestPossibleChunk(tolerance, position).getOverworldDistance(version, position);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class Posterior {
 		double minDist = Double.POSITIVE_INFINITY;
 		for (Chunk c : chunks) {
 			if (c.weight > tolerance) {
-				double dist = c.getDistance(version, position);
+				double dist = c.getOverworldDistance(version, position);
 				if (dist < minDist) {
 					minDist = dist;
 					closest = c;

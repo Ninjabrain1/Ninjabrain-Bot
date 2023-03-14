@@ -67,12 +67,12 @@ public class RayApproximatedPrior implements IPrior {
 				int n = 2;
 				double weight = 0;
 				if (n == 1) {
-					weight = strongholdDensity(i, j);
+					weight = strongholdDensity(chunk.x, chunk.z);
 				} else {
 					for (int k = 0; k < n; k++) {
-						double x = i - 0.5 + k / (n - 1.0);
+						double x = chunk.x - 0.5 + k / (n - 1.0);
 						for (int l = 0; l < n; l++) {
-							double z = j - 0.5 + l / (n - 1.0);
+							double z = chunk.z - 0.5 + l / (n - 1.0);
 							weight += strongholdDensity(x, z);
 						}
 					}
@@ -89,20 +89,18 @@ public class RayApproximatedPrior implements IPrior {
 
 	protected double strongholdDensity(double cx, double cz) {
 		double relativeWeight = 1.0;
-		if (divineContext.getFossil() != null) {
-			double d2 = cx * cx + cz * cz;
-			double chunkR = Math.sqrt(d2);
-			if (chunkR <= Ring.get(0).outerRadiusPostSnapping) {
-				double phi = Coords.getPhi(cx, cz);
-				relativeWeight = -divineContext.angleOffsetFromSector(phi) / (StrongholdConstants.snappingRadius * 1.5 / chunkR); // 1.5 ~ sqrt(2) + a small margin
-				relativeWeight = (1.0 + relativeWeight) * 0.5;
-				// clamp
-				if (relativeWeight > 1)
-					relativeWeight = 1;
-				if (relativeWeight < 0)
-					relativeWeight = 0;
-				relativeWeight *= divineContext.relativeDensity();
+		double d2 = cx * cx + cz * cz;
+		double chunkR = Math.sqrt(d2);
+		if (chunkR <= Ring.get(0).outerRadiusPostSnapping && divineContext.hasDivine()) {
+			int m = StrongholdConstants.snappingRadius;
+			double w = 0;
+			for (int i = -m; i <= m; i++) {
+				for (int j = -m; j <= m; j++) {
+					w += divineContext.getDensityAtAngleBeforeSnapping(Coords.getPhi(cx + i, cz + j));
+				}
 			}
+			w /= (2 * m + 1) * (2 * m + 1);
+			relativeWeight *= w * 2.0 * Math.PI;
 		}
 		return relativeWeight * ApproximatedDensity.density(cx, cz);
 	}

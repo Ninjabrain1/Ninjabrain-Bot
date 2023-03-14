@@ -1,7 +1,9 @@
 package ninjabrainbot.gui.components;
 
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
+import javax.swing.Box;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.style.StyleManager;
@@ -21,15 +23,24 @@ public class ColorMapLabel extends JPanel implements ILabel {
 	public ColorMapLabel(StyleManager styleManager, boolean textFirst, boolean centered) {
 		textLabel = new ThemedLabel(styleManager, "");
 		coloredLabel = new ColoredLabel(styleManager);
-		setLayout(new FlowLayout(centered ? FlowLayout.CENTER : FlowLayout.LEFT, 0, 0));
+		setLayout(new GridBagLayout());
 		setOpaque(false);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = GridBagConstraints.RELATIVE;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.weightx = 0;
 		if (textFirst) {
-			add(textLabel);
-			add(coloredLabel);
+			add(textLabel, gbc);
+			add(coloredLabel, gbc);
 		} else {
-			add(coloredLabel);
-			add(textLabel);
+			add(coloredLabel, gbc);
+			add(textLabel, gbc);
 		}
+		gbc.weightx = 1;
+		add(Box.createGlue(), gbc);
 		setAlignmentX(0);
 	}
 

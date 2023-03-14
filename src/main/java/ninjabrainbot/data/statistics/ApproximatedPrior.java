@@ -85,16 +85,16 @@ public class ApproximatedPrior extends Prior {
 	protected double strongholdDensity(double cx, double cz, Ring ring) {
 		double d2 = cx * cx + cz * cz;
 		double relativeWeight = 1.0;
-		if (ring.ring == 0 && divineContext.getFossil() != null) {
-			double phi = Coords.getPhi(cx, cz);
-			relativeWeight = -divineContext.angleOffsetFromSector(phi) / (StrongholdConstants.snappingRadius * 1.5 / Math.sqrt(d2)); // 1.5 ~ sqrt(2) + a small margin
-			relativeWeight = (1.0 + relativeWeight) * 0.5;
-			// clamp
-			if (relativeWeight > 1)
-				relativeWeight = 1;
-			if (relativeWeight < 0)
-				relativeWeight = 0;
-			relativeWeight *= divineContext.relativeDensity();
+		if (ring.ring == 0 && divineContext.hasDivine()) {
+			int m = StrongholdConstants.snappingRadius;
+			double w = 0;
+			for (int i = -m; i <= m; i++) {
+				for (int j = -m; j <= m; j++) {
+					w += divineContext.getDensityAtAngleBeforeSnapping(Coords.getPhi(cx + i, cz + j));
+				}
+			}
+			w /= (2 * m + 1) * (2 * m + 1);
+			relativeWeight *= w * 2.0 * Math.PI;
 		}
 		// Post snapping circle radiuses (dont have to be exact, tighter margins only
 		// affect performance, not the result)

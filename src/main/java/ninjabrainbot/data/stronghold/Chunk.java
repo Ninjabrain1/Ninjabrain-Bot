@@ -59,7 +59,7 @@ public class Chunk {
 	 * Returns the distance (number of blocks) to the predicted location from the
 	 * given throw.
 	 */
-	public int getDistance(McVersion version, IThrow t) {
+	public int getOverworldDistance(McVersion version, IThrow t) {
 		double playerX = t.x();
 		double playerZ = t.z();
 		if (t.isNether()) {
@@ -68,7 +68,7 @@ public class Chunk {
 		}
 		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - playerX;
 		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord(version) - playerZ;
-		return (int) (Math.sqrt(deltax * deltax + deltaz * deltaz) / (t.isNether() ? 8.0 : 1.0));
+		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
 	}
 
 	public double[] getAngleErrors(McVersion version, ISet<IThrow> eyeThrows) {
