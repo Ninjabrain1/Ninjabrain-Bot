@@ -18,9 +18,9 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 
+	private final NinjabrainBotPreferences preferences;
 	private final StandardStdProfile stdProfile;
 	private final CalculatorSettings calculatorSettings;
-	private float boatErrorLimit;
 
 	private DataState dataState;
 	private ModificationLock modificationLock;
@@ -30,19 +30,18 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences) {
+		this.preferences = preferences;
 		this.stdProfile = new StandardStdProfile(preferences);
 		modificationLock = new ModificationLock(wasUndoAction -> afterDataStateModified(wasUndoAction));
 
 		calculatorSettings = new CalculatorSettings();
 		calculatorSettings.useAdvStatistics = preferences.useAdvStatistics.get();
 		calculatorSettings.version = preferences.mcVersion.get();
-		boatErrorLimit = preferences.boatErrorLimit.get();
 		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
 		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
 		sh.add(preferences.useAdvStatistics.whenModified().subscribe(newValue -> onUseAdvStatisticsChanged(newValue)));
 		sh.add(preferences.mcVersion.whenModified().subscribe(newValue -> onMcVersionChanged(newValue)));
-		sh.add(preferences.boatErrorLimit.whenModified().subscribe(newValue -> onBoatErrorLimitChanged(newValue)));
 	}
 
 	@Override
@@ -149,7 +148,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				return;
 			}
 			if (dataState.enteringBoat().get()) {
-				dataState.setBoatAngle(t.rawAlpha(), boatErrorLimit);
+				dataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
 				return;
 			}
 			if (!t.lookingBelowHorizon()) {
@@ -177,10 +176,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.recalculateStronghold();
 		}
-	}
-
-	private synchronized void onBoatErrorLimitChanged(float newValue) {
-		boatErrorLimit = newValue;
 	}
 
 	@Override

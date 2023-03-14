@@ -70,7 +70,7 @@ public class NinjabrainBotPreferences {
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
 		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
 		// Float
-		sigma = new FloatPreference("sigma", 0.03f, 0.001f, 1f, source);
+		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
 		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
 		sigmaBoat = new FloatPreference("sigma_boat", 0.001f, 0.0001f, 1f, source);
