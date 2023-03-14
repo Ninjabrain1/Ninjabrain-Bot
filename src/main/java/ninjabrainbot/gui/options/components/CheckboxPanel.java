@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.options.components;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -10,15 +11,18 @@ import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.io.preferences.BooleanPreference;
 
 public class CheckboxPanel extends ThemedPanel {
 
 	private static final long serialVersionUID = -7054967229481740724L;
 
-	ThemedLabel descLabel;
+	public ThemedLabel descLabel;
 	CustomCheckbox checkbox;
 	BooleanPreference preference;
+
+	WrappedColor disabledCol;
 
 	public CheckboxPanel(StyleManager styleManager, String description, BooleanPreference preference) {
 		super(styleManager);
@@ -36,6 +40,14 @@ public class CheckboxPanel extends ThemedPanel {
 			public Dimension getPreferredSize() {
 				return new Dimension(t.getWidth() - 2 * OptionsFrame.PADDING - 32, super.getPreferredSize().height);
 			}
+
+			@Override
+			public Color getForegroundColor() {
+				if (checkbox.isEnabled()) {
+					return super.getForegroundColor();
+				}
+				return disabledCol.color();
+			}
 		};
 		checkbox = new CustomCheckbox(preference.get()) {
 			private static final long serialVersionUID = 1507233642665292025L;
@@ -48,6 +60,14 @@ public class CheckboxPanel extends ThemedPanel {
 		add(checkbox, BorderLayout.LINE_START);
 		add(descLabel, BorderLayout.CENTER);
 		setOpaque(false);
+
+		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		checkbox.setEnabled(enabled);
 	}
 
 }

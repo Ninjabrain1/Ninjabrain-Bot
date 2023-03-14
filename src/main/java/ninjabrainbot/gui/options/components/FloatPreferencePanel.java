@@ -3,8 +3,11 @@ package ninjabrainbot.gui.options.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.DecimalFormat;
+import java.util.Collections;
 
 import javax.swing.Box;
+import javax.swing.JSpinner;
 
 import ninjabrainbot.gui.components.DecimalTextField;
 import ninjabrainbot.gui.components.ThemedLabel;
@@ -14,13 +17,13 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.WrappedColor;
 import ninjabrainbot.io.preferences.FloatPreference;
 
+@SuppressWarnings("serial")
 public class FloatPreferencePanel extends ThemedPanel {
-
-	private static final long serialVersionUID = -7054967229481740724L;
 
 	public ThemedLabel descLabel;
 	DecimalTextField textfield;
 	FloatPreference preference;
+	DecimalFormat format;
 
 	WrappedColor disabledCol;
 
@@ -48,10 +51,11 @@ public class FloatPreferencePanel extends ThemedPanel {
 			private static final long serialVersionUID = -1357640224921308648L;
 
 			@Override
-			public void onChanged(double newSigma) {
-				preference.set((float) newSigma);
+			public void onChanged(double newValue) {
+				preference.set(Float.parseFloat(format.format(newValue)));
 			}
 		};
+		this.setDecimals(4);
 
 		Dimension size = textfield.getPreferredSize();
 		size.width = 60;
@@ -72,6 +76,21 @@ public class FloatPreferencePanel extends ThemedPanel {
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		textfield.setEnabled(enabled);
+	}
+
+	public void setWidth(int width) {
+		Dimension size = textfield.getPreferredSize();
+		size.width = width;
+		textfield.setPreferredSize(size);
+	}
+
+	public void setDecimals(int decimals) {
+		String newFormat = "#";
+		if (decimals > 0) {
+			newFormat += "." + String.join("", Collections.nCopies(decimals, "#"));
+		}
+		this.format = new DecimalFormat(newFormat);
+		textfield.setEditor(new JSpinner.NumberEditor(textfield, newFormat));
 	}
 
 }
