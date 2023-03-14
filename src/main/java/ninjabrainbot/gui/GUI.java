@@ -62,7 +62,7 @@ public class GUI {
 	private void initInputMethods() {
 		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
-		clipboardReader = new ClipboardReader(preferences, dataStateHandler);
+		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock(), dataState.boatAngle());
 		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
 		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
