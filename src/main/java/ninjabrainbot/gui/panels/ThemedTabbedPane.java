@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.options.sections;
+package ninjabrainbot.gui.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,8 +9,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.panels.ThemedOpaquePanel;
-import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.Theme;

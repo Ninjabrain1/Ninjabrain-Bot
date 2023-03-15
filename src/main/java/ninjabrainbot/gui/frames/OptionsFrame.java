@@ -13,7 +13,7 @@ import ninjabrainbot.gui.options.sections.HotkeyOptionsPanel;
 import ninjabrainbot.gui.options.sections.LanguageOptionsPanel;
 import ninjabrainbot.gui.options.sections.ObsOptionsPanel;
 import ninjabrainbot.gui.options.sections.OptionalFeaturesPanel;
-import ninjabrainbot.gui.options.sections.ThemedTabbedPane;
+import ninjabrainbot.gui.panels.ThemedTabbedPane;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
