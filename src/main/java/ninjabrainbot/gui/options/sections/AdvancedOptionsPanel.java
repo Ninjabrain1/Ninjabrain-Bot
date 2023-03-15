@@ -2,8 +2,6 @@ package ninjabrainbot.gui.options.sections;
 
 import java.awt.GridLayout;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,6 +13,7 @@ import ninjabrainbot.gui.options.CalibrationPanel;
 import ninjabrainbot.gui.options.components.CheckboxPanel;
 import ninjabrainbot.gui.options.components.FloatPreferencePanel;
 import ninjabrainbot.gui.options.components.HotkeyPanel;
+import ninjabrainbot.gui.panels.StackPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
@@ -35,14 +34,12 @@ public class AdvancedOptionsPanel extends JPanel {
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2));
 		setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
-		JPanel column1 = new JPanel();
-		JPanel column2 = new JPanel();
+		JPanel column1 = new StackPanel();
+		JPanel column2 = new StackPanel();
 		column1.setOpaque(false);
 		column2.setOpaque(false);
 		add(column1);
 		add(column2);
-		column1.setLayout(new BoxLayout(column1, BoxLayout.Y_AXIS));
-		column2.setLayout(new BoxLayout(column2, BoxLayout.Y_AXIS));
 
 		// Left advanced column
 		sigma = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma);
@@ -73,7 +70,6 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_updates"), preferences.showAngleUpdates));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
-		column2.add(Box.createGlue());
 
 		subscriptionHandler.add(preferences.useAltStd.whenModified().subscribe(b -> setAltSigmaEnabled(b)));
 	}
