@@ -26,6 +26,7 @@ public class DataState implements IDataState, IDisposable {
 	private final ICalculator calculator;
 
 	private final ObservableField<Boolean> locked;
+	private final ObservableField<Boolean> allAdvancementsMode;
 
 	private final ObservableField<Boolean> enteringBoat;
 	private final ObservableField<Float> boatAngle;
@@ -49,6 +50,7 @@ public class DataState implements IDataState, IDisposable {
 
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
+		allAdvancementsMode = new LockableField<Boolean>(false, modificationLock);
 		enteringBoat = new LockableField<Boolean>(false, modificationLock);
 		boatAngle = new LockableField<Float>(null, modificationLock);
 		boatState = new LockableField<BoatState>(BoatState.NONE, modificationLock);
@@ -68,6 +70,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public void reset() {
+		allAdvancementsMode.set(false);
 		enteringBoat.set(false);
 		boatAngle.set(null);
 		boatState.set(BoatState.NONE);
@@ -133,6 +136,10 @@ public class DataState implements IDataState, IDisposable {
 		return true;
 	}
 
+	public void setAllAdvancementsMode(boolean enabled) {
+		allAdvancementsMode.set(enabled);
+	}
+
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
 		if (calculatorResult == null || !calculatorResult.success()) {
 			topPrediction.set(null);
@@ -177,6 +184,9 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	private ResultType getExpectedResultType() {
+		if (allAdvancementsMode.get())
+			return ResultType.ALL_ADVANCEMENTS;
+
 		if (calculatorResult.get() != null && calculatorResult.get().success())
 			return ResultType.TRIANGULATION;
 

@@ -9,10 +9,14 @@ import ninjabrainbot.data.datalock.ModificationLock;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.StandardStdProfile;
+import ninjabrainbot.data.endereye.ThrowParser;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.io.IClipboardProvider;
+import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
+import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
@@ -22,6 +26,8 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final StandardStdProfile stdProfile;
 	private final CalculatorSettings calculatorSettings;
 
+	private final IActiveInstanceProvider activeInstanceProvider;
+
 	private DataState dataState;
 	private ModificationLock modificationLock;
 	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
@@ -29,8 +35,9 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private SubscriptionHandler sh = new SubscriptionHandler();
 
-	public DataStateHandler(NinjabrainBotPreferences preferences) {
+	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
 		this.preferences = preferences;
+		this.activeInstanceProvider = activeInstanceProvider;
 		this.stdProfile = new StandardStdProfile(preferences);
 		modificationLock = new ModificationLock(wasUndoAction -> afterDataStateModified(wasUndoAction));
 
@@ -40,8 +47,16 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
 		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
+		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, modificationLock, dataState.boatAngle());
+		addThrowStream(throwParser.whenNewThrowInputed());
+		addFossilStream(throwParser.whenNewFossilInputed());
+
+		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked());
+		activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(__ -> updateAllAdvancementsMode());
+
 		sh.add(preferences.useAdvStatistics.whenModified().subscribe(newValue -> onUseAdvStatisticsChanged(newValue)));
 		sh.add(preferences.mcVersion.whenModified().subscribe(newValue -> onMcVersionChanged(newValue)));
+		sh.add(preferences.allAdvancements.whenModified().subscribe(__ -> updateAllAdvancementsMode()));
 	}
 
 	@Override
@@ -122,19 +137,19 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	private void afterDataStateModified(boolean wasUndoAction) {
-		if (!wasUndoAction) {
-			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
-		}
-		whenDataStateModified.notifySubscribers(dataState);
-	}
-
 	public synchronized void toggleEnteringBoatIfNotLocked() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			if (!dataState.locked().get()) {
 				dataState.toggleEnteringBoat();
 			}
 		}
+	}
+
+	private void afterDataStateModified(boolean wasUndoAction) {
+		if (!wasUndoAction) {
+			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
+		}
+		whenDataStateModified.notifySubscribers(dataState);
 	}
 
 	private synchronized void onNewThrow(IThrow t) {
@@ -175,6 +190,18 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		calculatorSettings.version = newValue;
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			dataState.recalculateStronghold();
+		}
+	}
+
+	private synchronized void updateAllAdvancementsMode() {
+		IMinecraftWorldFile world = activeInstanceProvider.activeMinecraftWorld().get();
+		boolean allAdvancementsModeEnabled = false;
+		if (world != null) {
+			allAdvancementsModeEnabled = preferences.allAdvancements.get() && world.hasEnteredEnd();
+		}
+
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			dataState.setAllAdvancementsMode(allAdvancementsModeEnabled);
 		}
 	}
 

@@ -17,7 +17,6 @@ public class GeneralOptionalFeaturesOptionsPanel extends StackPanel {
 		setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
 
 		add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_updates"), preferences.showAngleUpdates));
-
 	}
 
 }

@@ -5,18 +5,11 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.Throw;
-import ninjabrainbot.data.endereye.Throw1_12;
-import ninjabrainbot.data.highprecision.BoatThrow;
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-public class ClipboardReader implements Runnable {
+public class ClipboardReader implements IClipboardProvider, Runnable {
 
 	private NinjabrainBotPreferences preferences;
 
@@ -25,32 +18,22 @@ public class ClipboardReader implements Runnable {
 
 	private AtomicBoolean forceReadLater;
 
-	private IObservable<Float> boatAngle;
-	private IModificationLock modificationLock;
-	private ObservableProperty<IThrow> whenNewThrowInputed;
-	private ObservableProperty<Fossil> whenNewFossilInputed;
+	ObservableProperty<String> clipboardString;
 
-	public ClipboardReader(NinjabrainBotPreferences preferences, IModificationLock modificationLock, IObservable<Float> boatAngle) {
+	public ClipboardReader(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
-		this.modificationLock = modificationLock;
-		this.boatAngle = boatAngle;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboardString = new ObservableProperty<String>();
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
-		whenNewThrowInputed = new ObservableProperty<IThrow>();
-		whenNewFossilInputed = new ObservableProperty<Fossil>();
+	}
+
+	public ISubscribable<String> whenClipboardChanged() {
+		return clipboardString;
 	}
 
 	public void forceRead() {
 		forceReadLater.set(true);
-	}
-
-	public ISubscribable<IThrow> whenNewThrowInputed() {
-		return whenNewThrowInputed;
-	}
-
-	public ISubscribable<Fossil> whenNewFossilInputed() {
-		return whenNewFossilInputed;
 	}
 
 	@Override
@@ -87,25 +70,7 @@ public class ClipboardReader implements Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		IThrow t = null;
-		if ((preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatAngle.get() != null)) {
-			t = BoatThrow.parseF3C(clipboard, preferences, modificationLock, boatAngle.get());
-		} else {
-			t = Throw.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
-		}
-		if (t != null) {
-			whenNewThrowInputed.notifySubscribers(t);
-			return;
-		}
-		final IThrow t2 = Throw1_12.parseF3C(clipboard, preferences.crosshairCorrection.get(), modificationLock);
-		if (t2 != null) {
-			whenNewThrowInputed.notifySubscribers(t);
-			return;
-		}
-		final Fossil f = Fossil.parseF3I(clipboard);
-		if (f != null) {
-			whenNewFossilInputed.notifySubscribers(f);
-		}
+		clipboardString.notifySubscribers(clipboard);
 	}
 
 }

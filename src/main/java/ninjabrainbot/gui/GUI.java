@@ -44,27 +44,17 @@ public class GUI {
 
 	public GUI(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
-		initDataState();
 		initInputMethods();
+		initDataState();
 		initDataProcessors();
 		initUI();
 		postInit();
 	}
 
-	private void initDataState() {
-		Progress.setTask("Creating calculator data", 0.01f);
-		Profiler.start("Init DataState");
-		dataStateHandler = new DataStateHandler(preferences);
-		dataState = dataStateHandler.getDataState();
-		Profiler.stop();
-	}
-
 	private void initInputMethods() {
 		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
-		clipboardReader = new ClipboardReader(preferences, dataStateHandler.getModificationLock(), dataState.boatAngle());
-		dataStateHandler.addThrowStream(clipboardReader.whenNewThrowInputed());
-		dataStateHandler.addFossilStream(clipboardReader.whenNewFossilInputed());
+		clipboardReader = new ClipboardReader(preferences);
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
 		clipboardThread.start();
@@ -72,10 +62,17 @@ public class GUI {
 		Progress.setTask("Starting instance listener", 0.03f);
 		Profiler.start("Init instance listener");
 		activeInstanceProvider = ActiveInstanceProviderFactory.createPlatformSpecificActiveInstanceProvider();
-		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> dataStateHandler.resetIfNotLocked());
 
 		Profiler.stopAndStart("Setup hotkeys");
 		setupHotkeys();
+		Profiler.stop();
+	}
+
+	private void initDataState() {
+		Progress.setTask("Creating calculator data", 0.01f);
+		Profiler.start("Init DataState");
+		dataStateHandler = new DataStateHandler(preferences, clipboardReader, activeInstanceProvider);
+		dataState = dataStateHandler.getDataState();
 		Profiler.stop();
 	}
 

@@ -16,6 +16,8 @@ import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.util.FakeActiveInstanceProvider;
+import ninjabrainbot.util.FakeClipboardProvider;
 import ninjabrainbot.util.TestUtils;
 
 public class DataStateHandlerTests {
@@ -32,7 +34,7 @@ public class DataStateHandlerTests {
 		ObservableProperty<IThrow> throwStream = new ObservableProperty<IThrow>();
 		ObservableProperty<Fossil> fossilStream = new ObservableProperty<Fossil>();
 
-		DataStateHandler dataStateHandler = new DataStateHandler(preferences);
+		DataStateHandler dataStateHandler = new DataStateHandler(preferences, new FakeClipboardProvider(), new FakeActiveInstanceProvider());
 		dataStateHandler.addThrowStream(throwStream);
 		dataStateHandler.addFossilStream(fossilStream);
 		IDataState dataState = dataStateHandler.getDataState();

@@ -46,6 +46,7 @@ public class NinjabrainBotPreferences {
 	public BooleanPreference useOverlay;
 	public BooleanPreference overlayAutoHide;
 	public BooleanPreference overlayHideWhenLocked;
+	public BooleanPreference allAdvancements;
 	public StringPreference customThemesString;
 	public StringPreference customThemesNames;
 	public MultipleChoicePreference<SizeSetting> size;
@@ -95,6 +96,7 @@ public class NinjabrainBotPreferences {
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
+		allAdvancements = new BooleanPreference("all_advancements", false, source);
 		// String
 		customThemesString = new StringPreference("custom_themes", "", source);
 		customThemesNames = new StringPreference("custom_themes_names", "", source);
