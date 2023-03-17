@@ -52,7 +52,7 @@ public class GUI {
 	}
 
 	private void initInputMethods() {
-		Progress.setTask("Starting clipboard reader", 0.02f);
+		Progress.setTask("Starting clipboard reader", 0.01f);
 		Profiler.start("Init clipboard reader");
 		clipboardReader = new ClipboardReader(preferences);
 		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
@@ -69,7 +69,7 @@ public class GUI {
 	}
 
 	private void initDataState() {
-		Progress.setTask("Creating calculator data", 0.01f);
+		Progress.setTask("Creating calculator data", 0.04f);
 		Profiler.start("Init DataState");
 		dataStateHandler = new DataStateHandler(preferences, clipboardReader, activeInstanceProvider);
 		dataState = dataStateHandler.getDataState();

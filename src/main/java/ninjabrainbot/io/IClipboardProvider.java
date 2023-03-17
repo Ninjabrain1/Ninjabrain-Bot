@@ -1,9 +1,9 @@
 package ninjabrainbot.io;
 
-import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.IObservable;
 
 public interface IClipboardProvider {
 
-	public ISubscribable<String> whenClipboardChanged();
+	public IObservable<String> clipboardText();
 
 }

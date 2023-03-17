@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 
 public class ObservableField<T> implements IObservable<T> {
 
+	private final boolean pushDataToNewSubscribers;
+
 	private T data;
 
 	private ArrayList<Consumer<T>> subscribers;
@@ -14,13 +16,22 @@ public class ObservableField<T> implements IObservable<T> {
 	}
 
 	public ObservableField(T data) {
+		this(data, false);
+	}
+
+	public ObservableField(T data, boolean pushDataToNewSubscribers) {
 		subscribers = new ArrayList<Consumer<T>>();
 		this.data = data;
+		this.pushDataToNewSubscribers = pushDataToNewSubscribers;
 	}
 
 	@Override
 	public Subscription subscribe(Consumer<T> subscriber) {
 		subscribers.add(subscriber);
+		if (pushDataToNewSubscribers) {
+			if (data != null)
+				subscriber.accept(data);
+		}
 		return new Subscription(this, subscriber);
 	}
 

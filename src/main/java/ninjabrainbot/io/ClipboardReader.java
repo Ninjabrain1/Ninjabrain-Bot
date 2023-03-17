@@ -5,8 +5,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ClipboardReader implements IClipboardProvider, Runnable {
@@ -18,17 +18,17 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 
 	private AtomicBoolean forceReadLater;
 
-	ObservableProperty<String> clipboardString;
+	ObservableField<String> clipboardString;
 
 	public ClipboardReader(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clipboardString = new ObservableProperty<String>();
+		clipboardString = new ObservableField<String>(null, true);
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
 	}
 
-	public ISubscribable<String> whenClipboardChanged() {
+	public IObservable<String> clipboardText() {
 		return clipboardString;
 	}
 
@@ -70,7 +70,7 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 	}
 
 	private void onClipboardUpdated(String clipboard) {
-		clipboardString.notifySubscribers(clipboard);
+		clipboardString.set(clipboard);
 	}
 
 }
