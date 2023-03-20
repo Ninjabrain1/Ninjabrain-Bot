@@ -47,7 +47,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
 		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
-		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, modificationLock, dataState.boatAngle());
+		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, modificationLock, dataState.boatDataState.boatAngle());
 		addThrowStream(throwParser.whenNewThrowInputed());
 		addFossilStream(throwParser.whenNewFossilInputed());
 
@@ -140,7 +140,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	public synchronized void toggleEnteringBoatIfNotLocked() {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			if (!dataState.locked().get()) {
-				dataState.toggleEnteringBoat();
+				dataState.boatDataState.toggleEnteringBoat();
 			}
 		}
 	}
@@ -162,8 +162,8 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 					dataState.setBlindPosition(new BlindPosition(t));
 				return;
 			}
-			if (dataState.enteringBoat().get()) {
-				dataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
+			if (dataState.boatDataState.enteringBoat().get()) {
+				dataState.boatDataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
 				return;
 			}
 			if (!t.lookingBelowHorizon()) {
