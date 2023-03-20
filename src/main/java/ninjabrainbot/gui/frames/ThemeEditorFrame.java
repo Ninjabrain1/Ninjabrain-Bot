@@ -166,7 +166,6 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		ArrayList<IThrow> eyeThrows = new ArrayList<>();
-		IDataStateHandler unlockedStateHandler = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null, false);
 		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", 0, new AlwaysUnlocked());
 		t1.addCorrection(true, defaultPreferences);
 		t1.setStdProfileNumber(1);

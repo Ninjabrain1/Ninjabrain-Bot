@@ -17,7 +17,7 @@ public class MainTextArea extends ResizablePanel {
 
 	private static final long serialVersionUID = 5680882946230890993L;
 
-	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET";
+	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET", ALL_ADVANCEMENTS = "AA";
 
 	private NinjabrainBotPreferences preferences;
 
@@ -27,6 +27,7 @@ public class MainTextArea extends ResizablePanel {
 	DetailedTriangulationPanel detailedTriangulation;
 	BlindPanel blind;
 	DivinePanel divine;
+	AllAdvancementsPanel allAdvancements;
 
 	boolean idle;
 	CardLayout layout;
@@ -42,10 +43,12 @@ public class MainTextArea extends ResizablePanel {
 		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
+		allAdvancements = new AllAdvancementsPanel(styleManager);
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);
 		add(divine, DIVINE);
+		add(allAdvancements, ALL_ADVANCEMENTS);
 		setOpaque(false);
 		layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
 		setupSubscriptions();
@@ -83,9 +86,9 @@ public class MainTextArea extends ResizablePanel {
 	}
 
 	private void updateResult() {
-		ResultType rt = dataState.resultType().get();
+		ResultType resultType = dataState.resultType().get();
 		idle = false;
-		switch (rt) {
+		switch (resultType) {
 		case NONE:
 			layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
 			idle = true;
@@ -102,6 +105,8 @@ public class MainTextArea extends ResizablePanel {
 		case DIVINE:
 			layout.show(this, DIVINE);
 			break;
+		case ALL_ADVANCEMENTS:
+			layout.show(this, ALL_ADVANCEMENTS);
 		}
 	}
 

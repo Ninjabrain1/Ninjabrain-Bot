@@ -201,7 +201,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 
 		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setAllAdvancementsMode(allAdvancementsModeEnabled);
+			dataState.allAdvancementsDataState.setAllAdvancementsModeEnabled(allAdvancementsModeEnabled);
 		}
 	}
 

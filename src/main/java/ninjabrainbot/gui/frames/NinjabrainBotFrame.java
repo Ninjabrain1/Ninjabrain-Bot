@@ -125,7 +125,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(settingsButton);
 		notificationsButton = new NotificationsButton(styleManager, this, preferences);
 		titlebarPanel.addButton(notificationsButton);
-		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatState(), preferences, sh));
+		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, sh));
 	}
 
 	@Override

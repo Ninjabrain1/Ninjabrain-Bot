@@ -1,5 +1,6 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
@@ -24,12 +25,12 @@ import ninjabrainbot.event.SubscriptionHandler;
 
 public class DataState implements IDataState, IDisposable {
 
+	final AllAdvancementsDataState allAdvancementsDataState;
 	final BoatDataState boatDataState;
 
 	private final ICalculator calculator;
 
 	private final ObservableField<Boolean> locked;
-	private final ObservableField<Boolean> allAdvancementsMode;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
@@ -49,8 +50,6 @@ public class DataState implements IDataState, IDisposable {
 
 		playerPos = new LockableField<IThrow>(modificationLock);
 		locked = new LockableField<Boolean>(false, modificationLock);
-		allAdvancementsMode = new LockableField<Boolean>(false, modificationLock);
-		boatDataState = new BoatDataState(modificationLock);
 
 		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
 		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
@@ -58,17 +57,21 @@ public class DataState implements IDataState, IDisposable {
 		blindResult = new LockableField<BlindResult>(modificationLock);
 		divineResult = new LockableField<DivineResult>(modificationLock);
 
+		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, modificationLock);
+		boatDataState = new BoatDataState(modificationLock);
+
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
 
 		// Subscriptions
 		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
 		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
+		sh.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribe(__ -> updateResultType()));
 	}
 
 	@Override
 	public void reset() {
-		allAdvancementsMode.set(false);
+		allAdvancementsDataState.reset();
 		boatDataState.reset();
 		throwSet.clear();
 		playerPos.set(null);
@@ -110,10 +113,6 @@ public class DataState implements IDataState, IDisposable {
 		updateResultType();
 	}
 
-	public void setAllAdvancementsMode(boolean enabled) {
-		allAdvancementsMode.set(enabled);
-	}
-
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
 		if (calculatorResult == null || !calculatorResult.success()) {
 			topPrediction.set(null);
@@ -149,7 +148,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	private ResultType getExpectedResultType() {
-		if (allAdvancementsMode.get())
+		if (allAdvancementsDataState.allAdvancementsModeEnabled().get())
 			return ResultType.ALL_ADVANCEMENTS;
 
 		if (calculatorResult.get() != null && calculatorResult.get().success())
@@ -209,7 +208,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public IBoatDataState boatDataState() {
-		return boatDataState();
+		return boatDataState;
 	}
 
 }
