@@ -1,5 +1,6 @@
 package ninjabrainbot.io.mcinstance;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -7,6 +8,7 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.HashMap;
 
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
@@ -16,13 +18,15 @@ import ninjabrainbot.event.ObservableProperty;
 public class SavesReader {
 
 	private WatchService watcher;
-
 	private WatchedInstance currentWatchedInstance;
+	private HashMap<MinecraftInstance, MinecraftWorldFile> activeWorldInEachInstance;
+
 	private ObservableField<IMinecraftWorldFile> lastModifiedWorldFile;
 	private ObservableProperty<IMinecraftWorldFile> whenActiveWorldFileModified;
 	private MinecraftWorldFile activeWorldFile;
 
 	public SavesReader(ISubscribable<MinecraftInstance> activeMinecraftInstance) throws IOException {
+		activeWorldInEachInstance = new HashMap<>();
 		lastModifiedWorldFile = new ObservableField<IMinecraftWorldFile>(null);
 		whenActiveWorldFileModified = new ObservableProperty<>();
 		watcher = FileSystems.getDefault().newWatchService();
@@ -59,6 +63,14 @@ public class SavesReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		if (!activeWorldInEachInstance.containsKey(minecraftInstance)) {
+			MinecraftWorldFile worldFile = new MinecraftWorldFile(minecraftInstance, getLatestModifiedWorldNameInSavesDirectory(minecraftInstance));
+			activeWorldInEachInstance.put(minecraftInstance, worldFile);
+		}
+		activeWorldFile = activeWorldInEachInstance.get(minecraftInstance);
+		lastModifiedWorldFile.set(activeWorldFile);
+		onActiveMinecraftWorldFileModified();
 	}
 
 	private void pollEventsForActiveMinecraftInstance(WatchKey watchKey) {
@@ -72,23 +84,20 @@ public class SavesReader {
 
 			if (kind == StandardWatchEventKinds.ENTRY_MODIFY && !modifiedEventAlreadyHandled) {
 				modifiedEventAlreadyHandled = true;
-				whenActiveMinecraftInstanceSaveDirectoryModified((Path) event.context());
+				whenActiveMinecraftInstanceSaveDirectoryModified(event.context().toString());
 			}
 		}
 	}
 
-	private void whenActiveMinecraftInstanceSaveDirectoryModified(Path worldName) {
+	private void whenActiveMinecraftInstanceSaveDirectoryModified(String worldName) {
 		if (isWorldFileDifferentFromTheLastModifiedWorldFile(worldName)) {
-			activeWorldFile = new MinecraftWorldFile(currentWatchedInstance.minecraftInstance, worldName.toString());
+			activeWorldFile = new MinecraftWorldFile(currentWatchedInstance.minecraftInstance, worldName);
 			lastModifiedWorldFile.set(activeWorldFile);
 		}
-		if (!activeWorldFile.hasEnteredEnd() && activeWorldFile.getEndDimensionFile().exists()) {
-			activeWorldFile.setHasEnteredEnd(true);
-			whenActiveWorldFileModified.notifySubscribers(activeWorldFile);
-		}
+		onActiveMinecraftWorldFileModified();
 	}
 
-	private boolean isWorldFileDifferentFromTheLastModifiedWorldFile(Path worldName) {
+	private boolean isWorldFileDifferentFromTheLastModifiedWorldFile(String worldName) {
 		if (activeWorldFile == null)
 			return true;
 
@@ -99,6 +108,31 @@ public class SavesReader {
 			return true;
 
 		return false;
+	}
+
+	private void onActiveMinecraftWorldFileModified() {
+		if (!activeWorldFile.hasEnteredEnd() && activeWorldFile.getEndDimensionFile().exists()) {
+			activeWorldFile.setHasEnteredEnd(true);
+		}
+		whenActiveWorldFileModified.notifySubscribers(activeWorldFile);
+	}
+
+	private String getLatestModifiedWorldNameInSavesDirectory(MinecraftInstance minecraftInstance) {
+		File savesDirectory = new File(minecraftInstance.savesDirectory);
+		File[] worldFiles = savesDirectory.listFiles();
+		if (worldFiles == null || worldFiles.length == 0) {
+			return null;
+		}
+
+		File lastModifiedWorldFile = null;
+		for (int i = worldFiles.length - 1; i >= 0; i--) {
+			if (lastModifiedWorldFile == null || lastModifiedWorldFile.lastModified() < worldFiles[i].lastModified()) {
+				if (!worldFiles[i].isDirectory())
+					continue;
+				lastModifiedWorldFile = worldFiles[i];
+			}
+		}
+		return lastModifiedWorldFile.getName();
 	}
 
 }
