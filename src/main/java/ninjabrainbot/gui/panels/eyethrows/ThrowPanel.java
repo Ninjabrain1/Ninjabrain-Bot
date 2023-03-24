@@ -110,7 +110,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			chunkPredictionModifiedSubscription.cancel();
 		chunkPredictionModifiedSubscription = null;
 		if (p != null)
-			chunkPredictionModifiedSubscription = p.whenModified().subscribe(pred -> updateError(pred));
+			chunkPredictionModifiedSubscription = p.whenRelativePlayerPositionChanged().subscribe(__ -> updateError(p));
 		updateError(p);
 	}
 
@@ -228,8 +228,8 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			removeButton.setVisible(false);
 			correctionSgn = 0;
 		} else {
-			x.setText(String.format(Locale.US, "%.2f", t.x()));
-			z.setText(String.format(Locale.US, "%.2f", t.z()));
+			x.setText(String.format(Locale.US, "%.2f", t.xInPlayerDimension()));
+			z.setText(String.format(Locale.US, "%.2f", t.zInPlayerDimension()));
 			alpha.setText(String.format(Locale.US, "%.2f", t.alpha_0()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {

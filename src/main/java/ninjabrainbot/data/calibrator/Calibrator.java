@@ -72,12 +72,12 @@ public class Calibrator implements IDisposable {
 				closest = stronghold;
 				prediction = stronghold;
 			}
-			double deltaX = closest.x * 16 + 8 - t.x();
-			double deltaZ = closest.z * 16 + 8 - t.z();
+			double deltaX = closest.x * 16 + 8 - t.xInPlayerDimension();
+			double deltaZ = closest.z * 16 + 8 - t.zInPlayerDimension();
 			double phi = t.alpha() * Math.PI / 180.0;
 			double perpendicularDistance = 100.0;
-			double nextX = t.x() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
-			double nextZ = t.z() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
+			double nextX = t.xInPlayerDimension() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
+			double nextZ = t.zInPlayerDimension() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			tp(nextX, nextZ, nextAlpha, -31.2);
@@ -93,8 +93,8 @@ public class Calibrator implements IDisposable {
 	}
 
 	private double distanceFromIntendedPosition(IThrow t) {
-		double dx = lastX - t.x();
-		double dz = lastZ - t.z();
+		double dx = lastX - t.xInPlayerDimension();
+		double dz = lastZ - t.zInPlayerDimension();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
 

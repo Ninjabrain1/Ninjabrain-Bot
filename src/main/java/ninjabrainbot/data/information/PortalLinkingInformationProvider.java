@@ -23,8 +23,8 @@ public class PortalLinkingInformationProvider extends InformationMessageProvider
 			return false;
 
 		IThrow t = dataState.getThrowSet().get(0);
-		double approximatePortalNetherX = t.x() / 8;
-		double approximatePortalNetherZ = t.z() / 8;
+		double approximatePortalNetherX = t.xInOverworld() / 8;
+		double approximatePortalNetherZ = t.zInOverworld() / 8;
 
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
 		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.getNetherX() + 0.5)), Math.abs(approximatePortalNetherZ - (bestPrediction.getNetherZ() + 0.5)));

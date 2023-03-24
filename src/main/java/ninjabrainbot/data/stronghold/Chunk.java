@@ -30,6 +30,22 @@ public class Chunk {
 		return dx * dx + dz * dz;
 	}
 
+	public int fourfourX() {
+		return 16 * x + 4;
+	}
+
+	public int fourfourZ() {
+		return 16 * z + 4;
+	}
+
+	public int eighteightX() {
+		return 16 * x + 8;
+	}
+
+	public int eighteightZ() {
+		return 16 * z + 8;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(x, z);
@@ -60,12 +76,8 @@ public class Chunk {
 	 * given throw.
 	 */
 	public int getOverworldDistance(McVersion version, IThrow t) {
-		double playerX = t.x();
-		double playerZ = t.z();
-		if (t.isNether()) {
-			playerX *= 8;
-			playerZ *= 8;
-		}
+		double playerX = t.xInOverworld();
+		double playerZ = t.zInOverworld();
 		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - playerX;
 		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord(version) - playerZ;
 		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
@@ -80,8 +92,8 @@ public class Chunk {
 	}
 
 	public double getAngleError(McVersion version, IThrow t) {
-		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.x();
-		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.z();
+		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInPlayerDimension();
+		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInPlayerDimension();
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
 		double delta = (t.alpha() - gamma) % 360.0;
 		if (delta < -180)

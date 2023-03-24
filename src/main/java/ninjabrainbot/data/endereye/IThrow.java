@@ -6,6 +6,10 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 
+	public double xInPlayerDimension();
+
+	public double zInPlayerDimension();
+
 	public double getStd();
 
 	public double rawAlpha();

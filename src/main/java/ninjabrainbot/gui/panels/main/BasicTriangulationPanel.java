@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
+import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
@@ -14,6 +15,7 @@ import ninjabrainbot.gui.components.ColorMapLabel;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
@@ -65,7 +67,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 				setChunkPrediction(prediction);
 				if (chunkPredictionSubscription != null)
 					chunkPredictionSubscription.cancel();
-				chunkPredictionSubscription = prediction.whenModified().subscribe(p -> setChunkPrediction(p));
+				chunkPredictionSubscription = prediction.whenRelativePlayerPositionChanged().subscribe(__ -> setChunkPrediction(prediction));
 			} else {
 				maintextLabel.setText(I18n.get("could_not_determine"));
 				certaintyPanel.setText(I18n.get("you_probably_misread"));
@@ -82,7 +84,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void setChunkPrediction(ChunkPrediction prediction) {
-		maintextLabel.setText(prediction.format(preferences.strongholdDisplayType.get()));
+		maintextLabel.setText(formatStrongholdCoords(prediction, preferences.strongholdDisplayType.get()));
 		certaintyPanel.setText(CERTAINTY_TEXT);
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.chunk.weight * 100.0), (float) prediction.chunk.weight);
 		netherLabel.setText(I18n.get("nether_coordinates", prediction.chunk.x * 2, prediction.chunk.z * 2, prediction.getNetherDistance()));
@@ -113,6 +115,22 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.cancel();
+	}
+
+	private static String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {
+		Chunk chunk = chunkPrediction.chunk;
+		int distance = chunkPrediction.getOverworldDistance();
+		switch (strongholdDisplayType) {
+		case FOURFOUR:
+			return I18n.get("location_blocks", chunk.fourfourX(), chunk.fourfourZ(), distance);
+		case EIGHTEIGHT:
+			return I18n.get("location_blocks", chunk.eighteightX(), chunk.eighteightZ(), distance);
+		case CHUNK:
+			return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
+		default:
+			break;
+		}
+		return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 	}
 
 }

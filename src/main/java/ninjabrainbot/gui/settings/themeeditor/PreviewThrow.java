@@ -24,12 +24,22 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public double x() {
+	public double xInOverworld() {
 		return x;
 	}
 
 	@Override
-	public double z() {
+	public double zInOverworld() {
+		return z;
+	}
+
+	@Override
+	public double xInPlayerDimension() {
+		return x;
+	}
+
+	@Override
+	public double zInPlayerDimension() {
 		return z;
 	}
 

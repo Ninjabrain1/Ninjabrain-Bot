@@ -45,8 +45,8 @@ public class RayApproximatedPrior implements IPrior {
 		boolean majorX = Math.cos(phi) * Math.cos(phi) < 0.5;
 		boolean majorPositive = majorX ? -Math.sin(phi) > 0 : Math.cos(phi) > 0;
 		// Subtract StrongholdChunkCoord to center grid at (8,8) (or 0,0 in 1.19).
-		double origin_major = ((majorX ? r.x() : r.z()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
-		double origin_minor = ((majorX ? r.z() : r.x()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
+		double origin_major = ((majorX ? r.xInOverworld() : r.zInOverworld()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
+		double origin_minor = ((majorX ? r.zInOverworld() : r.xInOverworld()) - StrongholdConstants.getStrongholdChunkCoord(version)) / 16.0;
 		double iter_start_major = getIterStartMajor(origin_major, origin_minor, ux, uz, vx, vz, majorX, majorPositive);
 		double uk = majorX ? uz / ux : ux / uz;
 		double vk = majorX ? vz / vx : vx / vz;

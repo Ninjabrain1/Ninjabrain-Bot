@@ -1,6 +1,6 @@
 package ninjabrainbot.data.blind;
 
-import ninjabrainbot.data.statistics.IRay;
+import ninjabrainbot.data.endereye.IThrow;
 
 public class BlindPosition {
 	public final double x, z;
@@ -10,8 +10,8 @@ public class BlindPosition {
 		this.z = z;
 	}
 
-	public BlindPosition(IRay ray) {
-		this(ray.x(), ray.z());
+	public BlindPosition(IThrow playerPos) {
+		this(playerPos.xInPlayerDimension(), playerPos.zInPlayerDimension());
 	}
 
 }

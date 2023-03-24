@@ -106,12 +106,22 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
-	public double x() {
+	public double xInOverworld() {
+		return x * (nether ? 8.0 : 1.0);
+	}
+
+	@Override
+	public double zInOverworld() {
+		return z * (nether ? 8.0 : 1.0);
+	}
+
+	@Override
+	public double xInPlayerDimension() {
 		return x;
 	}
 
 	@Override
-	public double z() {
+	public double zInPlayerDimension() {
 		return z;
 	}
 

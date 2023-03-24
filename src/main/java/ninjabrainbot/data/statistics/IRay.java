@@ -1,22 +1,9 @@
 package ninjabrainbot.data.statistics;
 
-import ninjabrainbot.data.endereye.Throw;
+import ninjabrainbot.data.common.IPosition;
 
-public interface IRay {
-
-	public double x();
-
-	public double z();
+public interface IRay extends IPosition {
 
 	public double alpha();
-
-	/**
-	 * Returns the squared distance between this ray and the given ray.
-	 */
-	public default double distance2(Throw other) {
-		double dx = x() - other.x();
-		double dz = z() - other.z();
-		return dx * dx + dz * dz;
-	}
 
 }

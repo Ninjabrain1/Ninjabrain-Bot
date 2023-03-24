@@ -11,13 +11,13 @@ public class TestUtils {
 		return new IRay() {
 
 			@Override
-			public double z() {
-				return z;
+			public double xInOverworld() {
+				return x;
 			}
 
 			@Override
-			public double x() {
-				return x;
+			public double zInOverworld() {
+				return z;
 			}
 
 			@Override
