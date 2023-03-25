@@ -6,9 +6,9 @@ import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.util.I18n;
 
-public class PortalLinkingInformationProvider extends InformationMessageProvider {
+public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
-	public PortalLinkingInformationProvider(IDataState dataState) {
+	public PortalLinkingWarningProvider(IDataState dataState) {
 		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
 	}
 
@@ -37,7 +37,7 @@ public class PortalLinkingInformationProvider extends InformationMessageProvider
 
 	private InformationMessage geOrCreatetWarningMessage() {
 		if (warningMessage == null)
-			warningMessage = new InformationMessage(InformationType.Info, I18n.get("information.portal_linking"));
+			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.portal_linking"));
 		return warningMessage;
 	}
 
