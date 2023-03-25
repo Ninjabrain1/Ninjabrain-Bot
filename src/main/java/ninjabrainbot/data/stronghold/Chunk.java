@@ -2,6 +2,7 @@ package ninjabrainbot.data.stronghold;
 
 import java.util.Objects;
 
+import ninjabrainbot.data.common.IPosition;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.ISet;
@@ -73,9 +74,9 @@ public class Chunk {
 
 	/**
 	 * Returns the distance (number of blocks) to the predicted location from the
-	 * given throw.
+	 * given position.
 	 */
-	public int getOverworldDistance(McVersion version, IThrow t) {
+	public int getOverworldDistance(McVersion version, IPosition t) {
 		double playerX = t.xInOverworld();
 		double playerZ = t.zInOverworld();
 		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - playerX;

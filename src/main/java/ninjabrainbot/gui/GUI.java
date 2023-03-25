@@ -5,7 +5,8 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.data.information.McVersionWarningProvider;
 import ninjabrainbot.data.information.MismeasureWarningProvider;
-import ninjabrainbot.data.information.PortalLinkingInformationProvider;
+import ninjabrainbot.data.information.NextThrowDirectionInformationProvider;
+import ninjabrainbot.data.information.PortalLinkingWarningProvider;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -82,7 +83,8 @@ public class GUI {
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
 		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
-		informationMessageList.AddInformationMessageProvider(new PortalLinkingInformationProvider(dataState));
+		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState));
+		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, preferences));
 		Profiler.stop();
 	}
 
