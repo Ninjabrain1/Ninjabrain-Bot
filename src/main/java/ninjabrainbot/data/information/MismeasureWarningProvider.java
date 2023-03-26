@@ -9,7 +9,8 @@ import ninjabrainbot.util.I18n;
 public class MismeasureWarningProvider extends InformationMessageProvider {
 
 	public MismeasureWarningProvider(IDataState dataState) {
-		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
+		updateInformationMessage(dataState);
+		dataState.calculatorResult().subscribeEDT(__ -> updateInformationMessage(dataState));
 	}
 
 	private void updateInformationMessage(IDataState dataState) {

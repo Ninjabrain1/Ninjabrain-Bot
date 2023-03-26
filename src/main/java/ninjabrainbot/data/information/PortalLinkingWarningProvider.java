@@ -9,7 +9,7 @@ import ninjabrainbot.util.I18n;
 public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
 	public PortalLinkingWarningProvider(IDataState dataState) {
-		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
+		dataState.calculatorResult().subscribeEDT(__ -> updateInformationMessage(dataState));
 	}
 
 	private void updateInformationMessage(IDataState dataState) {

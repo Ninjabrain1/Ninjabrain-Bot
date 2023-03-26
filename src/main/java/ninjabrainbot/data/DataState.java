@@ -182,6 +182,11 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
+	public IObservable<IThrow> playerPosition() {
+		return playerPos;
+	}
+
+	@Override
 	public IObservable<ChunkPrediction> topPrediction() {
 		return topPrediction;
 	}

@@ -21,19 +21,23 @@ public class InformationTextPanel extends ThemedPanel {
 	private static final int iconMarginsHorizontal = 6, iconMarginsVertical = 4;
 
 	private WrappedColor borderColor;
+	private JLabel icon;
+	private JLabel textLabel;
 
-	final InformationMessage informationMessage;
-
-	public InformationTextPanel(StyleManager styleManager, InformationMessage informationMessage) {
+	public InformationTextPanel(StyleManager styleManager) {
 		super(styleManager);
-		this.informationMessage = informationMessage;
 		setLayout(new BorderLayout(0, 0));
 		borderColor = styleManager.currentTheme.COLOR_DIVIDER;
-
-		JLabel icon = new JLabel(getIcon(informationMessage.type));
+		icon = new JLabel();
 		icon.setBorder(new EmptyBorder(iconMarginsVertical, iconMarginsHorizontal, iconMarginsVertical, iconMarginsHorizontal));
+		textLabel = new SmallThemedLabel(styleManager);
 		add(icon, BorderLayout.WEST);
-		add(new SmallThemedLabel(styleManager, "<html>" + informationMessage.message + "</html>"), BorderLayout.CENTER);
+		add(textLabel, BorderLayout.CENTER);
+	}
+
+	public void setInformationMessage(InformationMessage informationMessage) {
+		icon.setIcon(getIcon(informationMessage.type));
+		textLabel.setText("<html>" + informationMessage.message + "</html>");
 	}
 
 	@Override

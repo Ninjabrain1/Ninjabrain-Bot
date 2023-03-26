@@ -1,5 +1,6 @@
 package ninjabrainbot.gui.panels.information;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -17,6 +18,8 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 	StyleManager styleManager;
 
+	List<InformationTextPanel> cachedInformationTextPanels = new ArrayList<>();
+
 	public InformationListPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, InformationMessageList informationMessageList) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(true);
@@ -30,12 +33,21 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 	}
 
 	private void synchronizeInformationMessages(List<InformationMessage> informationMessages) {
-		removeAll();
-		for (InformationMessage informationMessage : informationMessages) {
-			InformationTextPanel informationTextPanel = new InformationTextPanel(styleManager, informationMessage);
-			add(informationTextPanel);
+		for (InformationTextPanel informationTextPanel : cachedInformationTextPanels) {
+			informationTextPanel.setVisible(false);
 		}
-		revalidate();
+		int messageIndex = 0;
+		for (InformationMessage informationMessage : informationMessages) {
+			if (cachedInformationTextPanels.size() <= messageIndex) {
+				InformationTextPanel newInformationTextPanel = new InformationTextPanel(styleManager);
+				cachedInformationTextPanels.add(newInformationTextPanel);
+				add(newInformationTextPanel);
+			}
+			InformationTextPanel informationTextPanel = cachedInformationTextPanels.get(messageIndex);
+			informationTextPanel.setInformationMessage(informationMessage);
+			informationTextPanel.setVisible(true);
+			messageIndex++;
+		}
 		whenSizeModified.notifySubscribers(this);
 	}
 

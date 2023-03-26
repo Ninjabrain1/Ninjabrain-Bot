@@ -14,6 +14,7 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 public class PreviewCalculatorResult implements ICalculatorResult {
 
 	List<ChunkPrediction> predictions = new ArrayList<ChunkPrediction>();
+	List<Chunk> chunks = new ArrayList<Chunk>();
 
 	public PreviewCalculatorResult(McVersion version) {
 		IObservable<IThrow> playerPos = new ObservableField<IThrow>(new PreviewThrow(0, 1950));
@@ -47,6 +48,11 @@ public class PreviewCalculatorResult implements ICalculatorResult {
 	@Override
 	public boolean success() {
 		return true;
+	}
+
+	@Override
+	public List<Chunk> getTopChunks() {
+		return chunks;
 	}
 
 }

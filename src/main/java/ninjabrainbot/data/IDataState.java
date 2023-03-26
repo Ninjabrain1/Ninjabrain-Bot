@@ -5,6 +5,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.highprecision.IBoatDataState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
@@ -19,6 +20,8 @@ public interface IDataState {
 	public IObservable<ICalculatorResult> calculatorResult();
 
 	public IObservable<ChunkPrediction> topPrediction();
+
+	public IObservable<IThrow> playerPosition();
 
 	public IObservable<BlindResult> blindResult();
 

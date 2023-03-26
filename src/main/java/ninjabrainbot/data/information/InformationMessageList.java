@@ -16,10 +16,12 @@ public class InformationMessageList extends ObservableList<InformationMessage> {
 	}
 
 	public void AddInformationMessageProvider(InformationMessageProvider informationMessageProvider) {
-		sh.add(informationMessageProvider.subscribe(message -> whenInformationMessageChanged(informationMessageProvider, message)));
+		whenInformationMessageChanged(informationMessageProvider);
+		sh.add(informationMessageProvider.subscribe(__ -> whenInformationMessageChanged(informationMessageProvider)));
 	}
 
-	private void whenInformationMessageChanged(InformationMessageProvider provider, InformationMessage message) {
+	private void whenInformationMessageChanged(InformationMessageProvider provider) {
+		InformationMessage message = provider.get();
 		if (informationMessages.containsKey(provider)) {
 			remove(informationMessages.get(provider));
 			informationMessages.remove(provider);
