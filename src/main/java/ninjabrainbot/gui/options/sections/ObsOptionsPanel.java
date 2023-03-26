@@ -11,11 +11,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.View;
 
 import ninjabrainbot.event.SubscriptionHandler;
-import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.components.ThemedTextArea;
+import ninjabrainbot.gui.components.labels.ThemedLabel;
+import ninjabrainbot.gui.components.labels.ThemedTextArea;
 import ninjabrainbot.gui.frames.OptionsFrame;
-import ninjabrainbot.gui.options.components.CheckboxPanel;
-import ninjabrainbot.gui.options.components.FloatPreferencePanel;
+import ninjabrainbot.gui.components.preferences.CheckboxPanel;
+import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.OBSOverlay;

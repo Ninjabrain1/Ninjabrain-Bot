@@ -10,12 +10,12 @@ import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.components.TitledDivider;
-import ninjabrainbot.gui.panels.HorizontalRestrictedThemedPanel;
-import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.CustomTheme;
+import ninjabrainbot.gui.components.layout.TitledDivider;
+import ninjabrainbot.gui.components.panels.HorizontalRestrictedThemedPanel;
+import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 

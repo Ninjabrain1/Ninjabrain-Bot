@@ -1,7 +1,7 @@
 package ninjabrainbot.gui.options.sections;
 
 import ninjabrainbot.event.SubscriptionHandler;
-import ninjabrainbot.gui.panels.ThemedTabbedPane;
+import ninjabrainbot.gui.components.layout.ThemedTabbedPane;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;

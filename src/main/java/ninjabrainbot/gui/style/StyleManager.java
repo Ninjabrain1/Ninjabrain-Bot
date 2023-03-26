@@ -15,6 +15,8 @@ import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.frames.ThemedDialog;
 import ninjabrainbot.gui.frames.ThemedFrame;
+import ninjabrainbot.gui.style.theme.CurrentTheme;
+import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 

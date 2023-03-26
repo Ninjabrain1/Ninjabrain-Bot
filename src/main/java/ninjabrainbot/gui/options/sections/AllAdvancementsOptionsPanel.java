@@ -3,8 +3,8 @@ package ninjabrainbot.gui.options.sections;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.frames.OptionsFrame;
-import ninjabrainbot.gui.options.components.CheckboxPanel;
-import ninjabrainbot.gui.panels.StackPanel;
+import ninjabrainbot.gui.components.preferences.CheckboxPanel;
+import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;

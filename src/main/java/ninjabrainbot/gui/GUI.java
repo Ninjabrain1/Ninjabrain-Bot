@@ -13,7 +13,7 @@ import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;

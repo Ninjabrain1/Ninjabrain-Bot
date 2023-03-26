@@ -14,11 +14,11 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.SubscriptionHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
-import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.panels.TitleBarPanel;
+import ninjabrainbot.gui.components.labels.ThemedLabel;
+import ninjabrainbot.gui.components.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedDialog extends JDialog implements IDisposable {

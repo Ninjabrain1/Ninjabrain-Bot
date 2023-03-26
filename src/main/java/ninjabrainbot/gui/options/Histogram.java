@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
-import ninjabrainbot.gui.components.ThemedLabel;
-import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.components.labels.ThemedLabel;
+import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class Histogram extends ThemedPanel {
 

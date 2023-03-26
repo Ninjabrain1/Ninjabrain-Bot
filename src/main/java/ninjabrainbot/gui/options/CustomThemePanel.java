@@ -10,10 +10,10 @@ import javax.swing.border.MatteBorder;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.frames.ThemeEditorFrame;
 import ninjabrainbot.gui.frames.ThemedDialog;
-import ninjabrainbot.gui.panels.ThemedPanel;
-import ninjabrainbot.gui.style.CustomTheme;
+import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class CustomThemePanel extends ThemePanel {

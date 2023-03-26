@@ -10,11 +10,11 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.components.ThemedIcon;
-import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.labels.ThemedIcon;
+import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 
 /**
  * Custom button with 'flat' graphics, otherwise behaves like a JButton.

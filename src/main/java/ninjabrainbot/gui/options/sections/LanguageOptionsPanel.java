@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.frames.OptionsFrame;
-import ninjabrainbot.gui.options.components.RadioButtonPanel;
+import ninjabrainbot.gui.components.preferences.RadioButtonPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;

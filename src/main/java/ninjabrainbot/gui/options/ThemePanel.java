@@ -9,10 +9,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.panels.ThemedPanel;
+import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.Theme;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ThemePanel extends ThemedPanel {
@@ -41,11 +41,11 @@ public class ThemePanel extends ThemedPanel {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weighty = 1;
 		gbc.weightx = 1;
-		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_NEUTRAL), gbc);
-		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_SLIGHTLY_WEAK), gbc);
-		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_STRONG), gbc);
-		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_DIVIDER), gbc);
-		colorPreviewPanels.add(new ColorPreviewPanel(styleManager, theme.COLOR_DIVIDER_DARK), gbc);
+		colorPreviewPanels.add(new ColorDisplayPanel(styleManager, theme.COLOR_NEUTRAL), gbc);
+		colorPreviewPanels.add(new ColorDisplayPanel(styleManager, theme.COLOR_SLIGHTLY_WEAK), gbc);
+		colorPreviewPanels.add(new ColorDisplayPanel(styleManager, theme.COLOR_STRONG), gbc);
+		colorPreviewPanels.add(new ColorDisplayPanel(styleManager, theme.COLOR_DIVIDER), gbc);
+		colorPreviewPanels.add(new ColorDisplayPanel(styleManager, theme.COLOR_DIVIDER_DARK), gbc);
 		colorPreviewPanels.setBackgroundColor(theme.COLOR_DIVIDER_DARK);
 
 		add(nameLabel);

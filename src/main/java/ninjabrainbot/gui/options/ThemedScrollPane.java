@@ -13,7 +13,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.WrappedColor;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedScrollPane extends JScrollPane implements ThemedComponent {
 

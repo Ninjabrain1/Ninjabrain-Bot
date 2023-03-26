@@ -12,7 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.components.ThemedLabel;
+import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.VersionURL;
