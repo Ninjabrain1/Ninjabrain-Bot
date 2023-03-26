@@ -7,6 +7,7 @@ import java.awt.font.FontRenderContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javax.swing.SwingUtilities;
 
@@ -118,14 +119,14 @@ public class StyleManager {
 	private Font loadFont() {
 		Font font = null;
 		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Main.class.getResourceAsStream("/OpenSans-Regular.ttf"));
+			font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Main.class.getResourceAsStream("/OpenSans-Regular.ttf")));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
 		if (font == null || font.canDisplayUpTo(I18n.get("lang")) != -1) {
 			font = new Font(null);
 		}
-		if (font == null || font.canDisplayUpTo(I18n.get("lang")) != -1) {
+		if (font.canDisplayUpTo(I18n.get("lang")) != -1) {
 			Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 			for (Font f : fonts) {
 				if (f.canDisplayUpTo(I18n.get("lang")) < 0) {
