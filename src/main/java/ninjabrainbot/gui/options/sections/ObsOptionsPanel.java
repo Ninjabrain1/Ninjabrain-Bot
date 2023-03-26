@@ -22,10 +22,9 @@ import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
-@SuppressWarnings("serial")
 public class ObsOptionsPanel extends JPanel {
 
-	private FloatPreferencePanel overlayResetDelay;
+	private final FloatPreferencePanel overlayResetDelay;
 
 	public ObsOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, SubscriptionHandler subscriptionHandler) {
 		setOpaque(false);
@@ -67,7 +66,7 @@ public class ObsOptionsPanel extends JPanel {
 		constraints.weighty = 1;
 		add(Box.createGlue(), constraints);
 
-		subscriptionHandler.add(preferences.overlayAutoHide.whenModified().subscribe(b -> setOverlayAutoHideEnabled(b)));
+		subscriptionHandler.add(preferences.overlayAutoHide.whenModified().subscribe(this::setOverlayAutoHideEnabled));
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {

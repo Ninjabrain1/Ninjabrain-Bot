@@ -16,14 +16,14 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class OBSOverlay implements IDisposable {
 
-	private NinjabrainBotPreferences preferences;
-	private NinjabrainBotFrame ninjabrainBotFrame;
-	private IObservable<Boolean> calculatorLocked;
+	private final NinjabrainBotPreferences preferences;
+	private final NinjabrainBotFrame ninjabrainBotFrame;
+	private final IObservable<Boolean> calculatorLocked;
 
 	private Timer overlayClearTimer;
 	private Timer overlayUpdateTimer;
 	private long lastOverlayUpdate = System.currentTimeMillis();
-	private final long minOverlayUpdateDelayMillis = 1000;
+	private static final long minOverlayUpdateDelayMillis = 1000;
 
 	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
@@ -55,7 +55,7 @@ public class OBSOverlay implements IDisposable {
 		sh.add(preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
 		sh.add(preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
 		sh.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(preferences.useOverlay.whenModified().subscribeEDT(b -> setOverlayEnabled(b)));
+		sh.add(preferences.useOverlay.whenModified().subscribeEDT(this::setOverlayEnabled));
 	}
 
 	private void markShouldUpdate() {
