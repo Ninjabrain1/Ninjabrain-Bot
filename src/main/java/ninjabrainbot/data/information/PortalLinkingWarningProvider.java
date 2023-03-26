@@ -4,13 +4,15 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
 public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
 	private final IDataState dataState;
 
-	public PortalLinkingWarningProvider(IDataState dataState) {
+	public PortalLinkingWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
+		super(preferences.informationPortalLinkingEnabled);
 		this.dataState = dataState;
 		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}

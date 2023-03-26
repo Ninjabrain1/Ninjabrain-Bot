@@ -18,6 +18,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 	private final IDataState dataState;
 
 	public NextThrowDirectionInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
+		super(preferences.informationDirectionHelpEnabled);
 		this.dataState = dataState;
 		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 		sh.add(preferences.sigma.whenModified().subscribe(__ -> raiseInformationMessageChanged()));

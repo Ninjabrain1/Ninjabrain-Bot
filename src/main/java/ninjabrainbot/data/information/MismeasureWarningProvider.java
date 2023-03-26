@@ -4,13 +4,15 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
 public class MismeasureWarningProvider extends InformationMessageProvider {
 
 	private final IDataState dataState;
 
-	public MismeasureWarningProvider(IDataState dataState) {
+	public MismeasureWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
+		super(preferences.informationMismeasureEnabled);
 		this.dataState = dataState;
 		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}

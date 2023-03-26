@@ -81,8 +81,8 @@ public class GUI {
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
-		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
-		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
 		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
 		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, preferences));
 		Profiler.stop();

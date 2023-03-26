@@ -13,6 +13,7 @@ public class CombinedCertaintyInformationProvider extends InformationMessageProv
 	private List<Chunk> predictions;
 
 	public CombinedCertaintyInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
+		super(preferences.informationCombinedCertaintyEnabled);
 		sh.add(dataState.calculatorResult().subscribe(this::updateInformationMessage));
 	}
 
