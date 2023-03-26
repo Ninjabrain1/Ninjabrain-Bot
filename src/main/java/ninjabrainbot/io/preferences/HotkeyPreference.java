@@ -3,7 +3,6 @@ package ninjabrainbot.io.preferences;
 import java.util.ArrayList;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 

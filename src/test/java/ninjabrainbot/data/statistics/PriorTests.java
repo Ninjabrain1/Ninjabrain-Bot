@@ -1,15 +1,7 @@
 package ninjabrainbot.data.statistics;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.divine.DivineContext;
@@ -17,6 +9,13 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.data.stronghold.RingIterator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class PriorTests {
 

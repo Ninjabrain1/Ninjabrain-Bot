@@ -112,7 +112,7 @@ public class Posterior {
 	 * Conditions all chunk weights on the fact that the stronghold is closer than
 	 * any other stronghold. This action is relatively costly, and is approximated
 	 * for all chunks below the given threshold.
-	 * 
+	 *
 	 * @param probabilityTheshold
 	 */
 	private void closestStrongholdCondition(IThrow t, double probabilityTheshold) {
@@ -127,8 +127,7 @@ public class Posterior {
 				totalClosestStrongholdProbability += a;
 				samples++;
 			} else {
-				c.weight *= totalClosestStrongholdProbability / samples; // Approximation, no need to be precise for
-																			// chunks that dont matter
+				c.weight *= totalClosestStrongholdProbability / samples; // Approximation, no need to be precise for chunks that dont matter
 			}
 		}
 		// Normalize

@@ -14,7 +14,6 @@ public class ColorMap {
 	}
 
 	/**
-	 * 
 	 * @param t a number in [0, 1]. If t is outside the range it will be set to the
 	 *          closest number in [0, 1].
 	 * @return The value of the color map at t.

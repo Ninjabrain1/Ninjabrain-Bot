@@ -121,14 +121,14 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 		Chunk chunk = chunkPrediction.chunk;
 		int distance = chunkPrediction.getOverworldDistance();
 		switch (strongholdDisplayType) {
-		case FOURFOUR:
-			return I18n.get("location_blocks", chunk.fourfourX(), chunk.fourfourZ(), distance);
-		case EIGHTEIGHT:
-			return I18n.get("location_blocks", chunk.eighteightX(), chunk.eighteightZ(), distance);
-		case CHUNK:
-			return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
-		default:
-			break;
+			case FOURFOUR:
+				return I18n.get("location_blocks", chunk.fourfourX(), chunk.fourfourZ(), distance);
+			case EIGHTEIGHT:
+				return I18n.get("location_blocks", chunk.eighteightX(), chunk.eighteightZ(), distance);
+			case CHUNK:
+				return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
+			default:
+				break;
 		}
 		return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 	}

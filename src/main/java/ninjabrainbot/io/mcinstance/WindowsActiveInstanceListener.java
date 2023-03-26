@@ -10,7 +10,6 @@ import com.sun.jna.platform.WindowUtils;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.IntByReference;
-
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;

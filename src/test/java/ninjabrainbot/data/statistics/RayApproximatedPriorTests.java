@@ -1,13 +1,7 @@
 package ninjabrainbot.data.statistics;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.divine.DivineContext;
@@ -16,6 +10,11 @@ import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.TestUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RayApproximatedPriorTests {
 

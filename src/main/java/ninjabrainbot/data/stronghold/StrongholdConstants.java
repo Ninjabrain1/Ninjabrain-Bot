@@ -31,6 +31,6 @@ public class StrongholdConstants {
 		boolean pre1_19 = version == McVersion.PRE_119;
 		int strongholdCenterChunkCoord = pre1_19 ? 8 : 0;
 		return strongholdCenterChunkCoord;
-	};
+	}
 
 }

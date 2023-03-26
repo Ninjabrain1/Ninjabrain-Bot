@@ -118,14 +118,14 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				IThrow last = dataState.getThrowSet().getLast();
 				int stdProfile = last.getStdProfileNumber();
 				switch (stdProfile) {
-				case StandardStdProfile.NORMAL:
-					last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
-					break;
-				case StandardStdProfile.ALTERNATIVE:
-					last.setStdProfileNumber(StandardStdProfile.NORMAL);
-					break;
-				case StandardStdProfile.MANUAL:
-					break;
+					case StandardStdProfile.NORMAL:
+						last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
+						break;
+					case StandardStdProfile.ALTERNATIVE:
+						last.setStdProfileNumber(StandardStdProfile.NORMAL);
+						break;
+					case StandardStdProfile.MANUAL:
+						break;
 				}
 			}
 		}

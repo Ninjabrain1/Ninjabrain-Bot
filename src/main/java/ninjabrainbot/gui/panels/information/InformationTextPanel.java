@@ -49,15 +49,15 @@ public class InformationTextPanel extends ThemedPanel {
 	private ImageIcon getIcon(InformationType informationType) {
 		String imagePath = null;
 		switch (informationType) {
-		case Info:
-			imagePath = "/info_icon.png";
-			break;
-		case Warning:
-			imagePath = "/warning_icon.png";
-			break;
-		case Error:
-			imagePath = null;
-			break;
+			case Info:
+				imagePath = "/info_icon.png";
+				break;
+			case Warning:
+				imagePath = "/warning_icon.png";
+				break;
+			case Error:
+				imagePath = null;
+				break;
 		}
 		return new ImageIcon(Main.class.getResource(imagePath));
 	}

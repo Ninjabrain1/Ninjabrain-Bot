@@ -171,14 +171,14 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private static String formatStrongholdCoords(Chunk chunk, StrongholdDisplayType strongholdDisplayType) {
 		switch (strongholdDisplayType) {
-		case FOURFOUR:
-			return String.format(Locale.US, "(%d, %d)", chunk.fourfourX(), chunk.fourfourZ());
-		case EIGHTEIGHT:
-			return String.format(Locale.US, "(%d, %d)", chunk.eighteightX(), chunk.eighteightZ());
-		case CHUNK:
-			return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
-		default:
-			break;
+			case FOURFOUR:
+				return String.format(Locale.US, "(%d, %d)", chunk.fourfourX(), chunk.fourfourZ());
+			case EIGHTEIGHT:
+				return String.format(Locale.US, "(%d, %d)", chunk.eighteightX(), chunk.eighteightZ());
+			case CHUNK:
+				return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
+			default:
+				break;
 		}
 		return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
 	}

@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.ThemedLabel;
 import ninjabrainbot.gui.frames.OptionsFrame;

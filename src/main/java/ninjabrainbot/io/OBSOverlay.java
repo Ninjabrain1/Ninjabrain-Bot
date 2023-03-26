@@ -25,7 +25,7 @@ public class OBSOverlay implements IDisposable {
 	private long lastOverlayUpdate = System.currentTimeMillis();
 	private final long minOverlayUpdateDelayMillis = 1000;
 
-	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");;
+	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
 	SubscriptionHandler sh = new SubscriptionHandler();
 

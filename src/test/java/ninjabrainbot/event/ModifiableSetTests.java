@@ -2,14 +2,13 @@ package ninjabrainbot.event;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ModifiableSetTests {
 

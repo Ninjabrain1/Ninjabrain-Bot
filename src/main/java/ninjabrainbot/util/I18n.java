@@ -34,7 +34,8 @@ public class I18n {
 
 	private static final List<String> LANGUAGE_NAMES = new ArrayList<>();
 
-	private static ResourceBundle DEFAULT_BUNDLE = ResourceBundle.getBundle("lang/I18n", Locale.US, new UTF8Control());;
+	private static ResourceBundle DEFAULT_BUNDLE = ResourceBundle.getBundle("lang/I18n", Locale.US, new UTF8Control());
+
 	static {
 		LANGUAGE_CONFIG.add(Locale.US);
 		LANGUAGE_CONFIG.add(Locale.KOREA);

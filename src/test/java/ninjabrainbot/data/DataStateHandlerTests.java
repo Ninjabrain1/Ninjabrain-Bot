@@ -1,14 +1,5 @@
 package ninjabrainbot.data;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import ninjabrainbot.data.DataStateHandler;
-import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.Fossil;
@@ -19,6 +10,10 @@ import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.FakeActiveInstanceProvider;
 import ninjabrainbot.util.FakeClipboardProvider;
 import ninjabrainbot.util.TestUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataStateHandlerTests {
 

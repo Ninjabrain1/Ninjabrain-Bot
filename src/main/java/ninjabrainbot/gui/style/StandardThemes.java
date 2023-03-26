@@ -8,22 +8,22 @@ import ninjabrainbot.io.preferences.SavedPreferences;
 public class StandardThemes {
 
 	// @formatter:off
-	static final String template = 
+	static final String template =
 			"class %sTheme extends Theme {\r\n"
-			+ "\r\n"
-			+ "public static final int UID = ;\r\n"
-			+ "\r\n"
-			+ "	public %sTheme() {\r\n"
-			+ "		super(\"%s\", UID);\r\n"
-			+ "	}\r\n"
-			+ "\r\n"
-			+ "	@Override\r\n"
-			+ "	protected void loadTheme() {\r\n"
-			+ "		loaded = true;\r\n"
-			+ "\r\n"
-			+ " %s"
-			+ "	}\r\n"
-			+ "}";
+					+ "\r\n"
+					+ "public static final int UID = ;\r\n"
+					+ "\r\n"
+					+ "	public %sTheme() {\r\n"
+					+ "		super(\"%s\", UID);\r\n"
+					+ "	}\r\n"
+					+ "\r\n"
+					+ "	@Override\r\n"
+					+ "	protected void loadTheme() {\r\n"
+					+ "		loaded = true;\r\n"
+					+ "\r\n"
+					+ " %s"
+					+ "	}\r\n"
+					+ "}";
 	// @formatter:on
 
 	public static void main(String[] args) {

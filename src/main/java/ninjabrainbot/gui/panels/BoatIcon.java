@@ -24,14 +24,14 @@ public class BoatIcon extends ThemedIcon {
 
 	private static ImageIcon getBoatIcon(BoatState boatState) {
 		switch (boatState) {
-		case ERROR:
-			return new ImageIcon(Main.class.getResource("/boat_red.png"));
-		case MEASURING:
-			return new ImageIcon(Main.class.getResource("/boat_blue.png"));
-		case VALID:
-			return new ImageIcon(Main.class.getResource("/boat_green.png"));
-		default:
-			return new ImageIcon(Main.class.getResource("/boat_gray.png"));
+			case ERROR:
+				return new ImageIcon(Main.class.getResource("/boat_red.png"));
+			case MEASURING:
+				return new ImageIcon(Main.class.getResource("/boat_blue.png"));
+			case VALID:
+				return new ImageIcon(Main.class.getResource("/boat_green.png"));
+			default:
+				return new ImageIcon(Main.class.getResource("/boat_gray.png"));
 		}
 	}
 

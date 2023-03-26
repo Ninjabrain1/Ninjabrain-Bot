@@ -89,24 +89,24 @@ public class MainTextArea extends ResizablePanel {
 		ResultType resultType = dataState.resultType().get();
 		idle = false;
 		switch (resultType) {
-		case NONE:
-			layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
-			idle = true;
-			break;
-		case FAILED:
-			layout.show(this, TRIANGULATION);
-			break;
-		case TRIANGULATION:
-			layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
-			break;
-		case BLIND:
-			layout.show(this, BLIND);
-			break;
-		case DIVINE:
-			layout.show(this, DIVINE);
-			break;
-		case ALL_ADVANCEMENTS:
-			layout.show(this, ALL_ADVANCEMENTS);
+			case NONE:
+				layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+				idle = true;
+				break;
+			case FAILED:
+				layout.show(this, TRIANGULATION);
+				break;
+			case TRIANGULATION:
+				layout.show(this, preferences.view.get() == MainViewType.BASIC ? TRIANGULATION : TRIANGULATION_DETAILED);
+				break;
+			case BLIND:
+				layout.show(this, BLIND);
+				break;
+			case DIVINE:
+				layout.show(this, DIVINE);
+				break;
+			case ALL_ADVANCEMENTS:
+				layout.show(this, ALL_ADVANCEMENTS);
 		}
 	}
 

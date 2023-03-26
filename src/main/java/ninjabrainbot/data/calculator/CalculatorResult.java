@@ -40,7 +40,7 @@ public class CalculatorResult implements ICalculatorResult {
 	public List<ChunkPrediction> getTopPredictions() {
 		return topPredictions;
 	}
-	
+
 	@Override
 	public List<Chunk> getTopChunks() {
 		return topChunks;

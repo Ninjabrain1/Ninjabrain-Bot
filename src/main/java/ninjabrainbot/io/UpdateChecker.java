@@ -9,11 +9,10 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import ninjabrainbot.Main;
 import ninjabrainbot.util.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class UpdateChecker implements Runnable {
 
@@ -36,9 +35,9 @@ public class UpdateChecker implements Runnable {
 
 	/**
 	 * Checks for updates on github.
-	 * 
+	 *
 	 * @return A download link to the latest release, or null if on the latest
-	 *         update.
+	 * update.
 	 * @throws Exception if something goes wrong, idk???
 	 */
 	public static VersionURL checkForUpdates() throws Exception {

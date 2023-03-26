@@ -2,16 +2,15 @@ package ninjabrainbot.gui.settings.themeeditor;
 
 import java.awt.Color;
 
+import ninjabrainbot.gui.style.CustomTheme;
+import ninjabrainbot.gui.style.Theme;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-import ninjabrainbot.gui.style.CustomTheme;
-import ninjabrainbot.gui.style.Theme;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.io.preferences.UnsavedPreferences;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class ThemeSerializerTests {

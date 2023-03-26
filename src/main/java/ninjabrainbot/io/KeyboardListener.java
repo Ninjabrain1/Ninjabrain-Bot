@@ -7,7 +7,6 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-
 import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 

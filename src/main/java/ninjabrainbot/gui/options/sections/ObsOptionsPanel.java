@@ -44,7 +44,7 @@ public class ObsOptionsPanel extends JPanel {
 
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
-			};
+			}
 
 			public Dimension getPreferredSize() {
 				View view = (View) getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
