@@ -47,7 +47,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		double phiLeft = (lastThrow.alpha() - 90.0) * Math.PI / 180.0;
 		int rightDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiRight));
 		int leftDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiLeft));
-		return new InformationMessage(InformationType.Info, "Go left " + leftDistance + " blocks, or right " + rightDistance + " blocks, for guaranteed 99% certainty.");
+		return new InformationMessage(InformationType.Info, I18n.get("information.go_left_x_block_or_right_y_blocks", leftDistance, rightDistance));
 	}
 
 	private double binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(List<Chunk> predictions, IThrow lastThrow, double phiSideways) {
