@@ -10,7 +10,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 
 	public MismeasureWarningProvider(IDataState dataState) {
 		updateInformationMessage(dataState);
-		dataState.calculatorResult().subscribeEDT(__ -> updateInformationMessage(dataState));
+		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
 	}
 
 	private void updateInformationMessage(IDataState dataState) {

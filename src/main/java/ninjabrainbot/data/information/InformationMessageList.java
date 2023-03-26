@@ -20,7 +20,7 @@ public class InformationMessageList extends ObservableList<InformationMessage> {
 		sh.add(informationMessageProvider.subscribe(__ -> whenInformationMessageChanged(informationMessageProvider)));
 	}
 
-	private void whenInformationMessageChanged(InformationMessageProvider provider) {
+	private synchronized void whenInformationMessageChanged(InformationMessageProvider provider) {
 		InformationMessage message = provider.get();
 		if (informationMessages.containsKey(provider)) {
 			remove(informationMessages.get(provider));

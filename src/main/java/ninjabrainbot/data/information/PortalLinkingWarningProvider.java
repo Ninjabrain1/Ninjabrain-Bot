@@ -9,11 +9,11 @@ import ninjabrainbot.util.I18n;
 public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
 	public PortalLinkingWarningProvider(IDataState dataState) {
-		dataState.calculatorResult().subscribeEDT(__ -> updateInformationMessage(dataState));
+		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
 	}
 
 	private void updateInformationMessage(IDataState dataState) {
-		InformationMessage informationMessageToShow = shouldShowInfoMessage(dataState) ? geOrCreatetWarningMessage() : null;
+		InformationMessage informationMessageToShow = shouldShowInfoMessage(dataState) ? geOrCreateWarningMessage() : null;
 		setInformationMessage(informationMessageToShow);
 	}
 
@@ -29,12 +29,12 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
 		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.getNetherX() + 0.5)), Math.abs(approximatePortalNetherZ - (bestPrediction.getNetherZ() + 0.5)));
 
-		return maxAxisDistance < 24; // if portals are 22 blocks away they wont link, but the precise location of blind portal is unknown, so use 1 chunk of margin.
+		return maxAxisDistance < 24; // if portals are 22 blocks away they won't link, but the precise location of blind portal is unknown, so use 1 chunk of margin.
 	}
 
 	private InformationMessage warningMessage = null;
 
-	private InformationMessage geOrCreatetWarningMessage() {
+	private InformationMessage geOrCreateWarningMessage() {
 		if (warningMessage == null)
 			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.portal_linking"));
 		return warningMessage;

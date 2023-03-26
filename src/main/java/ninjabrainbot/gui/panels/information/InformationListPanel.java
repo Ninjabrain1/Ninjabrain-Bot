@@ -29,7 +29,7 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessageList.get()));
 
-		informationMessageList.subscribeEDT(informationMessages -> synchronizeInformationMessages(informationMessages));
+		informationMessageList.subscribeEDT(this::synchronizeInformationMessages);
 	}
 
 	private void synchronizeInformationMessages(List<InformationMessage> informationMessages) {
