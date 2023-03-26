@@ -8,17 +8,15 @@ import ninjabrainbot.util.I18n;
 
 public class MismeasureWarningProvider extends InformationMessageProvider {
 
+	private final IDataState dataState;
+
 	public MismeasureWarningProvider(IDataState dataState) {
-		updateInformationMessage(dataState);
-		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
+		this.dataState = dataState;
+		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
-	private void updateInformationMessage(IDataState dataState) {
-		InformationMessage informationMessageToShow = shouldShowWarningMessage(dataState) ? geOrCreateWarningMessage() : null;
-		setInformationMessage(informationMessageToShow);
-	}
-
-	private boolean shouldShowWarningMessage(IDataState dataState) {
+	@Override
+	protected boolean shouldShowInformationMessage() {
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;
@@ -38,7 +36,8 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 
 	private InformationMessage warningMessage = null;
 
-	private InformationMessage geOrCreateWarningMessage() {
+	@Override
+	protected InformationMessage getInformationMessage() {
 		if (warningMessage == null)
 			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.mismeasure"));
 		return warningMessage;

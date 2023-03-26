@@ -4,12 +4,17 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.SubscriptionHandler;
 
-public class InformationMessageProvider extends ObservableField<InformationMessage> implements IDisposable {
+public abstract class InformationMessageProvider extends ObservableField<InformationMessage> implements IDisposable {
 
 	SubscriptionHandler sh = new SubscriptionHandler();
 
-	protected void setInformationMessage(InformationMessage informationMessage) {
-		set(informationMessage);
+	protected abstract boolean shouldShowInformationMessage();
+
+	protected abstract InformationMessage getInformationMessage();
+
+	protected void raiseInformationMessageChanged(){
+		InformationMessage informationMessageToShow = shouldShowInformationMessage() ? getInformationMessage() : null;
+		set(informationMessageToShow);
 	}
 
 	@Override

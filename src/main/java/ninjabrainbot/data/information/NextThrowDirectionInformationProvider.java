@@ -8,7 +8,6 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.common.IPosition;
 import ninjabrainbot.data.common.Position;
 import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Coords;
@@ -16,29 +15,28 @@ import ninjabrainbot.util.I18n;
 
 public class NextThrowDirectionInformationProvider extends InformationMessageProvider {
 
+	private final IDataState dataState;
+
 	public NextThrowDirectionInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
-		updateInformationMessage(dataState);
-		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
-		preferences.sigma.whenModified().subscribe(__ -> updateInformationMessage(dataState));
-		preferences.sigmaAlt.whenModified().subscribe(__ -> updateInformationMessage(dataState));
+		this.dataState = dataState;
+		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
+		sh.add(preferences.sigma.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
+		sh.add(preferences.sigmaAlt.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
-	private void updateInformationMessage(IDataState dataState) {
-		IThrowSet throwSet = dataState.getThrowSet();
+	@Override
+	protected boolean shouldShowInformationMessage() {
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
-		InformationMessage informationMessageToShow = shouldShowInfoMessage(calculatorResult) ? createInformationMessage(calculatorResult, throwSet.size() != 0 ? throwSet.getLast() : null) : null;
-		setInformationMessage(informationMessageToShow);
-	}
-
-	private boolean shouldShowInfoMessage(ICalculatorResult calculatorResult) {
-		if (calculatorResult == null || !calculatorResult.success())
+		if (calculatorResult == null || !calculatorResult.success() || dataState.getThrowSet().size() == 0)
 			return false;
 		return calculatorResult.getBestPrediction().chunk.weight < 0.95;
 	}
 
-	private InformationMessage createInformationMessage(ICalculatorResult calculatorResult, IThrow lastThrow) {
+	@Override
+	protected InformationMessage getInformationMessage() {
+		IThrow lastThrow = dataState.getThrowSet().getLast();
 		List<Chunk> predictions = new ArrayList<>();
-		for (Chunk predictedChunk : calculatorResult.getTopChunks()) {
+		for (Chunk predictedChunk : dataState.calculatorResult().get().getTopChunks()) {
 			if (predictedChunk.weight < 0.01)
 				break;
 			predictions.add(predictedChunk);

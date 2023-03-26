@@ -8,16 +8,15 @@ import ninjabrainbot.util.I18n;
 
 public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
+	private final IDataState dataState;
+
 	public PortalLinkingWarningProvider(IDataState dataState) {
-		dataState.calculatorResult().subscribe(__ -> updateInformationMessage(dataState));
+		this.dataState = dataState;
+		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
-	private void updateInformationMessage(IDataState dataState) {
-		InformationMessage informationMessageToShow = shouldShowInfoMessage(dataState) ? geOrCreateWarningMessage() : null;
-		setInformationMessage(informationMessageToShow);
-	}
-
-	private boolean shouldShowInfoMessage(IDataState dataState) {
+	@Override
+	protected boolean shouldShowInformationMessage() {
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;
@@ -34,7 +33,8 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 
 	private InformationMessage warningMessage = null;
 
-	private InformationMessage geOrCreateWarningMessage() {
+	@Override
+	protected InformationMessage getInformationMessage() {
 		if (warningMessage == null)
 			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.portal_linking"));
 		return warningMessage;

@@ -10,20 +10,21 @@ import ninjabrainbot.util.I18n;
 
 public class CombinedCertaintyInformationProvider extends InformationMessageProvider {
 
+	private List<Chunk> predictions;
+
 	public CombinedCertaintyInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
-		updateInformationMessage(dataState.calculatorResult().get());
-		dataState.calculatorResult().subscribe(this::updateInformationMessage);
+		sh.add(dataState.calculatorResult().subscribe(this::updateInformationMessage));
 	}
 
 	private void updateInformationMessage(ICalculatorResult calculatorResult) {
-		List<Chunk> predictions = null;
+		predictions = null;
 		if (calculatorResult != null && calculatorResult.success())
 			predictions = calculatorResult.getTopChunks();
-		InformationMessage informationMessageToShow = shouldShowInformationMessage(predictions) ? createInformationMessage(predictions) : null;
-		setInformationMessage(informationMessageToShow);
+		raiseInformationMessageChanged();
 	}
 
-	private boolean shouldShowInformationMessage(List<Chunk> predictions) {
+	@Override
+	protected boolean shouldShowInformationMessage() {
 		if (predictions == null || predictions.size() < 2)
 			return false;
 		Chunk chunk0 = predictions.get(0);
@@ -33,7 +34,8 @@ public class CombinedCertaintyInformationProvider extends InformationMessageProv
 		return chunk0.weight + chunk1.weight > 0.95;
 	}
 
-	private InformationMessage createInformationMessage(List<Chunk> predictions) {
+	@Override
+	protected InformationMessage getInformationMessage() {
 		Chunk chunk0 = predictions.get(0);
 		Chunk chunk1 = predictions.get(1);
 		double combinedProbability = chunk0.weight + chunk1.weight;

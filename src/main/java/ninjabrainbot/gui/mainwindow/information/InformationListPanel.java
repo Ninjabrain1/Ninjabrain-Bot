@@ -13,7 +13,6 @@ import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-@SuppressWarnings("serial")
 public class InformationListPanel extends ResizablePanel implements ThemedComponent {
 
 	StyleManager styleManager;
@@ -29,7 +28,13 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessageList.get()));
 
-		informationMessageList.subscribeEDT(this::synchronizeInformationMessages);
+		informationMessageList.subscribe(this::onInformationMessageListChanged);
+	}
+
+	private void onInformationMessageListChanged(List<InformationMessage> informationMessages) {
+		// avoid concurrent modification when messages are synchronized on the UI thread later by copying the list
+		List<InformationMessage> informationMessagesCopy = new ArrayList<>(informationMessages);
+		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessagesCopy));
 	}
 
 	private void synchronizeInformationMessages(List<InformationMessage> informationMessages) {
