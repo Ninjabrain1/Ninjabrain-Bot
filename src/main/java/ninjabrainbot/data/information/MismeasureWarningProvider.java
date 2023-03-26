@@ -14,7 +14,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 	}
 
 	private void updateInformationMessage(IDataState dataState) {
-		InformationMessage informationMessageToShow = shouldShowWarningMessage(dataState) ? geOrCreatetWarningMessage() : null;
+		InformationMessage informationMessageToShow = shouldShowWarningMessage(dataState) ? geOrCreateWarningMessage() : null;
 		setInformationMessage(informationMessageToShow);
 	}
 
@@ -38,7 +38,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 
 	private InformationMessage warningMessage = null;
 
-	private InformationMessage geOrCreatetWarningMessage() {
+	private InformationMessage geOrCreateWarningMessage() {
 		if (warningMessage == null)
 			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.mismeasure"));
 		return warningMessage;

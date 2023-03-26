@@ -47,6 +47,18 @@ public class Chunk {
 		return 16 * z + 8;
 	}
 
+	public int netherX(){
+		return 2 * x;
+	}
+
+	public int netherZ(){
+		return 2 * z;
+	}
+
+	public boolean isNeighboring(Chunk other) {
+		return Math.abs(this.x - other.x) <= 1 && Math.abs(this.z - other.z) <= 1;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(x, z);

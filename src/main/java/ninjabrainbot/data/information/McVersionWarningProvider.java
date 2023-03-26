@@ -16,13 +16,13 @@ public class McVersionWarningProvider extends InformationMessageProvider {
 	}
 
 	private void updateInformationMessage(MinecraftInstance minecraftInstance) {
-		InformationMessage informationMessageToShow = minecraftInstance == null || minecraftInstance.getMcVersion() == preferences.mcVersion.get() ? null : geOrCreatetWarningMessage();
+		InformationMessage informationMessageToShow = minecraftInstance == null || minecraftInstance.getMcVersion() == preferences.mcVersion.get() ? null : geOrCreateWarningMessage();
 		setInformationMessage(informationMessageToShow);
 	}
 
 	private InformationMessage warningMessage = null;
 
-	private InformationMessage geOrCreatetWarningMessage() {
+	private InformationMessage geOrCreateWarningMessage() {
 		if (warningMessage == null)
 			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.wrong_mc_version"));
 		return warningMessage;

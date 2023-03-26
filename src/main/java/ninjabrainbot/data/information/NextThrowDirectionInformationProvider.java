@@ -12,6 +12,7 @@ import ninjabrainbot.data.endereye.IThrowSet;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Coords;
+import ninjabrainbot.util.I18n;
 
 public class NextThrowDirectionInformationProvider extends InformationMessageProvider {
 
@@ -36,7 +37,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 	}
 
 	private InformationMessage createInformationMessage(ICalculatorResult calculatorResult, IThrow lastThrow) {
-		List<Chunk> predictions = new ArrayList<Chunk>();
+		List<Chunk> predictions = new ArrayList<>();
 		for (Chunk predictedChunk : calculatorResult.getTopChunks()) {
 			if (predictedChunk.weight < 0.01)
 				break;
@@ -55,7 +56,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		double sidewaysDistanceIncrement = 5.0;
 		boolean binarySearching = false;
 		while (sidewaysDistanceIncrement > 0.1) {
-			sidewaysDistance += sidewaysDistanceIncrement * (lowestPossibleCertainty < 0.99 ? 1.0 : -1.0);
+			sidewaysDistance += sidewaysDistanceIncrement * (lowestPossibleCertainty > 0.99 ? -1.0 : 1.0);
 			double newX = lastThrow.xInOverworld() + Coords.getX(sidewaysDistance, phiSideways);
 			double newZ = lastThrow.zInOverworld() + Coords.getZ(sidewaysDistance, phiSideways);
 			lowestPossibleCertainty = getLowestPossibleCertainty(predictions, new Position(newX, newZ), lastThrow.getStd());
@@ -83,8 +84,8 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 					totalCertaintyAfterSecondThrow += originalCertainty;
 					continue;
 				}
-//				if (Math.abs(otherChunk.x - assumedStrongholdChunk.x) <= 1 && Math.abs(otherChunk.z - assumedStrongholdChunk.z) <= 1)
-//					continue;
+				if (assumedStrongholdChunk.isNeighboring(otherChunk))
+					continue;
 				double phiToPrediction = Coords.getPhi(otherChunk.eighteightX() - lastThrow.xInOverworld(), otherChunk.eighteightZ() - lastThrow.zInOverworld());
 				double errorLikelihood = measurementErrorPdf(phiToPrediction - phiToStronghold, standardDeviation);
 				totalCertaintyAfterSecondThrow += otherChunk.weight * errorLikelihood;

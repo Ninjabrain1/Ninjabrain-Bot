@@ -2,6 +2,7 @@ package ninjabrainbot.gui;
 
 import ninjabrainbot.data.DataStateHandler;
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.information.CombinedCertaintyInformationProvider;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.data.information.McVersionWarningProvider;
 import ninjabrainbot.data.information.MismeasureWarningProvider;
@@ -56,9 +57,7 @@ public class GUI {
 		Progress.setTask("Starting clipboard reader", 0.01f);
 		Profiler.start("Init clipboard reader");
 		clipboardReader = new ClipboardReader(preferences);
-		Thread clipboardThread = new Thread(clipboardReader, "Clipboard reader");
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
-		clipboardThread.start();
 
 		Progress.setTask("Starting instance listener", 0.03f);
 		Profiler.start("Init instance listener");
@@ -84,6 +83,7 @@ public class GUI {
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
 		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState));
 		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState));
+		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
 		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, preferences));
 		Profiler.stop();
 	}
@@ -113,6 +113,8 @@ public class GUI {
 	private void postInit() {
 		Progress.setTask("Finishing up gui", 1f);
 		Profiler.start("Post init");
+
+		new Thread(clipboardReader, "Clipboard reader").start();
 
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
 		preferences.autoReset.whenModified().subscribe(b -> autoResetTimer.setAutoResetEnabled(b));
