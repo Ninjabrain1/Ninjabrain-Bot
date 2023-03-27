@@ -28,7 +28,7 @@ import ninjabrainbot.util.Profiler;
  */
 public class GUI {
 
-	private NinjabrainBotPreferences preferences;
+	private final NinjabrainBotPreferences preferences;
 
 	private ClipboardReader clipboardReader;
 	private IActiveInstanceProvider activeInstanceProvider;

@@ -28,18 +28,18 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private final IActiveInstanceProvider activeInstanceProvider;
 
-	private DataState dataState;
-	private ModificationLock modificationLock;
-	private ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
-	private DataStateUndoHistory dataStateUndoHistory;
+	private final DataState dataState;
+	private final ModificationLock modificationLock;
+	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
+	private final DataStateUndoHistory dataStateUndoHistory;
 
-	private SubscriptionHandler sh = new SubscriptionHandler();
+	private final SubscriptionHandler sh = new SubscriptionHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
 		this.preferences = preferences;
 		this.activeInstanceProvider = activeInstanceProvider;
 		this.stdProfile = new StandardStdProfile(preferences);
-		modificationLock = new ModificationLock(wasUndoAction -> afterDataStateModified(wasUndoAction));
+		modificationLock = new ModificationLock(this::afterDataStateModified);
 
 		calculatorSettings = new CalculatorSettings();
 		calculatorSettings.useAdvStatistics = preferences.useAdvStatistics.get();
@@ -54,9 +54,13 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked());
 		activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(__ -> updateAllAdvancementsMode());
 
-		sh.add(preferences.useAdvStatistics.whenModified().subscribe(newValue -> onUseAdvStatisticsChanged(newValue)));
-		sh.add(preferences.mcVersion.whenModified().subscribe(newValue -> onMcVersionChanged(newValue)));
+		sh.add(preferences.useAdvStatistics.whenModified().subscribe(this::onUseAdvStatisticsChanged));
+		sh.add(preferences.mcVersion.whenModified().subscribe(this::onMcVersionChanged));
 		sh.add(preferences.allAdvancements.whenModified().subscribe(__ -> updateAllAdvancementsMode()));
+		sh.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
+		sh.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
+		sh.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
+		sh.add(preferences.sigmaBoat.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.BOAT, newStd)));
 	}
 
 	@Override
@@ -205,14 +209,20 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
+	private synchronized void setStdProfile(int profileNumber, double std){
+		try (ILock lock = modificationLock.acquireWritePermission()) {
+			stdProfile.setStd(profileNumber, std);
+		}
+	}
+
 	@Override
 	public void addThrowStream(ISubscribable<IThrow> stream) {
-		stream.subscribe(t -> onNewThrow(t));
+		stream.subscribe(this::onNewThrow);
 	}
 
 	@Override
 	public void addFossilStream(ISubscribable<Fossil> stream) {
-		stream.subscribe(f -> setFossil(f));
+		stream.subscribe(this::setFossil);
 	}
 
 	@Override
