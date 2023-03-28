@@ -17,7 +17,6 @@ import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.ObservableProperty;
 
-@SuppressWarnings("serial")
 public class ColorChooserPanel extends JPanel {
 	private static final int WIDTH = 256;
 	private static final int HEIGHT = WIDTH;

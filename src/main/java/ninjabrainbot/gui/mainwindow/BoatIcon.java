@@ -10,7 +10,6 @@ import ninjabrainbot.gui.components.labels.ThemedIcon;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-@SuppressWarnings("serial")
 public class BoatIcon extends ThemedIcon {
 
 	public BoatIcon(StyleManager styleManager, IObservable<BoatState> boatState, NinjabrainBotPreferences preferences, SubscriptionHandler sh) {

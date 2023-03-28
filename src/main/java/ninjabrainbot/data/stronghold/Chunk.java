@@ -47,11 +47,11 @@ public class Chunk {
 		return 16 * z + 8;
 	}
 
-	public int netherX(){
+	public int netherX() {
 		return 2 * x;
 	}
 
-	public int netherZ(){
+	public int netherZ() {
 		return 2 * z;
 	}
 

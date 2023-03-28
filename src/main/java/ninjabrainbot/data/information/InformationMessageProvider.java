@@ -11,10 +11,10 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	BooleanPreference enabledPreference;
 
-	InformationMessageProvider(){
+	InformationMessageProvider() {
 	}
 
-	InformationMessageProvider(BooleanPreference enabledPreference){
+	InformationMessageProvider(BooleanPreference enabledPreference) {
 		this.enabledPreference = enabledPreference;
 		sh.add(enabledPreference.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
 	}
@@ -23,7 +23,7 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	protected abstract InformationMessage getInformationMessage();
 
-	protected void raiseInformationMessageChanged(){
+	protected void raiseInformationMessageChanged() {
 		boolean disabledByPreference = enabledPreference != null && !enabledPreference.get();
 		InformationMessage informationMessageToShow = shouldShowInformationMessage() && !disabledByPreference ? getInformationMessage() : null;
 		set(informationMessageToShow);

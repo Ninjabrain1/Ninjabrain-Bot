@@ -7,13 +7,12 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
-import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
@@ -39,6 +38,7 @@ public class HotkeyPanel extends ThemedPanel {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
+
 			@Override
 			public Color getForegroundColor() {
 				if (button.isEnabled()) {

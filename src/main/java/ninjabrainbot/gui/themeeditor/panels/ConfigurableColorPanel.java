@@ -9,10 +9,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.options.ColorDisplayPanel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
-import ninjabrainbot.gui.style.theme.ConfigurableColor;
+import ninjabrainbot.gui.options.ColorDisplayPanel;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.theme.ConfigurableColor;
 
 public class ConfigurableColorPanel extends ThemedPanel {
 

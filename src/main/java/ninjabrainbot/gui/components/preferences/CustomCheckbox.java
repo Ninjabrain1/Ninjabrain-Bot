@@ -7,7 +7,6 @@ import java.awt.event.ItemListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.Main;
 
@@ -25,7 +24,7 @@ public class CustomCheckbox extends JCheckBox {
 
 	public CustomCheckbox(boolean ticked) {
 		setSelected(ticked);
-		setMargin(new Insets(-2,-2,-2,-2));
+		setMargin(new Insets(-2, -2, -2, -2));
 		setBorderPainted(false);
 		setBorderPaintedFlat(false);
 		setFocusPainted(false);

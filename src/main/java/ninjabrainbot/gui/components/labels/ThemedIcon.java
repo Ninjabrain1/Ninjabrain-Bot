@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 

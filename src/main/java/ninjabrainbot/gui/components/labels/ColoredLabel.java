@@ -2,8 +2,8 @@ package ninjabrainbot.gui.components.labels;
 
 import java.awt.Color;
 
-import ninjabrainbot.gui.style.theme.ColorMap;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.theme.ColorMap;
 import ninjabrainbot.util.Wrapper;
 
 public class ColoredLabel extends ThemedLabel {

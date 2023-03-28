@@ -2,7 +2,6 @@ package ninjabrainbot.gui.options.sections;
 
 import java.awt.GridLayout;
 
-import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 

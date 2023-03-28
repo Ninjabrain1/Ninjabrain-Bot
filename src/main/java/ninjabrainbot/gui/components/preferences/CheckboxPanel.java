@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.components.preferences;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,8 +7,8 @@ import java.awt.FlowLayout;
 import javax.swing.Box;
 
 import ninjabrainbot.gui.components.labels.ThemedLabel;
-import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;

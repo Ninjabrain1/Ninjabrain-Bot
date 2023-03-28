@@ -209,7 +209,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	private synchronized void setStdProfile(int profileNumber, double std){
+	private synchronized void setStdProfile(int profileNumber, double std) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
 			stdProfile.setStd(profileNumber, std);
 		}

@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.components.panels;
 
-import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class ThemedOpaquePanel extends ThemedPanel {

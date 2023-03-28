@@ -5,15 +5,15 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JFrame;
 
+import ninjabrainbot.gui.components.layout.ThemedTabbedPane;
 import ninjabrainbot.gui.options.CalibrationPanel;
-import ninjabrainbot.gui.options.sections.ThemeSelectionPanel;
 import ninjabrainbot.gui.options.sections.AdvancedOptionsPanel;
 import ninjabrainbot.gui.options.sections.BasicOptionsPanel;
 import ninjabrainbot.gui.options.sections.HotkeyOptionsPanel;
 import ninjabrainbot.gui.options.sections.LanguageOptionsPanel;
 import ninjabrainbot.gui.options.sections.ObsOptionsPanel;
 import ninjabrainbot.gui.options.sections.OptionalFeaturesPanel;
-import ninjabrainbot.gui.components.layout.ThemedTabbedPane;
+import ninjabrainbot.gui.options.sections.ThemeSelectionPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

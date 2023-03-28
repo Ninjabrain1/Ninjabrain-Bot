@@ -2,7 +2,6 @@ package ninjabrainbot.gui.components.panels;
 
 import java.awt.Dimension;
 
-import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class HorizontalRestrictedThemedPanel extends ThemedPanel {

@@ -15,7 +15,6 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 
-@SuppressWarnings("serial")
 public class InformationTextPanel extends ThemedPanel {
 
 	private static final int iconMarginsHorizontal = 6, iconMarginsVertical = 4;

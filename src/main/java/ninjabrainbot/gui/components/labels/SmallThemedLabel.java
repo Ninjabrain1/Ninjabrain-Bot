@@ -3,7 +3,6 @@ package ninjabrainbot.gui.components.labels;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
-@SuppressWarnings("serial")
 public class SmallThemedLabel extends ThemedLabel {
 
 	public SmallThemedLabel(StyleManager styleManager) {

@@ -3,7 +3,6 @@ package ninjabrainbot.gui.components.preferences;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.text.DecimalFormat;
 import java.util.Collections;
 
@@ -13,7 +12,6 @@ import javax.swing.JSpinner;
 import ninjabrainbot.gui.components.inputfields.DecimalTextField;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
-import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
@@ -38,6 +36,7 @@ public class FloatPreferencePanel extends ThemedPanel {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
+
 			@Override
 			public Color getForegroundColor() {
 				if (textfield.isEnabled()) {

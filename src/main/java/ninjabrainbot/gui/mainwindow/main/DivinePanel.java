@@ -12,8 +12,8 @@ import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
-import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.util.I18n;
 
 class DivinePanel extends ThemedPanel {
