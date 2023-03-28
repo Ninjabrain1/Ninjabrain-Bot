@@ -36,7 +36,6 @@ public class HotkeyPanel extends ThemedPanel {
 		super(styleManager);
 		this.preference = preference;
 		setLayout(new GridLayout(1, 2, 0, 0));
-		setBorder(new EmptyBorder(0, 10, 0, 0));
 		descLabel = new ThemedLabel(styleManager, description) {
 			private static final long serialVersionUID = -658733822961822860L;
 

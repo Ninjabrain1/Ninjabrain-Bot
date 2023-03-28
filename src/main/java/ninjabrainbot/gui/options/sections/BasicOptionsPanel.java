@@ -6,23 +6,22 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.gui.frames.OptionsFrame;
+import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.RadioButtonPanel;
-import ninjabrainbot.gui.components.layout.StackPanel;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
-@SuppressWarnings("serial")
 public class BasicOptionsPanel extends JPanel {
 
 	public BasicOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		setOpaque(false);
-		setLayout(new GridLayout(1, 2));
-		setBorder(new EmptyBorder(OptionsFrame.PADDING - 3, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
-		JPanel column1 = new StackPanel();
-		JPanel column2 = new StackPanel();
+		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
+		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
+		JPanel column1 = new StackPanel(3 * OptionsFrame.PADDING);
+		JPanel column2 = new StackPanel(2 * OptionsFrame.PADDING);
 		column1.setOpaque(false);
 		column2.setOpaque(false);
 		add(column1);
@@ -36,7 +35,6 @@ public class BasicOptionsPanel extends JPanel {
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.notify_when_a_new_version_is_available"), preferences.checkForUpdates));
 
 		// Column 2
-		column2.add(Box.createVerticalStrut(10));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.display_stronghold_location_using"), preferences.strongholdDisplayType));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.view_type"), preferences.view));
 		column2.add(new RadioButtonPanel(styleManager, I18n.get("settings.window_size"), preferences.size));

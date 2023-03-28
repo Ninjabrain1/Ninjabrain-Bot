@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.options;
+package ninjabrainbot.gui.options.sections;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +13,9 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.layout.TitledDivider;
 import ninjabrainbot.gui.components.panels.HorizontalRestrictedThemedPanel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.options.CustomThemePanel;
+import ninjabrainbot.gui.options.ThemePanel;
+import ninjabrainbot.gui.options.ThemedScrollPane;
 import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.Theme;
@@ -20,8 +23,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
 public class ThemeSelectionPanel extends ThemedPanel {
-
-	private static final long serialVersionUID = 7243421413680247952L;
 
 	private ThemedPanel themesPanel;
 

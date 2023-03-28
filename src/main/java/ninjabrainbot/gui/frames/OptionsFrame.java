@@ -6,7 +6,7 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JFrame;
 
 import ninjabrainbot.gui.options.CalibrationPanel;
-import ninjabrainbot.gui.options.ThemeSelectionPanel;
+import ninjabrainbot.gui.options.sections.ThemeSelectionPanel;
 import ninjabrainbot.gui.options.sections.AdvancedOptionsPanel;
 import ninjabrainbot.gui.options.sections.BasicOptionsPanel;
 import ninjabrainbot.gui.options.sections.HotkeyOptionsPanel;

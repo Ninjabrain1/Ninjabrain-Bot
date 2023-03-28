@@ -1,5 +1,6 @@
 package ninjabrainbot.gui.components.preferences;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,12 +13,12 @@ import javax.swing.JSpinner;
 import ninjabrainbot.gui.components.inputfields.DecimalTextField;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.FloatPreference;
 
-@SuppressWarnings("serial")
 public class FloatPreferencePanel extends ThemedPanel {
 
 	public ThemedLabel descLabel;
@@ -30,15 +31,13 @@ public class FloatPreferencePanel extends ThemedPanel {
 	public FloatPreferencePanel(StyleManager styleManager, String description, FloatPreference preference) {
 		super(styleManager);
 		this.preference = preference;
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+//		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		setLayout(new BorderLayout());
 		descLabel = new ThemedLabel(styleManager, description) {
-			private static final long serialVersionUID = 2113195400239083116L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
-
 			@Override
 			public Color getForegroundColor() {
 				if (textfield.isEnabled()) {
@@ -48,8 +47,6 @@ public class FloatPreferencePanel extends ThemedPanel {
 			}
 		};
 		textfield = new DecimalTextField(styleManager, preference.get(), preference.min(), preference.max()) {
-			private static final long serialVersionUID = -1357640224921308648L;
-
 			@Override
 			public void onChanged(double newValue) {
 				preference.set(Float.parseFloat(format.format(newValue)));
@@ -58,11 +55,11 @@ public class FloatPreferencePanel extends ThemedPanel {
 		this.setDecimals(4);
 
 		Dimension size = textfield.getPreferredSize();
-		size.width = 60;
+		size.width = 80;
 		textfield.setPreferredSize(size);
-		add(Box.createHorizontalStrut(0));
-		add(descLabel);
-		add(textfield);
+		add(descLabel, BorderLayout.WEST);
+		add(Box.createGlue(), BorderLayout.CENTER);
+		add(textfield, BorderLayout.EAST);
 		setOpaque(false);
 
 		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;

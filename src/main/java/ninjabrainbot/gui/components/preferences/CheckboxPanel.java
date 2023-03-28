@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.Box;
+
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
@@ -26,7 +28,7 @@ public class CheckboxPanel extends ThemedPanel {
 	public CheckboxPanel(StyleManager styleManager, String description, BooleanPreference preference) {
 		super(styleManager);
 		this.preference = preference;
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		CheckboxPanel t = this;
 		descLabel = new ThemedLabel(styleManager, "<html>" + description + "</html>") {
 			private static final long serialVersionUID = 2113195400239083116L;
@@ -56,9 +58,10 @@ public class CheckboxPanel extends ThemedPanel {
 				preference.set(ticked);
 			}
 		};
-		add(checkbox, BorderLayout.LINE_START);
-		add(descLabel, BorderLayout.CENTER);
-		setOpaque(false);
+		add(checkbox);
+		add(Box.createHorizontalStrut(OptionsFrame.PADDING));
+		add(descLabel);
+		setOpaque(true);
 
 		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
 	}

@@ -6,30 +6,29 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.event.SubscriptionHandler;
-import ninjabrainbot.gui.frames.OptionsFrame;
+import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.components.preferences.HotkeyPanel;
-import ninjabrainbot.gui.components.layout.StackPanel;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
-@SuppressWarnings("serial")
 public class HighPrecisionOptionsPanel extends JPanel {
 
-	private CheckboxPanel sensitivityCheckbox;
-	private FloatPreferencePanel resolutionHeight;
-	private FloatPreferencePanel sensitivity;
-	private FloatPreferencePanel boatErrorLimit;
+	private final CheckboxPanel sensitivityCheckbox;
+	private final FloatPreferencePanel resolutionHeight;
+	private final FloatPreferencePanel sensitivity;
+	private final FloatPreferencePanel boatErrorLimit;
+	private final FloatPreferencePanel sigmaBoat;
 	private HotkeyPanel enterBoatHotkey;
-	private FloatPreferencePanel sigmaBoat;
 
 	public HighPrecisionOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, SubscriptionHandler subscriptionHandler) {
 		setOpaque(false);
-		setLayout(new GridLayout(1, 2));
-		setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
+		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
+		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
 		JPanel column1 = new StackPanel();
 		JPanel column2 = new StackPanel();
 		column1.setOpaque(false);

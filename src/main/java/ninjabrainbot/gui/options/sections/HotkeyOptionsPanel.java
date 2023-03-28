@@ -10,12 +10,11 @@ import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
-@SuppressWarnings("serial")
 public class HotkeyOptionsPanel extends StackPanel {
 
 	public HotkeyOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		setOpaque(false);
-		setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
+		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
 
 		if (KeyboardListener.registered) {
 			add(new HotkeyPanel(styleManager, I18n.get("settings.up_001_to_last_angle"), preferences.hotkeyIncrement));
