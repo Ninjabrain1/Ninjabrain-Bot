@@ -18,8 +18,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedTabbedPane extends ThemedPanel {
 
-	private static final long serialVersionUID = -3291029177930511395L;
-
 	ArrayList<TabButton> tabs;
 	StyleManager styleManager;
 	ThemedPanel tabPanel;
@@ -96,8 +94,6 @@ public class ThemedTabbedPane extends ThemedPanel {
 }
 
 class TabButton extends FlatButton {
-
-	private static final long serialVersionUID = 1874343984790503904L;
 
 	ThemedTabbedPane parent;
 	JComponent component;

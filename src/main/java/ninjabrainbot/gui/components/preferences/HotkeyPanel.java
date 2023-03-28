@@ -23,8 +23,6 @@ import ninjabrainbot.util.I18n;
 
 public class HotkeyPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = -7054967229481740724L;
-
 	public ThemedLabel descLabel;
 	FlatButton button;
 	HotkeyPreference preference;
@@ -37,13 +35,10 @@ public class HotkeyPanel extends ThemedPanel {
 		this.preference = preference;
 		setLayout(new GridLayout(1, 2, 0, 0));
 		descLabel = new ThemedLabel(styleManager, description) {
-			private static final long serialVersionUID = -658733822961822860L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
-
 			@Override
 			public Color getForegroundColor() {
 				if (button.isEnabled()) {
@@ -54,8 +49,6 @@ public class HotkeyPanel extends ThemedPanel {
 		};
 		descLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		button = new FlatButton(styleManager, getKeyText()) {
-			private static final long serialVersionUID = 1865599754734492942L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;

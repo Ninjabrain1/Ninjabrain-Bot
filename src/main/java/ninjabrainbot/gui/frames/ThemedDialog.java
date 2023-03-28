@@ -23,8 +23,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedDialog extends JDialog implements IDisposable {
 
-	private static final long serialVersionUID = -9103006492414835286L;
-
 	private StyleManager styleManager;
 
 	protected TitleBarPanel titlebarPanel;
@@ -45,7 +43,6 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 		titlebarPanel = new TitleBarPanel(styleManager, this);
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(styleManager, title, true) {
-			private static final long serialVersionUID = 1508931943984181857L;
 
 			@Override
 			public int getTextSize(SizePreference p) {

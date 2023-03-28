@@ -81,8 +81,6 @@ public class ColorChooserPanel extends JPanel {
 
 abstract class ColorPanelBase extends JPanel {
 
-	private static final long serialVersionUID = -4806312505145955774L;
-
 	public final int width;
 	public final int height;
 	protected Point cursor_ = new Point();
@@ -172,8 +170,6 @@ abstract class ColorPanelBase extends JPanel {
 
 class ColorBar extends ColorPanelBase {
 
-	private static final long serialVersionUID = -1270884585518867116L;
-
 	public ColorBar(int prefW, int prefH) {
 		super(prefW, prefH);
 	}
@@ -208,8 +204,6 @@ class ColorBar extends ColorPanelBase {
 }
 
 class ColorPanel extends ColorPanelBase {
-
-	private static final long serialVersionUID = -6475801098946878594L;
 
 	private static final int CURSOR_RADIUS = 8;
 

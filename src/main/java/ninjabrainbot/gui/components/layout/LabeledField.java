@@ -12,8 +12,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class LabeledField extends ThemedPanel {
 
-	private static final long serialVersionUID = -8306746495685008305L;
-
 	public LabeledField(StyleManager styleManager, String label, JComponent component, boolean stretchComponent) {
 		super(styleManager);
 		setLayout(new GridBagLayout());

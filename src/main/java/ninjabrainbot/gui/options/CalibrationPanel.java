@@ -37,8 +37,6 @@ import ninjabrainbot.util.ISet;
 
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
-	private static final long serialVersionUID = 1739847622825900761L;
-
 	Calibrator calibrator;
 
 	StyleManager styleManager;
@@ -69,8 +67,6 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		titlebarPanel.setLayout(null);
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(styleManager, I18n.get("calibrator.title_text_label"), true) {
-			private static final long serialVersionUID = -1284032833229918460L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_LARGE;
@@ -87,8 +83,6 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
 				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
 		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>" + I18n.get("calibrator.explanation") + "</div></html>") {
-			private static final long serialVersionUID = -5378176835369680709L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
@@ -178,8 +172,6 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 	private FlatButton getCancelButton() {
 		FlatButton button = new TitleBarButton(styleManager, I18n.get("calibrator.cancel")) {
-			private static final long serialVersionUID = 4380111129291481489L;
-
 			@Override
 			public void updateSize(StyleManager styleManager) {
 				setFont(styleManager.fontSize(getTextSize(styleManager.size), false));
@@ -267,8 +259,6 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 
 class InstructionLabel extends ThemedLabel {
 
-	private static final long serialVersionUID = 6451818182019649869L;
-
 	private boolean highlighted;
 
 	WrappedColor highlightedCol;
@@ -294,8 +284,6 @@ class InstructionLabel extends ThemedLabel {
 }
 
 class ErrorTextArea extends JScrollPane implements ThemedComponent {
-
-	private static final long serialVersionUID = 1059206057989769872L;
 
 	final JTextArea area;
 

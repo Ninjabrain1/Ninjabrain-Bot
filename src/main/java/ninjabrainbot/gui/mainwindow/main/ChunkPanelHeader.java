@@ -20,8 +20,6 @@ import ninjabrainbot.util.I18n;
 
 public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = -5271531617019225933L;
-
 	private JLabel location;
 	private JLabel certainty;
 	private JLabel distance;

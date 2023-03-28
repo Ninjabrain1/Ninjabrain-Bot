@@ -19,8 +19,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class NotificationsButton extends TitleBarButton implements IDisposable {
 
-	private static final long serialVersionUID = -352194555884422473L;
-
 	StyleManager styleManager;
 	NotificationsFrame notificationsFrame;
 	NinjabrainBotPreferences preferences;

@@ -13,8 +13,6 @@ import ninjabrainbot.Main;
 
 public class CustomCheckbox extends JCheckBox {
 
-	private static final long serialVersionUID = -6503070977470692912L;
-
 	private static ImageIcon icon = new ImageIcon(Main.class.getResource("/checkbox_icon.png"));
 	private static ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_icon.png"));
 	private static ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/checkbox_pressed_icon.png"));

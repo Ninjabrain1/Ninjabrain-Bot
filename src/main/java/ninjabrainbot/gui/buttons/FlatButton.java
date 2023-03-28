@@ -21,8 +21,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
  */
 public class FlatButton extends JButton implements ThemedComponent {
 
-	private static final long serialVersionUID = 3274726146609442471L;
-
 	protected ThemedLabel label; // Graphical element
 	protected Color bgCol, hoverCol;
 

@@ -36,8 +36,6 @@ import ninjabrainbot.util.Profiler;
 
 public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
-	private static final long serialVersionUID = -8033268694989543737L;
-
 	private NinjabrainBotPreferences preferences;
 
 	private ThemedLabel versiontextLabel;
@@ -108,8 +106,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void createTitleBar(StyleManager styleManager, IDataState dataState) {
 		versiontextLabel = new ThemedLabel(styleManager, VERSION_TEXT) {
-			private static final long serialVersionUID = 7210941876032010219L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_SMALL;

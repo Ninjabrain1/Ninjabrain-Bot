@@ -11,7 +11,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedPanel extends JPanel implements ThemedComponent {
 
-	private static final long serialVersionUID = 1363577008580584264L;
 	public boolean bold;
 
 	private WrappedColor bgCol;

@@ -18,8 +18,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class CustomThemePanel extends ThemePanel {
 
-	private static final long serialVersionUID = -7608715642093152581L;
-
 	ThemedPanel buttonPanel;
 
 	WrappedColor dividerCol;

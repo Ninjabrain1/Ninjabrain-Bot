@@ -4,8 +4,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class LimitedThemedTextField extends ThemedTextField {
 
-	private static final long serialVersionUID = 8018919933607184642L;
-
 	private int maxNumberOfCharacters;
 
 	public LimitedThemedTextField(StyleManager styleManager, int maxNumberOfCharacters) {

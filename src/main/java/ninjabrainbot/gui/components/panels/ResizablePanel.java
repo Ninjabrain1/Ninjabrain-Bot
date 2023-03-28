@@ -10,8 +10,6 @@ import ninjabrainbot.event.SubscriptionHandler;
 
 public class ResizablePanel extends JPanel implements IModifiable<ResizablePanel>, IDisposable {
 
-	private static final long serialVersionUID = 6569520433615429424L;
-
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 	protected ObservableProperty<ResizablePanel> whenSizeModified = new ObservableProperty<ResizablePanel>();
 

@@ -50,8 +50,6 @@ import ninjabrainbot.util.I18n;
 
 public class ThemeEditorFrame extends ThemedDialog {
 
-	private static final long serialVersionUID = -7008829231721934904L;
-
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
 

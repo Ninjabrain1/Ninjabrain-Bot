@@ -13,8 +13,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedIcon extends ThemedLabel {
 
-	private static final long serialVersionUID = 6219710623002938323L;
-
 	private ImageIcon icon;
 
 	private WrappedColor iconColor;

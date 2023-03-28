@@ -16,8 +16,6 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedScrollPane extends JScrollPane implements ThemedComponent {
-
-	private static final long serialVersionUID = 136357780584264L;
 	public boolean bold;
 
 	private WrappedColor bgCol;
@@ -95,8 +93,6 @@ public class ThemedScrollPane extends JScrollPane implements ThemedComponent {
 }
 
 class ZeroSizeButton extends JButton {
-	private static final long serialVersionUID = -2116256276789716547L;
-
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension();

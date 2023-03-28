@@ -11,8 +11,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
-	private static final long serialVersionUID = 5595933968395207468L;
-
 	public static final int DEFAULT_SHOWN_THROWS = 3;
 
 	private ThrowPanelHeader throwPanelHeader;

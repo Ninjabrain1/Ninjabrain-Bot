@@ -29,8 +29,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class ChunkPanel extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = -1522335220282509326L;
-
 	private MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
 
 	private ChunkPrediction currentPrediction;

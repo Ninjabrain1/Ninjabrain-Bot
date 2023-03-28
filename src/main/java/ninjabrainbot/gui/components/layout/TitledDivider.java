@@ -9,8 +9,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class TitledDivider extends ThemedPanel {
 
-	private static final long serialVersionUID = -522103449967910875L;
-
 	public TitledDivider(StyleManager styleManager, String title) {
 		super(styleManager);
 		setLayout(new GridBagLayout());

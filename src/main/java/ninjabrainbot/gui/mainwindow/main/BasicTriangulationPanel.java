@@ -21,8 +21,6 @@ import ninjabrainbot.util.I18n;
 
 class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = 5784318732643211103L;
-
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 
 	private NinjabrainBotPreferences preferences;

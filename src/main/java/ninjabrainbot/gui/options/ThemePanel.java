@@ -19,8 +19,6 @@ public class ThemePanel extends ThemedPanel {
 
 	WrappedColor borderCol;
 
-	private static final long serialVersionUID = -2461721723680709056L;
-
 	public ThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, Theme theme) {
 		super(styleManager);
 		setLayout(new GridLayout(0, 1));
@@ -65,8 +63,6 @@ public class ThemePanel extends ThemedPanel {
 }
 
 class LeftAlignedButton extends FlatButton {
-
-	private static final long serialVersionUID = 1439936402421359939L;
 
 	LeftAlignedButton(StyleManager styleManager, String name) {
 		super(styleManager, "  " + name);

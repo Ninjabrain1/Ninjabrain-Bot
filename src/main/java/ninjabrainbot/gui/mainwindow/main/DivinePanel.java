@@ -18,8 +18,6 @@ import ninjabrainbot.util.I18n;
 
 class DivinePanel extends ThemedPanel {
 
-	private static final long serialVersionUID = 8846911396318732368L;
-
 	private JPanel panels[];
 	public ThemedLabel fossilLabel;
 	public ThemedLabel safeLabels[];

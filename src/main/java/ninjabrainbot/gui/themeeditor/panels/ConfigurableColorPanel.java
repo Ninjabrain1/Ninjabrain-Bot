@@ -16,8 +16,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class ConfigurableColorPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = 8202127698667220002L;
-
 	private ConfigurableColor configurableColor;
 
 	private FlatButton colorName;
@@ -57,8 +55,6 @@ public class ConfigurableColorPanel extends ThemedPanel {
 }
 
 class LeftAlignedButton extends FlatButton {
-
-	private static final long serialVersionUID = 1439936402421359939L;
 
 	LeftAlignedButton(StyleManager styleManager, String name) {
 		super(styleManager, "  " + name);

@@ -24,8 +24,6 @@ import ninjabrainbot.util.I18n;
  */
 public class DivineContextPanel extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = -1522335220282509326L;
-
 	private IDivineContext dc;
 	private JLabel label;
 	private FlatButton removeButton;

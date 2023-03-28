@@ -30,8 +30,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class ThrowPanel extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = -1522335220282509326L;
-
 	protected SubscriptionHandler sh = new SubscriptionHandler();
 	private NinjabrainBotPreferences preferences;
 

@@ -15,8 +15,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class MainTextArea extends ResizablePanel {
 
-	private static final long serialVersionUID = 5680882946230890993L;
-
 	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET", ALL_ADVANCEMENTS = "AA";
 
 	private NinjabrainBotPreferences preferences;

@@ -22,8 +22,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedFrame extends JFrame implements IDisposable {
 
-	private static final long serialVersionUID = -9103006492414835286L;
-
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
@@ -40,8 +38,6 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 		titlebarPanel = new TitleBarPanel(styleManager, this);
 		add(titlebarPanel);
 		titletextLabel = new ThemedLabel(styleManager, title, true) {
-			private static final long serialVersionUID = 1508931943984181857L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_TITLE_LARGE;

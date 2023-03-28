@@ -7,8 +7,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class HexThemedTextField extends ThemedTextField {
 
-	private static final long serialVersionUID = 6963733270568097925L;
-
 	public HexThemedTextField(StyleManager styleManager) {
 		super(styleManager);
 		setPreferredSize(styleManager);

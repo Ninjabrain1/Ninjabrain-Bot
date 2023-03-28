@@ -10,8 +10,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class Divider extends JSeparator implements ThemedComponent {
 
-	private static final long serialVersionUID = 4116749757122783747L;
-
 	private WrappedColor bgCol;
 
 	public Divider(StyleManager styleManager) {

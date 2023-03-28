@@ -13,8 +13,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class Histogram extends ThemedPanel {
 
-	private static final long serialVersionUID = 4708333144993390247L;
-
 	private int[] counts;
 	private int maxCount;
 	private float min, max;

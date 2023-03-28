@@ -20,8 +20,6 @@ import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = -8143875137607726122L;
-
 	IDataState dataState;
 	IDataStateHandler dataStateHandler;
 

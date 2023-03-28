@@ -19,8 +19,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class DecimalTextField extends JSpinner implements ThemedComponent {
 
-	private static final long serialVersionUID = 1167120412326064670L;
-
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;
 

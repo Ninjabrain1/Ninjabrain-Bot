@@ -17,8 +17,6 @@ import ninjabrainbot.io.preferences.BooleanPreference;
 
 public class CheckboxPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = -7054967229481740724L;
-
 	public ThemedLabel descLabel;
 	CustomCheckbox checkbox;
 	BooleanPreference preference;
@@ -31,7 +29,6 @@ public class CheckboxPanel extends ThemedPanel {
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		CheckboxPanel t = this;
 		descLabel = new ThemedLabel(styleManager, "<html>" + description + "</html>") {
-			private static final long serialVersionUID = 2113195400239083116L;
 
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -51,8 +48,6 @@ public class CheckboxPanel extends ThemedPanel {
 			}
 		};
 		checkbox = new CustomCheckbox(preference.get()) {
-			private static final long serialVersionUID = 1507233642665292025L;
-
 			@Override
 			public void onChanged(boolean ticked) {
 				preference.set(ticked);

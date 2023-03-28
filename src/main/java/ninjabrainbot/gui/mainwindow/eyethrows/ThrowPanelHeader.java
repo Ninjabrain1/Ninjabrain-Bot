@@ -20,8 +20,6 @@ import ninjabrainbot.util.I18n;
  */
 public class ThrowPanelHeader extends ThemedPanel {
 
-	private static final long serialVersionUID = -1159034678242273505L;
-
 	private JLabel x;
 	private JLabel z;
 	private JLabel alpha;

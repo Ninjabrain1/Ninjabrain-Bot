@@ -8,8 +8,6 @@ import ninjabrainbot.util.Wrapper;
 
 public class ColoredLabel extends ThemedLabel {
 
-	private static final long serialVersionUID = 3745663434827561255L;
-
 	Wrapper<ColorMap> colorMap;
 
 	private double lastColor = 0.0;

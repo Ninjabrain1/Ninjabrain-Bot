@@ -42,8 +42,6 @@ public class AdvancedOptionsPanel extends JPanel {
 		// Left advanced column
 		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma));
 		JButton calibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation")) {
-			private static final long serialVersionUID = -673676238214760361L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;

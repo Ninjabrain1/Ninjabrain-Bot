@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 public class ColumnLayout implements LayoutManager, java.io.Serializable {
 
-	private static final long serialVersionUID = -2688561683995591776L;
-
 	int hgap;
 
 	HashMap<Component, Float> relativeWidths;

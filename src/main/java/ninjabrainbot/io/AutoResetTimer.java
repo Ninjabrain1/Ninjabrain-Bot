@@ -9,8 +9,6 @@ import ninjabrainbot.event.SubscriptionHandler;
 
 public class AutoResetTimer extends Timer implements IDisposable {
 
-	private static final long serialVersionUID = 607205414762178442L;
-
 	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
 
 	SubscriptionHandler sh = new SubscriptionHandler();

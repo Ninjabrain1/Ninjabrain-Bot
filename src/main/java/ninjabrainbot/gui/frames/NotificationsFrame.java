@@ -21,8 +21,6 @@ import ninjabrainbot.util.I18n;
 
 public class NotificationsFrame extends ThemedFrame {
 
-	private static final long serialVersionUID = 1767257205939839293L;
-
 	static final int PADDING = 6;
 
 	VersionURL url;
@@ -38,8 +36,6 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.setBorder(new EmptyBorder(PADDING - 3, PADDING, PADDING, PADDING));
 		add(mainPanel);
 		label = new ThemedLabel(styleManager, "") {
-			private static final long serialVersionUID = 4168366004174721821L;
-
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;

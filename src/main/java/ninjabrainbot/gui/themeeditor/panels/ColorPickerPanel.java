@@ -16,8 +16,6 @@ import ninjabrainbot.util.I18n;
 
 public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 
-	private static final long serialVersionUID = -1239458552267457429L;
-
 	private static final int GAP = 10;
 
 	ColorChooserPanel colorChooserPanel;

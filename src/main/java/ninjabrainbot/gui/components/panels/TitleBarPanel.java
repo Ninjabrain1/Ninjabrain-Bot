@@ -16,7 +16,7 @@ import ninjabrainbot.gui.style.StyleManager;
  * A JPanel that allows the user to drag the application window.
  */
 public class TitleBarPanel extends ThemedPanel {
-	private static final long serialVersionUID = 1284709910722728189L;
+
 	private Point initialClick;
 
 	ArrayList<Component> buttons;

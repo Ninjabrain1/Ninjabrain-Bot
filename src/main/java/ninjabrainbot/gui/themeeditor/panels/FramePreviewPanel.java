@@ -9,8 +9,6 @@ import javax.swing.JPanel;
 
 public class FramePreviewPanel extends JPanel {
 
-	private static final long serialVersionUID = -2260572252331237605L;
-
 	private JFrame frame;
 
 	private BufferedImage img;

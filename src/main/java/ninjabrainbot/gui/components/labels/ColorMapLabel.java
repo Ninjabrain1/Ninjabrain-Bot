@@ -11,8 +11,6 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ColorMapLabel extends JPanel implements ILabel {
 
-	private static final long serialVersionUID = 8926205242557099213L;
-
 	public ThemedLabel textLabel;
 	public ColoredLabel coloredLabel;
 

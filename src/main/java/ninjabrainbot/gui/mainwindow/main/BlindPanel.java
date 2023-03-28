@@ -18,8 +18,6 @@ import ninjabrainbot.util.Pair;
 
 class BlindPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = 5784318732643211103L;
-
 	public ColorMapLabel evalLabel;
 	public ColorMapLabel certaintyPanel;
 	public ThemedLabel distanceLabel;

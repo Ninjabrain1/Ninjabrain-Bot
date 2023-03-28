@@ -7,8 +7,6 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class HorizontalRestrictedThemedPanel extends ThemedPanel {
 
-	private static final long serialVersionUID = 5615638088344083425L;
-
 	public HorizontalRestrictedThemedPanel(StyleManager styleManager) {
 		super(styleManager);
 	}
