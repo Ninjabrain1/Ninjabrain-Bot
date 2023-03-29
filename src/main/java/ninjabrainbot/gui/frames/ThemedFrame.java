@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
@@ -27,7 +27,7 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 
 	WrappedColor bgCol;
 
-	protected SubscriptionHandler sh = new SubscriptionHandler();
+	protected DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ThemedFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
 		super(title);
@@ -88,7 +88,7 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 	@Override
 	public void dispose() {
 		super.dispose();
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 }

@@ -90,7 +90,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	public void setStdProfile(IStdProfile stdProfile) {
 		this.stdProfile = stdProfile;
 		if (stdProfileSubscription != null)
-			stdProfileSubscription.cancel();
+			stdProfileSubscription.dispose();
 		stdProfileSubscription = stdProfile.whenModified().subscribe(__ -> updateStd());
 		setStdProfileNumber(stdProfile.getInitialProfileNumber(this));
 	}
@@ -180,7 +180,7 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	@Override
 	public void dispose() {
 		if (stdProfileSubscription != null)
-			stdProfileSubscription.cancel();
+			stdProfileSubscription.dispose();
 	}
 
 }

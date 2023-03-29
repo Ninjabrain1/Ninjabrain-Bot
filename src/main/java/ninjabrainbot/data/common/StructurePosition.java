@@ -113,7 +113,7 @@ public class StructurePosition implements IPosition, IDisposable {
 	@Override
 	public void dispose() {
 		if (playerPosSubscription != null)
-			playerPosSubscription.cancel();
+			playerPosSubscription.dispose();
 	}
 
 }

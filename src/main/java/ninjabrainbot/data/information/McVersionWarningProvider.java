@@ -13,8 +13,8 @@ public class McVersionWarningProvider extends InformationMessageProvider {
 
 	public McVersionWarningProvider(IActiveInstanceProvider activeInstanceListener, NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
-		sh.add(activeInstanceListener.activeMinecraftInstance().subscribe(this::onActiveMinecraftInstanceChanged));
-		sh.add(preferences.mcVersion.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(activeInstanceListener.activeMinecraftInstance().subscribe(this::onActiveMinecraftInstanceChanged));
+		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
 	private void onActiveMinecraftInstanceChanged(MinecraftInstance minecraftInstance) {

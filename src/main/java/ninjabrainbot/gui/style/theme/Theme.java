@@ -8,7 +8,7 @@ import java.util.List;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Wrapper;
@@ -48,7 +48,7 @@ public abstract class Theme {
 	protected static final HashMap<Integer, Theme> THEMES = new HashMap<Integer, Theme>();
 	protected static final ArrayList<Theme> STANDARD_THEMES = new ArrayList<Theme>();
 	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<CustomTheme>();
-	protected static final SubscriptionHandler sh = new SubscriptionHandler();
+	protected static final DisposeHandler disposeHandler = new DisposeHandler();
 
 	private static Theme dark;
 	private static int nextCustomThemeUID = -1;
@@ -91,8 +91,8 @@ public abstract class Theme {
 		nextCustomThemeUID--;
 		THEMES.put(theme.UID, theme);
 		CUSTOM_THEMES.add(theme);
-		sh.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
-		sh.add(theme.whenNameChanged().subscribe(__ -> serializeCustomThemes(preferences)));
+		disposeHandler.add(theme.whenThemeStringChanged().subscribe(__ -> serializeCustomThemes(preferences)));
+		disposeHandler.add(theme.whenNameChanged().subscribe(__ -> serializeCustomThemes(preferences)));
 	}
 
 	private static void serializeCustomThemes(NinjabrainBotPreferences preferences) {

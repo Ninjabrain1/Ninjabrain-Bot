@@ -64,7 +64,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 				ChunkPrediction prediction = result.getBestPrediction();
 				setChunkPrediction(prediction);
 				if (chunkPredictionSubscription != null)
-					chunkPredictionSubscription.cancel();
+					chunkPredictionSubscription.dispose();
 				chunkPredictionSubscription = prediction.whenRelativePlayerPositionChanged().subscribe(__ -> setChunkPrediction(prediction));
 			} else {
 				maintextLabel.setText(I18n.get("could_not_determine"));
@@ -112,7 +112,7 @@ class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
-			chunkPredictionSubscription.cancel();
+			chunkPredictionSubscription.dispose();
 	}
 
 	private static String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {

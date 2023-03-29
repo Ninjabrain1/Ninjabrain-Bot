@@ -10,7 +10,7 @@ import javax.swing.Timer;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
@@ -27,13 +27,13 @@ public class OBSOverlay implements IDisposable {
 
 	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
-	SubscriptionHandler sh = new SubscriptionHandler();
+	DisposeHandler disposeHandler = new DisposeHandler();
 
 	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		this.ninjabrainBotFrame = frame;
 		this.preferences = preferences;
 		this.calculatorLocked = dataStateHandler.getDataState().locked();
-		sh.add(dataStateHandler.whenDataStateModified().subscribeEDT(__ -> markShouldUpdate()));
+		disposeHandler.add(dataStateHandler.whenDataStateModified().subscribeEDT(__ -> markShouldUpdate()));
 		createClearTimer();
 		createUpdateTimer();
 		setupSettingsSubscriptions();
@@ -52,10 +52,10 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void setupSettingsSubscriptions() {
-		sh.add(preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		sh.add(preferences.useOverlay.whenModified().subscribeEDT(this::setOverlayEnabled));
+		disposeHandler.add(preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		disposeHandler.add(preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		disposeHandler.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		disposeHandler.add(preferences.useOverlay.whenModified().subscribeEDT(this::setOverlayEnabled));
 	}
 
 	private void markShouldUpdate() {
@@ -123,7 +123,7 @@ public class OBSOverlay implements IDisposable {
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 		clear();
 	}
 

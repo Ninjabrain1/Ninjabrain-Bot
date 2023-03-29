@@ -103,7 +103,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 
 	@Override
 	public void dispose() {
-		fossilSubscription.cancel();
+		fossilSubscription.dispose();
 	}
 
 	private void onFossilChanged(Fossil fossil) {

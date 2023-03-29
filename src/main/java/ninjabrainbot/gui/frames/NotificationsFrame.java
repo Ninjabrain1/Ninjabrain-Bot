@@ -53,7 +53,7 @@ public class NotificationsFrame extends ThemedFrame {
 		mainPanel.add(changelogButton);
 
 		// Subscriptions
-		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 	}
 
 	@Override

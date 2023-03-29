@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
@@ -27,7 +27,7 @@ public class AdvancedOptionsPanel extends JPanel {
 	private final FloatPreferencePanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
 
-	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, CalibrationPanel calibrationPanel, SubscriptionHandler subscriptionHandler) {
+	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, CalibrationPanel calibrationPanel, DisposeHandler disposeHandler) {
 		this.calibrationPanel = calibrationPanel;
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
@@ -65,7 +65,7 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
 
-		subscriptionHandler.add(preferences.useAltStd.whenModified().subscribe(this::setAltSigmaEnabled));
+		disposeHandler.add(preferences.useAltStd.whenModified().subscribe(this::setAltSigmaEnabled));
 	}
 
 	private void startCalibrating() {

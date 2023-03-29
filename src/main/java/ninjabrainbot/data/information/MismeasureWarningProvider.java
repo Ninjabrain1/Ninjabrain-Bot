@@ -14,7 +14,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 	public MismeasureWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationMismeasureEnabled);
 		this.dataState = dataState;
-		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
 	@Override

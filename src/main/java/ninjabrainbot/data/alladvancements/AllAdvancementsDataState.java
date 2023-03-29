@@ -1,5 +1,6 @@
 package ninjabrainbot.data.alladvancements;
 
+import ninjabrainbot.data.common.StructurePosition;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
@@ -12,11 +13,15 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 
 	private final ObservableField<Boolean> allAdvancementsModeEnabled;
 	private final ObservableField<ChunkPrediction> strongholdChunk;
+	private final ObservableField<StructurePosition> outpostPosition;
+	private final ObservableField<StructurePosition> monumentPosition;
 
 	public AllAdvancementsDataState(IObservable<ChunkPrediction> currentStrongholdPrediction, IModificationLock modificationLock) {
 		this.currentStrongholdPrediction = currentStrongholdPrediction;
-		allAdvancementsModeEnabled = new LockableField<Boolean>(false, modificationLock);
-		strongholdChunk = new LockableField<ChunkPrediction>(null, modificationLock);
+		allAdvancementsModeEnabled = new LockableField<>(false, modificationLock);
+		strongholdChunk = new LockableField<>(null, modificationLock);
+		outpostPosition = new LockableField<>(null, modificationLock);
+		monumentPosition = new LockableField<>(null, modificationLock);
 	}
 
 	public void setAllAdvancementsModeEnabled(boolean enabled) {

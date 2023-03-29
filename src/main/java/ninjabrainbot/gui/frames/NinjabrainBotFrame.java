@@ -93,15 +93,15 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void setupSubscriptions(StyleManager styleManager, IDataState dataState) {
 		// Settings
-		sh.add(preferences.translucent.whenModified().subscribe(b -> setTranslucent(b)));
-		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
-		sh.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
+		disposeHandler.add(preferences.translucent.whenModified().subscribe(b -> setTranslucent(b)));
+		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		disposeHandler.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
 		// Components bounds changed
-		sh.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
-		sh.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
-		sh.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		disposeHandler.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		disposeHandler.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
+		disposeHandler.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		// Lock
-		sh.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
+		disposeHandler.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
 
 	private void createTitleBar(StyleManager styleManager, IDataState dataState) {
@@ -121,7 +121,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(settingsButton);
 		notificationsButton = new NotificationsButton(styleManager, this, preferences);
 		titlebarPanel.addButton(notificationsButton);
-		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, sh));
+		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, disposeHandler));
 	}
 
 	@Override

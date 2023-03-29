@@ -40,18 +40,18 @@ public class OptionsFrame extends ThemedFrame {
 		add(calibrationPanel);
 
 		tabbedPane.addTab(I18n.get("settings.basic"), new BasicOptionsPanel(styleManager, preferences));
-		tabbedPane.addTab(I18n.get("settings.advanced"), new AdvancedOptionsPanel(styleManager, preferences, calibrationPanel, sh));
+		tabbedPane.addTab(I18n.get("settings.advanced"), new AdvancedOptionsPanel(styleManager, preferences, calibrationPanel, disposeHandler));
 		tabbedPane.addTab(I18n.get("settings.theme"), new ThemeSelectionPanel(styleManager, preferences, this));
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), new HotkeyOptionsPanel(styleManager, preferences));
-		tabbedPane.addTab(I18n.get("settings.overlay"), new ObsOptionsPanel(styleManager, preferences, sh));
+		tabbedPane.addTab(I18n.get("settings.overlay"), new ObsOptionsPanel(styleManager, preferences, disposeHandler));
 		tabbedPane.addTab(I18n.get("settings.language"), new LanguageOptionsPanel(styleManager, preferences));
-		tabbedPane.addTab(I18n.get("settings.optional_features"), new OptionalFeaturesPanel(styleManager, preferences, sh));
+		tabbedPane.addTab(I18n.get("settings.optional_features"), new OptionalFeaturesPanel(styleManager, preferences, disposeHandler));
 
 		// Title bar
 		titlebarPanel.setFocusable(true);
 
 		// Subscriptions
-		sh.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
 	}
 
 	public void stopCalibrating() {

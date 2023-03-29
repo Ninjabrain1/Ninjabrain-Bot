@@ -21,7 +21,7 @@ import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 
 public class DataState implements IDataState, IDisposable {
 
@@ -42,7 +42,7 @@ public class DataState implements IDataState, IDisposable {
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
 
-	private SubscriptionHandler sh = new SubscriptionHandler();
+	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataState(ICalculator calculator, IModificationLock modificationLock) {
 		divineContext = new DivineContext(modificationLock);
@@ -64,9 +64,9 @@ public class DataState implements IDataState, IDisposable {
 		this.calculator = calculator;
 
 		// Subscriptions
-		sh.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
-		sh.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
-		sh.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribe(__ -> updateResultType()));
+		disposeHandler.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
+		disposeHandler.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
+		disposeHandler.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribe(__ -> updateResultType()));
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
 		throwSet.dispose();

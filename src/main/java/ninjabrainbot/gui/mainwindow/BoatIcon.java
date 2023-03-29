@@ -5,14 +5,14 @@ import javax.swing.ImageIcon;
 import ninjabrainbot.Main;
 import ninjabrainbot.data.highprecision.BoatState;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedIcon;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class BoatIcon extends ThemedIcon {
 
-	public BoatIcon(StyleManager styleManager, IObservable<BoatState> boatState, NinjabrainBotPreferences preferences, SubscriptionHandler sh) {
+	public BoatIcon(StyleManager styleManager, IObservable<BoatState> boatState, NinjabrainBotPreferences preferences, DisposeHandler sh) {
 		super(styleManager, getBoatIcon(boatState.get()));
 		setVisible(preferences.useTallRes.get() && preferences.usePreciseAngle.get());
 

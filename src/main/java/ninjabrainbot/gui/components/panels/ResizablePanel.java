@@ -6,16 +6,16 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IModifiable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 
 public class ResizablePanel extends JPanel implements IModifiable<ResizablePanel>, IDisposable {
 
-	protected SubscriptionHandler sh = new SubscriptionHandler();
+	protected DisposeHandler disposeHandler = new DisposeHandler();
 	protected ObservableProperty<ResizablePanel> whenSizeModified = new ObservableProperty<ResizablePanel>();
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 	@Override

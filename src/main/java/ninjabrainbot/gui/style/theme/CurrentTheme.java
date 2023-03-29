@@ -62,8 +62,8 @@ public class CurrentTheme {
 			return;
 		theme = newTheme;
 		if (themeSubscription != null)
-			themeSubscription.cancel();
-		themeSubscription = newTheme.whenModified().subscribe(t -> setTheme(t));
+			themeSubscription.dispose();
+		themeSubscription = newTheme.whenModified().subscribe(this::setTheme);
 	}
 
 	public boolean isTheme(Theme theme) {

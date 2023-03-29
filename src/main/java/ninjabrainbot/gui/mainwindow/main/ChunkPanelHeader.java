@@ -113,7 +113,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 
 	@Override
 	public void dispose() {
-		strongholdDisplayTypeChangedSubscription.cancel();
+		strongholdDisplayTypeChangedSubscription.dispose();
 	}
 
 }

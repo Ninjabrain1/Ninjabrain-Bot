@@ -3,13 +3,13 @@ package ninjabrainbot.data.information;
 import java.util.HashMap;
 
 import ninjabrainbot.event.ObservableList;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 
 public class InformationMessageList extends ObservableList<InformationMessage> {
 
 	HashMap<InformationMessageProvider, InformationMessage> informationMessages;
 
-	SubscriptionHandler sh = new SubscriptionHandler();
+	DisposeHandler disposeHandler = new DisposeHandler();
 
 	public InformationMessageList() {
 		informationMessages = new HashMap<>();
@@ -17,7 +17,7 @@ public class InformationMessageList extends ObservableList<InformationMessage> {
 
 	public void AddInformationMessageProvider(InformationMessageProvider informationMessageProvider) {
 		whenInformationMessageChanged(informationMessageProvider);
-		sh.add(informationMessageProvider.subscribe(__ -> whenInformationMessageChanged(informationMessageProvider)));
+		disposeHandler.add(informationMessageProvider.subscribe(__ -> whenInformationMessageChanged(informationMessageProvider)));
 	}
 
 	private synchronized void whenInformationMessageChanged(InformationMessageProvider provider) {

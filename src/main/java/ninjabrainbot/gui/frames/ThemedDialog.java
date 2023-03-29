@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
@@ -23,14 +23,14 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedDialog extends JDialog implements IDisposable {
 
-	private StyleManager styleManager;
+	private final StyleManager styleManager;
 
 	protected TitleBarPanel titlebarPanel;
 	protected ThemedLabel titletextLabel;
 
 	WrappedColor bgCol;
 
-	protected SubscriptionHandler sh = new SubscriptionHandler();
+	protected DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ThemedDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, String title) {
 		super(owner, title);
@@ -94,7 +94,7 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 	@Override
 	public void dispose() {
 		super.dispose();
-		sh.dispose();
+		disposeHandler.dispose();
 		styleManager.unregisterThemedDialog(this);
 	}
 

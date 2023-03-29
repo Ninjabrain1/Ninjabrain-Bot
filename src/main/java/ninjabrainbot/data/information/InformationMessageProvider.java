@@ -2,12 +2,12 @@ package ninjabrainbot.data.information;
 
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.io.preferences.BooleanPreference;
 
 public abstract class InformationMessageProvider extends ObservableField<InformationMessage> implements IDisposable {
 
-	SubscriptionHandler sh = new SubscriptionHandler();
+	DisposeHandler disposeHandler = new DisposeHandler();
 
 	BooleanPreference enabledPreference;
 
@@ -16,7 +16,7 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	InformationMessageProvider(BooleanPreference enabledPreference) {
 		this.enabledPreference = enabledPreference;
-		sh.add(enabledPreference.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(enabledPreference.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
 	protected abstract boolean shouldShowInformationMessage();
@@ -31,7 +31,7 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 }

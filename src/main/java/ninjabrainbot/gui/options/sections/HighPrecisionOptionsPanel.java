@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
@@ -25,7 +25,7 @@ public class HighPrecisionOptionsPanel extends JPanel {
 	private final FloatPreferencePanel sigmaBoat;
 	private HotkeyPanel enterBoatHotkey;
 
-	public HighPrecisionOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, SubscriptionHandler subscriptionHandler) {
+	public HighPrecisionOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
 		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
@@ -67,8 +67,8 @@ public class HighPrecisionOptionsPanel extends JPanel {
 		sigmaBoat.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 		column2.add(sigmaBoat);
 
-		subscriptionHandler.add(preferences.useTallRes.whenModified().subscribe(b -> setTallResolutionEnabled(b, preferences)));
-		subscriptionHandler.add(preferences.usePreciseAngle.whenModified().subscribe(b -> setPreciseAngleEnabled(b)));
+		disposeHandler.add(preferences.useTallRes.whenModified().subscribe(b -> setTallResolutionEnabled(b, preferences)));
+		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(b -> setPreciseAngleEnabled(b)));
 	}
 
 	private void setTallResolutionEnabled(boolean b, NinjabrainBotPreferences preferences) {

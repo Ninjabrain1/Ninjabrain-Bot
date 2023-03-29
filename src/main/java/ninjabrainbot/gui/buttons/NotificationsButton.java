@@ -10,7 +10,7 @@ import javax.swing.Timer;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NotificationsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.UpdateChecker;
@@ -29,7 +29,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 	Color start, end;
 	int duration = 1000;
 
-	SubscriptionHandler sh;
+	DisposeHandler sh;
 
 	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
 		super(styleManager, new ImageIcon(Main.class.getResource("/notifications_icon.png")));
@@ -39,7 +39,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 		setVisible(false);
 		notificationsFrame = new NotificationsFrame(styleManager, preferences);
 		// Subscriptions
-		sh = new SubscriptionHandler();
+		sh = new DisposeHandler();
 		sh.add(preferences.checkForUpdates.whenModified().subscribe(b -> onUpdatesEnabledChanged(b)));
 		if (preferences.checkForUpdates.get()) {
 			UpdateChecker.check(url -> setURL(url));

@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.inputfields.HexThemedTextField;
 import ninjabrainbot.gui.components.layout.LabeledField;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
@@ -20,7 +20,7 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 
 	ColorChooserPanel colorChooserPanel;
 
-	SubscriptionHandler sh = new SubscriptionHandler();
+	DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ColorPickerPanel(StyleManager styleManager) {
 		super(styleManager);
@@ -34,8 +34,8 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 		add(new LabeledField(styleManager, I18n.get("settings.themeeditor.hex_colon"), hexTextField, false));
 		add(colorChooserPanel);
 
-		sh.add(colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color)));
-		sh.add(hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text))));
+		disposeHandler.add(colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color)));
+		disposeHandler.add(hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text))));
 	}
 
 	public void setColor(Color color) {
@@ -48,7 +48,7 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 }

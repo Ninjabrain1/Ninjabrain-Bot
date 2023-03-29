@@ -59,14 +59,14 @@ public class MainTextArea extends ResizablePanel {
 
 	private void setupSubscriptions() {
 		// Settings
-		sh.add(preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
-		sh.add(preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
-		sh.add(preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
+		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
+		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
+		disposeHandler.add(preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
 		// Data state
-		sh.add(dataState.calculatorResult().subscribeEDT(result -> setResult(result)));
-		sh.add(dataState.blindResult().subscribeEDT(result -> setResult(result)));
-		sh.add(dataState.divineResult().subscribeEDT(result -> setResult(result)));
-		sh.add(dataState.resultType().subscribeEDT(__ -> updateResult()));
+		disposeHandler.add(dataState.calculatorResult().subscribeEDT(result -> setResult(result)));
+		disposeHandler.add(dataState.blindResult().subscribeEDT(result -> setResult(result)));
+		disposeHandler.add(dataState.divineResult().subscribeEDT(result -> setResult(result)));
+		disposeHandler.add(dataState.resultType().subscribeEDT(__ -> updateResult()));
 	}
 
 	private void onViewTypeChanged() {

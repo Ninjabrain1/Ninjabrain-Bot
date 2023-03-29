@@ -17,7 +17,7 @@ import ninjabrainbot.data.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Subscription;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
@@ -30,8 +30,8 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class ThrowPanel extends ThemedPanel implements IDisposable {
 
-	protected SubscriptionHandler sh = new SubscriptionHandler();
-	private NinjabrainBotPreferences preferences;
+	protected DisposeHandler disposeHandler = new DisposeHandler();
+	private final NinjabrainBotPreferences preferences;
 
 	DivineContextPanel divineContextPanel;
 
@@ -87,10 +87,10 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 		IThrowSet throwSet = dataStateHandler.getDataState().getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
-		sh.add(throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index));
+		disposeHandler.add(throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index));
 
 		setPrediction(topResult.get());
-		sh.add(topResult.subscribe(result -> setPrediction(result)));
+		disposeHandler.add(topResult.subscribe(result -> setPrediction(result)));
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
@@ -98,14 +98,14 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		posCol = styleManager.currentTheme.COLOR_POSITIVE;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
-		sh.add(preferences.showAngleErrors.whenModified().subscribe(b -> error.setVisible(b)));
-		sh.add(preferences.useTallRes.whenModified().subscribe(b -> whenTallResChanged()));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(b -> error.setVisible(b)));
+		disposeHandler.add(preferences.useTallRes.whenModified().subscribe(b -> whenTallResChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
 		lastTopPrediction = p;
 		if (chunkPredictionModifiedSubscription != null)
-			chunkPredictionModifiedSubscription.cancel();
+			chunkPredictionModifiedSubscription.dispose();
 		chunkPredictionModifiedSubscription = null;
 		if (p != null)
 			chunkPredictionModifiedSubscription = p.whenRelativePlayerPositionChanged().subscribe(__ -> updateError(p));
@@ -288,8 +288,8 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void dispose() {
 		if (chunkPredictionModifiedSubscription != null)
-			chunkPredictionModifiedSubscription.cancel();
-		sh.dispose();
+			chunkPredictionModifiedSubscription.dispose();
+		disposeHandler.dispose();
 	}
 
 	public void setDivineContextPanel(DivineContextPanel divineContextPanel) {

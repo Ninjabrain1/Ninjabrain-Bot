@@ -14,7 +14,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 	public PortalLinkingWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationPortalLinkingEnabled);
 		this.dataState = dataState;
-		sh.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
 	}
 
 	@Override

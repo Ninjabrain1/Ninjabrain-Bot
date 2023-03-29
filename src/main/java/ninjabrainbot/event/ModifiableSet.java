@@ -7,15 +7,15 @@ import java.util.List;
 
 public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifiableSet<T>> implements IModifiableSet<T>, IDisposable {
 
-	private ArrayList<T> set;
-	private HashMap<T, Subscription> subscriptions;
+	private final ArrayList<T> set;
+	private final HashMap<T, Subscription> subscriptions;
 
-	private IndexedObservableProperty<T> whenElementAtIndexModified;
+	private final IndexedObservableProperty<T> whenElementAtIndexModified;
 
 	public ModifiableSet() {
-		set = new ArrayList<T>();
+		set = new ArrayList<>();
 		subscriptions = new HashMap<>();
-		whenElementAtIndexModified = new IndexedObservableProperty<T>();
+		whenElementAtIndexModified = new IndexedObservableProperty<>();
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 	@Override
 	public boolean add(T t) {
 		if (set.add(t)) {
-			subscriptions.put(t, t.whenModified().subscribe(elem -> onElementModified(elem)));
+			subscriptions.put(t, t.whenModified().subscribe(this::onElementModified));
 			whenElementAtIndexModified.notifySubscribers(t, size() - 1);
 			notifySubscribers(this);
 			return true;
@@ -42,7 +42,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 	@Override
 	public boolean insert(T t, int index) {
 		set.add(index, t);
-		subscriptions.put(t, t.whenModified().subscribe(elem -> onElementModified(elem)));
+		subscriptions.put(t, t.whenModified().subscribe(this::onElementModified));
 		for (int i = index; i < size(); i++) {
 			whenElementAtIndexModified.notifySubscribers(set.get(i), i);
 		}
@@ -54,7 +54,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 	public void remove(T t) {
 		int index = set.indexOf(t);
 		if (set.remove(t)) {
-			subscriptions.remove(t).cancel();
+			subscriptions.remove(t).dispose();
 			for (int i = index; i < size() + 1; i++) {
 				whenElementAtIndexModified.notifySubscribers(i < size() ? set.get(i) : null, i);
 			}
@@ -68,7 +68,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		if (n == 0)
 			return;
 		for (Subscription s : subscriptions.values()) {
-			s.cancel();
+			s.dispose();
 		}
 		set.clear();
 		subscriptions.clear();
@@ -98,9 +98,9 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 			T t = list.get(i);
 			if (i < set.size() && set.get(i).equals(t))
 				continue;
-			subscriptions.put(t, t.whenModified().subscribe(elem -> onElementModified(elem)));
+			subscriptions.put(t, t.whenModified().subscribe(this::onElementModified));
 			if (i < set.size()) {
-				subscriptions.remove(set.get(i)).cancel();
+				subscriptions.remove(set.get(i)).dispose();
 				set.set(i, t);
 			} else {
 				set.add(i, t);
@@ -110,7 +110,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		while (set.size() > list.size()) {
 			int removeIndex = set.size() - 1;
 			T removed = set.remove(removeIndex);
-			subscriptions.remove(removed).cancel();
+			subscriptions.remove(removed).dispose();
 			modifiedIndices.add(removeIndex);
 		}
 		for (int i : modifiedIndices) {
@@ -122,18 +122,14 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 
 	@Override
 	public List<T> toList() {
-		List<T> list = new ArrayList<T>();
-		for (T t : set) {
-			list.add(t);
-		}
-		return list;
+		return new ArrayList<>(set);
 	}
 
 	@Override
 	public void dispose() {
 		assert subscriberCount() == 0;
 		for (Subscription s : subscriptions.values()) {
-			s.cancel();
+			s.dispose();
 		}
 	}
 

@@ -5,13 +5,13 @@ import javax.swing.Timer;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 
 public class AutoResetTimer extends Timer implements IDisposable {
 
 	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
 
-	SubscriptionHandler sh = new SubscriptionHandler();
+	DisposeHandler disposeHandler = new DisposeHandler();
 
 	public AutoResetTimer(IDataState dataState, IDataStateHandler dataStateHandler) {
 		super(AUTO_RESET_DELAY, null);
@@ -20,9 +20,9 @@ public class AutoResetTimer extends Timer implements IDisposable {
 			restart();
 			stop();
 		});
-		sh.add(dataState.locked().subscribe(__ -> restart()));
-		sh.add(dataState.blindResult().subscribe(__ -> restart()));
-		sh.add(dataState.calculatorResult().subscribe(__ -> restart()));
+		disposeHandler.add(dataState.locked().subscribe(__ -> restart()));
+		disposeHandler.add(dataState.blindResult().subscribe(__ -> restart()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> restart()));
 	}
 
 	public void setAutoResetEnabled(boolean b) {
@@ -34,7 +34,7 @@ public class AutoResetTimer extends Timer implements IDisposable {
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 }

@@ -32,7 +32,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
 		// Subscriptions
-		sh.add(preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
 	}
 
 	private void whenDivineContextVisibilityUpdated() {

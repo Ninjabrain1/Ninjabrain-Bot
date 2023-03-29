@@ -123,7 +123,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	public void setPrediction(ChunkPrediction chunkPrediction) {
 		currentPrediction = chunkPrediction;
 		if (chunkPredictionSubscription != null)
-			chunkPredictionSubscription.cancel();
+			chunkPredictionSubscription.dispose();
 		if (chunkPrediction == null) {
 			for (ILabel l : labels) {
 				if (l != null) {
@@ -163,8 +163,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
-			chunkPredictionSubscription.cancel();
-		strongholdDisplayTypeChangedSubscription.cancel();
+			chunkPredictionSubscription.dispose();
+		strongholdDisplayTypeChangedSubscription.dispose();
 	}
 
 	private static String formatStrongholdCoords(Chunk chunk, StrongholdDisplayType strongholdDisplayType) {

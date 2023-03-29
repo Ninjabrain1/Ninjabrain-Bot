@@ -13,7 +13,7 @@ import ninjabrainbot.data.endereye.ThrowParser;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
@@ -33,7 +33,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
 	private final DataStateUndoHistory dataStateUndoHistory;
 
-	private final SubscriptionHandler sh = new SubscriptionHandler();
+	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
 		this.preferences = preferences;
@@ -54,13 +54,13 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked());
 		activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(__ -> updateAllAdvancementsMode());
 
-		sh.add(preferences.useAdvStatistics.whenModified().subscribe(this::onUseAdvStatisticsChanged));
-		sh.add(preferences.mcVersion.whenModified().subscribe(this::onMcVersionChanged));
-		sh.add(preferences.allAdvancements.whenModified().subscribe(__ -> updateAllAdvancementsMode()));
-		sh.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
-		sh.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
-		sh.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
-		sh.add(preferences.sigmaBoat.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.BOAT, newStd)));
+		disposeHandler.add(preferences.useAdvStatistics.whenModified().subscribe(this::onUseAdvStatisticsChanged));
+		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onMcVersionChanged));
+		disposeHandler.add(preferences.allAdvancements.whenModified().subscribe(__ -> updateAllAdvancementsMode()));
+		disposeHandler.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
+		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
+		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
+		disposeHandler.add(preferences.sigmaBoat.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.BOAT, newStd)));
 	}
 
 	@Override
@@ -242,7 +242,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	@Override
 	public void dispose() {
-		sh.dispose();
+		disposeHandler.dispose();
 	}
 
 }

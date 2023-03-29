@@ -3,7 +3,7 @@ package ninjabrainbot.gui.options.sections;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.event.SubscriptionHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.labels.ThemedTextArea;
 import ninjabrainbot.gui.components.layout.StackPanel;
@@ -20,7 +20,7 @@ public class ObsOptionsPanel extends StackPanel {
 
 	private final FloatPreferencePanel overlayResetDelay;
 
-	public ObsOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, SubscriptionHandler subscriptionHandler) {
+	public ObsOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
 		super(3 * OptionsFrame.PADDING);
 		setOpaque(false);
 		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
@@ -42,7 +42,7 @@ public class ObsOptionsPanel extends StackPanel {
 		overlayResetDelay.setEnabled(preferences.overlayAutoHide.get());
 		add(overlayResetDelay);
 
-		subscriptionHandler.add(preferences.overlayAutoHide.whenModified().subscribe(this::setOverlayAutoHideEnabled));
+		disposeHandler.add(preferences.overlayAutoHide.whenModified().subscribe(this::setOverlayAutoHideEnabled));
 	}
 
 	private void setOverlayAutoHideEnabled(boolean b) {

@@ -2,7 +2,7 @@ package ninjabrainbot.event;
 
 import java.util.function.Consumer;
 
-public class Subscription {
+public class Subscription implements IDisposable {
 
 	private Runnable unsubscribe;
 
@@ -10,7 +10,8 @@ public class Subscription {
 		unsubscribe = () -> subscribable.unsubscribe(subscriber);
 	}
 
-	public void cancel() {
+	@Override
+	public void dispose() {
 		unsubscribe.run();
 		unsubscribe = null;
 	}
