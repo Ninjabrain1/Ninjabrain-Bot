@@ -1,11 +1,11 @@
 package ninjabrainbot.data;
 
 import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
+import ninjabrainbot.data.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.divine.DivineContext;
@@ -18,10 +18,10 @@ import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.highprecision.BoatDataState;
 import ninjabrainbot.data.highprecision.IBoatDataState;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.event.DisposeHandler;
 
 public class DataState implements IDataState, IDisposable {
 
@@ -34,13 +34,14 @@ public class DataState implements IDataState, IDisposable {
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
-	private final ObservableField<IThrow> playerPos;
+	private final ObservableField<IThrow> playerPosition;
 
-	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
 	private final ObservableField<ChunkPrediction> topPrediction;
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
+
+	private final ResultTypeProvider resultTypeProvider;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
@@ -48,25 +49,25 @@ public class DataState implements IDataState, IDisposable {
 		divineContext = new DivineContext(modificationLock);
 		throwSet = new ThrowSet(modificationLock);
 
-		playerPos = new LockableField<IThrow>(modificationLock);
-		locked = new LockableField<Boolean>(false, modificationLock);
+		playerPosition = new LockableField<>(modificationLock);
+		locked = new LockableField<>(false, modificationLock);
 
-		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
-		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
-		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
-		blindResult = new LockableField<BlindResult>(modificationLock);
-		divineResult = new LockableField<DivineResult>(modificationLock);
+		calculatorResult = new LockableField<>(modificationLock);
+		topPrediction = new LockableField<>(modificationLock);
+		blindResult = new LockableField<>(modificationLock);
+		divineResult = new LockableField<>(modificationLock);
 
 		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, modificationLock);
 		boatDataState = new BoatDataState(modificationLock);
+
+		resultTypeProvider = new ResultTypeProvider(this, modificationLock);
 
 		calculator.setDivineContext(divineContext);
 		this.calculator = calculator;
 
 		// Subscriptions
 		disposeHandler.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
-		disposeHandler.add(divineContext.whenFossilChanged().subscribe(__ -> onFossilChanged()));
-		disposeHandler.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribe(__ -> updateResultType()));
+		disposeHandler.add(divineContext.fossil().subscribe(__ -> onFossilChanged()));
 	}
 
 	@Override
@@ -74,11 +75,10 @@ public class DataState implements IDataState, IDisposable {
 		allAdvancementsDataState.reset();
 		boatDataState.reset();
 		throwSet.clear();
-		playerPos.set(null);
+		playerPosition.set(null);
 		blindResult.set(null);
 		divineResult.set(null);
 		divineContext.clear();
-		updateResultType();
 	}
 
 	@Override
@@ -97,20 +97,18 @@ public class DataState implements IDataState, IDisposable {
 	public void recalculateStronghold() {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
-		calculatorResult.set(calculator.triangulate(throwSet, playerPos));
+		calculatorResult.set(calculator.triangulate(throwSet, playerPosition));
 		updateTopPrediction(calculatorResult.get());
-		updateResultType();
 	}
 
 	public DataStateUndoData getUndoData() {
-		return new DataStateUndoData(throwSet, playerPos.get(), divineContext);
+		return new DataStateUndoData(throwSet, playerPosition.get(), divineContext);
 	}
 
 	public void setFromUndoData(DataStateUndoData undoData) {
 		divineContext.setFossil(undoData.fossil);
 		throwSet.setFromList(undoData.eyeThrows);
-		playerPos.set(undoData.playerPos);
-		updateResultType();
+		playerPosition.set(undoData.playerPos);
 	}
 
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {
@@ -127,43 +125,23 @@ public class DataState implements IDataState, IDisposable {
 		} else {
 			divineResult.set(calculator.divine());
 		}
-		updateResultType();
 	}
 
 	void setFossil(Fossil f) {
 		divineContext.setFossil(f);
 	}
 
-	void setPlayerPos(IThrow t) {
-		playerPos.set(t);
+	void setPlayerPosition(IThrow t) {
+		playerPosition.set(t);
 	}
 
 	void setBlindPosition(BlindPosition t) {
 		blindResult.set(calculator.blind(t));
-		updateResultType();
 	}
 
-	private void updateResultType() {
-		resultType.set(getExpectedResultType());
-	}
-
-	private ResultType getExpectedResultType() {
-		if (allAdvancementsDataState.allAdvancementsModeEnabled().get())
-			return ResultType.ALL_ADVANCEMENTS;
-
-		if (calculatorResult.get() != null && calculatorResult.get().success())
-			return ResultType.TRIANGULATION;
-
-		if (calculatorResult.get() != null)
-			return ResultType.FAILED;
-
-		if (playerPos.get() != null)
-			return ResultType.BLIND;
-
-		if (divineContext.getFossil() != null)
-			return ResultType.DIVINE;
-
-		return ResultType.NONE;
+	@Override
+	public IAllAdvancementsDataState allAdvancementDataState() {
+		return allAdvancementsDataState;
 	}
 
 	@Override
@@ -183,7 +161,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public IObservable<IThrow> playerPosition() {
-		return playerPos;
+		return playerPosition;
 	}
 
 	@Override
@@ -208,7 +186,7 @@ public class DataState implements IDataState, IDisposable {
 
 	@Override
 	public IObservable<ResultType> resultType() {
-		return resultType;
+		return resultTypeProvider.resultType();
 	}
 
 	@Override

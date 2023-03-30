@@ -1,4 +1,4 @@
-package ninjabrainbot.data.calculator;
+package ninjabrainbot.data;
 
 public enum ResultType {
 

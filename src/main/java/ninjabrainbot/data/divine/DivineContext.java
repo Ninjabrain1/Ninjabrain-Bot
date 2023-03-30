@@ -5,6 +5,7 @@ import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.statistics.DiscretizedDensity;
 import ninjabrainbot.data.stronghold.Ring;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.util.Coords;
@@ -36,7 +37,7 @@ public class DivineContext implements IDivineContext {
 	}
 
 	@Override
-	public ISubscribable<Fossil> whenFossilChanged() {
+	public IObservable<Fossil> fossil() {
 		return fossil;
 	}
 

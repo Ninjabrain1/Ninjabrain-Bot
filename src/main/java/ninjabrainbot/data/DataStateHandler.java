@@ -158,7 +158,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private synchronized void onNewThrow(IThrow t) {
 		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setPlayerPos(t);
+			dataState.setPlayerPosition(t);
 			if (dataState.locked().get())
 				return;
 			if (t.isNether()) {

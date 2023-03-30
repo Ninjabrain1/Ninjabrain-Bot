@@ -1,7 +1,6 @@
 package ninjabrainbot.data;
 
 import ninjabrainbot.data.blind.BlindResult;
-import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.event.ObservableProperty;

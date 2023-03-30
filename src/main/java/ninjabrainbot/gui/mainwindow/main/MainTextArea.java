@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.ResultType;
+import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;

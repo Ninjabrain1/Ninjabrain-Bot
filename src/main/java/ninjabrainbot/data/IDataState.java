@@ -1,8 +1,8 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
@@ -13,28 +13,30 @@ import ninjabrainbot.event.IObservable;
 
 public interface IDataState {
 
-	public IDivineContext getDivineContext();
+	IAllAdvancementsDataState allAdvancementDataState();
 
-	public IThrowSet getThrowSet();
+	IBoatDataState boatDataState();
 
-	public IObservable<ICalculatorResult> calculatorResult();
+	IDivineContext getDivineContext();
 
-	public IObservable<ChunkPrediction> topPrediction();
+	IThrowSet getThrowSet();
 
-	public IObservable<IThrow> playerPosition();
+	IObservable<ICalculatorResult> calculatorResult();
 
-	public IObservable<BlindResult> blindResult();
+	IObservable<ChunkPrediction> topPrediction();
 
-	public IObservable<DivineResult> divineResult();
+	IObservable<IThrow> playerPosition();
 
-	public IObservable<Boolean> locked();
+	IObservable<BlindResult> blindResult();
 
-	public IObservable<ResultType> resultType();
+	IObservable<DivineResult> divineResult();
 
-	public IBoatDataState boatDataState();
+	IObservable<Boolean> locked();
 
-	public void toggleLocked();
+	IObservable<ResultType> resultType();
 
-	public void reset();
+	void toggleLocked();
+
+	void reset();
 
 }

@@ -46,7 +46,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		onFossilChanged(divineContext.getFossil());
 		removeButton.addActionListener(p -> dataStateHandler.resetDivineContext());
-		fossilSubscription = divineContext.whenFossilChanged().subscribeEDT(fossil -> onFossilChanged(fossil));
+		fossilSubscription = divineContext.fossil().subscribeEDT(fossil -> onFossilChanged(fossil));
 		this.whenVisibilityChanged = whenVisibilityChanged;
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;

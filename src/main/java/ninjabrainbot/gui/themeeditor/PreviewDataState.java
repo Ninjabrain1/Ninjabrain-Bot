@@ -3,9 +3,11 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.List;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
+import ninjabrainbot.data.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.ResultType;
+import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
@@ -24,7 +26,8 @@ import ninjabrainbot.event.ObservableField;
 
 public class PreviewDataState implements IDataState {
 
-	private IBoatDataState boatDataState;
+	private final IBoatDataState boatDataState;
+	private final IAllAdvancementsDataState allAdvancementsDataState;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
@@ -51,14 +54,16 @@ public class PreviewDataState implements IDataState {
 		IModificationLock modificationLock = new AlwaysUnlocked();
 		divineContext = new DivineContext(modificationLock);
 		throwSet = new ThrowSet(modificationLock);
-		playerPos = new LockableField<IThrow>(modificationLock);
-		locked = new LockableField<Boolean>(false, modificationLock);
+		playerPos = new LockableField<>(modificationLock);
+		locked = new LockableField<>(false, modificationLock);
+		resultType = new LockableField<>(ResultType.NONE, modificationLock);
+		calculatorResult = new LockableField<>(modificationLock);
+		topPrediction = new LockableField<>(modificationLock);
+		blindResult = new LockableField<>(modificationLock);
+		divineResult = new LockableField<>(modificationLock);
+
 		boatDataState = new BoatDataState(modificationLock);
-		resultType = new LockableField<ResultType>(ResultType.NONE, modificationLock);
-		calculatorResult = new LockableField<ICalculatorResult>(modificationLock);
-		topPrediction = new LockableField<ChunkPrediction>(modificationLock);
-		blindResult = new LockableField<BlindResult>(modificationLock);
-		divineResult = new LockableField<DivineResult>(modificationLock);
+		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, modificationLock);
 	}
 
 	@Override
@@ -100,6 +105,11 @@ public class PreviewDataState implements IDataState {
 	public IObservable<ResultType> resultType() {
 		return resultType;
 
+	}
+
+	@Override
+	public IAllAdvancementsDataState allAdvancementDataState() {
+		return allAdvancementsDataState;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package ninjabrainbot.data.divine;
 
 import ninjabrainbot.data.blind.BlindPosition;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 
 public interface IDivineContext {
@@ -12,7 +13,7 @@ public interface IDivineContext {
 
 	public void resetFossil();
 
-	public ISubscribable<Fossil> whenFossilChanged();
+	public IObservable<Fossil> fossil();
 
 	public boolean hasDivine();
 
