@@ -30,6 +30,8 @@ public class CombinedCertaintyInformationProvider extends InformationMessageProv
 			return false;
 		Chunk chunk0 = predictions.get(0);
 		Chunk chunk1 = predictions.get(1);
+		if (chunk0.weight > 0.95)
+			return false;
 		if (!chunk0.isNeighboring(chunk1))
 			return false;
 		return chunk0.weight + chunk1.weight > 0.95;

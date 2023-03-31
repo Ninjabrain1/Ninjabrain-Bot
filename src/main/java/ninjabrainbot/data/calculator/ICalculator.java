@@ -10,12 +10,10 @@ import ninjabrainbot.util.ISet;
 
 public interface ICalculator {
 
-	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos);
+	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext);
 
-	public BlindResult blind(BlindPosition b);
+	public BlindResult blind(BlindPosition b, IDivineContext divineContext);
 
-	public DivineResult divine();
-
-	public void setDivineContext(IDivineContext divineContext);
+	public DivineResult divine(IDivineContext divineContext);
 
 }

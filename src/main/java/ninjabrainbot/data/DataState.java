@@ -2,7 +2,6 @@ package ninjabrainbot.data;
 
 import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.data.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculator;
 import ninjabrainbot.data.calculator.ICalculatorResult;
@@ -28,19 +27,13 @@ public class DataState implements IDataState, IDisposable {
 	final AllAdvancementsDataState allAdvancementsDataState;
 	final BoatDataState boatDataState;
 
-	private final ICalculator calculator;
-
 	private final ObservableField<Boolean> locked;
 
 	private final DivineContext divineContext;
 	private final ThrowSet throwSet;
 	private final ObservableField<IThrow> playerPosition;
 
-	private final ObservableField<ICalculatorResult> calculatorResult;
-	private final ObservableField<ChunkPrediction> topPrediction;
-	private final ObservableField<BlindResult> blindResult;
-	private final ObservableField<DivineResult> divineResult;
-
+	private final CalculatorManager calculatorManager;
 	private final ResultTypeProvider resultTypeProvider;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
@@ -48,26 +41,14 @@ public class DataState implements IDataState, IDisposable {
 	public DataState(ICalculator calculator, IModificationLock modificationLock) {
 		divineContext = new DivineContext(modificationLock);
 		throwSet = new ThrowSet(modificationLock);
-
 		playerPosition = new LockableField<>(modificationLock);
 		locked = new LockableField<>(false, modificationLock);
 
-		calculatorResult = new LockableField<>(modificationLock);
-		topPrediction = new LockableField<>(modificationLock);
-		blindResult = new LockableField<>(modificationLock);
-		divineResult = new LockableField<>(modificationLock);
-
-		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, modificationLock);
+		calculatorManager = disposeHandler.add(new CalculatorManager(calculator, throwSet, playerPosition, divineContext, modificationLock));
+		allAdvancementsDataState = new AllAdvancementsDataState(calculatorManager.topPrediction(), modificationLock);
 		boatDataState = new BoatDataState(modificationLock);
 
-		resultTypeProvider = new ResultTypeProvider(this, modificationLock);
-
-		calculator.setDivineContext(divineContext);
-		this.calculator = calculator;
-
-		// Subscriptions
-		disposeHandler.add(throwSet.whenModified().subscribe(__ -> recalculateStronghold()));
-		disposeHandler.add(divineContext.fossil().subscribe(__ -> onFossilChanged()));
+		resultTypeProvider = disposeHandler.add(new ResultTypeProvider(this, modificationLock));
 	}
 
 	@Override
@@ -76,29 +57,12 @@ public class DataState implements IDataState, IDisposable {
 		boatDataState.reset();
 		throwSet.clear();
 		playerPosition.set(null);
-		blindResult.set(null);
-		divineResult.set(null);
 		divineContext.clear();
 	}
 
 	@Override
 	public void toggleLocked() {
 		locked.set(!locked.get());
-	}
-
-	@Override
-	public void dispose() {
-		disposeHandler.dispose();
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
-		throwSet.dispose();
-	}
-
-	public void recalculateStronghold() {
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
-		calculatorResult.set(calculator.triangulate(throwSet, playerPosition));
-		updateTopPrediction(calculatorResult.get());
 	}
 
 	public DataStateUndoData getUndoData() {
@@ -111,22 +75,6 @@ public class DataState implements IDataState, IDisposable {
 		playerPosition.set(undoData.playerPos);
 	}
 
-	private void updateTopPrediction(ICalculatorResult calculatorResult) {
-		if (calculatorResult == null || !calculatorResult.success()) {
-			topPrediction.set(null);
-			return;
-		}
-		topPrediction.set(calculatorResult.getBestPrediction());
-	}
-
-	private void onFossilChanged() {
-		if (throwSet.size() != 0) {
-			recalculateStronghold();
-		} else {
-			divineResult.set(calculator.divine());
-		}
-	}
-
 	void setFossil(Fossil f) {
 		divineContext.setFossil(f);
 	}
@@ -135,8 +83,8 @@ public class DataState implements IDataState, IDisposable {
 		playerPosition.set(t);
 	}
 
-	void setBlindPosition(BlindPosition t) {
-		blindResult.set(calculator.blind(t));
+	void setCalculator(ICalculator calculator){
+		calculatorManager.setCalculator(calculator);
 	}
 
 	@Override
@@ -155,28 +103,28 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IObservable<ICalculatorResult> calculatorResult() {
-		return calculatorResult;
-	}
-
-	@Override
 	public IObservable<IThrow> playerPosition() {
 		return playerPosition;
 	}
 
 	@Override
+	public IObservable<ICalculatorResult> calculatorResult() {
+		return calculatorManager.calculatorResult();
+	}
+
+	@Override
 	public IObservable<ChunkPrediction> topPrediction() {
-		return topPrediction;
+		return calculatorManager.topPrediction();
 	}
 
 	@Override
 	public IObservable<BlindResult> blindResult() {
-		return blindResult;
+		return calculatorManager.blindResult();
 	}
 
 	@Override
 	public IObservable<DivineResult> divineResult() {
-		return divineResult;
+		return calculatorManager.divineResult();
 	}
 
 	@Override
@@ -192,6 +140,12 @@ public class DataState implements IDataState, IDisposable {
 	@Override
 	public IBoatDataState boatDataState() {
 		return boatDataState;
+	}
+
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
+		throwSet.dispose();
 	}
 
 }

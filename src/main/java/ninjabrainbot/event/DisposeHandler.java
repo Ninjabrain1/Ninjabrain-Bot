@@ -6,8 +6,9 @@ public class DisposeHandler implements IDisposable {
 
 	public ArrayList<IDisposable> disposables = new ArrayList<>(2);
 
-	public void add(IDisposable disposable) {
+	public <T extends IDisposable> T add(T disposable) {
 		disposables.add(disposable);
+		return disposable;
 	}
 
 	@Override

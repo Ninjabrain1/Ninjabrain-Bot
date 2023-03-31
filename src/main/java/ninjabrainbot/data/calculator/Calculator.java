@@ -9,12 +9,12 @@ import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.statistics.ApproximatedPrior;
 import ninjabrainbot.data.statistics.Posterior;
 import ninjabrainbot.data.statistics.Prior;
 import ninjabrainbot.data.stronghold.Chunk;
 import ninjabrainbot.data.stronghold.Ring;
 import ninjabrainbot.event.IObservable;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.ISet;
 import ninjabrainbot.util.Logger;
@@ -22,51 +22,53 @@ import ninjabrainbot.util.Pair;
 
 public class Calculator implements ICalculator {
 
-	private IDivineContext divineContext;
-	private CalculatorSettings settings;
+	private final int numberOfReturnedPredictions;
+	private final boolean useAdvancedStatistics;
+	private final MultipleChoicePreferenceDataTypes.McVersion mcVersion;
 
 	public Calculator() {
 		this(new CalculatorSettings());
 	}
 
 	public Calculator(CalculatorSettings settings) {
-		this.settings = settings;
+		numberOfReturnedPredictions = settings.numberOfReturnedPredictions;
+		useAdvancedStatistics = settings.useAdvancedStatistics;
+		mcVersion = settings.mcVersion;
 	}
 
 	@Override
-	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos) {
+	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(eyeThrows, divineContext, settings.useAdvStatistics, settings.version);
+		Posterior posterior = new Posterior(eyeThrows, divineContext, useAdvancedStatistics, mcVersion);
 		Logger.log("Time to triangulate: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
-		return new CalculatorResult(posterior, eyeThrows, playerPos, settings.numberOfReturnedPredictions, settings.version);
+		return new CalculatorResult(posterior, eyeThrows, playerPos, numberOfReturnedPredictions, mcVersion);
 	}
 
-	public Posterior getPosterior(ISet<IThrow> eyeThrows) {
+	public Posterior getPosterior(ISet<IThrow> eyeThrows, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
-		Posterior posterior = new Posterior(eyeThrows, divineContext, settings.useAdvStatistics, settings.version);
-		return posterior;
+		return new Posterior(eyeThrows, divineContext, useAdvancedStatistics, mcVersion);
 	}
 
 	@Override
-	public BlindResult blind(BlindPosition b) {
+	public BlindResult blind(BlindPosition b, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
 		int distanceThreshold = 400;
 		int h = 2;
 		double phi_p = phi(b.x, b.z);
-		double probability = getHighrollProbability(b.x, b.z, distanceThreshold);
+		double probability = getHighrollProbability(b.x, b.z, distanceThreshold, divineContext);
 		// difference in x direction
 		int deltaX1 = h;
 		int deltaZ1 = 0;
-		double probability1 = getHighrollProbability(b.x + deltaX1, b.z + deltaZ1, distanceThreshold);
+		double probability1 = getHighrollProbability(b.x + deltaX1, b.z + deltaZ1, distanceThreshold, divineContext);
 		double probabilityDerivative1 = (probability1 - probability) / Math.sqrt(deltaX1 * deltaX1 + deltaZ1 * deltaZ1);
 		// difference in z direction
 		int deltaX2 = deltaZ1;
 		int deltaZ2 = -deltaX1;
-		double probability2 = getHighrollProbability(b.x + deltaX2, b.z + deltaZ2, distanceThreshold);
+		double probability2 = getHighrollProbability(b.x + deltaX2, b.z + deltaZ2, distanceThreshold, divineContext);
 		double probabilityDerivative2 = (probability2 - probability) / Math.sqrt(deltaX1 * deltaX1 + deltaZ1 * deltaZ1);
 		double probabilityDerivative = Math.sqrt(probabilityDerivative1 * probabilityDerivative1 + probabilityDerivative2 * probabilityDerivative2);
 		double ninetiethPercentileDerivative = probabilityDerivative * Math.sqrt(0.1 / (2 * probability * probability * probability)) * distanceThreshold;
@@ -93,19 +95,15 @@ public class Calculator implements ICalculator {
 	}
 
 	@Override
-	public DivineResult divine() {
+	public DivineResult divine(IDivineContext divineContext) {
 		Fossil f = divineContext.getFossil();
 		return f != null ? new DivineResult(f) : null;
 	}
 
-	private double getHighrollProbability(double x, double z, int distanceThreshold) {
+	private double getHighrollProbability(double x, double z, int distanceThreshold, IDivineContext divineContext) {
 		double probability = 0;
 		Prior prior;
-		if (!settings.approximatedBlindCalculations) {
-			prior = new Prior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
-		} else {
-			prior = new ApproximatedPrior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
-		}
+		prior = new Prior((int) x * 8 / 16, (int) z * 8 / 16, distanceThreshold / 16 + 1, divineContext);
 		for (Chunk c : prior.getChunks()) {
 			double dx = x * 8 - c.x * 16 + 8;
 			double dz = z * 8 - c.z * 16 + 8;
@@ -212,11 +210,6 @@ public class Calculator implements ICalculator {
 		double dx = x + r * Math.sin(phi);
 		double dz = z - r * Math.cos(phi);
 		return Math.sqrt(dx * dx + dz * dz);
-	}
-
-	@Override
-	public void setDivineContext(IDivineContext divineContext) {
-		this.divineContext = divineContext;
 	}
 
 }

@@ -21,11 +21,11 @@ public interface IDataState {
 
 	IThrowSet getThrowSet();
 
+	IObservable<IThrow> playerPosition();
+
 	IObservable<ICalculatorResult> calculatorResult();
 
 	IObservable<ChunkPrediction> topPrediction();
-
-	IObservable<IThrow> playerPosition();
 
 	IObservable<BlindResult> blindResult();
 

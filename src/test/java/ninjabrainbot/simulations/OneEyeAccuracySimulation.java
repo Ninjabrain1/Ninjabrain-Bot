@@ -9,6 +9,7 @@ import ninjabrainbot.data.common.IPosition;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.divine.DivineContext;
+import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.stronghold.Chunk;
@@ -24,14 +25,15 @@ public class OneEyeAccuracySimulation {
 	private static final double std = 0.005;
 
 	private static Calculator calculator;
-	private static IModificationLock lock = new AlwaysUnlocked();
-	private static Random random = new Random();
-	private static Ring ring = Ring.get(0);
+	private static IDivineContext divineContext;
+	private static final IModificationLock lock = new AlwaysUnlocked();
+	private static final Random random = new Random();
+	private static final Ring ring = Ring.get(0);
 
 	public static void main(String[] args) {
 		Logger.enabled = false;
 		calculator = new Calculator(new CalculatorSettings());
-		calculator.setDivineContext(new DivineContext(lock));
+		divineContext = new DivineContext(lock);
 
 		for (int r = 0; r < 3000; r += 100) {
 			int successes = 0;
@@ -60,7 +62,7 @@ public class OneEyeAccuracySimulation {
 	private static ICalculatorResult calculateOneEye(IThrow eyeThrow) {
 		ThrowSet throwSet = new ThrowSet(lock);
 		throwSet.add(eyeThrow);
-		ICalculatorResult calculatorResult = calculator.triangulate(throwSet, new ObservableField<>(eyeThrow));
+		ICalculatorResult calculatorResult = calculator.triangulate(throwSet, new ObservableField<>(eyeThrow), divineContext);
 		throwSet.dispose();
 		return calculatorResult;
 	}

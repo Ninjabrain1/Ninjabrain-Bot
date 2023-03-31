@@ -1,6 +1,5 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.blind.BlindPosition;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.datalock.ILock;
@@ -10,21 +9,19 @@ import ninjabrainbot.data.divine.Fossil;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.StandardStdProfile;
 import ninjabrainbot.data.endereye.ThrowParser;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private final NinjabrainBotPreferences preferences;
 	private final StandardStdProfile stdProfile;
-	private final CalculatorSettings calculatorSettings;
 
 	private final IActiveInstanceProvider activeInstanceProvider;
 
@@ -41,9 +38,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		this.stdProfile = new StandardStdProfile(preferences);
 		modificationLock = new ModificationLock(this::afterDataStateModified);
 
-		calculatorSettings = new CalculatorSettings();
-		calculatorSettings.useAdvStatistics = preferences.useAdvStatistics.get();
-		calculatorSettings.version = preferences.mcVersion.get();
+		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
 		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
@@ -51,12 +46,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		addThrowStream(throwParser.whenNewThrowInputed());
 		addFossilStream(throwParser.whenNewFossilInputed());
 
-		activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked());
-		activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(__ -> updateAllAdvancementsMode());
+		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked()));
+		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::updateAllAdvancementsMode));
 
-		disposeHandler.add(preferences.useAdvStatistics.whenModified().subscribe(this::onUseAdvStatisticsChanged));
-		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onMcVersionChanged));
-		disposeHandler.add(preferences.allAdvancements.whenModified().subscribe(__ -> updateAllAdvancementsMode()));
+		disposeHandler.add(preferences.useAdvStatistics.whenModified().subscribe(this::onCalculatorSettingsChanged));
+		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onCalculatorSettingsChanged));
+		disposeHandler.add(preferences.allAdvancements.whenModified().subscribe(this::updateAllAdvancementsMode));
 		disposeHandler.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
 		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
 		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
@@ -162,8 +157,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 			if (dataState.locked().get())
 				return;
 			if (t.isNether()) {
-				if (dataState.getThrowSet().size() == 0)
-					dataState.setBlindPosition(new BlindPosition(t));
 				return;
 			}
 			if (dataState.boatDataState.enteringBoat().get()) {
@@ -183,17 +176,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		}
 	}
 
-	private synchronized void onUseAdvStatisticsChanged(boolean newValue) {
-		calculatorSettings.useAdvStatistics = newValue;
+	private synchronized void onCalculatorSettingsChanged() {
+		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.recalculateStronghold();
-		}
-	}
-
-	private synchronized void onMcVersionChanged(McVersion newValue) {
-		calculatorSettings.version = newValue;
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.recalculateStronghold();
+			dataState.setCalculator(new Calculator(calculatorSettings));
 		}
 	}
 

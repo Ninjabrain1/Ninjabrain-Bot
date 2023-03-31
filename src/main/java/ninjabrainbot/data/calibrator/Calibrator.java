@@ -4,6 +4,8 @@ import java.awt.AWTException;
 
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
+import ninjabrainbot.data.divine.DivineContext;
+import ninjabrainbot.data.divine.IDivineContext;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.ThrowSet;
 import ninjabrainbot.data.statistics.Posterior;
@@ -28,6 +30,8 @@ public class Calibrator implements IDisposable {
 	Chunk stronghold;
 	double lastX;
 	double lastZ;
+
+	private final IDivineContext divineContext = new DivineContext(new AlwaysUnlocked());
 
 	public Calibrator() {
 		triangulator = new Calculator();
@@ -62,7 +66,7 @@ public class Calibrator implements IDisposable {
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				Posterior posterior = triangulator.getPosterior(eyeThrows);
+				Posterior posterior = triangulator.getPosterior(eyeThrows, divineContext);
 				prediction = posterior.getMostProbableChunk();
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;
