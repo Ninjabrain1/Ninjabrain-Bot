@@ -15,14 +15,14 @@ public class HotkeyPreference {
 	IntPreference modifier;
 	IntPreference code;
 
-	private ObservableProperty<NativeKeyEvent> whenTriggered;
+	private final ObservableProperty<HotkeyPreference> whenTriggered;
 
 	public HotkeyPreference(String key, IPreferenceSource pref) {
 		this.pref = pref;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);
 		hotkeys.add(this);
-		whenTriggered = new ObservableProperty<NativeKeyEvent>();
+		whenTriggered = new ObservableProperty<>();
 	}
 
 	public int getCode() {
@@ -41,11 +41,11 @@ public class HotkeyPreference {
 		modifier.set(value);
 	}
 
-	public final void execute(NativeKeyEvent e) {
-		whenTriggered.notifySubscribers(e);
+	public final void execute() {
+		whenTriggered.notifySubscribers(this);
 	}
 
-	public ISubscribable<NativeKeyEvent> whenTriggered() {
+	public ISubscribable<HotkeyPreference> whenTriggered() {
 		return whenTriggered;
 	}
 

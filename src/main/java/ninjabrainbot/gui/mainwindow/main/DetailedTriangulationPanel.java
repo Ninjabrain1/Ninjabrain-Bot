@@ -20,7 +20,7 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 	private NinjabrainBotPreferences preferences;
 
 	private ChunkPanelHeader header;
-	private List<ChunkPanel> panels;
+	List<ChunkPanel> panels;
 
 	public DetailedTriangulationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager);

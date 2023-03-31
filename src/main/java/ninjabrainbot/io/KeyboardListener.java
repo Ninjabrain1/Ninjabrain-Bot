@@ -83,7 +83,7 @@ public class KeyboardListener implements NativeKeyListener {
 		}
 		for (HotkeyPreference h : HotkeyPreference.hotkeys) {
 			if (h.getCode() == e.getRawCode() && (h.getModifier() & e.getModifiers()) == h.getModifier()) {
-				h.execute(e);
+				h.execute();
 			}
 		}
 		// Alt clipboard reader

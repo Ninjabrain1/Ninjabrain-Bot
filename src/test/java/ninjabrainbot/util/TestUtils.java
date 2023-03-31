@@ -1,9 +1,17 @@
 package ninjabrainbot.util;
 
+import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.statistics.IRay;
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.theme.Theme;
 
 public class TestUtils {
 
@@ -37,6 +45,18 @@ public class TestUtils {
 
 	public static IThrow createThrowNether(double x, double z, double alpha) {
 		return new Throw(x, z, alpha, -31, true, new AlwaysUnlocked());
+	}
+
+	public static StyleManager createStyleManager() {
+		return new StyleManager(new TestTheme(), SizePreference.REGULAR);
+	}
+
+	public static void awaitSwingEvents(){
+		try {
+			SwingUtilities.invokeAndWait(() -> {});
+		} catch (InterruptedException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

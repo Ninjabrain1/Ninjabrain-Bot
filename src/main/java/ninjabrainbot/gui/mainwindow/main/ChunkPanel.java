@@ -33,11 +33,11 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private ChunkPrediction currentPrediction;
 
-	private ThemedLabel location;
-	private ColoredLabel certainty;
-	private ThemedLabel distance;
-	private ThemedLabel nether;
-	private ColorMapLabel angle;
+	ThemedLabel location;
+	ColoredLabel certainty;
+	ThemedLabel distance;
+	ThemedLabel nether;
+	ColorMapLabel angle;
 	private ILabel[] labels;
 
 	StyleManager styleManager;
