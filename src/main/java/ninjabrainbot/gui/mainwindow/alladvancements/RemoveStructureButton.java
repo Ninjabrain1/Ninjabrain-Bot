@@ -1,6 +1,6 @@
 package ninjabrainbot.gui.mainwindow.alladvancements;
 
-import ninjabrainbot.data.common.StructurePosition;
+import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;

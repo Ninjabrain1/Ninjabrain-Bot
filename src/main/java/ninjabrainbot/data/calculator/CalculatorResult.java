@@ -3,10 +3,10 @@ package ninjabrainbot.data.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.statistics.Posterior;
-import ninjabrainbot.data.stronghold.Chunk;
-import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.statistics.Posterior;
+import ninjabrainbot.data.calculator.stronghold.Chunk;
+import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.ISet;

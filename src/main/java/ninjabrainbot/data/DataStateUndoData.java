@@ -2,10 +2,10 @@ package ninjabrainbot.data;
 
 import java.util.List;
 
-import ninjabrainbot.data.divine.DivineContext;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.ThrowSet;
+import ninjabrainbot.data.calculator.divine.DivineContext;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.ThrowSet;
 
 public class DataStateUndoData {
 

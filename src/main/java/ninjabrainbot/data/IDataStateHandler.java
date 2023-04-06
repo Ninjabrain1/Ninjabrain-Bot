@@ -1,8 +1,8 @@
 package ninjabrainbot.data;
 
 import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 

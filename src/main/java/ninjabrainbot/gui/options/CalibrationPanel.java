@@ -18,9 +18,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.data.calibrator.Calibrator;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.Throw;
+import ninjabrainbot.data.calculator.calibrator.Calibrator;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedComponent;

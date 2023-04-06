@@ -5,7 +5,7 @@ import java.util.List;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.stronghold.Chunk;
+import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;

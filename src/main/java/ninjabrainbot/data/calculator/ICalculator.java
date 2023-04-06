@@ -1,10 +1,10 @@
 package ninjabrainbot.data.calculator;
 
-import ninjabrainbot.data.blind.BlindPosition;
-import ninjabrainbot.data.blind.BlindResult;
-import ninjabrainbot.data.divine.DivineResult;
-import ninjabrainbot.data.divine.IDivineContext;
-import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.calculator.blind.BlindPosition;
+import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.divine.DivineResult;
+import ninjabrainbot.data.calculator.divine.IDivineContext;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.ISet;
 

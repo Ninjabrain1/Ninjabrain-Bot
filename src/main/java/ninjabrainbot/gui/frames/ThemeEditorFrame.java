@@ -21,9 +21,9 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.Throw;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;

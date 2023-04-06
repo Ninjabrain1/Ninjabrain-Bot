@@ -1,17 +1,17 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
-import ninjabrainbot.data.alladvancements.StructureType;
+import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
+import ninjabrainbot.data.calculator.alladvancements.StructureType;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
-import ninjabrainbot.data.common.StructurePosition;
+import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.datalock.ILock;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.ModificationLock;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.StandardStdProfile;
-import ninjabrainbot.data.endereye.ThrowParser;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
+import ninjabrainbot.data.calculator.endereye.ThrowParser;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;

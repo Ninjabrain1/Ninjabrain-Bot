@@ -3,7 +3,7 @@ package ninjabrainbot.gui.mainwindow;
 import javax.swing.ImageIcon;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.highprecision.BoatState;
+import ninjabrainbot.data.calculator.highprecision.BoatState;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedIcon;

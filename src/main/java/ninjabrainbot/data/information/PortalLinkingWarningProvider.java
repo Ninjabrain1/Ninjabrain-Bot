@@ -3,8 +3,8 @@ package ninjabrainbot.data.information;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 

@@ -1,8 +1,8 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.blind.BlindResult;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;

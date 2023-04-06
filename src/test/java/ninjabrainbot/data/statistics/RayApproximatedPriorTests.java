@@ -3,11 +3,14 @@ package ninjabrainbot.data.statistics;
 import java.util.HashMap;
 import java.util.Map;
 
+import ninjabrainbot.data.calculator.statistics.ApproximatedPrior;
+import ninjabrainbot.data.calculator.statistics.IPrior;
+import ninjabrainbot.data.calculator.statistics.Prior;
+import ninjabrainbot.data.calculator.statistics.RayApproximatedPrior;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.divine.DivineContext;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.stronghold.Chunk;
-import ninjabrainbot.data.stronghold.Ring;
+import ninjabrainbot.data.calculator.divine.DivineContext;
+import ninjabrainbot.data.calculator.stronghold.Chunk;
+import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.BeforeAll;

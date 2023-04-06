@@ -5,9 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.SwingUtilities;
 
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.Throw;
-import ninjabrainbot.data.statistics.IRay;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.statistics.IRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 

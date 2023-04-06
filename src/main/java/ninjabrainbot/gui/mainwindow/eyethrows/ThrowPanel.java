@@ -11,9 +11,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.IThrowSet;
-import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IThrowSet;
+import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Subscription;

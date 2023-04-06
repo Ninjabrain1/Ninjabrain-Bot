@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.divine.Fossil;
-import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;

@@ -1,14 +1,14 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.data.blind.BlindResult;
+import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
+import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.divine.DivineResult;
-import ninjabrainbot.data.divine.IDivineContext;
-import ninjabrainbot.data.endereye.IThrow;
-import ninjabrainbot.data.endereye.IThrowSet;
-import ninjabrainbot.data.highprecision.IBoatDataState;
-import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.data.calculator.divine.DivineResult;
+import ninjabrainbot.data.calculator.divine.IDivineContext;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IThrowSet;
+import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
+import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 
 public interface IDataState {

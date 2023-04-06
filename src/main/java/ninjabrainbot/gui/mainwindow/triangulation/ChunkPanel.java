@@ -7,8 +7,8 @@ import java.util.Locale;
 
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.stronghold.Chunk;
-import ninjabrainbot.data.stronghold.ChunkPrediction;
+import ninjabrainbot.data.calculator.stronghold.Chunk;
+import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;

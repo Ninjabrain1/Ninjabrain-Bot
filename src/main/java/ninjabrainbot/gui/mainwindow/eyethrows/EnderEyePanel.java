@@ -3,7 +3,7 @@ package ninjabrainbot.gui.mainwindow.eyethrows;
 import javax.swing.BoxLayout;
 
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.divine.IDivineContext;
+import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;

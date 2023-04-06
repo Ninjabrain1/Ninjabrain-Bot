@@ -7,7 +7,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;

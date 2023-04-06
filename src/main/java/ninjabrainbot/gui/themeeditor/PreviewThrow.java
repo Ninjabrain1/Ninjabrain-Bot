@@ -1,7 +1,7 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.data.endereye.IStdProfile;
-import ninjabrainbot.data.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IStdProfile;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

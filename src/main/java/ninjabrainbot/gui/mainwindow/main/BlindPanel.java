@@ -8,7 +8,7 @@ import java.util.Locale;
 import javax.swing.Box;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.data.blind.BlindResult;
+import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
