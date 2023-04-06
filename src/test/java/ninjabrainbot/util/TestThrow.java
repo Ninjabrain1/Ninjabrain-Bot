@@ -45,6 +45,11 @@ public class TestThrow implements IThrow {
 	}
 
 	@Override
+	public double yInPlayerDimension() {
+		return 80;
+	}
+
+	@Override
 	public double zInPlayerDimension() {
 		return z;
 	}
@@ -62,6 +67,11 @@ public class TestThrow implements IThrow {
 	@Override
 	public double alpha_0() {
 		return alpha;
+	}
+
+	@Override
+	public double beta() {
+		return 0;
 	}
 
 	@Override

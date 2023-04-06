@@ -8,7 +8,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 public class BoatThrow extends Throw {
 
 	public BoatThrow(double x, double z, double rawAlpha, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
-		super(x, z, rawAlpha, alpha, beta, nether, modificationLock);
+		super(x, 80, z, rawAlpha, alpha, beta, nether, modificationLock);
 	}
 
 	/**

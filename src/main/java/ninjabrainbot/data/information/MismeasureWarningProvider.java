@@ -1,6 +1,7 @@
 package ninjabrainbot.data.information;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
@@ -14,11 +15,15 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 	public MismeasureWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationMismeasureEnabled);
 		this.dataState = dataState;
-		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 	}
 
 	@Override
 	protected boolean shouldShowInformationMessage() {
+		if (dataState.resultType().get() != ResultType.TRIANGULATION)
+			return false;
+
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;

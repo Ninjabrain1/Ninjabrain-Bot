@@ -9,11 +9,11 @@ public class MainTextAreaTestAdapter {
 	}
 
 	public String getDetailedTriangulationPanel_strongholdLocation(int row){
-		return mainTextArea.detailedTriangulation.panels.get(row).location.getText();
+		return mainTextArea.detailedTriangulation.getChunkPanels().iterator().next().getLocationText();
 	}
 
 	public String getDetailedTriangulationPanel_netherCoords(int row){
-		return mainTextArea.detailedTriangulation.panels.get(row).nether.getText();
+		return mainTextArea.detailedTriangulation.getChunkPanels().iterator().next().getNetherText();
 	}
 
 }

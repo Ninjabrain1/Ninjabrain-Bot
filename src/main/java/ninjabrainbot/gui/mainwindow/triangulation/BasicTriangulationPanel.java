@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.mainwindow.main;
+package ninjabrainbot.gui.mainwindow.triangulation;
 
 import java.awt.Dimension;
 import java.util.Locale;
@@ -19,7 +19,7 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.Stronghold
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
-class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
+public class BasicTriangulationPanel extends ThemedPanel implements IDisposable {
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 

@@ -8,7 +8,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class PreviewThrow implements IThrow {
 
-	private ISubscribable<IThrow> whenModified = new ObservableProperty<IThrow>();
+	private final ISubscribable<IThrow> whenModified = new ObservableProperty<IThrow>();
 
 	double x, z, alpha, correction;
 
@@ -39,6 +39,11 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
+	public double yInPlayerDimension() {
+		return 80;
+	}
+
+	@Override
 	public double zInPlayerDimension() {
 		return z;
 	}
@@ -66,6 +71,11 @@ public class PreviewThrow implements IThrow {
 	@Override
 	public double alpha_0() {
 		return alpha;
+	}
+
+	@Override
+	public double beta() {
+		return 0;
 	}
 
 	@Override

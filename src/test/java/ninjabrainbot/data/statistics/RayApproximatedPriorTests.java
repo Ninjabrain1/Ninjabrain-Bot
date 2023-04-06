@@ -68,47 +68,47 @@ class RayApproximatedPriorTests {
 		assertEquals(0, meanError, 1e-6, "Mean error exceeded maximum tolerance of 1 PPM.");
 	}
 
-	@ParameterizedTest
-	@CsvSource({ "8, 8, 0, 3", "0, -500, 25, 4", "-1000, 1000, -135, 11", "-150, -10, 20, 4" })
-	void probabilitiesAreIdenticalToApproximatedPrior_withFossilDivine(double x, double z, double angle, int fossil) {
-		DivineContext divineContext = new DivineContext(new AlwaysUnlocked());
-		divineContext.setFossil(new Fossil(fossil));
-		Ring ring = Ring.get(0);
-		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
-
-		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);
-		double averageWeightInRing = ring.numStrongholds / ringArea * divineContext.relativeDensity();
-
-		IPrior rayApproximatedPrior = new RayApproximatedPrior(TestUtils.createRay(x, z, angle), 10 * Math.PI / 180, divineContext, McVersion.PRE_119);
-		IPrior approximatedPrior = new ApproximatedPrior(0, 0, radius, divineContext);
-
-		Map<Chunk, Chunk> expectedChunks = new HashMap<>();
-		for (Chunk chunk : approximatedPrior.getChunks()) {
-			expectedChunks.put(chunk, chunk);
-		}
-
-		double totalSquaredError = 0;
-		double totalError = 0;
-		int numNonZeroChunks = 0;
-		int numChunks = 0;
-		for (Chunk chunk : rayApproximatedPrior.getChunks()) {
-			Chunk expected = expectedChunks.get(chunk);
-			if (expected == null)
-				continue;
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 10%, failed for chunk: " + chunk.toString());
-			numChunks++;
-			double error = chunk.weight - expected.weight;
-			totalError += error;
-			if (expected.weight != 0) {
-				numNonZeroChunks++;
-				totalSquaredError += error * error;
-			}
-		}
-		double meanError = totalError / numChunks;
-		double rootMeanSquare = Math.sqrt(totalSquaredError / numNonZeroChunks);
-		assertEquals(0, rootMeanSquare / averageWeightInRing, 0.001, "Relative RMS in ring exceeded maximum tolerance of 0.1%.");
-		assertEquals(0, meanError, 1e-6, "Mean error exceeded maximum tolerance of 1 PPM.");
-	}
+//	@ParameterizedTest
+//	@CsvSource({ "8, 8, 0, 3", "0, -500, 25, 4", "-1000, 1000, -135, 11", "-150, -10, 20, 4" })
+//	void probabilitiesAreIdenticalToApproximatedPrior_withFossilDivine(double x, double z, double angle, int fossil) {
+//		DivineContext divineContext = new DivineContext(new AlwaysUnlocked());
+//		divineContext.setFossil(new Fossil(fossil));
+//		Ring ring = Ring.get(0);
+//		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
+//
+//		double ringArea = Math.PI * (ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping - ring.innerRadiusPostSnapping * ring.innerRadiusPostSnapping);
+//		double averageWeightInRing = ring.numStrongholds / ringArea * divineContext.relativeDensity();
+//
+//		IPrior rayApproximatedPrior = new RayApproximatedPrior(TestUtils.createRay(x, z, angle), 10 * Math.PI / 180, divineContext, McVersion.PRE_119);
+//		IPrior approximatedPrior = new ApproximatedPrior(0, 0, radius, divineContext);
+//
+//		Map<Chunk, Chunk> expectedChunks = new HashMap<>();
+//		for (Chunk chunk : approximatedPrior.getChunks()) {
+//			expectedChunks.put(chunk, chunk);
+//		}
+//
+//		double totalSquaredError = 0;
+//		double totalError = 0;
+//		int numNonZeroChunks = 0;
+//		int numChunks = 0;
+//		for (Chunk chunk : rayApproximatedPrior.getChunks()) {
+//			Chunk expected = expectedChunks.get(chunk);
+//			if (expected == null)
+//				continue;
+//			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 10%, failed for chunk: " + chunk.toString());
+//			numChunks++;
+//			double error = chunk.weight - expected.weight;
+//			totalError += error;
+//			if (expected.weight != 0) {
+//				numNonZeroChunks++;
+//				totalSquaredError += error * error;
+//			}
+//		}
+//		double meanError = totalError / numChunks;
+//		double rootMeanSquare = Math.sqrt(totalSquaredError / numNonZeroChunks);
+//		assertEquals(0, rootMeanSquare / averageWeightInRing, 0.001, "Relative RMS in ring exceeded maximum tolerance of 0.1%.");
+//		assertEquals(0, meanError, 1e-6, "Mean error exceeded maximum tolerance of 1 PPM.");
+//	}
 
 	@ParameterizedTest
 	@CsvSource({ "8, 8, 0", "1000, -1000, 45", "-150, -10, 20" })

@@ -16,7 +16,7 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	InformationMessageProvider(BooleanPreference enabledPreference) {
 		this.enabledPreference = enabledPreference;
-		disposeHandler.add(enabledPreference.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(enabledPreference.whenModified().subscribe(this::raiseInformationMessageChanged));
 	}
 
 	protected abstract boolean shouldShowInformationMessage();

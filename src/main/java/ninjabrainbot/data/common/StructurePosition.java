@@ -21,7 +21,7 @@ public class StructurePosition implements IPosition, IDisposable {
 
 	private Subscription playerPosSubscription;
 
-	private ObservableProperty<StructurePosition> whenRelativePlayerPositionChanged;
+	private final ObservableProperty<StructurePosition> whenRelativePlayerPositionChanged;
 
 	public StructurePosition(int x, int z) {
 		this(x, z, null);
@@ -88,6 +88,14 @@ public class StructurePosition implements IPosition, IDisposable {
 	@Override
 	public double zInOverworld() {
 		return z;
+	}
+
+	public double xInNether() {
+		return xInOverworld() / 8.0;
+	}
+
+	public double zInNether() {
+		return zInOverworld() / 8.0;
 	}
 
 	public int getOverworldDistance() {

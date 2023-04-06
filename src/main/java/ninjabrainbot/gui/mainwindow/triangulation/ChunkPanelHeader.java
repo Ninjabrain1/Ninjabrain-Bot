@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.mainwindow.main;
+package ninjabrainbot.gui.mainwindow.triangulation;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -54,7 +54,7 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		add(nether);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
 		updateHeaderText(preferences.strongholdDisplayType.get());
-		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(newValue -> updateHeaderText(newValue));
+		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(this::updateHeaderText);
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 		setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);

@@ -20,10 +20,10 @@ public class ModifiableSetTests {
 		lock = new AlwaysUnlocked();
 		set = new ModifiableSet<IThrow>();
 
-		set.add(new Throw(313, 277, 90, -31, false, lock));
-		set.add(new Throw(4, 2660, 30, -31, false, lock));
-		set.add(new Throw(670, 273, 20, -31, false, lock));
-		set.add(new Throw(1200, 243, -90, -31, false, lock));
+		set.add(new Throw(313, 80, 277, 90, -31, false, lock));
+		set.add(new Throw(4, 80, 2660, 30, -31, false, lock));
+		set.add(new Throw(670, 80, 273, 20, -31, false, lock));
+		set.add(new Throw(1200, 80, 243, -90, -31, false, lock));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class ModifiableSetTests {
 		set.whenElementAtIndexModified().subscribe(__ -> whenModifiedWasRaised_idx5.set(true), 5);
 
 		// Act
-		set.add(new Throw(670, 273, 20, -31, false, lock));
+		set.add(new Throw(670, 80, 273, 20, -31, false, lock));
 
 		// Assert
 		Assertions.assertTrue(whenModifiedWasRaised.get());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.common.IPosition;
 import ninjabrainbot.data.common.Position;
@@ -20,13 +21,17 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 	public NextThrowDirectionInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationDirectionHelpEnabled);
 		this.dataState = dataState;
-		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
-		disposeHandler.add(preferences.sigma.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
-		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(preferences.sigma.whenModified().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 	}
 
 	@Override
 	protected boolean shouldShowInformationMessage() {
+		if (dataState.resultType().get() != ResultType.TRIANGULATION)
+			return false;
+
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
 		if (calculatorResult == null || !calculatorResult.success() || dataState.getThrowSet().size() == 0)
 			return false;

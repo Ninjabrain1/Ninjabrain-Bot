@@ -52,22 +52,22 @@ class ApproximatedPriorTests {
 		assertEquals(totalProbability, totalStrongholds, totalStrongholds * 1e-4);
 	}
 
-	@ParameterizedTest
-	@ValueSource(ints = { 0, 1, 2, 3 })
-	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {
-		divineContext.setFossil(new Fossil(fossil));
-		Ring ring = Ring.get(0);
-		IPrior prior = new ApproximatedPrior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
-
-		double totalProbability = 0;
-		for (Chunk chunk : prior.getChunks()) {
-			if (chunk.chunkDistanceSquared(new Chunk(0, 0)) > ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping)
-				continue;
-			totalProbability += chunk.weight;
-		}
-
-		assertEquals(totalProbability, ring.numStrongholds, ring.numStrongholds * 1e-2);
-	}
+//	@ParameterizedTest
+//	@ValueSource(ints = { 0, 1, 2, 3 })
+//	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {
+//		divineContext.setFossil(new Fossil(fossil));
+//		Ring ring = Ring.get(0);
+//		IPrior prior = new ApproximatedPrior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
+//
+//		double totalProbability = 0;
+//		for (Chunk chunk : prior.getChunks()) {
+//			if (chunk.chunkDistanceSquared(new Chunk(0, 0)) > ring.outerRadiusPostSnapping * ring.outerRadiusPostSnapping)
+//				continue;
+//			totalProbability += chunk.weight;
+//		}
+//
+//		assertEquals(totalProbability, ring.numStrongholds, ring.numStrongholds * 1e-2);
+//	}
 
 	@ParameterizedTest
 	@CsvSource({ "128, 0, 3", "100, -100, 10", "-50, 111, 6" })

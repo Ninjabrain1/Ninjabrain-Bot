@@ -44,8 +44,8 @@ public class DataStateHandlerTests {
 		throwStream.notifySubscribers(TestUtils.createThrowNether(213, 142, -45));
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
 		assertEquals(dataState.blindResult().get().evaluation(), BlindResult.EXCELLENT);
-		double highrollProbaility = dataState.blindResult().get().highrollProbability;
-		assertTrue(highrollProbaility > 0.4);
+		double highrollProbability = dataState.blindResult().get().highrollProbability;
+		assertTrue(highrollProbability > 0.4);
 
 		throwStream.notifySubscribers(TestUtils.createThrow(2000, 1000, -45));
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
@@ -75,7 +75,7 @@ public class DataStateHandlerTests {
 		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
 		assertEquals(dataState.blindResult().get().evaluation(), BlindResult.EXCELLENT);
-		assertEquals(dataState.blindResult().get().highrollProbability, highrollProbaility);
+		assertEquals(dataState.blindResult().get().highrollProbability, highrollProbability);
 
 		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.DIVINE);

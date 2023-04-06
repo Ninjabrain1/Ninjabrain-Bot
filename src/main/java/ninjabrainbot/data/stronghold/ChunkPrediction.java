@@ -44,12 +44,13 @@ public class ChunkPrediction extends StructurePosition {
 		return t == null ? -1 : chunk.getAngleError(version, t);
 	}
 
-	public int getNetherX() {
+	public double xInNether() {
 		return chunk.x * 2;
 	}
 
-	public int getNetherZ() {
+	public double zInNether() {
 		return chunk.z * 2;
 	}
+
 
 }

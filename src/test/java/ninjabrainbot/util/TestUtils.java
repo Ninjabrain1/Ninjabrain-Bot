@@ -1,6 +1,5 @@
 package ninjabrainbot.util;
 
-import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
@@ -11,7 +10,6 @@ import ninjabrainbot.data.endereye.Throw;
 import ninjabrainbot.data.statistics.IRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.theme.Theme;
 
 public class TestUtils {
 
@@ -36,15 +34,15 @@ public class TestUtils {
 	}
 
 	public static IThrow createThrow(double x, double z, double alpha) {
-		return new Throw(x, z, alpha, -31, false, new AlwaysUnlocked());
+		return new Throw(x, 80, z, alpha, -31, false, new AlwaysUnlocked());
 	}
 
 	public static IThrow createThrowLookDown(double x, double z, double alpha) {
-		return new Throw(x, z, alpha, 31, false, new AlwaysUnlocked());
+		return new Throw(x, 80, z, alpha, 31, false, new AlwaysUnlocked());
 	}
 
 	public static IThrow createThrowNether(double x, double z, double alpha) {
-		return new Throw(x, z, alpha, -31, true, new AlwaysUnlocked());
+		return new Throw(x, 80, z, alpha, -31, true, new AlwaysUnlocked());
 	}
 
 	public static StyleManager createStyleManager() {

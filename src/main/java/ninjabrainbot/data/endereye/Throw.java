@@ -11,7 +11,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable {
 
-	private final double x, z, rawAlpha, alpha_0, beta;
+	private final double x, y, z, rawAlpha, alpha_0, beta;
 	private final boolean nether;
 
 	private IStdProfile stdProfile;
@@ -21,13 +21,14 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 
 	private Subscription stdProfileSubscription;
 
-	public Throw(double x, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
-		this(x, z, alpha, alpha, beta, nether, modificationLock);
+	public Throw(double x, double y, double z, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+		this(x, y, z, alpha, alpha, beta, nether, modificationLock);
 	}
 
-	public Throw(double x, double z, double rawAlpha, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
+	public Throw(double x, double y, double z, double rawAlpha, double alpha, double beta, boolean nether, IModificationLock modificationLock) {
 		super(modificationLock);
 		this.x = x;
+		this.y = y;
 		this.z = z;
 		this.rawAlpha = rawAlpha;
 		alpha %= 360.0;
@@ -61,11 +62,12 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 		try {
 			boolean nether = substrings[2].equals("minecraft:the_nether");
 			double x = Double.parseDouble(substrings[6]);
+			double y = Double.parseDouble(substrings[7]);
 			double z = Double.parseDouble(substrings[8]);
 			double rawAlpha = Double.parseDouble(substrings[9]);
 			double beta = Double.parseDouble(substrings[10]);
 			double alpha = getPreciseAlpha(rawAlpha, crosshairCorrection);
-			return new Throw(x, z, rawAlpha, alpha, beta, nether, modificationLock);
+			return new Throw(x, y, z, rawAlpha, alpha, beta, nether, modificationLock);
 		} catch (NullPointerException | NumberFormatException e) {
 			return null;
 		}
@@ -121,6 +123,11 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	}
 
 	@Override
+	public double yInPlayerDimension() {
+		return y;
+	}
+
+	@Override
 	public double zInPlayerDimension() {
 		return z;
 	}
@@ -143,6 +150,11 @@ public class Throw extends DataComponent<IThrow> implements IThrow, IDisposable 
 	@Override
 	public double alpha_0() {
 		return alpha_0;
+	}
+
+	@Override
+	public double beta() {
+		return beta;
 	}
 
 	@Override

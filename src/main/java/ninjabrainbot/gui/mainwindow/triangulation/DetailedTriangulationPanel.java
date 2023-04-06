@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.mainwindow.main;
+package ninjabrainbot.gui.mainwindow.triangulation;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -13,14 +13,14 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
+public class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 
 	private static final int NUM_DETAILED_PANELS = 5;
 
 	private NinjabrainBotPreferences preferences;
 
 	private ChunkPanelHeader header;
-	List<ChunkPanel> panels;
+	private List<ChunkPanel> panels;
 
 	public DetailedTriangulationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager);
@@ -57,6 +57,10 @@ class DetailedTriangulationPanel extends ThemedPanel implements IDisposable {
 	public void setAngleUpdatesEnabled(boolean b) {
 		header.setAngleUpdatesEnabled(b);
 		panels.forEach(p -> p.setAngleUpdatesEnabled(b));
+	}
+
+	public Iterable<ChunkPanel> getChunkPanels(){
+		return panels;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package ninjabrainbot.data.information;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.endereye.IThrow;
 import ninjabrainbot.data.stronghold.ChunkPrediction;
@@ -14,11 +15,15 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 	public PortalLinkingWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationPortalLinkingEnabled);
 		this.dataState = dataState;
-		disposeHandler.add(dataState.calculatorResult().subscribe(__ -> raiseInformationMessageChanged()));
+		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 	}
 
 	@Override
 	protected boolean shouldShowInformationMessage() {
+		if (dataState.resultType().get() != ResultType.TRIANGULATION)
+			return false;
+
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;
@@ -28,7 +33,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 		double approximatePortalNetherZ = t.zInOverworld() / 8;
 
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
-		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.getNetherX() + 0.5)), Math.abs(approximatePortalNetherZ - (bestPrediction.getNetherZ() + 0.5)));
+		double maxAxisDistance = Math.max(Math.abs(approximatePortalNetherX - (bestPrediction.xInNether() + 0.5)), Math.abs(approximatePortalNetherZ - (bestPrediction.zInNether() + 0.5)));
 
 		return maxAxisDistance < 24; // if portals are 22 blocks away they won't link, but the precise location of blind portal is unknown, so use 1 chunk of margin.
 	}

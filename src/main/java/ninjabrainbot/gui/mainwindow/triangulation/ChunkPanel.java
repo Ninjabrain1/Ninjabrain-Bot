@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.mainwindow.main;
+package ninjabrainbot.gui.mainwindow.triangulation;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,7 +29,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class ChunkPanel extends ThemedPanel implements IDisposable {
 
-	private MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
+	private final MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
 
 	private ChunkPrediction currentPrediction;
 
@@ -38,15 +38,15 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	ThemedLabel distance;
 	ThemedLabel nether;
 	ColorMapLabel angle;
-	private ILabel[] labels;
+	private final ILabel[] labels;
 
 	StyleManager styleManager;
 	double lastColor;
 
 	private Subscription chunkPredictionSubscription;
-	private Subscription strongholdDisplayTypeChangedSubscription;
+	private final Subscription strongholdDisplayTypeChangedSubscription;
 
-	private WrappedColor borderCol;
+	private final WrappedColor borderCol;
 
 	public ChunkPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		this(styleManager, preferences, null);
@@ -87,37 +87,8 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		nether.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
-	@Override
-	public void setFont(Font font) {
-		super.setFont(font);
-		if (labels != null) {
-			for (ILabel l : labels) {
-				l.setFont(font);
-			}
-		}
-	}
-
-	@Override
-	public void setForeground(Color fg) {
-		super.setForeground(fg);
-		if (labels != null) {
-			for (ILabel l : labels) {
-				if (l != null)
-					l.setForeground(fg);
-			}
-		}
-	}
-
 	public void setAngleUpdatesEnabled(boolean b) {
 		angle.setVisible(b);
-	}
-
-	@Override
-	public void updateColors() {
-		setBorder(new MatteBorder(0, 0, 1, 0, borderCol.color()));
-		super.updateColors();
-		angle.updateColor();
-		certainty.updateColors();
 	}
 
 	public void setPrediction(ChunkPrediction chunkPrediction) {
@@ -139,14 +110,41 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		}
 	}
 
-	private void setText(ChunkPrediction chunkPrediction) {
-		location.setText(formatStrongholdCoords(chunkPrediction.chunk, strongholdDisplayType.get()));
-		certainty.setText(chunkPrediction.formatCertainty(), (float) chunkPrediction.chunk.weight);
-		distance.setText(chunkPrediction.formatDistanceInPlayersDimension());
-		nether.setText(chunkPrediction.formatNether());
-		angle.setText(chunkPrediction.formatTravelAngle(false));
-		angle.setColoredText(chunkPrediction.formatTravelAngleDiff(), chunkPrediction.getTravelAngleDiffColor());
-		lastColor = chunkPrediction.chunk.weight;
+	public String getLocationText() {
+		return location.getText();
+	}
+
+	public String getNetherText() {
+		return nether.getText();
+	}
+
+	@Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		if (labels != null) {
+			for (ILabel l : labels) {
+				l.setFont(font);
+			}
+		}
+	}
+
+	@Override
+	public void setForeground(Color fg) {
+		super.setForeground(fg);
+		if (labels != null) {
+			for (ILabel l : labels) {
+				if (l != null)
+					l.setForeground(fg);
+			}
+		}
+	}
+
+	@Override
+	public void updateColors() {
+		setBorder(new MatteBorder(0, 0, 1, 0, borderCol.color()));
+		super.updateColors();
+		angle.updateColor();
+		certainty.updateColors();
 	}
 
 	@Override
@@ -165,6 +163,16 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.dispose();
 		strongholdDisplayTypeChangedSubscription.dispose();
+	}
+
+	private void setText(ChunkPrediction chunkPrediction) {
+		location.setText(formatStrongholdCoords(chunkPrediction.chunk, strongholdDisplayType.get()));
+		certainty.setText(chunkPrediction.formatCertainty(), (float) chunkPrediction.chunk.weight);
+		distance.setText(chunkPrediction.formatDistanceInPlayersDimension());
+		nether.setText(chunkPrediction.formatNether());
+		angle.setText(chunkPrediction.formatTravelAngle(false));
+		angle.setColoredText(chunkPrediction.formatTravelAngleDiff(), chunkPrediction.getTravelAngleDiffColor());
+		lastColor = chunkPrediction.chunk.weight;
 	}
 
 	private static String formatStrongholdCoords(Chunk chunk, StrongholdDisplayType strongholdDisplayType) {

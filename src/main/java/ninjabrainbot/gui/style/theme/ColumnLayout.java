@@ -6,20 +6,29 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ColumnLayout implements LayoutManager, java.io.Serializable {
 
-	int hgap;
+	int horizontalGap;
 
 	HashMap<Component, Float> relativeWidths;
+	HashSet<Component> componentsWithReservedSpaceWhenHidden;
 
-	public ColumnLayout(int hgap) {
-		this.hgap = hgap;
-		relativeWidths = new HashMap<Component, Float>();
+	public ColumnLayout(int horizontalGap) {
+		this.horizontalGap = horizontalGap;
+		relativeWidths = new HashMap<>();
+		componentsWithReservedSpaceWhenHidden = new HashSet<>();
 	}
 
-	public void setRelativeWidth(Component comp, float w) {
-		relativeWidths.put(comp, w);
+	public void setRelativeWidth(Component component, float width) {
+		setRelativeWidth(component, width, false);
+	}
+
+	public void setRelativeWidth(Component component, float width, boolean reserveSpaceWhenHidden) {
+		relativeWidths.put(component, width);
+		if (reserveSpaceWhenHidden)
+			componentsWithReservedSpaceWhenHidden.add(component);
 	}
 
 	@Override
@@ -34,10 +43,10 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 	public Dimension preferredLayoutSize(Container parent) {
 		synchronized (parent.getTreeLock()) {
 			Insets insets = parent.getInsets();
-			int ncomponents = parent.getComponentCount();
+			int numberOfComponents = parent.getComponentCount();
 			int w = 0;
 			int h = 0;
-			for (int i = 0; i < ncomponents; i++) {
+			for (int i = 0; i < numberOfComponents; i++) {
 				Component comp = parent.getComponent(i);
 				Dimension d = comp.getPreferredSize();
 				if (w < d.width) {
@@ -47,7 +56,7 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 					h = d.height;
 				}
 			}
-			return new Dimension(insets.left + insets.right + ncomponents * w + (ncomponents - 1) * hgap, insets.top + insets.bottom + h);
+			return new Dimension(insets.left + insets.right + numberOfComponents * w + (numberOfComponents - 1) * horizontalGap, insets.top + insets.bottom + h);
 		}
 	}
 
@@ -60,19 +69,18 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 	public void layoutContainer(Container parent) {
 		synchronized (parent.getTreeLock()) {
 			Insets insets = parent.getInsets();
-			int ncomponents = parent.getComponentCount();
-			int ncols = ncomponents;
+			int numberOfComponents = parent.getComponentCount();
 
-			if (ncomponents == 0) {
+			if (numberOfComponents == 0) {
 				return;
 			}
 			float totalWeight = 0;
-			for (Component c : parent.getComponents()) {
-				if (c.isVisible()) {
-					totalWeight += relativeWidths.getOrDefault(c, 1f);
+			for (Component component : parent.getComponents()) {
+				if (component.isVisible() || componentsWithReservedSpaceWhenHidden.contains(component)) {
+					totalWeight += relativeWidths.getOrDefault(component, 1f);
 				}
 			}
-			int totalGapsWidth = (ncols - 1) * hgap;
+			int totalGapsWidth = (numberOfComponents - 1) * horizontalGap;
 			int widthWOInsets = parent.getWidth() - (insets.left + insets.right);
 			int widthOnComponent = (int) ((widthWOInsets - totalGapsWidth) / totalWeight);
 			int extraWidthAvailable = (int) ((widthWOInsets - (widthOnComponent * totalWeight + totalGapsWidth)) / 2);
@@ -81,13 +89,13 @@ public class ColumnLayout implements LayoutManager, java.io.Serializable {
 			int heightWOInsets = parent.getHeight() - (insets.top + insets.bottom);
 			int heightOnComponent = (heightWOInsets - totalGapsHeight);
 			int extraHeightAvailable = (heightWOInsets - (heightOnComponent + totalGapsHeight)) / 2;
-			for (int c = 0, x = insets.left + extraWidthAvailable; c < ncols; c++) {
-				Component component = parent.getComponent(c);
+			for (int componentIndex = 0, x = insets.left + extraWidthAvailable; componentIndex < numberOfComponents; componentIndex++) {
+				Component component = parent.getComponent(componentIndex);
 				int componentWidth = (int) (widthOnComponent * relativeWidths.getOrDefault(component, 1f));
-				if (c < ncomponents) {
-					parent.getComponent(c).setBounds(x, insets.top + extraHeightAvailable, componentWidth, heightOnComponent);
-				}
-				x += componentWidth + hgap;
+				if (componentIndex == numberOfComponents - 1)
+					x = widthWOInsets - componentWidth;
+				parent.getComponent(componentIndex).setBounds(x, insets.top + extraHeightAvailable, componentWidth, heightOnComponent);
+				x += componentWidth + horizontalGap;
 			}
 		}
 	}

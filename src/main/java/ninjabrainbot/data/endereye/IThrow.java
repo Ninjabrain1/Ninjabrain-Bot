@@ -6,35 +6,39 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public interface IThrow extends IRay, IModifiable<IThrow> {
 
-	public double xInPlayerDimension();
+	double xInPlayerDimension();
 
-	public double zInPlayerDimension();
+	double zInPlayerDimension();
 
-	public double getStd();
+	double yInPlayerDimension();
 
-	public double rawAlpha();
+	double getStd();
 
-	public double alpha_0();
+	double rawAlpha();
 
-	public double correction();
+	double alpha_0();
 
-	public boolean lookingBelowHorizon();
+	double beta();
 
-	public boolean isNether();
+	double correction();
 
-	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences);
+	boolean lookingBelowHorizon();
 
-	public void setStdProfileNumber(int profileNumber);
+	boolean isNether();
 
-	public void setStdProfile(IStdProfile stdProfile);
+	void addCorrection(boolean positive, NinjabrainBotPreferences preferences);
 
-	public int getStdProfileNumber();
+	void setStdProfileNumber(int profileNumber);
 
-	public default boolean isMcVersion1_12() {
+	void setStdProfile(IStdProfile stdProfile);
+
+	int getStdProfileNumber();
+
+	default boolean isMcVersion1_12() {
 		return false;
 	}
 
-	public default boolean isBoatThrow() {
+	default boolean isBoatThrow() {
 		return false;
 	}
 

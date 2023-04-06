@@ -9,6 +9,9 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.divine.DivineResult;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
+import ninjabrainbot.gui.mainwindow.alladvancements.AllAdvancementsPanel;
+import ninjabrainbot.gui.mainwindow.triangulation.BasicTriangulationPanel;
+import ninjabrainbot.gui.mainwindow.triangulation.DetailedTriangulationPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -41,7 +44,7 @@ public class MainTextArea extends ResizablePanel {
 		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
-		allAdvancements = new AllAdvancementsPanel(styleManager);
+		allAdvancements = new AllAdvancementsPanel(styleManager, dataState.allAdvancementDataState());
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);
@@ -59,13 +62,13 @@ public class MainTextArea extends ResizablePanel {
 
 	private void setupSubscriptions() {
 		// Settings
-		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribe(b -> setNetherCoordsEnabled(b)));
-		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribe(b -> setAngleUpdatesEnabled(b)));
+		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribe(this::setNetherCoordsEnabled));
+		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribe(this::setAngleUpdatesEnabled));
 		disposeHandler.add(preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
 		// Data state
-		disposeHandler.add(dataState.calculatorResult().subscribeEDT(result -> setResult(result)));
-		disposeHandler.add(dataState.blindResult().subscribeEDT(result -> setResult(result)));
-		disposeHandler.add(dataState.divineResult().subscribeEDT(result -> setResult(result)));
+		disposeHandler.add(dataState.calculatorResult().subscribeEDT(this::setResult));
+		disposeHandler.add(dataState.blindResult().subscribeEDT(this::setResult));
+		disposeHandler.add(dataState.divineResult().subscribeEDT(this::setResult));
 		disposeHandler.add(dataState.resultType().subscribeEDT(__ -> updateResult()));
 	}
 

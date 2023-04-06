@@ -1,7 +1,10 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.alladvancements.AllAdvancementsDataState;
+import ninjabrainbot.data.alladvancements.StructureType;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
+import ninjabrainbot.data.common.StructurePosition;
 import ninjabrainbot.data.datalock.ILock;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.ModificationLock;
@@ -159,6 +162,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 			if (t.isNether()) {
 				return;
 			}
+			if (dataState.allAdvancementsDataState.allAdvancementsModeEnabled().get()) {
+				tryAddAllAdvancementsStructure(t);
+				return;
+			}
 			if (dataState.boatDataState.enteringBoat().get()) {
 				dataState.boatDataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
 				return;
@@ -168,6 +175,48 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 				dataState.getThrowSet().add(t);
 			}
 		}
+	}
+
+	private void tryAddAllAdvancementsStructure(IThrow t) {
+		StructureType structureType = getAllAdvancementStructureTypeFromThrow(t);
+		AllAdvancementsDataState allAdvancementsDataState = dataState.allAdvancementsDataState;
+		switch (structureType) {
+			case Spawn:
+				if (allAdvancementsDataState.spawnPosition().get() == null)
+					allAdvancementsDataState.setSpawnPosition(new StructurePosition((int) t.xInOverworld(), (int) t.zInOverworld(), dataState.playerPosition()));
+				return;
+			case Outpost:
+				if (allAdvancementsDataState.outpostPosition().get() == null)
+					allAdvancementsDataState.setOutpostPosition(getOutpostPosition(t));
+				return;
+			case Monument:
+				if (allAdvancementsDataState.monumentPosition().get() == null)
+					allAdvancementsDataState.setMonumentPosition(new StructurePosition((int) t.xInOverworld(), (int) t.zInOverworld(), dataState.playerPosition()));
+		}
+	}
+
+	private StructureType getAllAdvancementStructureTypeFromThrow(IThrow t) {
+		if (t.isNether())
+			return StructureType.Unknown;
+
+		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300)
+			return StructureType.Spawn;
+
+		if (t.yInPlayerDimension() < 63)
+			return StructureType.Monument;
+
+		return StructureType.Outpost;
+	}
+
+	private StructurePosition getOutpostPosition(IThrow t) {
+		int averageOutpostY = 80;
+		double deltaY = averageOutpostY - t.yInPlayerDimension();
+		double horizontalDistance = deltaY / Math.tan(-t.beta() * Math.PI / 180.0);
+		double deltaX = horizontalDistance * Math.sin(-t.alpha() * Math.PI / 180.0);
+		double deltaZ = horizontalDistance * Math.cos(t.alpha() * Math.PI / 180.0);
+		deltaX = Math.max(Math.min(deltaX, 350), -350);
+		deltaZ = Math.max(Math.min(deltaZ, 350), -350);
+		return new StructurePosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ), dataState.playerPosition());
 	}
 
 	private synchronized void setFossil(Fossil f) {
