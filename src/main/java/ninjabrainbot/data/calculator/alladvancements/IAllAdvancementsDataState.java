@@ -1,18 +1,18 @@
 package ninjabrainbot.data.calculator.alladvancements;
 
 import ninjabrainbot.data.calculator.common.StructurePosition;
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.data.temp.IDataComponent;
 
 public interface IAllAdvancementsDataState {
 
-	IObservable<Boolean> allAdvancementsModeEnabled();
+	IDataComponent<Boolean> allAdvancementsModeEnabled();
 
-	IObservable<StructurePosition> strongholdPosition();
+	IDataComponent<StructurePosition> strongholdPosition();
 
-	IObservable<StructurePosition> spawnPosition();
+	IDataComponent<StructurePosition> spawnPosition();
 
-	IObservable<StructurePosition> outpostPosition();
+	IDataComponent<StructurePosition> outpostPosition();
 
-	IObservable<StructurePosition> monumentPosition();
+	IDataComponent<StructurePosition> monumentPosition();
 
 }

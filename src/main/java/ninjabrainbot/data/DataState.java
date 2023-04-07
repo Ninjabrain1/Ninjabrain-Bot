@@ -66,7 +66,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IAllAdvancementsDataState allAdvancementDataState() {
+	public IAllAdvancementsDataState allAdvancementsDataState() {
 		return allAdvancementsDataState;
 	}
 

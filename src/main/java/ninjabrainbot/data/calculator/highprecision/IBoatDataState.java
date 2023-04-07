@@ -1,13 +1,13 @@
 package ninjabrainbot.data.calculator.highprecision;
 
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.data.temp.IDataComponent;
 
 public interface IBoatDataState {
 
-	public IObservable<Boolean> enteringBoat();
+	IDataComponent<Boolean> enteringBoat();
 
-	public IObservable<Float> boatAngle();
+	IDataComponent<Float> boatAngle();
 
-	public IObservable<BoatState> boatState();
+	IDataComponent<BoatState> boatState();
 
 }

@@ -1,14 +1,15 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.actions.ActionExecutor;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
-import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
-import ninjabrainbot.data.calculator.alladvancements.StructureType;
-import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.calculator.endereye.ThrowParser;
+import ninjabrainbot.data.input.FossilInputHandler;
+import ninjabrainbot.data.input.ThrowInputHandler;
+import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
@@ -34,13 +35,16 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		this.activeInstanceProvider = activeInstanceProvider;
 		this.stdProfile = new StandardStdProfile(preferences);
 
+		DomainModel domainModel = new DomainModel();
+		ActionExecutor actionExecutor = new ActionExecutor(domainModel);
+
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		dataState = new DataState(new Calculator(calculatorSettings), null);
+		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 //		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
 		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
-		addThrowStream(throwParser.whenNewThrowInputted());
-		addFossilStream(throwParser.whenNewFossilInputted());
+		disposeHandler.add(new ThrowInputHandler(throwParser.whenNewThrowInputted(), dataState, actionExecutor, preferences));
+		disposeHandler.add(new FossilInputHandler(throwParser.whenNewFossilInputted(), dataState, actionExecutor));
 
 		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked()));
 		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::updateAllAdvancementsMode));
@@ -147,68 +151,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 //		whenDataStateModified.notifySubscribers(dataState);
 	}
 
-	private synchronized void onNewThrow(IThrow t) {
-		dataState.playerPosition().set(t);
-		if (dataState.locked().get())
-			return;
-		if (t.isNether()) {
-			return;
-		}
-		if (dataState.allAdvancementsDataState.allAdvancementsModeEnabled().get()) {
-			tryAddAllAdvancementsStructure(t);
-			return;
-		}
-		if (dataState.boatDataState.enteringBoat().get()) {
-			dataState.boatDataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
-			return;
-		}
-		if (!t.lookingBelowHorizon()) {
-			dataState.getThrowSet().add(t);
-		}
-	}
-
-	private void tryAddAllAdvancementsStructure(IThrow t) {
-		StructureType structureType = getAllAdvancementStructureTypeFromThrow(t);
-		AllAdvancementsDataState allAdvancementsDataState = dataState.allAdvancementsDataState;
-		switch (structureType) {
-			case Spawn:
-				if (allAdvancementsDataState.spawnPosition().get() == null)
-					allAdvancementsDataState.setSpawnPosition(new StructurePosition((int) t.xInOverworld(), (int) t.zInOverworld(), dataState.playerPosition()));
-				return;
-			case Outpost:
-				if (allAdvancementsDataState.outpostPosition().get() == null)
-					allAdvancementsDataState.setOutpostPosition(getOutpostPosition(t));
-				return;
-			case Monument:
-				if (allAdvancementsDataState.monumentPosition().get() == null)
-					allAdvancementsDataState.setMonumentPosition(new StructurePosition((int) t.xInOverworld(), (int) t.zInOverworld(), dataState.playerPosition()));
-		}
-	}
-
-	private StructureType getAllAdvancementStructureTypeFromThrow(IThrow t) {
-		if (t.isNether())
-			return StructureType.Unknown;
-
-		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300)
-			return StructureType.Spawn;
-
-		if (t.yInPlayerDimension() < 63)
-			return StructureType.Monument;
-
-		return StructureType.Outpost;
-	}
-
-	private StructurePosition getOutpostPosition(IThrow t) {
-		int averageOutpostY = 80;
-		double deltaY = averageOutpostY - t.yInPlayerDimension();
-		double horizontalDistance = deltaY / Math.tan(-t.beta() * Math.PI / 180.0);
-		double deltaX = horizontalDistance * Math.sin(-t.alpha() * Math.PI / 180.0);
-		double deltaZ = horizontalDistance * Math.cos(t.alpha() * Math.PI / 180.0);
-		deltaX = Math.max(Math.min(deltaX, 350), -350);
-		deltaZ = Math.max(Math.min(deltaZ, 350), -350);
-		return new StructurePosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ), dataState.playerPosition());
-	}
-
 	private synchronized void setFossil(Fossil f) {
 		dataState.getDivineContext().fossil().set(f);
 	}
@@ -236,16 +178,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 //		try (ILock lock = modificationLock.acquireWritePermission()) {
 //			stdProfile.setStd(profileNumber, std);
 //		}
-	}
-
-	@Override
-	public void addThrowStream(ISubscribable<IThrow> stream) {
-		stream.subscribe(this::onNewThrow);
-	}
-
-	@Override
-	public void addFossilStream(ISubscribable<Fossil> stream) {
-		stream.subscribe(this::setFossil);
 	}
 
 	@Override

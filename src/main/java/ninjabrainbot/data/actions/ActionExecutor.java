@@ -11,12 +11,15 @@ public class ActionExecutor implements IActionExecutor {
 	}
 
 	@Override
-	public void executeImmediately(IAction action) {
-		writeLock.acquireWriteLock();
+	public void executeImmediately(IAction... actions) {
+		if (writeLock != null)
+			writeLock.acquireWriteLock();
 		try {
-			action.execute();
+			for (IAction action : actions)
+				action.execute();
 		} finally {
-			writeLock.releaseWriteLock();
+			if (writeLock != null)
+				writeLock.releaseWriteLock();
 		}
 	}
 }

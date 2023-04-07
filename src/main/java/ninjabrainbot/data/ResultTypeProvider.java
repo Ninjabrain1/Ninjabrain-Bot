@@ -22,7 +22,7 @@ public class ResultTypeProvider implements IDisposable {
 
 	public ResultTypeProvider(IDataState dataState) {
 		resultType = new ObservableField<>(ResultType.NONE);
-		allAdvancementsDataState = dataState.allAdvancementDataState();
+		allAdvancementsDataState = dataState.allAdvancementsDataState();
 		calculatorResult = dataState.calculatorResult();
 		playerPosition = dataState.playerPosition();
 		fossil = dataState.getDivineContext().fossil();

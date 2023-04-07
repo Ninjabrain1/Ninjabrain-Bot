@@ -27,8 +27,4 @@ public interface IDataStateHandler {
 
 	ISubscribable<IDataState> whenDataStateModified();
 
-	void addThrowStream(ISubscribable<IThrow> stream);
-
-	void addFossilStream(ISubscribable<Fossil> stream);
-
 }

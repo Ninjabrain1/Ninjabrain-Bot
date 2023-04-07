@@ -2,6 +2,6 @@ package ninjabrainbot.data.actions;
 
 public interface IActionExecutor {
 
-	void executeImmediately(IAction action);
+	void executeImmediately(IAction... actions);
 
 }

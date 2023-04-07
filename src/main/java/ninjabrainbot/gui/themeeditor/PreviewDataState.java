@@ -114,7 +114,7 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IAllAdvancementsDataState allAdvancementDataState() {
+	public IAllAdvancementsDataState allAdvancementsDataState() {
 		return allAdvancementsDataState;
 	}
 

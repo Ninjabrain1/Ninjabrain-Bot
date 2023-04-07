@@ -14,7 +14,7 @@ import ninjabrainbot.event.IObservable;
 
 public interface IDataState {
 
-	IAllAdvancementsDataState allAdvancementDataState();
+	IAllAdvancementsDataState allAdvancementsDataState();
 
 	IBoatDataState boatDataState();
 

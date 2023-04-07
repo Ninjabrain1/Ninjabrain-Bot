@@ -68,12 +68,4 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 		return whenDataStateModified;
 	}
 
-	@Override
-	public void addThrowStream(ISubscribable<IThrow> stream) {
-	}
-
-	@Override
-	public void addFossilStream(ISubscribable<Fossil> stream) {
-	}
-
 }

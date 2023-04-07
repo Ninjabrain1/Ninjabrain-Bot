@@ -1,8 +1,12 @@
 package ninjabrainbot.data;
 
+import ninjabrainbot.data.actions.ActionExecutor;
 import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.input.FossilInputHandler;
+import ninjabrainbot.data.input.ThrowInputHandler;
+import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
@@ -19,21 +23,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ResultTypeProviderTests {
 
 	NinjabrainBotPreferences preferences;
+	DomainModel domainModel;
+	ActionExecutor actionExecutor;
 
 	@BeforeEach
 	void setup() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
+		domainModel = new DomainModel();
+		actionExecutor = new ActionExecutor(domainModel);
 	}
 
 	@Test
 	void resultTypeUpdatesCorrectly() {
-		ObservableProperty<IThrow> throwStream = new ObservableProperty<IThrow>();
-		ObservableProperty<Fossil> fossilStream = new ObservableProperty<Fossil>();
+		ObservableProperty<IThrow> throwStream = new ObservableProperty<>();
+		ObservableProperty<Fossil> fossilStream = new ObservableProperty<>();
 
 		DataStateHandler dataStateHandler = new DataStateHandler(preferences, new FakeClipboardProvider(), new FakeActiveInstanceProvider());
-		dataStateHandler.addThrowStream(throwStream);
-		dataStateHandler.addFossilStream(fossilStream);
+
 		IDataState dataState = dataStateHandler.getDataState();
+		ThrowInputHandler throwInputHandler = new ThrowInputHandler(throwStream, dataState, actionExecutor, preferences);
+		FossilInputHandler fossilInputHandler = new FossilInputHandler(fossilStream, dataState, actionExecutor);
 
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 

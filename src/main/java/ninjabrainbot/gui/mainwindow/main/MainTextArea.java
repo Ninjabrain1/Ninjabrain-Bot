@@ -44,7 +44,7 @@ public class MainTextArea extends ResizablePanel {
 		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
-		allAdvancements = new AllAdvancementsPanel(styleManager, dataState.allAdvancementDataState());
+		allAdvancements = new AllAdvancementsPanel(styleManager, dataState.allAdvancementsDataState());
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);

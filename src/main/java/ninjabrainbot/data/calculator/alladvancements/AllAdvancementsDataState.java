@@ -3,6 +3,7 @@ package ninjabrainbot.data.calculator.alladvancements;
 import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.temp.DataComponent;
+import ninjabrainbot.data.temp.IDataComponent;
 import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.IObservable;
 
@@ -32,48 +33,28 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 		allAdvancementsModeEnabled.set(enabled);
 	}
 
-	public void reset() {
-		allAdvancementsModeEnabled.set(false);
-		strongholdPosition.set(null);
-		spawnPosition.set(null);
-		outpostPosition.set(null);
-		monumentPosition.set(null);
-	}
-
-	public void setSpawnPosition(StructurePosition structurePosition) {
-		spawnPosition.set(structurePosition);
-	}
-
-	public void setMonumentPosition(StructurePosition structurePosition) {
-		monumentPosition.set(structurePosition);
-	}
-
-	public void setOutpostPosition(StructurePosition structurePosition) {
-		outpostPosition.set(structurePosition);
-	}
-
 	@Override
-	public IObservable<Boolean> allAdvancementsModeEnabled() {
+	public IDataComponent<Boolean> allAdvancementsModeEnabled() {
 		return allAdvancementsModeEnabled;
 	}
 
 	@Override
-	public IObservable<StructurePosition> strongholdPosition() {
+	public IDataComponent<StructurePosition> strongholdPosition() {
 		return strongholdPosition;
 	}
 
 	@Override
-	public IObservable<StructurePosition> spawnPosition() {
+	public IDataComponent<StructurePosition> spawnPosition() {
 		return spawnPosition;
 	}
 
 	@Override
-	public IObservable<StructurePosition> outpostPosition() {
+	public IDataComponent<StructurePosition> outpostPosition() {
 		return outpostPosition;
 	}
 
 	@Override
-	public IObservable<StructurePosition> monumentPosition() {
+	public IDataComponent<StructurePosition> monumentPosition() {
 		return monumentPosition;
 	}
 
