@@ -5,8 +5,8 @@ import ninjabrainbot.event.ISubscribable;
 
 public interface IThrowSource {
 
-	public ISubscribable<IThrow> whenNewThrowInputed();
+	public ISubscribable<IThrow> whenNewThrowInputted();
 
-	public ISubscribable<Fossil> whenNewFossilInputed();
+	public ISubscribable<Fossil> whenNewFossilInputted();
 
 }

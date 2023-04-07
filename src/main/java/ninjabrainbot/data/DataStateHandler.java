@@ -39,8 +39,8 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 //		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
 		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
-		addThrowStream(throwParser.whenNewThrowInputed());
-		addFossilStream(throwParser.whenNewFossilInputed());
+		addThrowStream(throwParser.whenNewThrowInputted());
+		addFossilStream(throwParser.whenNewFossilInputted());
 
 		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked()));
 		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::updateAllAdvancementsMode));

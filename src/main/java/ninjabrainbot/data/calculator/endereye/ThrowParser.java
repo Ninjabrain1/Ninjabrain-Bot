@@ -93,11 +93,11 @@ public class ThrowParser implements IThrowSource {
 		return getCorrectedHorizontalAngle(alpha, preferences.crosshairCorrection.get());
 	}
 
-	public ISubscribable<IThrow> whenNewThrowInputed() {
+	public ISubscribable<IThrow> whenNewThrowInputted() {
 		return whenNewThrowInputed;
 	}
 
-	public ISubscribable<Fossil> whenNewFossilInputed() {
+	public ISubscribable<Fossil> whenNewFossilInputted() {
 		return whenNewFossilInputed;
 	}
 
