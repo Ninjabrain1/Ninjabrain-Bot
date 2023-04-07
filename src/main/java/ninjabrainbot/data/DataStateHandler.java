@@ -1,13 +1,10 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
-import ninjabrainbot.data.calculator.alladvancements.StructureType;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
+import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
+import ninjabrainbot.data.calculator.alladvancements.StructureType;
 import ninjabrainbot.data.calculator.common.StructurePosition;
-import ninjabrainbot.data.datalock.ILock;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.ModificationLock;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
@@ -18,7 +15,6 @@ import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
-import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
@@ -29,9 +25,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final IActiveInstanceProvider activeInstanceProvider;
 
 	private final DataState dataState;
-	private final ModificationLock modificationLock;
 	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
-	private final DataStateUndoHistory dataStateUndoHistory;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
@@ -39,13 +33,12 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		this.preferences = preferences;
 		this.activeInstanceProvider = activeInstanceProvider;
 		this.stdProfile = new StandardStdProfile(preferences);
-		modificationLock = new ModificationLock(this::afterDataStateModified);
 
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		dataState = new DataState(new Calculator(calculatorSettings), modificationLock);
-		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
+		dataState = new DataState(new Calculator(calculatorSettings), null);
+//		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
-		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, modificationLock, dataState.boatDataState.boatAngle());
+		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
 		addThrowStream(throwParser.whenNewThrowInputed());
 		addFossilStream(throwParser.whenNewFossilInputed());
 
@@ -63,117 +56,114 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	@Override
 	public synchronized void reset() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.reset();
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.reset();
+//		}
 	}
 
 	@Override
 	public synchronized void resetIfNotLocked() {
-		if (!dataState.locked().get())
-			reset();
+//		if (!dataState.locked().get())
+//			reset();
 	}
 
 	@Override
 	public synchronized void undo() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			lock.setUndoAction();
-			dataState.setFromUndoData(dataStateUndoHistory.moveToPrevious());
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			lock.setUndoAction();
+//			dataState.setFromUndoData(dataStateUndoHistory.moveToPrevious());
+//		}
 	}
 
 	@Override
 	public synchronized void undoIfNotLocked() {
-		if (!dataState.locked().get())
-			undo();
+//		if (!dataState.locked().get())
+//			undo();
 	}
 
 	@Override
 	public synchronized void removeThrow(IThrow t) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.getThrowSet().remove(t);
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.getThrowSet().remove(t);
+//		}
 	}
 
 	@Override
 	public synchronized void resetDivineContext() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.getDivineContext().resetFossil();
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.getDivineContext().resetFossil();
+//		}
 	}
 
 	public synchronized void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
-		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-			IThrow last = dataState.getThrowSet().getLast();
-			if (last != null) {
-				try (ILock lock = modificationLock.acquireWritePermission()) {
-					last.addCorrection(positive, preferences);
-				}
-			}
-		}
+//		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
+//			IThrow last = dataState.getThrowSet().getLast();
+//			if (last != null) {
+//				try (ILock lock = modificationLock.acquireWritePermission()) {
+//					last.addCorrection(positive, preferences);
+//				}
+//			}
+//		}
 	}
 
 	@Override
 	public synchronized void toggleAltStdOnLastThrowIfNotLocked() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-				IThrow last = dataState.getThrowSet().getLast();
-				int stdProfile = last.getStdProfileNumber();
-				switch (stdProfile) {
-					case StandardStdProfile.NORMAL:
-						last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
-						break;
-					case StandardStdProfile.ALTERNATIVE:
-						last.setStdProfileNumber(StandardStdProfile.NORMAL);
-						break;
-					case StandardStdProfile.MANUAL:
-						break;
-				}
-			}
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
+//				IThrow last = dataState.getThrowSet().getLast();
+//				int stdProfile = last.getStdProfileNumber();
+//				switch (stdProfile) {
+//					case StandardStdProfile.NORMAL:
+//						last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
+//						break;
+//					case StandardStdProfile.ALTERNATIVE:
+//						last.setStdProfileNumber(StandardStdProfile.NORMAL);
+//						break;
+//					case StandardStdProfile.MANUAL:
+//						break;
+//				}
+//			}
+//		}
 	}
 
 	public synchronized void toggleLocked() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.toggleLocked();
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.toggleLocked();
+//		}
 	}
 
 	public synchronized void toggleEnteringBoatIfNotLocked() {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			if (!dataState.locked().get()) {
-				dataState.boatDataState.toggleEnteringBoat();
-			}
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			if (!dataState.locked().get()) {
+//				dataState.boatDataState.toggleEnteringBoat();
+//			}
+//		}
 	}
 
 	private void afterDataStateModified(boolean wasUndoAction) {
-		if (!wasUndoAction) {
-			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
-		}
-		whenDataStateModified.notifySubscribers(dataState);
+//		if (!wasUndoAction) {
+//			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
+//		}
+//		whenDataStateModified.notifySubscribers(dataState);
 	}
 
 	private synchronized void onNewThrow(IThrow t) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setPlayerPosition(t);
-			if (dataState.locked().get())
-				return;
-			if (t.isNether()) {
-				return;
-			}
-			if (dataState.allAdvancementsDataState.allAdvancementsModeEnabled().get()) {
-				tryAddAllAdvancementsStructure(t);
-				return;
-			}
-			if (dataState.boatDataState.enteringBoat().get()) {
-				dataState.boatDataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
-				return;
-			}
-			if (!t.lookingBelowHorizon()) {
-				t.setStdProfile(stdProfile);
-				dataState.getThrowSet().add(t);
-			}
+		dataState.playerPosition().set(t);
+		if (dataState.locked().get())
+			return;
+		if (t.isNether()) {
+			return;
+		}
+		if (dataState.allAdvancementsDataState.allAdvancementsModeEnabled().get()) {
+			tryAddAllAdvancementsStructure(t);
+			return;
+		}
+		if (dataState.boatDataState.enteringBoat().get()) {
+			dataState.boatDataState.setBoatAngle(t.rawAlpha(), preferences.boatErrorLimit.get());
+			return;
+		}
+		if (!t.lookingBelowHorizon()) {
+			dataState.getThrowSet().add(t);
 		}
 	}
 
@@ -220,34 +210,32 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	}
 
 	private synchronized void setFossil(Fossil f) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setFossil(f);
-		}
+		dataState.getDivineContext().fossil().set(f);
 	}
 
 	private synchronized void onCalculatorSettingsChanged() {
-		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.setCalculator(new Calculator(calculatorSettings));
-		}
+//		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.setCalculator(new Calculator(calculatorSettings));
+//		}
 	}
 
 	private synchronized void updateAllAdvancementsMode() {
-		IMinecraftWorldFile world = activeInstanceProvider.activeMinecraftWorld().get();
-		boolean allAdvancementsModeEnabled = false;
-		if (world != null) {
-			allAdvancementsModeEnabled = preferences.allAdvancements.get() && world.hasEnteredEnd();
-		}
-
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			dataState.allAdvancementsDataState.setAllAdvancementsModeEnabled(allAdvancementsModeEnabled);
-		}
+//		IMinecraftWorldFile world = activeInstanceProvider.activeMinecraftWorld().get();
+//		boolean allAdvancementsModeEnabled = false;
+//		if (world != null) {
+//			allAdvancementsModeEnabled = preferences.allAdvancements.get() && world.hasEnteredEnd();
+//		}
+//
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			dataState.allAdvancementsDataState.setAllAdvancementsModeEnabled(allAdvancementsModeEnabled);
+//		}
 	}
 
 	private synchronized void setStdProfile(int profileNumber, double std) {
-		try (ILock lock = modificationLock.acquireWritePermission()) {
-			stdProfile.setStd(profileNumber, std);
-		}
+//		try (ILock lock = modificationLock.acquireWritePermission()) {
+//			stdProfile.setStd(profileNumber, std);
+//		}
 	}
 
 	@Override
@@ -268,11 +256,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	@Override
 	public ISubscribable<IDataState> whenDataStateModified() {
 		return whenDataStateModified;
-	}
-
-	@Override
-	public IModificationLock getModificationLock() {
-		return modificationLock;
 	}
 
 	@Override

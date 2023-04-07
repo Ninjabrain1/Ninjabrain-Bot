@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import ninjabrainbot.data.calculator.common.IPosition;
 import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
-import ninjabrainbot.util.ISet;
 
 public class Chunk {
 
@@ -96,7 +96,7 @@ public class Chunk {
 		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
 	}
 
-	public double[] getAngleErrors(McVersion version, ISet<IThrow> eyeThrows) {
+	public double[] getAngleErrors(McVersion version, IReadOnlyList<IThrow> eyeThrows) {
 		double[] errors = new double[eyeThrows.size()];
 		for (int i = 0; i < errors.length; i++) {
 			errors[i] = getAngleError(version, eyeThrows.get(i));

@@ -6,4 +6,8 @@ public interface IReadOnlyList<T> extends Iterable<T> {
 
 	int size();
 
+	default T getLast() {
+		return get(size() - 1);
+	}
+
 }

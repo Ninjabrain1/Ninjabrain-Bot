@@ -1,29 +1,28 @@
 package ninjabrainbot.data.calculator.alladvancements;
 
 import ninjabrainbot.data.calculator.common.StructurePosition;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.data.temp.DataComponent;
+import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
 
 public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 
 	private final IObservable<ChunkPrediction> currentStrongholdPrediction;
 
-	private final ObservableField<Boolean> allAdvancementsModeEnabled;
-	private final ObservableField<StructurePosition> strongholdPosition;
-	private final ObservableField<StructurePosition> spawnPosition;
-	private final ObservableField<StructurePosition> outpostPosition;
-	private final ObservableField<StructurePosition> monumentPosition;
+	private final DataComponent<Boolean> allAdvancementsModeEnabled;
+	private final DataComponent<StructurePosition> strongholdPosition;
+	private final DataComponent<StructurePosition> spawnPosition;
+	private final DataComponent<StructurePosition> outpostPosition;
+	private final DataComponent<StructurePosition> monumentPosition;
 
-	public AllAdvancementsDataState(IObservable<ChunkPrediction> currentStrongholdPrediction, IModificationLock modificationLock) {
+	public AllAdvancementsDataState(IObservable<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel) {
 		this.currentStrongholdPrediction = currentStrongholdPrediction;
-		allAdvancementsModeEnabled = new LockableField<>(false, modificationLock);
-		strongholdPosition = new LockableField<>(null, modificationLock);
-		spawnPosition = new LockableField<>(null, modificationLock);
-		outpostPosition = new LockableField<>(null, modificationLock);
-		monumentPosition = new LockableField<>(null, modificationLock);
+		allAdvancementsModeEnabled = new DataComponent<>(domainModel, false);
+		strongholdPosition = new DataComponent<>(domainModel);
+		spawnPosition = new DataComponent<>(domainModel);
+		outpostPosition = new DataComponent<>(domainModel);
+		monumentPosition = new DataComponent<>(domainModel);
 	}
 
 	public void setAllAdvancementsModeEnabled(boolean enabled) {

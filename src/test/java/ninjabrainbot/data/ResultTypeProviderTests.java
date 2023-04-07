@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DataStateHandlerTests {
+public class ResultTypeProviderTests {
 
 	NinjabrainBotPreferences preferences;
 
@@ -26,7 +26,7 @@ public class DataStateHandlerTests {
 	}
 
 	@Test
-	void dataStateResultUpdatesCorrectly() {
+	void resultTypeUpdatesCorrectly() {
 		ObservableProperty<IThrow> throwStream = new ObservableProperty<IThrow>();
 		ObservableProperty<Fossil> fossilStream = new ObservableProperty<Fossil>();
 

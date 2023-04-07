@@ -1,5 +1,6 @@
 package ninjabrainbot.data.temp;
 
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 import ninjabrainbot.event.IObservableList;
@@ -7,22 +8,32 @@ import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.Subscription;
 
-public class ListComponent<T> implements IObservableList<T>, IListComponent<T> {
+/**
+ * Represents a list of data, write permissions of ListComponent are automatically handled by the DomainModel.
+ * Any modifications to a ListComponent are automatically saved by the DomainModel, for the undo action to work.
+ * The generic type T should be immutable to ensure that no modifications to the data go unnoticed by the domain model.
+ * If null is passed as the IDomainModel to the constructor, the data in the ListComponent will not be saved
+ * for the undo action, and the ListComponent will not be write locked. However, in most cases where saving of
+ * the data for undo is not needed, an {@link ObservableList} is more suiting.
+ */
+public class ListComponent<T> implements IListComponent<T> {
 
-	private final DomainModel domainModel;
+	private final IDomainModel domainModel;
 	private final ObservableList<T> observableList;
 	private final int maxCapacity;
 
-	public ListComponent(DomainModel domainModel, int maxCapacity) {
+	public ListComponent(IDomainModel domainModel, int maxCapacity) {
 		this.domainModel = domainModel;
 		this.maxCapacity = maxCapacity;
 		observableList = new ObservableList<>();
-		domainModel.registerDataComponent(this);
+		if (domainModel != null)
+			domainModel.registerDataComponent(this);
 	}
 
 	@Override
 	public boolean add(T t) {
-		domainModel.notifyDataComponentToBeModified();
+		if (domainModel != null)
+			domainModel.notifyDataComponentToBeModified();
 		if (observableList.get().size() >= maxCapacity)
 			return false;
 		return observableList.add(t);
@@ -30,13 +41,15 @@ public class ListComponent<T> implements IObservableList<T>, IListComponent<T> {
 
 	@Override
 	public void remove(T t) {
-		domainModel.notifyDataComponentToBeModified();
+		if (domainModel != null)
+			domainModel.notifyDataComponentToBeModified();
 		observableList.remove(t);
 	}
 
 	@Override
 	public void set(IReadOnlyList<T> list) {
-		domainModel.notifyDataComponentToBeModified();
+		if (domainModel != null)
+			domainModel.notifyDataComponentToBeModified();
 		if (list.size() > maxCapacity)
 			throw new IllegalModificationException("Attempting to set list to size greater than maxCapacity.");
 		observableList.setFromList(list);
@@ -50,6 +63,21 @@ public class ListComponent<T> implements IObservableList<T>, IListComponent<T> {
 	@Override
 	public int maxCapacity() {
 		return maxCapacity;
+	}
+
+	@Override
+	public T get(int index) {
+		return observableList.get(index);
+	}
+
+	@Override
+	public int size() {
+		return observableList.size();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return observableList.iterator();
 	}
 
 	@Override

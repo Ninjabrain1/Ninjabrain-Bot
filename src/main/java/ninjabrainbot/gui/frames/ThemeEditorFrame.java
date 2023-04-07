@@ -20,10 +20,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.endereye.IStdProfile;
 import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.ThrowType;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;
@@ -56,9 +58,9 @@ public class ThemeEditorFrame extends ThemedDialog {
 	private FramePreviewPanel ninBotPreviewBasic;
 	private FramePreviewPanel ninBotPreviewDetailed;
 
-	private StyleManager previewStyleManager;
-	private CustomTheme customTheme; // theme that is saved
-	private CustomTheme previewTheme; // used for previewing
+	private final StyleManager previewStyleManager;
+	private final CustomTheme customTheme; // theme that is saved
+	private final CustomTheme previewTheme; // used for previewing
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
 		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
@@ -163,13 +165,11 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
+		IStdProfile stdProfile = new StandardStdProfile(defaultPreferences);
 		ArrayList<IThrow> eyeThrows = new ArrayList<>();
-		IThrow t1 = Throw.parseF3C("/execute in minecraft:overworld run tp @s 659.70 85.00 1950.30 -253.82 -31.75", 0, new AlwaysUnlocked());
-		t1.addCorrection(true, defaultPreferences);
-		t1.setStdProfileNumber(1);
-		IThrow t2 = Throw.parseF3C("/execute in minecraft:overworld run tp @s -3.75 66.00 2002.63 -184.67 -31.75", 0, new AlwaysUnlocked());
-		t2.addCorrection(false, defaultPreferences);
-		t2.setStdProfileNumber(2);
+
+		IThrow t1 = new Throw(659.70, 85.00, 1950.30, -253.82, -31.75, false, ThrowType.NormalWithAltStd, stdProfile).withCorrection(0.01);
+		IThrow t2 = new Throw(-3.75, 66.00, 2002.63, -184.67, -31.75, false, ThrowType.McVersion1_12, stdProfile).withCorrection(-0.01);
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

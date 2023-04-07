@@ -2,19 +2,21 @@ package ninjabrainbot.data.calculator.highprecision;
 
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.temp.DataComponent;
+import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 
 public class BoatDataState implements IBoatDataState {
 
-	private final ObservableField<Boolean> enteringBoat;
-	private final ObservableField<Float> boatAngle;
-	private final ObservableField<BoatState> boatState;
+	private final DataComponent<Boolean> enteringBoat;
+	private final DataComponent<Float> boatAngle;
+	private final DataComponent<BoatState> boatState;
 
-	public BoatDataState(IModificationLock modificationLock) {
-		enteringBoat = new LockableField<Boolean>(false, modificationLock);
-		boatAngle = new LockableField<Float>(null, modificationLock);
-		boatState = new LockableField<BoatState>(BoatState.NONE, modificationLock);
+	public BoatDataState(IDomainModel domainModel) {
+		enteringBoat = new DataComponent<>(domainModel, false);
+		boatAngle = new DataComponent<>(domainModel);
+		boatState = new DataComponent<>(domainModel, BoatState.NONE);
 	}
 
 	public void reset() {

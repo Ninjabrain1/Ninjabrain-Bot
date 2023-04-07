@@ -26,7 +26,7 @@ class RayApproximatedPriorTests {
 
 	@BeforeAll
 	static void calculateTruePrior() {
-		divineContext = new DivineContext(new AlwaysUnlocked());
+		divineContext = new DivineContext(null);
 		Ring ring = Ring.get(1);
 		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
 		truePrior = new Prior(0, 0, radius, divineContext);

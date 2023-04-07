@@ -23,12 +23,10 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		return whenElementAtIndexModified;
 	}
 
-	@Override
 	public Iterator<T> iterator() {
 		return set.iterator();
 	}
 
-	@Override
 	public boolean add(T t) {
 		if (set.add(t)) {
 			subscriptions.put(t, t.whenModified().subscribe(this::onElementModified));
@@ -39,7 +37,6 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		return false;
 	}
 
-	@Override
 	public boolean insert(T t, int index) {
 		set.add(index, t);
 		subscriptions.put(t, t.whenModified().subscribe(this::onElementModified));
@@ -50,7 +47,6 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		return true;
 	}
 
-	@Override
 	public void remove(T t) {
 		int index = set.indexOf(t);
 		if (set.remove(t)) {
@@ -62,7 +58,6 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		}
 	}
 
-	@Override
 	public void clear() {
 		int n = set.size();
 		if (n == 0)
@@ -78,17 +73,14 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 		notifySubscribers(this);
 	}
 
-	@Override
 	public int size() {
 		return set.size();
 	}
 
-	@Override
 	public T get(int index) {
 		return set.get(index);
 	}
 
-	@Override
 	public void setFromList(List<T> list) {
 		int n = Math.max(set.size(), list.size());
 		if (n == 0)
@@ -120,7 +112,6 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 			notifySubscribers(this);
 	}
 
-	@Override
 	public List<T> toList() {
 		return new ArrayList<>(set);
 	}

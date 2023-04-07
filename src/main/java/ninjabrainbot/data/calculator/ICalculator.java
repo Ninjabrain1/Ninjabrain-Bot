@@ -6,14 +6,14 @@ import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.util.ISet;
+import ninjabrainbot.event.IReadOnlyList;
 
 public interface ICalculator {
 
-	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext);
+	ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext);
 
-	public BlindResult blind(BlindPosition b, IDivineContext divineContext);
+	BlindResult blind(BlindPosition b, IDivineContext divineContext);
 
-	public DivineResult divine(IDivineContext divineContext);
+	DivineResult divine(IDivineContext divineContext);
 
 }

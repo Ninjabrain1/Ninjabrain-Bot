@@ -5,7 +5,7 @@ import java.util.List;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.ThrowSet;
+import ninjabrainbot.event.IObservableList;
 
 public class DataStateUndoData {
 
@@ -13,8 +13,11 @@ public class DataStateUndoData {
 	final IThrow playerPos;
 	final Fossil fossil;
 
-	public DataStateUndoData(ThrowSet throwSet, IThrow playerPos, DivineContext divineContext) {
-		eyeThrows = throwSet.toList();
+	public DataStateUndoData(IObservableList<IThrow> throwSet, IThrow playerPos, DivineContext divineContext) {
+//		eyeThrows = throwSet.toList();
+//		this.playerPos = playerPos;
+//		fossil = divineContext.getFossil();
+		eyeThrows = null;
 		this.playerPos = playerPos;
 		fossil = divineContext.getFossil();
 	}

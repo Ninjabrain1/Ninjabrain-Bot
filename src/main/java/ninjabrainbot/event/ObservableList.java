@@ -1,6 +1,7 @@
 package ninjabrainbot.event;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 public class ObservableList<T> implements IObservableList<T> {
@@ -12,17 +13,6 @@ public class ObservableList<T> implements IObservableList<T> {
 	public ObservableList() {
 		subscribers = new ArrayList<>();
 		list = new ArrayListImplementingReadOnlyList<>();
-	}
-
-	@Override
-	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
-		subscribers.add(subscriber);
-		return new Subscription(this, subscriber);
-	}
-
-	@Override
-	public void unsubscribe(Consumer<IReadOnlyList<T>> subscriber) {
-		subscribers.remove(subscriber);
 	}
 
 	public boolean add(T element) {
@@ -47,8 +37,30 @@ public class ObservableList<T> implements IObservableList<T> {
 		notifySubscribers();
 	}
 
+	@Override
 	public IReadOnlyList<T> get() {
 		return list;
+	}
+
+	@Override
+	public T get(int index) {
+		return list.get(index);
+	}
+
+	@Override
+	public int size() {
+		return list.size();
+	}
+
+	@Override
+	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
+		subscribers.add(subscriber);
+		return new Subscription(this, subscriber);
+	}
+
+	@Override
+	public void unsubscribe(Consumer<IReadOnlyList<T>> subscriber) {
+		subscribers.remove(subscriber);
 	}
 
 	private void notifySubscribers() {
@@ -57,4 +69,8 @@ public class ObservableList<T> implements IObservableList<T> {
 		}
 	}
 
+	@Override
+	public Iterator<T> iterator() {
+		return list.iterator();
+	}
 }

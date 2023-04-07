@@ -5,11 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.statistics.ApproximatedPrior;
 import ninjabrainbot.data.calculator.statistics.IPrior;
 import ninjabrainbot.data.calculator.statistics.Prior;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.data.calculator.stronghold.RingIterator;
@@ -28,7 +27,7 @@ class ApproximatedPriorTests {
 
 	@BeforeEach
 	void setup() {
-		divineContext = new DivineContext(new AlwaysUnlocked());
+		divineContext = new DivineContext(null);
 	}
 
 	@ParameterizedTest
@@ -149,7 +148,7 @@ class ApproximatedPriorTests {
 		int numChunks = 0;
 		for (Chunk chunk : approximatedPrior.getChunks()) {
 			Chunk expected = expectedChunks.get(chunk);
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk.toString());
+			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk);
 			numChunks++;
 			double error = chunk.weight - expected.weight;
 			totalError += error;

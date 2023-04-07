@@ -1,27 +1,27 @@
 package ninjabrainbot.data.calculator.divine;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.data.temp.IDataComponent;
 
 public interface IDivineContext {
 
 	/**
 	 * @return The x-coordinate of the divine fossil if one exists, null otherwise.
 	 */
-	public Fossil getFossil();
+	Fossil getFossil();
 
-	public IObservable<Fossil> fossil();
+	IDataComponent<Fossil> fossil();
 
-	public boolean hasDivine();
+	boolean hasDivine();
 
-	public double relativeDensity();
+	double relativeDensity();
 
-	public double getDensityAtAngleBeforeSnapping(double phi);
+	double getDensityAtAngleBeforeSnapping(double phi);
 
 	/**
 	 * Returns the closest of the three divine coords that are a distance r from
 	 * (0,0)
 	 */
-	public BlindPosition getClosestCoords(double x, double z, double r);
+	BlindPosition getClosestCoords(double x, double z, double r);
 
 }

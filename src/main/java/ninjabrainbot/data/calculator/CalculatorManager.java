@@ -2,24 +2,24 @@ package ninjabrainbot.data.calculator;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
 import ninjabrainbot.data.calculator.blind.BlindResult;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.IThrowSet;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.calculator.stronghold.TopPredictionProvider;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IObservableList;
 import ninjabrainbot.event.ObservableField;
 
 public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private ICalculator calculator;
 
-	private final IThrowSet throwSet;
+	private final IObservableList<IThrow> throwSet;
 	private final IObservable<IThrow> playerPosition;
 	private final IDivineContext divineContext;
 
@@ -31,20 +31,20 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(ICalculator calculator, IThrowSet throwSet, IObservable<IThrow> playerPosition, IDivineContext divineContext, IModificationLock modificationLock) {
+	public CalculatorManager(ICalculator calculator, IObservableList<IThrow> throwSet, IObservable<IThrow> playerPosition, IDivineContext divineContext) {
 		this.calculator = calculator;
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;
 		this.divineContext = divineContext;
 
-		calculatorResult = new LockableField<>(modificationLock);
-		blindResult = new LockableField<>(modificationLock);
-		divineResult = new LockableField<>(modificationLock);
+		calculatorResult = new ObservableField<>();
+		blindResult = new ObservableField<>();
+		divineResult = new ObservableField<>();
 
-		disposeHandler.add(throwSet.whenModified().subscribe(this::onThrowSetModified));
+		disposeHandler.add(throwSet.subscribe(this::onThrowSetModified));
 		disposeHandler.add(playerPosition.subscribe(this::onPlayerPositionChanged));
 		disposeHandler.add(divineContext.fossil().subscribe(this::onFossilChanged));
-		topPredictionProvider = disposeHandler.add(new TopPredictionProvider(calculatorResult, modificationLock));
+		topPredictionProvider = disposeHandler.add(new TopPredictionProvider(calculatorResult));
 	}
 
 	private void onThrowSetModified() {
@@ -67,11 +67,11 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	private void updateCalculatorResult() {
 		if (calculatorResult.get() != null)
 			calculatorResult.get().dispose();
-		calculatorResult.set(calculator.triangulate(throwSet, playerPosition, divineContext));
+		calculatorResult.set(calculator.triangulate(throwSet.get(), playerPosition, divineContext));
 	}
 
 	private void updateBlindResult() {
-		if (throwSet.size() > 0 || playerPosition.get() == null || !playerPosition.get().isNether()) {
+		if (throwSet.get().size() > 0 || playerPosition.get() == null || !playerPosition.get().isNether()) {
 			blindResult.set(null);
 			return;
 		}
@@ -79,14 +79,14 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	}
 
 	private void updateDivineResult() {
-		if (throwSet.size() > 0 || (playerPosition.get() != null && playerPosition.get().isNether())) {
+		if (throwSet.get().size() > 0 || (playerPosition.get() != null && playerPosition.get().isNether())) {
 			divineResult.set(null);
 			return;
 		}
 		divineResult.set(calculator.divine(divineContext));
 	}
 
-	public void setCalculator(ICalculator calculator){
+	public void setCalculator(ICalculator calculator) {
 		this.calculator = calculator;
 		updateCalculatorResult();
 		updateBlindResult();

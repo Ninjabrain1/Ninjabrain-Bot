@@ -12,12 +12,13 @@ import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.IThrowSet;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IObservableList;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.event.Subscription;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
@@ -37,26 +38,26 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private ChunkPrediction lastTopPrediction;
 
-	private int index;
+	private final int index;
 	private IThrow t;
-	private JLabel x;
-	private JLabel z;
-	private JLabel alpha;
-	private JLabel correction;
-	private JLabel error;
-	private FlatButton removeButton;
+	private final JLabel x;
+	private final JLabel z;
+	private final JLabel alpha;
+	private final JLabel correction;
+	private final JLabel error;
+	private final FlatButton removeButton;
 
 	private int correctionSgn;
 	private Color colorNeg, colorPos;
 
 	private Subscription chunkPredictionModifiedSubscription;
-	private Runnable whenVisibilityChanged;
+	private final Runnable whenVisibilityChanged;
 
 	private ChunkPrediction lastPredictionForUpdatingError;
 
-	private WrappedColor negCol;
-	private WrappedColor posCol;
-	private WrappedColor lineCol;
+	private final WrappedColor negCol;
+	private final WrappedColor posCol;
+	private final WrappedColor lineCol;
 
 	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, NinjabrainBotPreferences preferences) {
 		super(styleManager);
@@ -65,11 +66,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 		setOpaque(true);
 		this.preferences = preferences;
-		x = new JLabel((String) null, 0);
-		z = new JLabel((String) null, 0);
-		alpha = new JLabel((String) null, 0);
-		correction = new JLabel((String) null, 0);
-		error = new JLabel((String) null, 0);
+		x = new JLabel((String) null, SwingConstants.CENTER);
+		z = new JLabel((String) null, SwingConstants.CENTER);
+		alpha = new JLabel((String) null, SwingConstants.CENTER);
+		correction = new JLabel((String) null, SwingConstants.CENTER);
+		error = new JLabel((String) null, SwingConstants.CENTER);
 		removeButton = new FlatButton(styleManager, "-");
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
@@ -85,12 +86,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		updateVisibility();
 
-		IThrowSet throwSet = dataStateHandler.getDataState().getThrowSet();
+		IObservableList<IThrow> throwSet = dataStateHandler.getDataState().getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
-		disposeHandler.add(throwSet.whenElementAtIndexModified().subscribeEDT(t -> setThrow(t), index));
+		disposeHandler.add(throwSet.subscribeEDT(this::updateThrow));
 
 		setPrediction(topResult.get());
-		disposeHandler.add(topResult.subscribe(result -> setPrediction(result)));
+		disposeHandler.add(topResult.subscribeEDT(this::setPrediction));
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_NEUTRAL);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
@@ -98,7 +99,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		posCol = styleManager.currentTheme.COLOR_POSITIVE;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
-		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(b -> error.setVisible(b)));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(error::setVisible));
 		disposeHandler.add(preferences.useTallRes.whenModified().subscribe(b -> whenTallResChanged()));
 	}
 
@@ -137,22 +138,22 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int w = width - 2 * 0 - height;
+		int w = width - height;
 		if (!preferences.showAngleErrors.get()) {
 			if (this.x != null)
 				this.x.setBounds(0, 0, w / 3, height);
 			if (this.z != null)
-				this.z.setBounds(0 + w / 3, 0, w / 3, height);
+				this.z.setBounds(w / 3, 0, w / 3, height);
 			if (this.alpha != null) {
 				if (correctionSgn != 0) {
 					int w1 = w / 3 * 3 / 4;
-					int dx = w / 3 * 1 / 8;
-					this.alpha.setBounds(0 + 2 * w / 3 - dx, 0, w1, height);
+					int dx = w / 3 / 8;
+					this.alpha.setBounds(2 * w / 3 - dx, 0, w1, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.RIGHT);
-					this.correction.setBounds(0 + 2 * w / 3 + w1 - dx, 0, w1, height);
+					this.correction.setBounds(2 * w / 3 + w1 - dx, 0, w1, height);
 					this.correction.setHorizontalAlignment(SwingConstants.LEFT);
 				} else {
-					this.alpha.setBounds(0 + 2 * w / 3, 0, w / 3, height);
+					this.alpha.setBounds(2 * w / 3, 0, w / 3, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.CENTER);
 				}
 			}
@@ -162,22 +163,22 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			if (this.x != null)
 				this.x.setBounds(0, 0, w / 4, height);
 			if (this.z != null)
-				this.z.setBounds(0 + w / 4, 0, w / 4, height);
+				this.z.setBounds(w / 4, 0, w / 4, height);
 			if (this.alpha != null) {
 				if (correctionSgn != 0) {
 					int w1 = w / 4 * 3 / 4;
-					int dx = w / 4 * 1 / 8;
-					this.alpha.setBounds(0 + 2 * w / 4 - dx, 0, w1, height);
+					int dx = w / 4 / 8;
+					this.alpha.setBounds(2 * w / 4 - dx, 0, w1, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.RIGHT);
-					this.correction.setBounds(0 + 2 * w / 4 + w1 - dx, 0, w1, height);
+					this.correction.setBounds(2 * w / 4 + w1 - dx, 0, w1, height);
 					this.correction.setHorizontalAlignment(SwingConstants.LEFT);
 				} else {
-					this.alpha.setBounds(0 + 2 * w / 4, 0, w / 4, height);
+					this.alpha.setBounds(2 * w / 4, 0, w / 4, height);
 					this.alpha.setHorizontalAlignment(SwingConstants.CENTER);
 				}
 			}
 			if (this.error != null)
-				this.error.setBounds(0 + 3 * w / 4, 0, w / 4, height);
+				this.error.setBounds(3 * w / 4, 0, w / 4, height);
 			if (this.removeButton != null)
 				this.removeButton.setBounds(w, 0, height, height - 1);
 		}
@@ -213,10 +214,15 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
 
+	private void updateThrow(IReadOnlyList<IThrow> throwSet) {
+		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
+	}
+
 	private void setThrow(IThrow t) {
-		if (this.t != t) {
-			this.t = t;
-		}
+		if (this.t == t)
+			return;
+
+		this.t = t;
 		if (t == null) {
 			x.setText(null);
 			z.setText(null);

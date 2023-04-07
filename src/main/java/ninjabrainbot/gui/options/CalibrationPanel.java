@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import ninjabrainbot.data.calculator.calibrator.Calibrator;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedComponent;
@@ -33,7 +34,6 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.ISet;
 
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
@@ -219,7 +219,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			std.setText(String.format("%.4f", calibrator.getSTD(preferences.mcVersion.get())));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
-			ISet<IThrow> eyeThrows = calibrator.getThrows();
+			IReadOnlyList<IThrow> eyeThrows = calibrator.getThrows();
 			for (int i = 0; i < angleErrors.length; i++) {
 				IThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
@@ -234,7 +234,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			hist.setData(angleErrors);
 		} else {
 			StringBuilder b = new StringBuilder();
-			ISet<IThrow> eyeThrows = calibrator.getThrows();
+			IReadOnlyList<IThrow> eyeThrows = calibrator.getThrows();
 			for (IThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
 					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.alpha() - t.correction(), t.correction()));

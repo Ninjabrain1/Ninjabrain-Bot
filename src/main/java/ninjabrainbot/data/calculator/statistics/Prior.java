@@ -3,13 +3,11 @@ package ninjabrainbot.data.calculator.statistics;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.data.calculator.stronghold.RingIterator;
 import ninjabrainbot.data.calculator.stronghold.StrongholdConstants;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Logger;
 
@@ -20,10 +18,6 @@ public class Prior implements IPrior {
 	int x0, z0, x1, z1;
 	Chunk[] chunks;
 	IDivineContext divineContext;
-
-	public Prior() {
-		this(0, 0, StrongholdConstants.maxChunk, new DivineContext(new AlwaysUnlocked()));
-	}
 
 	public Prior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();
@@ -186,7 +180,7 @@ public class Prior implements IPrior {
 	}
 
 	private int idx(int i, int j) {
-		return 1 * (j - z0) + (i - x0) * size1d;
+		return (j - z0) + (i - x0) * size1d;
 	}
 
 	@Override

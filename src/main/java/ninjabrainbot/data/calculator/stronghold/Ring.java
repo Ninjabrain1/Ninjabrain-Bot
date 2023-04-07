@@ -32,7 +32,7 @@ public class Ring {
 		if (i >= 0 && i < StrongholdConstants.numRings) {
 			return rings.get(i);
 		}
-		return null;
+		throw new IllegalArgumentException("Ring " + i + " is an invalid stronghold ring index.");
 	}
 
 	public static Ring get(double chunkR) {

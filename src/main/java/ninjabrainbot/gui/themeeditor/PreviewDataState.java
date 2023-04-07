@@ -3,24 +3,25 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.List;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.ResultType;
+import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.blind.BlindResult;
-import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.ResultType;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.IThrowSet;
-import ninjabrainbot.data.calculator.endereye.ThrowSet;
 import ninjabrainbot.data.calculator.highprecision.BoatDataState;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.data.datalock.AlwaysUnlocked;
+import ninjabrainbot.data.datalock.IModificationLock;
+import ninjabrainbot.data.temp.DataComponent;
+import ninjabrainbot.data.temp.IDataComponent;
+import ninjabrainbot.data.temp.IListComponent;
+import ninjabrainbot.data.temp.ListComponent;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 
@@ -30,12 +31,12 @@ public class PreviewDataState implements IDataState {
 	private final IAllAdvancementsDataState allAdvancementsDataState;
 
 	private final DivineContext divineContext;
-	private final ThrowSet throwSet;
-	private final ObservableField<Boolean> locked;
+	private final ListComponent<IThrow> throwSet;
+	private final DataComponent<Boolean> locked;
+	private final DataComponent<IThrow> playerPos;
 
 	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
-	private final ObservableField<IThrow> playerPos;
 	private final ObservableField<ChunkPrediction> topPrediction;
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
@@ -47,23 +48,23 @@ public class PreviewDataState implements IDataState {
 		for (IThrow t : eyeThrows) {
 			throwSet.add(t);
 		}
-		divineContext.setFossil(f);
+		divineContext.fossil.set(f);
 	}
 
 	public PreviewDataState() {
 		IModificationLock modificationLock = new AlwaysUnlocked();
-		divineContext = new DivineContext(modificationLock);
-		throwSet = new ThrowSet(modificationLock);
-		playerPos = new LockableField<>(modificationLock);
-		locked = new LockableField<>(false, modificationLock);
-		resultType = new LockableField<>(ResultType.NONE, modificationLock);
-		calculatorResult = new LockableField<>(modificationLock);
-		topPrediction = new LockableField<>(modificationLock);
-		blindResult = new LockableField<>(modificationLock);
-		divineResult = new LockableField<>(modificationLock);
+		divineContext = new DivineContext(null);
+		throwSet = new ListComponent<>(null, 10);
+		playerPos = new DataComponent<>(null);
+		locked = new DataComponent<>(null, false);
+		resultType = new ObservableField<>(ResultType.NONE);
+		calculatorResult = new ObservableField<>();
+		topPrediction = new ObservableField<>();
+		blindResult = new ObservableField<>();
+		divineResult = new ObservableField<>();
 
-		boatDataState = new BoatDataState(modificationLock);
-		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, modificationLock);
+		boatDataState = new BoatDataState(null);
+		allAdvancementsDataState = new AllAdvancementsDataState(topPrediction, null);
 	}
 
 	@Override
@@ -72,8 +73,18 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IThrowSet getThrowSet() {
+	public IListComponent<IThrow> getThrowSet() {
 		return throwSet;
+	}
+
+	@Override
+	public IDataComponent<IThrow> playerPosition() {
+		return playerPos;
+	}
+
+	@Override
+	public IDataComponent<Boolean> locked() {
+		return locked;
 	}
 
 	@Override
@@ -97,11 +108,6 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IObservable<Boolean> locked() {
-		return locked;
-	}
-
-	@Override
 	public IObservable<ResultType> resultType() {
 		return resultType;
 
@@ -115,20 +121,6 @@ public class PreviewDataState implements IDataState {
 	@Override
 	public IBoatDataState boatDataState() {
 		return boatDataState;
-	}
-
-	@Override
-	public void toggleLocked() {
-		locked.set(!locked.get());
-	}
-
-	@Override
-	public void reset() {
-	}
-
-	@Override
-	public IObservable<IThrow> playerPosition() {
-		return playerPos;
 	}
 
 }

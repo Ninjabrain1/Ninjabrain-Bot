@@ -3,11 +3,10 @@ package ninjabrainbot.data.statistics;
 import java.util.HashSet;
 import java.util.Set;
 
-import ninjabrainbot.data.calculator.statistics.IPrior;
-import ninjabrainbot.data.calculator.statistics.Prior;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.Fossil;
+import ninjabrainbot.data.calculator.statistics.IPrior;
+import ninjabrainbot.data.calculator.statistics.Prior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.data.calculator.stronghold.RingIterator;
@@ -25,7 +24,7 @@ class PriorTests {
 
 	@BeforeEach
 	void setup() {
-		divineContext = new DivineContext(new AlwaysUnlocked());
+		divineContext = new DivineContext(null);
 	}
 
 	@ParameterizedTest
@@ -55,7 +54,7 @@ class PriorTests {
 	@ValueSource(ints = { 0, 2, 6, 13, 15 })
 	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {
 		Ring ring = Ring.get(0);
-		divineContext.setFossil(new Fossil(fossil));
+		divineContext.fossil.set(new Fossil(fossil));
 		IPrior prior = new Prior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
 
 		double totalProbability = 0;

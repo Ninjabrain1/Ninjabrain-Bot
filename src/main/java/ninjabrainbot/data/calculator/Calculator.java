@@ -14,9 +14,9 @@ import ninjabrainbot.data.calculator.statistics.Prior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.util.Coords;
-import ninjabrainbot.util.ISet;
 import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Pair;
 
@@ -37,7 +37,7 @@ public class Calculator implements ICalculator {
 	}
 
 	@Override
-	public ICalculatorResult triangulate(ISet<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext) {
+	public ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
 		long t0 = System.currentTimeMillis();
@@ -47,7 +47,7 @@ public class Calculator implements ICalculator {
 		return new CalculatorResult(posterior, eyeThrows, playerPos, numberOfReturnedPredictions, mcVersion);
 	}
 
-	public Posterior getPosterior(ISet<IThrow> eyeThrows, IDivineContext divineContext) {
+	public Posterior getPosterior(IReadOnlyList<IThrow> eyeThrows, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
 		return new Posterior(eyeThrows, divineContext, useAdvancedStatistics, mcVersion);

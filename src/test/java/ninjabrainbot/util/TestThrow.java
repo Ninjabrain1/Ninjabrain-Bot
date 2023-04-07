@@ -1,14 +1,8 @@
 package ninjabrainbot.util;
 
-import ninjabrainbot.data.calculator.endereye.IStdProfile;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class TestThrow implements IThrow {
-
-	ObservableProperty<IThrow> whenModified = new ObservableProperty<>();
 
 	double x, z, alpha, std;
 
@@ -32,11 +26,6 @@ public class TestThrow implements IThrow {
 	@Override
 	public double zInOverworld() {
 		return z;
-	}
-
-	@Override
-	public ISubscribable<IThrow> whenModified() {
-		return whenModified;
 	}
 
 	@Override
@@ -90,20 +79,18 @@ public class TestThrow implements IThrow {
 	}
 
 	@Override
-	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
-	}
-
-	@Override
-	public void setStdProfileNumber(int profileNumber) {
-	}
-
-	@Override
-	public void setStdProfile(IStdProfile stdProfile) {
-	}
-
-	@Override
 	public int getStdProfileNumber() {
 		return 0;
+	}
+
+	@Override
+	public boolean isMcVersion1_12() {
+		return false;
+	}
+
+	@Override
+	public boolean isBoatThrow() {
+		return false;
 	}
 
 }

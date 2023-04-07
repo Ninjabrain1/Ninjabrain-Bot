@@ -1,8 +1,6 @@
 package ninjabrainbot.data.calculator.stronghold;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
@@ -14,9 +12,9 @@ public class TopPredictionProvider implements IDisposable {
 
 	private final Subscription calculatorResultSubscription;
 
-	public TopPredictionProvider(IObservable<ICalculatorResult> calculatorResult, IModificationLock modificationLock) {
+	public TopPredictionProvider(IObservable<ICalculatorResult> calculatorResult) {
 		calculatorResultSubscription = calculatorResult.subscribe(this::updateTopPrediction);
-		topPrediction = new LockableField<>(modificationLock);
+		topPrediction = new ObservableField<>();
 	}
 
 	private void updateTopPrediction(ICalculatorResult calculatorResult) {

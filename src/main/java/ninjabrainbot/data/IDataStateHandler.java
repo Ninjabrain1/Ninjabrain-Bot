@@ -1,6 +1,5 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
@@ -9,8 +8,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 public interface IDataStateHandler {
 
 	IDataState getDataState();
-
-	IModificationLock getModificationLock();
 
 	void reset();
 
@@ -28,10 +25,10 @@ public interface IDataStateHandler {
 
 	void toggleAltStdOnLastThrowIfNotLocked();
 
-	public ISubscribable<IDataState> whenDataStateModified();
+	ISubscribable<IDataState> whenDataStateModified();
 
-	public void addThrowStream(ISubscribable<IThrow> stream);
+	void addThrowStream(ISubscribable<IThrow> stream);
 
-	public void addFossilStream(ISubscribable<Fossil> stream);
+	void addFossilStream(ISubscribable<Fossil> stream);
 
 }

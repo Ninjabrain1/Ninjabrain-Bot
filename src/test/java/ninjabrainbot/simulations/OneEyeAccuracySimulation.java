@@ -6,14 +6,13 @@ import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.common.IPosition;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.ThrowSet;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
+import ninjabrainbot.data.temp.IListComponent;
+import ninjabrainbot.data.temp.ListComponent;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Logger;
@@ -26,14 +25,13 @@ public class OneEyeAccuracySimulation {
 
 	private static Calculator calculator;
 	private static IDivineContext divineContext;
-	private static final IModificationLock lock = new AlwaysUnlocked();
 	private static final Random random = new Random();
 	private static final Ring ring = Ring.get(0);
 
 	public static void main(String[] args) {
 		Logger.enabled = false;
 		calculator = new Calculator(new CalculatorSettings());
-		divineContext = new DivineContext(lock);
+		divineContext = new DivineContext(null);
 
 		for (int r = 0; r < 3000; r += 100) {
 			int successes = 0;
@@ -60,11 +58,9 @@ public class OneEyeAccuracySimulation {
 	}
 
 	private static ICalculatorResult calculateOneEye(IThrow eyeThrow) {
-		ThrowSet throwSet = new ThrowSet(lock);
+		IListComponent<IThrow> throwSet = new ListComponent<>(null, 10);
 		throwSet.add(eyeThrow);
-		ICalculatorResult calculatorResult = calculator.triangulate(throwSet, new ObservableField<>(eyeThrow), divineContext);
-		throwSet.dispose();
-		return calculatorResult;
+		return calculator.triangulate(throwSet, new ObservableField<>(eyeThrow), divineContext);
 	}
 
 	private static Chunk[] sampleThreeStrongholdsFirstRing() {

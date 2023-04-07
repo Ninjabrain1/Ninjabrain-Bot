@@ -5,17 +5,16 @@ import java.awt.AWTException;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.statistics.Posterior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.ThrowSet;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
-import ninjabrainbot.util.ISet;
 
 public class Calibrator implements IDisposable {
 
@@ -24,14 +23,14 @@ public class Calibrator implements IDisposable {
 
 	Calculator triangulator;
 	boolean calibrating;
-	ThrowSet eyeThrows;
+	ObservableList<IThrow> eyeThrows;
 	boolean ready;
 
 	Chunk stronghold;
 	double lastX;
 	double lastZ;
 
-	private final IDivineContext divineContext = new DivineContext(new AlwaysUnlocked());
+	private final IDivineContext divineContext = new DivineContext(null);
 
 	public Calibrator() {
 		triangulator = new Calculator();
@@ -44,7 +43,7 @@ public class Calibrator implements IDisposable {
 
 	public void startCalibrating() throws AWTException {
 		calibrating = true;
-		eyeThrows = new ThrowSet(new AlwaysUnlocked());
+		eyeThrows = new ObservableList<>();
 		keyPresser = new KeyPresser();
 		ready = false;
 	}
@@ -66,7 +65,7 @@ public class Calibrator implements IDisposable {
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				Posterior posterior = triangulator.getPosterior(eyeThrows, divineContext);
+				Posterior posterior = triangulator.getPosterior(eyeThrows.get(), divineContext);
 				prediction = posterior.getMostProbableChunk();
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;
@@ -85,15 +84,14 @@ public class Calibrator implements IDisposable {
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			tp(nextX, nextZ, nextAlpha, -31.2);
-			return;
 		}
 	}
 
 	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
 		int i = eyeThrows.size() - 1;
-		if (i == -1)
-			return;
-		eyeThrows.get(i).addCorrection(positive, preferences);
+		if (i == -1) {
+		}
+//		eyeThrows.get(i).addCorrection(positive, preferences);
 	}
 
 	private double distanceFromIntendedPosition(IThrow t) {
@@ -133,12 +131,11 @@ public class Calibrator implements IDisposable {
 	private double getAlpha(Chunk strongholdChunk, double x, double z) {
 		double deltax = strongholdChunk.x * 16 + 8 - x;
 		double deltaz = strongholdChunk.z * 16 + 8 - z;
-		double alpha = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
-		return alpha;
+		return -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 	}
 
 	private double getSTD(McVersion version, Chunk result) {
-		double[] errors = result.getAngleErrors(version, eyeThrows);
+		double[] errors = result.getAngleErrors(version, eyeThrows.get());
 		// Assume 0 mean
 		double sqSum = 0;
 		for (double e : errors) {
@@ -162,11 +159,11 @@ public class Calibrator implements IDisposable {
 	public double[] getErrors(McVersion version) {
 		if (stronghold == null)
 			return null;
-		return stronghold.getAngleErrors(version, eyeThrows);
+		return stronghold.getAngleErrors(version, eyeThrows.get());
 	}
 
-	public ISet<IThrow> getThrows() {
-		return eyeThrows;
+	public IReadOnlyList<IThrow> getThrows() {
+		return eyeThrows.get();
 	}
 
 	public boolean isReady() {
@@ -174,7 +171,7 @@ public class Calibrator implements IDisposable {
 	}
 
 	public int getNumThrows() {
-		return eyeThrows.size();
+		return eyeThrows.get().size();
 	}
 
 	public void stop() {
@@ -185,7 +182,6 @@ public class Calibrator implements IDisposable {
 
 	@Override
 	public void dispose() {
-		eyeThrows.dispose();
 	}
 
 }

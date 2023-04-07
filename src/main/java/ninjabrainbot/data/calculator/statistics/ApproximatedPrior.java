@@ -13,10 +13,6 @@ import ninjabrainbot.util.Logger;
  */
 public class ApproximatedPrior extends Prior {
 
-	public ApproximatedPrior() {
-		super();
-	}
-
 	public ApproximatedPrior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		super(centerX, centerZ, radius, divineContext);
 	}

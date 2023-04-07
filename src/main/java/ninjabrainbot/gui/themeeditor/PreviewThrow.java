@@ -1,10 +1,8 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.data.calculator.endereye.IStdProfile;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class PreviewThrow implements IThrow {
 
@@ -54,11 +52,6 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public ISubscribable<IThrow> whenModified() {
-		return whenModified;
-	}
-
-	@Override
 	public double getStd() {
 		return 0;
 	}
@@ -94,20 +87,18 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
-	}
-
-	@Override
-	public void setStdProfileNumber(int profileNumber) {
-	}
-
-	@Override
-	public void setStdProfile(IStdProfile stdProfile) {
-	}
-
-	@Override
 	public int getStdProfileNumber() {
 		return 0;
+	}
+
+	@Override
+	public boolean isMcVersion1_12() {
+		return false;
+	}
+
+	@Override
+	public boolean isBoatThrow() {
+		return false;
 	}
 
 }

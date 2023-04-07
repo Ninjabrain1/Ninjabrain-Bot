@@ -6,22 +6,22 @@ import java.util.List;
 import java.util.Optional;
 
 import ninjabrainbot.data.calculator.divine.IDivineContext;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.data.calculator.stronghold.StrongholdConstants;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Coords;
-import ninjabrainbot.util.ISet;
 
 public class Posterior {
 
-	private McVersion version;
+	private final McVersion version;
 
 	IPrior prior;
 	ArrayList<Chunk> chunks;
 
-	public Posterior(ISet<IThrow> eyeThrows, IDivineContext divineContext, boolean useAdvStatistics, McVersion version) {
+	public Posterior(IReadOnlyList<IThrow> eyeThrows, IDivineContext divineContext, boolean useAdvStatistics, McVersion version) {
 		this.version = version;
 		double sigma0 = eyeThrows.get(0).getStd();
 		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);

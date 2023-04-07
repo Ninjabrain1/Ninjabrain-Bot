@@ -1,9 +1,7 @@
 package ninjabrainbot.data;
 
-import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
+import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.DisposeHandler;
@@ -22,8 +20,8 @@ public class ResultTypeProvider implements IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public ResultTypeProvider(IDataState dataState, IModificationLock modificationLock) {
-		resultType = new LockableField<>(ResultType.NONE, modificationLock);
+	public ResultTypeProvider(IDataState dataState) {
+		resultType = new ObservableField<>(ResultType.NONE);
 		allAdvancementsDataState = dataState.allAdvancementDataState();
 		calculatorResult = dataState.calculatorResult();
 		playerPosition = dataState.playerPosition();
