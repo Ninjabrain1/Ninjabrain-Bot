@@ -4,6 +4,9 @@ import javax.swing.Timer;
 
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.actions.IActionExecutor;
+import ninjabrainbot.data.actions.ResetAction;
+import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.DisposeHandler;
 
@@ -13,10 +16,11 @@ public class AutoResetTimer extends Timer implements IDisposable {
 
 	DisposeHandler disposeHandler = new DisposeHandler();
 
-	public AutoResetTimer(IDataState dataState, IDataStateHandler dataStateHandler) {
+	public AutoResetTimer(IDataState dataState, IDomainModel domainModel, IActionExecutor actionExecutor) {
 		super(AUTO_RESET_DELAY, null);
 		addActionListener(p -> {
-			dataStateHandler.resetIfNotLocked();
+			if (!dataState.locked().get())
+				actionExecutor.executeImmediately(new ResetAction(domainModel));
 			restart();
 			stop();
 		});

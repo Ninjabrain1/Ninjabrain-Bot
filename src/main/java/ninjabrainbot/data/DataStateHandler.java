@@ -1,13 +1,18 @@
 package ninjabrainbot.data;
 
 import ninjabrainbot.data.actions.ActionExecutor;
+import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.calculator.endereye.ThrowParser;
+import ninjabrainbot.data.input.ActiveInstanceInputHandler;
+import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
+import ninjabrainbot.data.input.HotkeyInputHandler;
+import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.data.input.ThrowInputHandler;
 import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.DisposeHandler;
@@ -28,6 +33,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final DataState dataState;
 	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
 
+	public final DomainModel domainModel;
+	public final IActionExecutor actionExecutor;
+	public final IButtonInputHandler buttonInputHandler;
+
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
@@ -35,8 +44,8 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		this.activeInstanceProvider = activeInstanceProvider;
 		this.stdProfile = new StandardStdProfile(preferences);
 
-		DomainModel domainModel = new DomainModel();
-		ActionExecutor actionExecutor = new ActionExecutor(domainModel);
+		domainModel = new DomainModel();
+		actionExecutor = new ActionExecutor(domainModel);
 
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
@@ -45,30 +54,17 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
 		disposeHandler.add(new ThrowInputHandler(throwParser.whenNewThrowInputted(), dataState, actionExecutor, preferences));
 		disposeHandler.add(new FossilInputHandler(throwParser.whenNewFossilInputted(), dataState, actionExecutor));
+		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
+		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 
-		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(__ -> resetIfNotLocked()));
-		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::updateAllAdvancementsMode));
+		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 
 		disposeHandler.add(preferences.useAdvStatistics.whenModified().subscribe(this::onCalculatorSettingsChanged));
 		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onCalculatorSettingsChanged));
-		disposeHandler.add(preferences.allAdvancements.whenModified().subscribe(this::updateAllAdvancementsMode));
 		disposeHandler.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
 		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
 		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
 		disposeHandler.add(preferences.sigmaBoat.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.BOAT, newStd)));
-	}
-
-	@Override
-	public synchronized void reset() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			dataState.reset();
-//		}
-	}
-
-	@Override
-	public synchronized void resetIfNotLocked() {
-//		if (!dataState.locked().get())
-//			reset();
 	}
 
 	@Override
@@ -162,17 +158,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 //		}
 	}
 
-	private synchronized void updateAllAdvancementsMode() {
-//		IMinecraftWorldFile world = activeInstanceProvider.activeMinecraftWorld().get();
-//		boolean allAdvancementsModeEnabled = false;
-//		if (world != null) {
-//			allAdvancementsModeEnabled = preferences.allAdvancements.get() && world.hasEnteredEnd();
-//		}
-//
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			dataState.allAdvancementsDataState.setAllAdvancementsModeEnabled(allAdvancementsModeEnabled);
-//		}
-	}
 
 	private synchronized void setStdProfile(int profileNumber, double std) {
 //		try (ILock lock = modificationLock.acquireWritePermission()) {

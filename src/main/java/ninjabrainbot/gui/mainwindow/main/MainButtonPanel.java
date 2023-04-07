@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
@@ -20,26 +20,17 @@ import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends ThemedPanel {
 
-	IDataState dataState;
-	IDataStateHandler dataStateHandler;
+	private final WrappedColor borderCol;
 
-	private ThemedLabel throwsLabel;
-	private FlatButton resetButton;
-	private FlatButton undoButton;
-
-	private WrappedColor borderCol;
-
-	public MainButtonPanel(StyleManager styleManager, IDataState dataState, IDataStateHandler dataStateHandler) {
+	public MainButtonPanel(StyleManager styleManager, IDataState dataState, IButtonInputHandler buttonInputHandler) {
 		super(styleManager);
-		this.dataState = dataState;
-		this.dataStateHandler = dataStateHandler;
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
-		throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
+		ThemedLabel throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
 		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_HEADER);
-		resetButton = getResetButton(styleManager);
-		undoButton = getUndoButton(styleManager);
+		FlatButton resetButton = getResetButton(styleManager, buttonInputHandler);
+		FlatButton undoButton = getUndoButton(styleManager, buttonInputHandler);
 		add(throwsLabel);
 		add(Box.createHorizontalGlue());
 		add(undoButton);
@@ -76,15 +67,15 @@ public class MainButtonPanel extends ThemedPanel {
 		super.setBounds(x, y, width, height);
 	}
 
-	private FlatButton getResetButton(StyleManager styleManager) {
+	private FlatButton getResetButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
 		FlatButton button = new FlatButton(styleManager, I18n.get("reset"));
-		button.addActionListener(p -> dataStateHandler.reset());
+		button.addActionListener(p -> buttonInputHandler.onResetButtonPressed());
 		return button;
 	}
 
-	private FlatButton getUndoButton(StyleManager styleManager) {
+	private FlatButton getUndoButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
 		FlatButton button = new FlatButton(styleManager, I18n.get("undo"));
-		button.addActionListener(p -> dataStateHandler.undo());
+		button.addActionListener(p -> buttonInputHandler.onUndoButtonPressed());
 		return button;
 	}
 

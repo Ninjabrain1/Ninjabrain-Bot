@@ -13,4 +13,6 @@ public interface IDataComponent<T> extends IObservable<T> {
 
 	void set(T value);
 
+	void reset();
+
 }

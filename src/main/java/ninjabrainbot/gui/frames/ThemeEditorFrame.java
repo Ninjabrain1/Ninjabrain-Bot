@@ -27,6 +27,7 @@ import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.data.calculator.endereye.ThrowType;
 import ninjabrainbot.data.information.InformationMessageList;
+import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;
 import ninjabrainbot.gui.components.inputfields.ThemedTextField;
@@ -38,6 +39,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ConfigurableColor;
 import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.gui.style.theme.Theme;
+import ninjabrainbot.gui.themeeditor.PreviewButtonInputHandler;
 import ninjabrainbot.gui.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.themeeditor.PreviewDataStateHandler;
 import ninjabrainbot.gui.themeeditor.ThemeSerializer;
@@ -177,13 +179,13 @@ public class ThemeEditorFrame extends ThemedDialog {
 		NinjabrainBotPreferences previewPreferences1 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences1.view.set(MainViewType.BASIC);
 		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, f, false);
-		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, dataStateHandler1, new InformationMessageList()));
+		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, dataStateHandler1, new PreviewButtonInputHandler(), new InformationMessageList()));
 
 		NinjabrainBotPreferences previewPreferences2 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences2.view.set(MainViewType.DETAILED);
 		previewPreferences2.showAngleErrors.set(true);
 		IDataStateHandler dataStateHandler2 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null, true);
-		ninBotPreviewDetailed = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences2, dataStateHandler2, new InformationMessageList()));
+		ninBotPreviewDetailed = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences2, dataStateHandler2, new PreviewButtonInputHandler(), new InformationMessageList()));
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;

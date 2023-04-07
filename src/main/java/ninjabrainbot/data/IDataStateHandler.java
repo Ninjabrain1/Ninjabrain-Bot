@@ -9,10 +9,6 @@ public interface IDataStateHandler {
 
 	IDataState getDataState();
 
-	void reset();
-
-	void resetIfNotLocked();
-
 	void undo();
 
 	void undoIfNotLocked();

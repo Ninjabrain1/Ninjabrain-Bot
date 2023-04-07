@@ -32,14 +32,6 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void reset() {
-	}
-
-	@Override
-	public void resetIfNotLocked() {
-	}
-
-	@Override
 	public void undo() {
 	}
 

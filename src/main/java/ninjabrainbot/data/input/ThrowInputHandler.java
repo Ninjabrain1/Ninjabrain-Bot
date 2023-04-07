@@ -15,6 +15,9 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
+/**
+ * Listens to the stream of throws and decides if/how the throws should be inputted into the data state.
+ */
 public class ThrowInputHandler implements IDisposable {
 
 	private final IDataState dataState;

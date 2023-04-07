@@ -44,6 +44,11 @@ public class DataComponent<T> implements IDataComponent<T> {
 	}
 
 	@Override
+	public void reset() {
+		set(defaultValue);
+	}
+
+	@Override
 	public Subscription subscribe(Consumer<T> subscriber) {
 		return observableField.subscribe(subscriber);
 	}

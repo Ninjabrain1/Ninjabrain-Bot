@@ -23,6 +23,10 @@ public class DomainModel implements IDomainModel, IWriteLock {
 		lock.writeLock().unlock();
 	}
 
+	public Iterable<IDataComponent<?>> getAllDataComponents() {
+		return dataComponents;
+	}
+
 	public void notifyDataComponentToBeModified() {
 		if (!lock.isWriteLocked())
 			throw new IllegalModificationException("DataComponents cannot be changed without a write lock, create and execute an Action instead of trying to modify the DataComponent directly.");

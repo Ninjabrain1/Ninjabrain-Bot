@@ -8,6 +8,9 @@ import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 
+/**
+ * Listens to the stream of fossils and decides if/how the fossils should be inputted into the data state.
+ */
 public class FossilInputHandler implements IDisposable {
 
 	private final IDataState dataState;

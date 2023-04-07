@@ -63,8 +63,6 @@ public class GUI {
 		Profiler.start("Init instance listener");
 		activeInstanceProvider = ActiveInstanceProviderFactory.createPlatformSpecificActiveInstanceProvider();
 
-		Profiler.stopAndStart("Setup hotkeys");
-		setupHotkeys();
 		Profiler.stop();
 	}
 
@@ -98,7 +96,7 @@ public class GUI {
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler, informationMessageList);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler, dataStateHandler.buttonInputHandler, informationMessageList);
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
@@ -116,7 +114,7 @@ public class GUI {
 
 		new Thread(clipboardReader, "Clipboard reader").start();
 
-		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler);
+		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler.domainModel, dataStateHandler.actionExecutor);
 		preferences.autoReset.whenModified().subscribe(b -> autoResetTimer.setAutoResetEnabled(b));
 
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataStateHandler);
@@ -126,16 +124,6 @@ public class GUI {
 
 		Runtime.getRuntime().addShutdownHook(onShutdown());
 		Profiler.stop();
-	}
-
-	private void setupHotkeys() {
-		preferences.hotkeyReset.whenTriggered().subscribe(__ -> dataStateHandler.resetIfNotLocked());
-		preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
-		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(true, preferences));
-		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(false, preferences));
-		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
-		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> dataStateHandler.toggleEnteringBoatIfNotLocked());
-		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
 	}
 
 	private OptionsFrame getOrCreateOptionsFrame() {

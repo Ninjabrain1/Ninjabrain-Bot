@@ -9,4 +9,6 @@ public interface IDomainModel {
 
 	void notifyDataComponentToBeModified();
 
+	Iterable<IDataComponent<?>> getAllDataComponents();
+
 }

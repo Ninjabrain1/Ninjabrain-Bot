@@ -3,7 +3,6 @@ package ninjabrainbot.data.temp;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import ninjabrainbot.event.IObservableList;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.Subscription;
@@ -53,6 +52,13 @@ public class ListComponent<T> implements IListComponent<T> {
 		if (list.size() > maxCapacity)
 			throw new IllegalModificationException("Attempting to set list to size greater than maxCapacity.");
 		observableList.setFromList(list);
+	}
+
+	@Override
+	public void reset() {
+		if (domainModel != null)
+			domainModel.notifyDataComponentToBeModified();
+		observableList.clear();
 	}
 
 	@Override

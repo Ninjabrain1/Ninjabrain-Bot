@@ -7,6 +7,10 @@ import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
+/**
+ * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
+ * into throws and fossils, exposed through the streams whenNewThrowInputted(), and whenNewFossilInputted().
+ */
 public class ThrowParser implements IThrowSource {
 
 	private final NinjabrainBotPreferences preferences;
