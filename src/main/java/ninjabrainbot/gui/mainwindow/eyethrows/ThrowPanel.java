@@ -10,9 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -59,7 +60,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private final WrappedColor posCol;
 	private final WrappedColor lineCol;
 
-	public ThrowPanel(StyleManager styleManager, IDataStateHandler dataStateHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, NinjabrainBotPreferences preferences) {
+	public ThrowPanel(StyleManager styleManager, IDataState dataState, IButtonInputHandler buttonInputHandler, IObservable<ChunkPrediction> topResult, int index, Runnable whenVisibilityChanged, NinjabrainBotPreferences preferences) {
 		super(styleManager);
 		this.index = index;
 		this.whenVisibilityChanged = whenVisibilityChanged;
@@ -76,7 +77,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		removeButton.setVisible(false);
-		removeButton.addActionListener(p -> dataStateHandler.removeThrow(this.t));
+		removeButton.addActionListener(p -> buttonInputHandler.onRemoveThrowButtonPressed(this.t));
 		add(removeButton);
 		add(x);
 		add(z);
@@ -86,7 +87,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		updateVisibility();
 
-		IObservableList<IThrow> throwSet = dataStateHandler.getDataState().getThrowSet();
+		IObservableList<IThrow> throwSet = dataState.getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 		disposeHandler.add(throwSet.subscribeEDT(this::updateThrow));
 

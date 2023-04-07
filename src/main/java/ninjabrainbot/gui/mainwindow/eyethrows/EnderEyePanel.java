@@ -2,8 +2,8 @@ package ninjabrainbot.gui.mainwindow.eyethrows;
 
 import javax.swing.BoxLayout;
 
-import ninjabrainbot.data.IDataStateHandler;
-import ninjabrainbot.data.calculator.divine.IDivineContext;
+import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
@@ -13,26 +13,26 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 
 	public static final int DEFAULT_SHOWN_THROWS = 3;
 
-	private ThrowPanelHeader throwPanelHeader;
-	private ThrowPanel[] throwPanels;
-	private DivineContextPanel divineContextPanel;
+	private final ThrowPanelHeader throwPanelHeader;
+	private final ThrowPanel[] throwPanels;
+	private final DivineContextPanel divineContextPanel;
 
-	public EnderEyePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler, IDivineContext divineContext) {
+	public EnderEyePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState, IButtonInputHandler buttonInputHandler) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		throwPanelHeader = new ThrowPanelHeader(styleManager, preferences.showAngleErrors);
 		add(throwPanelHeader);
-		throwPanels = new ThrowPanel[dataStateHandler.getDataState().getThrowSet().maxCapacity()];
-		divineContextPanel = new DivineContextPanel(styleManager, divineContext, dataStateHandler, () -> whenDivineContextVisibilityUpdated());
+		throwPanels = new ThrowPanel[dataState.getThrowSet().maxCapacity()];
+		divineContextPanel = new DivineContextPanel(styleManager, dataState.getDivineContext(), buttonInputHandler, this::whenDivineContextVisibilityUpdated);
 		add(divineContextPanel);
-		for (int i = 0; i < dataStateHandler.getDataState().getThrowSet().maxCapacity(); i++) {
-			throwPanels[i] = new ThrowPanel(styleManager, dataStateHandler, dataStateHandler.getDataState().topPrediction(), i, () -> whenSizeModified.notifySubscribers(this), preferences);
+		for (int i = 0; i < dataState.getThrowSet().maxCapacity(); i++) {
+			throwPanels[i] = new ThrowPanel(styleManager, dataState, buttonInputHandler, dataState.topPrediction(), i, () -> whenSizeModified.notifySubscribers(this), preferences);
 			add(throwPanels[i]);
 		}
 		throwPanels[2].setDivineContextPanel(divineContextPanel);
 		// Subscriptions
-		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(b -> setAngleErrorsEnabled(b)));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(this::setAngleErrorsEnabled));
 	}
 
 	private void whenDivineContextVisibilityUpdated() {

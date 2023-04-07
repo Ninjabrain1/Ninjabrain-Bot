@@ -3,6 +3,8 @@ package ninjabrainbot.data.input;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.ResetAction;
+import ninjabrainbot.data.actions.SetFossilAction;
+import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.temp.IDomainModel;
 
 public class ButtonInputHandler implements IButtonInputHandler {
@@ -17,12 +19,23 @@ public class ButtonInputHandler implements IButtonInputHandler {
 		this.actionExecutor = actionExecutor;
 	}
 
+	@Override
 	public void onResetButtonPressed() {
 		actionExecutor.executeImmediately(new ResetAction(domainModel));
 	}
 
 	@Override
 	public void onUndoButtonPressed() {
+
+	}
+
+	@Override
+	public void onRemoveFossilButtonPressed() {
+		actionExecutor.executeImmediately(new SetFossilAction(dataState.getDivineContext(), null));
+	}
+
+	@Override
+	public void onRemoveThrowButtonPressed(IThrow throwToRemove) {
 
 	}
 

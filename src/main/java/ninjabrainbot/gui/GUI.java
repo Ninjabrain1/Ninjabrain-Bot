@@ -96,7 +96,7 @@ public class GUI {
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataStateHandler, dataStateHandler.buttonInputHandler, informationMessageList);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataState, dataStateHandler.buttonInputHandler, informationMessageList);
 
 		Progress.setTask("Creating settings window", 0.85f);
 		Profiler.stopAndStart("Create settings window");
