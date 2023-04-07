@@ -1,10 +1,8 @@
 package ninjabrainbot.data.calculator.endereye;
 
 import ninjabrainbot.data.calculator.statistics.IRay;
-import ninjabrainbot.event.IModifiable;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-public interface IThrow extends IRay, IModifiable<IThrow> {
+public interface IThrow extends IRay {
 
 	double xInPlayerDimension();
 
@@ -26,20 +24,10 @@ public interface IThrow extends IRay, IModifiable<IThrow> {
 
 	boolean isNether();
 
-	void addCorrection(boolean positive, NinjabrainBotPreferences preferences);
-
-	void setStdProfileNumber(int profileNumber);
-
-	void setStdProfile(IStdProfile stdProfile);
-
 	int getStdProfileNumber();
 
-	default boolean isMcVersion1_12() {
-		return false;
-	}
+	boolean isMcVersion1_12();
 
-	default boolean isBoatThrow() {
-		return false;
-	}
+	boolean isBoatThrow();
 
 }
