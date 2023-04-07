@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitor changes so that undo works.
  */
-public class DomainModel implements IWriteLock {
+public class DomainModel implements IDomainModel, IWriteLock {
 
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	private final ArrayList<IDataComponent<?>> dataComponents = new ArrayList<>();

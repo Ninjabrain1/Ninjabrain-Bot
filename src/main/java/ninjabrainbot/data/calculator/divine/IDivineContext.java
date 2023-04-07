@@ -10,8 +10,6 @@ public interface IDivineContext {
 	 */
 	public Fossil getFossil();
 
-	public void resetFossil();
-
 	public IObservable<Fossil> fossil();
 
 	public boolean hasDivine();

@@ -1,33 +1,28 @@
 package ninjabrainbot.data.calculator.divine;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.data.calculator.statistics.DiscretizedDensity;
 import ninjabrainbot.data.calculator.stronghold.Ring;
+import ninjabrainbot.data.temp.DataComponent;
+import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.util.Coords;
 
 public class DivineContext implements IDivineContext {
 
-	private DiscretizedDensity discretizedAngularDensity;
+	private final DiscretizedDensity discretizedAngularDensity;
 
-	private ObservableField<Fossil> fossil;
+	public final DataComponent<Fossil> fossil;
 
-	public DivineContext(IModificationLock modificationLock) {
-		fossil = new LockableField<Fossil>(modificationLock);
+	public DivineContext(IDomainModel domainModel) {
+		fossil = new DataComponent<>(domainModel);
 		discretizedAngularDensity = new DiscretizedDensity(0, 2.0 * Math.PI);
+		fossil.subscribe(this::onFossilChanged);
 	}
 
 	@Override
 	public Fossil getFossil() {
 		return fossil.get();
-	}
-
-	@Override
-	public void resetFossil() {
-		setFossil(null);
 	}
 
 	@Override
@@ -38,15 +33,6 @@ public class DivineContext implements IDivineContext {
 	@Override
 	public IObservable<Fossil> fossil() {
 		return fossil;
-	}
-
-	public void setFossil(Fossil f) {
-		onFossilChanged(f);
-		fossil.set(f);
-	}
-
-	public void clear() {
-		setFossil(null);
 	}
 
 	@Override

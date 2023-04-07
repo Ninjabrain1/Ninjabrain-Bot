@@ -1,24 +1,39 @@
 package ninjabrainbot.data.temp;
 
-public class DataComponent<T> implements IDataComponent<T> {
+import java.util.function.Consumer;
 
-	private final DomainModel domainModel;
-	private T value;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.Subscription;
 
-	public DataComponent(DomainModel domainModel) {
+public class DataComponent<T> implements IObservable<T>, IDataComponent<T> {
+
+	private final IDomainModel domainModel;
+	private ObservableField<T> observableField;
+
+	public DataComponent(IDomainModel domainModel) {
 		this.domainModel = domainModel;
 		domainModel.registerDataComponent(this);
 	}
 
 	@Override
 	public T get() {
-		return value;
+		return observableField.get();
 	}
 
 	@Override
 	public void set(T value) {
 		domainModel.notifyDataComponentToBeModified();
-		this.value = value;
+		observableField.set(value);
 	}
 
+	@Override
+	public Subscription subscribe(Consumer<T> subscriber) {
+		return observableField.subscribe(subscriber);
+	}
+
+	@Override
+	public void unsubscribe(Consumer<T> subscriber) {
+		observableField.unsubscribe(subscriber);
+	}
 }

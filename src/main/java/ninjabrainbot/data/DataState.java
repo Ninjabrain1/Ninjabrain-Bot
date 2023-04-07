@@ -18,6 +18,7 @@ import ninjabrainbot.data.calculator.endereye.ThrowSet;
 import ninjabrainbot.data.calculator.highprecision.BoatDataState;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -39,8 +40,8 @@ public class DataState implements IDataState, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public DataState(ICalculator calculator, IModificationLock modificationLock) {
-		divineContext = new DivineContext(modificationLock);
+	public DataState(ICalculator calculator, IDomainModel domainModel) {
+		divineContext = new DivineContext(domainModel);
 		throwSet = new ThrowSet(modificationLock);
 		playerPosition = new LockableField<>(modificationLock);
 		locked = new LockableField<>(false, modificationLock);
