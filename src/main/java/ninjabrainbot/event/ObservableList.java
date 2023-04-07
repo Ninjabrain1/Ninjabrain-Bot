@@ -1,34 +1,34 @@
 package ninjabrainbot.event;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
-public class ObservableList<T> implements IObservable<List<T>> {
+public class ObservableList<T> implements IObservableList<T> {
 
-	protected ArrayList<T> list;
+	protected ArrayListImplementingReadOnlyList<T> list;
 
-	private ArrayList<Consumer<List<T>>> subscribers;
+	private final ArrayList<Consumer<IReadOnlyList<T>>> subscribers;
 
 	public ObservableList() {
-		subscribers = new ArrayList<Consumer<List<T>>>();
-		list = new ArrayList<T>();
+		subscribers = new ArrayList<>();
+		list = new ArrayListImplementingReadOnlyList<>();
 	}
 
 	@Override
-	public Subscription subscribe(Consumer<List<T>> subscriber) {
+	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
 		subscribers.add(subscriber);
 		return new Subscription(this, subscriber);
 	}
 
 	@Override
-	public void unsubscribe(Consumer<List<T>> subscriber) {
+	public void unsubscribe(Consumer<IReadOnlyList<T>> subscriber) {
 		subscribers.remove(subscriber);
 	}
 
-	public void add(T element) {
+	public boolean add(T element) {
 		list.add(element);
 		notifySubscribers();
+		return true;
 	}
 
 	public void remove(T element) {
@@ -41,12 +41,18 @@ public class ObservableList<T> implements IObservable<List<T>> {
 		notifySubscribers();
 	}
 
-	public List<T> get() {
+	public void setFromList(IReadOnlyList<T> otherList) {
+		list.clear();
+		otherList.forEach(list::add);
+		notifySubscribers();
+	}
+
+	public IReadOnlyList<T> get() {
 		return list;
 	}
 
 	private void notifySubscribers() {
-		for (Consumer<List<T>> subscriber : subscribers) {
+		for (Consumer<IReadOnlyList<T>> subscriber : subscribers) {
 			subscriber.accept(list);
 		}
 	}

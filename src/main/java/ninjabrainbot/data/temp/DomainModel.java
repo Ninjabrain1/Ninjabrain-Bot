@@ -9,10 +9,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DomainModel implements IWriteLock {
 
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-	private final ArrayList<DataComponent<?>> dataComponents = new ArrayList<>();
+	private final ArrayList<IDataComponent<?>> dataComponents = new ArrayList<>();
 
-
-	public void registerDataComponent(DataComponent<?> dataComponent) {
+	public void registerDataComponent(IDataComponent<?> dataComponent) {
 		dataComponents.add(dataComponent);
 	}
 

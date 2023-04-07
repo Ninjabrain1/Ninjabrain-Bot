@@ -8,6 +8,6 @@ package ninjabrainbot.event;
  */
 public interface IObservable<T> extends ISubscribable<T> {
 
-	public T get();
+	T get();
 
 }

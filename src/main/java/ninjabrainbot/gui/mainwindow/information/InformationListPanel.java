@@ -8,6 +8,8 @@ import javax.swing.SwingUtilities;
 
 import ninjabrainbot.data.information.InformationMessage;
 import ninjabrainbot.data.information.InformationMessageList;
+import ninjabrainbot.event.ArrayListImplementingReadOnlyList;
+import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
@@ -31,13 +33,14 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 		informationMessageList.subscribe(this::onInformationMessageListChanged);
 	}
 
-	private void onInformationMessageListChanged(List<InformationMessage> informationMessages) {
+	private void onInformationMessageListChanged(IReadOnlyList<InformationMessage> informationMessages) {
 		// avoid concurrent modification when messages are synchronized on the UI thread later by copying the list
-		List<InformationMessage> informationMessagesCopy = new ArrayList<>(informationMessages);
+		ArrayListImplementingReadOnlyList<InformationMessage> informationMessagesCopy = new ArrayListImplementingReadOnlyList<>();
+		informationMessages.forEach(informationMessagesCopy::add);
 		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessagesCopy));
 	}
 
-	private void synchronizeInformationMessages(List<InformationMessage> informationMessages) {
+	private void synchronizeInformationMessages(IReadOnlyList<InformationMessage> informationMessages) {
 		for (InformationTextPanel informationTextPanel : cachedInformationTextPanels) {
 			informationTextPanel.setVisible(false);
 		}
