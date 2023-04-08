@@ -4,6 +4,8 @@ import ninjabrainbot.data.calculator.statistics.IRay;
 
 public interface IThrow extends IRay {
 
+	IThrow withCorrection(double correction);
+
 	double xInPlayerDimension();
 
 	double zInPlayerDimension();

@@ -1,8 +1,12 @@
 package ninjabrainbot.data.input;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.actions.ChangeLastAngleAction;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.ResetAction;
+import ninjabrainbot.data.actions.ToggleEnteringBoatAction;
+import ninjabrainbot.data.actions.ToggleLockedAction;
+import ninjabrainbot.data.actions.UndoAction;
 import ninjabrainbot.data.temp.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -24,17 +28,22 @@ public class HotkeyInputHandler implements IDisposable {
 		this.actionExecutor = actionExecutor;
 
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
-//		preferences.hotkeyUndo.whenTriggered().subscribe(__ -> dataStateHandler.undoIfNotLocked());
-//		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(true, preferences));
-//		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> dataStateHandler.changeLastAngleIfNotLocked(false, preferences));
+		preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked);
+		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, true)));
+		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, false)));
 //		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
-//		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> dataStateHandler.toggleEnteringBoatIfNotLocked());
-//		preferences.hotkeyLock.whenTriggered().subscribe(__ -> dataStateHandler.toggleLocked());
+		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState)));
+		preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState)));
 	}
 
 	private void resetIfNotLocked() {
 		if (!dataState.locked().get())
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
+	}
+
+	private void undoIfNotLocked() {
+		if (!dataState.locked().get())
+			actionExecutor.executeImmediately(new UndoAction(domainModel));
 	}
 
 	@Override

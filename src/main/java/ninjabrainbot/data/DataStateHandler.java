@@ -68,45 +68,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	}
 
 	@Override
-	public synchronized void undo() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			lock.setUndoAction();
-//			dataState.setFromUndoData(dataStateUndoHistory.moveToPrevious());
-//		}
-	}
-
-	@Override
-	public synchronized void undoIfNotLocked() {
-//		if (!dataState.locked().get())
-//			undo();
-	}
-
-	@Override
-	public synchronized void removeThrow(IThrow t) {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			dataState.getThrowSet().remove(t);
-//		}
-	}
-
-	@Override
-	public synchronized void resetDivineContext() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			dataState.getDivineContext().resetFossil();
-//		}
-	}
-
-	public synchronized void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
-//		if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-//			IThrow last = dataState.getThrowSet().getLast();
-//			if (last != null) {
-//				try (ILock lock = modificationLock.acquireWritePermission()) {
-//					last.addCorrection(positive, preferences);
-//				}
-//			}
-//		}
-	}
-
-	@Override
 	public synchronized void toggleAltStdOnLastThrowIfNotLocked() {
 //		try (ILock lock = modificationLock.acquireWritePermission()) {
 //			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
@@ -129,14 +90,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	public synchronized void toggleLocked() {
 //		try (ILock lock = modificationLock.acquireWritePermission()) {
 //			dataState.toggleLocked();
-//		}
-	}
-
-	public synchronized void toggleEnteringBoatIfNotLocked() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			if (!dataState.locked().get()) {
-//				dataState.boatDataState.toggleEnteringBoat();
-//			}
 //		}
 	}
 

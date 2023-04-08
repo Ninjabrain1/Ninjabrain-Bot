@@ -44,6 +44,7 @@ public class Throw implements IThrow {
 		std = stdProfile.getStd(stdProfileNumber);
 	}
 
+	@Override
 	public IThrow withCorrection(double correction) {
 		return new Throw(x, y, z, rawAlpha, alpha_0, beta, nether, correction, throwType, stdProfile);
 	}
@@ -132,18 +133,6 @@ public class Throw implements IThrow {
 	public double getStd() {
 		return std;
 	}
-
-//	@Override
-//	public void addCorrection(boolean positive, NinjabrainBotPreferences preferences) {
-//		double change = 0.01;
-//		if (preferences.useTallRes.get()) {
-//			final double toRad = Math.PI / 180.0;
-//			change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
-//		}
-//		change *= positive ? 1 : -1;
-//		correction += change;
-//		notifySubscribers(this);
-//	}
 
 //	private void updateStd() {
 //		if (stdProfile == null)

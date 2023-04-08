@@ -39,6 +39,13 @@ public class ListComponent<T> implements IListComponent<T> {
 	}
 
 	@Override
+	public void replace(T oldElement, T newElement) {
+		if (domainModel != null)
+			domainModel.notifyDataComponentToBeModified();
+		observableList.replace(oldElement, newElement);
+	}
+
+	@Override
 	public void remove(T t) {
 		if (domainModel != null)
 			domainModel.notifyDataComponentToBeModified();

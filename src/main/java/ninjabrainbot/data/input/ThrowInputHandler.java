@@ -1,7 +1,7 @@
 package ninjabrainbot.data.input;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.actions.AddThrowForTriangulationAction;
+import ninjabrainbot.data.actions.AddTriangulationThrowAction;
 import ninjabrainbot.data.actions.IAction;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.SetAllAdvancementsStructurePositionAction;
@@ -59,7 +59,7 @@ public class ThrowInputHandler implements IDisposable {
 		if (t.lookingBelowHorizon())
 			return null;
 
-		return new AddThrowForTriangulationAction(dataState, t);
+		return new AddTriangulationThrowAction(dataState, t);
 	}
 
 	private IAction createSetAllAdvancementsStructurePositionAction(IThrow t) {

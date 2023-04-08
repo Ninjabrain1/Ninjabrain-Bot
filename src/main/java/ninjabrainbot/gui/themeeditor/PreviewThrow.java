@@ -32,6 +32,12 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
+	public IThrow withCorrection(double correction) {
+		this.correction = correction;
+		return this;
+	}
+
+	@Override
 	public double xInPlayerDimension() {
 		return x;
 	}

@@ -32,22 +32,6 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void undo() {
-	}
-
-	@Override
-	public void undoIfNotLocked() {
-	}
-
-	@Override
-	public void removeThrow(IThrow t) {
-	}
-
-	@Override
-	public void resetDivineContext() {
-	}
-
-	@Override
 	public void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
 	}
 

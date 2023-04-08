@@ -9,14 +9,6 @@ public interface IDataStateHandler {
 
 	IDataState getDataState();
 
-	void undo();
-
-	void undoIfNotLocked();
-
-	void removeThrow(IThrow t);
-
-	void resetDivineContext();
-
 	void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences);
 
 	void toggleAltStdOnLastThrowIfNotLocked();

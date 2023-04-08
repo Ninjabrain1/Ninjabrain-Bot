@@ -10,10 +10,24 @@ import ninjabrainbot.event.IReadOnlyList;
  */
 public interface IListComponent<T> extends IDataComponent<IReadOnlyList<T>>, IObservableList<T>, IReadOnlyList<T> {
 
-	boolean add(T t);
+	/**
+	 * Adds the element to the end of the list.
+	 */
+	boolean add(T element);
 
-	void remove(T t);
+	/**
+	 * Replaces the old element in the list with the new element.
+	 */
+	void replace(T oldElement, T newElement);
 
+	/**
+	 * Removes the element from the list.
+	 */
+	void remove(T element);
+
+	/**
+	 * Returns the maximum amount of elements the list can contain.
+	 */
 	int maxCapacity();
 
 }
