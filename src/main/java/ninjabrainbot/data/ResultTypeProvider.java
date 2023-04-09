@@ -47,7 +47,7 @@ public class ResultTypeProvider implements IDisposable {
 		if (calculatorResult.get() != null)
 			return ResultType.FAILED;
 
-		if (playerPosition.get() != null && playerPosition.get().isNether())
+		if (playerPosition.get() != null && playerPosition.get().isInNether())
 			return ResultType.BLIND;
 
 		if (fossil.get() != null)

@@ -7,10 +7,9 @@ import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.SetAllAdvancementsStructurePositionAction;
 import ninjabrainbot.data.actions.SetBoatAngleAction;
 import ninjabrainbot.data.actions.SetPlayerPositionAction;
-import ninjabrainbot.data.calculator.alladvancements.StructureType;
-import ninjabrainbot.data.calculator.common.ILimitedPlayerPosition;
+import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.common.StructurePosition;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.data.calculator.endereye.IPlayerPositionInputSource;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -24,20 +23,22 @@ public class PlayerPositionInputHandler implements IDisposable {
 	private final IDataState dataState;
 	private final IActionExecutor actionExecutor;
 	private final NinjabrainBotPreferences preferences;
+	private final IEnderEyeThrowFactory enderEyeThrowFactory;
 
 	DisposeHandler disposeHandler = new DisposeHandler();
 
-	public PlayerPositionInputHandler(IPlayerPositionInputSource playerPositionInputSource, IDataState dataState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
+	public PlayerPositionInputHandler(IPlayerPositionInputSource playerPositionInputSource, IDataState dataState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences, IEnderEyeThrowFactory enderEyeThrowFactory) {
 		this.dataState = dataState;
 		this.actionExecutor = actionExecutor;
 		this.preferences = preferences;
-		disposeHandler.add(playerPositionInputSource.whenNewPlayerPositionInputted().subscribe(this::onNewPlayerPositionInputted));
+		this.enderEyeThrowFactory = enderEyeThrowFactory;
+		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewDetailedPlayerPositionInputted));
 		disposeHandler.add(playerPositionInputSource.whenNewLimitedPlayerPositionInputted().subscribe(this::onNewLimitedPlayerPositionInputted));
 	}
 
-	private void onNewPlayerPositionInputted(IPlayerPosition playerPosition) {
-		IAction setPlayerPositionAction = new SetPlayerPositionAction(dataState, playerPosition);
-		IAction actionForNewThrow = getActionForInputtedPlayerPosition(playerPosition);
+	private void onNewDetailedPlayerPositionInputted(IDetailedPlayerPosition detailedPlayerPosition) {
+		IAction setPlayerPositionAction = new SetPlayerPositionAction(dataState, detailedPlayerPosition);
+		IAction actionForNewThrow = getActionForInputtedPlayerPosition(detailedPlayerPosition);
 		if (actionForNewThrow == null) {
 			actionExecutor.executeImmediately(setPlayerPositionAction);
 			return;
@@ -45,17 +46,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 		actionExecutor.executeImmediately(setPlayerPositionAction, actionForNewThrow);
 	}
 
-	private void onNewLimitedPlayerPositionInputted(ILimitedPlayerPosition limitedPlayerPosition) {
-		IAction setPlayerPositionAction = new SetPlayerPositionAction(dataState, limitedPlayerPosition);
-		IAction actionForNewThrow = getActionForInputtedPlayerPosition(limitedPlayerPosition);
-		if (actionForNewThrow == null) {
-			actionExecutor.executeImmediately(setPlayerPositionAction);
-			return;
-		}
-		actionExecutor.executeImmediately(setPlayerPositionAction, actionForNewThrow);
-	}
-
-	private IAction getActionForInputtedPlayerPosition(IPlayerPosition playerPosition) {
+	private IAction getActionForInputtedPlayerPosition(IDetailedPlayerPosition playerPosition) {
 		if (dataState.locked().get())
 			return null;
 
@@ -63,7 +54,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 			return null;
 
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
-			return createSetAllAdvancementsStructurePositionAction(playerPosition);
+			return new SetAllAdvancementsStructurePositionAction(dataState, playerPosition);
 
 		if (dataState.boatDataState().enteringBoat().get())
 			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
@@ -71,42 +62,27 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (playerPosition.lookingBelowHorizon())
 			return null;
 
-		return new AddEnderEyeThrowAction(dataState, playerPosition);
+		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromDetailedPlayerPosition(playerPosition));
 	}
 
-	private IAction createSetAllAdvancementsStructurePositionAction(IPlayerPosition playerPosition) {
-		StructureType structureType = getAllAdvancementStructureTypeFromPlayerPosition(playerPosition);
-		if (structureType == StructureType.Unknown)
+	private void onNewLimitedPlayerPositionInputted(IPlayerPosition playerPosition) {
+		IAction setPlayerPositionAction = new SetPlayerPositionAction(dataState, playerPosition);
+		IAction actionForNewThrow = getActionForInputtedLimitedPlayerPosition(playerPosition);
+		if (actionForNewThrow == null) {
+			actionExecutor.executeImmediately(setPlayerPositionAction);
+			return;
+		}
+		actionExecutor.executeImmediately(setPlayerPositionAction, actionForNewThrow);
+	}
+
+	private IAction getActionForInputtedLimitedPlayerPosition(IPlayerPosition playerPosition) {
+		if (dataState.locked().get())
 			return null;
-		StructurePosition structurePosition =
-				structureType == StructureType.Outpost
-						? getOutpostPosition(playerPosition)
-						: new StructurePosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()), dataState.playerPosition());
-		return new SetAllAdvancementsStructurePositionAction(dataState.allAdvancementsDataState(), structureType, structurePosition);
-	}
 
-	private StructureType getAllAdvancementStructureTypeFromPlayerPosition(IPlayerPosition t) {
-		if (t.isNether())
-			return StructureType.Unknown;
+		if (!playerPosition.isInOverworld())
+			return null;
 
-		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300)
-			return StructureType.Spawn;
-
-		if (t.yInPlayerDimension() < 63)
-			return StructureType.Monument;
-
-		return StructureType.Outpost;
-	}
-
-	private StructurePosition getOutpostPosition(IPlayerPosition t) {
-		int averageOutpostY = 80;
-		double deltaY = averageOutpostY - t.yInPlayerDimension();
-		double horizontalDistance = deltaY / Math.tan(-t.beta() * Math.PI / 180.0);
-		double deltaX = horizontalDistance * Math.sin(-t.horizontalAngle() * Math.PI / 180.0);
-		double deltaZ = horizontalDistance * Math.cos(t.horizontalAngle() * Math.PI / 180.0);
-		deltaX = Math.max(Math.min(deltaX, 350), -350);
-		deltaZ = Math.max(Math.min(deltaZ, 350), -350);
-		return new StructurePosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ), dataState.playerPosition());
+		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition));
 	}
 
 	@Override

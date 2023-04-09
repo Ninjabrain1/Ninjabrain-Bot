@@ -8,7 +8,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.common.IOverworldPosition;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.data.temp.IListComponent;
@@ -16,7 +16,7 @@ import ninjabrainbot.data.temp.ListComponent;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Logger;
-import ninjabrainbot.util.TestThrow;
+import ninjabrainbot.util.TestEnderEyeThrow;
 
 public class OneEyeAccuracySimulation {
 
@@ -41,12 +41,12 @@ public class OneEyeAccuracySimulation {
 				double x = r * Math.sin(phi);
 				double z = r * Math.cos(phi);
 
-				IThrow position = new TestThrow(x, z, 0, std);
+				IEnderEyeThrow position = new TestEnderEyeThrow(x, z, 0, std);
 				Chunk closestStronghold = getClosestStronghold(sampleThreeStrongholdsFirstRing(), position);
 
 				double phiToStronghold = -closestStronghold.getAngleError(McVersion.PRE_119, position);
 				double sampledError = (random.nextDouble() - random.nextDouble()) * 0.01;
-				IThrow eyeThrow = new TestThrow(x, z, phiToStronghold + sampledError, std);
+				IEnderEyeThrow eyeThrow = new TestEnderEyeThrow(x, z, phiToStronghold + sampledError, std);
 
 				ICalculatorResult calculatorResult = calculateOneEye(eyeThrow);
 				total += 1;
@@ -57,10 +57,10 @@ public class OneEyeAccuracySimulation {
 		}
 	}
 
-	private static ICalculatorResult calculateOneEye(IThrow eyeThrow) {
-		IListComponent<IThrow> throwSet = new ListComponent<>(null, 10);
+	private static ICalculatorResult calculateOneEye(IEnderEyeThrow eyeThrow) {
+		IListComponent<IEnderEyeThrow> throwSet = new ListComponent<>(null, 10);
 		throwSet.add(eyeThrow);
-		return calculator.triangulate(throwSet, new ObservableField<>(eyeThrow), divineContext);
+		return calculator.triangulate(throwSet, new ObservableField<>(eyeThrow.getPlayerPosition()), divineContext);
 	}
 
 	private static Chunk[] sampleThreeStrongholdsFirstRing() {

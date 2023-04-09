@@ -1,6 +1,9 @@
 package ninjabrainbot.data.calculator.common;
 
-public class LimitedPlayerPosition implements ILimitedPlayerPosition {
+/**
+ * Limited player position information, for pre 1.12 where coordinates are inputted manually.
+ */
+public class LimitedPlayerPosition implements IPlayerPosition {
 
 	private final double x, z, horizontalAngle;
 
@@ -25,4 +28,23 @@ public class LimitedPlayerPosition implements ILimitedPlayerPosition {
 		return horizontalAngle;
 	}
 
+	@Override
+	public double xInPlayerDimension() {
+		return x;
+	}
+
+	@Override
+	public double zInPlayerDimension() {
+		return z;
+	}
+
+	@Override
+	public boolean isInOverworld() {
+		return true;
+	}
+
+	@Override
+	public boolean isInNether() {
+		return false;
+	}
 }

@@ -1,16 +1,14 @@
 package ninjabrainbot.data.calculator.endereye;
 
-import ninjabrainbot.data.calculator.common.ILimitedPlayerPosition;
-import ninjabrainbot.data.calculator.common.IOverworldPosition;
+import ninjabrainbot.data.calculator.common.DetailedPlayerPosition;
+import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.common.PlayerPosition;
+import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.input.IFossilInputSource;
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.IClipboardProvider;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
@@ -18,20 +16,12 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class CoordinateInputParser implements IPlayerPositionInputSource, IFossilInputSource {
 
-	private final NinjabrainBotPreferences preferences;
-	private final IStdProfile stdProfile;
-	private final IObservable<Float> boatAngle;
-
-	private final ObservableField<IPlayerPosition> whenNewPlayerPositionInputted;
-	private final ObservableField<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted;
+	private final ObservableField<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
+	private final ObservableField<IPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	private final ObservableField<Fossil> whenNewFossilInputted;
 
-	public CoordinateInputParser(IClipboardProvider clipboardProvider, NinjabrainBotPreferences preferences, IStdProfile stdProfile, IObservable<Float> boatAngle) {
-		this.preferences = preferences;
-		this.stdProfile = stdProfile;
-		this.boatAngle = boatAngle;
-
-		whenNewPlayerPositionInputted = new ObservableField<>(null, true);
+	public CoordinateInputParser(IClipboardProvider clipboardProvider) {
+		whenNewDetailedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewLimitedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewFossilInputted = new ObservableField<>(null, true);
 
@@ -44,13 +34,13 @@ public class CoordinateInputParser implements IPlayerPositionInputSource, IFossi
 
 		F3CData f3cData = F3CData.tryParseF3CString(f3c);
 		if (f3cData != null) {
-			whenNewPlayerPositionInputted.set(new PlayerPosition(f3cData.x, f3cData.y, f3cData.z, f3cData.horizontalAngle, f3cData.verticalAngle, f3cData.nether));
+			whenNewDetailedPlayerPositionInputted.set(new DetailedPlayerPosition(f3cData.x, f3cData.y, f3cData.z, f3cData.horizontalAngle, f3cData.verticalAngle, f3cData.nether));
 			return;
 		}
 
 		InputData1_12 data1_12 = InputData1_12.parseInputString(f3c);
 		if (data1_12 != null) {
-			whenNewPlayerPositionInputted.set(new PlayerPosition(data1_12.x, 80, data1_12.z, data1_12.horizontalAngle, -31, false));
+			whenNewLimitedPlayerPositionInputted.set(new LimitedPlayerPosition(data1_12.x, data1_12.z, data1_12.horizontalAngle));
 			return;
 		}
 
@@ -60,11 +50,11 @@ public class CoordinateInputParser implements IPlayerPositionInputSource, IFossi
 		}
 	}
 
-	public ISubscribable<IPlayerPosition> whenNewPlayerPositionInputted() {
-		return whenNewPlayerPositionInputted;
+	public ISubscribable<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted() {
+		return whenNewDetailedPlayerPositionInputted;
 	}
 
-	public ISubscribable<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted() {
+	public ISubscribable<IPlayerPosition> whenNewLimitedPlayerPositionInputted() {
 		return whenNewLimitedPlayerPositionInputted;
 	}
 

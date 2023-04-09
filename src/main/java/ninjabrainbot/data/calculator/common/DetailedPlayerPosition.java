@@ -1,11 +1,11 @@
 package ninjabrainbot.data.calculator.common;
 
-public class PlayerPosition implements IPlayerPosition {
+public class DetailedPlayerPosition implements IDetailedPlayerPosition {
 
 	private final double x, y, z, horizontalAngle, verticalAngle;
 	private final boolean isInNether;
 
-	public PlayerPosition(double x, double y, double z, double horizontalAngle, double verticalAngle, boolean isInNether) {
+	public DetailedPlayerPosition(double x, double y, double z, double horizontalAngle, double verticalAngle, boolean isInNether) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -45,7 +45,7 @@ public class PlayerPosition implements IPlayerPosition {
 	}
 
 	@Override
-	public double beta() {
+	public double verticalAngle() {
 		return verticalAngle;
 	}
 
@@ -60,7 +60,7 @@ public class PlayerPosition implements IPlayerPosition {
 	}
 
 	@Override
-	public boolean isNether() {
+	public boolean isInNether() {
 		return isInNether;
 	}
 

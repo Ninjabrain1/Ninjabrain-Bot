@@ -1,7 +1,7 @@
 package ninjabrainbot.data.actions;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.temp.IListComponent;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
@@ -22,13 +22,13 @@ public class ChangeLastAngleAction implements IAction {
 		if (dataState.locked().get())
 			return;
 
-		IListComponent<IThrow> throwList = dataState.getThrowSet();
+		IListComponent<IEnderEyeThrow> throwList = dataState.getThrowSet();
 		if (throwList.size() == 0)
 			return;
 
-		IThrow lastThrow = throwList.get(throwList.size() - 1);
-		double newCorrection = lastThrow.correction() + getAngleCorrectionAmountInDegrees(lastThrow.beta());
-		IThrow newThrow = lastThrow.withCorrection(newCorrection);
+		IEnderEyeThrow lastThrow = throwList.get(throwList.size() - 1);
+		double newCorrection = lastThrow.correction() + getAngleCorrectionAmountInDegrees(lastThrow.verticalAngle());
+		IEnderEyeThrow newThrow = lastThrow.withCorrection(newCorrection);
 
 		throwList.replace(lastThrow, newThrow);
 	}

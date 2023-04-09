@@ -5,11 +5,9 @@ import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.calculator.stronghold.TopPredictionProvider;
-import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.datalock.LockableField;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -20,7 +18,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private ICalculator calculator;
 
-	private final IObservableList<IThrow> throwSet;
+	private final IObservableList<IEnderEyeThrow> throwSet;
 	private final IObservable<IPlayerPosition> playerPosition;
 	private final IDivineContext divineContext;
 
@@ -32,7 +30,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(ICalculator calculator, IObservableList<IThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
+	public CalculatorManager(ICalculator calculator, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
 		this.calculator = calculator;
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;
@@ -72,7 +70,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	}
 
 	private void updateBlindResult() {
-		if (throwSet.get().size() > 0 || playerPosition.get() == null || !playerPosition.get().isNether()) {
+		if (throwSet.get().size() > 0 || playerPosition.get() == null || !playerPosition.get().isInNether()) {
 			blindResult.set(null);
 			return;
 		}
@@ -80,7 +78,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	}
 
 	private void updateDivineResult() {
-		if (throwSet.get().size() > 0 || (playerPosition.get() != null && playerPosition.get().isNether())) {
+		if (throwSet.get().size() > 0 || (playerPosition.get() != null && playerPosition.get().isInNether())) {
 			divineResult.set(null);
 			return;
 		}

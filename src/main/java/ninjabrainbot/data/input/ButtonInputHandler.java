@@ -6,7 +6,7 @@ import ninjabrainbot.data.actions.RemoveTriangulationThrowAction;
 import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.SetFossilAction;
 import ninjabrainbot.data.actions.UndoAction;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.temp.IDomainModel;
 
 public class ButtonInputHandler implements IButtonInputHandler {
@@ -37,7 +37,7 @@ public class ButtonInputHandler implements IButtonInputHandler {
 	}
 
 	@Override
-	public void onRemoveThrowButtonPressed(IThrow throwToRemove) {
+	public void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove) {
 		actionExecutor.executeImmediately(new RemoveTriangulationThrowAction(dataState, throwToRemove));
 	}
 

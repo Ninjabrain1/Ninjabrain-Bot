@@ -1,6 +1,6 @@
 package ninjabrainbot.data.input;
 
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 
 public interface IButtonInputHandler {
 
@@ -10,6 +10,6 @@ public interface IButtonInputHandler {
 
 	void onRemoveFossilButtonPressed();
 
-	void onRemoveThrowButtonPressed(IThrow throwToRemove);
+	void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove);
 
 }

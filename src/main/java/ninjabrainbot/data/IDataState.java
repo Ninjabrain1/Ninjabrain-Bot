@@ -6,7 +6,7 @@ import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.temp.IDataComponent;
@@ -21,7 +21,7 @@ public interface IDataState {
 
 	IDivineContext getDivineContext();
 
-	IListComponent<IThrow> getThrowSet();
+	IListComponent<IEnderEyeThrow> getThrowSet();
 
 	IDataComponent<IPlayerPosition> playerPosition();
 

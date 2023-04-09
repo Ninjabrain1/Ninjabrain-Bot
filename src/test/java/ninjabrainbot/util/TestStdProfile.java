@@ -1,7 +1,7 @@
 package ninjabrainbot.util;
 
 import ninjabrainbot.data.calculator.endereye.IStdProfile;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 
@@ -24,7 +24,7 @@ public class TestStdProfile implements IStdProfile {
 	}
 
 	@Override
-	public int getInitialProfileNumber(IThrow t) {
+	public int getInitialProfileNumber(IEnderEyeThrow t) {
 		return 0;
 	}
 

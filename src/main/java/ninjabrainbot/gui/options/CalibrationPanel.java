@@ -19,8 +19,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.calculator.calibrator.Calibrator;
-import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
@@ -189,7 +189,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		}
 	}
 
-	public void add(Throw t) throws InterruptedException {
+	public void add(EnderEyeThrow t) throws InterruptedException {
 		calibrator.add(t);
 		int stage = 0;
 		if (calibrator.isReady()) {
@@ -219,9 +219,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			std.setText(String.format("%.4f", calibrator.getSTD(preferences.mcVersion.get())));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
-			IReadOnlyList<IThrow> eyeThrows = calibrator.getThrows();
+			IReadOnlyList<IEnderEyeThrow> eyeThrows = calibrator.getThrows();
 			for (int i = 0; i < angleErrors.length; i++) {
-				IThrow t = eyeThrows.get(i);
+				IEnderEyeThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
 				if (Math.abs(t.correction()) > 1e-7) {
 					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.3f %.3f\n" : ": %.3f +%.3f\n"), t.horizontalAngle() - t.correction(), t.correction()));
@@ -234,8 +234,8 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			hist.setData(angleErrors);
 		} else {
 			StringBuilder b = new StringBuilder();
-			IReadOnlyList<IThrow> eyeThrows = calibrator.getThrows();
-			for (IThrow t : eyeThrows) {
+			IReadOnlyList<IEnderEyeThrow> eyeThrows = calibrator.getThrows();
+			for (IEnderEyeThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
 					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.horizontalAngle() - t.correction(), t.correction()));
 				} else {

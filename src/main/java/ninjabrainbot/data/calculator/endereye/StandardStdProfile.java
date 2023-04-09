@@ -34,7 +34,7 @@ public class StandardStdProfile extends Modifiable<IStdProfile> implements IStdP
 	}
 
 	@Override
-	public int getInitialProfileNumber(IThrow t) {
+	public int getInitialProfileNumber(IEnderEyeThrow t) {
 		return t.isMcVersion1_12() ? MANUAL : t.isBoatThrow() ? BOAT : NORMAL;
 	}
 

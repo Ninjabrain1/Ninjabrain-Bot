@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
 import ninjabrainbot.data.calculator.endereye.ThrowType;
 import ninjabrainbot.data.calculator.common.IOverworldRay;
 import ninjabrainbot.gui.style.SizePreference;
@@ -33,28 +33,28 @@ public class TestUtils {
 		};
 	}
 
-	public static IThrow createThrow(double x, double z, double alpha) {
+	public static IEnderEyeThrow createThrow(double x, double z, double alpha) {
 		return createThrow(x, z, alpha, 0.03);
 	}
 
-	public static IThrow createThrow(double x, double z, double alpha, double std) {
-		return new Throw(x, 80, z, alpha, -31, false, ThrowType.Normal, new TestStdProfile(std));
+	public static IEnderEyeThrow createThrow(double x, double z, double alpha, double std) {
+		return new EnderEyeThrow(x, z, alpha, -31, ThrowType.Normal, new TestStdProfile(std));
 	}
 
-	public static IThrow createThrowLookDown(double x, double z, double alpha) {
+	public static IEnderEyeThrow createThrowLookDown(double x, double z, double alpha) {
 		return createThrowLookDown(x, z, alpha, 0.03);
 	}
 
-	public static IThrow createThrowLookDown(double x, double z, double alpha, double std) {
-		return new Throw(x, 80, z, alpha, 31, false, ThrowType.Normal, new TestStdProfile(std));
+	public static IEnderEyeThrow createThrowLookDown(double x, double z, double alpha, double std) {
+		return new EnderEyeThrow(x, z, alpha, 31, ThrowType.Normal, new TestStdProfile(std));
 	}
 
-	public static IThrow createThrowNether(double x, double z, double alpha) {
+	public static IEnderEyeThrow createThrowNether(double x, double z, double alpha) {
 		return createThrowNether(x, z, alpha, 0.03);
 	}
 
-	public static IThrow createThrowNether(double x, double z, double alpha, double std) {
-		return new Throw(x, 80, z, alpha, -31, true, ThrowType.Normal, new TestStdProfile(std));
+	public static IEnderEyeThrow createThrowNether(double x, double z, double alpha, double std) {
+		return new EnderEyeThrow(x, z, alpha, -31, ThrowType.Normal, new TestStdProfile(std));
 	}
 
 	public static StyleManager createStyleManager() {

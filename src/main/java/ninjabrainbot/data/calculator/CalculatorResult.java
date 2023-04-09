@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.statistics.Posterior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
@@ -24,7 +24,7 @@ public class CalculatorResult implements ICalculatorResult {
 		topChunks = new ArrayList<>();
 	}
 
-	public CalculatorResult(Posterior posterior, IReadOnlyList<IThrow> eyeThrows, IObservable<IPlayerPosition> playerPosition, int numPredictions, McVersion version) {
+	public CalculatorResult(Posterior posterior, IReadOnlyList<IEnderEyeThrow> eyeThrows, IObservable<IPlayerPosition> playerPosition, int numPredictions, McVersion version) {
 		// Find chunk with the largest posterior probability
 		Chunk predictedChunk = posterior.getMostProbableChunk();
 		bestPrediction = new ChunkPrediction(predictedChunk, playerPosition, version);

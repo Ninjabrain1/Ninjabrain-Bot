@@ -32,27 +32,12 @@ public class PreviewPlayerPosition implements IPlayerPosition {
 	}
 
 	@Override
-	public double yInPlayerDimension() {
-		return 0;
-	}
-
-	@Override
-	public double beta() {
-		return 0;
-	}
-
-	@Override
-	public boolean lookingBelowHorizon() {
-		return false;
-	}
-
-	@Override
 	public boolean isInOverworld() {
 		return true;
 	}
 
 	@Override
-	public boolean isNether() {
+	public boolean isInNether() {
 		return false;
 	}
 

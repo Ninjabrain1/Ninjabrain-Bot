@@ -1,20 +1,22 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 
-public class PreviewThrow implements IThrow {
+public class PreviewEnderEyeThrow implements IEnderEyeThrow {
 
-	private final ISubscribable<IThrow> whenModified = new ObservableProperty<>();
+	private final ISubscribable<IEnderEyeThrow> whenModified = new ObservableProperty<>();
 
 	double x, z, alpha, correction;
 
-	public PreviewThrow(double x, double z) {
+	public PreviewEnderEyeThrow(double x, double z) {
 		this(x, z, 0, 0);
 	}
 
-	public PreviewThrow(double x, double z, double alpha, double correction) {
+	public PreviewEnderEyeThrow(double x, double z, double alpha, double correction) {
 		this.x = x;
 		this.z = z;
 		this.alpha = alpha;
@@ -32,7 +34,12 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public IThrow withCorrection(double correction) {
+	public double verticalAngle() {
+		return 0;
+	}
+
+	@Override
+	public IEnderEyeThrow withCorrection(double correction) {
 		this.correction = correction;
 		return this;
 	}
@@ -48,7 +55,7 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public double alphaWithoutCorrection() {
+	public double horizontalAngleWithoutCorrection() {
 		return alpha;
 	}
 
@@ -70,6 +77,11 @@ public class PreviewThrow implements IThrow {
 	@Override
 	public boolean isBoatThrow() {
 		return false;
+	}
+
+	@Override
+	public IPlayerPosition getPlayerPosition() {
+		return new LimitedPlayerPosition(x, z, horizontalAngle());
 	}
 
 }

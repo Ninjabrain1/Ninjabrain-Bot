@@ -3,7 +3,7 @@ package ninjabrainbot.data.calculator.stronghold;
 import java.util.Objects;
 
 import ninjabrainbot.data.calculator.common.IOverworldPosition;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
@@ -94,7 +94,7 @@ public class Chunk {
 		return (int) Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 	}
 
-	public double[] getAngleErrors(McVersion version, IReadOnlyList<IThrow> eyeThrows) {
+	public double[] getAngleErrors(McVersion version, IReadOnlyList<IEnderEyeThrow> eyeThrows) {
 		double[] errors = new double[eyeThrows.size()];
 		for (int i = 0; i < errors.length; i++) {
 			errors[i] = getAngleError(version, eyeThrows.get(i));
@@ -102,7 +102,7 @@ public class Chunk {
 		return errors;
 	}
 
-	public double getAngleError(McVersion version, IThrow t) {
+	public double getAngleError(McVersion version, IEnderEyeThrow t) {
 		double deltaX = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInOverworld();
 		double deltaZ = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInOverworld();
 		double gamma = -180 / Math.PI * Math.atan2(deltaX, deltaZ);

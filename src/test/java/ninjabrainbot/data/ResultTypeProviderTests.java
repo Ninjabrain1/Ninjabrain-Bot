@@ -3,9 +3,7 @@ package ninjabrainbot.data;
 import ninjabrainbot.data.actions.ActionExecutor;
 import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IThrow;
-import ninjabrainbot.data.input.FossilInputHandler;
-import ninjabrainbot.data.input.PlayerPositionInputHandler;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -35,14 +33,15 @@ public class ResultTypeProviderTests {
 
 	@Test
 	void resultTypeUpdatesCorrectly() {
-		ObservableProperty<IThrow> throwStream = new ObservableProperty<>();
+		ObservableProperty<IEnderEyeThrow> throwStream = new ObservableProperty<>();
 		ObservableProperty<Fossil> fossilStream = new ObservableProperty<>();
 
 		DataStateHandler dataStateHandler = new DataStateHandler(preferences, new FakeClipboardProvider(), new FakeActiveInstanceProvider());
 
 		IDataState dataState = dataStateHandler.getDataState();
-		PlayerPositionInputHandler playerPositionInputHandler = new PlayerPositionInputHandler(throwStream, dataState, actionExecutor, preferences);
-		FossilInputHandler fossilInputHandler = new FossilInputHandler(fossilStream, dataState, actionExecutor);
+//		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), dataStateHandler.std)
+//		PlayerPositionInputHandler playerPositionInputHandler = new PlayerPositionInputHandler(throwStream, dataState, actionExecutor, preferences, enderEyeThrowFactory);
+//		FossilInputHandler fossilInputHandler = new FossilInputHandler(fossilStream, dataState, actionExecutor);
 
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 

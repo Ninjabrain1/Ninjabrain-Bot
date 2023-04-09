@@ -3,7 +3,7 @@ package ninjabrainbot.data.information;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
@@ -31,7 +31,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
 		double likelihood = 1;
 		double expectedLikelihood = 1;
-		for (IThrow t : dataState.getThrowSet()) {
+		for (IEnderEyeThrow t : dataState.getThrowSet()) {
 			double error = bestPrediction.getAngleError(t);
 			double sigma = t.getStd();
 			likelihood *= Math.exp(-0.5 * (error / sigma) * (error / sigma));

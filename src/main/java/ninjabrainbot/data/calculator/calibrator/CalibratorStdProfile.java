@@ -1,7 +1,7 @@
 package ninjabrainbot.data.calculator.calibrator;
 
 import ninjabrainbot.data.calculator.endereye.IStdProfile;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.Unmodifiable;
 
 public class CalibratorStdProfile extends Unmodifiable<IStdProfile> implements IStdProfile {
@@ -17,7 +17,7 @@ public class CalibratorStdProfile extends Unmodifiable<IStdProfile> implements I
 	}
 
 	@Override
-	public int getInitialProfileNumber(IThrow t) {
+	public int getInitialProfileNumber(IEnderEyeThrow t) {
 		return 0;
 	}
 

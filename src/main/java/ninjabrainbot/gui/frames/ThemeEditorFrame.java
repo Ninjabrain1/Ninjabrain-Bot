@@ -22,12 +22,11 @@ import javax.swing.border.EmptyBorder;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IStdProfile;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
-import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
 import ninjabrainbot.data.calculator.endereye.ThrowType;
 import ninjabrainbot.data.information.InformationMessageList;
-import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;
 import ninjabrainbot.gui.components.inputfields.ThemedTextField;
@@ -41,7 +40,6 @@ import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.gui.themeeditor.PreviewButtonInputHandler;
 import ninjabrainbot.gui.themeeditor.PreviewCalculatorResult;
-import ninjabrainbot.gui.themeeditor.PreviewDataState;
 import ninjabrainbot.gui.themeeditor.PreviewDataStateHandler;
 import ninjabrainbot.gui.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.themeeditor.panels.ColorPickerPanel;
@@ -169,10 +167,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		IStdProfile stdProfile = new StandardStdProfile(defaultPreferences);
-		ArrayList<IThrow> eyeThrows = new ArrayList<>();
+		ArrayList<IEnderEyeThrow> eyeThrows = new ArrayList<>();
 
-		IThrow t1 = new Throw(659.70, 85.00, 1950.30, -253.82, -31.75, false, ThrowType.NormalWithAltStd, stdProfile).withCorrection(0.01);
-		IThrow t2 = new Throw(-3.75, 66.00, 2002.63, -184.67, -31.75, false, ThrowType.McVersion1_12, stdProfile).withCorrection(-0.01);
+		IEnderEyeThrow t1 = new EnderEyeThrow(659.70, 1950.30, -253.82, -31.75, ThrowType.NormalWithAltStd, stdProfile).withCorrection(0.01);
+		IEnderEyeThrow t2 = new EnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, ThrowType.McVersion1_12, stdProfile).withCorrection(-0.01);
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

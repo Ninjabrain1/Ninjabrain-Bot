@@ -1,14 +1,14 @@
 package ninjabrainbot.data.actions;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 
 public class RemoveTriangulationThrowAction implements IAction {
 
 	private final IDataState dataState;
-	private final IThrow throwToRemove;
+	private final IEnderEyeThrow throwToRemove;
 
-	public RemoveTriangulationThrowAction(IDataState dataState, IThrow throwToRemove) {
+	public RemoveTriangulationThrowAction(IDataState dataState, IEnderEyeThrow throwToRemove) {
 		this.dataState = dataState;
 		this.throwToRemove = throwToRemove;
 	}

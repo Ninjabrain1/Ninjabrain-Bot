@@ -8,7 +8,7 @@ import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.common.IOverworldPosition;
 import ninjabrainbot.data.calculator.common.OverworldPosition;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Coords;
@@ -40,7 +40,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 
 	@Override
 	protected InformationMessage getInformationMessage() {
-		IThrow lastThrow = dataState.getThrowSet().getLast();
+		IEnderEyeThrow lastThrow = dataState.getThrowSet().getLast();
 		List<Chunk> predictions = new ArrayList<>();
 		for (Chunk predictedChunk : dataState.calculatorResult().get().getTopChunks()) {
 			if (predictedChunk.weight < 0.01)
@@ -54,7 +54,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		return new InformationMessage(InformationType.Info, I18n.get("information.go_left_x_block_or_right_y_blocks", leftDistance, rightDistance));
 	}
 
-	private double binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(List<Chunk> predictions, IThrow lastThrow, double phiSideways) {
+	private double binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(List<Chunk> predictions, IEnderEyeThrow lastThrow, double phiSideways) {
 		double lowestPossibleCertainty = 0;
 		double sidewaysDistance = 0;
 		double sidewaysDistanceIncrement = 5.0;

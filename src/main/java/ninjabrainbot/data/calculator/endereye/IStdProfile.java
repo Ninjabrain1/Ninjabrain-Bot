@@ -8,6 +8,6 @@ public interface IStdProfile extends IModifiable<IStdProfile> {
 
 	public int getNumberOfProfiles();
 
-	public int getInitialProfileNumber(IThrow t);
+	public int getInitialProfileNumber(IEnderEyeThrow t);
 
 }

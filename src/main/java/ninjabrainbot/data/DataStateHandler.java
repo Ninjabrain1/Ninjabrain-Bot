@@ -5,8 +5,10 @@ import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.calculator.endereye.CoordinateInputParser;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrowFactory;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
+import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
 import ninjabrainbot.data.input.ActiveInstanceInputHandler;
 import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
@@ -50,8 +52,9 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 //		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
-		CoordinateInputParser coordinateInputParser = new CoordinateInputParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
-		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputParser, dataState, actionExecutor, preferences));
+		CoordinateInputParser coordinateInputParser = new CoordinateInputParser(clipboardProvider);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, stdProfile);
+		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputParser, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputParser, dataState, actionExecutor));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));

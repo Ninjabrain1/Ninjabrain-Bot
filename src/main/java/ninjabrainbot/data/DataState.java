@@ -10,7 +10,7 @@ import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.BoatDataState;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
@@ -31,7 +31,7 @@ public class DataState implements IDataState, IDisposable {
 	private final DataComponent<Boolean> locked;
 
 	private final DivineContext divineContext;
-	private final ListComponent<IThrow> throwSet;
+	private final ListComponent<IEnderEyeThrow> throwSet;
 	private final DataComponent<IPlayerPosition> playerPosition;
 
 	private final CalculatorManager calculatorManager;
@@ -77,7 +77,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IListComponent<IThrow> getThrowSet() {
+	public IListComponent<IEnderEyeThrow> getThrowSet() {
 		return throwSet;
 	}
 

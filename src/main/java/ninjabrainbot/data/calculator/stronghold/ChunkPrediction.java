@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.common.StructurePosition;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
@@ -37,11 +37,11 @@ public class ChunkPrediction extends StructurePosition {
 		return String.format(Locale.US, "%.1f%%", chunk.weight * 100);
 	}
 
-	public double[] getAngleErrors(IReadOnlyList<IThrow> eyeThrows) {
+	public double[] getAngleErrors(IReadOnlyList<IEnderEyeThrow> eyeThrows) {
 		return chunk.getAngleErrors(version, eyeThrows);
 	}
 
-	public double getAngleError(IThrow t) {
+	public double getAngleError(IEnderEyeThrow t) {
 		return t == null ? -1 : chunk.getAngleError(version, t);
 	}
 

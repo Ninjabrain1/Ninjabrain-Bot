@@ -13,7 +13,7 @@ import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.BoatDataState;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
@@ -32,7 +32,7 @@ public class PreviewDataState implements IDataState {
 	private final IAllAdvancementsDataState allAdvancementsDataState;
 
 	private final DivineContext divineContext;
-	private final ListComponent<IThrow> throwSet;
+	private final ListComponent<IEnderEyeThrow> throwSet;
 	private final DataComponent<Boolean> locked;
 	private final DataComponent<IPlayerPosition> playerPosition;
 
@@ -42,11 +42,11 @@ public class PreviewDataState implements IDataState {
 	private final ObservableField<BlindResult> blindResult;
 	private final ObservableField<DivineResult> divineResult;
 
-	public PreviewDataState(ICalculatorResult result, List<IThrow> eyeThrows, Fossil f) {
+	public PreviewDataState(ICalculatorResult result, List<IEnderEyeThrow> eyeThrows, Fossil f) {
 		this();
 		calculatorResult.set(result);
 		topPrediction.set(result.getBestPrediction());
-		for (IThrow t : eyeThrows) {
+		for (IEnderEyeThrow t : eyeThrows) {
 			throwSet.add(t);
 		}
 		divineContext.fossil.set(f);
@@ -74,7 +74,7 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IListComponent<IThrow> getThrowSet() {
+	public IListComponent<IEnderEyeThrow> getThrowSet() {
 		return throwSet;
 	}
 

@@ -41,7 +41,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 			return;
 
 		overworldDistance = (int) this.distanceInOverworld(playerPos);
-		playerIsInNether = playerPos.isNether();
+		playerIsInNether = playerPos.isInNether();
 		double xDiff = x - playerPos.xInOverworld();
 		double zDiff = z - playerPos.zInOverworld();
 

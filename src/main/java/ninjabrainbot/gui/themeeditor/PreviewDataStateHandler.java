@@ -6,12 +6,11 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class PreviewDataStateHandler implements IDataStateHandler {
 
@@ -20,7 +19,7 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 
 	private final PreviewDataState dataState;
 
-	public PreviewDataStateHandler(ICalculatorResult result, List<IThrow> eyeThrows, Fossil fossil, boolean locked) {
+	public PreviewDataStateHandler(ICalculatorResult result, List<IEnderEyeThrow> eyeThrows, Fossil fossil, boolean locked) {
 		dataState = new PreviewDataState(result, eyeThrows, fossil);
 		if (locked)
 			dataState.locked().set(true);

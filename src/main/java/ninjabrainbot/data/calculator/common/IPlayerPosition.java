@@ -6,14 +6,8 @@ public interface IPlayerPosition extends IOverworldRay {
 
 	double zInPlayerDimension();
 
-	double yInPlayerDimension();
-
-	double beta();
-
-	boolean lookingBelowHorizon();
-
 	boolean isInOverworld();
 
-	boolean isNether();
+	boolean isInNether();
 
 }

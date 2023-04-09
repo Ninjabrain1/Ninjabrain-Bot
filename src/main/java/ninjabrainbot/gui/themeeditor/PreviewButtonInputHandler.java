@@ -1,6 +1,6 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.input.IButtonInputHandler;
 
 public class PreviewButtonInputHandler implements IButtonInputHandler {
@@ -18,7 +18,7 @@ public class PreviewButtonInputHandler implements IButtonInputHandler {
 	}
 
 	@Override
-	public void onRemoveThrowButtonPressed(IThrow throwToRemove) {
+	public void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove) {
 	}
 
 }

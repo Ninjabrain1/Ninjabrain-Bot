@@ -7,7 +7,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
@@ -33,7 +33,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 		this(styleManager, showAngleErrors, null);
 	}
 
-	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors, Throw t) {
+	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors, EnderEyeThrow t) {
 		super(styleManager, true);
 		setOpaque(true);
 		errorsEnabled = showAngleErrors.get();

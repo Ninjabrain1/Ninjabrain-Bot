@@ -3,7 +3,7 @@ package ninjabrainbot.data.information;
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.ResultType;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
@@ -28,7 +28,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;
 
-		IThrow t = dataState.getThrowSet().get(0);
+		IEnderEyeThrow t = dataState.getThrowSet().get(0);
 		double approximatePortalNetherX = t.xInOverworld() / 8;
 		double approximatePortalNetherZ = t.zInOverworld() / 8;
 

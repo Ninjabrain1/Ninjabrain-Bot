@@ -5,7 +5,7 @@ import java.awt.AWTException;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.statistics.Posterior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.event.IDisposable;
@@ -23,7 +23,7 @@ public class Calibrator implements IDisposable {
 
 	Calculator triangulator;
 	boolean calibrating;
-	ObservableList<IThrow> eyeThrows;
+	ObservableList<IEnderEyeThrow> eyeThrows;
 	boolean ready;
 
 	Chunk stronghold;
@@ -48,7 +48,7 @@ public class Calibrator implements IDisposable {
 		ready = false;
 	}
 
-	public void add(IThrow t) throws InterruptedException {
+	public void add(IEnderEyeThrow t) throws InterruptedException {
 		if (!ready) {
 			keyPresser.releaseF3C();
 			doCommand("clear");
@@ -94,7 +94,7 @@ public class Calibrator implements IDisposable {
 //		eyeThrows.get(i).addCorrection(positive, preferences);
 	}
 
-	private double distanceFromIntendedPosition(IThrow t) {
+	private double distanceFromIntendedPosition(IEnderEyeThrow t) {
 		double dx = lastX - t.xInOverworld();
 		double dz = lastZ - t.zInOverworld();
 		return Math.sqrt(dx * dx + dz * dz);
@@ -162,7 +162,7 @@ public class Calibrator implements IDisposable {
 		return stronghold.getAngleErrors(version, eyeThrows.get());
 	}
 
-	public IReadOnlyList<IThrow> getThrows() {
+	public IReadOnlyList<IEnderEyeThrow> getThrows() {
 		return eyeThrows.get();
 	}
 

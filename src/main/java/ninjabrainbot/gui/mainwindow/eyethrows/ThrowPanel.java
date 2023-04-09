@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.event.DisposeHandler;
@@ -40,7 +40,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private ChunkPrediction lastTopPrediction;
 
 	private final int index;
-	private IThrow t;
+	private IEnderEyeThrow t;
 	private final JLabel x;
 	private final JLabel z;
 	private final JLabel alpha;
@@ -87,7 +87,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		updateVisibility();
 
-		IObservableList<IThrow> throwSet = dataState.getThrowSet();
+		IObservableList<IEnderEyeThrow> throwSet = dataState.getThrowSet();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 		disposeHandler.add(throwSet.subscribeEDT(this::updateThrow));
 
@@ -215,11 +215,11 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setPreferredSize(new Dimension(styleManager.size.WIDTH, styleManager.size.TEXT_SIZE_SMALL + styleManager.size.PADDING_THIN * 2));
 	}
 
-	private void updateThrow(IReadOnlyList<IThrow> throwSet) {
+	private void updateThrow(IReadOnlyList<IEnderEyeThrow> throwSet) {
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 	}
 
-	private void setThrow(IThrow t) {
+	private void setThrow(IEnderEyeThrow t) {
 		if (this.t == t)
 			return;
 
@@ -235,7 +235,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		} else {
 			x.setText(String.format(Locale.US, "%.2f", t.xInOverworld()));
 			z.setText(String.format(Locale.US, "%.2f", t.zInOverworld()));
-			alpha.setText(String.format(Locale.US, "%.2f", t.alphaWithoutCorrection()));
+			alpha.setText(String.format(Locale.US, "%.2f", t.horizontalAngleWithoutCorrection()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
 				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.useTallRes.get() ? "%.3f" : "%.2f"), t.correction()));
