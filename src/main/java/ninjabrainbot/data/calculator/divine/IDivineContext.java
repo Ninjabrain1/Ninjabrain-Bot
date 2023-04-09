@@ -1,7 +1,7 @@
 package ninjabrainbot.data.calculator.divine;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
-import ninjabrainbot.data.temp.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
 
 public interface IDivineContext {
 

@@ -9,8 +9,8 @@ import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IListComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IListComponent;
 import ninjabrainbot.event.IObservable;
 
 public interface IDataState {

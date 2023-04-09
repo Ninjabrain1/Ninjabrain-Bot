@@ -2,9 +2,9 @@ package ninjabrainbot.data.calculator.alladvancements;
 
 import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
-import ninjabrainbot.data.temp.DataComponent;
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.DataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 import ninjabrainbot.event.IObservable;
 
 public class AllAdvancementsDataState implements IAllAdvancementsDataState {

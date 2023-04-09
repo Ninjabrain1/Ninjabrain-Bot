@@ -7,7 +7,7 @@ import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.ToggleEnteringBoatAction;
 import ninjabrainbot.data.actions.ToggleLockedAction;
 import ninjabrainbot.data.actions.UndoAction;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

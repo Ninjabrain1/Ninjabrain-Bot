@@ -1,4 +1,4 @@
-package ninjabrainbot.data.temp;
+package ninjabrainbot.data.domainmodel;
 
 public class IllegalModificationException extends RuntimeException {
 

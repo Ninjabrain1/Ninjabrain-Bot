@@ -3,10 +3,9 @@ package ninjabrainbot.data.calculator.divine;
 import ninjabrainbot.data.calculator.blind.BlindPosition;
 import ninjabrainbot.data.calculator.statistics.DiscretizedDensity;
 import ninjabrainbot.data.calculator.stronghold.Ring;
-import ninjabrainbot.data.temp.DataComponent;
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IDomainModel;
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.data.domainmodel.DataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 import ninjabrainbot.util.Coords;
 
 public class DivineContext implements IDivineContext {

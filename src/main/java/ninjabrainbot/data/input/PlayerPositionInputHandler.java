@@ -10,7 +10,7 @@ import ninjabrainbot.data.actions.SetPlayerPositionAction;
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.data.calculator.endereye.IPlayerPositionInputSource;
+import ninjabrainbot.data.calculator.common.IPlayerPositionInputSource;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

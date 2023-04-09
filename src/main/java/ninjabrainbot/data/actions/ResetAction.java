@@ -1,7 +1,7 @@
 package ninjabrainbot.data.actions;
 
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 
 public class ResetAction implements IAction {
 

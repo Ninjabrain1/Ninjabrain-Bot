@@ -1,6 +1,6 @@
 package ninjabrainbot.data.actions;
 
-import ninjabrainbot.data.temp.IWriteLock;
+import ninjabrainbot.data.domainmodel.IWriteLock;
 
 public class ActionExecutor implements IActionExecutor {
 

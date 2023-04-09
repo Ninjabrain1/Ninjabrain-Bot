@@ -1,4 +1,4 @@
-package ninjabrainbot.data.temp;
+package ninjabrainbot.data.domainmodel;
 
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitor changes so that undo works.

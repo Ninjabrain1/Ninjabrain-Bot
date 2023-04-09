@@ -6,7 +6,7 @@ import ninjabrainbot.data.calculator.alladvancements.StructureType;
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.common.StructurePosition;
-import ninjabrainbot.data.temp.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
 import ninjabrainbot.event.IObservable;
 
 public class SetAllAdvancementsStructurePositionAction implements IAction {

@@ -15,7 +15,7 @@ import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.HotkeyInputHandler;
 import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
-import ninjabrainbot.data.temp.DomainModel;
+import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;

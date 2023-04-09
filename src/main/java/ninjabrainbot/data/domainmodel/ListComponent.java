@@ -1,4 +1,4 @@
-package ninjabrainbot.data.temp;
+package ninjabrainbot.data.domainmodel;
 
 import java.util.Iterator;
 import java.util.function.Consumer;

@@ -4,7 +4,7 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.SetAllAdvancementsModeAction;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;

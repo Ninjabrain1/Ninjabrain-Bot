@@ -1,4 +1,4 @@
-package ninjabrainbot.data.calculator.endereye;
+package ninjabrainbot.data.calculator.common;
 
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;

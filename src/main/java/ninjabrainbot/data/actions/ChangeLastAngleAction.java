@@ -2,7 +2,7 @@ package ninjabrainbot.data.actions;
 
 import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.temp.IListComponent;
+import ninjabrainbot.data.domainmodel.IListComponent;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ChangeLastAngleAction implements IAction {
