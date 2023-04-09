@@ -21,15 +21,15 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 	public IEnderEyeThrow createEnderEyeThrowFromDetailedPlayerPosition(IDetailedPlayerPosition detailedPlayerPosition) {
 		assert detailedPlayerPosition.isInOverworld();
 
-		boolean boatThrow = preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;
+		boolean isBoatThrow = preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;
 
 		double correctedHorizontalAngle = detailedPlayerPosition.horizontalAngle();
-		if (boatThrow)
+		if (isBoatThrow)
 			correctedHorizontalAngle += getPreciseBoatHorizontalAngle(correctedHorizontalAngle, preferences, boatDataState.boatAngle().get());
 		correctedHorizontalAngle = getCorrectedHorizontalAngle(correctedHorizontalAngle, preferences.crosshairCorrection.get());
 
 		return new EnderEyeThrow(detailedPlayerPosition.xInPlayerDimension(), detailedPlayerPosition.zInPlayerDimension(),
-				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), boatThrow ? ThrowType.Boat : ThrowType.Normal, stdProfile);
+				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), isBoatThrow ? ThrowType.Boat : ThrowType.Normal, stdProfile);
 	}
 
 	@Override

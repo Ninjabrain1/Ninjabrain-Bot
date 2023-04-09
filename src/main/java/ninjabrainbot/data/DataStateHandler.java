@@ -50,7 +50,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
-//		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
 		CoordinateInputSource coordinateInputSource = new CoordinateInputSource(clipboardProvider);
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, stdProfile);
@@ -89,21 +88,11 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 //		}
 	}
 
-	public synchronized void toggleLocked() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			dataState.toggleLocked();
-//		}
-	}
-
 	private void afterDataStateModified(boolean wasUndoAction) {
 //		if (!wasUndoAction) {
 //			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
 //		}
 //		whenDataStateModified.notifySubscribers(dataState);
-	}
-
-	private synchronized void setFossil(Fossil f) {
-		dataState.getDivineContext().fossil().set(f);
 	}
 
 	private synchronized void onCalculatorSettingsChanged() {
