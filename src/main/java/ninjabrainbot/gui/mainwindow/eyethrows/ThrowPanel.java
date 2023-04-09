@@ -233,9 +233,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			removeButton.setVisible(false);
 			correctionSgn = 0;
 		} else {
-			x.setText(String.format(Locale.US, "%.2f", t.xInPlayerDimension()));
-			z.setText(String.format(Locale.US, "%.2f", t.zInPlayerDimension()));
-			alpha.setText(String.format(Locale.US, "%.2f", t.alpha_0()));
+			x.setText(String.format(Locale.US, "%.2f", t.xInOverworld()));
+			z.setText(String.format(Locale.US, "%.2f", t.zInOverworld()));
+			alpha.setText(String.format(Locale.US, "%.2f", t.alphaWithoutCorrection()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
 				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.useTallRes.get() ? "%.3f" : "%.2f"), t.correction()));

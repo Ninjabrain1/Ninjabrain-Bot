@@ -6,7 +6,7 @@ import ninjabrainbot.event.ObservableProperty;
 
 public class PreviewThrow implements IThrow {
 
-	private final ISubscribable<IThrow> whenModified = new ObservableProperty<IThrow>();
+	private final ISubscribable<IThrow> whenModified = new ObservableProperty<>();
 
 	double x, z, alpha, correction;
 
@@ -38,22 +38,7 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public double xInPlayerDimension() {
-		return x;
-	}
-
-	@Override
-	public double yInPlayerDimension() {
-		return 80;
-	}
-
-	@Override
-	public double zInPlayerDimension() {
-		return z;
-	}
-
-	@Override
-	public double alpha() {
+	public double horizontalAngle() {
 		return alpha + correction;
 	}
 
@@ -63,33 +48,13 @@ public class PreviewThrow implements IThrow {
 	}
 
 	@Override
-	public double rawAlpha() {
+	public double alphaWithoutCorrection() {
 		return alpha;
-	}
-
-	@Override
-	public double alpha_0() {
-		return alpha;
-	}
-
-	@Override
-	public double beta() {
-		return 0;
 	}
 
 	@Override
 	public double correction() {
 		return correction;
-	}
-
-	@Override
-	public boolean lookingBelowHorizon() {
-		return false;
-	}
-
-	@Override
-	public boolean isNether() {
-		return false;
 	}
 
 	@Override

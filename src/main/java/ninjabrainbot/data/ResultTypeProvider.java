@@ -2,8 +2,8 @@ package ninjabrainbot.data;
 
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -15,7 +15,7 @@ public class ResultTypeProvider implements IDisposable {
 
 	private final IAllAdvancementsDataState allAdvancementsDataState;
 	private final IObservable<ICalculatorResult> calculatorResult;
-	private final IObservable<IThrow> playerPosition;
+	private final IObservable<IPlayerPosition> playerPosition;
 	private final IObservable<Fossil> fossil;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();

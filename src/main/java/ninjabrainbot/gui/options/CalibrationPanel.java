@@ -224,9 +224,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 				IThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
 				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.3f %.3f\n" : ": %.3f +%.3f\n"), t.alpha() - t.correction(), t.correction()));
+					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.3f %.3f\n" : ": %.3f +%.3f\n"), t.horizontalAngle() - t.correction(), t.correction()));
 				} else {
-					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.alpha()));
+					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.horizontalAngle()));
 				}
 				b.append(String.format(I18n.get("error") + ": %.4f\n", e));
 			}
@@ -237,9 +237,9 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 			IReadOnlyList<IThrow> eyeThrows = calibrator.getThrows();
 			for (IThrow t : eyeThrows) {
 				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.alpha() - t.correction(), t.correction()));
+					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.horizontalAngle() - t.correction(), t.correction()));
 				} else {
-					b.append(String.format("Angle: %.2f\n", t.alpha()));
+					b.append(String.format("Angle: %.2f\n", t.horizontalAngle()));
 				}
 			}
 			errors.area.setText(b.toString());

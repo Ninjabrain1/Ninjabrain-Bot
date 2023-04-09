@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.data.calculator.endereye.ThrowType;
-import ninjabrainbot.data.calculator.statistics.IOverworldRay;
+import ninjabrainbot.data.calculator.common.IOverworldRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
@@ -27,7 +27,7 @@ public class TestUtils {
 			}
 
 			@Override
-			public double alpha() {
+			public double horizontalAngle() {
 				return alpha;
 			}
 		};

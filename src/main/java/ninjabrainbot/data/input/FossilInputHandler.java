@@ -18,10 +18,10 @@ public class FossilInputHandler implements IDisposable {
 
 	DisposeHandler disposeHandler = new DisposeHandler();
 
-	public FossilInputHandler(ISubscribable<Fossil> fossilSource, IDataState dataState, IActionExecutor actionExecutor) {
+	public FossilInputHandler(IFossilInputSource fossilInputSource, IDataState dataState, IActionExecutor actionExecutor) {
 		this.dataState = dataState;
 		this.actionExecutor = actionExecutor;
-		disposeHandler.add(fossilSource.subscribe(this::onNewFossil));
+		disposeHandler.add(fossilInputSource.whenNewFossilInputted().subscribe(this::onNewFossil));
 	}
 
 	private void onNewFossil(Fossil fossil) {

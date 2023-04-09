@@ -14,7 +14,7 @@ public class TestThrow implements IThrow {
 	}
 
 	@Override
-	public double alpha() {
+	public double horizontalAngle() {
 		return alpha;
 	}
 
@@ -29,18 +29,8 @@ public class TestThrow implements IThrow {
 	}
 
 	@Override
-	public double xInPlayerDimension() {
-		return x;
-	}
-
-	@Override
-	public double yInPlayerDimension() {
-		return 80;
-	}
-
-	@Override
-	public double zInPlayerDimension() {
-		return z;
+	public IThrow withCorrection(double correction) {
+		return null;
 	}
 
 	@Override
@@ -54,28 +44,13 @@ public class TestThrow implements IThrow {
 	}
 
 	@Override
-	public double alpha_0() {
+	public double alphaWithoutCorrection() {
 		return alpha;
-	}
-
-	@Override
-	public double beta() {
-		return 0;
 	}
 
 	@Override
 	public double correction() {
 		return 0;
-	}
-
-	@Override
-	public boolean lookingBelowHorizon() {
-		return false;
-	}
-
-	@Override
-	public boolean isNether() {
-		return false;
 	}
 
 	@Override

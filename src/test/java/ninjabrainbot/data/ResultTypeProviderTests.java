@@ -5,7 +5,7 @@ import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.input.FossilInputHandler;
-import ninjabrainbot.data.input.ThrowInputHandler;
+import ninjabrainbot.data.input.PlayerPositionInputHandler;
 import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -41,7 +41,7 @@ public class ResultTypeProviderTests {
 		DataStateHandler dataStateHandler = new DataStateHandler(preferences, new FakeClipboardProvider(), new FakeActiveInstanceProvider());
 
 		IDataState dataState = dataStateHandler.getDataState();
-		ThrowInputHandler throwInputHandler = new ThrowInputHandler(throwStream, dataState, actionExecutor, preferences);
+		PlayerPositionInputHandler playerPositionInputHandler = new PlayerPositionInputHandler(throwStream, dataState, actionExecutor, preferences);
 		FossilInputHandler fossilInputHandler = new FossilInputHandler(fossilStream, dataState, actionExecutor);
 
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
@@ -71,26 +71,26 @@ public class ResultTypeProviderTests {
 		assertEquals(dataState.resultType().get(), ResultType.FAILED);
 		assertFalse(dataState.calculatorResult().get().success());
 
-		dataStateHandler.undo();
+//		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterSecondThrow);
 
-		dataStateHandler.undo();
+//		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterFirstThrow);
 
-		dataStateHandler.undo();
+//		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
 		assertEquals(dataState.blindResult().get().evaluation(), BlindResult.EXCELLENT);
 		assertEquals(dataState.blindResult().get().highrollProbability, highrollProbability);
 
-		dataStateHandler.undo();
+//		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.DIVINE);
 		assertEquals(dataState.divineResult().get().fossil.x, 1);
 
-		dataStateHandler.undo();
+//		dataStateHandler.undo();
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 	}
 

@@ -2,6 +2,7 @@ package ninjabrainbot.data.calculator;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
@@ -20,7 +21,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	private ICalculator calculator;
 
 	private final IObservableList<IThrow> throwSet;
-	private final IObservable<IThrow> playerPosition;
+	private final IObservable<IPlayerPosition> playerPosition;
 	private final IDivineContext divineContext;
 
 	private final ObservableField<ICalculatorResult> calculatorResult;
@@ -31,7 +32,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(ICalculator calculator, IObservableList<IThrow> throwSet, IObservable<IThrow> playerPosition, IDivineContext divineContext) {
+	public CalculatorManager(ICalculator calculator, IObservableList<IThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
 		this.calculator = calculator;
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;

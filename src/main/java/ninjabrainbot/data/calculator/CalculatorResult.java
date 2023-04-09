@@ -3,6 +3,7 @@ package ninjabrainbot.data.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.statistics.Posterior;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
@@ -23,12 +24,12 @@ public class CalculatorResult implements ICalculatorResult {
 		topChunks = new ArrayList<>();
 	}
 
-	public CalculatorResult(Posterior posterior, IReadOnlyList<IThrow> eyeThrows, IObservable<IThrow> playerPos, int numPredictions, McVersion version) {
+	public CalculatorResult(Posterior posterior, IReadOnlyList<IThrow> eyeThrows, IObservable<IPlayerPosition> playerPosition, int numPredictions, McVersion version) {
 		// Find chunk with the largest posterior probability
 		Chunk predictedChunk = posterior.getMostProbableChunk();
-		bestPrediction = new ChunkPrediction(predictedChunk, playerPos, version);
+		bestPrediction = new ChunkPrediction(predictedChunk, playerPosition, version);
 		topChunks = createTopChunks(posterior);
-		topPredictions = createTopPredictions(playerPos, numPredictions, version);
+		topPredictions = createTopPredictions(playerPosition, numPredictions, version);
 	}
 
 	@Override
@@ -57,10 +58,10 @@ public class CalculatorResult implements ICalculatorResult {
 		return topChunks;
 	}
 
-	private List<ChunkPrediction> createTopPredictions(IObservable<IThrow> playerPos, int amount, McVersion version) {
+	private List<ChunkPrediction> createTopPredictions(IObservable<IPlayerPosition> playerPosition, int amount, McVersion version) {
 		List<ChunkPrediction> topPredictions = new ArrayList<>();
 		for (Chunk c : topChunks) {
-			topPredictions.add(new ChunkPrediction(c, playerPos, version));
+			topPredictions.add(new ChunkPrediction(c, playerPosition, version));
 			if (topPredictions.size() >= amount)
 				break;
 		}

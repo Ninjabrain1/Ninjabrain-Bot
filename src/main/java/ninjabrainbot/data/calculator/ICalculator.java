@@ -2,6 +2,7 @@ package ninjabrainbot.data.calculator;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
@@ -10,7 +11,7 @@ import ninjabrainbot.event.IReadOnlyList;
 
 public interface ICalculator {
 
-	ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext);
+	ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IPlayerPosition> playerPos, IDivineContext divineContext);
 
 	BlindResult blind(BlindPosition b, IDivineContext divineContext);
 

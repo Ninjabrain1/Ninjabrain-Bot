@@ -5,7 +5,7 @@ package ninjabrainbot.data.calculator.endereye;
  */
 public class Throw implements IThrow {
 
-	private final double x, y, z, rawAlpha, alpha_0, beta;
+	private final double x, y, z, alphaWithoutCorrection, beta;
 	private final boolean nether;
 	private final ThrowType throwType;
 
@@ -15,18 +15,13 @@ public class Throw implements IThrow {
 	private final double correction;
 
 	public Throw(double x, double y, double z, double alpha, double beta, boolean nether, ThrowType throwType, IStdProfile stdProfile) {
-		this(x, y, z, alpha, alpha, beta, nether, throwType, stdProfile);
+		this(x, y, z, alpha, beta, nether, 0, throwType, stdProfile);
 	}
 
-	public Throw(double x, double y, double z, double rawAlpha, double alpha, double beta, boolean nether, ThrowType throwType, IStdProfile stdProfile) {
-		this(x, y, z, rawAlpha, alpha, beta, nether, 0, throwType, stdProfile);
-	}
-
-	private Throw(double x, double y, double z, double rawAlpha, double alpha, double beta, boolean nether, double correction, ThrowType throwType, IStdProfile stdProfile) {
+	private Throw(double x, double y, double z, double alpha, double beta, boolean nether, double correction, ThrowType throwType, IStdProfile stdProfile) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.rawAlpha = rawAlpha;
 		this.throwType = throwType;
 		alpha %= 360.0;
 		if (alpha < -180.0) {
@@ -34,7 +29,7 @@ public class Throw implements IThrow {
 		} else if (alpha > 180.0) {
 			alpha -= 360.0;
 		}
-		this.alpha_0 = alpha;
+		this.alphaWithoutCorrection = alpha;
 		this.beta = beta;
 		this.nether = nether;
 		this.correction = correction;
@@ -46,22 +41,17 @@ public class Throw implements IThrow {
 
 	@Override
 	public IThrow withCorrection(double correction) {
-		return new Throw(x, y, z, rawAlpha, alpha_0, beta, nether, correction, throwType, stdProfile);
+		return new Throw(x, y, z, alphaWithoutCorrection, beta, nether, correction, throwType, stdProfile);
 	}
 
 	@Override
 	public String toString() {
-		return "x=" + x + ", z=" + z + ", alpha=" + alpha_0;
+		return "x=" + x + ", z=" + z + ", alpha=" + alphaWithoutCorrection;
 	}
 
 	@Override
 	public boolean isBoatThrow() {
 		return throwType == ThrowType.Boat;
-	}
-
-	@Override
-	public boolean lookingBelowHorizon() {
-		return beta > 0;
 	}
 
 	@Override
@@ -75,23 +65,8 @@ public class Throw implements IThrow {
 	}
 
 	@Override
-	public double xInPlayerDimension() {
-		return x;
-	}
-
-	@Override
-	public double yInPlayerDimension() {
-		return y;
-	}
-
-	@Override
-	public double zInPlayerDimension() {
-		return z;
-	}
-
-	@Override
-	public double alpha() {
-		return alpha_0 + correction;
+	public double horizontalAngle() {
+		return alphaWithoutCorrection + correction;
 	}
 
 	@Override
@@ -100,23 +75,8 @@ public class Throw implements IThrow {
 	}
 
 	@Override
-	public double rawAlpha() {
-		return rawAlpha;
-	}
-
-	@Override
-	public double alpha_0() {
-		return alpha_0;
-	}
-
-	@Override
-	public double beta() {
-		return beta;
-	}
-
-	@Override
-	public boolean isNether() {
-		return nether;
+	public double alphaWithoutCorrection() {
+		return alphaWithoutCorrection;
 	}
 
 	@Override

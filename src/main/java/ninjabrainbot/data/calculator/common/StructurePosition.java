@@ -2,7 +2,6 @@ package ninjabrainbot.data.calculator.common;
 
 import java.util.Locale;
 
-import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
@@ -27,17 +26,17 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		this(x, z, null);
 	}
 
-	public StructurePosition(int x, int z, IObservable<IThrow> playerPos) {
+	public StructurePosition(int x, int z, IObservable<IPlayerPosition> playerPosition) {
 		this.x = x;
 		this.z = z;
 		whenRelativePlayerPositionChanged = new ObservableProperty<StructurePosition>();
-		if (playerPos != null) {
-			updateWithPlayerPos(playerPos.get(), false);
-			playerPosSubscription = playerPos.subscribe(pos -> updateWithPlayerPos(pos, true));
+		if (playerPosition != null) {
+			updateWithPlayerPos(playerPosition.get(), false);
+			playerPosSubscription = playerPosition.subscribe(pos -> updateWithPlayerPos(pos, true));
 		}
 	}
 
-	private void updateWithPlayerPos(IThrow playerPos, boolean notify) {
+	private void updateWithPlayerPos(IPlayerPosition playerPos, boolean notify) {
 		if (playerPos == null)
 			return;
 
@@ -47,8 +46,8 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		double zDiff = z - playerPos.zInOverworld();
 
 		double newAngle = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
-		double simpleDiff = newAngle - playerPos.alpha();
-		double adjustedDiff = ((newAngle + 360) % 360) - ((playerPos.alpha() + 360) % 360);
+		double simpleDiff = newAngle - playerPos.horizontalAngle();
+		double adjustedDiff = ((newAngle + 360) % 360) - ((playerPos.horizontalAngle() + 360) % 360);
 		double finalDiff = Math.abs(adjustedDiff) < Math.abs(simpleDiff) ? adjustedDiff : simpleDiff;
 
 		this.travelAngle = newAngle;

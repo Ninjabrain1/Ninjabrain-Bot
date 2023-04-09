@@ -5,15 +5,14 @@ import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
-import ninjabrainbot.data.calculator.endereye.ThrowParser;
+import ninjabrainbot.data.calculator.endereye.CoordinateInputParser;
 import ninjabrainbot.data.input.ActiveInstanceInputHandler;
 import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.HotkeyInputHandler;
 import ninjabrainbot.data.input.IButtonInputHandler;
-import ninjabrainbot.data.input.ThrowInputHandler;
+import ninjabrainbot.data.input.PlayerPositionInputHandler;
 import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -51,9 +50,9 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 //		dataStateUndoHistory = new DataStateUndoHistory(dataState.getUndoData(), 10);
 
-		ThrowParser throwParser = new ThrowParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
-		disposeHandler.add(new ThrowInputHandler(throwParser.whenNewThrowInputted(), dataState, actionExecutor, preferences));
-		disposeHandler.add(new FossilInputHandler(throwParser.whenNewFossilInputted(), dataState, actionExecutor));
+		CoordinateInputParser coordinateInputParser = new CoordinateInputParser(clipboardProvider, preferences, stdProfile, dataState.boatDataState.boatAngle());
+		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputParser, dataState, actionExecutor, preferences));
+		disposeHandler.add(new FossilInputHandler(coordinateInputParser, dataState, actionExecutor));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 

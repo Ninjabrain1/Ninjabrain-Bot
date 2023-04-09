@@ -58,7 +58,7 @@ public class Calibrator implements IDisposable {
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
 				doCommand("say " + I18n.get("calibrator.you_moved"));
-				tp(lastX, lastZ, t.alpha(), -31.2);
+				tp(lastX, lastZ, t.horizontalAngle(), -31.2);
 				return;
 			}
 			eyeThrows.add(t);
@@ -75,12 +75,12 @@ public class Calibrator implements IDisposable {
 				closest = stronghold;
 				prediction = stronghold;
 			}
-			double deltaX = closest.x * 16 + 8 - t.xInPlayerDimension();
-			double deltaZ = closest.z * 16 + 8 - t.zInPlayerDimension();
-			double phi = t.alpha() * Math.PI / 180.0;
+			double deltaX = closest.x * 16 + 8 - t.xInOverworld();
+			double deltaZ = closest.z * 16 + 8 - t.zInOverworld();
+			double phi = t.horizontalAngle() * Math.PI / 180.0;
 			double perpendicularDistance = 100.0;
-			double nextX = t.xInPlayerDimension() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
-			double nextZ = t.zInPlayerDimension() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
+			double nextX = t.xInOverworld() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
+			double nextZ = t.zInOverworld() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			tp(nextX, nextZ, nextAlpha, -31.2);
@@ -95,8 +95,8 @@ public class Calibrator implements IDisposable {
 	}
 
 	private double distanceFromIntendedPosition(IThrow t) {
-		double dx = lastX - t.xInPlayerDimension();
-		double dz = lastZ - t.zInPlayerDimension();
+		double dx = lastX - t.xInOverworld();
+		double dz = lastZ - t.zInOverworld();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
 

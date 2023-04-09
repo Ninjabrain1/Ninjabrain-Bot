@@ -3,6 +3,7 @@ package ninjabrainbot.data;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
@@ -22,7 +23,7 @@ public interface IDataState {
 
 	IListComponent<IThrow> getThrowSet();
 
-	IDataComponent<IThrow> playerPosition();
+	IDataComponent<IPlayerPosition> playerPosition();
 
 	IDataComponent<Boolean> locked();
 

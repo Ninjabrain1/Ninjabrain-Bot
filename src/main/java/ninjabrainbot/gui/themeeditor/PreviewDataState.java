@@ -8,6 +8,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
@@ -33,7 +34,7 @@ public class PreviewDataState implements IDataState {
 	private final DivineContext divineContext;
 	private final ListComponent<IThrow> throwSet;
 	private final DataComponent<Boolean> locked;
-	private final DataComponent<IThrow> playerPos;
+	private final DataComponent<IPlayerPosition> playerPosition;
 
 	private final ObservableField<ResultType> resultType;
 	private final ObservableField<ICalculatorResult> calculatorResult;
@@ -55,7 +56,7 @@ public class PreviewDataState implements IDataState {
 		IModificationLock modificationLock = new AlwaysUnlocked();
 		divineContext = new DivineContext(null);
 		throwSet = new ListComponent<>(null, 10);
-		playerPos = new DataComponent<>(null);
+		playerPosition = new DataComponent<>(null);
 		locked = new DataComponent<>(null, false);
 		resultType = new ObservableField<>(ResultType.NONE);
 		calculatorResult = new ObservableField<>();
@@ -78,8 +79,8 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IDataComponent<IThrow> playerPosition() {
-		return playerPos;
+	public IDataComponent<IPlayerPosition> playerPosition() {
+		return playerPosition;
 	}
 
 	@Override

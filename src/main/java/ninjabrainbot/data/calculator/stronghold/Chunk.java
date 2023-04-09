@@ -31,19 +31,19 @@ public class Chunk {
 		return dx * dx + dz * dz;
 	}
 
-	public int fourfourX() {
+	public int fourFourX() {
 		return 16 * x + 4;
 	}
 
-	public int fourfourZ() {
+	public int fourFourZ() {
 		return 16 * z + 4;
 	}
 
-	public int eighteightX() {
+	public int eightRightX() {
 		return 16 * x + 8;
 	}
 
-	public int eighteightZ() {
+	public int eightEightZ() {
 		return 16 * z + 8;
 	}
 
@@ -89,11 +89,9 @@ public class Chunk {
 	 * given position.
 	 */
 	public int getOverworldDistance(McVersion version, IOverworldPosition t) {
-		double playerX = t.xInOverworld();
-		double playerZ = t.zInOverworld();
-		double deltax = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - playerX;
-		double deltaz = 16 * z + StrongholdConstants.getStrongholdChunkCoord(version) - playerZ;
-		return (int) Math.sqrt(deltax * deltax + deltaz * deltaz);
+		double deltaX = 16 * x + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInOverworld();
+		double deltaZ = 16 * z + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInOverworld();
+		return (int) Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 	}
 
 	public double[] getAngleErrors(McVersion version, IReadOnlyList<IThrow> eyeThrows) {
@@ -105,10 +103,10 @@ public class Chunk {
 	}
 
 	public double getAngleError(McVersion version, IThrow t) {
-		double deltax = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInPlayerDimension();
-		double deltaz = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInPlayerDimension();
-		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz);
-		double delta = (t.alpha() - gamma) % 360.0;
+		double deltaX = x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInOverworld();
+		double deltaZ = z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInOverworld();
+		double gamma = -180 / Math.PI * Math.atan2(deltaX, deltaZ);
+		double delta = (t.horizontalAngle() - gamma) % 360.0;
 		if (delta < -180)
 			delta += 360;
 		if (delta > 180)

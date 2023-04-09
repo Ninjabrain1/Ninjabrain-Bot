@@ -5,6 +5,7 @@ import java.util.List;
 
 import ninjabrainbot.data.calculator.blind.BlindPosition;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
@@ -37,7 +38,7 @@ public class Calculator implements ICalculator {
 	}
 
 	@Override
-	public ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IThrow> playerPos, IDivineContext divineContext) {
+	public ICalculatorResult triangulate(IReadOnlyList<IThrow> eyeThrows, IObservable<IPlayerPosition> playerPos, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
 		long t0 = System.currentTimeMillis();

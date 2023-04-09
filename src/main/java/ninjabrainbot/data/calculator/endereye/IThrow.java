@@ -1,30 +1,16 @@
 package ninjabrainbot.data.calculator.endereye;
 
-import ninjabrainbot.data.calculator.statistics.IOverworldRay;
+import ninjabrainbot.data.calculator.common.IOverworldRay;
 
 public interface IThrow extends IOverworldRay {
 
 	IThrow withCorrection(double correction);
 
-	double xInPlayerDimension();
-
-	double zInPlayerDimension();
-
-	double yInPlayerDimension();
-
-	double getStd();
-
-	double rawAlpha();
-
-	double alpha_0();
-
-	double beta();
+	double alphaWithoutCorrection();
 
 	double correction();
 
-	boolean lookingBelowHorizon();
-
-	boolean isNether();
+	double getStd();
 
 	int getStdProfileNumber();
 

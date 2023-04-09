@@ -26,8 +26,8 @@ public class Posterior {
 		double sigma0 = eyeThrows.get(0).getStd();
 		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);
 		chunks = new ArrayList<Chunk>();
-		double px = eyeThrows.get(0).xInPlayerDimension();
-		double pz = eyeThrows.get(0).zInPlayerDimension();
+		double px = eyeThrows.get(0).xInOverworld();
+		double pz = eyeThrows.get(0).zInOverworld();
 		double maxDist = StrongholdConstants.getMaxDistance(px, pz) / 16.0;
 		double maxDist2 = maxDist * maxDist;
 		for (Chunk c : prior.getChunks()) {
@@ -95,10 +95,10 @@ public class Posterior {
 	}
 
 	private void updateConditionalProbability(Chunk chunk, IThrow t) {
-		double deltax = chunk.x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInPlayerDimension();
-		double deltaz = chunk.z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInPlayerDimension();
+		double deltax = chunk.x * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.xInOverworld();
+		double deltaz = chunk.z * 16 + StrongholdConstants.getStrongholdChunkCoord(version) - t.zInOverworld();
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
-		double delta = Math.abs((gamma - t.alpha()) % 360.0);
+		double delta = Math.abs((gamma - t.horizontalAngle()) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
 		double s = t.getStd();
 		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
@@ -143,13 +143,13 @@ public class Posterior {
 
 	private double closestStrongholdCondition(Chunk chunk, IThrow t) {
 		double closestStrongholdProbability = 1;
-		double deltax = chunk.x + (StrongholdConstants.getStrongholdChunkCoord(version) - t.xInPlayerDimension()) / 16.0;
-		double deltaz = chunk.z + (StrongholdConstants.getStrongholdChunkCoord(version) - t.zInPlayerDimension()) / 16.0;
-		double r_p = Math.sqrt(t.xInPlayerDimension() * t.xInPlayerDimension() + t.zInPlayerDimension() * t.zInPlayerDimension()) / 16.0;
+		double deltax = chunk.x + (StrongholdConstants.getStrongholdChunkCoord(version) - t.xInOverworld()) / 16.0;
+		double deltaz = chunk.z + (StrongholdConstants.getStrongholdChunkCoord(version) - t.zInOverworld()) / 16.0;
+		double r_p = Math.sqrt(t.xInOverworld() * t.xInOverworld() + t.zInOverworld() * t.zInOverworld()) / 16.0;
 		double d_i = Math.sqrt(deltax * deltax + deltaz * deltaz);
 		double phi_prime = Coords.getPhi(chunk.x, chunk.z);
-		double phi_p = Coords.getPhi(t.xInPlayerDimension(), t.zInPlayerDimension());
-		double maxDist = StrongholdConstants.getMaxDistance(t.xInPlayerDimension(), t.zInPlayerDimension()) / 16.0;
+		double phi_p = Coords.getPhi(t.xInOverworld(), t.zInOverworld());
+		double maxDist = StrongholdConstants.getMaxDistance(t.xInOverworld(), t.zInOverworld()) / 16.0;
 		double stronghold_r_min = r_p - maxDist;
 		double stronghold_r_max = r_p + maxDist;
 		Ring ring_chunk = Ring.get(Math.sqrt(chunk.x * chunk.x + chunk.z * chunk.z));

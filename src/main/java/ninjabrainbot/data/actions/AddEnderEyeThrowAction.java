@@ -1,59 +1,43 @@
-package ninjabrainbot.data.calculator.endereye;
+package ninjabrainbot.data.actions;
 
-import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.io.IClipboardProvider;
+import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.data.calculator.endereye.F3CData;
+import ninjabrainbot.data.calculator.endereye.IStdProfile;
+import ninjabrainbot.data.calculator.endereye.IThrow;
+import ninjabrainbot.data.calculator.endereye.InputData1_12;
+import ninjabrainbot.data.calculator.endereye.Throw;
+import ninjabrainbot.data.calculator.endereye.ThrowType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-/**
- * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
- * into throws and fossils, exposed through the streams whenNewThrowInputted(), and whenNewFossilInputted().
- */
-public class ThrowParser implements IThrowSource {
+public class AddEnderEyeThrowAction implements IAction {
 
-	private final NinjabrainBotPreferences preferences;
-	private final IStdProfile stdProfile;
-	private final IObservable<Float> boatAngle;
+	private final IDataState dataState;
+	private final IPlayerPosition playerPosition;
 
-	private final ObservableField<IThrow> whenNewThrowInputed;
-	private final ObservableField<Fossil> whenNewFossilInputed;
-
-	public ThrowParser(IClipboardProvider clipboardProvider, NinjabrainBotPreferences preferences, IStdProfile stdProfile, IObservable<Float> boatAngle) {
-		this.preferences = preferences;
-		this.stdProfile = stdProfile;
-		this.boatAngle = boatAngle;
-
-		whenNewThrowInputed = new ObservableField<>(null, true);
-		whenNewFossilInputed = new ObservableField<>(null, true);
-
-		clipboardProvider.clipboardText().subscribe(this::parseF3C);
+	public AddEnderEyeThrowAction(IDataState dataState, IPlayerPosition playerPosition) {
+		this.dataState = dataState;
+		this.playerPosition = playerPosition;
 	}
 
-	private void parseF3C(String f3c) {
-		if (f3c == null)
-			return;
-
+	@Override
+	public void execute() {
 		F3CData f3cData = F3CData.tryParseF3CString(f3c);
 		if (f3cData != null) {
 			boolean boatThrow = preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatAngle.get() != null;
 			IThrow newThrow = boatThrow ? createBoatThrow(f3cData, boatAngle.get(), preferences, stdProfile) : createNormalThrow(f3cData, preferences.crosshairCorrection.get(), stdProfile);
-			whenNewThrowInputed.set(newThrow);
+			whenNewPlayerPositionInputted.set(newThrow);
 			return;
 		}
 
 		InputData1_12 data1_12 = InputData1_12.parseInputString(f3c);
 		if (data1_12 != null) {
 			IThrow newThrow = createThrowForVersion1_12(data1_12, preferences.crosshairCorrection.get(), stdProfile);
-			whenNewThrowInputed.set(newThrow);
+			whenNewPlayerPositionInputted.set(newThrow);
 			return;
 		}
 
-		final Fossil f = Fossil.parseF3I(f3c);
-		if (f != null) {
-			whenNewFossilInputed.set(f);
-		}
+		dataState.getThrowSet().add(playerPosition);
 	}
 
 	public static IThrow parseNormalThrow(String string, double crosshairCorrection, IStdProfile stdProfile) {
@@ -65,17 +49,17 @@ public class ThrowParser implements IThrowSource {
 
 	public static IThrow createNormalThrow(F3CData data, double crosshairCorrection, IStdProfile stdProfile) {
 		double correctedHorizontalAngle = getCorrectedHorizontalAngle(data.horizontalAngle, crosshairCorrection);
-		return new Throw(data.x, data.y, data.z, data.horizontalAngle, correctedHorizontalAngle, data.verticalAngle, data.nether, ThrowType.Normal, stdProfile);
+		return new Throw(data.x, data.y, data.z, correctedHorizontalAngle, data.verticalAngle, data.nether, ThrowType.Normal, stdProfile);
 	}
 
 	public static IThrow createBoatThrow(F3CData data, float currentBoatAngle, NinjabrainBotPreferences preferences, IStdProfile stdProfile) {
 		double correctedHorizontalAngle = getPreciseBoatHorizontalAngle(data.horizontalAngle, preferences, currentBoatAngle);
-		return new Throw(data.x, data.y, data.z, data.horizontalAngle, correctedHorizontalAngle, data.verticalAngle, data.nether, ThrowType.Boat, stdProfile);
+		return new Throw(data.x, data.y, data.z, correctedHorizontalAngle, data.verticalAngle, data.nether, ThrowType.Boat, stdProfile);
 	}
 
 	public static IThrow createThrowForVersion1_12(InputData1_12 data, double crosshairCorrection, IStdProfile stdProfile) {
 		double correctedHorizontalAngle = data.horizontalAngle + crosshairCorrection;
-		return new Throw(data.x, 80, data.z, data.horizontalAngle, correctedHorizontalAngle, -31, false, ThrowType.McVersion1_12, stdProfile);
+		return new Throw(data.x, 80, data.z, correctedHorizontalAngle, -31, false, ThrowType.McVersion1_12, stdProfile);
 	}
 
 	protected static double getCorrectedHorizontalAngle(double alpha, double crosshairCorrection) {
@@ -95,14 +79,6 @@ public class ThrowParser implements IThrowSource {
 		alpha = boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc;
 
 		return getCorrectedHorizontalAngle(alpha, preferences.crosshairCorrection.get());
-	}
-
-	public ISubscribable<IThrow> whenNewThrowInputted() {
-		return whenNewThrowInputed;
-	}
-
-	public ISubscribable<Fossil> whenNewFossilInputted() {
-		return whenNewFossilInputed;
 	}
 
 }

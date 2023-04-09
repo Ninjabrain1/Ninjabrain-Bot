@@ -47,8 +47,8 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 				break;
 			predictions.add(predictedChunk);
 		}
-		double phiRight = (lastThrow.alpha() + 90.0) * Math.PI / 180.0;
-		double phiLeft = (lastThrow.alpha() - 90.0) * Math.PI / 180.0;
+		double phiRight = (lastThrow.horizontalAngle() + 90.0) * Math.PI / 180.0;
+		double phiLeft = (lastThrow.horizontalAngle() - 90.0) * Math.PI / 180.0;
 		int rightDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiRight));
 		int leftDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiLeft));
 		return new InformationMessage(InformationType.Info, I18n.get("information.go_left_x_block_or_right_y_blocks", leftDistance, rightDistance));
@@ -75,7 +75,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 	private double getLowestPossibleCertainty(List<Chunk> predictions, IOverworldPosition lastThrow, double standardDeviation) {
 		double lowestPossibleCertainty = 1.0;
 		for (Chunk assumedStrongholdChunk : predictions) {
-			double phiToStronghold = Coords.getPhi(assumedStrongholdChunk.eighteightX() - lastThrow.xInOverworld(), assumedStrongholdChunk.eighteightZ() - lastThrow.zInOverworld());
+			double phiToStronghold = Coords.getPhi(assumedStrongholdChunk.eightRightX() - lastThrow.xInOverworld(), assumedStrongholdChunk.eightEightZ() - lastThrow.zInOverworld());
 			double originalCertainty = assumedStrongholdChunk.weight;
 			double totalCertaintyAfterSecondThrow = 0;
 			for (Chunk otherChunk : predictions) {
@@ -90,7 +90,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 				}
 				if (assumedStrongholdChunk.isNeighboring(otherChunk))
 					continue;
-				double phiToPrediction = Coords.getPhi(otherChunk.eighteightX() - lastThrow.xInOverworld(), otherChunk.eighteightZ() - lastThrow.zInOverworld());
+				double phiToPrediction = Coords.getPhi(otherChunk.eightRightX() - lastThrow.xInOverworld(), otherChunk.eightEightZ() - lastThrow.zInOverworld());
 				double errorLikelihood = measurementErrorPdf(phiToPrediction - phiToStronghold, standardDeviation);
 				totalCertaintyAfterSecondThrow += otherChunk.weight * errorLikelihood;
 			}

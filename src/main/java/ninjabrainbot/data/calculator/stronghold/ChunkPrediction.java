@@ -2,6 +2,7 @@ package ninjabrainbot.data.calculator.stronghold;
 
 import java.util.Locale;
 
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.event.IObservable;
@@ -25,8 +26,8 @@ public class ChunkPrediction extends StructurePosition {
 	/**
 	 * Creates a triangulation result.
 	 */
-	public ChunkPrediction(Chunk chunk, IObservable<IThrow> playerPos, McVersion version) {
-		super(chunk.fourfourX(), chunk.fourfourZ(), playerPos);
+	public ChunkPrediction(Chunk chunk, IObservable<IPlayerPosition> playerPosition, McVersion version) {
+		super(chunk.fourFourX(), chunk.fourFourZ(), playerPosition);
 		this.version = version;
 		this.chunk = chunk;
 		this.success = Double.isFinite(chunk.weight) && chunk.weight > 0.0005;

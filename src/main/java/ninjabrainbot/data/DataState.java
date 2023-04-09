@@ -6,6 +6,7 @@ import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.data.calculator.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
@@ -31,7 +32,7 @@ public class DataState implements IDataState, IDisposable {
 
 	private final DivineContext divineContext;
 	private final ListComponent<IThrow> throwSet;
-	private final DataComponent<IThrow> playerPosition;
+	private final DataComponent<IPlayerPosition> playerPosition;
 
 	private final CalculatorManager calculatorManager;
 	private final ResultTypeProvider resultTypeProvider;
@@ -81,7 +82,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IDataComponent<IThrow> playerPosition() {
+	public IDataComponent<IPlayerPosition> playerPosition() {
 		return playerPosition;
 	}
 

@@ -2,6 +2,7 @@ package ninjabrainbot.data.calculator.statistics;
 
 import java.util.ArrayList;
 
+import ninjabrainbot.data.calculator.common.IOverworldRay;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
@@ -32,7 +33,7 @@ public class RayApproximatedPrior implements IPrior {
 	private void construct(IOverworldRay r, double tolerance, McVersion version) {
 		double range = 5000.0 / 16;
 		chunks = new ArrayList<Chunk>();
-		double phi = r.alpha() / 180.0 * Math.PI;
+		double phi = r.horizontalAngle() / 180.0 * Math.PI;
 		// direction vector
 		double dx = -Math.sin(phi);
 		double dz = Math.cos(phi);
