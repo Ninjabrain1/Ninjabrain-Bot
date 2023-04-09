@@ -9,8 +9,6 @@ public interface IDataStateHandler {
 
 	IDataState getDataState();
 
-	void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences);
-
 	void toggleAltStdOnLastThrowIfNotLocked();
 
 	ISubscribable<IDataState> whenDataStateModified();

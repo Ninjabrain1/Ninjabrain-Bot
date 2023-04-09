@@ -32,10 +32,6 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void changeLastAngleIfNotLocked(boolean positive, NinjabrainBotPreferences preferences) {
-	}
-
-	@Override
 	public void toggleAltStdOnLastThrowIfNotLocked() {
 	}
 

@@ -10,7 +10,7 @@ import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.I18n;
 
-public class StructurePosition implements IPosition, IDisposable {
+public class StructurePosition implements IOverworldPosition, IDisposable {
 
 	private final int x, z;
 

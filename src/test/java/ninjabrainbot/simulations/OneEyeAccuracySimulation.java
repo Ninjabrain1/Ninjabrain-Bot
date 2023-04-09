@@ -5,7 +5,7 @@ import java.util.Random;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.common.IPosition;
+import ninjabrainbot.data.calculator.common.IOverworldPosition;
 import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.calculator.endereye.IThrow;
@@ -74,7 +74,7 @@ public class OneEyeAccuracySimulation {
 		return new Chunk[] { stronghold0, stronghold1, stronghold2 };
 	}
 
-	private static Chunk getClosestStronghold(Chunk[] strongholds, IPosition position) {
+	private static Chunk getClosestStronghold(Chunk[] strongholds, IOverworldPosition position) {
 		Chunk closestStronghold = null;
 		double minDistance = Double.MAX_VALUE;
 		for (Chunk stronghold : strongholds) {

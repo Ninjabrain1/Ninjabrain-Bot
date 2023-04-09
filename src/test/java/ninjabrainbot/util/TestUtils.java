@@ -7,14 +7,14 @@ import javax.swing.SwingUtilities;
 import ninjabrainbot.data.calculator.endereye.IThrow;
 import ninjabrainbot.data.calculator.endereye.Throw;
 import ninjabrainbot.data.calculator.endereye.ThrowType;
-import ninjabrainbot.data.calculator.statistics.IRay;
+import ninjabrainbot.data.calculator.statistics.IOverworldRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class TestUtils {
 
-	public static IRay createRay(double x, double z, double alpha) {
-		return new IRay() {
+	public static IOverworldRay createRay(double x, double z, double alpha) {
+		return new IOverworldRay() {
 
 			@Override
 			public double xInOverworld() {

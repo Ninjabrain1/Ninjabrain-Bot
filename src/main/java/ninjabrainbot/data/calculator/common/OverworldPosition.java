@@ -1,10 +1,10 @@
 package ninjabrainbot.data.calculator.common;
 
-public class Position implements IPosition {
+public class OverworldPosition implements IOverworldPosition {
 
 	private final double x, z;
 
-	public Position(double x, double z) {
+	public OverworldPosition(double x, double z) {
 		this.x = x;
 		this.z = z;
 	}

@@ -1,8 +1,8 @@
 package ninjabrainbot.data.calculator.endereye;
 
-import ninjabrainbot.data.calculator.statistics.IRay;
+import ninjabrainbot.data.calculator.statistics.IOverworldRay;
 
-public interface IThrow extends IRay {
+public interface IThrow extends IOverworldRay {
 
 	IThrow withCorrection(double correction);
 
