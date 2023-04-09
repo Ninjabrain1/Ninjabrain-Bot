@@ -7,15 +7,12 @@ import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 
 public class PreviewDataStateHandler implements IDataStateHandler {
 
-	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<IDataState>();
-	private final IModificationLock modificationLock = new AlwaysUnlocked();
+	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
 
 	private final PreviewDataState dataState;
 

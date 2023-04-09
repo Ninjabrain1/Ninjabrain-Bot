@@ -17,8 +17,6 @@ import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.BoatDataState;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.datalock.IModificationLock;
 import ninjabrainbot.data.domainmodel.DataComponent;
 import ninjabrainbot.data.domainmodel.IDataComponent;
 import ninjabrainbot.data.domainmodel.IListComponent;
@@ -53,7 +51,6 @@ public class PreviewDataState implements IDataState {
 	}
 
 	public PreviewDataState() {
-		IModificationLock modificationLock = new AlwaysUnlocked();
 		divineContext = new DivineContext(null);
 		throwSet = new ListComponent<>(null, 10);
 		playerPosition = new DataComponent<>(null);

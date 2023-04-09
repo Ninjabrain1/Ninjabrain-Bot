@@ -3,12 +3,11 @@ package ninjabrainbot.data.statistics;
 import java.util.HashMap;
 import java.util.Map;
 
+import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.statistics.ApproximatedPrior;
 import ninjabrainbot.data.calculator.statistics.IPrior;
 import ninjabrainbot.data.calculator.statistics.Prior;
 import ninjabrainbot.data.calculator.statistics.RayApproximatedPrior;
-import ninjabrainbot.data.datalock.AlwaysUnlocked;
-import ninjabrainbot.data.calculator.divine.DivineContext;
 import ninjabrainbot.data.calculator.stronghold.Chunk;
 import ninjabrainbot.data.calculator.stronghold.Ring;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
@@ -56,7 +55,7 @@ class RayApproximatedPriorTests {
 			Chunk expected = expectedChunks.get(chunk);
 			if (expected == null)
 				continue;
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 5%, failed for chunk: " + chunk.toString());
+			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.05, "Maximum allowed relative error is 5%, failed for chunk: " + chunk);
 			numChunks++;
 			double error = chunk.weight - expected.weight;
 			totalError += error;
@@ -135,7 +134,7 @@ class RayApproximatedPriorTests {
 			Chunk expected = expectedChunks.get(chunk);
 			if (expected == null)
 				continue;
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk.toString());
+			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk);
 			numChunks++;
 			double error = chunk.weight - expected.weight;
 			totalError += error;
@@ -172,7 +171,7 @@ class RayApproximatedPriorTests {
 			Chunk expected = expectedChunks.get(chunk);
 			if (expected == null)
 				continue;
-			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk.toString());
+			assertEquals(expected.weight, chunk.weight, averageWeightInRing * 0.15, "Maximum allowed relative error is 15%, failed for chunk: " + chunk);
 			numChunks++;
 			double error = chunk.weight - expected.weight;
 			totalError += error;
