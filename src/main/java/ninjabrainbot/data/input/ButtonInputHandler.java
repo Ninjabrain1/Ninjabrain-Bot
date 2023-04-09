@@ -7,7 +7,7 @@ import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.SetFossilAction;
 import ninjabrainbot.data.actions.UndoAction;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 
 public class ButtonInputHandler implements IButtonInputHandler {
 

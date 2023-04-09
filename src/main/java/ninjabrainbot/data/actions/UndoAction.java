@@ -1,6 +1,6 @@
 package ninjabrainbot.data.actions;
 
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 
 public class UndoAction implements IAction {
 

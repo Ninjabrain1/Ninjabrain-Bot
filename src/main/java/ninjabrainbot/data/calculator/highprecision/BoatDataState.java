@@ -1,8 +1,8 @@
 package ninjabrainbot.data.calculator.highprecision;
 
-import ninjabrainbot.data.temp.DataComponent;
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IDomainModel;
+import ninjabrainbot.data.domainmodel.DataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDomainModel;
 
 public class BoatDataState implements IBoatDataState {
 

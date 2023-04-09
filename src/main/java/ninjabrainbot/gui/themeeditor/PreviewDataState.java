@@ -19,10 +19,10 @@ import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.datalock.AlwaysUnlocked;
 import ninjabrainbot.data.datalock.IModificationLock;
-import ninjabrainbot.data.temp.DataComponent;
-import ninjabrainbot.data.temp.IDataComponent;
-import ninjabrainbot.data.temp.IListComponent;
-import ninjabrainbot.data.temp.ListComponent;
+import ninjabrainbot.data.domainmodel.DataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
+import ninjabrainbot.data.domainmodel.IListComponent;
+import ninjabrainbot.data.domainmodel.ListComponent;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 

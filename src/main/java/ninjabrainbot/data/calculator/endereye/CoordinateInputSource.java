@@ -3,6 +3,7 @@ package ninjabrainbot.data.calculator.endereye;
 import ninjabrainbot.data.calculator.common.DetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.data.calculator.common.IPlayerPositionInputSource;
 import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.input.IFossilInputSource;

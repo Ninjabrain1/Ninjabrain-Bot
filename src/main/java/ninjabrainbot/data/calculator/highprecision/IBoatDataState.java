@@ -1,6 +1,6 @@
 package ninjabrainbot.data.calculator.highprecision;
 
-import ninjabrainbot.data.temp.IDataComponent;
+import ninjabrainbot.data.domainmodel.IDataComponent;
 
 public interface IBoatDataState {
 

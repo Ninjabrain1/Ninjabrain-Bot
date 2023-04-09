@@ -11,7 +11,7 @@ import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.data.calculator.endereye.IStdProfile;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
-import ninjabrainbot.data.temp.DomainModel;
+import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
