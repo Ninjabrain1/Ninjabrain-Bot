@@ -14,13 +14,13 @@ import ninjabrainbot.io.IClipboardProvider;
  * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
  * into player positions and fossils, exposed through the streams whenNewPlayerPositionInputted(), and whenNewFossilInputted().
  */
-public class CoordinateInputParser implements IPlayerPositionInputSource, IFossilInputSource {
+public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource {
 
 	private final ObservableField<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
 	private final ObservableField<IPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	private final ObservableField<Fossil> whenNewFossilInputted;
 
-	public CoordinateInputParser(IClipboardProvider clipboardProvider) {
+	public CoordinateInputSource(IClipboardProvider clipboardProvider) {
 		whenNewDetailedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewLimitedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewFossilInputted = new ObservableField<>(null, true);

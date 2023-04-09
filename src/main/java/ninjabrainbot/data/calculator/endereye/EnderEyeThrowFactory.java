@@ -26,7 +26,7 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 		double correctedHorizontalAngle = detailedPlayerPosition.horizontalAngle();
 		if (boatThrow)
 			correctedHorizontalAngle += getPreciseBoatHorizontalAngle(correctedHorizontalAngle, preferences, boatDataState.boatAngle().get());
-		correctedHorizontalAngle += getCorrectedHorizontalAngle(correctedHorizontalAngle, preferences.crosshairCorrection.get());
+		correctedHorizontalAngle = getCorrectedHorizontalAngle(correctedHorizontalAngle, preferences.crosshairCorrection.get());
 
 		return new EnderEyeThrow(detailedPlayerPosition.xInPlayerDimension(), detailedPlayerPosition.zInPlayerDimension(),
 				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), boatThrow ? ThrowType.Boat : ThrowType.Normal, stdProfile);

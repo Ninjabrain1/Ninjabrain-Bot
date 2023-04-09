@@ -1,15 +1,22 @@
 package ninjabrainbot.data;
 
 import ninjabrainbot.data.actions.ActionExecutor;
+import ninjabrainbot.data.calculator.Calculator;
+import ninjabrainbot.data.calculator.CalculatorSettings;
 import ninjabrainbot.data.calculator.blind.BlindResult;
+import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrowFactory;
+import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
+import ninjabrainbot.data.calculator.endereye.IStdProfile;
+import ninjabrainbot.data.input.FossilInputHandler;
+import ninjabrainbot.data.input.PlayerPositionInputHandler;
 import ninjabrainbot.data.temp.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
-import ninjabrainbot.util.FakeActiveInstanceProvider;
-import ninjabrainbot.util.FakeClipboardProvider;
+import ninjabrainbot.util.FakeCoordinateInputSource;
+import ninjabrainbot.util.TestStdProfile;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,25 +30,28 @@ public class ResultTypeProviderTests {
 	NinjabrainBotPreferences preferences;
 	DomainModel domainModel;
 	ActionExecutor actionExecutor;
+	IStdProfile stdProfile;
 
 	@BeforeEach
 	void setup() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
+		stdProfile = new TestStdProfile(0.03);
 	}
 
 	@Test
 	void resultTypeUpdatesCorrectly() {
-		ObservableProperty<IEnderEyeThrow> throwStream = new ObservableProperty<>();
-		ObservableProperty<Fossil> fossilStream = new ObservableProperty<>();
+		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
+		IDataState dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 
-		DataStateHandler dataStateHandler = new DataStateHandler(preferences, new FakeClipboardProvider(), new FakeActiveInstanceProvider());
+		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), stdProfile);
+		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
+		new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 
-		IDataState dataState = dataStateHandler.getDataState();
-//		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), dataStateHandler.std)
-//		PlayerPositionInputHandler playerPositionInputHandler = new PlayerPositionInputHandler(throwStream, dataState, actionExecutor, preferences, enderEyeThrowFactory);
-//		FossilInputHandler fossilInputHandler = new FossilInputHandler(fossilStream, dataState, actionExecutor);
+		ObservableProperty<IDetailedPlayerPosition> playerPositionStream = coordinateInputSource.whenNewDetailedPlayerPositionInputted;
+		ObservableProperty<Fossil> fossilStream = coordinateInputSource.whenNewFossilInputted;
 
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 
@@ -49,24 +59,24 @@ public class ResultTypeProviderTests {
 		assertEquals(dataState.resultType().get(), ResultType.DIVINE);
 		assertEquals(dataState.divineResult().get().fossil.x, 1);
 
-		throwStream.notifySubscribers(TestUtils.createThrowNether(213, 142, -45));
+		playerPositionStream.notifySubscribers(TestUtils.createPlayerPositionInNether(213, 142, -45));
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
 		assertEquals(dataState.blindResult().get().evaluation(), BlindResult.EXCELLENT);
 		double highrollProbability = dataState.blindResult().get().highrollProbability;
 		assertTrue(highrollProbability > 0.4);
 
-		throwStream.notifySubscribers(TestUtils.createThrow(2000, 1000, -45));
+		playerPositionStream.notifySubscribers(TestUtils.createPlayerPosition(2000, 1000, -45));
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		double distanceAfterFirstThrow = dataState.calculatorResult().get().getBestPrediction().getOverworldDistance();
 
-		throwStream.notifySubscribers(TestUtils.createThrowLookDown(2100, 1100, -45));
+		playerPositionStream.notifySubscribers(TestUtils.createPlayerPositionLookDown(2100, 1100, -45));
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		double distanceAfterSecondThrow = dataState.calculatorResult().get().getBestPrediction().getOverworldDistance();
 		assertTrue(distanceAfterSecondThrow < distanceAfterFirstThrow);
 
-		throwStream.notifySubscribers(TestUtils.createThrow(2000, 1000, 45));
+		playerPositionStream.notifySubscribers(TestUtils.createPlayerPosition(2000, 1000, 45));
 		assertEquals(dataState.resultType().get(), ResultType.FAILED);
 		assertFalse(dataState.calculatorResult().get().success());
 

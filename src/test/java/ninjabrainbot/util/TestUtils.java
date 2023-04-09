@@ -4,9 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
-import ninjabrainbot.data.calculator.endereye.ThrowType;
+import ninjabrainbot.data.calculator.common.DetailedPlayerPosition;
+import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IOverworldRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
@@ -33,28 +32,15 @@ public class TestUtils {
 		};
 	}
 
-	public static IEnderEyeThrow createThrow(double x, double z, double alpha) {
-		return createThrow(x, z, alpha, 0.03);
+	public static IDetailedPlayerPosition createPlayerPosition(double x, double z, double alpha) {
+		return new DetailedPlayerPosition(x, 80, z, alpha, -31, false);
 	}
 
-	public static IEnderEyeThrow createThrow(double x, double z, double alpha, double std) {
-		return new EnderEyeThrow(x, z, alpha, -31, ThrowType.Normal, new TestStdProfile(std));
+	public static IDetailedPlayerPosition createPlayerPositionLookDown(double x, double z, double alpha) {
+		return new DetailedPlayerPosition(x, 80, z, alpha, 90, false);
 	}
-
-	public static IEnderEyeThrow createThrowLookDown(double x, double z, double alpha) {
-		return createThrowLookDown(x, z, alpha, 0.03);
-	}
-
-	public static IEnderEyeThrow createThrowLookDown(double x, double z, double alpha, double std) {
-		return new EnderEyeThrow(x, z, alpha, 31, ThrowType.Normal, new TestStdProfile(std));
-	}
-
-	public static IEnderEyeThrow createThrowNether(double x, double z, double alpha) {
-		return createThrowNether(x, z, alpha, 0.03);
-	}
-
-	public static IEnderEyeThrow createThrowNether(double x, double z, double alpha, double std) {
-		return new EnderEyeThrow(x, z, alpha, -31, ThrowType.Normal, new TestStdProfile(std));
+	public static IDetailedPlayerPosition createPlayerPositionInNether(double x, double z, double alpha) {
+		return new DetailedPlayerPosition(x, 80, z, alpha, 0, true);
 	}
 
 	public static StyleManager createStyleManager() {
