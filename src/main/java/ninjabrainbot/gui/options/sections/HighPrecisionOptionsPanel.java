@@ -49,7 +49,7 @@ public class HighPrecisionOptionsPanel extends JPanel {
 		column2.add(sensitivityCheckbox);
 
 		sensitivity = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivity"), preferences.sensitivity);
-		sensitivity.setWidth(100);
+		sensitivity.setWidth(150);
 		sensitivity.setDecimals(9);
 		sensitivity.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 		column2.add(sensitivity);

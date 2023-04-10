@@ -38,7 +38,7 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 
 	@Override
 	protected double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler) {
-		return standardDeviationHandler.getNormalStandardDeviation();
+		return standardDeviationHandler.getBoatStandardDeviation();
 	}
 
 	@Override
