@@ -37,6 +37,11 @@ public class DataComponent<T> implements IDataComponent<T> {
 	}
 
 	@Override
+	public T getAsImmutable() {
+		return get();
+	}
+
+	@Override
 	public void set(T value) {
 		if (domainModel != null)
 			domainModel.notifyDataComponentToBeModified();
@@ -46,6 +51,11 @@ public class DataComponent<T> implements IDataComponent<T> {
 	@Override
 	public void reset() {
 		set(defaultValue);
+	}
+
+	@Override
+	public boolean contentEquals(T value) {
+		return observableField.get() == value;
 	}
 
 	@Override

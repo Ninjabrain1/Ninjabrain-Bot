@@ -1,6 +1,5 @@
 package ninjabrainbot.data.actions;
 
-import ninjabrainbot.data.domainmodel.IDataComponent;
 import ninjabrainbot.data.domainmodel.IDomainModel;
 
 public class ResetAction implements IAction {
@@ -13,8 +12,6 @@ public class ResetAction implements IAction {
 
 	@Override
 	public void execute() {
-		for (IDataComponent<?> dataComponent : domainModel.getAllDataComponents()) {
-			dataComponent.reset();
-		}
+		domainModel.reset();
 	}
 }

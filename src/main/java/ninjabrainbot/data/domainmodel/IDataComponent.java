@@ -9,10 +9,11 @@ import ninjabrainbot.event.IObservable;
  */
 public interface IDataComponent<T> extends IObservable<T> {
 
-	T get();
+	T getAsImmutable();
 
 	void set(T value);
 
 	void reset();
 
+	boolean contentEquals(T value);
 }

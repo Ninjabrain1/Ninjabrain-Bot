@@ -15,8 +15,9 @@ public class ActionExecutor implements IActionExecutor {
 		if (writeLock != null)
 			writeLock.acquireWriteLock();
 		try {
-			for (IAction action : actions)
+			for (IAction action : actions) {
 				action.execute();
+			}
 		} finally {
 			if (writeLock != null)
 				writeLock.releaseWriteLock();

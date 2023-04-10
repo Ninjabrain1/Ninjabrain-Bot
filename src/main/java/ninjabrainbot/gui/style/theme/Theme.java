@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
@@ -81,13 +82,13 @@ public abstract class Theme {
 	}
 
 	private static void addStandardTheme(Theme theme) {
-		assert !THEMES.containsKey(theme.UID);
+		Assert.isFalse(THEMES.containsKey(theme.UID));
 		THEMES.put(theme.UID, theme);
 		STANDARD_THEMES.add(theme);
 	}
 
 	private static void addCustomTheme(CustomTheme theme, NinjabrainBotPreferences preferences) {
-		assert !THEMES.containsKey(theme.UID);
+		Assert.isFalse(THEMES.containsKey(theme.UID));
 		nextCustomThemeUID--;
 		THEMES.put(theme.UID, theme);
 		CUSTOM_THEMES.add(theme);
@@ -103,7 +104,7 @@ public abstract class Theme {
 		for (CustomTheme c : CUSTOM_THEMES) {
 			String name = c.name.get().replace(".", "");
 			String themeString = c.getThemeString();
-			assert !themeString.contains(".");
+			Assert.isFalse(themeString.contains("."));
 			if (!first) {
 				names.append(".");
 				themeStrings.append(".");

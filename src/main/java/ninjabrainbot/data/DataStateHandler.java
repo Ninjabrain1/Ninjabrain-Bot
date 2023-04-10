@@ -55,24 +55,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onCalculatorSettingsChanged));
 	}
 
-	private void afterDataStateModified(boolean wasUndoAction) {
-//		if (!wasUndoAction) {
-//			dataStateUndoHistory.addNewUndoData(dataState.getUndoData());
-//		}
-//		whenDataStateModified.notifySubscribers(dataState);
-	}
-
 	private synchronized void onCalculatorSettingsChanged() {
 //		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 //		try (ILock lock = modificationLock.acquireWritePermission()) {
 //			dataState.setCalculator(new Calculator(calculatorSettings));
-//		}
-	}
-
-
-	private synchronized void setStdProfile(int profileNumber, double std) {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			stdProfile.setStd(profileNumber, std);
 //		}
 	}
 

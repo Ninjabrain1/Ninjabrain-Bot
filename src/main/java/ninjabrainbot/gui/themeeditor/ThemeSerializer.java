@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ninjabrainbot.gui.style.theme.ConfigurableColor;
 import ninjabrainbot.gui.style.theme.CustomTheme;
+import ninjabrainbot.util.Assert;
 
 public class ThemeSerializer {
 
@@ -93,7 +94,7 @@ public class ThemeSerializer {
 	}
 
 	private static String toChar(int i) {
-		assert i >= 0 && i < 64;
+		Assert.isTrue(i >= 0 && i < 64);
 		return String.valueOf((char) (i + 48));
 	}
 

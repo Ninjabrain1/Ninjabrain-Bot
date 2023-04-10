@@ -7,7 +7,6 @@ import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.ToggleAltStdOnLastThrowAction;
 import ninjabrainbot.data.actions.ToggleEnteringBoatAction;
 import ninjabrainbot.data.actions.ToggleLockedAction;
-import ninjabrainbot.data.actions.UndoAction;
 import ninjabrainbot.data.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -28,6 +27,7 @@ public class HotkeyInputHandler implements IDisposable {
 
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
 		preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked);
+		preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked);
 		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, true)));
 		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, false)));
 		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleAltStdOnLastThrowAction(dataState, preferences)));
@@ -42,7 +42,12 @@ public class HotkeyInputHandler implements IDisposable {
 
 	private void undoIfNotLocked() {
 		if (!dataState.locked().get())
-			actionExecutor.executeImmediately(new UndoAction(domainModel));
+			domainModel.undoUnderWriteLock();
+	}
+
+	private void redoIfNotLocked() {
+		if (!dataState.locked().get())
+			domainModel.redoUnderWriteLock();
 	}
 
 	@Override

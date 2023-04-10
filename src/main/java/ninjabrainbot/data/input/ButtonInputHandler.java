@@ -5,7 +5,6 @@ import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.RemoveTriangulationThrowAction;
 import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.actions.SetFossilAction;
-import ninjabrainbot.data.actions.UndoAction;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.domainmodel.IDomainModel;
 
@@ -28,7 +27,12 @@ public class ButtonInputHandler implements IButtonInputHandler {
 
 	@Override
 	public void onUndoButtonPressed() {
-		actionExecutor.executeImmediately(new UndoAction(domainModel));
+		domainModel.undoUnderWriteLock();
+	}
+
+	@Override
+	public void onRedoButtonPressed() {
+		domainModel.redoUnderWriteLock();
 	}
 
 	@Override

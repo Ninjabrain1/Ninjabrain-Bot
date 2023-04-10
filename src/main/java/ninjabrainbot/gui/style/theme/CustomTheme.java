@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.gui.themeeditor.ThemeSerializer;
+import ninjabrainbot.util.Assert;
 
 public class CustomTheme extends Theme {
 
@@ -129,8 +130,8 @@ public class CustomTheme extends Theme {
 	}
 
 	protected WrappedColor createColor(Color color, String name, String uid) {
-		assert uid.length() == 1;
-		assert !configurableColors.stream().anyMatch(cc -> cc.uid == uid);
+		Assert.isTrue(uid.length() == 1);
+		Assert.isTrue(configurableColors.stream().noneMatch(cc -> cc.uid == uid));
 		WrappedColor wc = super.createColor(color);
 		configurableColors.add(new ConfigurableColor(wc, name, uid));
 		return wc;

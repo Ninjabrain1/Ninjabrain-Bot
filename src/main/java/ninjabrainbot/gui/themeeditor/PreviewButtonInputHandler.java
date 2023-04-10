@@ -14,6 +14,10 @@ public class PreviewButtonInputHandler implements IButtonInputHandler {
 	}
 
 	@Override
+	public void onRedoButtonPressed() {
+	}
+
+	@Override
 	public void onRemoveFossilButtonPressed() {
 	}
 

@@ -5,6 +5,7 @@ import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.highprecision.BoatEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.util.Assert;
 
 public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 
@@ -20,7 +21,7 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 
 	@Override
 	public IEnderEyeThrow createEnderEyeThrowFromDetailedPlayerPosition(IDetailedPlayerPosition detailedPlayerPosition) {
-		assert detailedPlayerPosition.isInOverworld();
+		Assert.isTrue(detailedPlayerPosition.isInOverworld());
 
 		boolean isBoatThrow = preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;
 		if (isBoatThrow)
@@ -31,7 +32,7 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 
 	@Override
 	public IEnderEyeThrow createEnderEyeThrowFromLimitedPlayerPosition(IPlayerPosition playerPosition) {
-		assert playerPosition.isInOverworld();
+		Assert.isTrue(playerPosition.isInOverworld());
 
 		return new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get(), standardDeviationHandler);
 	}

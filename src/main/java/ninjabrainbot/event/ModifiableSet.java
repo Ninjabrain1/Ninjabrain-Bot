@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import ninjabrainbot.util.Assert;
+
 public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifiableSet<T>> implements IModifiableSet<T>, IDisposable {
 
 	private final ArrayList<T> set;
@@ -118,7 +120,7 @@ public class ModifiableSet<T extends IModifiable<T>> extends Modifiable<IModifia
 
 	@Override
 	public void dispose() {
-		assert subscriberCount() == 0;
+		Assert.isTrue(subscriberCount() == 0);
 		for (Subscription s : subscriptions.values()) {
 			s.dispose();
 		}

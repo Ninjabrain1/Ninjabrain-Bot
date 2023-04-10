@@ -3,6 +3,7 @@ package ninjabrainbot.data.domainmodel;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
+import ninjabrainbot.event.ArrayListImplementingReadOnlyList;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.Subscription;
@@ -69,8 +70,26 @@ public class ListComponent<T> implements IListComponent<T> {
 	}
 
 	@Override
+	public boolean contentEquals(IReadOnlyList<T> value) {
+		if (value == null)
+			return false;
+		if (value.size() != this.size())
+			return false;
+		for (int i = 0; i < size(); i++) {
+			if (value.get(i) != get(i))
+				return false;
+		}
+		return true;
+	}
+
+	@Override
 	public IReadOnlyList<T> get() {
 		return observableList.get();
+	}
+
+	@Override
+	public IReadOnlyList<T> getAsImmutable() {
+		return new ArrayListImplementingReadOnlyList<>(observableList.get());
 	}
 
 	@Override

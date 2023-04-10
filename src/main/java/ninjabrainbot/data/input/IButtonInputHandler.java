@@ -8,6 +8,8 @@ public interface IButtonInputHandler {
 
 	void onUndoButtonPressed();
 
+	void onRedoButtonPressed();
+
 	void onRemoveFossilButtonPressed();
 
 	void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove);

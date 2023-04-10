@@ -19,6 +19,7 @@ public class NinjabrainBotPreferences {
 	public HotkeyPreference hotkeyBoat;
 	public HotkeyPreference hotkeyReset;
 	public HotkeyPreference hotkeyUndo;
+	public HotkeyPreference hotkeyRedo;
 	public HotkeyPreference hotkeyMinimize;
 	public HotkeyPreference hotkeyAltStd;
 	public HotkeyPreference hotkeyLock;
@@ -70,6 +71,7 @@ public class NinjabrainBotPreferences {
 		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", source);
 		hotkeyReset = new HotkeyPreference("hotkey_reset", source);
 		hotkeyUndo = new HotkeyPreference("hotkey_undo", source);
+		hotkeyRedo = new HotkeyPreference("hotkey_redo", source);
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", source);
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);

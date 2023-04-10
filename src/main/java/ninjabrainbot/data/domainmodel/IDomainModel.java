@@ -3,12 +3,16 @@ package ninjabrainbot.data.domainmodel;
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitor changes so that undo works.
  */
-public interface IDomainModel {
+public interface IDomainModel extends IWriteLock {
 
 	void registerDataComponent(IDataComponent<?> dataComponent);
 
 	void notifyDataComponentToBeModified();
 
-	Iterable<IDataComponent<?>> getAllDataComponents();
+	void reset();
+
+	void undoUnderWriteLock();
+
+	void redoUnderWriteLock();
 
 }
