@@ -4,9 +4,9 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 
 import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.calculator.blind.BlindResult;
-import ninjabrainbot.data.calculator.ICalculatorResult;
 import ninjabrainbot.data.ResultType;
+import ninjabrainbot.data.calculator.ICalculatorResult;
+import ninjabrainbot.data.calculator.blind.BlindResult;
 import ninjabrainbot.data.calculator.divine.DivineResult;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.mainwindow.alladvancements.AllAdvancementsPanel;

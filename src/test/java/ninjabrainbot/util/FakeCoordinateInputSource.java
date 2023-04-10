@@ -2,8 +2,8 @@ package ninjabrainbot.util;
 
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.common.IPlayerPositionInputSource;
+import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.input.IFossilInputSource;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;

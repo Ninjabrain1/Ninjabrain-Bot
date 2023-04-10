@@ -8,9 +8,9 @@ import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 

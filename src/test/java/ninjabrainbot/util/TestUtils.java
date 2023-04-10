@@ -39,6 +39,7 @@ public class TestUtils {
 	public static IDetailedPlayerPosition createPlayerPositionLookDown(double x, double z, double alpha) {
 		return new DetailedPlayerPosition(x, 80, z, alpha, 90, false);
 	}
+
 	public static IDetailedPlayerPosition createPlayerPositionInNether(double x, double z, double alpha) {
 		return new DetailedPlayerPosition(x, 80, z, alpha, 0, true);
 	}

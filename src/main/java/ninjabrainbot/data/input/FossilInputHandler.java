@@ -6,7 +6,6 @@ import ninjabrainbot.data.actions.SetFossilAction;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.ISubscribable;
 
 /**
  * Listens to the stream of fossils and decides if/how the fossils should be inputted into the data state.

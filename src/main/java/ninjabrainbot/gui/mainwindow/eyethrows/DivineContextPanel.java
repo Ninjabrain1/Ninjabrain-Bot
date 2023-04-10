@@ -7,7 +7,6 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.divine.IDivineContext;
 import ninjabrainbot.data.input.IButtonInputHandler;

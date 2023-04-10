@@ -5,9 +5,9 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.inputfields.HexThemedTextField;
 import ninjabrainbot.gui.components.layout.LabeledField;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
