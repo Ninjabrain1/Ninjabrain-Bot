@@ -23,7 +23,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		this.dataState = dataState;
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(preferences.sigma.whenModified().subscribe(this::raiseInformationMessageChanged));
-		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 	}
 
@@ -63,7 +63,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 			sidewaysDistance += sidewaysDistanceIncrement * (lowestPossibleCertainty > 0.99 ? -1.0 : 1.0);
 			double newX = lastThrow.xInOverworld() + Coords.getX(sidewaysDistance, phiSideways);
 			double newZ = lastThrow.zInOverworld() + Coords.getZ(sidewaysDistance, phiSideways);
-			lowestPossibleCertainty = getLowestPossibleCertainty(predictions, new OverworldPosition(newX, newZ), lastThrow.getStd());
+			lowestPossibleCertainty = getLowestPossibleCertainty(predictions, new OverworldPosition(newX, newZ), lastThrow.getExpectedStdForNextEnderEyeThrow());
 			if (lowestPossibleCertainty > 0.99)
 				binarySearching = true;
 			if (binarySearching)

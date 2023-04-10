@@ -57,6 +57,11 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
+	public double getExpectedStdForNextEnderEyeThrow() {
+		return std;
+	}
+
+	@Override
 	public double horizontalAngleWithoutCorrection() {
 		return alpha;
 	}

@@ -60,7 +60,14 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 		return getStandardDeviation(standardDeviationHandler);
 	}
 
+	@Override
+	public double getExpectedStdForNextEnderEyeThrow() {
+		return getStandardDeviation(standardDeviationHandler);
+	}
+
 	protected abstract double getStandardDeviation(IStandardDeviationHandler standardDeviationHandler);
+
+	protected abstract double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler);
 
 	private static double clampToPlusMinus180Degrees(double angleInDegrees) {
 		angleInDegrees %= 360.0;

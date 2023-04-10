@@ -14,13 +14,15 @@ public interface IEnderEyeThrow extends IOverworldRay {
 
 	double getStd();
 
+	double getExpectedStdForNextEnderEyeThrow();
+
 	IEnderEyeThrow withCorrection(double correction);
 
 	IEnderEyeThrow withToggledAltStd();
 
 	EnderEyeThrowType getType();
 
-	default IPlayerPosition getPlayerPosition(){
+	default IPlayerPosition getPlayerPosition() {
 		return new LimitedPlayerPosition(xInOverworld(), zInOverworld(), horizontalAngle());
 	}
 

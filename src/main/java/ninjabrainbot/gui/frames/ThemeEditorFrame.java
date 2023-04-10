@@ -169,7 +169,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		ArrayList<IEnderEyeThrow> eyeThrows = new ArrayList<>();
 
 		IEnderEyeThrow t1 = new NormalEnderEyeThrow(659.70, 1950.30, -253.82, -31.75, standardDeviationHandler).withCorrection(0.01);
-		IEnderEyeThrow t2 = new NormalEnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, standardDeviationHandler).withCorrection(-0.01);
+		IEnderEyeThrow t2 = new NormalEnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, standardDeviationHandler).withCorrection(-0.01).withToggledAltStd();
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

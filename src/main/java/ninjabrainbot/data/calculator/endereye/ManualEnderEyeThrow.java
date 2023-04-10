@@ -26,6 +26,11 @@ public class ManualEnderEyeThrow extends EnderEyeThrow {
 	}
 
 	@Override
+	protected double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler) {
+		return standardDeviationHandler.getManualStandardDeviation();
+	}
+
+	@Override
 	public EnderEyeThrowType getType() {
 		return EnderEyeThrowType.Manual;
 	}
