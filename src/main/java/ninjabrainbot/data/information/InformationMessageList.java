@@ -2,8 +2,8 @@ package ninjabrainbot.data.information;
 
 import java.util.HashMap;
 
-import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.ObservableList;
 
 public class InformationMessageList extends ObservableList<InformationMessage> {
 

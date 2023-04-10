@@ -8,7 +8,7 @@ public class MockedClipboardReader implements IClipboardProvider {
 
 	private final ObservableField<String> clipboard = new ObservableField<>("");
 
-	public void setClipboard(String string){
+	public void setClipboard(String string) {
 		clipboard.set(string);
 	}
 

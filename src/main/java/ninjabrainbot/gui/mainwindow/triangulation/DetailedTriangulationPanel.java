@@ -59,7 +59,7 @@ public class DetailedTriangulationPanel extends ThemedPanel implements IDisposab
 		panels.forEach(p -> p.setAngleUpdatesEnabled(b));
 	}
 
-	public Iterable<ChunkPanel> getChunkPanels(){
+	public Iterable<ChunkPanel> getChunkPanels() {
 		return panels;
 	}
 

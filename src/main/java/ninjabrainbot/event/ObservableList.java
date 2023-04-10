@@ -21,7 +21,7 @@ public class ObservableList<T> implements IObservableList<T> {
 		return true;
 	}
 
-	public void replace(T oldElement, T newElement){
+	public void replace(T oldElement, T newElement) {
 		int index = list.indexOf(oldElement);
 		list.set(index, newElement);
 		notifySubscribers();

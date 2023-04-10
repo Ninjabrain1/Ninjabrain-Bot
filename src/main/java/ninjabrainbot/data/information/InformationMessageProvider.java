@@ -1,8 +1,8 @@
 package ninjabrainbot.data.information;
 
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.io.preferences.BooleanPreference;
 
 public abstract class InformationMessageProvider extends ObservableField<InformationMessage> implements IDisposable {

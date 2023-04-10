@@ -10,8 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;

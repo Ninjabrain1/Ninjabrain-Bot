@@ -31,6 +31,7 @@ public class CalculatedTravelTests {
 			"/execute in minecraft:overworld run tp @s 4798.40 63.00 -307.89 174.14 -31.39," +
 					"/execute in minecraft:overworld run tp @s 4786.13 64.00 -309.25 174.56 -31.60," +
 					"289,-121";
+
 	@ParameterizedTest
 	@CsvSource({ input1, input2, input3 })
 	public void twoEyeCalculatedTravelEyeSpies(String f3c1, String f3c2, int strongholdChunkX, int strongholdChunkZ) {

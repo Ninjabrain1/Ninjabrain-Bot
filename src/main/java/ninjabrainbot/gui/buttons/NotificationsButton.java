@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.frames.NotificationsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.UpdateChecker;

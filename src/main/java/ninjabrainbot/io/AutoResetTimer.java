@@ -6,8 +6,8 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.ResetAction;
 import ninjabrainbot.data.domainmodel.IDomainModel;
-import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 
 public class AutoResetTimer extends Timer implements IDisposable {
 

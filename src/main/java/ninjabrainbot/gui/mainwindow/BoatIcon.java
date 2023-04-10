@@ -4,8 +4,8 @@ import javax.swing.ImageIcon;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.data.calculator.highprecision.BoatState;
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.components.labels.ThemedIcon;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

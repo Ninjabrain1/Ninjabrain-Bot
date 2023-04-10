@@ -18,7 +18,7 @@ public interface ISubscribable<T> extends IUnsubscribable<T> {
 		return subscribe(t -> SwingUtilities.invokeLater(() -> subscriber.accept(t)));
 	}
 
-	default Subscription subscribe(Runnable runnable){
+	default Subscription subscribe(Runnable runnable) {
 		return subscribe(__ -> runnable.run());
 	}
 

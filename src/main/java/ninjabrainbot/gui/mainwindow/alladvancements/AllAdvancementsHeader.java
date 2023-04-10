@@ -2,7 +2,6 @@ package ninjabrainbot.gui.mainwindow.alladvancements;
 
 import java.awt.Dimension;
 
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.gui.components.labels.ThemedLabel;
