@@ -14,6 +14,8 @@ import ninjabrainbot.data.input.ActiveInstanceInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.HotkeyInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
+import ninjabrainbot.gui.mainwindow.main.MainTextArea;
+import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
@@ -21,6 +23,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.MockedClipboardReader;
 import ninjabrainbot.util.MockedInstanceProvider;
+import ninjabrainbot.util.TestUtils;
 
 public class IntegrationTestBuilder {
 
@@ -83,6 +86,10 @@ public class IntegrationTestBuilder {
 
 	public IDataState getDataState() {
 		return dataState;
+	}
+
+	public MainTextAreaTestAdapter createMainTextArea() {
+		return new MainTextAreaTestAdapter(new MainTextArea(TestUtils.createStyleManager(), preferences, dataState));
 	}
 
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
