@@ -1,9 +1,12 @@
 package ninjabrainbot.data.calculator.endereye;
 
+import ninjabrainbot.data.calculator.common.IPlayerPosition;
+
 public class ManualEnderEyeThrow extends EnderEyeThrow {
 
-	public ManualEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, IStandardDeviationHandler standardDeviationHandler) {
-		this(x, z, horizontalAngle, verticalAngle, standardDeviationHandler, 0);
+	public ManualEnderEyeThrow(IPlayerPosition playerPosition, double crosshairCorrection, IStandardDeviationHandler standardDeviationHandler) {
+		this(playerPosition.xInOverworld(), playerPosition.zInOverworld(), playerPosition.horizontalAngle() + crosshairCorrection,
+				-31.6, standardDeviationHandler, 0);
 	}
 
 	private ManualEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, IStandardDeviationHandler standardDeviationHandler, double correction) {

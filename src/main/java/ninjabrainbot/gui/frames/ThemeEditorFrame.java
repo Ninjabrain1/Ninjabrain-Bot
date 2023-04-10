@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
+import ninjabrainbot.data.calculator.common.DetailedPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.endereye.IStandardDeviationHandler;
@@ -168,8 +169,8 @@ public class ThemeEditorFrame extends ThemedDialog {
 		IStandardDeviationHandler standardDeviationHandler = new StandardDeviationHandler(defaultPreferences);
 		ArrayList<IEnderEyeThrow> eyeThrows = new ArrayList<>();
 
-		IEnderEyeThrow t1 = new NormalEnderEyeThrow(659.70, 1950.30, -253.82, -31.75, standardDeviationHandler).withCorrection(0.01);
-		IEnderEyeThrow t2 = new NormalEnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, standardDeviationHandler).withCorrection(-0.01).withToggledAltStd();
+		IEnderEyeThrow t1 = new NormalEnderEyeThrow(new DetailedPlayerPosition(659.70, 80, 1950.30, -253.82, -31.75, false), 0, standardDeviationHandler).withCorrection(0.01);
+		IEnderEyeThrow t2 = new NormalEnderEyeThrow(new DetailedPlayerPosition(-3.75, 80, 2002.63, -184.67, -31.75, false), 0, standardDeviationHandler).withCorrection(-0.01).withToggledAltStd();
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

@@ -2,6 +2,7 @@ package ninjabrainbot.data.calculator.endereye;
 
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.data.calculator.highprecision.BoatEnderEyeThrow;
 import ninjabrainbot.data.calculator.highprecision.IBoatDataState;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
@@ -22,39 +23,17 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 		assert detailedPlayerPosition.isInOverworld();
 
 		boolean isBoatThrow = preferences.useTallRes.get() && preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;
-
-		double correctedHorizontalAngle = detailedPlayerPosition.horizontalAngle();
 		if (isBoatThrow)
-			correctedHorizontalAngle += getPreciseBoatHorizontalAngle(correctedHorizontalAngle, preferences, boatDataState.boatAngle().get());
-		correctedHorizontalAngle = getCorrectedHorizontalAngle(correctedHorizontalAngle, preferences.crosshairCorrection.get());
+			return new BoatEnderEyeThrow(detailedPlayerPosition, preferences, standardDeviationHandler, boatDataState.boatAngle().get());
 
-		return new NormalEnderEyeThrow(detailedPlayerPosition.xInPlayerDimension(), detailedPlayerPosition.zInPlayerDimension(),
-				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), standardDeviationHandler);
+		return new NormalEnderEyeThrow(detailedPlayerPosition, preferences.crosshairCorrection.get(), standardDeviationHandler);
 	}
 
 	@Override
 	public IEnderEyeThrow createEnderEyeThrowFromLimitedPlayerPosition(IPlayerPosition playerPosition) {
 		assert playerPosition.isInOverworld();
 
-		double correctedHorizontalAngle = playerPosition.horizontalAngle() + preferences.crosshairCorrection.get();
-		return new NormalEnderEyeThrow(playerPosition.xInPlayerDimension(), playerPosition.zInPlayerDimension(), correctedHorizontalAngle, -31, standardDeviationHandler);
-	}
-
-	private static double getCorrectedHorizontalAngle(double alpha, double crosshairCorrection) {
-		alpha += crosshairCorrection;
-
-		// Determined experimentally, exact cause unknown
-		alpha -= 0.00079 * Math.sin((alpha + 45) * Math.PI / 180.0);
-
-		return alpha;
-	}
-
-	private static double getPreciseBoatHorizontalAngle(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
-		double sensitivity = preferences.sensitivity.get();
-		double preMultiplier = sensitivity * 0.6f + 0.2f;
-		preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0f;
-		double minInc = preMultiplier * 0.15D;
-		return boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc;
+		return new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get(), standardDeviationHandler);
 	}
 
 }
