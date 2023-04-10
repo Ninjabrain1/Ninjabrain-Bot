@@ -80,26 +80,26 @@ public class ResultTypeProviderTests {
 		assertEquals(dataState.resultType().get(), ResultType.FAILED);
 		assertFalse(dataState.calculatorResult().get().success());
 
-//		dataStateHandler.undo();
+		domainModel.undoUnderWriteLock();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterSecondThrow);
 
-//		dataStateHandler.undo();
+		domainModel.undoUnderWriteLock();
 		assertEquals(dataState.resultType().get(), ResultType.TRIANGULATION);
 		assertTrue(dataState.calculatorResult().get().success());
 		assertEquals(dataState.calculatorResult().get().getBestPrediction().getOverworldDistance(), distanceAfterFirstThrow);
 
-//		dataStateHandler.undo();
+		domainModel.undoUnderWriteLock();
 		assertEquals(dataState.resultType().get(), ResultType.BLIND);
 		assertEquals(dataState.blindResult().get().evaluation(), BlindResult.EXCELLENT);
 		assertEquals(dataState.blindResult().get().highrollProbability, highrollProbability);
 
-//		dataStateHandler.undo();
+		domainModel.undoUnderWriteLock();
 		assertEquals(dataState.resultType().get(), ResultType.DIVINE);
 		assertEquals(dataState.divineResult().get().fossil.x, 1);
 
-//		dataStateHandler.undo();
+		domainModel.undoUnderWriteLock();
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 	}
 
