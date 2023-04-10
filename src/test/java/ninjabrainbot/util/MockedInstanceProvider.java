@@ -9,24 +9,24 @@ import ninjabrainbot.io.mcinstance.MinecraftInstance;
 
 public class MockedInstanceProvider implements IActiveInstanceProvider {
 
-	private final IObservable<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
-	private final IObservable<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
+	public final ObservableField<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
+	public final ObservableField<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
 
 	public MockedInstanceProvider() {
 	}
 
 	@Override
-	public IObservable<MinecraftInstance> activeMinecraftInstance() {
+	public ObservableField<MinecraftInstance> activeMinecraftInstance() {
 		return currentInstance;
 	}
 
 	@Override
-	public IObservable<IMinecraftWorldFile> activeMinecraftWorld() {
+	public ObservableField<IMinecraftWorldFile> activeMinecraftWorld() {
 		return currentWorldFile;
 	}
 
 	@Override
-	public ISubscribable<IMinecraftWorldFile> whenActiveMinecraftWorldModified() {
+	public ObservableField<IMinecraftWorldFile> whenActiveMinecraftWorldModified() {
 		return currentWorldFile;
 	}
 

@@ -36,19 +36,14 @@ public class CalculatedTravelTests {
 	@CsvSource({ input1, input2, input3 })
 	public void twoEyeCalculatedTravelEyeSpies(String f3c1, String f3c2, int strongholdChunkX, int strongholdChunkZ) {
 		// Arrange
-		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
-		preferences.sigma.set(0.005f);
-		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
-		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
-		MockedClipboardReader clipboardReader = new MockedClipboardReader();
-
-		IDataState dataState = createDataState(preferences, clipboardReader);
-		MainTextArea mainTextArea = new MainTextArea(TestUtils.createStyleManager(), preferences, dataState);
+		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
+		IDataState dataState = testBuilder.getDataState();
+		MainTextArea mainTextArea = new MainTextArea(TestUtils.createStyleManager(), testBuilder.preferences, dataState);
 		MainTextAreaTestAdapter mainTextAreaTestAdapter = new MainTextAreaTestAdapter(mainTextArea);
 
 		// Act
-		clipboardReader.setClipboard(f3c1);
-		clipboardReader.setClipboard(f3c2);
+		testBuilder.setClipboard(f3c1);
+		testBuilder.setClipboard(f3c2);
 
 		// Assert
 		TestUtils.awaitSwingEvents();
@@ -56,22 +51,6 @@ public class CalculatedTravelTests {
 		Assertions.assertEquals(expectedStrongholdChunkText, mainTextAreaTestAdapter.getDetailedTriangulationPanel_strongholdLocation(0));
 		String expectedNetherText = String.format("(%s, %s)", strongholdChunkX * 2, strongholdChunkZ * 2);
 		Assertions.assertEquals(expectedNetherText, mainTextAreaTestAdapter.getDetailedTriangulationPanel_netherCoords(0));
-	}
-
-	private static void inputF3C(String eye, MockedClipboardReader clipboardProvider, NinjabrainBotPreferences preferences) {
-		TestF3C f3c = new TestF3C(eye);
-		clipboardProvider.setClipboard(f3c.F3C);
-		f3c.executeSubpixelCorrectionHotkeys(preferences);
-	}
-
-	private static IDataState createDataState(NinjabrainBotPreferences preferences, IClipboardProvider clipboardReader) {
-		MockedInstanceProvider instanceProvider = new MockedInstanceProvider();
-		IDataStateHandler dataStateHandler = new DataStateHandler(preferences, clipboardReader, instanceProvider);
-		return dataStateHandler.getDataState();
-	}
-
-	private static String testInput(String fc31, String f3c2, int strongholdChunkX, int strongholdChunkZ) {
-		return fc31 + "," + f3c2 + "," + strongholdChunkX + "," + strongholdChunkZ;
 	}
 
 }
