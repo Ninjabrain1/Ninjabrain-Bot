@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.calculator.calibrator.Calibrator;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
+import ninjabrainbot.data.calculator.endereye.NormalEnderEyeThrow;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
@@ -189,7 +189,7 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		}
 	}
 
-	public void add(EnderEyeThrow t) throws InterruptedException {
+	public void add(NormalEnderEyeThrow t) throws InterruptedException {
 		calibrator.add(t);
 		int stage = 0;
 		if (calibrator.isReady()) {

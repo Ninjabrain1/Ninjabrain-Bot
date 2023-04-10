@@ -4,18 +4,17 @@ import ninjabrainbot.data.actions.ActionExecutor;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.calculator.Calculator;
 import ninjabrainbot.data.calculator.CalculatorSettings;
-import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.CoordinateInputSource;
 import ninjabrainbot.data.calculator.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
+import ninjabrainbot.data.calculator.endereye.StandardDeviationHandler;
+import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.data.input.ActiveInstanceInputHandler;
 import ninjabrainbot.data.input.ButtonInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.HotkeyInputHandler;
 import ninjabrainbot.data.input.IButtonInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
-import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
@@ -25,11 +24,6 @@ import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class DataStateHandler implements IDataStateHandler, IDisposable {
-
-	private final NinjabrainBotPreferences preferences;
-	private final StandardStdProfile stdProfile;
-
-	private final IActiveInstanceProvider activeInstanceProvider;
 
 	private final DataState dataState;
 	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
@@ -41,18 +35,15 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
-		this.preferences = preferences;
-		this.activeInstanceProvider = activeInstanceProvider;
-		this.stdProfile = new StandardStdProfile(preferences);
-
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
 
+		StandardDeviationHandler standardDeviationHandler = disposeHandler.add(new StandardDeviationHandler(preferences));
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
 		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 
 		CoordinateInputSource coordinateInputSource = new CoordinateInputSource(clipboardProvider);
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, stdProfile);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, standardDeviationHandler);
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
@@ -62,30 +53,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 		disposeHandler.add(preferences.useAdvStatistics.whenModified().subscribe(this::onCalculatorSettingsChanged));
 		disposeHandler.add(preferences.mcVersion.whenModified().subscribe(this::onCalculatorSettingsChanged));
-		disposeHandler.add(preferences.sigma.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.NORMAL, newStd)));
-		disposeHandler.add(preferences.sigmaAlt.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.ALTERNATIVE, newStd)));
-		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.MANUAL, newStd)));
-		disposeHandler.add(preferences.sigmaBoat.whenModified().subscribe(newStd -> setStdProfile(StandardStdProfile.BOAT, newStd)));
-	}
-
-	@Override
-	public synchronized void toggleAltStdOnLastThrowIfNotLocked() {
-//		try (ILock lock = modificationLock.acquireWritePermission()) {
-//			if (!dataState.locked().get() && dataState.getThrowSet().size() != 0) {
-//				IThrow last = dataState.getThrowSet().getLast();
-//				int stdProfile = last.getStdProfileNumber();
-//				switch (stdProfile) {
-//					case StandardStdProfile.NORMAL:
-//						last.setStdProfileNumber(StandardStdProfile.ALTERNATIVE);
-//						break;
-//					case StandardStdProfile.ALTERNATIVE:
-//						last.setStdProfileNumber(StandardStdProfile.NORMAL);
-//						break;
-//					case StandardStdProfile.MANUAL:
-//						break;
-//				}
-//			}
-//		}
 	}
 
 	private void afterDataStateModified(boolean wasUndoAction) {

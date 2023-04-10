@@ -28,10 +28,6 @@ public class PreviewDataStateHandler implements IDataStateHandler {
 	}
 
 	@Override
-	public void toggleAltStdOnLastThrowIfNotLocked() {
-	}
-
-	@Override
 	public ISubscribable<IDataState> whenDataStateModified() {
 		return whenDataStateModified;
 	}

@@ -77,7 +77,7 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IListComponent<IEnderEyeThrow> getThrowSet() {
+	public IListComponent<IEnderEyeThrow> getThrowList() {
 		return throwSet;
 	}
 

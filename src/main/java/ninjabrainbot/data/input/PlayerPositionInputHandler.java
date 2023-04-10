@@ -4,7 +4,7 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.actions.AddEnderEyeThrowAction;
 import ninjabrainbot.data.actions.IAction;
 import ninjabrainbot.data.actions.IActionExecutor;
-import ninjabrainbot.data.actions.SetAllAdvancementsStructurePositionAction;
+import ninjabrainbot.data.actions.TryAddAllAdvancementsStructureAction;
 import ninjabrainbot.data.actions.SetBoatAngleAction;
 import ninjabrainbot.data.actions.SetPlayerPositionAction;
 import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
@@ -54,7 +54,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 			return null;
 
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
-			return new SetAllAdvancementsStructurePositionAction(dataState, playerPosition);
+			return new TryAddAllAdvancementsStructureAction(dataState, playerPosition);
 
 		if (dataState.boatDataState().enteringBoat().get())
 			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);

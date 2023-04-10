@@ -1,7 +1,5 @@
 package ninjabrainbot.data.calculator.common;
 
-import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
-import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.event.ISubscribable;
 
 public interface IPlayerPositionInputSource {

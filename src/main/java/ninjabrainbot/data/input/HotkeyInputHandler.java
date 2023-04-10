@@ -4,6 +4,7 @@ import ninjabrainbot.data.IDataState;
 import ninjabrainbot.data.actions.ChangeLastAngleAction;
 import ninjabrainbot.data.actions.IActionExecutor;
 import ninjabrainbot.data.actions.ResetAction;
+import ninjabrainbot.data.actions.ToggleAltStdOnLastThrowAction;
 import ninjabrainbot.data.actions.ToggleEnteringBoatAction;
 import ninjabrainbot.data.actions.ToggleLockedAction;
 import ninjabrainbot.data.actions.UndoAction;
@@ -14,7 +15,6 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class HotkeyInputHandler implements IDisposable {
 
-	private final NinjabrainBotPreferences preferences;
 	private final IDomainModel domainModel;
 	private final IDataState dataState;
 	private final IActionExecutor actionExecutor;
@@ -22,7 +22,6 @@ public class HotkeyInputHandler implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public HotkeyInputHandler(NinjabrainBotPreferences preferences, IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor) {
-		this.preferences = preferences;
 		this.domainModel = domainModel;
 		this.dataState = dataState;
 		this.actionExecutor = actionExecutor;
@@ -31,7 +30,7 @@ public class HotkeyInputHandler implements IDisposable {
 		preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked);
 		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, true)));
 		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, false)));
-//		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> dataStateHandler.toggleAltStdOnLastThrowIfNotLocked());
+		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleAltStdOnLastThrowAction(dataState, preferences)));
 		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState)));
 		preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState)));
 	}

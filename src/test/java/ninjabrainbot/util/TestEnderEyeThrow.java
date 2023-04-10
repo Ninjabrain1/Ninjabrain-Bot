@@ -2,6 +2,7 @@ package ninjabrainbot.util;
 
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
 import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrowType;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 
 public class TestEnderEyeThrow implements IEnderEyeThrow {
@@ -41,6 +42,16 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
+	public IEnderEyeThrow withToggledAltStd() {
+		return this;
+	}
+
+	@Override
+	public EnderEyeThrowType getType() {
+		return EnderEyeThrowType.Normal;
+	}
+
+	@Override
 	public double getStd() {
 		return std;
 	}
@@ -53,21 +64,6 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	@Override
 	public double correction() {
 		return 0;
-	}
-
-	@Override
-	public int getStdProfileNumber() {
-		return 0;
-	}
-
-	@Override
-	public boolean isMcVersion1_12() {
-		return false;
-	}
-
-	@Override
-	public boolean isBoatThrow() {
-		return false;
 	}
 
 	@Override

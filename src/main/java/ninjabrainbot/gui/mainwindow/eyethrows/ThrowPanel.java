@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.IDataState;
+import ninjabrainbot.data.calculator.endereye.EnderEyeThrowType;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
 import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
 import ninjabrainbot.data.input.IButtonInputHandler;
@@ -87,7 +88,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		setLayout(null);
 		updateVisibility();
 
-		IObservableList<IEnderEyeThrow> throwSet = dataState.getThrowSet();
+		IObservableList<IEnderEyeThrow> throwSet = dataState.getThrowList();
 		setThrow(index < throwSet.size() ? throwSet.get(index) : null);
 		disposeHandler.add(throwSet.subscribeEDT(this::updateThrow));
 
@@ -264,12 +265,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// Paint dot if special std
-		if (t != null && t.getStdProfileNumber() != 0) {
-			if (t.getStdProfileNumber() == 1) {
+		if (t != null && t.getType() != EnderEyeThrowType.Normal) {
+			if (t.getType() == EnderEyeThrowType.NormalWithAltStd) {
 				g.setColor(Color.RED);
-			} else if (t.getStdProfileNumber() == 2) {
+			} else if (t.getType() == EnderEyeThrowType.Manual) {
 				g.setColor(Color.CYAN);
-			} else if (t.getStdProfileNumber() == 3) {
+			} else if (t.getType() == EnderEyeThrowType.Boat) {
 				g.setColor(Color.GREEN);
 			}
 			int a = 3;

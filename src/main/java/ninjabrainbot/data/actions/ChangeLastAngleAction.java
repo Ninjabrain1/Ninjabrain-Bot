@@ -22,7 +22,7 @@ public class ChangeLastAngleAction implements IAction {
 		if (dataState.locked().get())
 			return;
 
-		IListComponent<IEnderEyeThrow> throwList = dataState.getThrowSet();
+		IListComponent<IEnderEyeThrow> throwList = dataState.getThrowList();
 		if (throwList.size() == 0)
 			return;
 
@@ -42,6 +42,5 @@ public class ChangeLastAngleAction implements IAction {
 		change *= positive ? 1 : -1;
 		return change;
 	}
-
 
 }

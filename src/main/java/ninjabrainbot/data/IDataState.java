@@ -21,7 +21,7 @@ public interface IDataState {
 
 	IDivineContext getDivineContext();
 
-	IListComponent<IEnderEyeThrow> getThrowSet();
+	IListComponent<IEnderEyeThrow> getThrowList();
 
 	IDataComponent<IPlayerPosition> playerPosition();
 

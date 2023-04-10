@@ -15,7 +15,7 @@ public class RemoveTriangulationThrowAction implements IAction {
 
 	@Override
 	public void execute() {
-		dataState.getThrowSet().remove(throwToRemove);
+		dataState.getThrowList().remove(throwToRemove);
 	}
 
 }

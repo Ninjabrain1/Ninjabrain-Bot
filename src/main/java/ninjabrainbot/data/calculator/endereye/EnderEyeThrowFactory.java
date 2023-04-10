@@ -9,12 +9,12 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 
 	private final NinjabrainBotPreferences preferences;
 	private final IBoatDataState boatDataState;
-	private final IStdProfile stdProfile;
+	private final IStandardDeviationHandler standardDeviationHandler;
 
-	public EnderEyeThrowFactory(NinjabrainBotPreferences preferences, IBoatDataState boatDataState, IStdProfile stdProfile) {
+	public EnderEyeThrowFactory(NinjabrainBotPreferences preferences, IBoatDataState boatDataState, IStandardDeviationHandler standardDeviationHandler) {
 		this.preferences = preferences;
 		this.boatDataState = boatDataState;
-		this.stdProfile = stdProfile;
+		this.standardDeviationHandler = standardDeviationHandler;
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 			correctedHorizontalAngle += getPreciseBoatHorizontalAngle(correctedHorizontalAngle, preferences, boatDataState.boatAngle().get());
 		correctedHorizontalAngle = getCorrectedHorizontalAngle(correctedHorizontalAngle, preferences.crosshairCorrection.get());
 
-		return new EnderEyeThrow(detailedPlayerPosition.xInPlayerDimension(), detailedPlayerPosition.zInPlayerDimension(),
-				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), isBoatThrow ? ThrowType.Boat : ThrowType.Normal, stdProfile);
+		return new NormalEnderEyeThrow(detailedPlayerPosition.xInPlayerDimension(), detailedPlayerPosition.zInPlayerDimension(),
+				correctedHorizontalAngle, detailedPlayerPosition.verticalAngle(), standardDeviationHandler);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 		assert playerPosition.isInOverworld();
 
 		double correctedHorizontalAngle = playerPosition.horizontalAngle() + preferences.crosshairCorrection.get();
-		return new EnderEyeThrow(playerPosition.xInPlayerDimension(), playerPosition.zInPlayerDimension(), correctedHorizontalAngle, -31, ThrowType.McVersion1_12, stdProfile);
+		return new NormalEnderEyeThrow(playerPosition.xInPlayerDimension(), playerPosition.zInPlayerDimension(), correctedHorizontalAngle, -31, standardDeviationHandler);
 	}
 
 	private static double getCorrectedHorizontalAngle(double alpha, double crosshairCorrection) {

@@ -28,7 +28,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 		if (calculatorResult == null || !calculatorResult.success())
 			return false;
 
-		IEnderEyeThrow t = dataState.getThrowSet().get(0);
+		IEnderEyeThrow t = dataState.getThrowList().get(0);
 		double approximatePortalNetherX = t.xInOverworld() / 8;
 		double approximatePortalNetherZ = t.zInOverworld() / 8;
 

@@ -21,11 +21,10 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.data.IDataStateHandler;
 import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.endereye.IStdProfile;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.calculator.endereye.StandardStdProfile;
-import ninjabrainbot.data.calculator.endereye.EnderEyeThrow;
-import ninjabrainbot.data.calculator.endereye.ThrowType;
+import ninjabrainbot.data.calculator.endereye.IStandardDeviationHandler;
+import ninjabrainbot.data.calculator.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.data.calculator.endereye.StandardDeviationHandler;
 import ninjabrainbot.data.information.InformationMessageList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;
@@ -166,11 +165,11 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
-		IStdProfile stdProfile = new StandardStdProfile(defaultPreferences);
+		IStandardDeviationHandler standardDeviationHandler = new StandardDeviationHandler(defaultPreferences);
 		ArrayList<IEnderEyeThrow> eyeThrows = new ArrayList<>();
 
-		IEnderEyeThrow t1 = new EnderEyeThrow(659.70, 1950.30, -253.82, -31.75, ThrowType.NormalWithAltStd, stdProfile).withCorrection(0.01);
-		IEnderEyeThrow t2 = new EnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, ThrowType.McVersion1_12, stdProfile).withCorrection(-0.01);
+		IEnderEyeThrow t1 = new NormalEnderEyeThrow(659.70, 1950.30, -253.82, -31.75, standardDeviationHandler).withCorrection(0.01);
+		IEnderEyeThrow t2 = new NormalEnderEyeThrow(-3.75, 2002.63, -184.67, -31.75, standardDeviationHandler).withCorrection(-0.01);
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

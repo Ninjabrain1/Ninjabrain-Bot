@@ -33,14 +33,14 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 			return false;
 
 		ICalculatorResult calculatorResult = dataState.calculatorResult().get();
-		if (calculatorResult == null || !calculatorResult.success() || dataState.getThrowSet().size() == 0)
+		if (calculatorResult == null || !calculatorResult.success() || dataState.getThrowList().size() == 0)
 			return false;
 		return calculatorResult.getBestPrediction().chunk.weight < 0.95;
 	}
 
 	@Override
 	protected InformationMessage getInformationMessage() {
-		IEnderEyeThrow lastThrow = dataState.getThrowSet().getLast();
+		IEnderEyeThrow lastThrow = dataState.getThrowList().getLast();
 		List<Chunk> predictions = new ArrayList<>();
 		for (Chunk predictedChunk : dataState.calculatorResult().get().getTopChunks()) {
 			if (predictedChunk.weight < 0.01)

@@ -71,7 +71,7 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IListComponent<IEnderEyeThrow> getThrowSet() {
+	public IListComponent<IEnderEyeThrow> getThrowList() {
 		return throwSet;
 	}
 

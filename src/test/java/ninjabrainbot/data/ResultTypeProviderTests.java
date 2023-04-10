@@ -8,15 +8,15 @@ import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
 import ninjabrainbot.data.calculator.divine.Fossil;
 import ninjabrainbot.data.calculator.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.data.calculator.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.data.calculator.endereye.IStdProfile;
+import ninjabrainbot.data.calculator.endereye.IStandardDeviationHandler;
+import ninjabrainbot.data.calculator.endereye.StandardDeviationHandler;
+import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
-import ninjabrainbot.data.domainmodel.DomainModel;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.FakeCoordinateInputSource;
-import ninjabrainbot.util.TestStdProfile;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,14 +30,14 @@ public class ResultTypeProviderTests {
 	NinjabrainBotPreferences preferences;
 	DomainModel domainModel;
 	ActionExecutor actionExecutor;
-	IStdProfile stdProfile;
+	IStandardDeviationHandler standardDeviationHandler;
 
 	@BeforeEach
 	void setup() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
-		stdProfile = new TestStdProfile(0.03);
+		standardDeviationHandler = new StandardDeviationHandler(preferences);
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class ResultTypeProviderTests {
 		IDataState dataState = new DataState(new Calculator(calculatorSettings), domainModel);
 
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), stdProfile);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), standardDeviationHandler);
 		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 		new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 

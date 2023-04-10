@@ -15,7 +15,7 @@ public class AddEnderEyeThrowAction implements IAction {
 
 	@Override
 	public void execute() {
-		dataState.getThrowSet().add(throwToAdd);
+		dataState.getThrowList().add(throwToAdd);
 	}
 
 }

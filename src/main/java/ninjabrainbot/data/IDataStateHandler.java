@@ -6,8 +6,6 @@ public interface IDataStateHandler {
 
 	IDataState getDataState();
 
-	void toggleAltStdOnLastThrowIfNotLocked();
-
 	ISubscribable<IDataState> whenDataStateModified();
 
 }

@@ -9,13 +9,13 @@ import ninjabrainbot.data.calculator.common.StructurePosition;
 import ninjabrainbot.data.domainmodel.IDataComponent;
 import ninjabrainbot.event.IObservable;
 
-public class SetAllAdvancementsStructurePositionAction implements IAction {
+public class TryAddAllAdvancementsStructureAction implements IAction {
 
 	private final IAllAdvancementsDataState allAdvancementsDataState;
 	private final IObservable<IPlayerPosition> playerPositionObservable;
 	private final IDetailedPlayerPosition playerPosition;
 
-	public SetAllAdvancementsStructurePositionAction(IDataState dataState, IDetailedPlayerPosition playerPosition) {
+	public TryAddAllAdvancementsStructureAction(IDataState dataState, IDetailedPlayerPosition playerPosition) {
 		this.allAdvancementsDataState = dataState.allAdvancementsDataState();
 		this.playerPositionObservable = dataState.playerPosition();
 		this.playerPosition = playerPosition;

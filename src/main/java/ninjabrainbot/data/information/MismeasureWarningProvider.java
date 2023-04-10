@@ -31,7 +31,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 		ChunkPrediction bestPrediction = calculatorResult.getBestPrediction();
 		double likelihood = 1;
 		double expectedLikelihood = 1;
-		for (IEnderEyeThrow t : dataState.getThrowSet()) {
+		for (IEnderEyeThrow t : dataState.getThrowList()) {
 			double error = bestPrediction.getAngleError(t);
 			double sigma = t.getStd();
 			likelihood *= Math.exp(-0.5 * (error / sigma) * (error / sigma));

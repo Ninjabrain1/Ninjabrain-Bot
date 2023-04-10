@@ -2,12 +2,11 @@ package ninjabrainbot.data.calculator.endereye;
 
 import ninjabrainbot.data.calculator.common.IOverworldRay;
 import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
 
 public interface IEnderEyeThrow extends IOverworldRay {
 
 	double verticalAngle();
-
-	IEnderEyeThrow withCorrection(double correction);
 
 	double horizontalAngleWithoutCorrection();
 
@@ -15,12 +14,14 @@ public interface IEnderEyeThrow extends IOverworldRay {
 
 	double getStd();
 
-	int getStdProfileNumber();
+	IEnderEyeThrow withCorrection(double correction);
 
-	boolean isMcVersion1_12();
+	IEnderEyeThrow withToggledAltStd();
 
-	boolean isBoatThrow();
+	EnderEyeThrowType getType();
 
-	IPlayerPosition getPlayerPosition();
+	default IPlayerPosition getPlayerPosition(){
+		return new LimitedPlayerPosition(xInOverworld(), zInOverworld(), horizontalAngle());
+	}
 
 }
