@@ -37,20 +37,20 @@ import ninjabrainbot.util.I18n;
 
 public class CalibrationPanel extends JPanel implements ThemedComponent {
 
-	Calibrator calibrator;
+	final Calibrator calibrator;
 
-	StyleManager styleManager;
-	NinjabrainBotPreferences preferences;
-	OptionsFrame optionsFrame;
-	TitleBarPanel titlebarPanel;
-	JLabel titletextLabel;
-	FlatButton cancelButton;
-	JPanel panel;
-	InstructionLabel[] labels;
-	ErrorTextArea errors;
-	Histogram hist;
-	JPanel rightPanel;
-	JLabel std;
+	final StyleManager styleManager;
+	final NinjabrainBotPreferences preferences;
+	final OptionsFrame optionsFrame;
+	final TitleBarPanel titlebarPanel;
+	final JLabel titletextLabel;
+	final FlatButton cancelButton;
+	final JPanel panel;
+	final InstructionLabel[] labels;
+	final ErrorTextArea errors;
+	final Histogram hist;
+	final JPanel rightPanel;
+	final JLabel std;
 	static final int errorAreaWidth = 100;
 
 	public CalibrationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, OptionsFrame frame) {
@@ -261,7 +261,7 @@ class InstructionLabel extends ThemedLabel {
 
 	private boolean highlighted;
 
-	WrappedColor highlightedCol;
+	final WrappedColor highlightedCol;
 
 	public InstructionLabel(StyleManager styleManager, String text) {
 		super(styleManager, "<html><div style='text-align: center;'>" + text + "</div></html>");

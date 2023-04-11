@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 public class ObservableList<T> implements IObservableList<T> {
 
-	protected ArrayListImplementingReadOnlyList<T> list;
+	protected final ArrayListImplementingReadOnlyList<T> list;
 
 	private final ArrayList<Consumer<IReadOnlyList<T>>> subscribers;
 

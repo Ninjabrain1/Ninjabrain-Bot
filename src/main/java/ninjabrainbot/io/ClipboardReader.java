@@ -13,12 +13,12 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 
 	private final NinjabrainBotPreferences preferences;
 
-	Clipboard clipboard;
+	final Clipboard clipboard;
 	String lastClipboardString;
 
 	private final AtomicBoolean forceReadLater;
 
-	ObservableField<String> clipboardString;
+	final ObservableField<String> clipboardString;
 
 	public ClipboardReader(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;

@@ -19,12 +19,12 @@ public class Histogram extends ThemedPanel {
 	private final float max;
 	private final int numBins;
 
-	ArrayList<JLabel> ticks;
-	ArrayList<Float> floatTicks;
+	final ArrayList<JLabel> ticks;
+	final ArrayList<Float> floatTicks;
 	Color histColor = Color.black;
 	Color lineColor = Color.black;
-	int labelsHeight = 20;
-	int margin = 20;
+	final int labelsHeight = 20;
+	final int margin = 20;
 
 	private final WrappedColor histCol;
 	private final WrappedColor lineCol;

@@ -158,7 +158,8 @@ public class Calculator implements ICalculator {
 	}
 
 	private class Uniform {
-		public double a, b;
+		public final double a;
+		public final double b;
 
 		public Uniform(double a, double b) {
 			this.a = a;

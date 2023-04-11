@@ -18,7 +18,7 @@ public class KeyboardListener implements NativeKeyListener {
 	private final BooleanPreference useAltClipboardReader;
 
 	BiConsumer<Integer, Integer> consumer;
-	ClipboardReader clr;
+	final ClipboardReader clr;
 	boolean f3Held = false;
 
 	public static void preInit() {

@@ -18,7 +18,7 @@ public class TitleBarPanel extends ThemedPanel {
 
 	private Point initialClick;
 
-	ArrayList<Component> buttons;
+	final ArrayList<Component> buttons;
 
 	public TitleBarPanel(StyleManager styleManager, final Window frame) {
 		super(styleManager);

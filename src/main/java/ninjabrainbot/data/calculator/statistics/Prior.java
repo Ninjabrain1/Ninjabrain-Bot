@@ -17,7 +17,7 @@ public class Prior implements IPrior {
 	int radius;
 	int x0, z0, x1, z1;
 	Chunk[] chunks;
-	IDivineContext divineContext;
+	final IDivineContext divineContext;
 
 	public Prior(int centerX, int centerZ, int radius, IDivineContext divineContext) {
 		long t0 = System.currentTimeMillis();

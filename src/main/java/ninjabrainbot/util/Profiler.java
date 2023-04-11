@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Profiler {
 
-	private static boolean enabled = false;
+	private static final boolean enabled = false;
 	static Timer root = new Timer(null, "root");
 	static Timer active = root;
 
@@ -45,9 +45,9 @@ public class Profiler {
 
 class Timer {
 
-	Timer parent;
+	final Timer parent;
 	HashMap<String, Timer> children;
-	String name;
+	final String name;
 	long totalTime;
 	long startTime;
 

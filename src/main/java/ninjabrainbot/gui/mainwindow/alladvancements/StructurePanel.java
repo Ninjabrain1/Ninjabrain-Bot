@@ -16,9 +16,9 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class StructurePanel extends ThemedPanel implements IDisposable {
 
-	ThemedLabel location;
-	ThemedLabel nether;
-	ThemedLabel angle;
+	final ThemedLabel location;
+	final ThemedLabel nether;
+	final ThemedLabel angle;
 
 	private final boolean showBorder;
 	private final WrappedColor borderColor;

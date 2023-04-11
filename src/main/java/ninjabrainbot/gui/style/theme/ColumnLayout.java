@@ -10,10 +10,10 @@ import java.util.HashSet;
 
 public class ColumnLayout implements LayoutManager, java.io.Serializable {
 
-	int horizontalGap;
+	final int horizontalGap;
 
-	HashMap<Component, Float> relativeWidths;
-	HashSet<Component> componentsWithReservedSpaceWhenHidden;
+	final HashMap<Component, Float> relativeWidths;
+	final HashSet<Component> componentsWithReservedSpaceWhenHidden;
 
 	public ColumnLayout(int horizontalGap) {
 		this.horizontalGap = horizontalGap;

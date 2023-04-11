@@ -28,8 +28,8 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	private final JLabel label;
 	private final FlatButton removeButton;
 
-	Subscription fossilSubscription;
-	Runnable whenVisibilityChanged;
+	final Subscription fossilSubscription;
+	final Runnable whenVisibilityChanged;
 
 	private final WrappedColor borderCol;
 

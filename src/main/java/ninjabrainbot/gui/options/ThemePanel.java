@@ -17,7 +17,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ThemePanel extends ThemedPanel {
 
-	WrappedColor borderCol;
+	final WrappedColor borderCol;
 
 	public ThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, Theme theme) {
 		super(styleManager);

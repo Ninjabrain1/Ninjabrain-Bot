@@ -22,12 +22,12 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public abstract class ThemedFrame extends JFrame implements IDisposable {
 
-	protected TitleBarPanel titlebarPanel;
-	protected ThemedLabel titletextLabel;
+	protected final TitleBarPanel titlebarPanel;
+	protected final ThemedLabel titletextLabel;
 
-	WrappedColor bgCol;
+	final WrappedColor bgCol;
 
-	protected DisposeHandler disposeHandler = new DisposeHandler();
+	protected final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ThemedFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
 		super(title);

@@ -6,7 +6,7 @@ import ninjabrainbot.Main;
 
 public class SavedPreferences implements IPreferenceSource {
 
-	Preferences pref;
+	final Preferences pref;
 
 	public SavedPreferences() {
 		pref = Preferences.userNodeForPackage(Main.class);

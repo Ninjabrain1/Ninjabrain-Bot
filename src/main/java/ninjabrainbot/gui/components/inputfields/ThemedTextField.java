@@ -20,7 +20,7 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedTextField extends JTextField implements ThemedComponent {
 
-	protected ObservableField<String> validatedProcessedText = new ObservableField<String>();
+	protected final ObservableField<String> validatedProcessedText = new ObservableField<String>();
 
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;

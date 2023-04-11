@@ -25,8 +25,8 @@ public class NotificationsFrame extends ThemedFrame {
 
 	VersionURL url;
 
-	JPanel mainPanel;
-	ThemedLabel label;
+	final JPanel mainPanel;
+	final ThemedLabel label;
 
 	public NotificationsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager, preferences, I18n.get("notificationsframe.new_version_available"));

@@ -109,7 +109,7 @@ public class ThemeSerializer {
 
 class ParseResult {
 
-	boolean success;
+	final boolean success;
 	List<Character> tags;
 	List<Color> colors;
 

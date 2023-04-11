@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 public class ObservableProperty<T> implements ISubscribable<T> {
 
-	protected ArrayList<Consumer<T>> subscribers;
+	protected final ArrayList<Consumer<T>> subscribers;
 
 	public ObservableProperty() {
 		subscribers = new ArrayList<Consumer<T>>();

@@ -7,12 +7,12 @@ import ninjabrainbot.event.ObservableProperty;
 
 public class HotkeyPreference {
 
-	public static ArrayList<HotkeyPreference> hotkeys = new ArrayList<HotkeyPreference>();
+	public static final ArrayList<HotkeyPreference> hotkeys = new ArrayList<HotkeyPreference>();
 
-	IPreferenceSource pref;
+	final IPreferenceSource pref;
 
-	IntPreference modifier;
-	IntPreference code;
+	final IntPreference modifier;
+	final IntPreference code;
 
 	private final ObservableProperty<HotkeyPreference> whenTriggered;
 

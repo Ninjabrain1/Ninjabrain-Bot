@@ -22,9 +22,9 @@ import ninjabrainbot.util.I18n;
 
 public class HotkeyPanel extends ThemedPanel {
 
-	public ThemedLabel descLabel;
+	public final ThemedLabel descLabel;
 	FlatButton button;
-	HotkeyPreference preference;
+	final HotkeyPreference preference;
 	boolean editing = false;
 
 	WrappedColor disabledCol;

@@ -7,7 +7,7 @@ import ninjabrainbot.io.preferences.BooleanPreference;
 
 public abstract class InformationMessageProvider extends ObservableField<InformationMessage> implements IDisposable {
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	BooleanPreference enabledPreference;
 

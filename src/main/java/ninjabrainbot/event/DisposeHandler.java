@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class DisposeHandler implements IDisposable {
 
-	public ArrayList<IDisposable> disposables = new ArrayList<>(2);
+	public final ArrayList<IDisposable> disposables = new ArrayList<>(2);
 
 	public <T extends IDisposable> T add(T disposable) {
 		disposables.add(disposable);

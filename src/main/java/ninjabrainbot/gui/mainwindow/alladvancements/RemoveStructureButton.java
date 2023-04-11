@@ -9,7 +9,7 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class RemoveStructureButton extends FlatButton implements IDisposable {
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public RemoveStructureButton(StyleManager styleManager, IObservable<StructurePosition> structurePosition) {
 		super(styleManager, "-");

@@ -22,16 +22,16 @@ public class MainTextArea extends ResizablePanel {
 
 	private final NinjabrainBotPreferences preferences;
 
-	IDataState dataState;
+	final IDataState dataState;
 
-	BasicTriangulationPanel basicTriangulation;
-	DetailedTriangulationPanel detailedTriangulation;
-	BlindPanel blind;
-	DivinePanel divine;
-	AllAdvancementsPanel allAdvancements;
+	final BasicTriangulationPanel basicTriangulation;
+	final DetailedTriangulationPanel detailedTriangulation;
+	final BlindPanel blind;
+	final DivinePanel divine;
+	final AllAdvancementsPanel allAdvancements;
 
 	boolean idle;
-	CardLayout layout;
+	final CardLayout layout;
 
 	public MainTextArea(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState) {
 		this.preferences = preferences;

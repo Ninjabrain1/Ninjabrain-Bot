@@ -24,9 +24,9 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 	private final JLabel angle;
 	private final JLabel[] labels;
 
-	StyleManager styleManager;
+	final StyleManager styleManager;
 
-	Subscription strongholdDisplayTypeChangedSubscription;
+	final Subscription strongholdDisplayTypeChangedSubscription;
 
 	private final WrappedColor borderCol;
 

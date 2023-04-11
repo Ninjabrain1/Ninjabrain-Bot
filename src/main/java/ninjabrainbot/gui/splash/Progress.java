@@ -29,9 +29,9 @@ public class Progress {
 
 class ProgressKeeper {
 
-	ArrayList<String> labels;
-	ArrayList<Float> progressWhenStarted;
-	ArrayList<Float> progressWhenComplete;
+	final ArrayList<String> labels;
+	final ArrayList<Float> progressWhenStarted;
+	final ArrayList<Float> progressWhenComplete;
 
 	String currentName = "";
 	float currentSubTaskProgress = 0;

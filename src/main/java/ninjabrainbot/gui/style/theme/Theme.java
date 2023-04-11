@@ -16,7 +16,7 @@ import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
 
-	protected ObservableField<String> name = new ObservableField<String>();
+	protected final ObservableField<String> name = new ObservableField<String>();
 
 	public WrappedColor COLOR_STRONGEST;
 	public WrappedColor COLOR_DIVIDER;
@@ -44,7 +44,7 @@ public abstract class Theme {
 
 	public final int UID;
 	protected boolean loaded = false;
-	protected ObservableProperty<Theme> whenModified;
+	protected final ObservableProperty<Theme> whenModified;
 
 	protected static final HashMap<Integer, Theme> THEMES = new HashMap<Integer, Theme>();
 	protected static final ArrayList<Theme> STANDARD_THEMES = new ArrayList<Theme>();

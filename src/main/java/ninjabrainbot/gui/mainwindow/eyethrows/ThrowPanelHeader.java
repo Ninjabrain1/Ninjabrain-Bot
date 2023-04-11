@@ -27,7 +27,7 @@ public class ThrowPanelHeader extends ThemedPanel {
 
 	private boolean errorsEnabled;
 
-	WrappedColor lineColor;
+	final WrappedColor lineColor;
 
 	public ThrowPanelHeader(StyleManager styleManager, BooleanPreference showAngleErrors) {
 		this(styleManager, showAngleErrors, null);

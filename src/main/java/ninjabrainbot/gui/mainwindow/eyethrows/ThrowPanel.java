@@ -33,7 +33,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
  */
 public class ThrowPanel extends ThemedPanel implements IDisposable {
 
-	protected DisposeHandler disposeHandler = new DisposeHandler();
+	protected final DisposeHandler disposeHandler = new DisposeHandler();
 	private final NinjabrainBotPreferences preferences;
 
 	DivineContextPanel divineContextPanel;

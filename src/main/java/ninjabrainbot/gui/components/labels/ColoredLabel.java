@@ -8,7 +8,7 @@ import ninjabrainbot.util.Wrapper;
 
 public class ColoredLabel extends ThemedLabel {
 
-	Wrapper<ColorMap> colorMap;
+	final Wrapper<ColorMap> colorMap;
 
 	private double lastColor = 0.0;
 

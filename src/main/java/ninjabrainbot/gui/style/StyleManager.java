@@ -24,7 +24,7 @@ public class StyleManager {
 
 	private boolean initialized = false;
 
-	public CurrentTheme currentTheme;
+	public final CurrentTheme currentTheme;
 	public SizePreference size;
 	private final ArrayList<ThemedComponent> themedComponents;
 	private final ArrayList<ThemedFrame> themedFrames;

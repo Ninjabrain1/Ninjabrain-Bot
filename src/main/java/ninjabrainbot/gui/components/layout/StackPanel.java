@@ -12,8 +12,8 @@ import ninjabrainbot.gui.frames.OptionsFrame;
 
 public class StackPanel extends JPanel {
 
-	GridBagConstraints constraints;
-	int gapBetweenComponents;
+	final GridBagConstraints constraints;
+	final int gapBetweenComponents;
 
 	public StackPanel() {
 		this(OptionsFrame.PADDING);

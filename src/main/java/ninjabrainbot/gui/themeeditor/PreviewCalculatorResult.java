@@ -14,8 +14,8 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class PreviewCalculatorResult implements ICalculatorResult {
 
-	List<ChunkPrediction> predictions = new ArrayList<>();
-	List<Chunk> chunks = new ArrayList<>();
+	final List<ChunkPrediction> predictions = new ArrayList<>();
+	final List<Chunk> chunks = new ArrayList<>();
 
 	public PreviewCalculatorResult(McVersion version) {
 		IObservable<IPlayerPosition> playerPosition = new ObservableField<>(new PreviewPlayerPosition(0, 1950));

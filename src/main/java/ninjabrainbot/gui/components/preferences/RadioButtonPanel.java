@@ -13,9 +13,9 @@ import ninjabrainbot.io.preferences.MultipleChoicePreference;
 
 public class RadioButtonPanel extends ThemedPanel {
 
-	JLabel descLabel;
-	RadioButtonGroup radioButtonGroup;
-	MultipleChoicePreference<?> preference;
+	final JLabel descLabel;
+	final RadioButtonGroup radioButtonGroup;
+	final MultipleChoicePreference<?> preference;
 
 	public RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<?> preference) {
 		super(styleManager);

@@ -4,10 +4,12 @@ import ninjabrainbot.event.Modifiable;
 
 public class FloatPreference extends Modifiable<Float> {
 
-	IPreferenceSource pref;
+	final IPreferenceSource pref;
 
-	String key;
-	float value, max, min;
+	final String key;
+	float value;
+	final float max;
+	final float min;
 
 	public FloatPreference(String key, float defaultValue, float minValue, float maxValue, IPreferenceSource pref) {
 		this.pref = pref;

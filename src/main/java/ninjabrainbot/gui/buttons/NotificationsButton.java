@@ -19,17 +19,17 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class NotificationsButton extends TitleBarButton implements IDisposable {
 
-	StyleManager styleManager;
-	NotificationsFrame notificationsFrame;
-	NinjabrainBotPreferences preferences;
+	final StyleManager styleManager;
+	final NotificationsFrame notificationsFrame;
+	final NinjabrainBotPreferences preferences;
 
 	// Pulsing
 	int i;
 	Timer timer;
 	Color start, end;
-	int duration = 1000;
+	final int duration = 1000;
 
-	DisposeHandler sh;
+	final DisposeHandler sh;
 
 	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
 		super(styleManager, new ImageIcon(Main.class.getResource("/notifications_icon.png")));

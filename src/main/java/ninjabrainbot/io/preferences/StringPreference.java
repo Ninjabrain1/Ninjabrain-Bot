@@ -4,9 +4,9 @@ import ninjabrainbot.event.Modifiable;
 
 public class StringPreference extends Modifiable<String> {
 
-	IPreferenceSource pref;
+	final IPreferenceSource pref;
 
-	String key;
+	final String key;
 	String value;
 
 	public StringPreference(String key, String defaultValue, IPreferenceSource pref) {

@@ -15,7 +15,7 @@ public class FossilInputHandler implements IDisposable {
 	private final IDataState dataState;
 	private final IActionExecutor actionExecutor;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public FossilInputHandler(IFossilInputSource fossilInputSource, IDataState dataState, IActionExecutor actionExecutor) {
 		this.dataState = dataState;

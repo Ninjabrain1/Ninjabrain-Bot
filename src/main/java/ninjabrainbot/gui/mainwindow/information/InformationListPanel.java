@@ -17,9 +17,9 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class InformationListPanel extends ResizablePanel implements ThemedComponent {
 
-	StyleManager styleManager;
+	final StyleManager styleManager;
 
-	List<InformationTextPanel> cachedInformationTextPanels = new ArrayList<>();
+	final List<InformationTextPanel> cachedInformationTextPanels = new ArrayList<>();
 
 	public InformationListPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, InformationMessageList informationMessageList) {
 		styleManager.registerThemedComponent(this);

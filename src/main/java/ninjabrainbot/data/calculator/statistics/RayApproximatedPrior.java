@@ -17,7 +17,7 @@ import ninjabrainbot.util.Logger;
 public class RayApproximatedPrior implements IPrior {
 
 	ArrayList<Chunk> chunks;
-	IDivineContext divineContext;
+	final IDivineContext divineContext;
 
 	public RayApproximatedPrior(IOverworldRay r, IDivineContext divineContext, McVersion version) {
 		this(r, 1.0 / 180.0 * Math.PI, divineContext, version); // 1 degree tolerance

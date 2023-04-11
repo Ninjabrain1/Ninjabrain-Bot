@@ -19,9 +19,9 @@ import ninjabrainbot.util.I18n;
 public class Calibrator implements IDisposable {
 
 	KeyPresser keyPresser;
-	int delay = 150; // key press delay
+	final int delay = 150; // key press delay
 
-	Calculator triangulator;
+	final Calculator triangulator;
 	boolean calibrating;
 	ObservableList<IEnderEyeThrow> eyeThrows;
 	boolean ready;

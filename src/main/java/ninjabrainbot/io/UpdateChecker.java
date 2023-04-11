@@ -27,7 +27,7 @@ public class UpdateChecker implements Runnable {
 		}
 	}
 
-	Consumer<VersionURL> urlConsumer;
+	final Consumer<VersionURL> urlConsumer;
 
 	public UpdateChecker(Consumer<VersionURL> urlConsumer) {
 		this.urlConsumer = urlConsumer;

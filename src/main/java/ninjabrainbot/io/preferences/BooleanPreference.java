@@ -4,9 +4,9 @@ import ninjabrainbot.event.Modifiable;
 
 public class BooleanPreference extends Modifiable<Boolean> {
 
-	IPreferenceSource pref;
+	final IPreferenceSource pref;
 
-	String key;
+	final String key;
 	boolean value;
 
 	public BooleanPreference(String key, boolean defaultValue, IPreferenceSource pref) {

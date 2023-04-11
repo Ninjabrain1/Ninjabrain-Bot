@@ -27,7 +27,7 @@ public class OptionsFrame extends ThemedFrame {
 
 	public static int WINDOW_WIDTH = 560;
 	public static int COLUMN_WIDTH = WINDOW_WIDTH / 2;
-	public static int PADDING = 6;
+	public static final int PADDING = 6;
 
 	private static final String TITLE_TEXT = I18n.get("settings");
 

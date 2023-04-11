@@ -18,9 +18,9 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class CustomThemePanel extends ThemePanel {
 
-	ThemedPanel buttonPanel;
+	final ThemedPanel buttonPanel;
 
-	WrappedColor dividerCol;
+	final WrappedColor dividerCol;
 
 	public CustomThemePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme, ActionListener deleteAction) {
 		super(styleManager, preferences, theme);

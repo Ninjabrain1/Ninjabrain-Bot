@@ -7,9 +7,9 @@ import ninjabrainbot.event.ObservableList;
 
 public class InformationMessageList extends ObservableList<InformationMessage> {
 
-	HashMap<InformationMessageProvider, InformationMessage> informationMessages;
+	final HashMap<InformationMessageProvider, InformationMessage> informationMessages;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public InformationMessageList() {
 		informationMessages = new HashMap<>();

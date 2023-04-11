@@ -15,7 +15,7 @@ import ninjabrainbot.util.Logger;
 
 public class Splash {
 
-	SplashScreen splashScreen;
+	final SplashScreen splashScreen;
 	Graphics2D g;
 
 	private Timer timer;

@@ -10,8 +10,8 @@ import ninjabrainbot.event.ObservableProperty;
 
 public class ResizablePanel extends JPanel implements IModifiable<ResizablePanel>, IDisposable {
 
-	protected DisposeHandler disposeHandler = new DisposeHandler();
-	protected ObservableProperty<ResizablePanel> whenSizeModified = new ObservableProperty<ResizablePanel>();
+	protected final DisposeHandler disposeHandler = new DisposeHandler();
+	protected final ObservableProperty<ResizablePanel> whenSizeModified = new ObservableProperty<ResizablePanel>();
 
 	@Override
 	public void dispose() {

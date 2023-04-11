@@ -18,8 +18,8 @@ public class Posterior {
 
 	private final McVersion version;
 
-	IPrior prior;
-	ArrayList<Chunk> chunks;
+	final IPrior prior;
+	final ArrayList<Chunk> chunks;
 
 	public Posterior(IReadOnlyList<IEnderEyeThrow> eyeThrows, IDivineContext divineContext, boolean useAdvStatistics, McVersion version) {
 		this.version = version;
@@ -139,7 +139,7 @@ public class Posterior {
 		chunks.forEach((chunk) -> chunk.weight /= totalWeight);
 	}
 
-	int K = 7;
+	final int K = 7;
 
 	private double closestStrongholdCondition(Chunk chunk, IEnderEyeThrow t) {
 		double closestStrongholdProbability = 1;

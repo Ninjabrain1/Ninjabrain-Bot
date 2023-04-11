@@ -25,12 +25,12 @@ public abstract class ThemedDialog extends JDialog implements IDisposable {
 
 	private final StyleManager styleManager;
 
-	protected TitleBarPanel titlebarPanel;
-	protected ThemedLabel titletextLabel;
+	protected final TitleBarPanel titlebarPanel;
+	protected final ThemedLabel titletextLabel;
 
-	WrappedColor bgCol;
+	final WrappedColor bgCol;
 
-	protected DisposeHandler disposeHandler = new DisposeHandler();
+	protected final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ThemedDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, String title) {
 		super(owner, title);

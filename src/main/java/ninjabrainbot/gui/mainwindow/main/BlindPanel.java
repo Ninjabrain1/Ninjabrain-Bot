@@ -18,9 +18,9 @@ import ninjabrainbot.util.Pair;
 
 class BlindPanel extends ThemedPanel {
 
-	public ColorMapLabel evalLabel;
-	public ColorMapLabel certaintyPanel;
-	public ThemedLabel distanceLabel;
+	public final ColorMapLabel evalLabel;
+	public final ColorMapLabel certaintyPanel;
+	public final ThemedLabel distanceLabel;
 
 	public BlindPanel(StyleManager styleManager) {
 		super(styleManager);

@@ -7,7 +7,7 @@ import ninjabrainbot.util.I18n;
 
 public abstract class SizePreference {
 
-	public String name;
+	public final String name;
 	public int TEXT_SIZE_TITLE_LARGE;
 	public int TEXT_SIZE_TITLE_SMALL;
 	public int TEXT_SIZE_MEDIUM;

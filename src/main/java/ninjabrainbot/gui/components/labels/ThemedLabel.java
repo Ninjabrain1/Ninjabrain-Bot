@@ -12,7 +12,7 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedLabel extends JLabel implements ThemedComponent, ILabel {
 
-	public boolean bold;
+	public final boolean bold;
 
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;

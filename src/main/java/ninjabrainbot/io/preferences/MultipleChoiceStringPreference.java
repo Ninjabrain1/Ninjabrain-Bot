@@ -6,14 +6,14 @@ import ninjabrainbot.event.Modifiable;
 
 public class MultipleChoiceStringPreference extends Modifiable<String> {
 
-	IPreferenceSource pref;
+	final IPreferenceSource pref;
 
-	String key;
+	final String key;
 	String value;
-	String[] choices;
+	final String[] choices;
 
-	HashMap<Integer, String> id2choice;
-	HashMap<String, Integer> choice2id;
+	final HashMap<Integer, String> id2choice;
+	final HashMap<String, Integer> choice2id;
 
 	public MultipleChoiceStringPreference(String key, String defaultValue, int[] ids, String[] choices, IPreferenceSource pref) {
 		this.pref = pref;

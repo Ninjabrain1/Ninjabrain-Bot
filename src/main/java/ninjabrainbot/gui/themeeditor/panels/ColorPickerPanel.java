@@ -18,9 +18,9 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 
 	private static final int GAP = 10;
 
-	ColorChooserPanel colorChooserPanel;
+	final ColorChooserPanel colorChooserPanel;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ColorPickerPanel(StyleManager styleManager) {
 		super(styleManager);

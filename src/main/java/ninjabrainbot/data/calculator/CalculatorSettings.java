@@ -5,9 +5,9 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class CalculatorSettings {
 
-	public int numberOfReturnedPredictions;
-	public boolean useAdvancedStatistics;
-	public McVersion mcVersion;
+	public final int numberOfReturnedPredictions;
+	public final boolean useAdvancedStatistics;
+	public final McVersion mcVersion;
 
 	public CalculatorSettings() {
 		numberOfReturnedPredictions = 5;

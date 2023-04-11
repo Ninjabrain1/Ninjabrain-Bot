@@ -11,7 +11,7 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedPanel extends JPanel implements ThemedComponent {
 
-	public boolean bold;
+	public final boolean bold;
 
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;

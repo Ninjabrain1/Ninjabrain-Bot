@@ -11,8 +11,8 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ColorMapLabel extends JPanel implements ILabel {
 
-	public ThemedLabel textLabel;
-	public ColoredLabel coloredLabel;
+	public final ThemedLabel textLabel;
+	public final ColoredLabel coloredLabel;
 
 	public ColorMapLabel(StyleManager styleManager, boolean textFirst) {
 		this(styleManager, textFirst, false);

@@ -25,7 +25,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 	private final NinjabrainBotPreferences preferences;
 	private final IEnderEyeThrowFactory enderEyeThrowFactory;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public PlayerPositionInputHandler(IPlayerPositionInputSource playerPositionInputSource, IDataState dataState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences, IEnderEyeThrowFactory enderEyeThrowFactory) {
 		this.dataState = dataState;

@@ -18,10 +18,10 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedTabbedPane extends ThemedPanel {
 
-	ArrayList<TabButton> tabs;
-	StyleManager styleManager;
-	ThemedPanel tabPanel;
-	JPanel mainPanel;
+	final ArrayList<TabButton> tabs;
+	final StyleManager styleManager;
+	final ThemedPanel tabPanel;
+	final JPanel mainPanel;
 
 	public ThemedTabbedPane(StyleManager styleManager) {
 		super(styleManager);
@@ -95,10 +95,11 @@ public class ThemedTabbedPane extends ThemedPanel {
 
 class TabButton extends FlatButton {
 
-	ThemedTabbedPane parent;
-	JComponent component;
+	final ThemedTabbedPane parent;
+	final JComponent component;
 
-	WrappedColor selectedBackgroundColor, selectedTextColor;
+	final WrappedColor selectedBackgroundColor;
+	final WrappedColor selectedTextColor;
 
 	public TabButton(StyleManager styleManager, ThemedTabbedPane parent, String title, JComponent component) {
 		super(styleManager, title);

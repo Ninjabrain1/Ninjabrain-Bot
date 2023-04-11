@@ -27,7 +27,7 @@ public class OBSOverlay implements IDisposable {
 
 	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
 		this.ninjabrainBotFrame = frame;

@@ -25,7 +25,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 
 	private final NinjabrainBotPreferences preferences;
 
-	public ThemedLabel mainTextLabel;
+	public final ThemedLabel mainTextLabel;
 	public final ColorMapLabel certaintyPanel;
 	public final ThemedLabel netherLabel;
 	public final ColorMapLabel currentAngleLabel;

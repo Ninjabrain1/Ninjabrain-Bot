@@ -19,9 +19,9 @@ import ninjabrainbot.io.preferences.FloatPreference;
 
 public class FloatPreferencePanel extends ThemedPanel {
 
-	public ThemedLabel descLabel;
+	public final ThemedLabel descLabel;
 	DecimalTextField textfield;
-	FloatPreference preference;
+	final FloatPreference preference;
 	DecimalFormat format;
 
 	WrappedColor disabledCol;

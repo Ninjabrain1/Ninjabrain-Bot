@@ -16,9 +16,9 @@ import ninjabrainbot.io.preferences.BooleanPreference;
 
 public class CheckboxPanel extends ThemedPanel {
 
-	public ThemedLabel descLabel;
+	public final ThemedLabel descLabel;
 	CustomCheckbox checkbox;
-	BooleanPreference preference;
+	final BooleanPreference preference;
 
 	WrappedColor disabledCol;
 
