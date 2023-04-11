@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.event.IDisposable;
@@ -34,11 +35,11 @@ public class ChunkPanelHeader extends ThemedPanel implements IDisposable {
 		super(styleManager, true);
 		this.styleManager = styleManager;
 		setOpaque(true);
-		location = new JLabel("", 0);
-		JLabel certainty = new JLabel(I18n.get("certainty_2"), 0);
-		JLabel distance = new JLabel(I18n.get("dist"), 0);
-		JLabel nether = new JLabel(I18n.get("nether"), 0);
-		angle = new JLabel(I18n.get("angle"), 0);
+		location = new JLabel("", SwingConstants.CENTER);
+		JLabel certainty = new JLabel(I18n.get("certainty_2"), SwingConstants.CENTER);
+		JLabel distance = new JLabel(I18n.get("dist"), SwingConstants.CENTER);
+		JLabel nether = new JLabel(I18n.get("nether"), SwingConstants.CENTER);
+		angle = new JLabel(I18n.get("angle"), SwingConstants.CENTER);
 		labels = new JLabel[] { location, certainty, distance, nether, angle };
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(location, 2f);

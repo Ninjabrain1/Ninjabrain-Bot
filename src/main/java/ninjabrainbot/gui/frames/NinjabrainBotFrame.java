@@ -5,6 +5,7 @@ import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
+import java.util.Objects;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -111,7 +112,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 			}
 		};
 		versionTextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_WEAK);
-		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Main.class.getResource("/lock_icon.png")));
+		lockIcon = new ThemedIcon(styleManager, new ImageIcon(Objects.requireNonNull(Main.class.getResource("/lock_icon.png"))));
 		lockIcon.setVisible(dataState.locked().get());
 		titlebarPanel.add(versionTextLabel);
 		titlebarPanel.add(lockIcon);
@@ -188,7 +189,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void setAppIcon() {
 		URL iconURL = Main.class.getResource("/icon.png");
-		ImageIcon img = new ImageIcon(iconURL);
+		ImageIcon img = new ImageIcon(Objects.requireNonNull(iconURL));
 		setIconImage(img.getImage());
 	}
 

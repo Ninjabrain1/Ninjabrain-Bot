@@ -13,6 +13,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.util.Logger;
 
 public class OBSOverlay implements IDisposable {
 
@@ -117,7 +118,8 @@ public class OBSOverlay implements IDisposable {
 		if (b) {
 			markShouldUpdate();
 		} else {
-			OBS_OVERLAY.delete();
+			if (!OBS_OVERLAY.delete())
+				Logger.log("Warning: Failed to delete OBS overlay image.");
 		}
 	}
 

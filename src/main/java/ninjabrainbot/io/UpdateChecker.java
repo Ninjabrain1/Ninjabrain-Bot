@@ -64,7 +64,7 @@ public class UpdateChecker implements Runnable {
 		return null;
 	}
 
-	private static JSONObject getLatestRelease(JSONArray releases) throws Exception {
+	private static JSONObject getLatestRelease(JSONArray releases) {
 		JSONObject latest = null;
 		Instant latestReleaseTime = Instant.parse("2007-12-03T10:15:30.00Z");
 		for (int i = 0; i < releases.length(); i++) {
@@ -80,7 +80,7 @@ public class UpdateChecker implements Runnable {
 		return latest;
 	}
 
-	private static String getReleaseUrl(JSONObject release) throws Exception {
+	private static String getReleaseUrl(JSONObject release) {
 		return release.getString("html_url");
 	}
 

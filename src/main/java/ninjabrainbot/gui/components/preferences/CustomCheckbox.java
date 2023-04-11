@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -12,11 +13,11 @@ import ninjabrainbot.Main;
 
 public class CustomCheckbox extends JCheckBox {
 
-	private static final ImageIcon icon = new ImageIcon(Main.class.getResource("/checkbox_icon.png"));
-	private static final ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_icon.png"));
-	private static final ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/checkbox_pressed_icon.png"));
-	private static final ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_rollover_icon.png"));
-	private static final ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_rollover_icon.png"));
+	private static final ImageIcon icon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/checkbox_icon.png")));
+	private static final ImageIcon selected_icon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/checkbox_selected_icon.png")));
+	private static final ImageIcon pressed_icon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/checkbox_pressed_icon.png")));
+	private static final ImageIcon rollover_icon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/checkbox_rollover_icon.png")));
+	private static final ImageIcon selected_rollover_icon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/checkbox_selected_rollover_icon.png")));
 
 	public CustomCheckbox() {
 		this(false);

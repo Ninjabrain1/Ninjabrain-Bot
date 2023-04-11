@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.calculator.divine.Fossil;
@@ -36,7 +37,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 	public DivineContextPanel(StyleManager styleManager, IDivineContext divineContext, IButtonInputHandler buttonInputHandler, Runnable whenVisibilityChanged) {
 		super(styleManager);
 		setOpaque(true);
-		label = new JLabel((String) null, 0);
+		label = new JLabel((String) null, SwingConstants.CENTER);
 		removeButton = new FlatButton(styleManager, "-");
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);

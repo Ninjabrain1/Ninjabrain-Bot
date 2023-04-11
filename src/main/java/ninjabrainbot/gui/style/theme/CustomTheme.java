@@ -10,7 +10,7 @@ import ninjabrainbot.util.Assert;
 
 public class CustomTheme extends Theme {
 
-	private ArrayList<ConfigurableColor> configurableColors = new ArrayList<ConfigurableColor>();
+	private ArrayList<ConfigurableColor> configurableColors;
 
 	private final ObservableField<String> themeString = new ObservableField<String>();
 

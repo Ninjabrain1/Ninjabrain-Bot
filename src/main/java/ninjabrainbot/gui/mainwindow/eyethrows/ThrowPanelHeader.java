@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.data.calculator.endereye.NormalEnderEyeThrow;
@@ -37,10 +38,10 @@ public class ThrowPanelHeader extends ThemedPanel {
 		super(styleManager, true);
 		setOpaque(true);
 		errorsEnabled = showAngleErrors.get();
-		x = new JLabel("x", 0);
-		z = new JLabel("z", 0);
-		alpha = new JLabel(I18n.get("angle"), 0);
-		error = new JLabel(I18n.get("error"), 0);
+		x = new JLabel("x", SwingConstants.CENTER);
+		z = new JLabel("z", SwingConstants.CENTER);
+		alpha = new JLabel(I18n.get("angle"), SwingConstants.CENTER);
+		error = new JLabel(I18n.get("error"), SwingConstants.CENTER);
 		add(x);
 		add(z);
 		add(alpha);

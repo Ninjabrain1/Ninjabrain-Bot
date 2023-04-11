@@ -3,6 +3,7 @@ package ninjabrainbot.gui.buttons;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -32,7 +33,7 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 	final DisposeHandler sh;
 
 	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
-		super(styleManager, new ImageIcon(Main.class.getResource("/notifications_icon.png")));
+		super(styleManager, new ImageIcon(Objects.requireNonNull(Main.class.getResource("/notifications_icon.png"))));
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		addActionListener(p -> toggleNotificationsWindow(parent));

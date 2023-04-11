@@ -62,14 +62,6 @@ public class ThemedTabbedPane extends ThemedPanel {
 		return p.TEXT_SIZE_MEDIUM;
 	}
 
-	public Color getBackgroundColor(Theme theme) {
-		return null;
-	}
-
-	public Color getForegroundColor(Theme theme) {
-		return null;
-	}
-
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);

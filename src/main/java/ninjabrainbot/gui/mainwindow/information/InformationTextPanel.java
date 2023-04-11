@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.mainwindow.information;
 
 import java.awt.BorderLayout;
+import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -55,10 +56,10 @@ public class InformationTextPanel extends ThemedPanel {
 				imagePath = "/warning_icon.png";
 				break;
 			case Error:
-				imagePath = null;
+				imagePath = "/warning_icon.png";
 				break;
 		}
-		return new ImageIcon(Main.class.getResource(imagePath));
+		return new ImageIcon(Objects.requireNonNull(Main.class.getResource(imagePath)));
 	}
 
 }
