@@ -36,8 +36,8 @@ public class ColorChooserPanel extends JPanel {
 		add(Box.createHorizontalStrut(5));
 		add(colorBar, BorderLayout.LINE_END);
 
-		colorBar.whenCursorChanged().subscribe(p -> onBarUpdated(p));
-		colorPanel.whenCursorChanged().subscribe(p -> onPanelUpdated(p));
+		colorBar.whenCursorChanged().subscribe(this::onBarUpdated);
+		colorPanel.whenCursorChanged().subscribe(this::onPanelUpdated);
 	}
 
 	public ISubscribable<Color> whenColorChanged() {

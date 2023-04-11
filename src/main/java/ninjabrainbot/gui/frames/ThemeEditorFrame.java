@@ -83,7 +83,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 		SwingUtilities.invokeLater(() -> ninBotPreviewBasic.postInit());
 		SwingUtilities.invokeLater(() -> ninBotPreviewDetailed.postInit());
 
-		colorPickerPanel.whenColorChanged().subscribe(color -> onColorChanged(color));
+		colorPickerPanel.whenColorChanged().subscribe(this::onColorChanged);
 	}
 
 	private ThemedPanel createConfigurableColorsPanel(StyleManager styleManager) {
@@ -113,7 +113,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 
 		ThemedTextField nameField = new LimitedThemedTextField(styleManager, 16);
 		nameField.setText(customTheme.toString());
-		nameField.whenTextChanged().subscribe(newName -> previewTheme.setName(newName));
+		nameField.whenTextChanged().subscribe(previewTheme::setName);
 
 		FlatButton selectPresetButton = new FlatButton(styleManager, I18n.get("settings.themeeditor.selectpreset"));
 		selectPresetButton.addActionListener(__ -> openSelectPresetDialog());

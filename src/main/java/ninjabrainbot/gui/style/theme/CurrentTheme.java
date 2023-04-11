@@ -63,7 +63,7 @@ public class CurrentTheme {
 		theme = newTheme;
 		if (themeSubscription != null)
 			themeSubscription.dispose();
-		themeSubscription = newTheme.whenModified().subscribe(this::setTheme);
+		themeSubscription = newTheme.whenModified().subscribeEDT(this::setTheme);
 	}
 
 	public boolean isTheme(Theme theme) {

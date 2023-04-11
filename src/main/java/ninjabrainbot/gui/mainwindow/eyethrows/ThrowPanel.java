@@ -101,8 +101,8 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		posCol = styleManager.currentTheme.COLOR_POSITIVE;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
-		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribe(error::setVisible));
-		disposeHandler.add(preferences.useTallRes.whenModified().subscribe(b -> whenTallResChanged()));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(error::setVisible));
+		disposeHandler.add(preferences.useTallRes.whenModified().subscribeEDT(b -> whenTallResChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -111,7 +111,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			chunkPredictionModifiedSubscription.dispose();
 		chunkPredictionModifiedSubscription = null;
 		if (p != null)
-			chunkPredictionModifiedSubscription = p.whenRelativePlayerPositionChanged().subscribe(__ -> updateError(p));
+			chunkPredictionModifiedSubscription = p.whenRelativePlayerPositionChanged().subscribeEDT(__ -> updateError(p));
 		updateError(p);
 	}
 

@@ -93,9 +93,9 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void setupSubscriptions(StyleManager styleManager, IDataState dataState) {
 		// Settings
-		disposeHandler.add(preferences.translucent.whenModified().subscribe(this::setTranslucent));
-		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribe(this::setAlwaysOnTop));
-		disposeHandler.add(preferences.hotkeyMinimize.whenTriggered().subscribe(__ -> toggleMinimized()));
+		disposeHandler.add(preferences.translucent.whenModified().subscribeEDT(this::setTranslucent));
+		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribeEDT(this::setAlwaysOnTop));
+		disposeHandler.add(preferences.hotkeyMinimize.whenTriggered().subscribeEDT(__ -> toggleMinimized()));
 		// Components bounds changed
 		disposeHandler.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		disposeHandler.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
@@ -134,7 +134,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
 		add(mainTextArea);
 		// Info and warnings
-		informationTextPanel = new InformationListPanel(styleManager, preferences, informationMessageList);
+		informationTextPanel = new InformationListPanel(styleManager, informationMessageList);
 		add(informationTextPanel);
 		// "Throws" text + buttons
 		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, buttonInputHandler);

@@ -65,7 +65,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 				setChunkPrediction(prediction);
 				if (chunkPredictionSubscription != null)
 					chunkPredictionSubscription.dispose();
-				chunkPredictionSubscription = prediction.whenRelativePlayerPositionChanged().subscribe(__ -> setChunkPrediction(prediction));
+				chunkPredictionSubscription = prediction.whenRelativePlayerPositionChanged().subscribeEDT(__ -> setChunkPrediction(prediction));
 			} else {
 				mainTextLabel.setText(I18n.get("could_not_determine"));
 				certaintyPanel.setText(I18n.get("you_probably_misread"));

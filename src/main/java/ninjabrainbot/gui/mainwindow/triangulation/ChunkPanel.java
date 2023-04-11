@@ -75,7 +75,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		add(angle);
 		setPrediction(p);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
-		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribe(__ -> setPrediction(currentPrediction));
+		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setPrediction(currentPrediction));
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER;
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
@@ -106,7 +106,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 			}
 		} else {
 			setText(chunkPrediction);
-			chunkPrediction.whenRelativePlayerPositionChanged().subscribe(__ -> setText(chunkPrediction));
+			chunkPrediction.whenRelativePlayerPositionChanged().subscribeEDT(__ -> setText(chunkPrediction));
 		}
 	}
 

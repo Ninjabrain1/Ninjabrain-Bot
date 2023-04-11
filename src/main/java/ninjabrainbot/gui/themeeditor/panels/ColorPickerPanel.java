@@ -34,7 +34,7 @@ public class ColorPickerPanel extends ThemedPanel implements IDisposable {
 		add(new LabeledField(styleManager, I18n.get("settings.themeeditor.hex_colon"), hexTextField, false));
 		add(colorChooserPanel);
 
-		disposeHandler.add(colorChooserPanel.whenColorChanged().subscribe(color -> hexTextField.setColor(color)));
+		disposeHandler.add(colorChooserPanel.whenColorChanged().subscribe(hexTextField::setColor));
 		disposeHandler.add(hexTextField.whenTextChanged().subscribe(text -> colorChooserPanel.setColor(Color.decode(text))));
 	}
 

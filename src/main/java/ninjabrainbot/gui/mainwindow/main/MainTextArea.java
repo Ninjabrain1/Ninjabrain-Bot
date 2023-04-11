@@ -62,9 +62,9 @@ public class MainTextArea extends ResizablePanel {
 
 	private void setupSubscriptions() {
 		// Settings
-		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribe(this::setNetherCoordsEnabled));
-		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribe(this::setAngleUpdatesEnabled));
-		disposeHandler.add(preferences.view.whenModified().subscribe(__ -> onViewTypeChanged()));
+		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribeEDT(this::setNetherCoordsEnabled));
+		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribeEDT(this::setAngleUpdatesEnabled));
+		disposeHandler.add(preferences.view.whenModified().subscribeEDT(__ -> onViewTypeChanged()));
 		// Data state
 		disposeHandler.add(dataState.calculatorResult().subscribeEDT(this::setResult));
 		disposeHandler.add(dataState.blindResult().subscribeEDT(this::setResult));

@@ -51,7 +51,7 @@ public class OptionsFrame extends ThemedFrame {
 		titlebarPanel.setFocusable(true);
 
 		// Subscriptions
-		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribe(b -> setAlwaysOnTop(b)));
+		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribeEDT(this::setAlwaysOnTop));
 	}
 
 	public void stopCalibrating() {

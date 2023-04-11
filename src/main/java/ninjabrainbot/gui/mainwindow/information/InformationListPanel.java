@@ -21,7 +21,7 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 	final List<InformationTextPanel> cachedInformationTextPanels = new ArrayList<>();
 
-	public InformationListPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, InformationMessageList informationMessageList) {
+	public InformationListPanel(StyleManager styleManager, InformationMessageList informationMessageList) {
 		styleManager.registerThemedComponent(this);
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -30,7 +30,7 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 
 		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessageList.get()));
 
-		informationMessageList.subscribe(this::onInformationMessageListChanged);
+		informationMessageList.subscribeEDT(this::onInformationMessageListChanged);
 	}
 
 	private void onInformationMessageListChanged(IReadOnlyList<InformationMessage> informationMessages) {

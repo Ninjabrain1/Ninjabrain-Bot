@@ -41,15 +41,15 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 		notificationsFrame = new NotificationsFrame(styleManager, preferences);
 		// Subscriptions
 		sh = new DisposeHandler();
-		sh.add(preferences.checkForUpdates.whenModified().subscribe(b -> onUpdatesEnabledChanged(b)));
+		sh.add(preferences.checkForUpdates.whenModified().subscribeEDT(this::onUpdatesEnabledChanged));
 		if (preferences.checkForUpdates.get()) {
-			UpdateChecker.check(url -> setURL(url));
+			UpdateChecker.check(this::setURL);
 		}
 	}
 
 	private void onUpdatesEnabledChanged(boolean enabled) {
 		if (enabled)
-			UpdateChecker.check(url -> setURL(url));
+			UpdateChecker.check(this::setURL);
 		setVisible(enabled && hasURL());
 	}
 

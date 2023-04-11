@@ -19,7 +19,7 @@ public class RemoveStructureButton extends FlatButton implements IDisposable {
 		//addActionListener(remove structure);
 
 		updateVisibility(structurePosition.get());
-		structurePosition.subscribe(this::updateVisibility);
+		structurePosition.subscribeEDT(this::updateVisibility);
 	}
 
 	private void updateVisibility(StructurePosition structurePosition) {

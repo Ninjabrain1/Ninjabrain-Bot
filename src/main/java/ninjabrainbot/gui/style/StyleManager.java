@@ -45,7 +45,7 @@ public class StyleManager {
 		themedDialogs = new ArrayList<>();
 
 		initFonts();
-		currentTheme.whenModified().subscribe(__ -> updateFontsAndColors());
+		currentTheme.whenModified().subscribeEDT(__ -> updateFontsAndColors());
 	}
 
 	private void initFonts() {

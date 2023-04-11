@@ -67,8 +67,8 @@ public class HighPrecisionOptionsPanel extends JPanel {
 		sigmaBoat.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 		column2.add(sigmaBoat);
 
-		disposeHandler.add(preferences.useTallRes.whenModified().subscribe(b -> setTallResolutionEnabled(b, preferences)));
-		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(b -> setPreciseAngleEnabled(b)));
+		disposeHandler.add(preferences.useTallRes.whenModified().subscribeEDT(b -> setTallResolutionEnabled(b, preferences)));
+		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribeEDT(this::setPreciseAngleEnabled));
 	}
 
 	private void setTallResolutionEnabled(boolean b, NinjabrainBotPreferences preferences) {

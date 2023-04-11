@@ -91,8 +91,8 @@ public class GUI {
 		Profiler.start("Init StyleManager");
 		Theme.loadThemes(preferences);
 		styleManager = new StyleManager(Theme.get(preferences.theme.get()), SizePreference.get(preferences.size.get()));
-		preferences.size.whenModified().subscribe(size -> styleManager.setSizePreference(SizePreference.get(size)));
-		preferences.theme.whenModified().subscribe(theme_uid -> styleManager.currentTheme.setTheme(Theme.get(theme_uid)));
+		preferences.size.whenModified().subscribeEDT(size -> styleManager.setSizePreference(SizePreference.get(size)));
+		preferences.theme.whenModified().subscribeEDT(theme_uid -> styleManager.currentTheme.setTheme(Theme.get(theme_uid)));
 
 		Progress.setTask("Creating main window", 0.65f);
 		Profiler.stopAndStart("Create frame");
@@ -115,7 +115,7 @@ public class GUI {
 		new Thread(clipboardReader, "Clipboard reader").start();
 
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler.domainModel, dataStateHandler.actionExecutor);
-		preferences.autoReset.whenModified().subscribe(b -> autoResetTimer.setAutoResetEnabled(b));
+		preferences.autoReset.whenModified().subscribeEDT(b -> autoResetTimer.setAutoResetEnabled(b));
 
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataStateHandler);
 
