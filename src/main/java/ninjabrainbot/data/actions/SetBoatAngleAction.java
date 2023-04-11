@@ -25,7 +25,7 @@ public class SetBoatAngleAction implements IAction {
 		}
 
 		float candidate = Math.round(angle / 1.40625) * 1.40625f;
-		double rounded = Double.parseDouble(String.format("%.2f", candidate));
+		double rounded = Math.round(candidate * 100) / 100.0;
 
 		if (Math.abs(rounded - angle) > boatErrorLimit) {
 			boatDataState.boatAngle().set(null);

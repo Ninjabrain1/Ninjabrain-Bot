@@ -58,6 +58,17 @@ public class IntegrationTestBuilder {
 		return this;
 	}
 
+	public IntegrationTestBuilder withBoatSettings() {
+		preferences.sigmaBoat.set(0.001f);
+		preferences.sensitivity.set(0.204225346f);
+		preferences.resolutionHeight.set(16384);
+		preferences.useTallRes.set(true);
+		preferences.usePreciseAngle.set(true);
+		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
+		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
+		return this;
+	}
+
 	public void setClipboard(String clipboardString) {
 		if (clipboardReader == null)
 			clipboardReader = new MockedClipboardReader();
@@ -68,6 +79,15 @@ public class IntegrationTestBuilder {
 		if (fossilInputHandler == null)
 			fossilInputHandler = new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 		clipboardReader.setClipboard(clipboardString);
+	}
+
+	public void inputSubpixelCorrections(int correctionCount) {
+		for (int i = 0; i < correctionCount; i++) {
+			triggerHotkey(preferences.hotkeyIncrement);
+		}
+		for (int i = 0; i < -correctionCount; i++) {
+			triggerHotkey(preferences.hotkeyDecrement);
+		}
 	}
 
 	public void triggerHotkey(HotkeyPreference hotkeyPreference) {

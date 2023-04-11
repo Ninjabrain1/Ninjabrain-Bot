@@ -31,7 +31,6 @@ public class DomainModelHistory {
 	public void saveSnapshotIfUniqueFromLastSnapshot() {
 		Assert.isTrue(isInitialized, "The DomainModelHistory has not been initialized.");
 		Assert.isEqual(numberOfDataComponents, dataComponents.size(), "Number of DataComponents have changed since last snapshot.");
-		System.out.println("IsEqualToCurrentStateOfDomainModel? " + snapshots.get(currentIndex).isEqualToCurrentStateOfDomainModel());
 		if (snapshots.get(currentIndex).isEqualToCurrentStateOfDomainModel())
 			return;
 		saveSnapshotAfterCurrentSnapshot(new DomainModelSnapshot(dataComponents));
