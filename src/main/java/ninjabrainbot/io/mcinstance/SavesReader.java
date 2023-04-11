@@ -104,7 +104,7 @@ public class SavesReader {
 		if (activeWorldFile.minecraftInstance() != currentWatchedInstance.minecraftInstance)
 			return true;
 
-		if (!activeWorldFile.name().contentEquals(worldName.toString()))
+		if (!activeWorldFile.name().contentEquals(worldName))
 			return true;
 
 		return false;

@@ -22,7 +22,7 @@ public class ActiveInstanceInputHandler implements IDisposable {
 	private final IActionExecutor actionExecutor;
 	private final NinjabrainBotPreferences preferences;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public ActiveInstanceInputHandler(IActiveInstanceProvider activeInstanceProvider, IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
 		this.activeInstanceProvider = activeInstanceProvider;

@@ -13,7 +13,7 @@ public class AutoResetTimer extends Timer implements IDisposable {
 
 	private static final int AUTO_RESET_DELAY = 15 * 60 * 1000;
 
-	DisposeHandler disposeHandler = new DisposeHandler();
+	final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public AutoResetTimer(IDataState dataState, IDomainModel domainModel, IActionExecutor actionExecutor) {
 		super(AUTO_RESET_DELAY, null);

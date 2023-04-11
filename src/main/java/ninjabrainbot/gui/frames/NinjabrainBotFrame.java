@@ -160,8 +160,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 	private FlatButton createSettingsButton(StyleManager styleManager) {
 		URL iconURL = Main.class.getResource("/settings_icon.png");
 		ImageIcon img = new ImageIcon(iconURL);
-		FlatButton button = new TitleBarButton(styleManager, img);
-		return button;
+		return new TitleBarButton(styleManager, img);
 	}
 
 	private void toggleMinimized() {

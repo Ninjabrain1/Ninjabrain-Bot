@@ -155,9 +155,7 @@ abstract class ColorPanelBase extends JPanel {
 	}
 
 	public void setColorPropertyValue(Color color) {
-		int w = width;
-		int h = height;
-		setImg(createImage(color, w, h));
+		setImg(createImage(color, width, height));
 		repaint();
 	}
 

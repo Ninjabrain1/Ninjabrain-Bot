@@ -15,11 +15,11 @@ import ninjabrainbot.util.I18n;
 
 public class AllAdvancementsHeader extends ThemedPanel {
 
-	ThemedLabel location;
-	ThemedLabel nether;
-	ThemedLabel angle;
+	final ThemedLabel location;
+	final ThemedLabel nether;
+	final ThemedLabel angle;
 
-	StyleManager styleManager;
+	final StyleManager styleManager;
 
 	private final WrappedColor borderCol;
 
