@@ -18,10 +18,10 @@ import ninjabrainbot.util.I18n;
 
 class DivinePanel extends ThemedPanel {
 
-	private JPanel panels[];
+	private final JPanel[] panels;
 	public ThemedLabel fossilLabel;
-	public ThemedLabel safeLabels[];
-	public ThemedLabel highrollLabels[];
+	public ThemedLabel[] safeLabels;
+	public ThemedLabel[] highrollLabels;
 
 	public DivinePanel(StyleManager styleManager) {
 		super(styleManager);

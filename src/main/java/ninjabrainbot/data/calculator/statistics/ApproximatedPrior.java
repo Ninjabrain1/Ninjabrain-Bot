@@ -46,8 +46,6 @@ public class ApproximatedPrior extends Prior {
 				relError -= 1f;
 				if (relError > largestRelError)
 					largestRelError = relError;
-				// errors.add(new Pair<Double, String>(relError, "x: " + (i % size1d - radius) +
-				// ", z: " + (i / size1d - radius)));
 				numNonZeroChunks++;
 				double error = prior.chunks[i].weight - chunks[i].weight;
 				if (Math.abs(error) > largestError) {
@@ -58,10 +56,6 @@ public class ApproximatedPrior extends Prior {
 			sump += prior.chunks[i].weight;
 			sum += chunks[i].weight;
 		}
-//		errors.sort((Pair<Double, String> p1, Pair<Double, String> p2) -> Double.compare(p1.fst, p2.fst));
-//		for (Pair<Double, String> p : errors) {
-//			Logger.log(p.fst + p.snd);
-//		}
 		Logger.log("Average non-zero weight: " + sum / numNonZeroChunks);
 		Logger.log("Root-mean-square error (on non-zero weights): " + Math.sqrt(totalSquaredError / numNonZeroChunks));
 		Logger.log("Largest relative error: " + largestRelError);

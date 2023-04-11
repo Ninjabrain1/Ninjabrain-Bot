@@ -23,9 +23,9 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 
-	private NinjabrainBotPreferences preferences;
+	private final NinjabrainBotPreferences preferences;
 
-	public ThemedLabel maintextLabel;
+	public ThemedLabel mainTextLabel;
 	public ColorMapLabel certaintyPanel;
 	public ThemedLabel netherLabel;
 	public ColorMapLabel currentAngleLabel;
@@ -37,23 +37,23 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		this.preferences = preferences;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(0);
-		maintextLabel = new ThemedLabel(styleManager, I18n.get("waiting_f3c"));
+		mainTextLabel = new ThemedLabel(styleManager, I18n.get("waiting_f3c"));
 		certaintyPanel = new ColorMapLabel(styleManager, true);
 		netherLabel = new ThemedLabel(styleManager, "");
 		netherLabel.setVisible(preferences.showNetherCoords.get());
 		currentAngleLabel = new ColorMapLabel(styleManager, true);
-		maintextLabel.setAlignmentX(0);
+		mainTextLabel.setAlignmentX(0);
 		netherLabel.setAlignmentX(0);
 		certaintyPanel.setAlignmentX(0);
 		currentAngleLabel.setAlignmentX(0);
-		add(maintextLabel);
+		add(mainTextLabel);
 		add(certaintyPanel);
 		add(netherLabel);
 		add(currentAngleLabel);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
 
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
-		maintextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		mainTextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		netherLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
@@ -67,14 +67,14 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 					chunkPredictionSubscription.dispose();
 				chunkPredictionSubscription = prediction.whenRelativePlayerPositionChanged().subscribe(__ -> setChunkPrediction(prediction));
 			} else {
-				maintextLabel.setText(I18n.get("could_not_determine"));
+				mainTextLabel.setText(I18n.get("could_not_determine"));
 				certaintyPanel.setText(I18n.get("you_probably_misread"));
 				certaintyPanel.setColoredText("", 0);
 				netherLabel.setText("");
 				currentAngleLabel.clear();
 			}
 		} else {
-			maintextLabel.setText(I18n.get("waiting_f3c"));
+			mainTextLabel.setText(I18n.get("waiting_f3c"));
 			certaintyPanel.clear();
 			netherLabel.setText("");
 			currentAngleLabel.clear();
@@ -82,7 +82,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 	}
 
 	private void setChunkPrediction(ChunkPrediction prediction) {
-		maintextLabel.setText(formatStrongholdCoords(prediction, preferences.strongholdDisplayType.get()));
+		mainTextLabel.setText(formatStrongholdCoords(prediction, preferences.strongholdDisplayType.get()));
 		certaintyPanel.setText(CERTAINTY_TEXT);
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.chunk.weight * 100.0), (float) prediction.chunk.weight);
 		netherLabel.setText(I18n.get("nether_coordinates", prediction.chunk.x * 2, prediction.chunk.z * 2, prediction.getNetherDistance()));

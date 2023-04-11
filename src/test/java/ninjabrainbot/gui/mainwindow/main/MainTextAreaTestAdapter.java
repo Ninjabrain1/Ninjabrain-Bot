@@ -21,7 +21,7 @@ public class MainTextAreaTestAdapter {
 
 	public void assertFailedResultIsShown() {
 		Assertions.assertTrue(mainTextArea.basicTriangulation.isVisible());
-		Assertions.assertEquals(I18n.get("could_not_determine"), mainTextArea.basicTriangulation.maintextLabel.getText());
+		Assertions.assertEquals(I18n.get("could_not_determine"), mainTextArea.basicTriangulation.mainTextLabel.getText());
 	}
 
 	public void assertDetailedTriangulationTopPredictionIsEqualTo(int x, int z) {

@@ -2,10 +2,10 @@ package ninjabrainbot.io.mcinstance;
 
 public interface IMinecraftWorldFile {
 
-	public MinecraftInstance minecraftInstance();
+	MinecraftInstance minecraftInstance();
 
-	public String name();
+	String name();
 
-	public boolean hasEnteredEnd();
+	boolean hasEnteredEnd();
 
 }

@@ -12,9 +12,9 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedIcon extends ThemedLabel {
 
-	private ImageIcon icon;
+	private final ImageIcon icon;
 
-	private WrappedColor iconColor;
+	private final WrappedColor iconColor;
 
 	public ThemedIcon(StyleManager styleManager, ImageIcon img) {
 		super(styleManager);

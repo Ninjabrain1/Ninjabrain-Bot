@@ -19,8 +19,8 @@ public class ThemedScrollPane extends JScrollPane implements ThemedComponent {
 	public boolean bold;
 
 	private WrappedColor bgCol;
-	private WrappedColor barCol;
-	private WrappedColor barBgCol;
+	private final WrappedColor barCol;
+	private final WrappedColor barBgCol;
 
 	public ThemedScrollPane(StyleManager styleManager, Component c) {
 		super(c, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

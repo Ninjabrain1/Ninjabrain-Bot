@@ -12,7 +12,7 @@ import ninjabrainbot.util.I18n;
 
 public class CombinedCertaintyInformationProvider extends InformationMessageProvider {
 
-	private IObservable<ResultType> resultType;
+	private final IObservable<ResultType> resultType;
 	private List<Chunk> predictions;
 
 	public CombinedCertaintyInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {

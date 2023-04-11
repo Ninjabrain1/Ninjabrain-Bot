@@ -17,10 +17,10 @@ public class DetailedTriangulationPanel extends ThemedPanel implements IDisposab
 
 	private static final int NUM_DETAILED_PANELS = 5;
 
-	private NinjabrainBotPreferences preferences;
+	private final NinjabrainBotPreferences preferences;
 
-	private ChunkPanelHeader header;
-	private List<ChunkPanel> panels;
+	private final ChunkPanelHeader header;
+	private final List<ChunkPanel> panels;
 
 	public DetailedTriangulationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager);

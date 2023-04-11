@@ -19,10 +19,10 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 
 	private int lastForegroundWindowProcessId = -1;
 
-	private HashMap<String, MinecraftInstance> minecraftInstances;
-	private ObservableField<MinecraftInstance> activeMinecraftInstance;
+	private final HashMap<String, MinecraftInstance> minecraftInstances;
+	private final ObservableField<MinecraftInstance> activeMinecraftInstance;
 
-	private SavesReader savesReader;
+	private final SavesReader savesReader;
 
 	WindowsActiveInstanceListener() throws IOException {
 		minecraftInstances = new HashMap<>();

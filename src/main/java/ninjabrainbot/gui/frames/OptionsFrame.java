@@ -21,9 +21,9 @@ import ninjabrainbot.util.I18n;
 
 public class OptionsFrame extends ThemedFrame {
 
-	private ThemedTabbedPane tabbedPane;
+	private final ThemedTabbedPane tabbedPane;
 
-	private CalibrationPanel calibrationPanel;
+	private final CalibrationPanel calibrationPanel;
 
 	public static int WINDOW_WIDTH = 560;
 	public static int COLUMN_WIDTH = WINDOW_WIDTH / 2;

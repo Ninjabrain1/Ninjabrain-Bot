@@ -2,7 +2,7 @@ package ninjabrainbot.event;
 
 public class Modifiable<T> implements IModifiable<T> {
 
-	private ObservableProperty<T> whenModified;
+	private final ObservableProperty<T> whenModified;
 
 	public Modifiable() {
 		whenModified = new ObservableProperty<T>();

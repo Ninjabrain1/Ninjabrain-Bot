@@ -24,7 +24,7 @@ import ninjabrainbot.util.I18n;
 
 public class ThemeSelectionPanel extends ThemedPanel {
 
-	private ThemedPanel themesPanel;
+	private final ThemedPanel themesPanel;
 
 	private ThemePanel firstThemePanel;
 

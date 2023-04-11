@@ -16,9 +16,9 @@ import ninjabrainbot.gui.style.theme.ConfigurableColor;
 
 public class ConfigurableColorPanel extends ThemedPanel {
 
-	private ConfigurableColor configurableColor;
+	private final ConfigurableColor configurableColor;
 
-	private FlatButton colorName;
+	private final FlatButton colorName;
 
 	public ConfigurableColorPanel(StyleManager styleManager, StyleManager previewStyleManager, ConfigurableColor configurableColor) {
 		super(styleManager);

@@ -54,7 +54,7 @@ public class StandardThemes {
 			colorsStringBuilder.append(String.format("		COLOR_GRADIENT_0 = createColor(Color.decode(\"%s\"));\r\n", theme.COLOR_GRADIENT_0.hex()));
 			colorsStringBuilder.append(String.format("		COLOR_GRADIENT_50 = createColor(Color.decode(\"%s\"));\r\n", theme.COLOR_GRADIENT_50.hex()));
 			colorsStringBuilder.append(String.format("		COLOR_GRADIENT_100 = createColor(Color.decode(\"%s\"));\r\n", theme.COLOR_GRADIENT_100.hex()));
-			System.out.println(String.format(template, nameNoSpace, nameNoSpace, name, colorsStringBuilder.toString()));
+			System.out.printf(template + "%n", nameNoSpace, nameNoSpace, name, colorsStringBuilder);
 		}
 	}
 

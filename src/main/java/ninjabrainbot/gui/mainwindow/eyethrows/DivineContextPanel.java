@@ -25,13 +25,13 @@ import ninjabrainbot.util.I18n;
 public class DivineContextPanel extends ThemedPanel implements IDisposable {
 
 	private IDivineContext dc;
-	private JLabel label;
-	private FlatButton removeButton;
+	private final JLabel label;
+	private final FlatButton removeButton;
 
 	Subscription fossilSubscription;
 	Runnable whenVisibilityChanged;
 
-	private WrappedColor borderCol;
+	private final WrappedColor borderCol;
 
 	public DivineContextPanel(StyleManager styleManager, IDivineContext divineContext, IButtonInputHandler buttonInputHandler, Runnable whenVisibilityChanged) {
 		super(styleManager);

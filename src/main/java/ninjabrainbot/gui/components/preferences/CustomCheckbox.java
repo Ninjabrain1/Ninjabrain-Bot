@@ -12,11 +12,11 @@ import ninjabrainbot.Main;
 
 public class CustomCheckbox extends JCheckBox {
 
-	private static ImageIcon icon = new ImageIcon(Main.class.getResource("/checkbox_icon.png"));
-	private static ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_icon.png"));
-	private static ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/checkbox_pressed_icon.png"));
-	private static ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_rollover_icon.png"));
-	private static ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_rollover_icon.png"));
+	private static final ImageIcon icon = new ImageIcon(Main.class.getResource("/checkbox_icon.png"));
+	private static final ImageIcon selected_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_icon.png"));
+	private static final ImageIcon pressed_icon = new ImageIcon(Main.class.getResource("/checkbox_pressed_icon.png"));
+	private static final ImageIcon rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_rollover_icon.png"));
+	private static final ImageIcon selected_rollover_icon = new ImageIcon(Main.class.getResource("/checkbox_selected_rollover_icon.png"));
 
 	public CustomCheckbox() {
 		this(false);

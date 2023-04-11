@@ -6,8 +6,8 @@ import ninjabrainbot.event.ObservableField;
 
 public class UnsupportedOSActiveInstanceProvider implements IActiveInstanceProvider {
 
-	private IObservable<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
-	private IObservable<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
+	private final IObservable<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
+	private final IObservable<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
 
 	UnsupportedOSActiveInstanceProvider() {
 	}

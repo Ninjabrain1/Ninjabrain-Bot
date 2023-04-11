@@ -7,7 +7,7 @@ import java.awt.Color;
  */
 public class ColorMap {
 
-	private Color[] colors;
+	private final Color[] colors;
 
 	public ColorMap(Color... colors) {
 		this.colors = colors;

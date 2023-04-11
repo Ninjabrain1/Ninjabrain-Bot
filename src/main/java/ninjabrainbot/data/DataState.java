@@ -52,16 +52,6 @@ public class DataState implements IDataState, IDisposable {
 		resultTypeProvider = disposeHandler.add(new ResultTypeProvider(this));
 	}
 
-//	public DataStateUndoData getUndoData() {
-//		return new DataStateUndoData(throwSet, playerPosition.get(), divineContext);
-//	}
-//
-//	public void setFromUndoData(DataStateUndoData undoData) {
-//		divineContext.setFossil(undoData.fossil);
-//		throwSet.setFromList(undoData.eyeThrows);
-//		playerPosition.set(undoData.playerPos);
-//	}
-
 	void setCalculator(ICalculator calculator) {
 		calculatorManager.setCalculator(calculator);
 	}

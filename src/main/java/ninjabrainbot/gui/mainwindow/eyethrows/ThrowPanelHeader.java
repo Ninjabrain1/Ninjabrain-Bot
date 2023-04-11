@@ -20,10 +20,10 @@ import ninjabrainbot.util.I18n;
  */
 public class ThrowPanelHeader extends ThemedPanel {
 
-	private JLabel x;
-	private JLabel z;
-	private JLabel alpha;
-	private JLabel error;
+	private final JLabel x;
+	private final JLabel z;
+	private final JLabel alpha;
+	private final JLabel error;
 
 	private boolean errorsEnabled;
 

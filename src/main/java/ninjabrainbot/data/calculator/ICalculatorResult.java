@@ -8,12 +8,12 @@ import ninjabrainbot.event.IDisposable;
 
 public interface ICalculatorResult extends IDisposable {
 
-	public ChunkPrediction getBestPrediction();
+	ChunkPrediction getBestPrediction();
 
-	public List<ChunkPrediction> getTopPredictions();
+	List<ChunkPrediction> getTopPredictions();
 
-	public List<Chunk> getTopChunks();
+	List<Chunk> getTopChunks();
 
-	public boolean success();
+	boolean success();
 
 }

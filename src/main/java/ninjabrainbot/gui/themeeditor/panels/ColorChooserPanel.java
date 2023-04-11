@@ -21,9 +21,9 @@ public class ColorChooserPanel extends JPanel {
 	private static final int WIDTH = 256;
 	private static final int HEIGHT = WIDTH;
 	private static final int BAR_WIDTH = 20;
-	private ColorPanel colorPanel;
-	private ColorBar colorBar;
-	private ObservableField<Color> color;
+	private final ColorPanel colorPanel;
+	private final ColorBar colorBar;
+	private final ObservableField<Color> color;
 
 	public ColorChooserPanel() {
 		setOpaque(false);
@@ -83,7 +83,7 @@ abstract class ColorPanelBase extends JPanel {
 	public final int width;
 	public final int height;
 	protected Point cursor_ = new Point();
-	private ObservableProperty<Point> cursor = new ObservableProperty<Point>();
+	private final ObservableProperty<Point> cursor = new ObservableProperty<Point>();
 	private BufferedImage img = null;
 
 	public ColorPanelBase(int width, int height) {
