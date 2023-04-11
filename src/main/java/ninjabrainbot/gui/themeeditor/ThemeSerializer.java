@@ -11,8 +11,8 @@ import ninjabrainbot.util.Assert;
 
 public class ThemeSerializer {
 
-	private static int FILTER_6BIT = 0b111111;
-	private static int SHIFT_SIZE = 6;
+	private static final int FILTER_6BIT = 0b111111;
+	private static final int SHIFT_SIZE = 6;
 
 	public static String serialize(CustomTheme theme) {
 		ArrayList<ConfigurableColor> configurableColors = theme.getConfigurableColors();

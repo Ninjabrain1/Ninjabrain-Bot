@@ -4,6 +4,6 @@ import ninjabrainbot.data.calculator.stronghold.Chunk;
 
 public interface IPrior {
 
-	public Iterable<Chunk> getChunks();
+	Iterable<Chunk> getChunks();
 
 }

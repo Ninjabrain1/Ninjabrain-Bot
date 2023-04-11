@@ -17,12 +17,12 @@ import ninjabrainbot.event.ObservableProperty;
 
 public class SavesReader {
 
-	private WatchService watcher;
+	private final WatchService watcher;
 	private WatchedInstance currentWatchedInstance;
-	private HashMap<MinecraftInstance, MinecraftWorldFile> activeWorldInEachInstance;
+	private final HashMap<MinecraftInstance, MinecraftWorldFile> activeWorldInEachInstance;
 
-	private ObservableField<IMinecraftWorldFile> lastModifiedWorldFile;
-	private ObservableProperty<IMinecraftWorldFile> whenActiveWorldFileModified;
+	private final ObservableField<IMinecraftWorldFile> lastModifiedWorldFile;
+	private final ObservableProperty<IMinecraftWorldFile> whenActiveWorldFileModified;
 	private MinecraftWorldFile activeWorldFile;
 
 	public SavesReader(ISubscribable<MinecraftInstance> activeMinecraftInstance) throws IOException {

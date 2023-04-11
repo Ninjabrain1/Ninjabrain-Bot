@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Progress {
 
-	private static ProgressKeeper pk = new ProgressKeeper();
+	private static final ProgressKeeper pk = new ProgressKeeper();
 	private static Splash splash;
 
 	public static void init(Splash splash) {

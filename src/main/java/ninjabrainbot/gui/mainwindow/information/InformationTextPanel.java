@@ -19,9 +19,9 @@ public class InformationTextPanel extends ThemedPanel {
 
 	private static final int iconMarginsHorizontal = 6, iconMarginsVertical = 4;
 
-	private WrappedColor borderColor;
-	private JLabel icon;
-	private JLabel textLabel;
+	private final WrappedColor borderColor;
+	private final JLabel icon;
+	private final JLabel textLabel;
 
 	public InformationTextPanel(StyleManager styleManager) {
 		super(styleManager);

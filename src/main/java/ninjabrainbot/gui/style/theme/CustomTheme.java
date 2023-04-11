@@ -12,7 +12,7 @@ public class CustomTheme extends Theme {
 
 	private ArrayList<ConfigurableColor> configurableColors = new ArrayList<ConfigurableColor>();
 
-	private ObservableField<String> themeString = new ObservableField<String>();
+	private final ObservableField<String> themeString = new ObservableField<String>();
 
 	public CustomTheme() {
 		this("temp", "", 0);

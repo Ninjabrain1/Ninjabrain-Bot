@@ -27,7 +27,7 @@ public class CurrentTheme {
 
 	public final Wrapper<ColorMap> CERTAINTY_COLOR_MAP = new Wrapper<>();
 
-	private ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
+	private final ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
 
 	private Subscription themeSubscription;
 	private Theme theme;

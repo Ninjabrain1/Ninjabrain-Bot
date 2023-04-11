@@ -4,7 +4,7 @@ import ninjabrainbot.gui.style.StyleManager;
 
 public class LimitedThemedTextField extends ThemedTextField {
 
-	private int maxNumberOfCharacters;
+	private final int maxNumberOfCharacters;
 
 	public LimitedThemedTextField(StyleManager styleManager, int maxNumberOfCharacters) {
 		super(styleManager);

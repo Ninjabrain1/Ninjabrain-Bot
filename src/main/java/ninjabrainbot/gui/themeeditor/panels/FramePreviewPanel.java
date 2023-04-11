@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class FramePreviewPanel extends JPanel {
 
-	private JFrame frame;
+	private final JFrame frame;
 
 	private BufferedImage img;
 

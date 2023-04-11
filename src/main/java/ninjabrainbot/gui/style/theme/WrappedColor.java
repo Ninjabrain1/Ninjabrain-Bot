@@ -9,7 +9,7 @@ public class WrappedColor {
 
 	private Color color;
 
-	private ObservableProperty<Color> whenColoChanged = new ObservableProperty<>();
+	private final ObservableProperty<Color> whenColoChanged = new ObservableProperty<>();
 
 	public void set(WrappedColor other) {
 		if (this.color == other.color())

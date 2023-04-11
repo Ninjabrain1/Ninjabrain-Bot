@@ -9,7 +9,7 @@ public class ObservableField<T> implements IObservable<T> {
 
 	private T data;
 
-	private ArrayList<Consumer<T>> subscribers;
+	private final ArrayList<Consumer<T>> subscribers;
 
 	public ObservableField() {
 		this(null);

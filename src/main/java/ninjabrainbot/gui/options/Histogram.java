@@ -15,8 +15,9 @@ public class Histogram extends ThemedPanel {
 
 	private int[] counts;
 	private int maxCount;
-	private float min, max;
-	private int numBins;
+	private final float min;
+	private final float max;
+	private final int numBins;
 
 	ArrayList<JLabel> ticks;
 	ArrayList<Float> floatTicks;
@@ -25,8 +26,8 @@ public class Histogram extends ThemedPanel {
 	int labelsHeight = 20;
 	int margin = 20;
 
-	private WrappedColor histCol;
-	private WrappedColor lineCol;
+	private final WrappedColor histCol;
+	private final WrappedColor lineCol;
 
 	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
 		super(styleManager);

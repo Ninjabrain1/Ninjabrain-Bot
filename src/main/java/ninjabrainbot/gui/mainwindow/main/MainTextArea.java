@@ -20,7 +20,7 @@ public class MainTextArea extends ResizablePanel {
 
 	private final String BLIND = "BLIND", DIVINE = "DIVINE", TRIANGULATION = "TRI", TRIANGULATION_DETAILED = "DET", ALL_ADVANCEMENTS = "AA";
 
-	private NinjabrainBotPreferences preferences;
+	private final NinjabrainBotPreferences preferences;
 
 	IDataState dataState;
 
