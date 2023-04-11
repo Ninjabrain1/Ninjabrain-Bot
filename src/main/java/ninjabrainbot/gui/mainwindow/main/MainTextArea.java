@@ -3,11 +3,6 @@ package ninjabrainbot.gui.mainwindow.main;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
-import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.ResultType;
-import ninjabrainbot.model.datastate.ICalculatorResult;
-import ninjabrainbot.model.datastate.blind.BlindResult;
-import ninjabrainbot.model.datastate.divine.DivineResult;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.mainwindow.alladvancements.AllAdvancementsPanel;
 import ninjabrainbot.gui.mainwindow.triangulation.BasicTriangulationPanel;
@@ -15,6 +10,12 @@ import ninjabrainbot.gui.mainwindow.triangulation.DetailedTriangulationPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.ResultType;
+import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.divine.DivineResult;
+import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class MainTextArea extends ResizablePanel {
 
@@ -33,7 +34,7 @@ public class MainTextArea extends ResizablePanel {
 	boolean idle;
 	final CardLayout layout;
 
-	public MainTextArea(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState) {
+	public MainTextArea(StyleManager styleManager, IButtonInputHandler buttonInputHandler, NinjabrainBotPreferences preferences, IDataState dataState) {
 		this.preferences = preferences;
 		this.dataState = dataState;
 		layout = new CardLayout();
@@ -44,7 +45,7 @@ public class MainTextArea extends ResizablePanel {
 		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
-		allAdvancements = new AllAdvancementsPanel(styleManager, dataState.allAdvancementsDataState());
+		allAdvancements = new AllAdvancementsPanel(styleManager, buttonInputHandler, dataState.allAdvancementsDataState());
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);

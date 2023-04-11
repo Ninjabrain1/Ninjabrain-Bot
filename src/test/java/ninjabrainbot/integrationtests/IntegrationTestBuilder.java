@@ -1,5 +1,15 @@
 package ninjabrainbot.integrationtests;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.gui.mainwindow.BoatIcon;
+import ninjabrainbot.gui.mainwindow.main.MainTextArea;
+import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
+import ninjabrainbot.io.preferences.HotkeyPreference;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.model.DataState;
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.ActionExecutor;
@@ -11,19 +21,10 @@ import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
+import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
-import ninjabrainbot.event.DisposeHandler;
-import ninjabrainbot.gui.mainwindow.BoatIcon;
-import ninjabrainbot.gui.mainwindow.main.MainTextArea;
-import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
-import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
-import ninjabrainbot.io.preferences.HotkeyPreference;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.MockedClipboardReader;
 import ninjabrainbot.util.MockedInstanceProvider;
 import ninjabrainbot.util.TestUtils;
@@ -42,6 +43,7 @@ public class IntegrationTestBuilder {
 	private PlayerPositionInputHandler playerPositionInputHandler;
 	private FossilInputHandler fossilInputHandler;
 	private HotkeyInputHandler hotkeyInputHandler;
+	private ButtonInputHandler buttonInputHandler;
 	private MockedInstanceProvider activeInstanceProvider;
 	private ActiveInstanceInputHandler activeInstanceInputHandler;
 
@@ -116,7 +118,9 @@ public class IntegrationTestBuilder {
 	public MainTextAreaTestAdapter createMainTextArea() {
 		if (styleManager == null)
 			styleManager = TestUtils.createStyleManager();
-		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, preferences, dataState));
+		if (buttonInputHandler == null)
+			buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, buttonInputHandler, preferences, dataState));
 	}
 
 	public BoatIcon createBoatIcon() {

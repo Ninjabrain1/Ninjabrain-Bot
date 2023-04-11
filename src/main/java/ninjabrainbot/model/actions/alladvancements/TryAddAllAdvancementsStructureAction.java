@@ -1,5 +1,6 @@
 package ninjabrainbot.model.actions.alladvancements;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
@@ -8,7 +9,6 @@ import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.domainmodel.IDataComponent;
-import ninjabrainbot.event.IObservable;
 
 public class TryAddAllAdvancementsStructureAction implements IAction {
 
@@ -33,7 +33,11 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 						? getOutpostPosition(playerPosition)
 						: new StructurePosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()), playerPositionObservable);
 
-		getDataComponentFromStructureType(structureType).set(structurePosition);
+		IDataComponent<StructurePosition> dataComponent = getDataComponentFromStructureType(structureType);
+		if (dataComponent.get() != null)
+			return;
+
+		dataComponent.set(structurePosition);
 	}
 
 	private StructureType getAllAdvancementStructureTypeFromPlayerPosition(IDetailedPlayerPosition t) {

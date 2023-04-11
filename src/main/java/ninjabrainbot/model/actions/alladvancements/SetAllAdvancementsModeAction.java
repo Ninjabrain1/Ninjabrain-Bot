@@ -17,4 +17,5 @@ public class SetAllAdvancementsModeAction implements IAction {
 	public void execute() {
 		allAdvancementsDataState.allAdvancementsModeEnabled().set(enabled);
 	}
+
 }

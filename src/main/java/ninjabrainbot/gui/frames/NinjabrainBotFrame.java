@@ -131,7 +131,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private void createComponents(StyleManager styleManager, IDataState dataState, IButtonInputHandler buttonInputHandler, InformationMessageList informationMessageList) {
 		// Main text
-		mainTextArea = new MainTextArea(styleManager, preferences, dataState);
+		mainTextArea = new MainTextArea(styleManager, buttonInputHandler, preferences, dataState);
 		add(mainTextArea);
 		// Info and warnings
 		informationTextPanel = new InformationListPanel(styleManager, informationMessageList);

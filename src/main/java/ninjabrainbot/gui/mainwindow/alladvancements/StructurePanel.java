@@ -13,6 +13,7 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class StructurePanel extends ThemedPanel implements IDisposable {
 
@@ -26,7 +27,7 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private Subscription angleSubscription;
 
-	public StructurePanel(StyleManager styleManager, IObservable<StructurePosition> structurePosition, ImageIcon icon, boolean showBorder) {
+	public StructurePanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IObservable<StructurePosition> structurePosition, ImageIcon icon, boolean showBorder) {
 		super(styleManager);
 		setOpaque(true);
 		ThemedLabel iconLabel = new ThemedLabel(styleManager, true);
@@ -34,7 +35,7 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 		location = new ThemedLabel(styleManager, true);
 		nether = new ThemedLabel(styleManager, true);
 		angle = new ThemedLabel(styleManager, true);
-		RemoveStructureButton removeStructureButton = new RemoveStructureButton(styleManager, structurePosition);
+		RemoveStructureButton removeStructureButton = new RemoveStructureButton(styleManager, structurePosition, buttonInputHandler);
 
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(iconLabel, 0.4f);

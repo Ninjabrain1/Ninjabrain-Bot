@@ -1,5 +1,6 @@
 package ninjabrainbot.model.input;
 
+import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 
 public interface IButtonInputHandler {
@@ -13,5 +14,7 @@ public interface IButtonInputHandler {
 	void onRemoveFossilButtonPressed();
 
 	void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove);
+
+	void onRemoveAllAdvancementsStructureButtonPressed(StructurePosition structurePosition);
 
 }

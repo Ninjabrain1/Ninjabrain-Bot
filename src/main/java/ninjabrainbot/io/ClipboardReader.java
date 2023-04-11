@@ -23,7 +23,7 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 	public ClipboardReader(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clipboardString = new ObservableField<String>(null, true);
+		clipboardString = new ObservableField<>(null, true);
 		lastClipboardString = "";
 		forceReadLater = new AtomicBoolean(false);
 	}
