@@ -16,7 +16,7 @@ import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
 
-	protected final ObservableField<String> name = new ObservableField<String>();
+	protected final ObservableField<String> name = new ObservableField<>();
 
 	public WrappedColor COLOR_STRONGEST;
 	public WrappedColor COLOR_DIVIDER;
@@ -46,9 +46,9 @@ public abstract class Theme {
 	protected boolean loaded = false;
 	protected final ObservableProperty<Theme> whenModified;
 
-	protected static final HashMap<Integer, Theme> THEMES = new HashMap<Integer, Theme>();
-	protected static final ArrayList<Theme> STANDARD_THEMES = new ArrayList<Theme>();
-	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<CustomTheme>();
+	protected static final HashMap<Integer, Theme> THEMES = new HashMap<>();
+	protected static final ArrayList<Theme> STANDARD_THEMES = new ArrayList<>();
+	protected static final ArrayList<CustomTheme> CUSTOM_THEMES = new ArrayList<>();
 	protected static final DisposeHandler disposeHandler = new DisposeHandler();
 
 	private static Theme dark;
@@ -137,7 +137,7 @@ public abstract class Theme {
 	public Theme(String name, int uid) {
 		this.UID = uid;
 		this.name.set(name);
-		whenModified = new ObservableProperty<Theme>();
+		whenModified = new ObservableProperty<>();
 	}
 
 	public static List<Theme> getStandardThemes() {
@@ -178,7 +178,7 @@ public abstract class Theme {
 	}
 
 	protected Wrapper<Boolean> createBoolean(boolean bool) {
-		Wrapper<Boolean> b = new Wrapper<Boolean>();
+		Wrapper<Boolean> b = new Wrapper<>();
 		b.set(bool);
 		return b;
 	}

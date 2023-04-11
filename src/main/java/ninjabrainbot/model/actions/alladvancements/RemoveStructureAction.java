@@ -2,10 +2,7 @@ package ninjabrainbot.model.actions.alladvancements;
 
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.StructurePosition;
-import ninjabrainbot.model.domainmodel.IDataComponent;
-import ninjabrainbot.util.Assert;
 
 public class RemoveStructureAction implements IAction {
 
@@ -19,15 +16,15 @@ public class RemoveStructureAction implements IAction {
 
 	@Override
 	public void execute() {
-		if (allAdvancementsDataState.spawnPosition().get() == structurePosition){
+		if (allAdvancementsDataState.spawnPosition().get() == structurePosition) {
 			allAdvancementsDataState.spawnPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.outpostPosition().get() == structurePosition){
+		if (allAdvancementsDataState.outpostPosition().get() == structurePosition) {
 			allAdvancementsDataState.outpostPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.monumentPosition().get() == structurePosition){
+		if (allAdvancementsDataState.monumentPosition().get() == structurePosition) {
 			allAdvancementsDataState.monumentPosition().reset();
 			return;
 		}
