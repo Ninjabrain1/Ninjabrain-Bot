@@ -1,6 +1,6 @@
 package ninjabrainbot.gui.themeeditor.panels;
 
-import ninjabrainbot.data.calculator.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
 
 public class PreviewPlayerPosition implements IPlayerPosition {
 

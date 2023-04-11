@@ -2,17 +2,17 @@ package ninjabrainbot.simulations;
 
 import java.util.Random;
 
-import ninjabrainbot.data.calculator.Calculator;
-import ninjabrainbot.data.calculator.CalculatorSettings;
-import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.common.IOverworldPosition;
-import ninjabrainbot.data.calculator.divine.DivineContext;
-import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.calculator.stronghold.Chunk;
-import ninjabrainbot.data.calculator.stronghold.Ring;
-import ninjabrainbot.data.domainmodel.IListComponent;
-import ninjabrainbot.data.domainmodel.ListComponent;
+import ninjabrainbot.model.datastate.Calculator;
+import ninjabrainbot.model.datastate.CalculatorSettings;
+import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.IOverworldPosition;
+import ninjabrainbot.model.datastate.divine.DivineContext;
+import ninjabrainbot.model.datastate.divine.IDivineContext;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.datastate.stronghold.Ring;
+import ninjabrainbot.model.domainmodel.IListComponent;
+import ninjabrainbot.model.domainmodel.ListComponent;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Logger;

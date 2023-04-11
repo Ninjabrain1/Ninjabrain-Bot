@@ -3,10 +3,10 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.stronghold.Chunk;
-import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.gui.themeeditor.panels.PreviewPlayerPosition;

@@ -1,9 +1,9 @@
 package ninjabrainbot.util;
 
-import ninjabrainbot.data.calculator.common.IPlayerPosition;
-import ninjabrainbot.data.calculator.common.LimitedPlayerPosition;
-import ninjabrainbot.data.calculator.endereye.EnderEyeThrowType;
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
+import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 
 public class TestEnderEyeThrow implements IEnderEyeThrow {
 

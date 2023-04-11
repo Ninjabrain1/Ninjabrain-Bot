@@ -2,7 +2,7 @@ package ninjabrainbot;
 
 import java.util.Locale;
 
-import ninjabrainbot.data.calculator.statistics.ApproximatedDensity;
+import ninjabrainbot.model.datastate.statistics.ApproximatedDensity;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.splash.Splash;

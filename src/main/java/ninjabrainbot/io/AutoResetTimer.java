@@ -2,10 +2,10 @@ package ninjabrainbot.io;
 
 import javax.swing.Timer;
 
-import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.actions.IActionExecutor;
-import ninjabrainbot.data.actions.ResetAction;
-import ninjabrainbot.data.domainmodel.IDomainModel;
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.ResetAction;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 

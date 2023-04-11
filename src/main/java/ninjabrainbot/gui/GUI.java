@@ -1,13 +1,13 @@
 package ninjabrainbot.gui;
 
-import ninjabrainbot.data.DataStateHandler;
-import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.information.CombinedCertaintyInformationProvider;
-import ninjabrainbot.data.information.InformationMessageList;
-import ninjabrainbot.data.information.McVersionWarningProvider;
-import ninjabrainbot.data.information.MismeasureWarningProvider;
-import ninjabrainbot.data.information.NextThrowDirectionInformationProvider;
-import ninjabrainbot.data.information.PortalLinkingWarningProvider;
+import ninjabrainbot.model.DataStateHandler;
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
+import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.model.information.McVersionWarningProvider;
+import ninjabrainbot.model.information.MismeasureWarningProvider;
+import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
+import ninjabrainbot.model.information.PortalLinkingWarningProvider;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;

@@ -3,7 +3,7 @@ package ninjabrainbot.gui.mainwindow.alladvancements;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.calculator.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;

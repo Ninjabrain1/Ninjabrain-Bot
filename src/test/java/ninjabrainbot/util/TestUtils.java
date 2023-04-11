@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import ninjabrainbot.data.calculator.common.DetailedPlayerPosition;
-import ninjabrainbot.data.calculator.common.IDetailedPlayerPosition;
-import ninjabrainbot.data.calculator.common.IOverworldRay;
+import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.IOverworldRay;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import org.junit.jupiter.api.Assertions;

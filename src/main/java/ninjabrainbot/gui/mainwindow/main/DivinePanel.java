@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.data.calculator.divine.DivineResult;
-import ninjabrainbot.data.calculator.stronghold.Ring;
+import ninjabrainbot.model.datastate.divine.DivineResult;
+import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;

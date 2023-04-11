@@ -6,9 +6,9 @@ import java.util.Locale;
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.stronghold.Chunk;
-import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
+import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;

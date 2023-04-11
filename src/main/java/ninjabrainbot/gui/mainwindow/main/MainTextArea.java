@@ -3,11 +3,11 @@ package ninjabrainbot.gui.mainwindow.main;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
-import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.ResultType;
-import ninjabrainbot.data.calculator.ICalculatorResult;
-import ninjabrainbot.data.calculator.blind.BlindResult;
-import ninjabrainbot.data.calculator.divine.DivineResult;
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.ResultType;
+import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.divine.DivineResult;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.mainwindow.alladvancements.AllAdvancementsPanel;
 import ninjabrainbot.gui.mainwindow.triangulation.BasicTriangulationPanel;

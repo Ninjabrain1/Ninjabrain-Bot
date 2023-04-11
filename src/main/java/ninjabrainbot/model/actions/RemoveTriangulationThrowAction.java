@@ -1,0 +1,21 @@
+package ninjabrainbot.model.actions;
+
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+
+public class RemoveTriangulationThrowAction implements IAction {
+
+	private final IDataState dataState;
+	private final IEnderEyeThrow throwToRemove;
+
+	public RemoveTriangulationThrowAction(IDataState dataState, IEnderEyeThrow throwToRemove) {
+		this.dataState = dataState;
+		this.throwToRemove = throwToRemove;
+	}
+
+	@Override
+	public void execute() {
+		dataState.getThrowList().remove(throwToRemove);
+	}
+
+}

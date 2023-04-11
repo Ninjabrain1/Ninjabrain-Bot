@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.calculator.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;

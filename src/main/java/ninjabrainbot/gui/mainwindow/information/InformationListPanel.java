@@ -6,14 +6,13 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.SwingUtilities;
 
-import ninjabrainbot.data.information.InformationMessage;
-import ninjabrainbot.data.information.InformationMessageList;
+import ninjabrainbot.model.information.InformationMessage;
+import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.event.ArrayListImplementingReadOnlyList;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class InformationListPanel extends ResizablePanel implements ThemedComponent {
 

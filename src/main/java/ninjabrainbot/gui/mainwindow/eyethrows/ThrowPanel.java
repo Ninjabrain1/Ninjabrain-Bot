@@ -10,11 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.IDataState;
-import ninjabrainbot.data.calculator.endereye.EnderEyeThrowType;
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.calculator.stronghold.ChunkPrediction;
-import ninjabrainbot.data.input.IButtonInputHandler;
+import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
+import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;

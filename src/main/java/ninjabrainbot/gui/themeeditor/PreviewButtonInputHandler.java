@@ -1,7 +1,7 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.data.calculator.endereye.IEnderEyeThrow;
-import ninjabrainbot.data.input.IButtonInputHandler;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class PreviewButtonInputHandler implements IButtonInputHandler {
 

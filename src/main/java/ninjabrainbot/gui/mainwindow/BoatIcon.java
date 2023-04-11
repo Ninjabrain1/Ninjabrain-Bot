@@ -6,7 +6,7 @@ import java.util.Objects;
 import javax.swing.ImageIcon;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.calculator.highprecision.BoatState;
+import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.components.labels.ThemedLabel;

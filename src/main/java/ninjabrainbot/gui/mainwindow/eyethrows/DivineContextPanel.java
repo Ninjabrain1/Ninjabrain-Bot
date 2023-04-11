@@ -8,9 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.data.calculator.divine.Fossil;
-import ninjabrainbot.data.calculator.divine.IDivineContext;
-import ninjabrainbot.data.input.IButtonInputHandler;
+import ninjabrainbot.model.datastate.divine.Fossil;
+import ninjabrainbot.model.datastate.divine.IDivineContext;
+import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;

@@ -9,8 +9,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.data.information.InformationMessage;
-import ninjabrainbot.data.information.InformationType;
+import ninjabrainbot.model.information.InformationMessage;
+import ninjabrainbot.model.information.InformationType;
 import ninjabrainbot.gui.components.labels.SmallThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
