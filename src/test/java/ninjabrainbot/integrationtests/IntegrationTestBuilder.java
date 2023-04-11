@@ -14,8 +14,11 @@ import ninjabrainbot.data.input.ActiveInstanceInputHandler;
 import ninjabrainbot.data.input.FossilInputHandler;
 import ninjabrainbot.data.input.HotkeyInputHandler;
 import ninjabrainbot.data.input.PlayerPositionInputHandler;
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.gui.mainwindow.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
+import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
@@ -41,6 +44,8 @@ public class IntegrationTestBuilder {
 	private HotkeyInputHandler hotkeyInputHandler;
 	private MockedInstanceProvider activeInstanceProvider;
 	private ActiveInstanceInputHandler activeInstanceInputHandler;
+
+	private StyleManager styleManager;
 
 	public IntegrationTestBuilder() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
@@ -109,7 +114,15 @@ public class IntegrationTestBuilder {
 	}
 
 	public MainTextAreaTestAdapter createMainTextArea() {
-		return new MainTextAreaTestAdapter(new MainTextArea(TestUtils.createStyleManager(), preferences, dataState));
+		if (styleManager == null)
+			styleManager = TestUtils.createStyleManager();
+		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, preferences, dataState));
+	}
+
+	public BoatIcon createBoatIcon() {
+		if (styleManager == null)
+			styleManager = TestUtils.createStyleManager();
+		return new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, new DisposeHandler());
 	}
 
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {

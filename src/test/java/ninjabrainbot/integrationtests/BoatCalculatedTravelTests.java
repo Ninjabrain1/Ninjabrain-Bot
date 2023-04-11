@@ -1,7 +1,11 @@
 package ninjabrainbot.integrationtests;
 
+import ninjabrainbot.data.calculator.highprecision.BoatState;
+import ninjabrainbot.gui.mainwindow.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
+import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.TestUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -29,15 +33,27 @@ public class BoatCalculatedTravelTests {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withBoatSettings();
 		MainTextAreaTestAdapter mainTextAreaTestAdapter = testBuilder.createMainTextArea();
+		BoatIcon boatIcon = testBuilder.createBoatIcon();
 
-		// Act
+		// Act + Assert
+		TestUtils.awaitSwingEvents();
+		Assertions.assertTrue(boatIcon.isVisible());
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.NONE));
+
 		testBuilder.triggerHotkey(testBuilder.preferences.hotkeyBoat);
+		TestUtils.awaitSwingEvents();
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.MEASURING));
+
 		testBuilder.setClipboard(boatF3c);
+		TestUtils.awaitSwingEvents();
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.VALID));
+
 		testBuilder.setClipboard(enderEyeF3c);
 		testBuilder.inputSubpixelCorrections(subpixelCorrections);
 
 		// Assert
 		TestUtils.awaitSwingEvents();
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.VALID));
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopPredictionIsEqualTo(strongholdChunkX, strongholdChunkZ);
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopNetherCoordsIsEqualTo(2 * strongholdChunkX, 2 * strongholdChunkZ);
 	}
