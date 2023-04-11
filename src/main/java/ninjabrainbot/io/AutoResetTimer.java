@@ -4,7 +4,7 @@ import javax.swing.Timer;
 
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.ResetAction;
+import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;

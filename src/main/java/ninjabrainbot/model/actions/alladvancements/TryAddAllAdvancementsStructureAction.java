@@ -1,6 +1,7 @@
-package ninjabrainbot.model.actions;
+package ninjabrainbot.model.actions.alladvancements;
 
 import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;

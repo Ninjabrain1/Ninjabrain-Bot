@@ -1,5 +1,6 @@
-package ninjabrainbot.model.actions;
+package ninjabrainbot.model.actions.alladvancements;
 
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 
 public class SetAllAdvancementsModeAction implements IAction {

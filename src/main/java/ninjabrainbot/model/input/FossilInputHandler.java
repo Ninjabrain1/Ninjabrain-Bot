@@ -2,7 +2,7 @@ package ninjabrainbot.model.input;
 
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.SetFossilAction;
+import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;

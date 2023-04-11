@@ -1,6 +1,7 @@
-package ninjabrainbot.model.actions;
+package ninjabrainbot.model.actions.boat;
 
 import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 

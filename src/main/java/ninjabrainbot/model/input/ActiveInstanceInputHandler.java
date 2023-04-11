@@ -2,8 +2,8 @@ package ninjabrainbot.model.input;
 
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.ResetAction;
-import ninjabrainbot.model.actions.SetAllAdvancementsModeAction;
+import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.actions.alladvancements.SetAllAdvancementsModeAction;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;

@@ -1,12 +1,12 @@
 package ninjabrainbot.model.input;
 
 import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.actions.AddEnderEyeThrowAction;
+import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.SetBoatAngleAction;
-import ninjabrainbot.model.actions.SetPlayerPositionAction;
-import ninjabrainbot.model.actions.TryAddAllAdvancementsStructureAction;
+import ninjabrainbot.model.actions.boat.SetBoatAngleAction;
+import ninjabrainbot.model.actions.common.SetPlayerPositionAction;
+import ninjabrainbot.model.actions.alladvancements.TryAddAllAdvancementsStructureAction;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;

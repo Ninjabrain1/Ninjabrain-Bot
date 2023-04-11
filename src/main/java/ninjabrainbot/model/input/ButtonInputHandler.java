@@ -2,9 +2,9 @@ package ninjabrainbot.model.input;
 
 import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.RemoveTriangulationThrowAction;
-import ninjabrainbot.model.actions.ResetAction;
-import ninjabrainbot.model.actions.SetFossilAction;
+import ninjabrainbot.model.actions.endereye.RemoveEnderEyeThrowAction;
+import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
@@ -42,7 +42,7 @@ public class ButtonInputHandler implements IButtonInputHandler {
 
 	@Override
 	public void onRemoveThrowButtonPressed(IEnderEyeThrow throwToRemove) {
-		actionExecutor.executeImmediately(new RemoveTriangulationThrowAction(dataState, throwToRemove));
+		actionExecutor.executeImmediately(new RemoveEnderEyeThrowAction(dataState, throwToRemove));
 	}
 
 }

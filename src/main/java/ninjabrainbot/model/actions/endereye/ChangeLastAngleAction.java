@@ -1,6 +1,7 @@
-package ninjabrainbot.model.actions;
+package ninjabrainbot.model.actions.endereye;
 
 import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
