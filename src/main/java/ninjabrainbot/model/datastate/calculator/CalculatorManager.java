@@ -1,4 +1,4 @@
-package ninjabrainbot.model.datastate;
+package ninjabrainbot.model.datastate.calculator;
 
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.blind.BlindResult;
@@ -13,6 +13,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.IObservableList;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 public class CalculatorManager implements ICalculatorManager, IDisposable {
 
@@ -30,8 +31,8 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(ICalculator calculator, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
-		this.calculator = calculator;
+	public CalculatorManager(IEnvironmentState environmentState, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
+		this.calculator = environmentState.calculator().get();
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;
 		this.divineContext = divineContext;
@@ -40,6 +41,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 		blindResult = new ObservableField<>();
 		divineResult = new ObservableField<>();
 
+		disposeHandler.add(environmentState.calculator().subscribe(this::setCalculator));
 		disposeHandler.add(throwSet.subscribe(this::onThrowSetModified));
 		disposeHandler.add(playerPosition.subscribe(this::onPlayerPositionChanged));
 		disposeHandler.add(divineContext.fossil().subscribe(this::onFossilChanged));
@@ -85,7 +87,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 		divineResult.set(calculator.divine(divineContext));
 	}
 
-	public void setCalculator(ICalculator calculator) {
+	private void setCalculator(ICalculator calculator) {
 		this.calculator = calculator;
 		updateCalculatorResult();
 		updateBlindResult();

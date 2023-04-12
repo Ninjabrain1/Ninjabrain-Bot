@@ -10,16 +10,16 @@ import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
-import ninjabrainbot.model.DataState;
-import ninjabrainbot.model.IDataState;
 import ninjabrainbot.model.actions.ActionExecutor;
-import ninjabrainbot.model.datastate.Calculator;
-import ninjabrainbot.model.datastate.CalculatorSettings;
+import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
+import ninjabrainbot.model.environmentstate.EnvironmentState;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.FossilInputHandler;
@@ -36,6 +36,7 @@ public class IntegrationTestBuilder {
 
 	private final ActionExecutor actionExecutor;
 	private final StandardDeviationHandler standardDeviationHandler;
+	private final IEnvironmentState environmentState;
 	private final IDataState dataState;
 
 	private CoordinateInputSource coordinateInputSource;
@@ -54,8 +55,8 @@ public class IntegrationTestBuilder {
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
 		standardDeviationHandler = new StandardDeviationHandler(preferences);
-		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		dataState = new DataState(new Calculator(calculatorSettings), domainModel);
+		environmentState = new EnvironmentState(domainModel, preferences);
+		dataState = new DataState(domainModel, environmentState);
 	}
 
 	public IntegrationTestBuilder withProSettings() {
@@ -107,7 +108,7 @@ public class IntegrationTestBuilder {
 		if (activeInstanceProvider == null)
 			activeInstanceProvider = new MockedInstanceProvider();
 		if (activeInstanceInputHandler == null)
-			activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences);
+			activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
 		activeInstanceProvider.activeMinecraftWorld().set(minecraftWorld);
 	}
 

@@ -6,4 +6,6 @@ public interface IWriteLock {
 
 	void releaseWriteLock();
 
+	Runnable applyWriteLock(Runnable runnable);
+
 }

@@ -1,4 +1,4 @@
-package ninjabrainbot.model;
+package ninjabrainbot.model.datastate;
 
 /**
  * Represents different types of calculation results that can be shown to the user.

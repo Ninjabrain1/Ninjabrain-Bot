@@ -1,11 +1,13 @@
-package ninjabrainbot.model;
+package ninjabrainbot.model.datastate;
 
-import ninjabrainbot.model.datastate.CalculatorManager;
-import ninjabrainbot.model.datastate.ICalculator;
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.calculator.CalculatorManager;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.DivineResult;
@@ -19,9 +21,7 @@ import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
-import ninjabrainbot.event.DisposeHandler;
-import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 public class DataState implements IDataState, IDisposable {
 
@@ -39,21 +39,17 @@ public class DataState implements IDataState, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public DataState(ICalculator calculator, IDomainModel domainModel) {
+	public DataState(IDomainModel domainModel, IEnvironmentState environmentState) {
 		divineContext = new DivineContext(domainModel);
 		throwSet = new ListComponent<>(domainModel, 10);
 		playerPosition = new DataComponent<>(domainModel);
 		locked = new DataComponent<>(domainModel, false);
 
-		calculatorManager = disposeHandler.add(new CalculatorManager(calculator, throwSet, playerPosition, divineContext));
-		allAdvancementsDataState = new AllAdvancementsDataState(calculatorManager.topPrediction(), domainModel);
+		calculatorManager = disposeHandler.add(new CalculatorManager(environmentState, throwSet, playerPosition, divineContext));
+		allAdvancementsDataState = new AllAdvancementsDataState(calculatorManager.topPrediction(), domainModel, environmentState);
 		boatDataState = new BoatDataState(domainModel);
 
 		resultTypeProvider = disposeHandler.add(new ResultTypeProvider(this));
-	}
-
-	void setCalculator(ICalculator calculator) {
-		calculatorManager.setCalculator(calculator);
 	}
 
 	@Override

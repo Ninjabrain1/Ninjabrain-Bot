@@ -9,7 +9,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;

@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;

@@ -2,9 +2,9 @@ package ninjabrainbot.simulations;
 
 import java.util.Random;
 
-import ninjabrainbot.model.datastate.Calculator;
-import ninjabrainbot.model.datastate.CalculatorSettings;
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.Calculator;
+import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;

@@ -2,9 +2,9 @@ package ninjabrainbot.gui.themeeditor;
 
 import java.util.List;
 
-import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.IDataStateHandler;
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.IDataStateHandler;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.event.ISubscribable;

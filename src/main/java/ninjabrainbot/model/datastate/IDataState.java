@@ -1,6 +1,6 @@
-package ninjabrainbot.model;
+package ninjabrainbot.model.datastate;
 
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;

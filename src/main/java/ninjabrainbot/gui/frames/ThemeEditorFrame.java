@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.model.IDataStateHandler;
+import ninjabrainbot.model.datastate.IDataStateHandler;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;

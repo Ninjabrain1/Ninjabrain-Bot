@@ -1,6 +1,6 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.IActionExecutor;

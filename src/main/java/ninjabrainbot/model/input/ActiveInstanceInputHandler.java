@@ -1,53 +1,49 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.common.ResetAction;
-import ninjabrainbot.model.actions.alladvancements.SetAllAdvancementsModeAction;
-import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 /**
  * Listens to active instance changes and decides if/how the changes should affect the data state.
  */
 public class ActiveInstanceInputHandler implements IDisposable {
 
-	private final IActiveInstanceProvider activeInstanceProvider;
 	private final IDomainModel domainModel;
 	private final IDataState dataState;
+	private final IEnvironmentState environmentState;
 	private final IActionExecutor actionExecutor;
-	private final NinjabrainBotPreferences preferences;
 
-	final DisposeHandler disposeHandler = new DisposeHandler();
+	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public ActiveInstanceInputHandler(IActiveInstanceProvider activeInstanceProvider, IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
-		this.activeInstanceProvider = activeInstanceProvider;
+	private IMinecraftWorldFile lastActiveMinecraftWorldFile;
+
+	public ActiveInstanceInputHandler(IActiveInstanceProvider activeInstanceProvider, IDomainModel domainModel, IDataState dataState, IEnvironmentState environmentState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
 		this.domainModel = domainModel;
 		this.dataState = dataState;
+		this.environmentState = environmentState;
 		this.actionExecutor = actionExecutor;
-		this.preferences = preferences;
+		lastActiveMinecraftWorldFile = activeInstanceProvider.activeMinecraftWorld().get();
 		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(this::onActiveMinecraftWorldChanged));
 		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::onActiveMinecraftWorldModified));
-		disposeHandler.add(preferences.allAdvancements.whenModified().subscribe(this::updateAllAdvancementsMode));
 	}
 
 	private void onActiveMinecraftWorldChanged(IMinecraftWorldFile newWorldFile) {
-		if (!dataState.locked().get())
+		if (!dataState.locked().get() && lastActiveMinecraftWorldFile != null)
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
+		lastActiveMinecraftWorldFile = newWorldFile;
 	}
 
 	private void onActiveMinecraftWorldModified(IMinecraftWorldFile modifiedWorldFile) {
-		updateAllAdvancementsMode();
-	}
-
-	private void updateAllAdvancementsMode() {
-		IMinecraftWorldFile modifiedWorldFile = activeInstanceProvider.activeMinecraftWorld().get();
-		boolean allAdvancementsModeEnabled = modifiedWorldFile != null && preferences.allAdvancements.get() && modifiedWorldFile.hasEnteredEnd();
-		actionExecutor.executeImmediately(new SetAllAdvancementsModeAction(dataState.allAdvancementsDataState(), allAdvancementsModeEnabled));
+		if (modifiedWorldFile != null)
+			environmentState.setHasEnteredEnd(modifiedWorldFile.hasEnteredEnd());
 	}
 
 	@Override

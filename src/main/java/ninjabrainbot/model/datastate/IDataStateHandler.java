@@ -1,4 +1,4 @@
-package ninjabrainbot.model;
+package ninjabrainbot.model.datastate;
 
 import ninjabrainbot.event.ISubscribable;
 

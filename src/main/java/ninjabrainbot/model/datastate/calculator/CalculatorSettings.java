@@ -1,4 +1,4 @@
-package ninjabrainbot.model.datastate;
+package ninjabrainbot.model.datastate.calculator;
 
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -13,6 +13,12 @@ public class CalculatorSettings {
 		numberOfReturnedPredictions = 5;
 		useAdvancedStatistics = true;
 		mcVersion = McVersion.PRE_119;
+	}
+
+	public CalculatorSettings(boolean useAdvancedStatistics, McVersion mcVersion) {
+		numberOfReturnedPredictions = 5;
+		this.useAdvancedStatistics = useAdvancedStatistics;
+		this.mcVersion = mcVersion;
 	}
 
 	public CalculatorSettings(NinjabrainBotPreferences preferences) {

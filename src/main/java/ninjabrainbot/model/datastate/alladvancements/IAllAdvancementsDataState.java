@@ -1,13 +1,14 @@
 package ninjabrainbot.model.datastate.alladvancements;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 
 public interface IAllAdvancementsDataState {
 
-	IDataComponent<Boolean> allAdvancementsModeEnabled();
+	IObservable<Boolean> allAdvancementsModeEnabled();
 
-	IDataComponent<StructurePosition> strongholdPosition();
+	IObservable<StructurePosition> strongholdPosition();
 
 	IDataComponent<StructurePosition> spawnPosition();
 

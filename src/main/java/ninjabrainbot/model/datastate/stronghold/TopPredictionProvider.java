@@ -1,6 +1,6 @@
 package ninjabrainbot.model.datastate.stronghold;
 
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;

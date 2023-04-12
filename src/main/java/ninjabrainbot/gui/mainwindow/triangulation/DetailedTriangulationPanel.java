@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.components.panels.ThemedPanel;

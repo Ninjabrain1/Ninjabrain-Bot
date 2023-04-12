@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.IDisposable;

@@ -1,4 +1,4 @@
-package ninjabrainbot.model.datastate;
+package ninjabrainbot.model.datastate.calculator;
 
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.blind.BlindResult;

@@ -1,6 +1,6 @@
 package ninjabrainbot.model.actions.endereye;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 

@@ -2,7 +2,7 @@ package ninjabrainbot.model.datastate.calibrator;
 
 import java.awt.AWTException;
 
-import ninjabrainbot.model.datastate.Calculator;
+import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;

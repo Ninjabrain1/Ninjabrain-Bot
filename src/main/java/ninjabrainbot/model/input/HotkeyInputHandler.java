@@ -1,6 +1,6 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.common.ResetAction;

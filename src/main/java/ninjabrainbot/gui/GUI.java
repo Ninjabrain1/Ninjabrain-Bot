@@ -1,7 +1,7 @@
 package ninjabrainbot.gui;
 
-import ninjabrainbot.model.DataStateHandler;
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.DataStateHandler;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.information.McVersionWarningProvider;

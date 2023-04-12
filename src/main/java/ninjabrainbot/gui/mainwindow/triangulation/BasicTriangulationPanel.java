@@ -6,7 +6,7 @@ import java.util.Locale;
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;

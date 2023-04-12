@@ -2,9 +2,9 @@ package ninjabrainbot.model.information;
 
 import java.util.List;
 
-import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.ResultType;
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

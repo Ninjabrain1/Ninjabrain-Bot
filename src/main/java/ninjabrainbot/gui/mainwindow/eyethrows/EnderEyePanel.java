@@ -2,7 +2,7 @@ package ninjabrainbot.gui.mainwindow.eyethrows;
 
 import javax.swing.BoxLayout;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;

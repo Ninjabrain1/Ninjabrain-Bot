@@ -1,8 +1,10 @@
 package ninjabrainbot.model;
 
 import ninjabrainbot.model.actions.ActionExecutor;
-import ninjabrainbot.model.datastate.Calculator;
-import ninjabrainbot.model.datastate.CalculatorSettings;
+import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -11,6 +13,7 @@ import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
 import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
+import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.event.ObservableProperty;
@@ -43,7 +46,7 @@ public class ResultTypeProviderTests {
 	@Test
 	void resultTypeUpdatesCorrectly() {
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		IDataState dataState = new DataState(new Calculator(calculatorSettings), domainModel);
+		IDataState dataState = new DataState(domainModel, new EnvironmentState(domainModel, preferences));
 
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), standardDeviationHandler);

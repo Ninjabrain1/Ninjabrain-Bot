@@ -1,4 +1,4 @@
-package ninjabrainbot.model.datastate;
+package ninjabrainbot.model.datastate.calculator;
 
 import java.util.ArrayList;
 import java.util.List;

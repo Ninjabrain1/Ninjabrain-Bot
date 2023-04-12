@@ -1,5 +1,7 @@
 package ninjabrainbot.model.domainmodel;
 
+import ninjabrainbot.event.IObservable;
+
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitor changes so that undo works.
  */

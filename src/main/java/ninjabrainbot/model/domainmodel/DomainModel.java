@@ -3,6 +3,7 @@ package ninjabrainbot.model.domainmodel;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.Assert;
 
 /**
@@ -58,6 +59,17 @@ public class DomainModel implements IDomainModel {
 		acquireWriteLock();
 		if (domainModelHistory.hasNextSnapshot())
 			domainModelHistory.moveToNextSnapshotAndGet().restoreDomainModelToStateAtSnapshot();
+		releaseWriteLock(false);
+	}
+
+	@Override
+	public Runnable applyWriteLock(Runnable runnable) {
+		return () -> runUnderWriteLock(runnable);
+	}
+
+	private void runUnderWriteLock(Runnable runnable){
+		acquireWriteLock();
+		runnable.run();
 		releaseWriteLock(false);
 	}
 

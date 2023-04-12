@@ -1,12 +1,11 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.IDataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.alladvancements.RemoveStructureAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.actions.endereye.RemoveEnderEyeThrowAction;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.domainmodel.IDomainModel;

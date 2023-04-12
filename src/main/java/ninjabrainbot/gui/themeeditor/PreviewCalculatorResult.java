@@ -3,7 +3,7 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;

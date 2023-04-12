@@ -3,9 +3,9 @@ package ninjabrainbot.model.information;
 import java.util.ArrayList;
 import java.util.List;
 
-import ninjabrainbot.model.IDataState;
-import ninjabrainbot.model.ResultType;
-import ninjabrainbot.model.datastate.ICalculatorResult;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.common.OverworldPosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
