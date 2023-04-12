@@ -44,7 +44,7 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		if (t.isInNether())
 			return StructureType.Unknown;
 
-		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300)
+		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
 			return StructureType.Spawn;
 
 		if (t.yInPlayerDimension() < 63)
