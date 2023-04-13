@@ -5,7 +5,6 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Observable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
@@ -70,8 +69,11 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	@Override
 	public void setHasEnteredEnd(boolean hasEnteredEnd) {
 		domainModel.acquireWriteLock();
-		this.hasEnteredEnd.set(hasEnteredEnd);
-		domainModel.releaseWriteLock();
+		try {
+			this.hasEnteredEnd.set(hasEnteredEnd);
+		} finally {
+			domainModel.releaseWriteLock();
+		}
 	}
 
 	private ICalculator createCalculator() {

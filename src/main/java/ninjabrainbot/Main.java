@@ -23,15 +23,15 @@ public class Main {
 		Profiler.start("Initialize language");
 		Logger.log("Language: " + I18n.get("lang"));
 
-		Progress.setTask("Loading preferences", 0.03f);
+		Progress.setTask("Loading preferences", 0.04f);
 		Profiler.stopAndStart("Initialize preferences");
 		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new SavedPreferences());
 
-		Progress.setTask("Calculating approximated stronghold density", 0.04f);
+		Progress.setTask("Calculating approximated stronghold density", 0.05f);
 		Profiler.stopAndStart("Calculate approximated density");
 		ApproximatedDensity.init();
 
-		Progress.setTask("Starting keyboard listener", 0.07f);
+		Progress.setTask("Starting keyboard listener", 0.08f);
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
 

@@ -9,7 +9,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
@@ -22,19 +21,18 @@ public class MainButtonPanel extends ThemedPanel {
 
 	private final WrappedColor borderCol;
 
-	public MainButtonPanel(StyleManager styleManager, IDataState dataState, IButtonInputHandler buttonInputHandler) {
+	public MainButtonPanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
 		super(styleManager);
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
 		ThemedLabel throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
 		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_HEADER);
-		FlatButton resetButton = getResetButton(styleManager, buttonInputHandler);
-		FlatButton undoButton = getUndoButton(styleManager, buttonInputHandler);
 		add(throwsLabel);
 		add(Box.createHorizontalGlue());
-		add(undoButton);
-		add(resetButton);
+		add(getUndoButton(styleManager, buttonInputHandler));
+		add(getRedoButton(styleManager, buttonInputHandler));
+		add(getResetButton(styleManager, buttonInputHandler));
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
 		setBackgroundColor(styleManager.currentTheme.COLOR_HEADER);
@@ -76,6 +74,12 @@ public class MainButtonPanel extends ThemedPanel {
 	private FlatButton getUndoButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
 		FlatButton button = new FlatButton(styleManager, I18n.get("undo"));
 		button.addActionListener(p -> buttonInputHandler.onUndoButtonPressed());
+		return button;
+	}
+
+	private FlatButton getRedoButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
+		FlatButton button = new FlatButton(styleManager, I18n.get("redo"));
+		button.addActionListener(p -> buttonInputHandler.onRedoButtonPressed());
 		return button;
 	}
 

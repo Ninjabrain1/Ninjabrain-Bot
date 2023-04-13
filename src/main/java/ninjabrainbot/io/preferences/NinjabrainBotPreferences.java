@@ -39,6 +39,7 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference showAngleUpdates;
 	public final BooleanPreference showAngleErrors;
 	public final BooleanPreference autoReset;
+	public final BooleanPreference autoResetWhenChangingInstance;
 	public final BooleanPreference useAdvStatistics;
 	public final BooleanPreference altClipboardReader;
 	public final BooleanPreference useAltStd;
@@ -94,6 +95,7 @@ public class NinjabrainBotPreferences {
 		showAngleUpdates = new BooleanPreference("show_angle_updates", false, source);
 		showAngleErrors = new BooleanPreference("show_angle_errors", false, source);
 		autoReset = new BooleanPreference("auto_reset", false, source);
+		autoResetWhenChangingInstance = new BooleanPreference("auto_reset_on_instance_change", false, source);
 		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, source);
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);

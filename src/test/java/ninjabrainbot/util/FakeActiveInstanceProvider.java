@@ -9,8 +9,8 @@ import ninjabrainbot.io.mcinstance.MinecraftInstance;
 
 public class FakeActiveInstanceProvider implements IActiveInstanceProvider {
 
-	private IObservable<MinecraftInstance> currentInstance = new ObservableField<MinecraftInstance>(null);
-	private IObservable<IMinecraftWorldFile> currentWorldFile = new ObservableField<IMinecraftWorldFile>(null);
+	public final ObservableField<MinecraftInstance> currentInstance = new ObservableField<>(null);
+	public final ObservableField<IMinecraftWorldFile> currentWorldFile = new ObservableField<>(null);
 
 	public FakeActiveInstanceProvider() {
 	}

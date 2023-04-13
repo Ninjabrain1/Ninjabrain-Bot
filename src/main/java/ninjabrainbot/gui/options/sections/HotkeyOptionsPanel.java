@@ -21,6 +21,7 @@ public class HotkeyOptionsPanel extends StackPanel {
 			add(new HotkeyPanel(styleManager, I18n.get("settings.down_001_to_last_angle"), preferences.hotkeyDecrement));
 			add(new HotkeyPanel(styleManager, I18n.get("reset"), preferences.hotkeyReset));
 			add(new HotkeyPanel(styleManager, I18n.get("undo"), preferences.hotkeyUndo));
+			add(new HotkeyPanel(styleManager, I18n.get("redo"), preferences.hotkeyRedo));
 			add(new HotkeyPanel(styleManager, I18n.get("lock"), preferences.hotkeyLock));
 			add(new HotkeyPanel(styleManager, I18n.get("hide_show_window"), preferences.hotkeyMinimize));
 		}

@@ -137,7 +137,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		informationTextPanel = new InformationListPanel(styleManager, informationMessageList);
 		add(informationTextPanel);
 		// "Throws" text + buttons
-		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, dataState, buttonInputHandler);
+		MainButtonPanel mainButtonPanel = new MainButtonPanel(styleManager, buttonInputHandler);
 		add(mainButtonPanel);
 		// Throw panels
 		enderEyePanel = new EnderEyePanel(styleManager, preferences, dataState, buttonInputHandler);

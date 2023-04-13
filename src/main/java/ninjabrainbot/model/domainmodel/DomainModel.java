@@ -3,7 +3,6 @@ package ninjabrainbot.model.domainmodel;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.util.Assert;
 
 /**
@@ -50,16 +49,22 @@ public class DomainModel implements IDomainModel {
 
 	public void undoUnderWriteLock() {
 		acquireWriteLock();
-		if (domainModelHistory.hasPreviousSnapshot())
-			domainModelHistory.moveToPreviousSnapshotAndGet().restoreDomainModelToStateAtSnapshot();
-		releaseWriteLock(false);
+		try {
+			if (domainModelHistory.hasPreviousSnapshot())
+				domainModelHistory.moveToPreviousSnapshotAndGet().restoreDomainModelToStateAtSnapshot();
+		} finally {
+			releaseWriteLock(false);
+		}
 	}
 
 	public void redoUnderWriteLock() {
 		acquireWriteLock();
-		if (domainModelHistory.hasNextSnapshot())
-			domainModelHistory.moveToNextSnapshotAndGet().restoreDomainModelToStateAtSnapshot();
-		releaseWriteLock(false);
+		try {
+			if (domainModelHistory.hasNextSnapshot())
+				domainModelHistory.moveToNextSnapshotAndGet().restoreDomainModelToStateAtSnapshot();
+		} finally {
+			releaseWriteLock(false);
+		}
 	}
 
 	@Override
@@ -67,10 +72,13 @@ public class DomainModel implements IDomainModel {
 		return () -> runUnderWriteLock(runnable);
 	}
 
-	private void runUnderWriteLock(Runnable runnable){
+	private void runUnderWriteLock(Runnable runnable) {
 		acquireWriteLock();
-		runnable.run();
-		releaseWriteLock(false);
+		try {
+			runnable.run();
+		} finally {
+			releaseWriteLock(false);
+		}
 	}
 
 	public void notifyDataComponentToBeModified() {

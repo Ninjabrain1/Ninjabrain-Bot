@@ -16,6 +16,7 @@ import ninjabrainbot.model.environmentstate.IEnvironmentState;
  */
 public class ActiveInstanceInputHandler implements IDisposable {
 
+	private final NinjabrainBotPreferences preferences;
 	private final IDomainModel domainModel;
 	private final IDataState dataState;
 	private final IEnvironmentState environmentState;
@@ -26,17 +27,19 @@ public class ActiveInstanceInputHandler implements IDisposable {
 	private IMinecraftWorldFile lastActiveMinecraftWorldFile;
 
 	public ActiveInstanceInputHandler(IActiveInstanceProvider activeInstanceProvider, IDomainModel domainModel, IDataState dataState, IEnvironmentState environmentState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
+		this.preferences = preferences;
 		this.domainModel = domainModel;
 		this.dataState = dataState;
 		this.environmentState = environmentState;
 		this.actionExecutor = actionExecutor;
 		lastActiveMinecraftWorldFile = activeInstanceProvider.activeMinecraftWorld().get();
+
 		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(this::onActiveMinecraftWorldChanged));
 		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::onActiveMinecraftWorldModified));
 	}
 
 	private void onActiveMinecraftWorldChanged(IMinecraftWorldFile newWorldFile) {
-		if (!dataState.locked().get() && lastActiveMinecraftWorldFile != null)
+		if (!dataState.locked().get() && preferences.autoResetWhenChangingInstance.get() && lastActiveMinecraftWorldFile != null)
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
 		lastActiveMinecraftWorldFile = newWorldFile;
 	}

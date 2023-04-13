@@ -54,7 +54,7 @@ public class GUI {
 	}
 
 	private void initInputMethods() {
-		Progress.setTask("Starting clipboard reader", 0.01f);
+		Progress.setTask("Starting clipboard reader", 0.02f);
 		Profiler.start("Init clipboard reader");
 		clipboardReader = new ClipboardReader(preferences);
 		KeyboardListener.init(clipboardReader, preferences.altClipboardReader);
@@ -67,7 +67,7 @@ public class GUI {
 	}
 
 	private void initDataState() {
-		Progress.setTask("Creating calculator data", 0.04f);
+		Progress.setTask("Creating calculator data", 0.08f);
 		Profiler.start("Init DataState");
 		dataStateHandler = new DataStateHandler(preferences, clipboardReader, activeInstanceProvider);
 		dataState = dataStateHandler.getDataState();
@@ -75,7 +75,7 @@ public class GUI {
 	}
 
 	private void initDataProcessors() {
-		Progress.setTask("Initializing information message generators", 0.04f);
+		Progress.setTask("Initializing information message generators", 0.09f);
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
@@ -87,18 +87,18 @@ public class GUI {
 	}
 
 	private void initUI() {
-		Progress.setTask("Loading themes", 0.15f);
+		Progress.setTask("Loading themes", 0.30f);
 		Profiler.start("Init StyleManager");
 		Theme.loadThemes(preferences);
 		styleManager = new StyleManager(Theme.get(preferences.theme.get()), SizePreference.get(preferences.size.get()));
 		preferences.size.whenModified().subscribeEDT(size -> styleManager.setSizePreference(SizePreference.get(size)));
 		preferences.theme.whenModified().subscribeEDT(theme_uid -> styleManager.currentTheme.setTheme(Theme.get(theme_uid)));
 
-		Progress.setTask("Creating main window", 0.65f);
+		Progress.setTask("Creating main window", 0.93f);
 		Profiler.stopAndStart("Create frame");
 		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataState, dataStateHandler.buttonInputHandler, informationMessageList);
 
-		Progress.setTask("Creating settings window", 0.85f);
+		Progress.setTask("Creating settings window", 0.95f);
 		Profiler.stopAndStart("Create settings window");
 		ninjabrainBotFrame.getSettingsButton().addActionListener(__ -> getOrCreateOptionsFrame().toggleWindow(ninjabrainBotFrame));
 

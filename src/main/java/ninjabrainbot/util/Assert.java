@@ -32,4 +32,8 @@ public class Assert {
 			throw new AssertionError(message);
 	}
 
+	public static void isNotNull(Object object) {
+		if (object == null)
+			throw new AssertionError();
+	}
 }

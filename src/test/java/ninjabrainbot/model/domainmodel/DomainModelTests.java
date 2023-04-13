@@ -81,33 +81,33 @@ public class DomainModelTests {
 		DomainModel domainModel = new DomainModel();
 		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
 
-		for (int i = 0; i < maxNumberOfUndoSnapshots; i++){
+		for (int i = 0; i < maxNumberOfUndoSnapshots; i++) {
 			domainModel.acquireWriteLock();
 			integer.set(i + 1);
 			domainModel.releaseWriteLock();
 		}
 		Assertions.assertEquals(maxNumberOfUndoSnapshots, integer.get());
 
-		for (int i = 0; i < maxNumberOfUndoSnapshots - 1; i++){
+		for (int i = 0; i < maxNumberOfUndoSnapshots - 1; i++) {
 			domainModel.undoUnderWriteLock();
 			Assertions.assertEquals(maxNumberOfUndoSnapshots - i - 1, integer.get());
 		}
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < 10; i++) {
 			domainModel.undoUnderWriteLock();
 			Assertions.assertEquals(1, integer.get());
 		}
-		for (int i = 0; i < maxNumberOfUndoSnapshots - 1; i++){
+		for (int i = 0; i < maxNumberOfUndoSnapshots - 1; i++) {
 			domainModel.redoUnderWriteLock();
 			Assertions.assertEquals(i + 2, integer.get());
 		}
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < 10; i++) {
 			domainModel.redoUnderWriteLock();
 			Assertions.assertEquals(maxNumberOfUndoSnapshots, integer.get());
 		}
 	}
 
 	@Test
-	public void duplicateStatesAreNotSavedForUndo(){
+	public void duplicateStatesAreNotSavedForUndo() {
 		DomainModel domainModel = new DomainModel();
 		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
 
@@ -139,6 +139,42 @@ public class DomainModelTests {
 
 		domainModel.redoUnderWriteLock();
 		Assertions.assertEquals(0, integer.get());
+	}
+
+	@Test
+	public void noRaceConditionsDuringAttemptedConcurrentModification() {
+		DomainModel domainModel = new DomainModel();
+		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
+
+		Thread thread1 = new Thread(() -> {
+			for (int i = 0; i < 10000; i++) {
+				domainModel.acquireWriteLock();
+				integer.set(integer.get() + 1);
+				domainModel.releaseWriteLock();
+			}
+		});
+		Thread thread2 = new Thread(() -> {
+			for (int i = 0; i < 10000; i++) {
+				domainModel.acquireWriteLock();
+				integer.set(integer.get() + 1);
+				domainModel.releaseWriteLock();
+			}
+		});
+		thread1.start();
+		thread2.start();
+
+		int millis = 0;
+		while (thread1.isAlive() && thread2.isAlive()) {
+			try {
+				Thread.sleep(10);
+				millis += 10;
+				if (millis > 1000)
+					Assertions.fail("Test timed out.");
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		Assertions.assertEquals(20000, integer.get());
 	}
 
 }
