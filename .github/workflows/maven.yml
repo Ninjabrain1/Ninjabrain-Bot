@@ -24,7 +24,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'oracle'
-          cache: maven
+          cache: temurin
 
       - name: Build with Maven
         run: mvn -B package -DskipTests --file pom.xml
@@ -38,6 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          java-version: '17'
+          distribution: 'oracle'
+          cache: temurin
       - name: Test with Maven
         run: mvn test --file pom.xml
 
