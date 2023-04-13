@@ -164,7 +164,7 @@ public class DomainModelTests {
 		thread2.start();
 
 		int millis = 0;
-		while (thread1.isAlive() && thread2.isAlive()) {
+		while (thread1.isAlive() || thread2.isAlive()) {
 			try {
 				Thread.sleep(10);
 				millis += 10;
