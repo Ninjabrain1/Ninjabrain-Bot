@@ -142,6 +142,7 @@ public class GUI {
 				preferences.windowY.set(ninjabrainBotFrame.getY());
 				obsOverlay.dispose();
 				autoResetTimer.dispose();
+				informationMessageList.dispose();
 				dataStateHandler.dispose();
 			}
 		};

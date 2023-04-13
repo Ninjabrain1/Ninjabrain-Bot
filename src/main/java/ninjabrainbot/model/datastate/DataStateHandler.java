@@ -38,10 +38,10 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		actionExecutor = new ActionExecutor(domainModel);
 
 		StandardDeviationHandler standardDeviationHandler = disposeHandler.add(new StandardDeviationHandler(preferences));
-		EnvironmentState environmentState = new EnvironmentState(domainModel, preferences);
-		dataState = new DataState(domainModel, environmentState);
+		EnvironmentState environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
+		dataState = disposeHandler.add(new DataState(domainModel, environmentState));
 
-		CoordinateInputSource coordinateInputSource = new CoordinateInputSource(clipboardProvider);
+		CoordinateInputSource coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardProvider));
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, standardDeviationHandler);
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));

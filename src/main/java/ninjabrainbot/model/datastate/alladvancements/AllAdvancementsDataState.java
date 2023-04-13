@@ -1,5 +1,7 @@
 package ninjabrainbot.model.datastate.alladvancements;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.model.datastate.common.StructurePosition;
@@ -9,7 +11,7 @@ import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
-public class AllAdvancementsDataState implements IAllAdvancementsDataState {
+public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDisposable {
 
 	private final IObservable<ChunkPrediction> currentStrongholdPrediction;
 	private final IEnvironmentState environmentState;
@@ -20,6 +22,8 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 	private final DataComponent<StructurePosition> outpostPosition;
 	private final DataComponent<StructurePosition> monumentPosition;
 
+	private final DisposeHandler disposeHandler = new DisposeHandler();
+
 	public AllAdvancementsDataState(IObservable<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel, IEnvironmentState environmentState) {
 		this.currentStrongholdPrediction = currentStrongholdPrediction;
 		this.environmentState = environmentState;
@@ -28,8 +32,8 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 		spawnPosition = new DataComponent<>(domainModel);
 		outpostPosition = new DataComponent<>(domainModel);
 		monumentPosition = new DataComponent<>(domainModel);
-		environmentState.allAdvancementsModeEnabled().subscribe(this::updateAllAdvancementsMode);
-		environmentState.hasEnteredEnd().subscribe(this::updateAllAdvancementsMode);
+		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribe(this::updateAllAdvancementsMode));
+		disposeHandler.add(environmentState.hasEnteredEnd().subscribe(this::updateAllAdvancementsMode));
 	}
 
 	private void updateAllAdvancementsMode() {
@@ -64,4 +68,8 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState {
 		return monumentPosition;
 	}
 
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
+	}
 }

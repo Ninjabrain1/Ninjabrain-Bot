@@ -1,5 +1,10 @@
 package ninjabrainbot.model.datastate.endereye;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
@@ -7,26 +12,25 @@ import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
 import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.input.IFossilInputSource;
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.io.IClipboardProvider;
 
 /**
  * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
  * into player positions and fossils, exposed through the streams whenNewPlayerPositionInputted(), and whenNewFossilInputted().
  */
-public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource {
+public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource, IDisposable {
 
 	private final ObservableField<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
 	private final ObservableField<IPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	private final ObservableField<Fossil> whenNewFossilInputted;
+
+	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public CoordinateInputSource(IClipboardProvider clipboardProvider) {
 		whenNewDetailedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewLimitedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewFossilInputted = new ObservableField<>(null, true);
 
-		clipboardProvider.clipboardText().subscribe(this::parseF3C);
+		disposeHandler.add(clipboardProvider.clipboardText().subscribe(this::parseF3C));
 	}
 
 	private void parseF3C(String f3c) {
@@ -63,4 +67,8 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 		return whenNewFossilInputted;
 	}
 
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
+	}
 }

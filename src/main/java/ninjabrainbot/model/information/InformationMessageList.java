@@ -3,9 +3,10 @@ package ninjabrainbot.model.information;
 import java.util.HashMap;
 
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ObservableList;
 
-public class InformationMessageList extends ObservableList<InformationMessage> {
+public class InformationMessageList extends ObservableList<InformationMessage> implements IDisposable {
 
 	final HashMap<InformationMessageProvider, InformationMessage> informationMessages;
 
@@ -30,6 +31,11 @@ public class InformationMessageList extends ObservableList<InformationMessage> {
 			add(message);
 			informationMessages.put(provider, message);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
 	}
 
 }
