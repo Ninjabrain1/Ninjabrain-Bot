@@ -22,17 +22,20 @@ public class DomainModel implements IDomainModel {
 		domainModelHistory = new DomainModelHistory(dataComponents, 10);
 	}
 
+	@Override
 	public void registerDataComponent(IDataComponent<?> dataComponent) {
 		Assert.isFalse(isFullyInitialized, "New DataComponents cannot be registered in the DomainModel after it has been fully initialized.");
 		dataComponents.add(dataComponent);
 	}
 
+	@Override
 	public void acquireWriteLock() {
 		lock.writeLock().lock();
 		if (!isFullyInitialized)
 			finishInitialization();
 	}
 
+	@Override
 	public void releaseWriteLock() {
 		releaseWriteLock(true);
 	}
@@ -43,10 +46,12 @@ public class DomainModel implements IDomainModel {
 		lock.writeLock().unlock();
 	}
 
+	@Override
 	public void reset() {
 		dataComponents.forEach(IDataComponent::reset);
 	}
 
+	@Override
 	public void undoUnderWriteLock() {
 		acquireWriteLock();
 		try {
@@ -57,6 +62,7 @@ public class DomainModel implements IDomainModel {
 		}
 	}
 
+	@Override
 	public void redoUnderWriteLock() {
 		acquireWriteLock();
 		try {
@@ -65,6 +71,11 @@ public class DomainModel implements IDomainModel {
 		} finally {
 			releaseWriteLock(false);
 		}
+	}
+
+	@Override
+	public boolean isReset() {
+		return dataComponents.stream().allMatch(IDataComponent::isReset);
 	}
 
 	@Override

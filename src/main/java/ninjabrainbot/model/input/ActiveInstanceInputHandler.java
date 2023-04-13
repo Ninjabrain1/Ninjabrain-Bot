@@ -39,7 +39,7 @@ public class ActiveInstanceInputHandler implements IDisposable {
 	}
 
 	private void onActiveMinecraftWorldChanged(IMinecraftWorldFile newWorldFile) {
-		if (!dataState.locked().get() && preferences.autoResetWhenChangingInstance.get() && lastActiveMinecraftWorldFile != null)
+		if (!dataState.locked().get() && !domainModel.isReset() && preferences.autoResetWhenChangingInstance.get() && lastActiveMinecraftWorldFile != null)
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
 		lastActiveMinecraftWorldFile = newWorldFile;
 	}

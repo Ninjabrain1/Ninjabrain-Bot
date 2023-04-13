@@ -17,4 +17,6 @@ public interface IDomainModel extends IWriteLock {
 
 	void redoUnderWriteLock();
 
+	boolean isReset();
+
 }

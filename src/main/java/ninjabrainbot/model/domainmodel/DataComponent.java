@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.util.Assert;
 
 /**
  * Represents a piece of data, write permissions of DataComponents are automatically handled by the DomainModel.
@@ -51,11 +52,17 @@ public class DataComponent<T> implements IDataComponent<T> {
 	@Override
 	public void reset() {
 		set(defaultValue);
+		Assert.isTrue(isReset());
 	}
 
 	@Override
 	public boolean contentEquals(T value) {
 		return observableField.get() == value;
+	}
+
+	@Override
+	public boolean isReset() {
+		return get() == defaultValue;
 	}
 
 	@Override

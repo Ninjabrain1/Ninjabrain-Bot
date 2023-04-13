@@ -8,7 +8,6 @@ import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.DataComponent;
-import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.util.FakeActiveInstanceProvider;
@@ -24,6 +23,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ActiveInstanceInputHandlerTest {
 
 	@Mock
+	IDomainModel domainModel;
+	@Mock
 	IActionExecutor actionExecutor;
 	@Mock
 	IDataState dataState;
@@ -34,11 +35,12 @@ class ActiveInstanceInputHandlerTest {
 	@ValueSource(booleans = { true, false })
 	void changingMinecraftWorldExecutesResetAction(boolean preferenceEnabled) {
 		// Arrange
-		IDomainModel domainModel = new DomainModel();
 		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		preferences.autoResetWhenChangingInstance.set(preferenceEnabled);
 
-		Mockito.when(dataState.locked()).thenReturn(new DataComponent<>(domainModel, false));
+		Mockito.when(domainModel.isReset()).thenReturn(false);
+		var locked = new DataComponent<>(domainModel, false);
+		Mockito.when(dataState.locked()).thenReturn(locked);
 
 		FakeActiveInstanceProvider activeInstanceProvider = new FakeActiveInstanceProvider();
 		MinecraftInstance minecraftInstance = new MinecraftInstance("instance 1");
@@ -50,21 +52,23 @@ class ActiveInstanceInputHandlerTest {
 		activeInstanceProvider.currentWorldFile.set(new MinecraftWorldFile(minecraftInstance, "world 2"));
 
 		// Assert
-		if (preferenceEnabled)
+		if (preferenceEnabled) {
 			Mockito.verify(actionExecutor, Mockito.only()).executeImmediately(ArgumentMatchers.any(ResetAction.class));
-		else
+		} else {
 			Mockito.verify(actionExecutor, Mockito.never()).executeImmediately(ArgumentMatchers.any());
+		}
 	}
 
 	@ParameterizedTest
 	@ValueSource(booleans = { true, false })
 	void changingMinecraftWorld_FromNull_DoesNotExecuteResetAction(boolean preferenceEnabled) {
 		// Arrange
-		IDomainModel domainModel = new DomainModel();
 		NinjabrainBotPreferences preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		preferences.autoResetWhenChangingInstance.set(preferenceEnabled);
 
-		Mockito.when(dataState.locked()).thenReturn(new DataComponent<>(domainModel, false));
+		Mockito.when(domainModel.isReset()).thenReturn(false);
+		var locked = new DataComponent<>(domainModel, false);
+		Mockito.when(dataState.locked()).thenReturn(locked);
 
 		FakeActiveInstanceProvider activeInstanceProvider = new FakeActiveInstanceProvider();
 		MinecraftInstance minecraftInstance = new MinecraftInstance("instance 1");

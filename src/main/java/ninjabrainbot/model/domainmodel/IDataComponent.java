@@ -16,4 +16,7 @@ public interface IDataComponent<T> extends IObservable<T> {
 	void reset();
 
 	boolean contentEquals(T value);
+
+	boolean isReset();
+
 }

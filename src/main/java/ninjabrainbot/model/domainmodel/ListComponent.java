@@ -7,6 +7,7 @@ import ninjabrainbot.event.ArrayListImplementingReadOnlyList;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.util.Assert;
 
 /**
  * Represents a list of data, write permissions of ListComponent are automatically handled by the DomainModel.
@@ -67,6 +68,7 @@ public class ListComponent<T> implements IListComponent<T> {
 		if (domainModel != null)
 			domainModel.notifyDataComponentToBeModified();
 		observableList.clear();
+		Assert.isTrue(isReset());
 	}
 
 	@Override
@@ -80,6 +82,11 @@ public class ListComponent<T> implements IListComponent<T> {
 				return false;
 		}
 		return true;
+	}
+
+	@Override
+	public boolean isReset() {
+		return size() == 0;
 	}
 
 	@Override
