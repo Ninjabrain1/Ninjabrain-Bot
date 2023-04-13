@@ -22,4 +22,8 @@ public interface ISubscribable<T> extends IUnsubscribable<T> {
 		return subscribe(__ -> runnable.run());
 	}
 
+	default Subscription subscribeEDT(Runnable runnable) {
+		return subscribeEDT(__ -> runnable.run());
+	}
+
 }
