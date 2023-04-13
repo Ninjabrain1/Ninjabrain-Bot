@@ -29,6 +29,7 @@ public class BasicOptionsPanel extends JPanel {
 		// Column 1
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.show_nether_coordinates"), preferences.showNetherCoords));
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.auto_reset"), preferences.autoReset));
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.auto_reset_when_world_is_reset"), preferences.autoResetWhenChangingInstance));
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.always_on_top"), preferences.alwaysOnTop));
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.translucent_window"), preferences.translucent));
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.notify_when_a_new_version_is_available"), preferences.checkForUpdates));
