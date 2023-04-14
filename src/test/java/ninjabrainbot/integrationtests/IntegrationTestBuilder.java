@@ -21,13 +21,17 @@ import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
+import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
+import ninjabrainbot.util.Assert;
+import ninjabrainbot.util.FakeUpdateChecker;
 import ninjabrainbot.util.MockedClipboardReader;
 import ninjabrainbot.util.MockedInstanceProvider;
+import ninjabrainbot.util.TestTheme2;
 import ninjabrainbot.util.TestUtils;
 
 public class IntegrationTestBuilder {
@@ -35,10 +39,10 @@ public class IntegrationTestBuilder {
 	public final NinjabrainBotPreferences preferences;
 	public final DomainModel domainModel;
 
-	private final ActionExecutor actionExecutor;
-	private final StandardDeviationHandler standardDeviationHandler;
-	private final IEnvironmentState environmentState;
-	private final IDataState dataState;
+	public final ActionExecutor actionExecutor;
+	public final StandardDeviationHandler standardDeviationHandler;
+	public final IEnvironmentState environmentState;
+	public final IDataState dataState;
 
 	private CoordinateInputSource coordinateInputSource;
 	private MockedClipboardReader clipboardReader;
@@ -65,6 +69,14 @@ public class IntegrationTestBuilder {
 		preferences.sigma.set(0.005f);
 		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
+		return this;
+	}
+
+	public IntegrationTestBuilder withObsOverlaySettings() {
+		preferences.overlayHideDelay.set(10);
+		preferences.overlayAutoHide.set(true);
+		preferences.overlayHideWhenLocked.set(true);
+		preferences.useOverlay.set(true);
 		return this;
 	}
 
@@ -114,10 +126,6 @@ public class IntegrationTestBuilder {
 		activeInstanceProvider.activeMinecraftWorld().set(minecraftWorld);
 	}
 
-	public IDataState getDataState() {
-		return dataState;
-	}
-
 	public MainTextAreaTestAdapter createMainTextArea() {
 		if (styleManager == null)
 			styleManager = TestUtils.createStyleManager();
@@ -126,10 +134,29 @@ public class IntegrationTestBuilder {
 		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, buttonInputHandler, preferences, dataState));
 	}
 
+	public NinjabrainBotFrame createNinjabrainBotFrame() {
+		if (styleManager == null)
+			styleManager = TestUtils.createStyleManager();
+		if (buttonInputHandler == null)
+			buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		NinjabrainBotFrame frame = new NinjabrainBotFrame(styleManager, preferences, new FakeUpdateChecker(), dataState, buttonInputHandler, new InformationMessageList());
+		styleManager.init();
+		return frame;
+	}
+
 	public BoatIcon createBoatIcon() {
 		if (styleManager == null)
 			styleManager = TestUtils.createStyleManager();
 		return new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, new DisposeHandler());
+	}
+
+	public void swapTheme() {
+		Assert.isNotNull(styleManager, "Create something that uses a StyleManager first!");
+		styleManager.currentTheme.setTheme(new TestTheme2());
+	}
+
+	public void addDummyEnderEyeThrow(){
+		TestUtils.addDummyEnderEyeThrow(domainModel, dataState);
 	}
 
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {

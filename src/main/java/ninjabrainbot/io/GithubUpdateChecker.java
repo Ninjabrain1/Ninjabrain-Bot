@@ -14,23 +14,19 @@ import ninjabrainbot.util.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class UpdateChecker implements Runnable {
+public class GithubUpdateChecker implements Runnable, IUpdateChecker {
 
-	private static boolean hasChecked = false;
+	private boolean hasChecked = false;
 
-	public static synchronized void check(Consumer<VersionURL> urlConsumer) {
+	Consumer<VersionURL> urlConsumer;
+
+	public synchronized void check(Consumer<VersionURL> urlConsumer) {
 		if (!hasChecked) {
+			this.urlConsumer = urlConsumer;
 			hasChecked = true;
-			UpdateChecker updateChecker = new UpdateChecker(urlConsumer);
-			Thread t = new Thread(updateChecker);
+			Thread t = new Thread(this);
 			t.start();
 		}
-	}
-
-	final Consumer<VersionURL> urlConsumer;
-
-	public UpdateChecker(Consumer<VersionURL> urlConsumer) {
-		this.urlConsumer = urlConsumer;
 	}
 
 	/**
@@ -40,7 +36,7 @@ public class UpdateChecker implements Runnable {
 	 * update.
 	 * @throws Exception if something goes wrong, idk???
 	 */
-	public static VersionURL checkForUpdates() throws Exception {
+	private static VersionURL checkForUpdates() throws Exception {
 		URL url;
 		url = new URL("https://api.github.com/repos/Ninjabrain1/Ninjabrain-Bot/releases");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();

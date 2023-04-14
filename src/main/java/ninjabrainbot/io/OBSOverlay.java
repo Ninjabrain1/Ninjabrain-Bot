@@ -22,16 +22,19 @@ public class OBSOverlay implements IDisposable {
 
 	private Timer overlayClearTimer;
 	private Timer overlayUpdateTimer;
-	private long lastOverlayUpdate = System.currentTimeMillis();
-	private static final long minOverlayUpdateDelayMillis = 1000;
+	private long lastOverlayUpdate;
+	private final long minOverlayUpdateDelayMillis;
 
 	final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataState dataState, IDomainModel domainModel, IImageWriter imageWriter) {
+	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataState dataState, IDomainModel domainModel, IImageWriter imageWriter, int updateDelayMillis) {
 		this.ninjabrainBotFrame = frame;
 		this.preferences = preferences;
 		this.imageWriter = imageWriter;
 		this.calculatorLocked = dataState.locked();
+		minOverlayUpdateDelayMillis = updateDelayMillis;
+		lastOverlayUpdate = System.currentTimeMillis() - minOverlayUpdateDelayMillis;
+
 		disposeHandler.add(domainModel.whenModified().subscribeEDT(this::markShouldUpdate));
 		createClearTimer();
 		createUpdateTimer();

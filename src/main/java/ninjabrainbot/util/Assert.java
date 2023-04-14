@@ -36,4 +36,10 @@ public class Assert {
 		if (object == null)
 			throw new AssertionError();
 	}
+
+	public static void isNotNull(Object object, String message) {
+		if (object == null)
+			throw new AssertionError(message);
+	}
+
 }

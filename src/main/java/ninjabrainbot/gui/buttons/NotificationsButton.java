@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
@@ -14,28 +15,28 @@ import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.frames.NotificationsFrame;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.UpdateChecker;
+import ninjabrainbot.io.IUpdateChecker;
 import ninjabrainbot.io.VersionURL;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class NotificationsButton extends TitleBarButton implements IDisposable {
 
-	final StyleManager styleManager;
-	final NotificationsFrame notificationsFrame;
-	final NinjabrainBotPreferences preferences;
+	private final NotificationsFrame notificationsFrame;
+	private final NinjabrainBotPreferences preferences;
+	private final IUpdateChecker updateChecker;
 
 	// Pulsing
 	int i;
 	Timer timer;
-	Color start, end;
+	Color start = Color.WHITE, end = Color.BLACK;
 	final int duration = 1000;
 
 	final DisposeHandler sh;
 
-	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences) {
+	public NotificationsButton(StyleManager styleManager, JFrame parent, NinjabrainBotPreferences preferences, IUpdateChecker updateChecker) {
 		super(styleManager, new ImageIcon(Objects.requireNonNull(Main.class.getResource("/notifications_icon.png"))));
-		this.styleManager = styleManager;
 		this.preferences = preferences;
+		this.updateChecker = updateChecker;
 		addActionListener(p -> toggleNotificationsWindow(parent));
 		setVisible(false);
 		notificationsFrame = new NotificationsFrame(styleManager, preferences);
@@ -43,13 +44,13 @@ public class NotificationsButton extends TitleBarButton implements IDisposable {
 		sh = new DisposeHandler();
 		sh.add(preferences.checkForUpdates.whenModified().subscribeEDT(this::onUpdatesEnabledChanged));
 		if (preferences.checkForUpdates.get()) {
-			UpdateChecker.check(this::setURL);
+			updateChecker.check(this::setURL);
 		}
 	}
 
 	private void onUpdatesEnabledChanged(boolean enabled) {
 		if (enabled)
-			UpdateChecker.check(this::setURL);
+			updateChecker.check(this::setURL);
 		setVisible(enabled && hasURL());
 	}
 

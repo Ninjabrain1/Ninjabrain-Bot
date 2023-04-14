@@ -10,6 +10,7 @@ import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
+import ninjabrainbot.io.GithubUpdateChecker;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
@@ -97,7 +98,7 @@ public class GUI {
 
 		Progress.setTask("Creating main window", 0.93f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, dataState, dataStateHandler.buttonInputHandler, informationMessageList);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, new GithubUpdateChecker(), dataState, dataStateHandler.buttonInputHandler, informationMessageList);
 
 		Progress.setTask("Creating settings window", 0.95f);
 		Profiler.stopAndStart("Create settings window");
@@ -118,7 +119,7 @@ public class GUI {
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler.domainModel, dataStateHandler.actionExecutor);
 		preferences.autoReset.whenModified().subscribeEDT(b -> autoResetTimer.setAutoResetEnabled(b));
 
-		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, dataStateHandler.domainModel, new NinjabrainBotOverlayImageWriter());
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, dataStateHandler.domainModel, new NinjabrainBotOverlayImageWriter(), 1000);
 
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);

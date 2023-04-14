@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.io.IUpdateChecker;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.input.IButtonInputHandler;
@@ -52,7 +53,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 
 	private final StyleManager styleManager;
 
-	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState, IButtonInputHandler buttonInputHandler, InformationMessageList informationMessageList) {
+	public NinjabrainBotFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, IUpdateChecker updateChecker, IDataState dataState, IButtonInputHandler buttonInputHandler, InformationMessageList informationMessageList) {
 		super(styleManager, preferences, TITLE_TEXT);
 		this.preferences = preferences;
 		Profiler.start("NinjabrainBotFrame");
@@ -61,7 +62,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		setTranslucent(preferences.translucent.get());
 		setAppIcon();
 
-		createTitleBar(styleManager, dataState);
+		createTitleBar(styleManager, dataState, updateChecker);
 		createComponents(styleManager, dataState, buttonInputHandler, informationMessageList);
 		setupSubscriptions(styleManager, dataState);
 		Profiler.stop();
@@ -104,7 +105,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		disposeHandler.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
 
-	private void createTitleBar(StyleManager styleManager, IDataState dataState) {
+	private void createTitleBar(StyleManager styleManager, IDataState dataState, IUpdateChecker updateChecker) {
 		versionTextLabel = new ThemedLabel(styleManager, VERSION_TEXT) {
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -119,7 +120,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(createMinimizeButton(styleManager));
 		settingsButton = createSettingsButton(styleManager);
 		titlebarPanel.addButton(settingsButton);
-		NotificationsButton notificationsButton = new NotificationsButton(styleManager, this, preferences);
+		NotificationsButton notificationsButton = new NotificationsButton(styleManager, this, preferences, updateChecker);
 		titlebarPanel.addButton(notificationsButton);
 		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, disposeHandler));
 	}

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import ninjabrainbot.gui.themeeditor.PreviewUpdateChecker;
 import ninjabrainbot.model.datastate.IDataStateHandler;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -178,13 +179,13 @@ public class ThemeEditorFrame extends ThemedDialog {
 		NinjabrainBotPreferences previewPreferences1 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences1.view.set(MainViewType.BASIC);
 		IDataStateHandler dataStateHandler1 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, f, false);
-		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, dataStateHandler1.getDataState(), new PreviewButtonInputHandler(), new InformationMessageList()));
+		ninBotPreviewBasic = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences1, new PreviewUpdateChecker(), dataStateHandler1.getDataState(), new PreviewButtonInputHandler(), new InformationMessageList()));
 
 		NinjabrainBotPreferences previewPreferences2 = new NinjabrainBotPreferences(new UnsavedPreferences());
 		previewPreferences2.view.set(MainViewType.DETAILED);
 		previewPreferences2.showAngleErrors.set(true);
 		IDataStateHandler dataStateHandler2 = new PreviewDataStateHandler(new PreviewCalculatorResult(McVersion.PRE_119), eyeThrows, null, true);
-		ninBotPreviewDetailed = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences2, dataStateHandler2.getDataState(), new PreviewButtonInputHandler(), new InformationMessageList()));
+		ninBotPreviewDetailed = new FramePreviewPanel(new NinjabrainBotFrame(previewStyleManager, previewPreferences2, new PreviewUpdateChecker(), dataStateHandler2.getDataState(), new PreviewButtonInputHandler(), new InformationMessageList()));
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
