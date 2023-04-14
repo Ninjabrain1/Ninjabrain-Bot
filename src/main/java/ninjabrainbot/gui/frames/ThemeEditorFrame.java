@@ -19,15 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.gui.themeeditor.PreviewUpdateChecker;
-import ninjabrainbot.model.datastate.IDataStateHandler;
-import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
-import ninjabrainbot.model.datastate.divine.Fossil;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
-import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
-import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.inputfields.LimitedThemedTextField;
 import ninjabrainbot.gui.components.inputfields.ThemedTextField;
@@ -42,6 +33,7 @@ import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.gui.themeeditor.PreviewButtonInputHandler;
 import ninjabrainbot.gui.themeeditor.PreviewCalculatorResult;
 import ninjabrainbot.gui.themeeditor.PreviewDataStateHandler;
+import ninjabrainbot.gui.themeeditor.PreviewUpdateChecker;
 import ninjabrainbot.gui.themeeditor.ThemeSerializer;
 import ninjabrainbot.gui.themeeditor.panels.ColorPickerPanel;
 import ninjabrainbot.gui.themeeditor.panels.ConfigurableColorPanel;
@@ -50,6 +42,14 @@ import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewTy
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.model.datastate.IDataStateHandler;
+import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
+import ninjabrainbot.model.datastate.divine.Fossil;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
+import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
+import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.util.I18n;
 
 public class ThemeEditorFrame extends ThemedDialog {
@@ -61,11 +61,13 @@ public class ThemeEditorFrame extends ThemedDialog {
 	private FramePreviewPanel ninBotPreviewDetailed;
 
 	private final StyleManager previewStyleManager;
+	private final NinjabrainBotPreferences preferences;
 	private final CustomTheme customTheme; // theme that is saved
 	private final CustomTheme previewTheme; // used for previewing
 
 	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
 		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
+		this.preferences = preferences;
 		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
 		previewTheme.setFromTheme(customTheme, true);
@@ -248,7 +250,6 @@ public class ThemeEditorFrame extends ThemedDialog {
 			}
 		}
 		JOptionPane.showMessageDialog(this, I18n.get("settings.themeeditor.clipboard_does_not_contain_a_theme_string"));
-
 	}
 
 	private void setSelectedConfigurableColorPanel(ConfigurableColorPanel configurableColorPanel) {
@@ -273,8 +274,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 			colorPickerPanel.setColor(c);
 		}
 
-		ninBotPreviewBasic.renderImage();
-		ninBotPreviewDetailed.renderImage();
+		SwingUtilities.invokeLater(() -> {
+			ninBotPreviewBasic.renderImage();
+			ninBotPreviewDetailed.renderImage();
+		});
 	}
 
 	@Override
@@ -291,7 +294,7 @@ public class ThemeEditorFrame extends ThemedDialog {
 			int result = JOptionPane.showConfirmDialog(this, I18n.get("settings.themeeditor.do_you_want_to_save"), I18n.get("settings.themeeditor.unsaved_changes"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			if (result == JOptionPane.YES_OPTION)
 				saveTheme();
-			else if (result == JOptionPane.CANCEL_OPTION)
+			else if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.PLAIN_MESSAGE)
 				return;
 		}
 		dispose();

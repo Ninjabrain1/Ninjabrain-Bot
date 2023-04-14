@@ -35,8 +35,6 @@ public class CurrentTheme {
 	private Theme theme;
 
 	public void setTheme(Theme theme) {
-		if (!SwingUtilities.isEventDispatchThread())
-			SwingUtilities.invokeLater(() -> setTheme(theme));
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
 		COLOR_DIVIDER.set(theme.COLOR_DIVIDER);
 		COLOR_DIVIDER_DARK.set(theme.COLOR_DIVIDER_DARK);
