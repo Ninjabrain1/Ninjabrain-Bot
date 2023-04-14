@@ -2,8 +2,6 @@ package ninjabrainbot.model.datastate;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.ISubscribable;
-import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.IClipboardProvider;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -25,7 +23,6 @@ import ninjabrainbot.model.input.PlayerPositionInputHandler;
 public class DataStateHandler implements IDataStateHandler, IDisposable {
 
 	private final DataState dataState;
-	private final ObservableProperty<IDataState> whenDataStateModified = new ObservableProperty<>();
 
 	public final DomainModel domainModel;
 	public final IActionExecutor actionExecutor;
@@ -34,7 +31,7 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataStateHandler(NinjabrainBotPreferences preferences, IClipboardProvider clipboardProvider, IActiveInstanceProvider activeInstanceProvider) {
-		domainModel = new DomainModel();
+		disposeHandler.add(domainModel = new DomainModel());
 		actionExecutor = new ActionExecutor(domainModel);
 
 		StandardDeviationHandler standardDeviationHandler = disposeHandler.add(new StandardDeviationHandler(preferences));
@@ -54,11 +51,6 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 	@Override
 	public IDataState getDataState() {
 		return dataState;
-	}
-
-	@Override
-	public ISubscribable<IDataState> whenDataStateModified() {
-		return whenDataStateModified;
 	}
 
 	@Override

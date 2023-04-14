@@ -4,11 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
+import ninjabrainbot.gui.style.SizePreference;
+import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IOverworldRay;
-import ninjabrainbot.gui.style.SizePreference;
-import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 import org.junit.jupiter.api.Assertions;
 
 public class TestUtils {
@@ -45,10 +47,6 @@ public class TestUtils {
 		return new DetailedPlayerPosition(x, 80, z, alpha, 0, true);
 	}
 
-	public static StyleManager createStyleManager() {
-		return new StyleManager(new TestTheme(), SizePreference.REGULAR);
-	}
-
 	public static <T> void assertIterableEquals(Iterable<T> iterable1, Iterable<T> iterable2) {
 		var iterator1 = iterable1.iterator();
 		var iterator2 = iterable2.iterator();
@@ -57,6 +55,16 @@ public class TestUtils {
 			Assertions.assertEquals(iterator1.next(), iterator2.next(), "Non-matching element.");
 		}
 		Assertions.assertFalse(iterator2.hasNext(), "First iterable is shorter than the second.");
+	}
+
+	public static StyleManager createStyleManager() {
+		return new StyleManager(new TestTheme(), SizePreference.REGULAR);
+	}
+
+	public static void addDummyEnderEyeThrow(IDomainModel domainModel, IDataState dataState) {
+		domainModel.acquireWriteLock();
+		dataState.getThrowList().add(new TestEnderEyeThrow(0, 0, 123, 0.03));
+		domainModel.releaseWriteLock();
 	}
 
 	public static void awaitSwingEvents() {

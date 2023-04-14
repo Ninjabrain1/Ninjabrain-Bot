@@ -34,7 +34,7 @@ public class ListComponent<T> implements IListComponent<T> {
 	@Override
 	public boolean add(T t) {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		if (observableList.get().size() >= maxCapacity)
 			return false;
 		return observableList.add(t);
@@ -43,21 +43,21 @@ public class ListComponent<T> implements IListComponent<T> {
 	@Override
 	public void replace(T oldElement, T newElement) {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		observableList.replace(oldElement, newElement);
 	}
 
 	@Override
 	public void remove(T t) {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		observableList.remove(t);
 	}
 
 	@Override
 	public void set(IReadOnlyList<T> list) {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		if (list.size() > maxCapacity)
 			throw new IllegalModificationException("Attempting to set list to size greater than maxCapacity.");
 		observableList.setFromList(list);
@@ -66,7 +66,7 @@ public class ListComponent<T> implements IListComponent<T> {
 	@Override
 	public void reset() {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		observableList.clear();
 		Assert.isTrue(isReset());
 	}

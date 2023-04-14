@@ -22,14 +22,14 @@ public final class Observable<T> implements IObservable<T>, IDisposable {
 
 	public Observable<T> dependsOn(ISubscribable<?>... dependencies) {
 		for (ISubscribable<?> dependency : dependencies) {
-			disposeHandler.add(dependency.subscribe(onNext));
+			disposeHandler.add(dependency.subscribe(() -> onNext.run()));
 		}
 		return this;
 	}
 
 	public Observable<T> dependsOn(IModifiable<?>... dependencies) {
 		for (IModifiable<?> dependency : dependencies) {
-			disposeHandler.add(dependency.whenModified().subscribe(onNext));
+			disposeHandler.add(dependency.whenModified().subscribe(() -> onNext.run()));
 		}
 		return this;
 	}

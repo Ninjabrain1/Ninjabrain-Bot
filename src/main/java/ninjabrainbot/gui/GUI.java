@@ -1,13 +1,5 @@
 package ninjabrainbot.gui;
 
-import ninjabrainbot.model.datastate.DataStateHandler;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
-import ninjabrainbot.model.information.InformationMessageList;
-import ninjabrainbot.model.information.McVersionWarningProvider;
-import ninjabrainbot.model.information.MismeasureWarningProvider;
-import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
-import ninjabrainbot.model.information.PortalLinkingWarningProvider;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -20,7 +12,16 @@ import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
+import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.DataStateHandler;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
+import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.model.information.McVersionWarningProvider;
+import ninjabrainbot.model.information.MismeasureWarningProvider;
+import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
+import ninjabrainbot.model.information.PortalLinkingWarningProvider;
 import ninjabrainbot.util.Profiler;
 
 /**
@@ -117,7 +118,7 @@ public class GUI {
 		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler.domainModel, dataStateHandler.actionExecutor);
 		preferences.autoReset.whenModified().subscribeEDT(b -> autoResetTimer.setAutoResetEnabled(b));
 
-		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataStateHandler);
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, dataStateHandler.domainModel, new NinjabrainBotOverlayImageWriter());
 
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);

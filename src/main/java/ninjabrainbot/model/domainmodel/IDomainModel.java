@@ -1,6 +1,6 @@
 package ninjabrainbot.model.domainmodel;
 
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.ISubscribable;
 
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitor changes so that undo works.
@@ -9,7 +9,9 @@ public interface IDomainModel extends IWriteLock {
 
 	void registerDataComponent(IDataComponent<?> dataComponent);
 
-	void notifyDataComponentToBeModified();
+	void registerInferredComponent(IInferredComponent<?> inferredComponent);
+
+	void checkWriteAccess();
 
 	void reset();
 
@@ -18,5 +20,7 @@ public interface IDomainModel extends IWriteLock {
 	void redoUnderWriteLock();
 
 	boolean isReset();
+
+	ISubscribable<IDomainModel> whenModified();
 
 }

@@ -3,18 +3,26 @@ package ninjabrainbot.model.domainmodel;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.util.Assert;
 
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitors changes so that undo works.
  */
-public class DomainModel implements IDomainModel {
+public class DomainModel implements IDomainModel, IDisposable {
 
 	private final ReentrantReadWriteLock lock;
 	private final ArrayList<IDataComponent<?>> dataComponents;
 	private final DomainModelHistory domainModelHistory;
+	private final DisposeHandler disposeHandler = new DisposeHandler();
+	private final ObservableProperty<IDomainModel> whenModified = new ObservableProperty<>();
 
 	private boolean isFullyInitialized = false;
+
+	private boolean isModifiedDuringCurrentWriteLock = false;
 
 	public DomainModel() {
 		lock = new ReentrantReadWriteLock();
@@ -26,6 +34,13 @@ public class DomainModel implements IDomainModel {
 	public void registerDataComponent(IDataComponent<?> dataComponent) {
 		Assert.isFalse(isFullyInitialized, "New DataComponents cannot be registered in the DomainModel after it has been fully initialized.");
 		dataComponents.add(dataComponent);
+		dataComponent.subscribe(__ -> isModifiedDuringCurrentWriteLock = true);
+	}
+
+	@Override
+	public void registerInferredComponent(IInferredComponent<?> inferredComponent) {
+		Assert.isFalse(isFullyInitialized, "New InferredComponents cannot be registered in the DomainModel after it has been fully initialized.");
+		inferredComponent.subscribe(__ -> isModifiedDuringCurrentWriteLock = true);
 	}
 
 	@Override
@@ -41,9 +56,13 @@ public class DomainModel implements IDomainModel {
 	}
 
 	private void releaseWriteLock(boolean saveSnapshotOfNewState) {
-		if (saveSnapshotOfNewState)
+		if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
 			domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
 		lock.writeLock().unlock();
+
+		if (isModifiedDuringCurrentWriteLock)
+			whenModified.notifySubscribers(this);
+		isModifiedDuringCurrentWriteLock = false;
 	}
 
 	@Override
@@ -79,6 +98,11 @@ public class DomainModel implements IDomainModel {
 	}
 
 	@Override
+	public ISubscribable<IDomainModel> whenModified() {
+		return whenModified;
+	}
+
+	@Override
 	public Runnable applyWriteLock(Runnable runnable) {
 		return () -> runUnderWriteLock(runnable);
 	}
@@ -92,7 +116,7 @@ public class DomainModel implements IDomainModel {
 		}
 	}
 
-	public void notifyDataComponentToBeModified() {
+	public void checkWriteAccess() {
 		if (!lock.isWriteLocked())
 			throw new IllegalModificationException("DataComponents cannot be changed without a write lock, create and execute an Action instead of trying to modify the DataComponent directly.");
 		if (!lock.isWriteLockedByCurrentThread())
@@ -104,4 +128,8 @@ public class DomainModel implements IDomainModel {
 		isFullyInitialized = true;
 	}
 
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
+	}
 }

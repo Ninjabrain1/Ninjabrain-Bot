@@ -1,17 +1,18 @@
 package ninjabrainbot.model.datastate;
 
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.divine.Fossil;
+import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.InferredComponent;
 
 public class ResultTypeProvider implements IDisposable {
 
-	private final ObservableField<ResultType> resultType;
+	private final InferredComponent<ResultType> resultType;
 
 	private final IAllAdvancementsDataState allAdvancementsDataState;
 	private final IObservable<ICalculatorResult> calculatorResult;
@@ -20,8 +21,8 @@ public class ResultTypeProvider implements IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public ResultTypeProvider(IDataState dataState) {
-		resultType = new ObservableField<>(ResultType.NONE);
+	public ResultTypeProvider(IDataState dataState, IDomainModel domainModel) {
+		resultType = new InferredComponent<>(domainModel, ResultType.NONE);
 		allAdvancementsDataState = dataState.allAdvancementsDataState();
 		calculatorResult = dataState.calculatorResult();
 		playerPosition = dataState.playerPosition();

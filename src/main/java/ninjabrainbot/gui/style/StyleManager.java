@@ -113,6 +113,8 @@ public class StyleManager {
 	}
 
 	public void setSizePreference(SizePreference size) {
+		if (!SwingUtilities.isEventDispatchThread())
+			SwingUtilities.invokeLater(() -> setSizePreference(size));
 		this.size = size;
 		updateFontsAndColors();
 		updateBounds();

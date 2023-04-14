@@ -4,18 +4,18 @@ import java.awt.Color;
 
 import ninjabrainbot.gui.style.theme.Theme;
 
-public class TestTheme extends Theme {
+public class TestTheme2 extends Theme {
 
-	public static final int UID = 1000;
+	public static final int UID = 1001;
 
-	public TestTheme() {
+	public TestTheme2() {
 		super("Test theme", UID);
 		loadTheme();
 	}
 
 	@Override
 	protected void loadTheme() {
-		COLOR_NEUTRAL = createColor(Color.decode("#33383D"));
+		COLOR_NEUTRAL = createColor(Color.decode("#000000"));
 		COLOR_STRONGEST = createColor(Color.decode("#212529"));
 		COLOR_EXIT_BUTTON_HOVER = createColor(Color.decode("#F04747"));
 		COLOR_DIVIDER = createColor(Color.decode("#2A2E32"));

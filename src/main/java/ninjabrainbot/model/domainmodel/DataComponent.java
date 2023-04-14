@@ -45,7 +45,7 @@ public class DataComponent<T> implements IDataComponent<T> {
 	@Override
 	public void set(T value) {
 		if (domainModel != null)
-			domainModel.notifyDataComponentToBeModified();
+			domainModel.checkWriteAccess();
 		observableField.set(value);
 	}
 

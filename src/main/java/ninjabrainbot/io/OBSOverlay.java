@@ -1,19 +1,16 @@
 package ninjabrainbot.io;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-import ninjabrainbot.model.datastate.IDataStateHandler;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.util.Logger;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class OBSOverlay implements IDisposable {
 
@@ -21,20 +18,21 @@ public class OBSOverlay implements IDisposable {
 	private final NinjabrainBotFrame ninjabrainBotFrame;
 	private final IObservable<Boolean> calculatorLocked;
 
+	private final IImageWriter imageWriter;
+
 	private Timer overlayClearTimer;
 	private Timer overlayUpdateTimer;
 	private long lastOverlayUpdate = System.currentTimeMillis();
 	private static final long minOverlayUpdateDelayMillis = 1000;
 
-	public static final File OBS_OVERLAY = new File(System.getProperty("java.io.tmpdir"), "nb-overlay.png");
-
 	final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataStateHandler dataStateHandler) {
+	public OBSOverlay(NinjabrainBotFrame frame, NinjabrainBotPreferences preferences, IDataState dataState, IDomainModel domainModel, IImageWriter imageWriter) {
 		this.ninjabrainBotFrame = frame;
 		this.preferences = preferences;
-		this.calculatorLocked = dataStateHandler.getDataState().locked();
-		disposeHandler.add(dataStateHandler.whenDataStateModified().subscribeEDT(__ -> markShouldUpdate()));
+		this.imageWriter = imageWriter;
+		this.calculatorLocked = dataState.locked();
+		disposeHandler.add(domainModel.whenModified().subscribeEDT(this::markShouldUpdate));
 		createClearTimer();
 		createUpdateTimer();
 		setupSettingsSubscriptions();
@@ -53,10 +51,13 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void setupSettingsSubscriptions() {
-		disposeHandler.add(preferences.overlayHideDelay.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		disposeHandler.add(preferences.overlayAutoHide.whenModified().subscribeEDT(__ -> markShouldUpdate()));
-		disposeHandler.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(__ -> markShouldUpdate()));
+		disposeHandler.add(preferences.overlayHideDelay.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.overlayAutoHide.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(this::markShouldUpdate));
 		disposeHandler.add(preferences.useOverlay.whenModified().subscribeEDT(this::setOverlayEnabled));
+
+		disposeHandler.add(preferences.theme.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.size.whenModified().subscribeEDT(this::markShouldUpdate));
 	}
 
 	private void markShouldUpdate() {
@@ -73,7 +74,7 @@ public class OBSOverlay implements IDisposable {
 	private void clear() {
 		if (preferences.useOverlay.get()) {
 			BufferedImage img = new BufferedImage(ninjabrainBotFrame.getWidth(), ninjabrainBotFrame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			write(img);
+			imageWriter.write(img);
 			if (preferences.overlayAutoHide.get()) {
 				overlayClearTimer.stop();
 			}
@@ -93,7 +94,7 @@ public class OBSOverlay implements IDisposable {
 				ninjabrainBotFrame.paint(img.createGraphics());
 				resetClearTimer();
 			}
-			write(img);
+			imageWriter.write(img);
 		}
 	}
 
@@ -106,20 +107,11 @@ public class OBSOverlay implements IDisposable {
 		}
 	}
 
-	private void write(BufferedImage img) {
-		try {
-			ImageIO.write(img, "png", OBS_OVERLAY);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void setOverlayEnabled(boolean b) {
 		if (b) {
 			markShouldUpdate();
 		} else {
-			if (!OBS_OVERLAY.delete())
-				Logger.log("Warning: Failed to delete OBS overlay image.");
+			imageWriter.delete();
 		}
 	}
 

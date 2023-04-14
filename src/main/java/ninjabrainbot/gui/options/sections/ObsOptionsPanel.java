@@ -12,7 +12,7 @@ import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.OBSOverlay;
+import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
@@ -33,7 +33,7 @@ public class ObsOptionsPanel extends StackPanel {
 		JPanel info = new StackPanel();
 		info.setOpaque(false);
 		info.add(overlayExplanation);
-		info.add(new ThemedTextArea(styleManager, OBSOverlay.OBS_OVERLAY.getAbsolutePath()));
+		info.add(new ThemedTextArea(styleManager, NinjabrainBotOverlayImageWriter.OBS_OVERLAY.getAbsolutePath()));
 		add(info);
 		add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_enable"), preferences.useOverlay));
 		add(new CheckboxPanel(styleManager, I18n.get("settings.overlay_hide_locked"), preferences.overlayHideWhenLocked));

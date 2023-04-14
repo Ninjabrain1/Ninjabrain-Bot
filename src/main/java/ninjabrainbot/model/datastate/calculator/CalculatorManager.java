@@ -1,5 +1,9 @@
 package ninjabrainbot.model.datastate.calculator;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IObservableList;
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
@@ -8,11 +12,8 @@ import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.datastate.stronghold.TopPredictionProvider;
-import ninjabrainbot.event.DisposeHandler;
-import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.IObservableList;
-import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.InferredComponent;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 public class CalculatorManager implements ICalculatorManager, IDisposable {
@@ -23,29 +24,29 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	private final IObservable<IPlayerPosition> playerPosition;
 	private final IDivineContext divineContext;
 
-	private final ObservableField<ICalculatorResult> calculatorResult;
-	private final ObservableField<BlindResult> blindResult;
-	private final ObservableField<DivineResult> divineResult;
+	private final InferredComponent<ICalculatorResult> calculatorResult;
+	private final InferredComponent<BlindResult> blindResult;
+	private final InferredComponent<DivineResult> divineResult;
 
 	private final TopPredictionProvider topPredictionProvider;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(IEnvironmentState environmentState, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
+	public CalculatorManager(IDomainModel domainModel, IEnvironmentState environmentState, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
 		this.calculator = environmentState.calculator().get();
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;
 		this.divineContext = divineContext;
 
-		calculatorResult = new ObservableField<>();
-		blindResult = new ObservableField<>();
-		divineResult = new ObservableField<>();
+		calculatorResult = new InferredComponent<>(domainModel);
+		blindResult = new InferredComponent<>(domainModel);
+		divineResult = new InferredComponent<>(domainModel);
 
 		disposeHandler.add(environmentState.calculator().subscribe(this::setCalculator));
 		disposeHandler.add(throwSet.subscribe(this::onThrowSetModified));
 		disposeHandler.add(playerPosition.subscribe(this::onPlayerPositionChanged));
 		disposeHandler.add(divineContext.fossil().subscribe(this::onFossilChanged));
-		topPredictionProvider = disposeHandler.add(new TopPredictionProvider(calculatorResult));
+		topPredictionProvider = disposeHandler.add(new TopPredictionProvider(domainModel, calculatorResult));
 	}
 
 	private void onThrowSetModified() {

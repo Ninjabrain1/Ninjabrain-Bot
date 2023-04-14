@@ -1,5 +1,7 @@
 package ninjabrainbot.gui.style.theme;
 
+import javax.swing.SwingUtilities;
+
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;
@@ -27,12 +29,14 @@ public class CurrentTheme {
 
 	public final Wrapper<ColorMap> CERTAINTY_COLOR_MAP = new Wrapper<>();
 
-	private final ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<CurrentTheme>();
+	private final ObservableProperty<CurrentTheme> whenModified = new ObservableProperty<>();
 
 	private Subscription themeSubscription;
 	private Theme theme;
 
 	public void setTheme(Theme theme) {
+		if (!SwingUtilities.isEventDispatchThread())
+			SwingUtilities.invokeLater(() -> setTheme(theme));
 		COLOR_STRONGEST.set(theme.COLOR_STRONGEST);
 		COLOR_DIVIDER.set(theme.COLOR_DIVIDER);
 		COLOR_DIVIDER_DARK.set(theme.COLOR_DIVIDER_DARK);

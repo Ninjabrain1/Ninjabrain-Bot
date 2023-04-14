@@ -1,6 +1,7 @@
 package ninjabrainbot.integrationtests;
 
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.mainwindow.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
@@ -41,11 +42,12 @@ public class IntegrationTestBuilder {
 
 	private CoordinateInputSource coordinateInputSource;
 	private MockedClipboardReader clipboardReader;
+	private MockedInstanceProvider activeInstanceProvider;
+
 	private PlayerPositionInputHandler playerPositionInputHandler;
 	private FossilInputHandler fossilInputHandler;
 	private HotkeyInputHandler hotkeyInputHandler;
 	private ButtonInputHandler buttonInputHandler;
-	private MockedInstanceProvider activeInstanceProvider;
 	private ActiveInstanceInputHandler activeInstanceInputHandler;
 
 	private StyleManager styleManager;

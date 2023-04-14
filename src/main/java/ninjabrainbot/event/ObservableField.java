@@ -1,6 +1,7 @@
 package ninjabrainbot.event;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ObservableField<T> implements IObservable<T> {
@@ -41,7 +42,7 @@ public class ObservableField<T> implements IObservable<T> {
 	}
 
 	public void set(T value) {
-		if (value == data || (value != null && value.equals(data)))
+		if (Objects.equals(value, data))
 			return;
 		data = value;
 		for (Consumer<T> subscriber : subscribers) {
