@@ -106,7 +106,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 			}
 		} else {
 			setText(chunkPrediction);
-			chunkPrediction.whenRelativePlayerPositionChanged().subscribeEDT(__ -> setText(chunkPrediction));
+			chunkPredictionSubscription = chunkPrediction.whenRelativePlayerPositionChanged().subscribeEDT(__ -> setText(chunkPrediction));
 		}
 	}
 

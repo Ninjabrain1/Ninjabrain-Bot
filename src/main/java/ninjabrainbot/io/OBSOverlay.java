@@ -2,6 +2,7 @@ package ninjabrainbot.io;
 
 import java.awt.image.BufferedImage;
 
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.event.DisposeHandler;
@@ -59,11 +60,35 @@ public class OBSOverlay implements IDisposable {
 		disposeHandler.add(preferences.overlayHideWhenLocked.whenModified().subscribeEDT(this::markShouldUpdate));
 		disposeHandler.add(preferences.useOverlay.whenModified().subscribeEDT(this::setOverlayEnabled));
 
+		disposeHandler.add(preferences.strongholdDisplayType.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.informationCombinedCertaintyEnabled.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.informationDirectionHelpEnabled.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.informationMismeasureEnabled.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.informationPortalLinkingEnabled.whenModified().subscribeEDT(this::markShouldUpdate));
+		disposeHandler.add(preferences.view.whenModified().subscribeEDT(this::markShouldUpdate));
 		disposeHandler.add(preferences.theme.whenModified().subscribeEDT(this::markShouldUpdate));
 		disposeHandler.add(preferences.size.whenModified().subscribeEDT(this::markShouldUpdate));
 	}
 
 	private void markShouldUpdate() {
+		// Delay to let the frame render. I'll find a better solution later.
+		SwingUtilities.invokeLater(() ->
+				SwingUtilities.invokeLater(() ->
+						SwingUtilities.invokeLater(() ->
+								SwingUtilities.invokeLater(() ->
+										SwingUtilities.invokeLater(
+												this::markShouldUpdate2
+										)
+								)
+						)
+				)
+		);
+	}
+
+	private void markShouldUpdate2() {
 		long time = System.currentTimeMillis();
 		long timeSinceLastUpdate = time - lastOverlayUpdate;
 		if (timeSinceLastUpdate < minOverlayUpdateDelayMillis - 10) {

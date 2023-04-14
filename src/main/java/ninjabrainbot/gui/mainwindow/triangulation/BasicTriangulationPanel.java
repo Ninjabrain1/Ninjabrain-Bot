@@ -30,6 +30,9 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 	public final ThemedLabel netherLabel;
 	public final ColorMapLabel currentAngleLabel;
 
+	private ICalculatorResult currentResult;
+
+	Subscription strongholdDisplayTypeChangedSubscription;
 	Subscription chunkPredictionSubscription;
 
 	public BasicTriangulationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
@@ -56,9 +59,11 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		mainTextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		netherLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setResult(currentResult));
 	}
 
 	public void setResult(ICalculatorResult result) {
+		currentResult = result;
 		if (result != null) {
 			if (result.success()) {
 				ChunkPrediction prediction = result.getBestPrediction();
@@ -113,6 +118,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.dispose();
+		strongholdDisplayTypeChangedSubscription.dispose();
 	}
 
 	private static String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {
