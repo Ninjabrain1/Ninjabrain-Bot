@@ -27,14 +27,11 @@ import ninjabrainbot.gui.options.Histogram;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.model.datastate.calculator.Calculator;
-import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.datastate.calibrator.Calibrator;
+import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
-import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.I18n;
 
 public class CalibrationDialog extends ThemedDialog {
@@ -51,13 +48,13 @@ public class CalibrationDialog extends ThemedDialog {
 	final JLabel std;
 	static final int errorAreaWidth = 100;
 
-	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame frame) {
-		super(styleManager, preferences, frame, "Calibration");
+	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, JFrame owner) {
+		super(styleManager, preferences, owner, "Calibration");
 		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
-		owner = frame;
-		calibrator = new Calibrator(new Calculator(new CalculatorSettings(true, MultipleChoicePreferenceDataTypes.McVersion.PRE_119), new StandardDeviationSettings(1, 1, 1, 1)));
+		this.owner = owner;
+		calibrator = disposeHandler.add(calibratorFactory.createCalibrator());
 
 		JPanel panel2 = new JPanel();
 		panel2.setOpaque(false);
@@ -103,6 +100,7 @@ public class CalibrationDialog extends ThemedDialog {
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
 		startCalibrating();
+		disposeHandler.add(calibrator.whenModified().subscribeEDT(this::updateUI));
 	}
 
 	public void startCalibrating() {
@@ -110,18 +108,12 @@ public class CalibrationDialog extends ThemedDialog {
 		setHighlighted(0);
 	}
 
-	public void cancel() {
-		calibrator.stop();
-		errors.area.setText("");
-		hist.clear();
-	}
-
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
 			preferences.sigma.set(std);
-//			optionsFrame.stopCalibrating();
 		}
+		dispose();
 	}
 
 	private void setHighlighted(int i) {
@@ -131,8 +123,7 @@ public class CalibrationDialog extends ThemedDialog {
 		}
 	}
 
-	public void add(NormalEnderEyeThrow t) throws InterruptedException {
-		calibrator.add(t);
+	private void updateUI() {
 		int stage = 0;
 		if (calibrator.isReady()) {
 			if (calibrator.getNumThrows() > 0) {
@@ -186,9 +177,9 @@ public class CalibrationDialog extends ThemedDialog {
 
 	@Override
 	protected void onExitButtonClicked() {
-//		button.addActionListener(p -> optionsFrame.stopCalibrating());
 		dispose();
 	}
+
 }
 
 class InstructionLabel extends ThemedLabel {

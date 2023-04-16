@@ -12,6 +12,8 @@ public interface IEnvironmentState {
 
 	IObservable<ICalculator> calculator();
 
+	IObservable<CalculatorSettings> calculatorSettings();
+
 	IObservable<StandardDeviationSettings> standardDeviationSettings();
 
 	IObservable<Boolean> allAdvancementsModeEnabled();

@@ -36,8 +36,8 @@ public class Histogram extends ThemedPanel {
 		this.numBins = numBins;
 		counts = new int[numBins];
 		maxCount = 0;
-		ticks = new ArrayList<JLabel>();
-		floatTicks = new ArrayList<Float>();
+		ticks = new ArrayList<>();
+		floatTicks = new ArrayList<>();
 		addTick(styleManager, 0);
 		addTick(styleManager, min);
 		addTick(styleManager, max);
@@ -73,7 +73,7 @@ public class Histogram extends ThemedPanel {
 		float delta = (float) w / numBins;
 		g.setColor(histColor);
 		for (int i = 0; i < numBins; i++) {
-			g.fillRect(margin + (int) (i * delta), getHeight() - labelsHeight, (int) ((i + 1) * delta) - (int) (i * delta), -counts[i] * a);
+			g.fillRect(margin + (int) (i * delta), getHeight() - labelsHeight - counts[i] * a, (int) ((i + 1) * delta) - (int) (i * delta), counts[i] * a);
 		}
 		g.setColor(lineColor);
 		g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight() - labelsHeight);
@@ -89,11 +89,6 @@ public class Histogram extends ThemedPanel {
 		super.updateColors();
 		histColor = histCol.color();
 		lineColor = lineCol.color();
-	}
-
-	public void clear() {
-		counts = new int[numBins];
-		maxCount = 0;
 	}
 
 	public void setData(double[] angleErrors) {

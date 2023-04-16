@@ -1,5 +1,6 @@
 package ninjabrainbot.model.actions.endereye;
 
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -8,22 +9,27 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ChangeLastAngleAction implements IAction {
 
-	private final IDataState dataState;
+	private final IListComponent<IEnderEyeThrow> throwList;
+	private final IObservable<Boolean> locked;
 	private final NinjabrainBotPreferences preferences;
 	private final boolean positive;
 
 	public ChangeLastAngleAction(IDataState dataState, NinjabrainBotPreferences preferences, boolean positive) {
-		this.dataState = dataState;
+		this(dataState.getThrowList(), dataState.locked(), preferences, positive);
+	}
+
+	public ChangeLastAngleAction(IListComponent<IEnderEyeThrow> throwList, IObservable<Boolean> locked, NinjabrainBotPreferences preferences, boolean positive) {
+		this.throwList = throwList;
+		this.locked = locked;
 		this.preferences = preferences;
 		this.positive = positive;
 	}
 
 	@Override
 	public void execute() {
-		if (dataState.locked().get())
+		if (locked.get())
 			return;
 
-		IListComponent<IEnderEyeThrow> throwList = dataState.getThrowList();
 		if (throwList.size() == 0)
 			return;
 

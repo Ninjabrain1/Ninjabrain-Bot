@@ -2,52 +2,78 @@ package ninjabrainbot.model.datastate.calibrator;
 
 import java.awt.AWTException;
 
-import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.model.datastate.calculator.Calculator;
-import ninjabrainbot.model.datastate.calculator.ICalculator;
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
-import ninjabrainbot.model.datastate.divine.DivineContext;
-import ninjabrainbot.model.datastate.divine.IDivineContext;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.statistics.Posterior;
-import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.event.ObservableList;
+import ninjabrainbot.event.ISubscribable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
+import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
+import ninjabrainbot.model.datastate.calculator.Calculator;
+import ninjabrainbot.model.datastate.calculator.ICalculator;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
+import ninjabrainbot.model.datastate.divine.DivineContext;
+import ninjabrainbot.model.datastate.divine.IDivineContext;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.domainmodel.IListComponent;
+import ninjabrainbot.model.domainmodel.ListComponent;
+import ninjabrainbot.model.environmentstate.CalculatorSettings;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.I18n;
 
 public class Calibrator implements IDisposable {
 
-	KeyPresser keyPresser;
-	final int delay = 150; // key press delay
+	private final KeyPresser keyPresser;
+	private final int delay = 150; // key press delay
 
-	final ICalculator triangulator;
-	ObservableList<IEnderEyeThrow> eyeThrows;
-	boolean ready;
+	private final ICalculator calculator;
+	private final NinjabrainBotPreferences preferences;
+	private final IObservable<Boolean> locked = new ObservableField<>(false);
+	private final IListComponent<IEnderEyeThrow> throwList;
+	private boolean ready;
 
-	Chunk stronghold;
-	double lastX;
-	double lastZ;
+	private Chunk stronghold;
+	private double lastX;
+	private double lastZ;
 
 	private final IDivineContext divineContext = new DivineContext(null);
 
-	public Calibrator(ICalculator calculator) {
-		triangulator = calculator;
-		eyeThrows = new ObservableList<>();
+	private final DisposeHandler disposeHandler = new DisposeHandler();
+	private final ObservableProperty<Calibrator> whenModified = new ObservableProperty<>();
+
+	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences) {
 		try {
 			keyPresser = new KeyPresser();
 		} catch (AWTException e) {
 			throw new RuntimeException(e);
 		}
+		this.preferences = preferences;
+		calculator = new Calculator(calculatorSettings, new StandardDeviationSettings(0.2, 0.2, 0.2, 0.2));
+		throwList = new ListComponent<>(null, 100);
+		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewPlayerPositionInputted));
+		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, true).execute()));
+		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
+		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
 		ready = false;
 	}
 
-	public void add(IEnderEyeThrow t) throws InterruptedException {
+	private void onNewPlayerPositionInputted(IDetailedPlayerPosition playerPosition) {
+		try {
+			add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void add(IEnderEyeThrow t) throws InterruptedException {
 		if (!ready) {
 			keyPresser.releaseF3C();
 			doCommand("clear");
@@ -60,11 +86,11 @@ public class Calibrator implements IDisposable {
 				tp(lastX, lastZ, t.horizontalAngle(), -31.2);
 				return;
 			}
-			eyeThrows.add(t);
+			throwList.add(t);
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				ICalculatorResult result = triangulator.triangulate(eyeThrows.get(), new ObservableField<>(t.getPlayerPosition()), divineContext);
+				ICalculatorResult result = calculator.triangulate(throwList.get(), new ObservableField<>(t.getPlayerPosition()), divineContext);
 				prediction = result.getBestPrediction().chunk;
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;
@@ -84,13 +110,6 @@ public class Calibrator implements IDisposable {
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			tp(nextX, nextZ, nextAlpha, -31.2);
 		}
-	}
-
-	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
-		int i = eyeThrows.size() - 1;
-		if (i == -1) {
-		}
-//		eyeThrows.get(i).addCorrection(positive, preferences);
 	}
 
 	private double distanceFromIntendedPosition(IEnderEyeThrow t) {
@@ -134,7 +153,7 @@ public class Calibrator implements IDisposable {
 	}
 
 	private double getSTD(McVersion version, Chunk result) {
-		double[] errors = result.getAngleErrors(version, eyeThrows.get());
+		double[] errors = result.getAngleErrors(version, throwList.get());
 		// Assume 0 mean
 		double sqSum = 0;
 		for (double e : errors) {
@@ -158,11 +177,11 @@ public class Calibrator implements IDisposable {
 	public double[] getErrors(McVersion version) {
 		if (stronghold == null)
 			return null;
-		return stronghold.getAngleErrors(version, eyeThrows.get());
+		return stronghold.getAngleErrors(version, throwList.get());
 	}
 
 	public IReadOnlyList<IEnderEyeThrow> getThrows() {
-		return eyeThrows.get();
+		return throwList.get();
 	}
 
 	public boolean isReady() {
@@ -170,16 +189,16 @@ public class Calibrator implements IDisposable {
 	}
 
 	public int getNumThrows() {
-		return eyeThrows.get().size();
+		return throwList.get().size();
 	}
 
-	public void stop() {
-		keyPresser = null;
-		stronghold = null;
+	public ISubscribable<Calibrator> whenModified() {
+		return whenModified;
 	}
 
 	@Override
 	public void dispose() {
+		disposeHandler.dispose();
 	}
 
 }

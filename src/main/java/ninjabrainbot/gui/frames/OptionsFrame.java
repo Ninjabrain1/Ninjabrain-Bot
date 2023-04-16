@@ -16,6 +16,7 @@ import ninjabrainbot.gui.options.sections.ThemeSelectionPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.util.I18n;
 
 public class OptionsFrame extends ThemedFrame {
@@ -28,14 +29,14 @@ public class OptionsFrame extends ThemedFrame {
 
 	private static final String TITLE_TEXT = I18n.get("settings");
 
-	public OptionsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences) {
+	public OptionsFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory) {
 		super(styleManager, preferences, TITLE_TEXT);
 		setLayout(null);
 		tabbedPane = new ThemedTabbedPane(styleManager);
 		add(tabbedPane);
 
 		tabbedPane.addTab(I18n.get("settings.basic"), new BasicOptionsPanel(styleManager, preferences));
-		tabbedPane.addTab(I18n.get("settings.advanced"), new AdvancedOptionsPanel(styleManager, preferences, this, disposeHandler));
+		tabbedPane.addTab(I18n.get("settings.advanced"), new AdvancedOptionsPanel(styleManager, preferences, calibratorFactory, this, disposeHandler));
 		tabbedPane.addTab(I18n.get("settings.theme"), new ThemeSelectionPanel(styleManager, preferences, this));
 		tabbedPane.addTab(I18n.get("settings.keyboard_shortcuts"), new HotkeyOptionsPanel(styleManager, preferences));
 		tabbedPane.addTab(I18n.get("settings.overlay"), new ObsOptionsPanel(styleManager, preferences, disposeHandler));
@@ -47,15 +48,6 @@ public class OptionsFrame extends ThemedFrame {
 
 		// Subscriptions
 		disposeHandler.add(preferences.alwaysOnTop.whenModified().subscribeEDT(this::setAlwaysOnTop));
-	}
-
-	public void stopCalibrating() {
-//		tabbedPane.setVisible(true);
-//		titlebarPanel.setVisible(true);
-//		calibrationPanel.setVisible(false);
-//		calibrationPanel.cancel();
-//		updateBounds(styleManager);
-//		sigma.updateValue();
 	}
 
 	public void updateBounds(StyleManager styleManager) {
@@ -77,15 +69,10 @@ public class OptionsFrame extends ThemedFrame {
 
 	public void close() {
 		setVisible(false);
-		stopCalibrating();
 		if (KeyboardListener.registered) {
 			KeyboardListener.instance.cancelConsumer();
 		}
 	}
-
-//	public CalibrationDialog getCalibrationPanel() {
-//		return calibrationPanel;
-//	}
 
 	public void toggleWindow(JFrame parent) {
 		if (isVisible()) {

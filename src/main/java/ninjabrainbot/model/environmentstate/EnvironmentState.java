@@ -21,6 +21,7 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	private final NinjabrainBotPreferences preferences;
 
 	private final IObservable<ICalculator> calculator;
+	private final IObservable<CalculatorSettings> calculatorSettings;
 	private final IObservable<StandardDeviationSettings> standardDeviationSettings;
 	private final IObservable<Boolean> allAdvancementsModeEnabled;
 	private final ObservableField<Boolean> hasEnteredEnd;
@@ -30,13 +31,17 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	public EnvironmentState(IDomainModel domainModel, NinjabrainBotPreferences preferences) {
 		this.domainModel = domainModel;
 		this.preferences = preferences;
+		calculatorSettings = disposeHandler.add(Observable
+				.inferFrom(this::createCalculatorSettings)
+				.dependsOn(preferences.useAdvStatistics, preferences.mcVersion)
+				.whenPushingEventsDo(domainModel::applyWriteLock));
 		standardDeviationSettings = disposeHandler.add(Observable
 				.inferFrom(this::createStandardDeviationSettings)
 				.dependsOn(preferences.sigma, preferences.sigmaAlt, preferences.sigmaManual, preferences.sigmaBoat)
 				.whenPushingEventsDo(domainModel::applyWriteLock));
 		calculator = disposeHandler.add(Observable
 				.inferFrom(this::createCalculator)
-				.dependsOn(preferences.useAdvStatistics.whenModified(), preferences.mcVersion.whenModified(), standardDeviationSettings)
+				.dependsOn(calculatorSettings, standardDeviationSettings)
 				.whenPushingEventsDo(domainModel::applyWriteLock));
 		allAdvancementsModeEnabled = disposeHandler.add(Observable
 				.inferFrom(preferences.allAdvancements::get)
@@ -48,6 +53,11 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	@Override
 	public IObservable<ICalculator> calculator() {
 		return calculator;
+	}
+
+	@Override
+	public IObservable<CalculatorSettings> calculatorSettings() {
+		return calculatorSettings;
 	}
 
 	@Override
@@ -76,8 +86,11 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	}
 
 	private ICalculator createCalculator() {
-		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences.useAdvStatistics.get(), preferences.mcVersion.get());
-		return new Calculator(calculatorSettings, standardDeviationSettings.get());
+		return new Calculator(calculatorSettings.get(), standardDeviationSettings.get());
+	}
+
+	private CalculatorSettings createCalculatorSettings(){
+		return new CalculatorSettings(preferences.useAdvStatistics.get(), preferences.mcVersion.get());
 	}
 
 	private StandardDeviationSettings createStandardDeviationSettings() {

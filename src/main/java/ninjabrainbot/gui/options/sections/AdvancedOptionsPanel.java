@@ -3,7 +3,6 @@ package ninjabrainbot.gui.options.sections;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -15,26 +14,29 @@ import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.components.preferences.HotkeyPanel;
-import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.frames.CalibrationDialog;
+import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.util.I18n;
 
 public class AdvancedOptionsPanel extends JPanel {
 
 	private final StyleManager styleManager;
 	private final NinjabrainBotPreferences preferences;
+	private final ICalibratorFactory calibratorFactory;
 	private final JFrame owner;
 
 	private final FloatPreferencePanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
 
-	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, DisposeHandler disposeHandler) {
+	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, JFrame owner, DisposeHandler disposeHandler) {
 		this.styleManager = styleManager;
 		this.preferences = preferences;
+		this.calibratorFactory = calibratorFactory;
 		this.owner = owner;
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
@@ -47,7 +49,8 @@ public class AdvancedOptionsPanel extends JPanel {
 		add(column2);
 
 		// Left advanced column
-		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma));
+		FloatPreferencePanel sigmaPanel = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma);
+		column1.add(sigmaPanel);
 		JButton calibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation")) {
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -73,22 +76,14 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
 
 		disposeHandler.add(preferences.useAltStd.whenModified().subscribeEDT(this::setAltSigmaEnabled));
+		disposeHandler.add(preferences.sigma.whenModified().subscribeEDT(sigmaPanel::updateValue));
 	}
 
 	private void startCalibrating() {
-		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, owner);
-//		JDialog d = new JDialog(owner);
+		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, calibratorFactory, owner);
 		d.setLocation(owner.getX() - 140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));
-//		calibrationPanel.startCalibrating();
-//		tabbedPane.setVisible(false);
-//		titlebarPanel.setVisible(false);
-//		calibrationPanel.setVisible(true);
-//		updateBounds(styleManager);
-//		if (KeyboardListener.registered) {
-//			KeyboardListener.instance.cancelConsumer();
-//		}
 	}
 
 	private void setAltSigmaEnabled(boolean b) {

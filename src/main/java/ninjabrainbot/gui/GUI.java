@@ -11,14 +11,15 @@ import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
 import ninjabrainbot.io.GithubUpdateChecker;
 import ninjabrainbot.io.KeyboardListener;
+import ninjabrainbot.io.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
-import ninjabrainbot.io.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.ActionExecutor;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.datastate.calibrator.CalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
@@ -58,7 +59,8 @@ public class GUI {
 	private EnvironmentState environmentState;
 	private DataState dataState;
 
-	public IButtonInputHandler buttonInputHandler;
+	private CoordinateInputSource coordinateInputSource;
+	private IButtonInputHandler buttonInputHandler;
 
 	private InformationMessageList informationMessageList;
 
@@ -101,7 +103,7 @@ public class GUI {
 
 	private void initInputHandlers() {
 		Progress.setTask("Initializing input handlers", 0.08f);
-		CoordinateInputSource coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
+		coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));
@@ -164,7 +166,7 @@ public class GUI {
 
 	private OptionsFrame getOrCreateOptionsFrame() {
 		if (optionsFrame == null) {
-			optionsFrame = new OptionsFrame(styleManager, preferences);
+			optionsFrame = new OptionsFrame(styleManager, preferences, new CalibratorFactory(environmentState.calculatorSettings(), coordinateInputSource, preferences));
 			styleManager.init();
 		}
 		return optionsFrame;

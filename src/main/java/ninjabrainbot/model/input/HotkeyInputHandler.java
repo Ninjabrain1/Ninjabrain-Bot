@@ -26,13 +26,13 @@ public class HotkeyInputHandler implements IDisposable {
 		this.actionExecutor = actionExecutor;
 
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
-		preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked);
-		preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked);
-		preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, true)));
-		preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, false)));
-		preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleAltStdOnLastThrowAction(dataState, preferences)));
-		preferences.hotkeyBoat.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState)));
-		preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState)));
+		disposeHandler.add(preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked));
+		disposeHandler.add(preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked));
+		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, true))));
+		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, false))));
+		disposeHandler.add(preferences.hotkeyAltStd.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleAltStdOnLastThrowAction(dataState, preferences))));
+		disposeHandler.add(preferences.hotkeyBoat.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState))));
+		disposeHandler.add(preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState))));
 	}
 
 	private void resetIfNotLocked() {
