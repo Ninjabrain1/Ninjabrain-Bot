@@ -1,4 +1,4 @@
-package ninjabrainbot.io.preferences;
+package ninjabrainbot.io;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

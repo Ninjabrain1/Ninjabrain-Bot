@@ -14,7 +14,7 @@ import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
-import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
+import ninjabrainbot.io.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.ActionExecutor;
 import ninjabrainbot.model.actions.IActionExecutor;

@@ -12,7 +12,7 @@ import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
+import ninjabrainbot.io.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.I18n;
 
