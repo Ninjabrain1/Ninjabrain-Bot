@@ -3,6 +3,8 @@ package ninjabrainbot.model.information;
 import java.util.ArrayList;
 import java.util.List;
 
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.ResultType;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
@@ -10,21 +12,25 @@ import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.common.OverworldPosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.I18n;
 
 public class NextThrowDirectionInformationProvider extends InformationMessageProvider {
 
 	private final IDataState dataState;
+	private final IObservable<StandardDeviationSettings> standardDeviationSettings;
 
-	public NextThrowDirectionInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
+	public NextThrowDirectionInformationProvider(IDataState dataState, IEnvironmentState environmentState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationDirectionHelpEnabled);
 		this.dataState = dataState;
+		this.standardDeviationSettings = environmentState.standardDeviationSettings();
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(preferences.sigma.whenModified().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
+		disposeHandler.add(standardDeviationSettings.subscribe(this::raiseInformationMessageChanged));
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 			sidewaysDistance += sidewaysDistanceIncrement * (lowestPossibleCertainty > 0.99 ? -1.0 : 1.0);
 			double newX = lastThrow.xInOverworld() + Coords.getX(sidewaysDistance, phiSideways);
 			double newZ = lastThrow.zInOverworld() + Coords.getZ(sidewaysDistance, phiSideways);
-			lowestPossibleCertainty = getLowestPossibleCertainty(predictions, new OverworldPosition(newX, newZ), lastThrow.getExpectedStdForNextEnderEyeThrow());
+			lowestPossibleCertainty = getLowestPossibleCertainty(predictions, new OverworldPosition(newX, newZ), lastThrow.getExpectedStandardDeviationForNextEnderEyeThrow(standardDeviationSettings.get()));
 			if (lowestPossibleCertainty > 0.99)
 				binarySearching = true;
 			if (binarySearching)

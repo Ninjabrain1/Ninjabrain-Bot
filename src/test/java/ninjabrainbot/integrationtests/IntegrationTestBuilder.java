@@ -17,7 +17,6 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
@@ -40,7 +39,6 @@ public class IntegrationTestBuilder {
 	public final DomainModel domainModel;
 
 	public final ActionExecutor actionExecutor;
-	public final StandardDeviationHandler standardDeviationHandler;
 	public final IEnvironmentState environmentState;
 	public final IDataState dataState;
 
@@ -60,7 +58,6 @@ public class IntegrationTestBuilder {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
-		standardDeviationHandler = new StandardDeviationHandler(preferences);
 		environmentState = new EnvironmentState(domainModel, preferences);
 		dataState = new DataState(domainModel, environmentState);
 	}
@@ -92,14 +89,10 @@ public class IntegrationTestBuilder {
 	}
 
 	public void setClipboard(String clipboardString) {
-		if (clipboardReader == null)
-			clipboardReader = new MockedClipboardReader();
-		if (coordinateInputSource == null)
-			coordinateInputSource = new CoordinateInputSource(clipboardReader);
-		if (playerPositionInputHandler == null)
-			playerPositionInputHandler = createPlayerPositionInputHandler();
-		if (fossilInputHandler == null)
-			fossilInputHandler = new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
+		if (clipboardReader == null) clipboardReader = new MockedClipboardReader();
+		if (coordinateInputSource == null) coordinateInputSource = new CoordinateInputSource(clipboardReader);
+		if (playerPositionInputHandler == null) playerPositionInputHandler = createPlayerPositionInputHandler();
+		if (fossilInputHandler == null) fossilInputHandler = new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 		clipboardReader.setClipboard(clipboardString);
 	}
 
@@ -113,40 +106,32 @@ public class IntegrationTestBuilder {
 	}
 
 	public void triggerHotkey(HotkeyPreference hotkeyPreference) {
-		if (hotkeyInputHandler == null)
-			hotkeyInputHandler = new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor);
+		if (hotkeyInputHandler == null) hotkeyInputHandler = new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor);
 		hotkeyPreference.execute();
 	}
 
 	public void setActiveMinecraftWorld(IMinecraftWorldFile minecraftWorld) {
-		if (activeInstanceProvider == null)
-			activeInstanceProvider = new MockedInstanceProvider();
-		if (activeInstanceInputHandler == null)
-			activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
+		if (activeInstanceProvider == null) activeInstanceProvider = new MockedInstanceProvider();
+		if (activeInstanceInputHandler == null) activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
 		activeInstanceProvider.activeMinecraftWorld().set(minecraftWorld);
 	}
 
 	public MainTextAreaTestAdapter createMainTextArea() {
-		if (styleManager == null)
-			styleManager = TestUtils.createStyleManager();
-		if (buttonInputHandler == null)
-			buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		if (styleManager == null) styleManager = TestUtils.createStyleManager();
+		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, buttonInputHandler, preferences, dataState));
 	}
 
 	public NinjabrainBotFrame createNinjabrainBotFrame() {
-		if (styleManager == null)
-			styleManager = TestUtils.createStyleManager();
-		if (buttonInputHandler == null)
-			buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		if (styleManager == null) styleManager = TestUtils.createStyleManager();
+		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 		NinjabrainBotFrame frame = new NinjabrainBotFrame(styleManager, preferences, new FakeUpdateChecker(), dataState, buttonInputHandler, new InformationMessageList());
 		styleManager.init();
 		return frame;
 	}
 
 	public BoatIcon createBoatIcon() {
-		if (styleManager == null)
-			styleManager = TestUtils.createStyleManager();
+		if (styleManager == null) styleManager = TestUtils.createStyleManager();
 		return new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, new DisposeHandler());
 	}
 
@@ -155,12 +140,12 @@ public class IntegrationTestBuilder {
 		styleManager.currentTheme.setTheme(new TestTheme2());
 	}
 
-	public void addDummyEnderEyeThrow(){
+	public void addDummyEnderEyeThrow() {
 		TestUtils.addDummyEnderEyeThrow(domainModel, dataState);
 	}
 
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), standardDeviationHandler);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		return new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 	}
 

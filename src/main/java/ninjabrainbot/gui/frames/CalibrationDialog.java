@@ -1,15 +1,14 @@
-package ninjabrainbot.gui.options;
+package ninjabrainbot.gui.frames;
 
-import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,34 +17,33 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.model.datastate.calibrator.Calibrator;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.layout.Divider;
-import ninjabrainbot.gui.components.panels.TitleBarPanel;
-import ninjabrainbot.gui.frames.OptionsFrame;
+import ninjabrainbot.gui.components.layout.StackPanel;
+import ninjabrainbot.gui.options.Histogram;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.calculator.Calculator;
+import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
+import ninjabrainbot.model.datastate.calibrator.Calibrator;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.I18n;
 
-public class CalibrationPanel extends JPanel implements ThemedComponent {
+public class CalibrationDialog extends ThemedDialog {
 
 	final Calibrator calibrator;
 
 	final StyleManager styleManager;
 	final NinjabrainBotPreferences preferences;
-	final OptionsFrame optionsFrame;
-	final TitleBarPanel titlebarPanel;
-	final JLabel titletextLabel;
-	final FlatButton cancelButton;
-	final JPanel panel;
+	final JFrame owner;
 	final InstructionLabel[] labels;
 	final ErrorTextArea errors;
 	final Histogram hist;
@@ -53,33 +51,23 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	final JLabel std;
 	static final int errorAreaWidth = 100;
 
-	public CalibrationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, OptionsFrame frame) {
-		styleManager.registerThemedComponent(this);
+	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame frame) {
+		super(styleManager, preferences, frame, "Calibration");
+		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
-		optionsFrame = frame;
-		calibrator = new Calibrator();
-		setOpaque(false);
-		setLayout(null);
-		setVisible(false);
+		owner = frame;
+		calibrator = new Calibrator(new Calculator(new CalculatorSettings(true, MultipleChoicePreferenceDataTypes.McVersion.PRE_119), new StandardDeviationSettings(1, 1, 1, 1)));
 
-		titlebarPanel = new TitleBarPanel(styleManager, frame);
-		titlebarPanel.setLayout(null);
-		add(titlebarPanel);
-		titletextLabel = new ThemedLabel(styleManager, I18n.get("calibrator.title_text_label"), true) {
-			@Override
-			public int getTextSize(SizePreference p) {
-				return p.TEXT_SIZE_TITLE_LARGE;
-			}
-		};
-		titlebarPanel.add(titletextLabel);
-		cancelButton = getCancelButton();
-		titlebarPanel.add(cancelButton);
+		JPanel panel2 = new JPanel();
+		panel2.setOpaque(false);
+		panel2.setLayout(new BorderLayout());
 
-		panel = new JPanel();
+		JPanel panel = new StackPanel(OptionsFrame.PADDING, panel2);
 		panel.setOpaque(false);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
 		add(panel);
+
 		labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
 				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
 		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>" + I18n.get("calibrator.explanation") + "</div></html>") {
@@ -90,17 +78,10 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		};
 		explanation.setAlignmentX(0.5f);
 		panel.add(explanation);
-		panel.add(Box.createVerticalStrut(5));
 		panel.add(new Divider(styleManager));
-		panel.add(Box.createVerticalStrut(5));
 		for (InstructionLabel l : labels) {
 			panel.add(l);
-			panel.add(Box.createVerticalStrut(5));
 		}
-		JPanel panel2 = new JPanel();
-		panel2.setOpaque(false);
-		panel2.setLayout(new BorderLayout());
-		panel.add(panel2);
 		errors = new ErrorTextArea(styleManager, new JTextArea());
 		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
 		rightPanel = new JPanel();
@@ -121,65 +102,26 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
+		startCalibrating();
 	}
 
 	public void startCalibrating() {
-		try {
-			calibrator.startCalibrating();
-			std.setText("-");
-			setHighlighted(0);
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
+		std.setText("-");
+		setHighlighted(0);
 	}
 
 	public void cancel() {
-		if (calibrator.isCalibrating()) {
-			calibrator.stop();
-			errors.area.setText("");
-			hist.clear();
-		}
+		calibrator.stop();
+		errors.area.setText("");
+		hist.clear();
 	}
 
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
 			preferences.sigma.set(std);
-			optionsFrame.stopCalibrating();
+//			optionsFrame.stopCalibrating();
 		}
-	}
-
-	@Override
-	public void setBounds(int x, int y, int width, int height) {
-		super.setBounds(x, y, width, height);
-		int titlebarHeight = titlebarPanel.getPreferredSize().height;
-		titlebarPanel.setBounds(0, 0, width, titlebarHeight);
-		titletextLabel.setBounds((titlebarHeight - styleManager.size.TEXT_SIZE_TITLE_LARGE) / 2, 0, 300, titlebarHeight);
-		int cancelButtonWidth = cancelButton.getPreferredSize().width;
-		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, titlebarHeight);
-		panel.setBounds(0, titlebarHeight, width, height - titlebarHeight);
-	}
-
-//	@Override
-//	public void setSize(int width, int height) {
-//		super.setSize(width, height);
-//		titlebarPanel.setBounds(0, 0, width, GUI.TITLE_BAR_HEIGHT);
-//		titletextLabel.setBounds((GUI.TITLE_BAR_HEIGHT - gui.size.TEXT_SIZE_LARGE)/2, 0, 300, GUI.TITLE_BAR_HEIGHT);
-//		int cancelButtonWidth = cancelButton.getPreferredSize().width;
-//		cancelButton.setBounds(width - cancelButtonWidth, 0, cancelButtonWidth, GUI.TITLE_BAR_HEIGHT);
-//		panel.setBounds(0, GUI.TITLE_BAR_HEIGHT, width, height - GUI.TITLE_BAR_HEIGHT);
-//	}
-
-	private FlatButton getCancelButton() {
-		FlatButton button = new TitleBarButton(styleManager, I18n.get("calibrator.cancel")) {
-			@Override
-			public void updateSize(StyleManager styleManager) {
-				setFont(styleManager.fontSize(getTextSize(styleManager.size), false));
-			}
-		};
-		button.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
-		button.addActionListener(p -> optionsFrame.stopCalibrating());
-		return button;
 	}
 
 	private void setHighlighted(int i) {
@@ -201,17 +143,6 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 		}
 		setHighlighted(stage);
 		updateHistogram();
-	}
-
-	public void changeLastAngle(boolean positive, NinjabrainBotPreferences preferences) {
-		if (calibrator.getNumThrows() > 0) {
-			calibrator.changeLastAngle(positive, preferences);
-			updateHistogram();
-		}
-	}
-
-	public boolean isCalibrating() {
-		return calibrator.isCalibrating();
 	}
 
 	private void updateHistogram() {
@@ -247,14 +178,17 @@ public class CalibrationPanel extends JPanel implements ThemedComponent {
 	}
 
 	@Override
-	public void updateColors() {
+	public void updateBounds(StyleManager styleManager) {
+		super.updateBounds(styleManager);
+		setSize(styleManager.size.WIDTH * 2, styleManager.size.WIDTH * 3 / 2);
+		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), styleManager.size.WINDOW_ROUNDING, styleManager.size.WINDOW_ROUNDING));
 	}
 
 	@Override
-	public void updateSize(StyleManager styleManager) {
-		panel.setBorder(new EmptyBorder(styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING, 2 * styleManager.size.PADDING));
+	protected void onExitButtonClicked() {
+//		button.addActionListener(p -> optionsFrame.stopCalibrating());
+		dispose();
 	}
-
 }
 
 class InstructionLabel extends ThemedLabel {

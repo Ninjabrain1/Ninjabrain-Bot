@@ -31,13 +31,13 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	public EnvironmentState(IDomainModel domainModel, NinjabrainBotPreferences preferences) {
 		this.domainModel = domainModel;
 		this.preferences = preferences;
-		calculator = disposeHandler.add(Observable
-				.inferFrom(this::createCalculator)
-				.dependsOn(preferences.useAdvStatistics, preferences.mcVersion)
-				.whenPushingEventsDo(domainModel::applyWriteLock));
 		standardDeviationSettings = disposeHandler.add(Observable
 				.inferFrom(this::createStandardDeviationSettings)
 				.dependsOn(preferences.sigma, preferences.sigmaAlt, preferences.sigmaManual, preferences.sigmaBoat)
+				.whenPushingEventsDo(domainModel::applyWriteLock));
+		calculator = disposeHandler.add(Observable
+				.inferFrom(this::createCalculator)
+				.dependsOn(preferences.useAdvStatistics.whenModified(), preferences.mcVersion.whenModified(), standardDeviationSettings)
 				.whenPushingEventsDo(domainModel::applyWriteLock));
 		allAdvancementsModeEnabled = disposeHandler.add(Observable
 				.inferFrom(preferences.allAdvancements::get)
@@ -78,7 +78,7 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 
 	private ICalculator createCalculator() {
 		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences.useAdvStatistics.get(), preferences.mcVersion.get());
-		return new Calculator(calculatorSettings);
+		return new Calculator(calculatorSettings, standardDeviationSettings.get());
 	}
 
 	private StandardDeviationSettings createStandardDeviationSettings() {

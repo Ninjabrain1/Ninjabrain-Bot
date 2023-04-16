@@ -3,7 +3,10 @@ package ninjabrainbot.gui.options.sections;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.event.DisposeHandler;
@@ -13,7 +16,7 @@ import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.components.preferences.HotkeyPanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
-import ninjabrainbot.gui.options.CalibrationPanel;
+import ninjabrainbot.gui.frames.CalibrationDialog;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
@@ -22,13 +25,17 @@ import ninjabrainbot.util.I18n;
 
 public class AdvancedOptionsPanel extends JPanel {
 
-	private final CalibrationPanel calibrationPanel;
+	private final StyleManager styleManager;
+	private final NinjabrainBotPreferences preferences;
+	private final JFrame owner;
 
 	private final FloatPreferencePanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
 
-	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, CalibrationPanel calibrationPanel, DisposeHandler disposeHandler) {
-		this.calibrationPanel = calibrationPanel;
+	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, DisposeHandler disposeHandler) {
+		this.styleManager = styleManager;
+		this.preferences = preferences;
+		this.owner = owner;
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
 		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
@@ -69,7 +76,12 @@ public class AdvancedOptionsPanel extends JPanel {
 	}
 
 	private void startCalibrating() {
-		calibrationPanel.startCalibrating();
+		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, owner);
+//		JDialog d = new JDialog(owner);
+		d.setLocation(owner.getX() - 140, owner.getY() + 30);
+		styleManager.init();
+		SwingUtilities.invokeLater(() -> d.setVisible(true));
+//		calibrationPanel.startCalibrating();
 //		tabbedPane.setVisible(false);
 //		titlebarPanel.setVisible(false);
 //		calibrationPanel.setVisible(true);

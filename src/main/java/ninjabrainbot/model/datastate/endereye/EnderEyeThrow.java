@@ -8,15 +8,12 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 	protected final double x, z, horizontalAngleWithoutCorrection, verticalAngle;
 	protected final double correction;
 
-	protected final IStandardDeviationHandler standardDeviationHandler;
-
-	protected EnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, IStandardDeviationHandler standardDeviationHandler, double correction) {
+	protected EnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction) {
 		this.x = x;
 		this.z = z;
 		this.horizontalAngleWithoutCorrection = clampToPlusMinus180Degrees(horizontalAngle);
 		this.verticalAngle = verticalAngle;
 		this.correction = correction;
-		this.standardDeviationHandler = standardDeviationHandler;
 	}
 
 	@Override
@@ -54,20 +51,6 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 	public double horizontalAngleWithoutCorrection() {
 		return horizontalAngleWithoutCorrection;
 	}
-
-	@Override
-	public double getStd() {
-		return getStandardDeviation(standardDeviationHandler);
-	}
-
-	@Override
-	public double getExpectedStdForNextEnderEyeThrow() {
-		return getStandardDeviation(standardDeviationHandler);
-	}
-
-	protected abstract double getStandardDeviation(IStandardDeviationHandler standardDeviationHandler);
-
-	protected abstract double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler);
 
 	private static double clampToPlusMinus180Degrees(double angleInDegrees) {
 		angleInDegrees %= 360.0;

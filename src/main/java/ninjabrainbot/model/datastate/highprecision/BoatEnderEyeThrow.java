@@ -1,29 +1,29 @@
 package ninjabrainbot.model.datastate.highprecision;
 
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 
 /**
  * Represents an ender eye throw from an F3+C command after a boat angle has been registered.
  */
 public class BoatEnderEyeThrow extends EnderEyeThrow {
 
-	public BoatEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, NinjabrainBotPreferences preferences, IStandardDeviationHandler standardDeviationHandler, float boatAngle) {
+	public BoatEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, NinjabrainBotPreferences preferences, float boatAngle) {
 		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(detailedPlayerPosition.horizontalAngle(), preferences, boatAngle),
-				detailedPlayerPosition.verticalAngle(), standardDeviationHandler, 0);
+				detailedPlayerPosition.verticalAngle(), 0);
 	}
 
-	private BoatEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, IStandardDeviationHandler standardDeviationHandler, double correction) {
-		super(x, z, horizontalAngle, verticalAngle, standardDeviationHandler, correction);
+	private BoatEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction) {
+		super(x, z, horizontalAngle, verticalAngle, correction);
 	}
 
 	@Override
 	public IEnderEyeThrow withCorrection(double correction) {
-		return new BoatEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, standardDeviationHandler, correction);
+		return new BoatEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction);
 	}
 
 	@Override
@@ -32,13 +32,13 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 	}
 
 	@Override
-	protected double getStandardDeviation(IStandardDeviationHandler standardDeviationHandler) {
-		return standardDeviationHandler.getBoatStandardDeviation();
+	public double getStandardDeviation(StandardDeviationSettings standardDeviationSettings) {
+		return standardDeviationSettings.boatStd;
 	}
 
 	@Override
-	protected double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler) {
-		return standardDeviationHandler.getBoatStandardDeviation();
+	public double getExpectedStandardDeviationForNextEnderEyeThrow(StandardDeviationSettings standardDeviationSettings) {
+		return standardDeviationSettings.boatStd;
 	}
 
 	@Override

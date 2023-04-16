@@ -46,13 +46,12 @@ import ninjabrainbot.model.datastate.IDataStateHandler;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
 import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.I18n;
 
-public class ThemeEditorFrame extends ThemedDialog {
+public class ThemeEditorDialog extends ThemedDialog {
 
 	private ConfigurableColorPanel selectedPanel;
 	private ColorPickerPanel colorPickerPanel;
@@ -65,8 +64,9 @@ public class ThemeEditorFrame extends ThemedDialog {
 	private final CustomTheme customTheme; // theme that is saved
 	private final CustomTheme previewTheme; // used for previewing
 
-	public ThemeEditorFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
+	public ThemeEditorDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
 		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
+		Assert.isTrue(SwingUtilities.isEventDispatchThread());
 		this.preferences = preferences;
 		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
@@ -169,11 +169,10 @@ public class ThemeEditorFrame extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		NinjabrainBotPreferences defaultPreferences = new NinjabrainBotPreferences(new UnsavedPreferences());
-		IStandardDeviationHandler standardDeviationHandler = new StandardDeviationHandler(defaultPreferences);
 		ArrayList<IEnderEyeThrow> eyeThrows = new ArrayList<>();
 
-		IEnderEyeThrow t1 = new NormalEnderEyeThrow(new DetailedPlayerPosition(659.70, 80, 1950.30, -253.82, -31.75, false), 0, standardDeviationHandler).withCorrection(0.01);
-		IEnderEyeThrow t2 = new NormalEnderEyeThrow(new DetailedPlayerPosition(-3.75, 80, 2002.63, -184.67, -31.75, false), 0, standardDeviationHandler).withCorrection(-0.01).withToggledAltStd();
+		IEnderEyeThrow t1 = new NormalEnderEyeThrow(new DetailedPlayerPosition(659.70, 80, 1950.30, -253.82, -31.75, false), 0).withCorrection(0.01);
+		IEnderEyeThrow t2 = new NormalEnderEyeThrow(new DetailedPlayerPosition(-3.75, 80, 2002.63, -184.67, -31.75, false), 0).withCorrection(-0.01).withToggledAltStd();
 		eyeThrows.add(t1);
 		eyeThrows.add(t2);
 		Fossil f = new Fossil(3);

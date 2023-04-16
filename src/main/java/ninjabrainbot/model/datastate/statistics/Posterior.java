@@ -5,25 +5,28 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.model.datastate.stronghold.StrongholdConstants;
-import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.Coords;
 
 public class Posterior {
 
+	private final StandardDeviationSettings standardDeviationSettings;
 	private final McVersion version;
 
 	final IPrior prior;
 	final ArrayList<Chunk> chunks;
 
-	public Posterior(IReadOnlyList<IEnderEyeThrow> eyeThrows, IDivineContext divineContext, boolean useAdvStatistics, McVersion version) {
+	public Posterior(IReadOnlyList<IEnderEyeThrow> eyeThrows, IDivineContext divineContext, StandardDeviationSettings standardDeviationSettings, boolean useAdvStatistics, McVersion version) {
+		this.standardDeviationSettings = standardDeviationSettings;
 		this.version = version;
-		double sigma0 = eyeThrows.get(0).getStd();
+		double sigma0 = eyeThrows.get(0).getStandardDeviation(standardDeviationSettings);
 		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).xInOverworld();
@@ -100,7 +103,7 @@ public class Posterior {
 		double gamma = -180 / Math.PI * Math.atan2(deltax, deltaz); // mod 360 necessary?
 		double delta = Math.abs((gamma - t.horizontalAngle()) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
-		double s = t.getStd();
+		double s = t.getStandardDeviation(standardDeviationSettings);
 		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
 	}
 

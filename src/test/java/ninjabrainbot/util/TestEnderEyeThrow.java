@@ -4,6 +4,7 @@ import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 
 public class TestEnderEyeThrow implements IEnderEyeThrow {
 
@@ -37,6 +38,11 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
+	public double horizontalAngleWithoutCorrection() {
+		return alpha;
+	}
+
+	@Override
 	public IEnderEyeThrow withCorrection(double correction) {
 		return null;
 	}
@@ -52,18 +58,13 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
-	public double getStd() {
+	public double getStandardDeviation(StandardDeviationSettings standardDeviationHandler) {
 		return std;
 	}
 
 	@Override
-	public double getExpectedStdForNextEnderEyeThrow() {
+	public double getExpectedStandardDeviationForNextEnderEyeThrow(StandardDeviationSettings standardDeviationHandler) {
 		return std;
-	}
-
-	@Override
-	public double horizontalAngleWithoutCorrection() {
-		return alpha;
 	}
 
 	@Override

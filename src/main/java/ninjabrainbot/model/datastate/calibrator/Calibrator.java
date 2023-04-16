@@ -2,7 +2,11 @@ package ninjabrainbot.model.datastate.calibrator;
 
 import java.awt.AWTException;
 
+import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.model.datastate.calculator.Calculator;
+import ninjabrainbot.model.datastate.calculator.ICalculator;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -14,6 +18,7 @@ import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.io.KeyPresser;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.util.I18n;
 
 public class Calibrator implements IDisposable {
@@ -21,8 +26,7 @@ public class Calibrator implements IDisposable {
 	KeyPresser keyPresser;
 	final int delay = 150; // key press delay
 
-	final Calculator triangulator;
-	boolean calibrating;
+	final ICalculator triangulator;
 	ObservableList<IEnderEyeThrow> eyeThrows;
 	boolean ready;
 
@@ -32,19 +36,14 @@ public class Calibrator implements IDisposable {
 
 	private final IDivineContext divineContext = new DivineContext(null);
 
-	public Calibrator() {
-		triangulator = new Calculator();
-		calibrating = false;
-	}
-
-	public boolean isCalibrating() {
-		return calibrating;
-	}
-
-	public void startCalibrating() throws AWTException {
-		calibrating = true;
+	public Calibrator(ICalculator calculator) {
+		triangulator = calculator;
 		eyeThrows = new ObservableList<>();
-		keyPresser = new KeyPresser();
+		try {
+			keyPresser = new KeyPresser();
+		} catch (AWTException e) {
+			throw new RuntimeException(e);
+		}
 		ready = false;
 	}
 
@@ -65,12 +64,12 @@ public class Calibrator implements IDisposable {
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
-				Posterior posterior = triangulator.getPosterior(eyeThrows.get(), divineContext);
-				prediction = posterior.getMostProbableChunk();
+				ICalculatorResult result = triangulator.triangulate(eyeThrows.get(), new ObservableField<>(t.getPlayerPosition()), divineContext);
+				prediction = result.getBestPrediction().chunk;
 				if (1.0 - prediction.weight < 1e-8) {
 					stronghold = prediction;
 				}
-				closest = posterior.getClosestPossibleChunk(1e-4, t);
+				closest = prediction;
 			} else {
 				closest = stronghold;
 				prediction = stronghold;
@@ -176,7 +175,6 @@ public class Calibrator implements IDisposable {
 
 	public void stop() {
 		keyPresser = null;
-		calibrating = false;
 		stronghold = null;
 	}
 

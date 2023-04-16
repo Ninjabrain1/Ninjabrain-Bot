@@ -20,6 +20,10 @@ public class StackPanel extends JPanel {
 	}
 
 	public StackPanel(int gapBetweenComponents) {
+		this(gapBetweenComponents, Box.createGlue());
+	}
+
+	public StackPanel(int gapBetweenComponents, Component lastComponent) {
 		setLayout(new GridBagLayout());
 		this.gapBetweenComponents = gapBetweenComponents;
 
@@ -27,10 +31,11 @@ public class StackPanel extends JPanel {
 		constraints.gridy = GridBagConstraints.RELATIVE;
 		constraints.gridx = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = GridBagConstraints.BOTH;
 		constraints.weightx = 1;
 		constraints.weighty = 1;
-		add(Box.createGlue(), constraints);
+		add(lastComponent, constraints);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.weighty = 0;
 	}

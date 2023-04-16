@@ -1,24 +1,22 @@
 package ninjabrainbot.model;
 
+import ninjabrainbot.event.ObservableProperty;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.model.actions.ActionExecutor;
 import ninjabrainbot.model.datastate.DataState;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.ResultType;
-import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
 import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.model.datastate.endereye.IStandardDeviationHandler;
-import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
-import ninjabrainbot.event.ObservableProperty;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.util.FakeCoordinateInputSource;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,14 +31,12 @@ public class ResultTypeProviderTests {
 	NinjabrainBotPreferences preferences;
 	DomainModel domainModel;
 	ActionExecutor actionExecutor;
-	IStandardDeviationHandler standardDeviationHandler;
 
 	@BeforeEach
 	void setup() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
-		standardDeviationHandler = new StandardDeviationHandler(preferences);
 	}
 
 	@Test
@@ -49,7 +45,7 @@ public class ResultTypeProviderTests {
 		IDataState dataState = new DataState(domainModel, new EnvironmentState(domainModel, preferences));
 
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState(), standardDeviationHandler);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 		new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 

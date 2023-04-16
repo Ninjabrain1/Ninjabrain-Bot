@@ -8,9 +8,9 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
+import ninjabrainbot.io.GithubUpdateChecker;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.OBSOverlay;
-import ninjabrainbot.io.GithubUpdateChecker;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
@@ -72,7 +72,7 @@ public class GUI {
 		Progress.setTask("Creating calculator data", 0.08f);
 		Profiler.start("Init DataState");
 		dataStateHandler = new DataStateHandler(preferences, clipboardReader, activeInstanceProvider);
-		dataState = dataStateHandler.getDataState();
+		dataState = dataStateHandler.dataState;
 		Profiler.stop();
 	}
 
@@ -81,10 +81,10 @@ public class GUI {
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
-		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, dataStateHandler.environmentState, preferences));
 		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
 		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
-		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, dataStateHandler.environmentState, preferences));
 		Profiler.stop();
 	}
 

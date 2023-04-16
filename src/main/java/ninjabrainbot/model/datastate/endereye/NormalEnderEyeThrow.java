@@ -1,6 +1,7 @@
 package ninjabrainbot.model.datastate.endereye;
 
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 
 /**
  * Represents an eye of ender throw, from a normal F3+C command.
@@ -9,34 +10,34 @@ public class NormalEnderEyeThrow extends EnderEyeThrow {
 
 	private final boolean altStandardDeviation;
 
-	public NormalEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, double crosshairCorrection, IStandardDeviationHandler standardDeviationHandler) {
+	public NormalEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, double crosshairCorrection) {
 		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getCorrectedHorizontalAngle(detailedPlayerPosition.horizontalAngle(), crosshairCorrection),
-				detailedPlayerPosition.verticalAngle(), standardDeviationHandler, 0, false);
+				detailedPlayerPosition.verticalAngle(), 0, false);
 	}
 
-	private NormalEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, IStandardDeviationHandler standardDeviationHandler, double correction, boolean altStandardDeviation) {
-		super(x, z, horizontalAngle, verticalAngle, standardDeviationHandler, correction);
+	private NormalEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction, boolean altStandardDeviation) {
+		super(x, z, horizontalAngle, verticalAngle, correction);
 		this.altStandardDeviation = altStandardDeviation;
 	}
 
 	@Override
 	public IEnderEyeThrow withCorrection(double correction) {
-		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, standardDeviationHandler, correction, altStandardDeviation);
+		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, altStandardDeviation);
 	}
 
 	@Override
 	public IEnderEyeThrow withToggledAltStd() {
-		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, standardDeviationHandler, correction, !altStandardDeviation);
+		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, !altStandardDeviation);
 	}
 
 	@Override
-	protected double getStandardDeviation(IStandardDeviationHandler standardDeviationHandler) {
-		return altStandardDeviation ? standardDeviationHandler.getAlternativeStandardDeviation() : standardDeviationHandler.getNormalStandardDeviation();
+	public double getStandardDeviation(StandardDeviationSettings standardDeviationSettings) {
+		return altStandardDeviation ? standardDeviationSettings.altStd : standardDeviationSettings.std;
 	}
 
 	@Override
-	protected double getExpectedStandardDeviationForNextEnderEyeThrow(IStandardDeviationHandler standardDeviationHandler) {
-		return standardDeviationHandler.getNormalStandardDeviation();
+	public double getExpectedStandardDeviationForNextEnderEyeThrow(StandardDeviationSettings standardDeviationSettings) {
+		return standardDeviationSettings.std;
 	}
 
 	@Override

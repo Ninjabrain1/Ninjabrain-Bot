@@ -3,13 +3,14 @@ package ninjabrainbot.gui.options;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
-import ninjabrainbot.gui.frames.ThemeEditorFrame;
+import ninjabrainbot.gui.frames.ThemeEditorDialog;
 import ninjabrainbot.gui.frames.ThemedDialog;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.CustomTheme;
@@ -55,7 +56,7 @@ public class CustomThemePanel extends ThemePanel {
 	}
 
 	private void editTheme(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme theme) {
-		ThemedDialog d = new ThemeEditorFrame(styleManager, preferences, owner, theme);
+		ThemedDialog d = new ThemeEditorDialog(styleManager, preferences, owner, theme);
 		d.setLocation(owner.getX() - 140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));

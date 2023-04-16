@@ -3,6 +3,9 @@ package ninjabrainbot.model.datastate.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
@@ -14,9 +17,7 @@ import ninjabrainbot.model.datastate.statistics.Posterior;
 import ninjabrainbot.model.datastate.statistics.Prior;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.Ring;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
+import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Pair;
@@ -26,15 +27,13 @@ public class Calculator implements ICalculator {
 	private final int numberOfReturnedPredictions;
 	private final boolean useAdvancedStatistics;
 	private final MultipleChoicePreferenceDataTypes.McVersion mcVersion;
+	private final StandardDeviationSettings standardDeviationSettings;
 
-	public Calculator() {
-		this(new CalculatorSettings());
-	}
-
-	public Calculator(CalculatorSettings settings) {
-		numberOfReturnedPredictions = settings.numberOfReturnedPredictions;
-		useAdvancedStatistics = settings.useAdvancedStatistics;
-		mcVersion = settings.mcVersion;
+	public Calculator(CalculatorSettings calculatorSettings, StandardDeviationSettings standardDeviationSettings) {
+		numberOfReturnedPredictions = calculatorSettings.numberOfReturnedPredictions;
+		useAdvancedStatistics = calculatorSettings.useAdvancedStatistics;
+		mcVersion = calculatorSettings.mcVersion;
+		this.standardDeviationSettings = standardDeviationSettings;
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class Calculator implements ICalculator {
 			return null;
 		long t0 = System.currentTimeMillis();
 		// Calculate posteriors
-		Posterior posterior = new Posterior(eyeThrows, divineContext, useAdvancedStatistics, mcVersion);
+		Posterior posterior = new Posterior(eyeThrows, divineContext, standardDeviationSettings, useAdvancedStatistics, mcVersion);
 		Logger.log("Time to triangulate: " + (System.currentTimeMillis() - t0) / 1000f + " seconds.");
 		return new CalculatorResult(posterior, eyeThrows, playerPos, numberOfReturnedPredictions, mcVersion);
 	}
@@ -51,7 +50,7 @@ public class Calculator implements ICalculator {
 	public Posterior getPosterior(IReadOnlyList<IEnderEyeThrow> eyeThrows, IDivineContext divineContext) {
 		if (eyeThrows.size() == 0)
 			return null;
-		return new Posterior(eyeThrows, divineContext, useAdvancedStatistics, mcVersion);
+		return new Posterior(eyeThrows, divineContext, standardDeviationSettings, useAdvancedStatistics, mcVersion);
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.model.datastate.endereye.StandardDeviationHandler;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
@@ -20,9 +19,10 @@ import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 
-public class DataStateHandler implements IDataStateHandler, IDisposable {
+public class DataStateHandler implements IDisposable {
 
-	private final DataState dataState;
+	public final DataState dataState;
+	public final EnvironmentState environmentState;
 
 	public final DomainModel domainModel;
 	public final IActionExecutor actionExecutor;
@@ -34,23 +34,17 @@ public class DataStateHandler implements IDataStateHandler, IDisposable {
 		disposeHandler.add(domainModel = new DomainModel());
 		actionExecutor = new ActionExecutor(domainModel);
 
-		StandardDeviationHandler standardDeviationHandler = disposeHandler.add(new StandardDeviationHandler(preferences));
-		EnvironmentState environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
+		environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
 		dataState = disposeHandler.add(new DataState(domainModel, environmentState));
 
 		CoordinateInputSource coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardProvider));
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState, standardDeviationHandler);
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState);
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 
 		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
-	}
-
-	@Override
-	public IDataState getDataState() {
-		return dataState;
 	}
 
 	@Override
