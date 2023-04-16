@@ -1,5 +1,6 @@
 package ninjabrainbot.gui;
 
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.splash.Progress;
@@ -15,14 +16,26 @@ import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.preferences.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.model.datastate.DataStateHandler;
-import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.actions.ActionExecutor;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
+import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
+import ninjabrainbot.model.domainmodel.DomainModel;
+import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.information.McVersionWarningProvider;
 import ninjabrainbot.model.information.MismeasureWarningProvider;
 import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
 import ninjabrainbot.model.information.PortalLinkingWarningProvider;
+import ninjabrainbot.model.input.ActiveInstanceInputHandler;
+import ninjabrainbot.model.input.ButtonInputHandler;
+import ninjabrainbot.model.input.FossilInputHandler;
+import ninjabrainbot.model.input.HotkeyInputHandler;
+import ninjabrainbot.model.input.IButtonInputHandler;
+import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.Profiler;
 
 /**
@@ -35,22 +48,30 @@ public class GUI {
 	private ClipboardReader clipboardReader;
 	private IActiveInstanceProvider activeInstanceProvider;
 	private AutoResetTimer autoResetTimer;
-	private OBSOverlay obsOverlay;
 
 	private StyleManager styleManager;
 	private NinjabrainBotFrame ninjabrainBotFrame;
 	private OptionsFrame optionsFrame;
 
-	private DataStateHandler dataStateHandler;
-	private IDataState dataState;
+	private DomainModel domainModel;
+	private IActionExecutor actionExecutor;
+	private EnvironmentState environmentState;
+	private DataState dataState;
+
+	public IButtonInputHandler buttonInputHandler;
 
 	private InformationMessageList informationMessageList;
+
+	private OBSOverlay obsOverlay;
+
+	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public GUI(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
 		initInputMethods();
 		initDataState();
 		initDataProcessors();
+		initInputHandlers();
 		initUI();
 		postInit();
 	}
@@ -69,11 +90,24 @@ public class GUI {
 	}
 
 	private void initDataState() {
-		Progress.setTask("Creating calculator data", 0.08f);
+		Progress.setTask("Creating calculator data", 0.07f);
 		Profiler.start("Init DataState");
-		dataStateHandler = new DataStateHandler(preferences, clipboardReader, activeInstanceProvider);
-		dataState = dataStateHandler.dataState;
+		domainModel = disposeHandler.add(new DomainModel());
+		actionExecutor = new ActionExecutor(domainModel);
+		environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
+		dataState = disposeHandler.add(new DataState(domainModel, environmentState));
 		Profiler.stop();
+	}
+
+	private void initInputHandlers() {
+		Progress.setTask("Initializing input handlers", 0.08f);
+		CoordinateInputSource coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
+		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));
+		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences));
+		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
+		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 	}
 
 	private void initDataProcessors() {
@@ -81,10 +115,10 @@ public class GUI {
 		Profiler.start("Init info message generators");
 		informationMessageList = new InformationMessageList();
 		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
-		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, dataStateHandler.environmentState, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, environmentState, preferences));
 		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
 		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
-		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, dataStateHandler.environmentState, preferences));
+		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, environmentState, preferences));
 		Profiler.stop();
 	}
 
@@ -98,7 +132,7 @@ public class GUI {
 
 		Progress.setTask("Creating main window", 0.93f);
 		Profiler.stopAndStart("Create frame");
-		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, new GithubUpdateChecker(), dataState, dataStateHandler.buttonInputHandler, informationMessageList);
+		ninjabrainBotFrame = new NinjabrainBotFrame(styleManager, preferences, new GithubUpdateChecker(), dataState, buttonInputHandler, informationMessageList);
 
 		Progress.setTask("Creating settings window", 0.95f);
 		Profiler.stopAndStart("Create settings window");
@@ -116,10 +150,10 @@ public class GUI {
 
 		new Thread(clipboardReader, "Clipboard reader").start();
 
-		autoResetTimer = new AutoResetTimer(dataState, dataStateHandler.domainModel, dataStateHandler.actionExecutor);
+		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor);
 		preferences.autoReset.whenModified().subscribeEDT(b -> autoResetTimer.setAutoResetEnabled(b));
 
-		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, dataStateHandler.domainModel, new NinjabrainBotOverlayImageWriter(), 1000);
+		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, domainModel, new NinjabrainBotOverlayImageWriter(), 1000);
 
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);
@@ -142,10 +176,10 @@ public class GUI {
 			public void run() {
 				preferences.windowX.set(ninjabrainBotFrame.getX());
 				preferences.windowY.set(ninjabrainBotFrame.getY());
+				disposeHandler.dispose();
 				obsOverlay.dispose();
 				autoResetTimer.dispose();
 				informationMessageList.dispose();
-				dataStateHandler.dispose();
 			}
 		};
 	}

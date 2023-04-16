@@ -1,4 +1,4 @@
-package ninjabrainbot.model.datastate.calculator;
+package ninjabrainbot.model.environmentstate;
 
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;

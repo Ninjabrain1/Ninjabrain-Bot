@@ -7,8 +7,6 @@ import java.util.Locale;
 
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.datastate.stronghold.Chunk;
-import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;
@@ -23,6 +21,8 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.MultipleChoicePreference;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 
 /**
  * JComponent for showing a Throw.
@@ -93,8 +93,10 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	public void setPrediction(ChunkPrediction chunkPrediction) {
 		currentPrediction = chunkPrediction;
-		if (chunkPredictionSubscription != null)
+		if (chunkPredictionSubscription != null) {
 			chunkPredictionSubscription.dispose();
+			chunkPredictionSubscription = null;
+		}
 		if (chunkPrediction == null) {
 			for (ILabel l : labels) {
 				if (l != null) {

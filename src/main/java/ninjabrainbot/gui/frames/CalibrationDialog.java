@@ -30,7 +30,7 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.calculator.Calculator;
-import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
+import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.datastate.calibrator.Calibrator;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;

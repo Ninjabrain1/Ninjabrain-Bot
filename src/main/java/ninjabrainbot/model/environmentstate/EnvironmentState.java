@@ -7,7 +7,6 @@ import ninjabrainbot.event.Observable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.calculator.Calculator;
-import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
 import ninjabrainbot.model.datastate.calculator.ICalculator;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 

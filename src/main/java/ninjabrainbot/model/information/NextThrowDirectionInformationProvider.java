@@ -6,7 +6,7 @@ import java.util.List;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.common.OverworldPosition;

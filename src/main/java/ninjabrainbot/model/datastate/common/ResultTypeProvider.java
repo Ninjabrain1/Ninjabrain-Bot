@@ -1,11 +1,11 @@
-package ninjabrainbot.model.datastate;
+package ninjabrainbot.model.datastate.common;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.domainmodel.InferredComponent;

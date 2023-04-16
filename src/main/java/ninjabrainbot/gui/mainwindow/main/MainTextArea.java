@@ -11,7 +11,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.divine.DivineResult;

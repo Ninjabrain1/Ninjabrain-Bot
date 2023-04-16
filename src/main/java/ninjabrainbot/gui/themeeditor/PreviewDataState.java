@@ -3,9 +3,8 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.List;
 
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.ResultType;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsDataState;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
@@ -23,7 +22,6 @@ import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.model.environmentstate.EnvironmentState;
 
 public class PreviewDataState implements IDataState {
 

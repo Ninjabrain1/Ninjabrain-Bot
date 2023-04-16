@@ -17,6 +17,7 @@ import ninjabrainbot.model.datastate.statistics.Posterior;
 import ninjabrainbot.model.datastate.statistics.Prior;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.Ring;
+import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Logger;

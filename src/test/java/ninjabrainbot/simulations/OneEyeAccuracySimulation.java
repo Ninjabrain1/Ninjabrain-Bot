@@ -5,7 +5,7 @@ import java.util.Random;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.model.datastate.calculator.Calculator;
-import ninjabrainbot.model.datastate.calculator.CalculatorSettings;
+import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.divine.DivineContext;
