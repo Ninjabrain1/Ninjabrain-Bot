@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.updatechecker;
 
 import java.util.function.Consumer;
 

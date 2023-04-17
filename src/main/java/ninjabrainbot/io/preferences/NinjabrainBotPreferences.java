@@ -1,11 +1,9 @@
 package ninjabrainbot.io.preferences;
 
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.Language;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.SizeSetting;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
-import ninjabrainbot.util.I18n;
 
 public class NinjabrainBotPreferences {
 
@@ -55,11 +53,11 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference informationPortalLinkingEnabled;
 	public final StringPreference customThemesString;
 	public final StringPreference customThemesNames;
+	public final StringPreference language;
 	public final MultipleChoicePreference<SizeSetting> size;
 	public final MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
 	public final MultipleChoicePreference<MainViewType> view;
 	public final MultipleChoicePreference<McVersion> mcVersion;
-	public final MultipleChoicePreference<Language> language;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -112,13 +110,13 @@ public class NinjabrainBotPreferences {
 		// String
 		customThemesString = new StringPreference("custom_themes", "", source);
 		customThemesNames = new StringPreference("custom_themes_names", "", source);
+		language = new StringPreference("language_v2", "", source);
 		// Multiple choice
 		size = new MultipleChoicePreference<SizeSetting>("size", SizeSetting.SMALL, new int[] { 0, 1, 2 }, new SizeSetting[] { SizeSetting.SMALL, SizeSetting.MEDIUM, SizeSetting.LARGE }, source);
 		strongholdDisplayType = new MultipleChoicePreference<StrongholdDisplayType>("stronghold_display_type", StrongholdDisplayType.FOURFOUR, new int[] { 0, 1, 2 },
 				new StrongholdDisplayType[] { StrongholdDisplayType.FOURFOUR, StrongholdDisplayType.EIGHTEIGHT, StrongholdDisplayType.CHUNK }, source);
 		view = new MultipleChoicePreference<MainViewType>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
 		mcVersion = new MultipleChoicePreference<McVersion>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
-		language = new MultipleChoicePreference<Language>("language", I18n.getDefaultName(), I18n.getLanguageIDs(), I18n.getLanguageNames(), Language.values(), source);
 	}
 
 }

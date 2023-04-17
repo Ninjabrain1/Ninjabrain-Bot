@@ -2,8 +2,8 @@ package ninjabrainbot.util;
 
 import java.util.function.Consumer;
 
-import ninjabrainbot.io.IUpdateChecker;
-import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.io.updatechecker.IUpdateChecker;
+import ninjabrainbot.io.updatechecker.VersionURL;
 
 public class FakeUpdateChecker implements IUpdateChecker {
 

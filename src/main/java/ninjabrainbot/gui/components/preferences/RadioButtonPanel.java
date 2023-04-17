@@ -1,5 +1,7 @@
 package ninjabrainbot.gui.components.preferences;
 
+import java.util.function.Consumer;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -14,12 +16,14 @@ import ninjabrainbot.io.preferences.MultipleChoicePreference;
 public class RadioButtonPanel extends ThemedPanel {
 
 	final JLabel descLabel;
-	final RadioButtonGroup radioButtonGroup;
-	final MultipleChoicePreference<?> preference;
+	final RadioButtonGroup<?> radioButtonGroup;
 
-	public RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<?> preference) {
+	public <T extends IMultipleChoicePreferenceDataType> RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<T> preference) {
+		this(styleManager, description, preference.getChoices(), preference.get(), preference::set);
+	}
+
+	public <T extends IMultipleChoiceOption> RadioButtonPanel(StyleManager styleManager, String description, T[] choices, T selectedValue, Consumer<T> onChanged) {
 		super(styleManager);
-		this.preference = preference;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		descLabel = new ThemedLabel(styleManager, description) {
 			@Override
@@ -27,10 +31,10 @@ public class RadioButtonPanel extends ThemedPanel {
 				return p.TEXT_SIZE_SMALL;
 			}
 		};
-		radioButtonGroup = new RadioButtonGroup(styleManager, preference.getChoices(), preference.get(), preference.getChoices().length >= 4) {
+		radioButtonGroup = new RadioButtonGroup<>(styleManager, choices, selectedValue, choices.length >= 4) {
 			@Override
-			public void onChanged(IMultipleChoicePreferenceDataType newValue) {
-				preference.set(newValue);
+			public void onChanged(T newValue) {
+				onChanged.accept(newValue);
 			}
 		};
 		descLabel.setAlignmentX(0);

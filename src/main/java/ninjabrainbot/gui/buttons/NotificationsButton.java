@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import ninjabrainbot.Main;
@@ -15,8 +14,8 @@ import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.frames.NotificationsFrame;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.IUpdateChecker;
-import ninjabrainbot.io.VersionURL;
+import ninjabrainbot.io.updatechecker.IUpdateChecker;
+import ninjabrainbot.io.updatechecker.VersionURL;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class NotificationsButton extends TitleBarButton implements IDisposable {

@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.overlay;
 
 import java.awt.image.BufferedImage;
 

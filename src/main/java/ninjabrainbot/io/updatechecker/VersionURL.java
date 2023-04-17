@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.updatechecker;
 
 public class VersionURL {
 	public final String url;

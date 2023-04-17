@@ -18,21 +18,16 @@ import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
-import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 
-class RadioButtonGroup extends ThemedPanel {
+class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 
-	RadioButtonGroup(StyleManager styleManager, IMultipleChoicePreferenceDataType[] options, IMultipleChoicePreferenceDataType selected) {
-		this(styleManager, options, selected, false);
-	}
-
-	RadioButtonGroup(StyleManager styleManager, IMultipleChoicePreferenceDataType[] options, IMultipleChoicePreferenceDataType selected, boolean verticalRadioButtons) {
+	RadioButtonGroup(StyleManager styleManager, T[] options, T selected, boolean verticalRadioButtons) {
 		super(styleManager);
 		setOpaque(false);
 		ButtonGroup group = new ButtonGroup();
 		setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.Y_AXIS : BoxLayout.X_AXIS));
 		for (int i = 0; i < options.length; i++) {
-			IMultipleChoicePreferenceDataType option = options[i];
+			T option = options[i];
 			ActionListener listener = e -> onChanged(option);
 			JRadioButton button = new ThemedRadioButton(styleManager, option.choiceName());
 			if (selected == option)
@@ -45,7 +40,7 @@ class RadioButtonGroup extends ThemedPanel {
 		}
 	}
 
-	public void onChanged(IMultipleChoicePreferenceDataType newValue) {
+	public void onChanged(T newValue) {
 
 	}
 

@@ -19,8 +19,8 @@ public class MultipleChoicePreference<T extends IMultipleChoicePreferenceDataTyp
 		this.pref = pref;
 		this.key = key;
 		this.choices = choices;
-		id2choice = new HashMap<Integer, IMultipleChoicePreferenceDataType>();
-		choice2id = new HashMap<IMultipleChoicePreferenceDataType, Integer>();
+		id2choice = new HashMap<>();
+		choice2id = new HashMap<>();
 		for (int i = 0; i < ids.length; i++) {
 			id2choice.put(ids[i], choices[i]);
 			choice2id.put(choices[i], ids[i]);

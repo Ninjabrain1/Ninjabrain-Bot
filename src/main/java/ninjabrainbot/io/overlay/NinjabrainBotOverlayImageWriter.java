@@ -1,4 +1,4 @@
-package ninjabrainbot.io;
+package ninjabrainbot.io.overlay;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ninjabrainbot.io.IImageWriter;
 import ninjabrainbot.util.Logger;
 
 public class NinjabrainBotOverlayImageWriter implements IImageWriter {
