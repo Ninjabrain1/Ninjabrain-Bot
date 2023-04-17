@@ -49,7 +49,7 @@ public class CalibrationDialog extends ThemedDialog {
 	static final int errorAreaWidth = 100;
 
 	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, JFrame owner) {
-		super(styleManager, preferences, owner, "Calibration");
+		super(styleManager, preferences, owner, I18n.get("calibrator.title"));
 		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
