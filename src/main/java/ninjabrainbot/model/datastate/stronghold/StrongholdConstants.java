@@ -1,6 +1,6 @@
 package ninjabrainbot.model.datastate.stronghold;
 
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.enums.McVersion;
 
 public class StrongholdConstants {
 

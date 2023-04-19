@@ -1,7 +1,7 @@
 package ninjabrainbot.model.environmentstate;
 
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.McVersion;
 
 public class CalculatorSettings {
 

@@ -13,7 +13,7 @@ import com.sun.jna.ptr.IntByReference;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.enums.McVersion;
 
 public class WindowsActiveInstanceListener implements IActiveInstanceProvider, Runnable {
 
@@ -100,10 +100,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		if (!windowTitle.startsWith("Minecraft"))
 			return false;
 
-		if (!WindowUtils.getProcessFilePath(windowHandle).contains("javaw.exe"))
-			return false;
-
-		return true;
+		return WindowUtils.getProcessFilePath(windowHandle).contains("javaw.exe");
 	}
 
 	private int getWindowProcessId(HWND windowHandle) {

@@ -3,7 +3,7 @@ package ninjabrainbot.simulations;
 import java.util.Random;
 
 import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;

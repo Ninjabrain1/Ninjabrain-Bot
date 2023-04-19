@@ -15,8 +15,8 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.theme.WrappedColor;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.util.I18n;
 
 public class ChunkPanelHeader extends ThemedPanel implements IDisposable {

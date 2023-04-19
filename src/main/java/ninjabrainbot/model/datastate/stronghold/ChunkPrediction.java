@@ -2,12 +2,12 @@ package ninjabrainbot.model.datastate.stronghold;
 
 import java.util.Locale;
 
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class ChunkPrediction extends StructurePosition {
 

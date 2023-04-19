@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.Chunk;

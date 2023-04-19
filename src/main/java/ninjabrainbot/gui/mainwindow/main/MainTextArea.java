@@ -8,12 +8,12 @@ import ninjabrainbot.gui.mainwindow.alladvancements.AllAdvancementsPanel;
 import ninjabrainbot.gui.mainwindow.triangulation.BasicTriangulationPanel;
 import ninjabrainbot.gui.mainwindow.triangulation.DetailedTriangulationPanel;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.DivineResult;
 import ninjabrainbot.model.input.IButtonInputHandler;
 

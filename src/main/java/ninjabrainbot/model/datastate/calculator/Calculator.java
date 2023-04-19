@@ -5,7 +5,7 @@ import java.util.List;
 
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
@@ -27,7 +27,7 @@ public class Calculator implements ICalculator {
 
 	private final int numberOfReturnedPredictions;
 	private final boolean useAdvancedStatistics;
-	private final MultipleChoicePreferenceDataTypes.McVersion mcVersion;
+	private final McVersion mcVersion;
 	private final StandardDeviationSettings standardDeviationSettings;
 
 	public Calculator(CalculatorSettings calculatorSettings, StandardDeviationSettings standardDeviationSettings) {

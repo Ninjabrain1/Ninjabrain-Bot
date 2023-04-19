@@ -14,10 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.io.updatechecker.IUpdateChecker;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.information.InformationMessageList;
-import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.NotificationsButton;
@@ -31,8 +27,12 @@ import ninjabrainbot.gui.mainwindow.main.MainButtonPanel;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.MainViewType;
+import ninjabrainbot.io.updatechecker.IUpdateChecker;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Profiler;
 

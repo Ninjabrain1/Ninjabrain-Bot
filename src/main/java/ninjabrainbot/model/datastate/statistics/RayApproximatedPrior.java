@@ -2,12 +2,12 @@ package ninjabrainbot.model.datastate.statistics;
 
 import java.util.ArrayList;
 
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.IOverworldRay;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.model.datastate.stronghold.StrongholdConstants;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.Logger;
 

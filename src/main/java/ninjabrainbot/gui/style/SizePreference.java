@@ -2,7 +2,7 @@ package ninjabrainbot.gui.style;
 
 import java.util.HashMap;
 
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.SizeSetting;
+import ninjabrainbot.io.preferences.enums.SizeSetting;
 import ninjabrainbot.util.I18n;
 
 public abstract class SizePreference {

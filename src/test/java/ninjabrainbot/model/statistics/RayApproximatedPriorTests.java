@@ -3,6 +3,7 @@ package ninjabrainbot.model.statistics;
 import java.util.HashMap;
 import java.util.Map;
 
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.statistics.ApproximatedPrior;
 import ninjabrainbot.model.datastate.statistics.IPrior;
@@ -10,7 +11,6 @@ import ninjabrainbot.model.datastate.statistics.Prior;
 import ninjabrainbot.model.datastate.statistics.RayApproximatedPrior;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.Ring;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;

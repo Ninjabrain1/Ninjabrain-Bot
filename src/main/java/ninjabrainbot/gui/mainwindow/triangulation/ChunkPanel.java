@@ -19,8 +19,8 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.MultipleChoicePreference;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 

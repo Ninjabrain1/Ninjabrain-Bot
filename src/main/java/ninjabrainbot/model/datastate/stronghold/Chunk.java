@@ -2,10 +2,10 @@ package ninjabrainbot.model.datastate.stronghold;
 
 import java.util.Objects;
 
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class Chunk {
 

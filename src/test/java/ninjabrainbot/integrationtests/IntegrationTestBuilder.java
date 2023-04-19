@@ -9,9 +9,10 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.preferences.HotkeyPreference;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.io.preferences.enums.MainViewType;
+import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.common.ResetAction;
@@ -73,8 +74,8 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder withProSettings() {
 		preferences.sigma.set(0.005f);
-		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
-		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
+		preferences.view.set(MainViewType.DETAILED);
+		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
 		return this;
 	}
 
@@ -97,8 +98,8 @@ public class IntegrationTestBuilder {
 		preferences.resolutionHeight.set(16384);
 		preferences.useTallRes.set(true);
 		preferences.usePreciseAngle.set(true);
-		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
-		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
+		preferences.view.set(MainViewType.DETAILED);
+		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
 		return this;
 	}
 

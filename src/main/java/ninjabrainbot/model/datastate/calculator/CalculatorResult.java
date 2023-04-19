@@ -3,14 +3,14 @@ package ninjabrainbot.model.datastate.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.statistics.Posterior;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.IReadOnlyList;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class CalculatorResult implements ICalculatorResult {
 

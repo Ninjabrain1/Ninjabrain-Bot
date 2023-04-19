@@ -3,14 +3,14 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.ArrayList;
 import java.util.List;
 
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.gui.themeeditor.panels.PreviewPlayerPosition;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
-import ninjabrainbot.gui.themeeditor.panels.PreviewPlayerPosition;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
 
 public class PreviewCalculatorResult implements ICalculatorResult {
 

@@ -1,9 +1,9 @@
 package ninjabrainbot.io.preferences;
 
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.MainViewType;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.McVersion;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.SizeSetting;
-import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes.StrongholdDisplayType;
+import ninjabrainbot.io.preferences.enums.MainViewType;
+import ninjabrainbot.io.preferences.enums.McVersion;
+import ninjabrainbot.io.preferences.enums.SizeSetting;
+import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 
 public class NinjabrainBotPreferences {
 
