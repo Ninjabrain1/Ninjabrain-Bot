@@ -3,11 +3,11 @@ package ninjabrainbot.gui.themeeditor;
 import java.util.List;
 
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.DivineResult;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -18,10 +18,9 @@ import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
 
 public class PreviewDataState implements IDataState {
 
@@ -33,11 +32,11 @@ public class PreviewDataState implements IDataState {
 	private final DataComponent<Boolean> locked;
 	private final DataComponent<IPlayerPosition> playerPosition;
 
-	private final ObservableField<ResultType> resultType;
-	private final ObservableField<ICalculatorResult> calculatorResult;
-	private final ObservableField<ChunkPrediction> topPrediction;
-	private final ObservableField<BlindResult> blindResult;
-	private final ObservableField<DivineResult> divineResult;
+	private final DataComponent<ResultType> resultType;
+	private final DataComponent<ICalculatorResult> calculatorResult;
+	private final DataComponent<ChunkPrediction> topPrediction;
+	private final DataComponent<BlindResult> blindResult;
+	private final DataComponent<DivineResult> divineResult;
 
 	public PreviewDataState(ICalculatorResult result, List<IEnderEyeThrow> eyeThrows, Fossil f) {
 		this();
@@ -54,11 +53,11 @@ public class PreviewDataState implements IDataState {
 		throwSet = new ListComponent<>(null, 10);
 		playerPosition = new DataComponent<>(null);
 		locked = new DataComponent<>(null, false);
-		resultType = new ObservableField<>(ResultType.NONE);
-		calculatorResult = new ObservableField<>();
-		topPrediction = new ObservableField<>();
-		blindResult = new ObservableField<>();
-		divineResult = new ObservableField<>();
+		resultType = new DataComponent<>(null, ResultType.NONE);
+		calculatorResult = new DataComponent<>(null);
+		topPrediction = new DataComponent<>(null);
+		blindResult = new DataComponent<>(null);
+		divineResult = new DataComponent<>(null);
 
 		boatDataState = new BoatDataState(null);
 		allAdvancementsDataState = new PreviewAllAdvancementsDataState();
@@ -85,29 +84,28 @@ public class PreviewDataState implements IDataState {
 	}
 
 	@Override
-	public IObservable<ICalculatorResult> calculatorResult() {
+	public IDomainModelComponent<ICalculatorResult> calculatorResult() {
 		return calculatorResult;
 	}
 
 	@Override
-	public IObservable<ChunkPrediction> topPrediction() {
+	public IDomainModelComponent<ChunkPrediction> topPrediction() {
 		return topPrediction;
 	}
 
 	@Override
-	public IObservable<BlindResult> blindResult() {
+	public IDomainModelComponent<BlindResult> blindResult() {
 		return blindResult;
 	}
 
 	@Override
-	public IObservable<DivineResult> divineResult() {
+	public IDomainModelComponent<DivineResult> divineResult() {
 		return divineResult;
 	}
 
 	@Override
-	public IObservable<ResultType> resultType() {
+	public IDomainModelComponent<ResultType> resultType() {
 		return resultType;
-
 	}
 
 	@Override

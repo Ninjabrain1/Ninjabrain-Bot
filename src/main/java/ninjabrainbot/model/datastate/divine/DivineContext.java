@@ -1,5 +1,7 @@
 package ninjabrainbot.model.datastate.divine;
 
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.model.datastate.blind.BlindPosition;
 import ninjabrainbot.model.datastate.statistics.DiscretizedDensity;
 import ninjabrainbot.model.datastate.stronghold.Ring;
@@ -8,16 +10,18 @@ import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.util.Coords;
 
-public class DivineContext implements IDivineContext {
+public class DivineContext implements IDivineContext, IDisposable {
 
 	private final DiscretizedDensity discretizedAngularDensity;
 
 	public final DataComponent<Fossil> fossil;
 
+	private final DisposeHandler disposeHandler = new DisposeHandler();
+
 	public DivineContext(IDomainModel domainModel) {
 		fossil = new DataComponent<>(domainModel);
 		discretizedAngularDensity = new DiscretizedDensity(0, 2.0 * Math.PI);
-		fossil.subscribe(this::onFossilChanged);
+		disposeHandler.add(fossil.subscribeInternal(this::onFossilChanged));
 	}
 
 	@Override
@@ -111,4 +115,8 @@ public class DivineContext implements IDivineContext {
 		}
 	}
 
+	@Override
+	public void dispose() {
+		disposeHandler.dispose();
+	}
 }

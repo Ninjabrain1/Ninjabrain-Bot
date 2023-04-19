@@ -11,6 +11,8 @@ public interface IDomainModel extends IWriteLock {
 
 	void registerInferredComponent(IInferredComponent<?> inferredComponent);
 
+	<T> ISubscribable<T> createExternalEventFor(ISubscribable<T> subscribable);
+
 	void checkWriteAccess();
 
 	void reset();
@@ -20,6 +22,8 @@ public interface IDomainModel extends IWriteLock {
 	void redoUnderWriteLock();
 
 	boolean isReset();
+
+	boolean isFullyInitialized();
 
 	ISubscribable<IDomainModel> whenModified();
 

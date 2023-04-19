@@ -8,6 +8,7 @@ import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.InferredComponent;
 
 public class ResultTypeProvider implements IDisposable {
@@ -15,9 +16,9 @@ public class ResultTypeProvider implements IDisposable {
 	private final InferredComponent<ResultType> resultType;
 
 	private final IAllAdvancementsDataState allAdvancementsDataState;
-	private final IObservable<ICalculatorResult> calculatorResult;
-	private final IObservable<IPlayerPosition> playerPosition;
-	private final IObservable<Fossil> fossil;
+	private final IDomainModelComponent<ICalculatorResult> calculatorResult;
+	private final IDomainModelComponent<IPlayerPosition> playerPosition;
+	private final IDomainModelComponent<Fossil> fossil;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
@@ -28,13 +29,13 @@ public class ResultTypeProvider implements IDisposable {
 		playerPosition = dataState.playerPosition();
 		fossil = dataState.getDivineContext().fossil();
 
-		disposeHandler.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribe(this::updateResultType));
-		disposeHandler.add(calculatorResult.subscribe(this::updateResultType));
-		disposeHandler.add(playerPosition.subscribe(this::updateResultType));
-		disposeHandler.add(fossil.subscribe(this::updateResultType));
+		disposeHandler.add(allAdvancementsDataState.allAdvancementsModeEnabled().subscribeInternal(this::updateResultType));
+		disposeHandler.add(calculatorResult.subscribeInternal(this::updateResultType));
+		disposeHandler.add(playerPosition.subscribeInternal(this::updateResultType));
+		disposeHandler.add(fossil.subscribeInternal(this::updateResultType));
 	}
 
-	public IObservable<ResultType> resultType() {
+	public IDomainModelComponent<ResultType> resultType() {
 		return resultType;
 	}
 

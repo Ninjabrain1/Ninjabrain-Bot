@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import ninjabrainbot.event.ArrayListImplementingReadOnlyList;
 import ninjabrainbot.event.IReadOnlyList;
+import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableList;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.Assert;
@@ -21,12 +22,14 @@ public class ListComponent<T> implements IListComponent<T> {
 
 	private final IDomainModel domainModel;
 	private final ObservableList<T> observableList;
+	private final ISubscribable<IReadOnlyList<T>> externalEvent;
 	private final int maxCapacity;
 
 	public ListComponent(IDomainModel domainModel, int maxCapacity) {
 		this.domainModel = domainModel;
 		this.maxCapacity = maxCapacity;
 		observableList = new ObservableList<>();
+		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableList) : observableList;
 		if (domainModel != null)
 			domainModel.registerDataComponent(this);
 	}
@@ -120,12 +123,16 @@ public class ListComponent<T> implements IListComponent<T> {
 	}
 
 	@Override
-	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
+	public Subscription subscribeInternal(Consumer<IReadOnlyList<T>> subscriber) {
+		if (domainModel != null)
+			Assert.isFalse(domainModel.isFullyInitialized(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IListComponent.subscribe().");
 		return observableList.subscribe(subscriber);
 	}
 
 	@Override
-	public void unsubscribe(Consumer<IReadOnlyList<T>> subscriber) {
-		observableList.unsubscribe(subscriber);
+	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
+		if (domainModel != null)
+			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IListComponent.subscribeInternal().");
+		return externalEvent.subscribe(subscriber);
 	}
 }

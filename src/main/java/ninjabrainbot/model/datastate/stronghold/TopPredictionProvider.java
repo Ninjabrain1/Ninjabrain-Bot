@@ -1,10 +1,10 @@
 package ninjabrainbot.model.datastate.stronghold;
 
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.InferredComponent;
 
 public class TopPredictionProvider implements IDisposable {
@@ -13,8 +13,8 @@ public class TopPredictionProvider implements IDisposable {
 
 	private final Subscription calculatorResultSubscription;
 
-	public TopPredictionProvider(IDomainModel domainModel, IObservable<ICalculatorResult> calculatorResult) {
-		calculatorResultSubscription = calculatorResult.subscribe(this::updateTopPrediction);
+	public TopPredictionProvider(IDomainModel domainModel, IDomainModelComponent<ICalculatorResult> calculatorResult) {
+		calculatorResultSubscription = calculatorResult.subscribeInternal(this::updateTopPrediction);
 		topPrediction = new InferredComponent<>(domainModel);
 	}
 
@@ -26,7 +26,7 @@ public class TopPredictionProvider implements IDisposable {
 		topPrediction.set(calculatorResult.getBestPrediction());
 	}
 
-	public IObservable<ChunkPrediction> topPrediction() {
+	public IDomainModelComponent<ChunkPrediction> topPrediction() {
 		return topPrediction;
 	}
 

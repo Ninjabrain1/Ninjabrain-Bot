@@ -1,22 +1,21 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 
 public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataState {
 
 	@Override
-	public IObservable<Boolean> allAdvancementsModeEnabled() {
-		return new ObservableField<>(false);
+	public IDomainModelComponent<Boolean> allAdvancementsModeEnabled() {
+		return new DataComponent<>(null, false);
 	}
 
 	@Override
-	public IObservable<StructurePosition> strongholdPosition() {
-		return new ObservableField<>();
+	public IDomainModelComponent<StructurePosition> strongholdPosition() {
+		return new DataComponent<>(null);
 	}
 
 	@Override

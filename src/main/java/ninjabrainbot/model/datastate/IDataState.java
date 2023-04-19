@@ -1,8 +1,8 @@
 package ninjabrainbot.model.datastate;
 
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.DivineResult;
@@ -11,8 +11,8 @@ import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.IDataComponent;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.IListComponent;
-import ninjabrainbot.event.IObservable;
 
 public interface IDataState {
 
@@ -28,14 +28,14 @@ public interface IDataState {
 
 	IDataComponent<Boolean> locked();
 
-	IObservable<ICalculatorResult> calculatorResult();
+	IDomainModelComponent<ICalculatorResult> calculatorResult();
 
-	IObservable<ChunkPrediction> topPrediction();
+	IDomainModelComponent<ChunkPrediction> topPrediction();
 
-	IObservable<BlindResult> blindResult();
+	IDomainModelComponent<BlindResult> blindResult();
 
-	IObservable<DivineResult> divineResult();
+	IDomainModelComponent<DivineResult> divineResult();
 
-	IObservable<ResultType> resultType();
+	IDomainModelComponent<ResultType> resultType();
 
 }

@@ -7,7 +7,7 @@ import ninjabrainbot.event.IObservable;
  * Any modifications to a DataComponent are automatically saved by the DomainModel, for the undo action to work.
  * The generic type T should be immutable to ensure that no modifications to the data go unnoticed by the domain model.
  */
-public interface IDataComponent<T> extends IObservable<T> {
+public interface IDataComponent<T> extends IDomainModelComponent<T> {
 
 	T getAsImmutable();
 

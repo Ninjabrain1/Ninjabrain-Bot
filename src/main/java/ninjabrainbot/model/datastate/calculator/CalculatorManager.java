@@ -12,7 +12,10 @@ import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.datastate.stronghold.TopPredictionProvider;
+import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
+import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.InferredComponent;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
@@ -32,7 +35,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CalculatorManager(IDomainModel domainModel, IEnvironmentState environmentState, IObservableList<IEnderEyeThrow> throwSet, IObservable<IPlayerPosition> playerPosition, IDivineContext divineContext) {
+	public CalculatorManager(IDomainModel domainModel, IEnvironmentState environmentState, IListComponent<IEnderEyeThrow> throwSet, IDataComponent<IPlayerPosition> playerPosition, IDivineContext divineContext) {
 		this.calculator = environmentState.calculator().get();
 		this.throwSet = throwSet;
 		this.playerPosition = playerPosition;
@@ -43,9 +46,9 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 		divineResult = new InferredComponent<>(domainModel);
 
 		disposeHandler.add(environmentState.calculator().subscribe(this::setCalculator));
-		disposeHandler.add(throwSet.subscribe(this::onThrowSetModified));
-		disposeHandler.add(playerPosition.subscribe(this::onPlayerPositionChanged));
-		disposeHandler.add(divineContext.fossil().subscribe(this::onFossilChanged));
+		disposeHandler.add(throwSet.subscribeInternal(this::onThrowSetModified));
+		disposeHandler.add(playerPosition.subscribeInternal(this::onPlayerPositionChanged));
+		disposeHandler.add(divineContext.fossil().subscribeInternal(this::onFossilChanged));
 		topPredictionProvider = disposeHandler.add(new TopPredictionProvider(domainModel, calculatorResult));
 	}
 
@@ -67,8 +70,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	}
 
 	private void updateCalculatorResult() {
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
+		if (calculatorResult.get() != null) calculatorResult.get().dispose();
 		calculatorResult.set(calculator.triangulate(throwSet.get(), playerPosition, divineContext));
 	}
 
@@ -96,29 +98,28 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 	}
 
 	@Override
-	public IObservable<ICalculatorResult> calculatorResult() {
+	public IDomainModelComponent<ICalculatorResult> calculatorResult() {
 		return calculatorResult;
 	}
 
 	@Override
-	public IObservable<ChunkPrediction> topPrediction() {
+	public IDomainModelComponent<ChunkPrediction> topPrediction() {
 		return topPredictionProvider.topPrediction();
 	}
 
 	@Override
-	public IObservable<BlindResult> blindResult() {
+	public IDomainModelComponent<BlindResult> blindResult() {
 		return blindResult;
 	}
 
 	@Override
-	public IObservable<DivineResult> divineResult() {
+	public IDomainModelComponent<DivineResult> divineResult() {
 		return divineResult;
 	}
 
 	@Override
 	public void dispose() {
 		disposeHandler.dispose();
-		if (calculatorResult.get() != null)
-			calculatorResult.get().dispose();
+		if (calculatorResult.get() != null) calculatorResult.get().dispose();
 	}
 }

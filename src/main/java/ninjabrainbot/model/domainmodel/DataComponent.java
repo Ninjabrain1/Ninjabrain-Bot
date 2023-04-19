@@ -2,6 +2,7 @@ package ninjabrainbot.model.domainmodel;
 
 import java.util.function.Consumer;
 
+import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.Assert;
@@ -18,6 +19,7 @@ public class DataComponent<T> implements IDataComponent<T> {
 
 	private final IDomainModel domainModel;
 	private final ObservableField<T> observableField;
+	private final ISubscribable<T> externalEvent;
 	private final T defaultValue;
 
 	public DataComponent(IDomainModel domainModel) {
@@ -25,8 +27,9 @@ public class DataComponent<T> implements IDataComponent<T> {
 	}
 
 	public DataComponent(IDomainModel domainModel, T defaultValue) {
-		observableField = new ObservableField<>(defaultValue);
 		this.domainModel = domainModel;
+		observableField = new ObservableField<>(defaultValue);
+		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableField) : observableField;
 		this.defaultValue = defaultValue;
 		if (domainModel != null)
 			domainModel.registerDataComponent(this);
@@ -66,12 +69,17 @@ public class DataComponent<T> implements IDataComponent<T> {
 	}
 
 	@Override
-	public Subscription subscribe(Consumer<T> subscriber) {
+	public Subscription subscribeInternal(Consumer<T> subscriber) {
+		if (domainModel != null)
+			Assert.isFalse(domainModel.isFullyInitialized(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IDataComponent.subscribe().");
 		return observableField.subscribe(subscriber);
 	}
 
 	@Override
-	public void unsubscribe(Consumer<T> subscriber) {
-		observableField.unsubscribe(subscriber);
+	public Subscription subscribe(Consumer<T> subscriber) {
+		if (domainModel != null)
+			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IDataComponent.subscribeInternal().");
+		return externalEvent.subscribe(subscriber);
 	}
+
 }

@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 /**
  * Represents an event that can be subscribed to.
  */
-public interface ISubscribable<T> extends IUnsubscribable<T> {
+public interface ISubscribable<T> {
 
 	Subscription subscribe(Consumer<T> subscriber);
 

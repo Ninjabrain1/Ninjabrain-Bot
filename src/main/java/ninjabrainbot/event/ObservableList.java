@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-public class ObservableList<T> implements IObservableList<T> {
+public class ObservableList<T> implements IObservableList<T>, IUnsubscribable<IReadOnlyList<T>> {
 
 	protected final ArrayListImplementingReadOnlyList<T> list;
 

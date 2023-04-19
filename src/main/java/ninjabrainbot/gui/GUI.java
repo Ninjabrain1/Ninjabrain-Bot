@@ -9,22 +9,22 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.io.AutoResetTimer;
 import ninjabrainbot.io.ClipboardReader;
-import ninjabrainbot.io.updatechecker.GithubUpdateChecker;
 import ninjabrainbot.io.KeyboardListener;
-import ninjabrainbot.io.overlay.NinjabrainBotOverlayImageWriter;
-import ninjabrainbot.io.overlay.OBSOverlay;
 import ninjabrainbot.io.mcinstance.ActiveInstanceProviderFactory;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
+import ninjabrainbot.io.overlay.NinjabrainBotOverlayImageWriter;
+import ninjabrainbot.io.overlay.OBSOverlay;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.model.actions.ActionExecutor;
+import ninjabrainbot.io.updatechecker.GithubUpdateChecker;
+import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.calibrator.CalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.model.domainmodel.DomainModel;
-import ninjabrainbot.model.environmentstate.EnvironmentState;
+import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.information.McVersionWarningProvider;
@@ -54,10 +54,10 @@ public class GUI {
 	private NinjabrainBotFrame ninjabrainBotFrame;
 	private OptionsFrame optionsFrame;
 
-	private DomainModel domainModel;
+	private IDomainModel domainModel;
 	private IActionExecutor actionExecutor;
-	private EnvironmentState environmentState;
-	private DataState dataState;
+	private IEnvironmentState environmentState;
+	private IDataState dataState;
 
 	private CoordinateInputSource coordinateInputSource;
 	private IButtonInputHandler buttonInputHandler;
@@ -71,7 +71,7 @@ public class GUI {
 	public GUI(NinjabrainBotPreferences preferences) {
 		this.preferences = preferences;
 		initInputMethods();
-		initDataState();
+		initModel();
 		initDataProcessors();
 		initInputHandlers();
 		initUI();
@@ -91,13 +91,14 @@ public class GUI {
 		Profiler.stop();
 	}
 
-	private void initDataState() {
+	private void initModel() {
 		Progress.setTask("Creating calculator data", 0.07f);
 		Profiler.start("Init DataState");
-		domainModel = disposeHandler.add(new DomainModel());
-		actionExecutor = new ActionExecutor(domainModel);
-		environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
-		dataState = disposeHandler.add(new DataState(domainModel, environmentState));
+		ModelState modelState = disposeHandler.add(new ModelState(preferences));
+		domainModel = modelState.domainModel;
+		actionExecutor = modelState.actionExecutor;
+		environmentState = modelState.environmentState;
+		dataState = modelState.dataState;
 		Profiler.stop();
 	}
 

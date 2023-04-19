@@ -3,16 +3,16 @@ package ninjabrainbot.model.datastate.calculator;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.divine.DivineResult;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
-import ninjabrainbot.event.IObservable;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 
 public interface ICalculatorManager {
 
-	IObservable<ICalculatorResult> calculatorResult();
+	IDomainModelComponent<ICalculatorResult> calculatorResult();
 
-	IObservable<ChunkPrediction> topPrediction();
+	IDomainModelComponent<ChunkPrediction> topPrediction();
 
-	IObservable<BlindResult> blindResult();
+	IDomainModelComponent<BlindResult> blindResult();
 
-	IObservable<DivineResult> divineResult();
+	IDomainModelComponent<DivineResult> divineResult();
 
 }

@@ -21,6 +21,7 @@ import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
@@ -42,7 +43,7 @@ public class DataState implements IDataState, IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataState(IDomainModel domainModel, IEnvironmentState environmentState) {
-		divineContext = new DivineContext(domainModel);
+		divineContext = disposeHandler.add(new DivineContext(domainModel));
 		throwSet = new ListComponent<>(domainModel, 10);
 		playerPosition = new DataComponent<>(domainModel);
 		locked = new DataComponent<>(domainModel, false);
@@ -80,27 +81,27 @@ public class DataState implements IDataState, IDisposable {
 	}
 
 	@Override
-	public IObservable<ICalculatorResult> calculatorResult() {
+	public IDomainModelComponent<ICalculatorResult> calculatorResult() {
 		return calculatorManager.calculatorResult();
 	}
 
 	@Override
-	public IObservable<ChunkPrediction> topPrediction() {
+	public IDomainModelComponent<ChunkPrediction> topPrediction() {
 		return calculatorManager.topPrediction();
 	}
 
 	@Override
-	public IObservable<BlindResult> blindResult() {
+	public IDomainModelComponent<BlindResult> blindResult() {
 		return calculatorManager.blindResult();
 	}
 
 	@Override
-	public IObservable<DivineResult> divineResult() {
+	public IDomainModelComponent<DivineResult> divineResult() {
 		return calculatorManager.divineResult();
 	}
 
 	@Override
-	public IObservable<ResultType> resultType() {
+	public IDomainModelComponent<ResultType> resultType() {
 		return resultTypeProvider.resultType();
 	}
 

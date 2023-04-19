@@ -54,11 +54,6 @@ public final class Observable<T> implements IObservable<T>, IDisposable {
 	}
 
 	@Override
-	public void unsubscribe(Consumer<T> subscriber) {
-		observableField.unsubscribe(subscriber);
-	}
-
-	@Override
 	public void dispose() {
 		disposeHandler.dispose();
 	}

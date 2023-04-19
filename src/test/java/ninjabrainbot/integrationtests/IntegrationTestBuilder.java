@@ -7,18 +7,21 @@ import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
+import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.MultipleChoicePreferenceDataTypes;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
-import ninjabrainbot.model.actions.ActionExecutor;
-import ninjabrainbot.model.datastate.DataState;
+import ninjabrainbot.model.ModelState;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.model.domainmodel.DomainModel;
-import ninjabrainbot.model.environmentstate.EnvironmentState;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
@@ -27,6 +30,8 @@ import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.Assert;
+import ninjabrainbot.util.FakeCoordinateInputSource;
+import ninjabrainbot.util.FakeMinecraftWorldFile;
 import ninjabrainbot.util.FakeUpdateChecker;
 import ninjabrainbot.util.MockedClipboardReader;
 import ninjabrainbot.util.MockedInstanceProvider;
@@ -36,18 +41,21 @@ import ninjabrainbot.util.TestUtils;
 public class IntegrationTestBuilder {
 
 	public final NinjabrainBotPreferences preferences;
-	public final DomainModel domainModel;
+	public final IDomainModel domainModel;
 
-	public final ActionExecutor actionExecutor;
+	public final IActionExecutor actionExecutor;
 	public final IEnvironmentState environmentState;
 	public final IDataState dataState;
 
 	private CoordinateInputSource coordinateInputSource;
+	private FakeCoordinateInputSource fakeCoordinateInputSource;
 	private MockedClipboardReader clipboardReader;
 	private MockedInstanceProvider activeInstanceProvider;
 
 	private PlayerPositionInputHandler playerPositionInputHandler;
+	private PlayerPositionInputHandler fakePlayerPositionInputHandler;
 	private FossilInputHandler fossilInputHandler;
+	private FossilInputHandler fakeFossilInputHandler;
 	private HotkeyInputHandler hotkeyInputHandler;
 	private ButtonInputHandler buttonInputHandler;
 	private ActiveInstanceInputHandler activeInstanceInputHandler;
@@ -56,16 +64,22 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
-		domainModel = new DomainModel();
-		actionExecutor = new ActionExecutor(domainModel);
-		environmentState = new EnvironmentState(domainModel, preferences);
-		dataState = new DataState(domainModel, environmentState);
+		ModelState modelState = new ModelState(preferences);
+		domainModel = modelState.domainModel;
+		actionExecutor = modelState.actionExecutor;
+		environmentState = modelState.environmentState;
+		dataState = modelState.dataState;
 	}
 
 	public IntegrationTestBuilder withProSettings() {
 		preferences.sigma.set(0.005f);
 		preferences.view.set(MultipleChoicePreferenceDataTypes.MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(MultipleChoicePreferenceDataTypes.StrongholdDisplayType.CHUNK);
+		return this;
+	}
+
+	public IntegrationTestBuilder withAllAdvancementsSettings() {
+		preferences.allAdvancements.set(true);
 		return this;
 	}
 
@@ -144,9 +158,40 @@ public class IntegrationTestBuilder {
 		TestUtils.addDummyEnderEyeThrow(domainModel, dataState);
 	}
 
+	public void inputDetailedPlayerPosition(IDetailedPlayerPosition detailedPlayerPosition) {
+		if (fakePlayerPositionInputHandler == null)
+			fakePlayerPositionInputHandler = createFakePlayerPositionInputHandler();
+		fakeCoordinateInputSource.whenNewDetailedPlayerPositionInputted.notifySubscribers(detailedPlayerPosition);
+	}
+
+	public void inputFossil(Fossil fossil) {
+		if (fakeCoordinateInputSource == null)
+			fakeCoordinateInputSource = new FakeCoordinateInputSource();
+		if (fakeFossilInputHandler == null)
+			fakeFossilInputHandler = new FossilInputHandler(fakeCoordinateInputSource, dataState, actionExecutor);
+		fakeCoordinateInputSource.whenNewFossilInputted.notifySubscribers(fossil);
+	}
+
+	public void resetCalculator() {
+		actionExecutor.executeImmediately(new ResetAction(domainModel));
+	}
+
+	public void enterEnd() {
+		setActiveMinecraftWorld(new FakeMinecraftWorldFile(new MinecraftInstance("instance 1"), "world1", true));
+	}
+
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
+		if (coordinateInputSource == null)
+			coordinateInputSource = new CoordinateInputSource(clipboardReader);
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		return new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
+	}
+
+	private PlayerPositionInputHandler createFakePlayerPositionInputHandler() {
+		if (fakeCoordinateInputSource == null)
+			fakeCoordinateInputSource = new FakeCoordinateInputSource();
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+		return new PlayerPositionInputHandler(fakeCoordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 	}
 
 }

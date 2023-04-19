@@ -6,14 +6,14 @@ import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.model.actions.ActionExecutor;
 import ninjabrainbot.model.datastate.DataState;
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.blind.BlindResult;
-import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.domainmodel.DomainModel;
+import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.input.FossilInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
@@ -31,19 +31,19 @@ public class ResultTypeProviderTests {
 	NinjabrainBotPreferences preferences;
 	DomainModel domainModel;
 	ActionExecutor actionExecutor;
+	IDataState dataState;
 
 	@BeforeEach
 	void setup() {
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		domainModel = new DomainModel();
 		actionExecutor = new ActionExecutor(domainModel);
+		dataState = new DataState(domainModel, new EnvironmentState(domainModel, preferences));
+		domainModel.finishInitialization();
 	}
 
 	@Test
 	void resultTypeUpdatesCorrectly() {
-		CalculatorSettings calculatorSettings = new CalculatorSettings(preferences);
-		IDataState dataState = new DataState(domainModel, new EnvironmentState(domainModel, preferences));
-
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);

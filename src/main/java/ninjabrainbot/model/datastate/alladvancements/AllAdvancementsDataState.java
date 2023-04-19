@@ -8,6 +8,7 @@ import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.InferredComponent;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
@@ -44,12 +45,12 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	}
 
 	@Override
-	public IObservable<Boolean> allAdvancementsModeEnabled() {
+	public IDomainModelComponent<Boolean> allAdvancementsModeEnabled() {
 		return allAdvancementsModeEnabled;
 	}
 
 	@Override
-	public IObservable<StructurePosition> strongholdPosition() {
+	public IDomainModelComponent<StructurePosition> strongholdPosition() {
 		return strongholdPosition;
 	}
 

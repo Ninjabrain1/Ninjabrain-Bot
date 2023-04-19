@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ObservableField<T> implements IObservable<T> {
+public class ObservableField<T> implements IObservable<T>, IUnsubscribable<T> {
 
 	private final boolean pushDataToNewSubscribers;
 

@@ -1,6 +1,7 @@
 package ninjabrainbot.model.domainmodel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import ninjabrainbot.event.DisposeHandler;
@@ -15,7 +16,8 @@ import ninjabrainbot.util.Assert;
 public class DomainModel implements IDomainModel, IDisposable {
 
 	private final ReentrantReadWriteLock lock;
-	private final ArrayList<IDataComponent<?>> dataComponents;
+	private final List<IDataComponent<?>> dataComponents;
+	private final List<EventLocker<?>> eventLockers;
 	private final DomainModelHistory domainModelHistory;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private final ObservableProperty<IDomainModel> whenModified = new ObservableProperty<>();
@@ -27,27 +29,41 @@ public class DomainModel implements IDomainModel, IDisposable {
 	public DomainModel() {
 		lock = new ReentrantReadWriteLock();
 		dataComponents = new ArrayList<>();
+		eventLockers = new ArrayList<>();
 		domainModelHistory = new DomainModelHistory(dataComponents, 10);
+	}
+
+	public void finishInitialization() {
+		domainModelHistory.initialize();
+		isFullyInitialized = true;
 	}
 
 	@Override
 	public void registerDataComponent(IDataComponent<?> dataComponent) {
 		Assert.isFalse(isFullyInitialized, "New DataComponents cannot be registered in the DomainModel after it has been fully initialized.");
 		dataComponents.add(dataComponent);
-		dataComponent.subscribe(__ -> isModifiedDuringCurrentWriteLock = true);
+		dataComponent.subscribeInternal(__ -> isModifiedDuringCurrentWriteLock = true);
 	}
 
 	@Override
 	public void registerInferredComponent(IInferredComponent<?> inferredComponent) {
 		Assert.isFalse(isFullyInitialized, "New InferredComponents cannot be registered in the DomainModel after it has been fully initialized.");
-		inferredComponent.subscribe(__ -> isModifiedDuringCurrentWriteLock = true);
+		inferredComponent.subscribeInternal(__ -> isModifiedDuringCurrentWriteLock = true);
+	}
+
+	@Override
+	public <T> ISubscribable<T> createExternalEventFor(ISubscribable<T> subscribable) {
+		Assert.isFalse(isFullyInitialized, "New external events cannot be created after the DomainModel has been initialized.");
+		EventLocker<T> eventLocker = new EventLocker<>(subscribable);
+		eventLockers.add(eventLocker);
+		return eventLocker;
 	}
 
 	@Override
 	public void acquireWriteLock() {
+		Assert.isTrue(isFullyInitialized, "Attempted to modify DomainModel before it has been fully initialized.");
 		lock.writeLock().lock();
-		if (!isFullyInitialized)
-			finishInitialization();
+		eventLockers.forEach(EventLocker::lock);
 	}
 
 	@Override
@@ -58,11 +74,14 @@ public class DomainModel implements IDomainModel, IDisposable {
 	private void releaseWriteLock(boolean saveSnapshotOfNewState) {
 		if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
 			domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
-		lock.writeLock().unlock();
+
+		eventLockers.forEach(EventLocker::unlockAndReleaseEvents);
 
 		if (isModifiedDuringCurrentWriteLock)
 			whenModified.notifySubscribers(this);
 		isModifiedDuringCurrentWriteLock = false;
+
+		lock.writeLock().unlock();
 	}
 
 	@Override
@@ -98,6 +117,11 @@ public class DomainModel implements IDomainModel, IDisposable {
 	}
 
 	@Override
+	public boolean isFullyInitialized() {
+		return isFullyInitialized;
+	}
+
+	@Override
 	public ISubscribable<IDomainModel> whenModified() {
 		return whenModified;
 	}
@@ -121,11 +145,6 @@ public class DomainModel implements IDomainModel, IDisposable {
 			throw new IllegalModificationException("DataComponents cannot be changed without a write lock, create and execute an Action instead of trying to modify the DataComponent directly.");
 		if (!lock.isWriteLockedByCurrentThread())
 			throw new IllegalModificationException("Modification was attempted by thread " + Thread.currentThread().getName() + ", while the write lock is held by another thread.");
-	}
-
-	private void finishInitialization() {
-		domainModelHistory.initialize();
-		isFullyInitialized = true;
 	}
 
 	@Override

@@ -3,12 +3,12 @@ package ninjabrainbot.event;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class ObservableProperty<T> implements ISubscribable<T> {
+public class ObservableProperty<T> implements ISubscribable<T>, IUnsubscribable<T> {
 
 	protected final ArrayList<Consumer<T>> subscribers;
 
 	public ObservableProperty() {
-		subscribers = new ArrayList<Consumer<T>>();
+		subscribers = new ArrayList<>();
 	}
 
 	@Override
