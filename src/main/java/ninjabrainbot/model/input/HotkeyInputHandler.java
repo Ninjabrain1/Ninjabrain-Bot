@@ -1,16 +1,16 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
-import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.common.ResetAction;
-import ninjabrainbot.model.actions.endereye.ToggleAltStdOnLastThrowAction;
-import ninjabrainbot.model.actions.boat.ToggleEnteringBoatAction;
-import ninjabrainbot.model.actions.common.ToggleLockedAction;
-import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.boat.ToggleEnteringBoatAction;
+import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.actions.common.ToggleLockedAction;
+import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
+import ninjabrainbot.model.actions.endereye.ToggleAltStdOnLastThrowAction;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class HotkeyInputHandler implements IDisposable {
 

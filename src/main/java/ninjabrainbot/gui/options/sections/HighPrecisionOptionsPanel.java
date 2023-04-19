@@ -81,13 +81,9 @@ public class HighPrecisionOptionsPanel extends JPanel {
 
 	private void setPreciseAngleEnabled(boolean b) {
 		sensitivity.setEnabled(b);
-		sensitivity.descLabel.updateColors();
 		enterBoatHotkey.setEnabled(b);
-		enterBoatHotkey.descLabel.updateColors();
 		boatErrorLimit.setEnabled(b);
-		boatErrorLimit.descLabel.updateColors();
 		sigmaBoat.setEnabled(b);
-		sigmaBoat.descLabel.updateColors();
 	}
 
 }

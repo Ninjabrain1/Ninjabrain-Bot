@@ -1,5 +1,6 @@
 package ninjabrainbot.io.preferences;
 
+import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.io.preferences.enums.SizeSetting;
@@ -21,6 +22,7 @@ public class NinjabrainBotPreferences {
 	public final HotkeyPreference hotkeyMinimize;
 	public final HotkeyPreference hotkeyAltStd;
 	public final HotkeyPreference hotkeyLock;
+	public final HotkeyPreference hotkeyToggleAllAdvancementsMode;
 	public final FloatPreference sigma;
 	public final FloatPreference sigmaAlt;
 	public final FloatPreference sigmaManual;
@@ -58,6 +60,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
 	public final MultipleChoicePreference<MainViewType> view;
 	public final MultipleChoicePreference<McVersion> mcVersion;
+	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -75,6 +78,7 @@ public class NinjabrainBotPreferences {
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
 		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
+		hotkeyToggleAllAdvancementsMode = new HotkeyPreference("hotkey_toggle_aa_mode", source);
 		// Float
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
@@ -112,11 +116,12 @@ public class NinjabrainBotPreferences {
 		customThemesNames = new StringPreference("custom_themes_names", "", source);
 		language = new StringPreference("language_v2", "", source);
 		// Multiple choice
-		size = new MultipleChoicePreference<SizeSetting>("size", SizeSetting.SMALL, new int[] { 0, 1, 2 }, new SizeSetting[] { SizeSetting.SMALL, SizeSetting.MEDIUM, SizeSetting.LARGE }, source);
-		strongholdDisplayType = new MultipleChoicePreference<StrongholdDisplayType>("stronghold_display_type", StrongholdDisplayType.FOURFOUR, new int[] { 0, 1, 2 },
+		size = new MultipleChoicePreference<>("size", SizeSetting.SMALL, new int[] { 0, 1, 2 }, new SizeSetting[] { SizeSetting.SMALL, SizeSetting.MEDIUM, SizeSetting.LARGE }, source);
+		strongholdDisplayType = new MultipleChoicePreference<>("stronghold_display_type", StrongholdDisplayType.FOURFOUR, new int[] { 0, 1, 2 },
 				new StrongholdDisplayType[] { StrongholdDisplayType.FOURFOUR, StrongholdDisplayType.EIGHTEIGHT, StrongholdDisplayType.CHUNK }, source);
-		view = new MultipleChoicePreference<MainViewType>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
-		mcVersion = new MultipleChoicePreference<McVersion>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
+		view = new MultipleChoicePreference<>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
+		mcVersion = new MultipleChoicePreference<>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
+		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
 	}
 
 }

@@ -5,6 +5,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
@@ -16,17 +17,21 @@ import ninjabrainbot.model.environmentstate.IEnvironmentState;
  */
 public class ActiveInstanceInputHandler implements IDisposable {
 
+	private final IActiveInstanceProvider activeInstanceProvider;
 	private final NinjabrainBotPreferences preferences;
 	private final IDomainModel domainModel;
 	private final IDataState dataState;
 	private final IEnvironmentState environmentState;
 	private final IActionExecutor actionExecutor;
 
+	private boolean userHasToggledAllAdvancementModeThroughHotkey = false;
+
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	private IMinecraftWorldFile lastActiveMinecraftWorldFile;
 
 	public ActiveInstanceInputHandler(IActiveInstanceProvider activeInstanceProvider, IDomainModel domainModel, IDataState dataState, IEnvironmentState environmentState, IActionExecutor actionExecutor, NinjabrainBotPreferences preferences) {
+		this.activeInstanceProvider = activeInstanceProvider;
 		this.preferences = preferences;
 		this.domainModel = domainModel;
 		this.dataState = dataState;
@@ -35,7 +40,9 @@ public class ActiveInstanceInputHandler implements IDisposable {
 		lastActiveMinecraftWorldFile = activeInstanceProvider.activeMinecraftWorld().get();
 
 		disposeHandler.add(activeInstanceProvider.activeMinecraftWorld().subscribe(this::onActiveMinecraftWorldChanged));
-		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::onActiveMinecraftWorldModified));
+		disposeHandler.add(activeInstanceProvider.whenActiveMinecraftWorldModified().subscribe(this::updateHasEnteredEndState));
+		disposeHandler.add(preferences.allAdvancementsToggleType.whenModified().subscribe(this::updateHasEnteredEndState));
+		disposeHandler.add(preferences.hotkeyToggleAllAdvancementsMode.whenTriggered().subscribe(this::onToggleAllAdvancementsModeHotkeyTriggered));
 	}
 
 	private void onActiveMinecraftWorldChanged(IMinecraftWorldFile newWorldFile) {
@@ -44,9 +51,22 @@ public class ActiveInstanceInputHandler implements IDisposable {
 		lastActiveMinecraftWorldFile = newWorldFile;
 	}
 
-	private void onActiveMinecraftWorldModified(IMinecraftWorldFile modifiedWorldFile) {
-		if (modifiedWorldFile != null)
-			environmentState.setHasEnteredEnd(modifiedWorldFile.hasEnteredEnd());
+	private void onToggleAllAdvancementsModeHotkeyTriggered() {
+		if (preferences.allAdvancementsToggleType.get() == AllAdvancementsToggleType.Hotkey) {
+			userHasToggledAllAdvancementModeThroughHotkey = !userHasToggledAllAdvancementModeThroughHotkey;
+			updateHasEnteredEndState();
+		}
+	}
+
+	private void updateHasEnteredEndState() {
+		if (preferences.allAdvancementsToggleType.get() == AllAdvancementsToggleType.Hotkey) {
+			environmentState.setHasEnteredEnd(userHasToggledAllAdvancementModeThroughHotkey);
+		} else if (preferences.allAdvancementsToggleType.get() == AllAdvancementsToggleType.Automatic) {
+			userHasToggledAllAdvancementModeThroughHotkey = false;
+			IMinecraftWorldFile worldFile = activeInstanceProvider.activeMinecraftWorld().get();
+			environmentState.setHasEnteredEnd(worldFile != null && worldFile.hasEnteredEnd());
+		}
+
 	}
 
 	@Override

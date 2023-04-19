@@ -88,9 +88,7 @@ public class AdvancedOptionsPanel extends JPanel {
 
 	private void setAltSigmaEnabled(boolean b) {
 		sigmaAlt.setEnabled(b);
-		sigmaAlt.descLabel.updateColors();
 		sigmaAltHotkey.setEnabled(b);
-		sigmaAltHotkey.descLabel.updateColors();
 	}
 
 }

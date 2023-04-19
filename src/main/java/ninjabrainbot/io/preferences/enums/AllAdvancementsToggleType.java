@@ -3,13 +3,13 @@ package ninjabrainbot.io.preferences.enums;
 import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 import ninjabrainbot.util.I18n;
 
-public enum StrongholdDisplayType implements IMultipleChoicePreferenceDataType {
+public enum AllAdvancementsToggleType implements IMultipleChoicePreferenceDataType {
 
-	FOURFOUR("(4, 4)"), EIGHTEIGHT("(8, 8)"), CHUNK(I18n.get("chunk"));
+	Automatic(I18n.get("settings.all_advancements.automatic")), Hotkey(I18n.get("settings.all_advancements.hotkey"));
 
 	final String name;
 
-	StrongholdDisplayType(String string) {
+	AllAdvancementsToggleType(String string) {
 		name = string;
 	}
 
@@ -17,4 +17,5 @@ public enum StrongholdDisplayType implements IMultipleChoicePreferenceDataType {
 	public String choiceName() {
 		return name;
 	}
+
 }

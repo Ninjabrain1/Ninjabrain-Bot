@@ -106,6 +106,7 @@ public class HotkeyPanel extends ThemedPanel {
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		button.setEnabled(enabled);
+		descLabel.updateColors();
 	}
 
 }

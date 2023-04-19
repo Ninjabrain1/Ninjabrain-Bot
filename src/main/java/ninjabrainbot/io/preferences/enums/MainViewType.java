@@ -4,6 +4,7 @@ import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 import ninjabrainbot.util.I18n;
 
 public enum MainViewType implements IMultipleChoicePreferenceDataType {
+
 	BASIC(I18n.get("basic")), DETAILED(I18n.get("detailed"));
 
 	final String name;

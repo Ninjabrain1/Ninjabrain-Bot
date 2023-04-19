@@ -72,6 +72,7 @@ public class FloatPreferencePanel extends ThemedPanel {
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		textfield.setEnabled(enabled);
+		descLabel.updateColors();
 	}
 
 	public void setWidth(int width) {

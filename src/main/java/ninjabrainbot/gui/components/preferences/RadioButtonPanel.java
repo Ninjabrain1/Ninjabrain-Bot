@@ -15,14 +15,22 @@ import ninjabrainbot.io.preferences.MultipleChoicePreference;
 
 public class RadioButtonPanel extends ThemedPanel {
 
-	final JLabel descLabel;
+	final ThemedLabel descLabel;
 	final RadioButtonGroup<?> radioButtonGroup;
 
 	public <T extends IMultipleChoicePreferenceDataType> RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<T> preference) {
 		this(styleManager, description, preference.getChoices(), preference.get(), preference::set);
 	}
 
+	public <T extends IMultipleChoicePreferenceDataType> RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<T> preference, boolean verticalRadioButtons) {
+		this(styleManager, description, preference.getChoices(), preference.get(), preference::set, verticalRadioButtons);
+	}
+
 	public <T extends IMultipleChoiceOption> RadioButtonPanel(StyleManager styleManager, String description, T[] choices, T selectedValue, Consumer<T> onChanged) {
+		this(styleManager, description, choices, selectedValue, onChanged, choices.length >= 4);
+	}
+
+	public <T extends IMultipleChoiceOption> RadioButtonPanel(StyleManager styleManager, String description, T[] choices, T selectedValue, Consumer<T> onChanged, boolean verticalRadioButtons) {
 		super(styleManager);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		descLabel = new ThemedLabel(styleManager, description) {
@@ -31,7 +39,7 @@ public class RadioButtonPanel extends ThemedPanel {
 				return p.TEXT_SIZE_SMALL;
 			}
 		};
-		radioButtonGroup = new RadioButtonGroup<>(styleManager, choices, selectedValue, choices.length >= 4) {
+		radioButtonGroup = new RadioButtonGroup<>(styleManager, choices, selectedValue, verticalRadioButtons) {
 			@Override
 			public void onChanged(T newValue) {
 				onChanged.accept(newValue);
@@ -45,4 +53,10 @@ public class RadioButtonPanel extends ThemedPanel {
 		setOpaque(true);
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		descLabel.updateColors();
+		radioButtonGroup.setEnabled(enabled);
+	}
 }

@@ -1,6 +1,7 @@
 package ninjabrainbot.gui.components.preferences;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -44,6 +45,13 @@ class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		for (Component component : getComponents()){
+			component.setEnabled(enabled);
+		}
+	}
 }
 
 class ThemedRadioButton extends JRadioButton implements ThemedComponent {
