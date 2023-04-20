@@ -122,7 +122,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 	public void updateColors() {
 		Color bg = getBackgroundColor();
 		Color hg = getHoverColor();
-		setColors(bg, hg, fgHoverColor.interpolate(getBackgroundColor(), dimTextWhenNotHovered ? 0.4f : 0), getForegroundColor());
+		setColors(bg, hg, fgHoverColor.interpolate(getBackgroundColor(), dimTextWhenNotHovered ? 0.3f : 0), getForegroundColor());
 		setForeground(fgCol);
 		if (img != null)
 			setIcon(createIcon(img, iconColor.color()));
