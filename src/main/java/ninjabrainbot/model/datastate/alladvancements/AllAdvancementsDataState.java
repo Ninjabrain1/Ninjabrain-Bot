@@ -2,7 +2,6 @@ package ninjabrainbot.model.datastate.alladvancements;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
@@ -14,7 +13,6 @@ import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDisposable {
 
-	private final IObservable<ChunkPrediction> currentStrongholdPrediction;
 	private final IEnvironmentState environmentState;
 
 	private final InferredComponent<Boolean> allAdvancementsModeEnabled;
@@ -26,7 +24,6 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public AllAdvancementsDataState(IDomainModelComponent<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel, IEnvironmentState environmentState) {
-		this.currentStrongholdPrediction = currentStrongholdPrediction;
 		this.environmentState = environmentState;
 		allAdvancementsModeEnabled = new InferredComponent<>(domainModel, false);
 		strongholdPosition = new InferredComponent<>(domainModel);

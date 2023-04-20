@@ -62,6 +62,11 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		return savesReader.whenActiveMinecraftWorldModified();
 	}
 
+	@Override
+	public boolean supportsReadingActiveMinecraftWorld() {
+		return true;
+	}
+
 	private void pollForegroundWindow() {
 		HWND foregroundWindowHandle = User32.INSTANCE.GetForegroundWindow();
 		if (foregroundWindowHandle == null)

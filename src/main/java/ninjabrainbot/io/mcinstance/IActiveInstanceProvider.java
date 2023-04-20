@@ -11,4 +11,6 @@ public interface IActiveInstanceProvider {
 
 	ISubscribable<IMinecraftWorldFile> whenActiveMinecraftWorldModified();
 
+	boolean supportsReadingActiveMinecraftWorld();
+
 }

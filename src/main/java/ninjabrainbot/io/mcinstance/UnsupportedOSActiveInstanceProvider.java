@@ -27,4 +27,9 @@ public class UnsupportedOSActiveInstanceProvider implements IActiveInstanceProvi
 		return currentWorldFile;
 	}
 
+	@Override
+	public boolean supportsReadingActiveMinecraftWorld() {
+		return false;
+	}
+
 }

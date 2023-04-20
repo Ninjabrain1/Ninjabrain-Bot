@@ -66,7 +66,6 @@ public class ActiveInstanceInputHandler implements IDisposable {
 			IMinecraftWorldFile worldFile = activeInstanceProvider.activeMinecraftWorld().get();
 			environmentState.setHasEnteredEnd(worldFile != null && worldFile.hasEnteredEnd());
 		}
-
 	}
 
 	@Override

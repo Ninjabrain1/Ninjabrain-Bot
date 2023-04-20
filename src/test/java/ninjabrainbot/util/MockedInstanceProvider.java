@@ -30,4 +30,9 @@ public class MockedInstanceProvider implements IActiveInstanceProvider {
 		return currentWorldFile;
 	}
 
+	@Override
+	public boolean supportsReadingActiveMinecraftWorld() {
+		return true;
+	}
+
 }
