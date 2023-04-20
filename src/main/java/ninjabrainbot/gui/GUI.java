@@ -167,7 +167,7 @@ public class GUI {
 
 	private OptionsFrame getOrCreateOptionsFrame() {
 		if (optionsFrame == null) {
-			optionsFrame = new OptionsFrame(styleManager, preferences, new CalibratorFactory(environmentState.calculatorSettings(), coordinateInputSource, preferences), activeInstanceProvider);
+			optionsFrame = new OptionsFrame(styleManager, preferences, new CalibratorFactory(environmentState.calculatorSettings(), coordinateInputSource, preferences), activeInstanceProvider, actionExecutor);
 			styleManager.init();
 		}
 		return optionsFrame;

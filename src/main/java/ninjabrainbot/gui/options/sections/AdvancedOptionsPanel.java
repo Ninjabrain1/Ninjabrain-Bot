@@ -20,6 +20,7 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.util.I18n;
 
@@ -28,15 +29,17 @@ public class AdvancedOptionsPanel extends JPanel {
 	private final StyleManager styleManager;
 	private final NinjabrainBotPreferences preferences;
 	private final ICalibratorFactory calibratorFactory;
+	private final IActionExecutor actionExecutor;
 	private final JFrame owner;
 
 	private final FloatPreferencePanel sigmaAlt;
 	private HotkeyPanel sigmaAltHotkey;
 
-	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, JFrame owner, DisposeHandler disposeHandler) {
+	public AdvancedOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner, DisposeHandler disposeHandler) {
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		this.calibratorFactory = calibratorFactory;
+		this.actionExecutor = actionExecutor;
 		this.owner = owner;
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
@@ -80,7 +83,7 @@ public class AdvancedOptionsPanel extends JPanel {
 	}
 
 	private void startCalibrating() {
-		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, calibratorFactory, owner);
+		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, calibratorFactory, actionExecutor, owner);
 		d.setLocation(owner.getX() - 140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));

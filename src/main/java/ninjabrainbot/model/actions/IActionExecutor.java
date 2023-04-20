@@ -4,4 +4,8 @@ public interface IActionExecutor {
 
 	void executeImmediately(IAction... actions);
 
+	void disable();
+
+	void enable();
+
 }

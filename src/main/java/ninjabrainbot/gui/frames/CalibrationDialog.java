@@ -28,10 +28,10 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.calibrator.Calibrator;
 import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
 import ninjabrainbot.util.I18n;
 
 public class CalibrationDialog extends ThemedDialog {
@@ -47,13 +47,16 @@ public class CalibrationDialog extends ThemedDialog {
 	final JPanel rightPanel;
 	final JLabel std;
 	static final int errorAreaWidth = 100;
+	private final IActionExecutor actionExecutor;
 
-	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, JFrame owner) {
+	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner) {
 		super(styleManager, preferences, owner, I18n.get("calibrator.title"));
+		this.actionExecutor = actionExecutor;
 		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		this.owner = owner;
+		actionExecutor.disable();
 		calibrator = disposeHandler.add(calibratorFactory.createCalibrator());
 
 		JPanel panel2 = new JPanel();
@@ -180,6 +183,11 @@ public class CalibrationDialog extends ThemedDialog {
 		dispose();
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		actionExecutor.enable();
+	}
 }
 
 class InstructionLabel extends ThemedLabel {
