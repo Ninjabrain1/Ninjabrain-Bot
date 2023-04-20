@@ -25,7 +25,7 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public AllAdvancementsDataState(IObservable<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel, IEnvironmentState environmentState) {
+	public AllAdvancementsDataState(IDomainModelComponent<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel, IEnvironmentState environmentState) {
 		this.currentStrongholdPrediction = currentStrongholdPrediction;
 		this.environmentState = environmentState;
 		allAdvancementsModeEnabled = new InferredComponent<>(domainModel, false);
@@ -35,13 +35,11 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		monumentPosition = new DataComponent<>(domainModel);
 		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribe(this::updateAllAdvancementsMode));
 		disposeHandler.add(environmentState.hasEnteredEnd().subscribe(this::updateAllAdvancementsMode));
+		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdPosition::set));
 	}
 
 	private void updateAllAdvancementsMode() {
-		boolean enabled = environmentState.allAdvancementsModeEnabled().get() && environmentState.hasEnteredEnd().get();
-		allAdvancementsModeEnabled.set(enabled);
-		if (enabled)
-			strongholdPosition.set(currentStrongholdPrediction.get());
+		allAdvancementsModeEnabled.set(environmentState.allAdvancementsModeEnabled().get() && environmentState.hasEnteredEnd().get());
 	}
 
 	@Override
