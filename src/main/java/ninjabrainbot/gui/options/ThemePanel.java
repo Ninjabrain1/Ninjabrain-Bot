@@ -28,7 +28,7 @@ public class ThemePanel extends ThemedPanel {
 		nameLabel.setForegroundColor(theme.TEXT_COLOR_TITLE);
 		nameLabel.setHoverColor(theme.COLOR_STRONGEST);
 		nameLabel.setBackgroundColor(theme.COLOR_STRONGEST);
-		nameLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		nameLabel.setBorder(new EmptyBorder(5, 8, 5, 5));
 
 		ThemedPanel colorPreviewPanels = new ThemedPanel(styleManager);
 		colorPreviewPanels.setLayout(new GridBagLayout());
@@ -65,13 +65,8 @@ public class ThemePanel extends ThemedPanel {
 class LeftAlignedButton extends FlatButton {
 
 	LeftAlignedButton(StyleManager styleManager, String name) {
-		super(styleManager, "  " + name);
-		label.setHorizontalAlignment(SwingConstants.LEFT);
-	}
-
-	@Override
-	public void setText(String text) {
-		super.setText("  " + text);
+		super(styleManager, name);
+		setHorizontalAlignment(SwingConstants.LEFT);
 	}
 
 }

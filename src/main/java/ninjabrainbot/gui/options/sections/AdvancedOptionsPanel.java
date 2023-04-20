@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
+import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.components.preferences.HotkeyPanel;
@@ -51,7 +52,6 @@ public class AdvancedOptionsPanel extends JPanel {
 		add(column1);
 		add(column2);
 
-		// Left advanced column
 		FloatPreferencePanel sigmaPanel = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation"), preferences.sigma);
 		column1.add(sigmaPanel);
 		JButton calibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation")) {
@@ -73,6 +73,7 @@ public class AdvancedOptionsPanel extends JPanel {
 			sigmaAltHotkey.setEnabled(preferences.useAltStd.get());
 			column1.add(sigmaAltHotkey);
 		}
+
 		column2.add(new FloatPreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), preferences.crosshairCorrection));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), preferences.showAngleErrors));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));

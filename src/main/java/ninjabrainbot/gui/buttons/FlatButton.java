@@ -2,16 +2,15 @@ package ninjabrainbot.gui.buttons;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.components.ThemedComponent;
-import ninjabrainbot.gui.components.labels.ThemedIcon;
-import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
@@ -21,70 +20,76 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
  */
 public class FlatButton extends JButton implements ThemedComponent {
 
-	protected final ThemedLabel label; // Graphical element
-	protected Color bgCol, hoverCol;
+	private final boolean dimTextWhenNotHovered;
+	private final ImageIcon img;
+	protected Color bgCol, hoverCol, fgCol, fgHoverCol;
 
 	private WrappedColor bgColor;
-	private WrappedColor fgColor;
+	private WrappedColor fgHoverColor;
 	private WrappedColor hoverColor;
+	private final WrappedColor iconColor;
 
 	public FlatButton(StyleManager styleManager, ImageIcon img) {
 		super();
+		this.img = img;
+		dimTextWhenNotHovered = false;
 		setBorderPainted(false);
 		setFocusPainted(false);
 		setContentAreaFilled(false);
 		setBorder(null);
 		setFocusable(false);
+		setOpaque(true);
 
 		bgColor = styleManager.currentTheme.COLOR_HEADER;
-		fgColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
+		fgHoverColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
+		iconColor = styleManager.currentTheme.TEXT_COLOR_TITLE;
 
-		label = new ThemedIcon(styleManager, img);
-		label.setOpaque(true);
-		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.add(label);
-		this.setLayout(null);
-		// Change color on hover
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
 		addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				label.setBackground(isEnabled() ? hoverCol : bgCol);
+				setBackground(isEnabled() ? hoverCol : bgCol);
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				label.setBackground(bgCol);
+				setBackground(bgCol);
 			}
 		});
 		styleManager.registerThemedComponent(this);
 	}
 
 	public FlatButton(StyleManager styleManager, String text) {
-		super();
+		this(styleManager, text, false);
+	}
+
+	public FlatButton(StyleManager styleManager, String text, boolean dimTextWhenNotHovered) {
+		super(text);
+		this.dimTextWhenNotHovered = dimTextWhenNotHovered;
+		this.img = null;
 		setBorderPainted(false);
 		setFocusPainted(false);
 		setContentAreaFilled(false);
-		setBorder(null);
+		setBorder(new EmptyBorder(4, 8, 4, 8));
 		setFocusable(false);
+		setOpaque(true);
 
 		bgColor = styleManager.currentTheme.COLOR_HEADER;
-		fgColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
+		fgHoverColor = styleManager.currentTheme.TEXT_COLOR_HEADER;
 		hoverColor = styleManager.currentTheme.COLOR_SLIGHTLY_STRONG;
+		iconColor = styleManager.currentTheme.TEXT_COLOR_TITLE;
 
-		label = new ThemedLabel(styleManager, text);
-		label.setOpaque(true);
-		label.setForeground(Color.WHITE);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.add(label);
-		this.setLayout(null);
+		setForeground(Color.WHITE);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
 		// Change color on hover
 		addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				label.setBackground(isEnabled() ? hoverCol : bgCol);
+				setBackground(isEnabled() ? hoverCol : bgCol);
+				setForeground(isEnabled() ? fgHoverCol : fgCol);
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				label.setBackground(bgCol);
+				setBackground(bgCol);
+				setForeground(fgCol);
 			}
 		});
 		styleManager.registerThemedComponent(this);
@@ -93,39 +98,19 @@ public class FlatButton extends JButton implements ThemedComponent {
 	@Override
 	public void setFont(Font font) {
 		super.setFont(font);
-		if (label != null) {
-			label.setFont(font);
-		}
 	}
 
-	@Override
-	public void setText(String text) {
-		label.setText(text);
-	}
-
-	public void setColors(final Color backgroundColor, final Color hoverColor) {
-		label.setBackground(backgroundColor);
+	private void setColors(final Color backgroundColor, final Color hoverColor, final Color foregroundColor, final Color foregroundHoverColor) {
+		setBackground(backgroundColor);
 		this.bgCol = backgroundColor;
 		this.hoverCol = hoverColor;
+		this.fgCol = foregroundColor;
+		this.fgHoverCol = foregroundHoverColor;
 	}
 
 	public void setBackgroundColor(final Color backgroundColor) {
-		label.setBackground(backgroundColor);
+		setBackground(backgroundColor);
 		this.bgCol = backgroundColor;
-	}
-
-	@Override
-	public Dimension getPreferredSize() {
-		Dimension dim = label.getPreferredSize();
-		dim.height += 8;
-		dim.width += 16;
-		return dim;
-	}
-
-	@Override
-	public void setBounds(int x, int y, int width, int height) {
-		label.setBounds(0, 0, width, height);
-		super.setBounds(x, y, width, height);
 	}
 
 	@Override
@@ -137,8 +122,10 @@ public class FlatButton extends JButton implements ThemedComponent {
 	public void updateColors() {
 		Color bg = getBackgroundColor();
 		Color hg = getHoverColor();
-		setColors(bg, hg);
-		label.setForeground(getForegroundColor());
+		setColors(bg, hg, fgHoverColor.interpolate(getBackgroundColor(), dimTextWhenNotHovered ? 0.4f : 0), getForegroundColor());
+		setForeground(fgCol);
+		if (img != null)
+			setIcon(createIcon(img, iconColor.color()));
 	}
 
 	public int getTextSize(SizePreference p) {
@@ -154,7 +141,7 @@ public class FlatButton extends JButton implements ThemedComponent {
 	}
 
 	public void setForegroundColor(WrappedColor color) {
-		fgColor = color;
+		fgHoverColor = color;
 	}
 
 	protected Color getBackgroundColor() {
@@ -166,7 +153,25 @@ public class FlatButton extends JButton implements ThemedComponent {
 	}
 
 	protected Color getForegroundColor() {
-		return fgColor.color();
+		return fgHoverColor.color();
+	}
+
+	private ImageIcon createIcon(ImageIcon img, Color c) {
+		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TRANSLUCENT);
+		Graphics graphics = bi.createGraphics();
+		img.paintIcon(null, graphics, 0, 0);
+		for (int i = 0; i < bi.getWidth(); i++) {
+			for (int j = 0; j < bi.getHeight(); j++) {
+				int argb = bi.getRGB(i, j);
+				int a = c.getAlpha() * (argb >> 24);
+				int r = c.getRed() * ((argb >> 16) & 0b11111111);
+				int g = c.getGreen() * ((argb >> 8) & 0b11111111);
+				int b = c.getBlue() * (argb & 0b11111111);
+				bi.setRGB(i, j, (a / 255 << 24) | (r / 255 << 16) | (g / 255 << 8) | (b / 255));
+			}
+		}
+		graphics.dispose();
+		return new ImageIcon(bi);
 	}
 
 }

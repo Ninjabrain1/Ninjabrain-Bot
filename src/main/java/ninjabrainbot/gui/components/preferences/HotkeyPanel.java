@@ -33,7 +33,7 @@ public class HotkeyPanel extends ThemedPanel {
 		super(styleManager);
 		this.preference = preference;
 		setLayout(new GridLayout(1, 2, 0, 0));
-		descLabel = new ThemedLabel(styleManager, description) {
+		descLabel = new ThemedLabel(styleManager, "<html>" + description + "</html>") {
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;

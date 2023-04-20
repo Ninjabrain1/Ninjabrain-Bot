@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.gui.buttons.FlatButton;
-import ninjabrainbot.gui.components.panels.ThemedOpaquePanel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.gui.style.theme.Theme;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 
 public class ThemedTabbedPane extends ThemedPanel {
@@ -26,11 +25,10 @@ public class ThemedTabbedPane extends ThemedPanel {
 	public ThemedTabbedPane(StyleManager styleManager) {
 		super(styleManager);
 		this.styleManager = styleManager;
-		tabs = new ArrayList<TabButton>();
+		tabs = new ArrayList<>();
 		setLayout(null);
-		tabPanel = new ThemedOpaquePanel(styleManager);
+		tabPanel = new StretchPanel(styleManager, true);
 		tabPanel.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
-		tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.X_AXIS));
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		tabPanel.setOpaque(true);
@@ -97,7 +95,7 @@ class TabButton extends FlatButton {
 		super(styleManager, title);
 		this.parent = parent;
 		this.component = component;
-		label.setCursor(null);
+		setBorder(new EmptyBorder(5, 1, 5, 1));
 		addActionListener(p -> onClicked());
 		setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);

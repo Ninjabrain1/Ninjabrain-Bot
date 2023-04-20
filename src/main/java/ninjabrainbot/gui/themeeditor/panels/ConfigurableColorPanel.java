@@ -57,8 +57,8 @@ public class ConfigurableColorPanel extends ThemedPanel {
 class LeftAlignedButton extends FlatButton {
 
 	LeftAlignedButton(StyleManager styleManager, String name) {
-		super(styleManager, "  " + name);
-		label.setHorizontalAlignment(SwingConstants.LEFT);
+		super(styleManager, name);
+		setHorizontalAlignment(SwingConstants.LEFT);
 	}
 
 }

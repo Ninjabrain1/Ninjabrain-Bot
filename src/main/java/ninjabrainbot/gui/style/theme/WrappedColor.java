@@ -42,4 +42,11 @@ public class WrappedColor {
 		return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
 	}
 
+	public Color interpolate(Color other, float t) {
+		int r = (int) (color().getRed() * (1f - t) + other.getRed() * t);
+		int g = (int) (color().getGreen() * (1f - t) + other.getGreen() * t);
+		int b = (int) (color().getBlue() * (1f - t) + other.getBlue() * t);
+		return new Color(r, g, b);
+	}
+
 }

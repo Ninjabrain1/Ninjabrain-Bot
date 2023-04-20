@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.gui.components.layout.StretchPanel;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
@@ -17,14 +18,14 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.util.I18n;
 
-public class MainButtonPanel extends ThemedPanel {
+public class MainButtonPanel extends StretchPanel {
 
 	private final WrappedColor borderCol;
 
 	public MainButtonPanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
-		super(styleManager);
+		super(styleManager, true);
 		setOpaque(true);
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setAlignmentX(0);
 		ThemedLabel throwsLabel = new ThemedLabel(styleManager, I18n.get("ender_eye_throws"), true);
 		throwsLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_HEADER);
@@ -66,19 +67,19 @@ public class MainButtonPanel extends ThemedPanel {
 	}
 
 	private FlatButton getResetButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
-		FlatButton button = new FlatButton(styleManager, I18n.get("reset"));
+		FlatButton button = new FlatButton(styleManager, I18n.get("reset"), true);
 		button.addActionListener(p -> buttonInputHandler.onResetButtonPressed());
 		return button;
 	}
 
 	private FlatButton getUndoButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
-		FlatButton button = new FlatButton(styleManager, I18n.get("undo"));
+		FlatButton button = new FlatButton(styleManager, I18n.get("undo"), true);
 		button.addActionListener(p -> buttonInputHandler.onUndoButtonPressed());
 		return button;
 	}
 
 	private FlatButton getRedoButton(StyleManager styleManager, IButtonInputHandler buttonInputHandler) {
-		FlatButton button = new FlatButton(styleManager, I18n.get("redo"));
+		FlatButton button = new FlatButton(styleManager, I18n.get("redo"), true);
 		button.addActionListener(p -> buttonInputHandler.onRedoButtonPressed());
 		return button;
 	}

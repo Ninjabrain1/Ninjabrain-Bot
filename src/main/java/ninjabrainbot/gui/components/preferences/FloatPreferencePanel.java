@@ -29,9 +29,8 @@ public class FloatPreferencePanel extends ThemedPanel {
 	public FloatPreferencePanel(StyleManager styleManager, String description, FloatPreference preference) {
 		super(styleManager);
 		this.preference = preference;
-//		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		setLayout(new BorderLayout());
-		descLabel = new ThemedLabel(styleManager, description) {
+		descLabel = new ThemedLabel(styleManager, "<html>" + description + "</html>") {
 			@Override
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
@@ -56,8 +55,7 @@ public class FloatPreferencePanel extends ThemedPanel {
 		Dimension size = textfield.getPreferredSize();
 		size.width = 80;
 		textfield.setPreferredSize(size);
-		add(descLabel, BorderLayout.WEST);
-		add(Box.createGlue(), BorderLayout.CENTER);
+		add(descLabel, BorderLayout.CENTER);
 		add(textfield, BorderLayout.EAST);
 		setOpaque(false);
 
