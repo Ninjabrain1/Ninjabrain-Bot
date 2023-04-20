@@ -30,8 +30,8 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		spawnPosition = new DataComponent<>(domainModel);
 		outpostPosition = new DataComponent<>(domainModel);
 		monumentPosition = new DataComponent<>(domainModel);
-		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribe(this::updateAllAdvancementsMode));
-		disposeHandler.add(environmentState.hasEnteredEnd().subscribe(this::updateAllAdvancementsMode));
+		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribeInternal(this::updateAllAdvancementsMode));
+		disposeHandler.add(environmentState.hasEnteredEnd().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdPosition::set));
 	}
 

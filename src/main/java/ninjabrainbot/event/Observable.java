@@ -2,14 +2,12 @@ package ninjabrainbot.event;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 public final class Observable<T> implements IObservable<T>, IDisposable {
 
 	private final Supplier<T> supplier;
 	private final ObservableField<T> observableField;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
-	private Runnable onNext = this::onNext;
 
 	private Observable(Supplier<T> supplier) {
 		this.supplier = supplier;
@@ -22,20 +20,15 @@ public final class Observable<T> implements IObservable<T>, IDisposable {
 
 	public Observable<T> dependsOn(ISubscribable<?>... dependencies) {
 		for (ISubscribable<?> dependency : dependencies) {
-			disposeHandler.add(dependency.subscribe(() -> onNext.run()));
+			disposeHandler.add(dependency.subscribe(this::onNext));
 		}
 		return this;
 	}
 
 	public Observable<T> dependsOn(IModifiable<?>... dependencies) {
 		for (IModifiable<?> dependency : dependencies) {
-			disposeHandler.add(dependency.whenModified().subscribe(() -> onNext.run()));
+			disposeHandler.add(dependency.whenModified().subscribe(this::onNext));
 		}
-		return this;
-	}
-
-	public Observable<T> whenPushingEventsDo(UnaryOperator<Runnable> onNextOperator) {
-		onNext = onNextOperator.apply(onNext);
 		return this;
 	}
 

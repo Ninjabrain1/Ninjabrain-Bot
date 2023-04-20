@@ -1,7 +1,7 @@
 package ninjabrainbot.model.environmentstate;
 
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.calculator.ICalculator;
+import ninjabrainbot.model.domainmodel.IEnvironmentComponent;
 
 /**
  * The state of external variables affecting the DataState. It is distinct from the DataState
@@ -10,15 +10,15 @@ import ninjabrainbot.model.datastate.calculator.ICalculator;
  */
 public interface IEnvironmentState {
 
-	IObservable<ICalculator> calculator();
+	IEnvironmentComponent<ICalculator> calculator();
 
-	IObservable<CalculatorSettings> calculatorSettings();
+	IEnvironmentComponent<CalculatorSettings> calculatorSettings();
 
-	IObservable<StandardDeviationSettings> standardDeviationSettings();
+	IEnvironmentComponent<StandardDeviationSettings> standardDeviationSettings();
 
-	IObservable<Boolean> allAdvancementsModeEnabled();
+	IEnvironmentComponent<Boolean> allAdvancementsModeEnabled();
 
-	IObservable<Boolean> hasEnteredEnd();
+	IEnvironmentComponent<Boolean> hasEnteredEnd();
 
 	void setHasEnteredEnd(boolean hasEnteredEnd);
 

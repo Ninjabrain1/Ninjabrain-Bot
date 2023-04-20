@@ -45,7 +45,7 @@ public class CalculatorManager implements ICalculatorManager, IDisposable {
 		blindResult = new InferredComponent<>(domainModel);
 		divineResult = new InferredComponent<>(domainModel);
 
-		disposeHandler.add(environmentState.calculator().subscribe(this::setCalculator));
+		disposeHandler.add(environmentState.calculator().subscribeInternal(this::setCalculator));
 		disposeHandler.add(throwSet.subscribeInternal(this::onThrowSetModified));
 		disposeHandler.add(playerPosition.subscribeInternal(this::onPlayerPositionChanged));
 		disposeHandler.add(divineContext.fossil().subscribeInternal(this::onFossilChanged));
