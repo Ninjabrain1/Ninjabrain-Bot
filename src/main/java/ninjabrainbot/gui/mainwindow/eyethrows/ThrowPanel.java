@@ -78,6 +78,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
 		removeButton.setVisible(false);
+		removeButton.setBorder(null);
 		removeButton.addActionListener(p -> buttonInputHandler.onRemoveThrowButtonPressed(this.t));
 		add(removeButton);
 		add(x);

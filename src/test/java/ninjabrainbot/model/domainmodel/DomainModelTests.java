@@ -78,7 +78,7 @@ public class DomainModelTests {
 
 	@Test
 	public void maxNumberOfUndoSteps() {
-		int maxNumberOfUndoSnapshots = 10;
+		int maxNumberOfUndoSnapshots = 100;
 
 		DomainModel domainModel = new DomainModel();
 		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);

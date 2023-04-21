@@ -25,7 +25,7 @@ public abstract class InformationMessageProvider extends ObservableField<Informa
 
 	protected void raiseInformationMessageChanged() {
 		boolean disabledByPreference = enabledPreference != null && !enabledPreference.get();
-		InformationMessage informationMessageToShow = shouldShowInformationMessage() && !disabledByPreference ? getInformationMessage() : null;
+		InformationMessage informationMessageToShow = !disabledByPreference && shouldShowInformationMessage() ? getInformationMessage() : null;
 		set(informationMessageToShow);
 	}
 

@@ -182,7 +182,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 			case FOURFOUR:
 				return String.format(Locale.US, "(%d, %d)", chunk.fourFourX(), chunk.fourFourZ());
 			case EIGHTEIGHT:
-				return String.format(Locale.US, "(%d, %d)", chunk.eightRightX(), chunk.eightEightZ());
+				return String.format(Locale.US, "(%d, %d)", chunk.eightEightX(), chunk.eightEightZ());
 			case CHUNK:
 				return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
 			default:

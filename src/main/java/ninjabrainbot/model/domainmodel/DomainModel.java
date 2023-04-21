@@ -30,7 +30,7 @@ public class DomainModel implements IDomainModel, IDisposable {
 		lock = new ReentrantReadWriteLock();
 		dataComponents = new ArrayList<>();
 		eventLockers = new ArrayList<>();
-		domainModelHistory = new DomainModelHistory(dataComponents, 10);
+		domainModelHistory = new DomainModelHistory(dataComponents, 100);
 	}
 
 	public void finishInitialization() {

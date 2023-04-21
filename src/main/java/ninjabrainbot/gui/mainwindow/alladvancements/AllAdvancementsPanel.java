@@ -22,10 +22,10 @@ public class AllAdvancementsPanel extends ThemedPanel {
 		super(styleManager);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(new AllAdvancementsHeader(styleManager));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.strongholdPosition(), strongholdIcon, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.spawnPosition(), shulkerIcon, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.outpostPosition(), outpostIcon, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.monumentPosition(), monumentIcon, false));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.strongholdPosition(), strongholdIcon, false, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.spawnPosition(), shulkerIcon, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.outpostPosition(), outpostIcon, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.monumentPosition(), monumentIcon, true, false));
 	}
 
 }

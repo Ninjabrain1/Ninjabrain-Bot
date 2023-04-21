@@ -39,7 +39,7 @@ public class Chunk {
 		return 16 * z + 4;
 	}
 
-	public int eightRightX() {
+	public int eightEightX() {
 		return 16 * x + 8;
 	}
 

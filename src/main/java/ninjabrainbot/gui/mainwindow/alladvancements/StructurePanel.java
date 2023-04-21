@@ -1,9 +1,10 @@
 package ninjabrainbot.gui.mainwindow.alladvancements;
 
+import java.awt.Component;
+
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -13,6 +14,7 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class StructurePanel extends ThemedPanel implements IDisposable {
@@ -27,7 +29,7 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private Subscription angleSubscription;
 
-	public StructurePanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IObservable<StructurePosition> structurePosition, ImageIcon icon, boolean showBorder) {
+	public StructurePanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IObservable<StructurePosition> structurePosition, ImageIcon icon, boolean addDeleteButton, boolean showBorder) {
 		super(styleManager);
 		setOpaque(true);
 		ThemedLabel iconLabel = new ThemedLabel(styleManager, true);
@@ -35,21 +37,21 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 		location = new ThemedLabel(styleManager, true);
 		nether = new ThemedLabel(styleManager, true);
 		angle = new ThemedLabel(styleManager, true);
-		RemoveStructureButton removeStructureButton = new RemoveStructureButton(styleManager, structurePosition, buttonInputHandler);
+		Component deleteButton = addDeleteButton ? createDeleteButton(styleManager, structurePosition, buttonInputHandler) : new ThemedLabel(styleManager);
 
 		ColumnLayout layout = new ColumnLayout(0);
 		layout.setRelativeWidth(iconLabel, 0.4f);
 		layout.setRelativeWidth(location, 1.9f);
 		layout.setRelativeWidth(nether, 1.7f);
 		layout.setRelativeWidth(angle, 0.8f);
-		layout.setRelativeWidth(removeStructureButton, 0.4f, true);
+		layout.setRelativeWidth(deleteButton, 0.4f, true);
 		setLayout(layout);
 
 		add(iconLabel);
 		add(location);
 		add(nether);
 		add(angle);
-		add(removeStructureButton);
+		add(deleteButton);
 
 		this.showBorder = showBorder;
 		borderColor = styleManager.currentTheme.COLOR_DIVIDER;
@@ -58,11 +60,16 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 		location.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		nether.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		angle.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
-		removeStructureButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 
 		onStructurePositionUpdated(structurePosition.get());
 		disposeHandler.add(structurePosition.subscribeEDT(this::onStructurePositionUpdated));
+	}
+
+	private RemoveStructureButton createDeleteButton(StyleManager styleManager, IObservable<StructurePosition> structurePosition, IButtonInputHandler buttonInputHandler) {
+		RemoveStructureButton removeStructureButton = new RemoveStructureButton(styleManager, structurePosition, buttonInputHandler);
+		removeStructureButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		disposeHandler.add(removeStructureButton);
+		return removeStructureButton;
 	}
 
 	public void onStructurePositionUpdated(StructurePosition structurePosition) {

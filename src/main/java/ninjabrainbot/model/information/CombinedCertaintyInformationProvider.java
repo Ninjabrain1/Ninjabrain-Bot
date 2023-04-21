@@ -43,7 +43,7 @@ public class CombinedCertaintyInformationProvider extends InformationMessageProv
 			return false;
 		if (!chunk0.isNeighboring(chunk1))
 			return false;
-		return chunk0.weight + chunk1.weight > 0.95;
+		return chunk0.weight + chunk1.weight > 0.80;
 	}
 
 	@Override

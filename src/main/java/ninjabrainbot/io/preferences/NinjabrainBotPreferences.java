@@ -107,7 +107,7 @@ public class NinjabrainBotPreferences {
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
 		allAdvancements = new BooleanPreference("all_advancements", false, source);
-		informationMismeasureEnabled = new BooleanPreference("mismeasure_warning_enabled", true, source);
+		informationMismeasureEnabled = new BooleanPreference("mismeasure_warning_enabled", false, source);
 		informationDirectionHelpEnabled = new BooleanPreference("direction_help_enabled", false, source);
 		informationCombinedCertaintyEnabled = new BooleanPreference("combined_offset_information_enabled", true, source);
 		informationPortalLinkingEnabled = new BooleanPreference("portal_linking_warning_enabled", true, source);

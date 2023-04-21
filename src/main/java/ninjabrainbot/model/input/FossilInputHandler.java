@@ -1,11 +1,11 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.common.SetFossilAction;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.common.SetFossilAction;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.divine.Fossil;
 
 /**
  * Listens to the stream of fossils and decides if/how the fossils should be inputted into the data state.
@@ -24,6 +24,9 @@ public class FossilInputHandler implements IDisposable {
 	}
 
 	private void onNewFossil(Fossil fossil) {
+		if (dataState.locked().get())
+			return;
+
 		actionExecutor.executeImmediately(new SetFossilAction(dataState.getDivineContext(), fossil));
 	}
 

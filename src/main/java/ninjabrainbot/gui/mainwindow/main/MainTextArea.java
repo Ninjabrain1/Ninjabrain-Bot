@@ -83,8 +83,6 @@ public class MainTextArea extends ResizablePanel {
 			detailedTriangulation.updateColors();
 		}
 		updateResult();
-		revalidate();
-		whenSizeModified.notifySubscribers(this);
 	}
 
 	private void updateResult() {
@@ -110,6 +108,8 @@ public class MainTextArea extends ResizablePanel {
 			case ALL_ADVANCEMENTS:
 				layout.show(this, ALL_ADVANCEMENTS);
 		}
+		revalidate();
+		whenSizeModified.notifySubscribers(this);
 	}
 
 	private void setResult(ICalculatorResult result) {
@@ -143,7 +143,7 @@ public class MainTextArea extends ResizablePanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (preferences.view.get() == MainViewType.BASIC) {
+		if (preferences.view.get() == MainViewType.BASIC && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
 			return basicTriangulation.getPreferredSize();
 		} else {
 			return detailedTriangulation.getPreferredSize();

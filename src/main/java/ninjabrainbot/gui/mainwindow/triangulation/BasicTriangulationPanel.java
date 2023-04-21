@@ -128,7 +128,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 			case FOURFOUR:
 				return I18n.get("location_blocks", chunk.fourFourX(), chunk.fourFourZ(), distance);
 			case EIGHTEIGHT:
-				return I18n.get("location_blocks", chunk.eightRightX(), chunk.eightEightZ(), distance);
+				return I18n.get("location_blocks", chunk.eightEightX(), chunk.eightEightZ(), distance);
 			case CHUNK:
 				return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
 			default:
