@@ -69,6 +69,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		double sidewaysDistance = 0;
 		double sidewaysDistanceIncrement = 5.0;
 		boolean binarySearching = false;
+		int iteration = 0;
 		while (sidewaysDistanceIncrement > 0.1) {
 			sidewaysDistance += sidewaysDistanceIncrement * (expectedTopCertainty > 0.95 ? -1.0 : 1.0);
 			double newX = lastThrow.xInOverworld() + Coords.getX(sidewaysDistance, phiSideways);
@@ -78,6 +79,11 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 				binarySearching = true;
 			if (binarySearching)
 				sidewaysDistanceIncrement *= 0.5;
+			iteration++;
+			if (iteration > 1000) {
+				System.out.println("Could not determine optimal sideways distance.");
+				return sidewaysDistance;
+			}
 		}
 		return sidewaysDistance;
 	}

@@ -91,6 +91,10 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 			angleSubscription = structurePosition.whenRelativePlayerPositionChanged().subscribeEDT(this::onStructurePositionUpdated);
 	}
 
+	public String getLocationText() {
+		return location.getText();
+	}
+
 	@Override
 	public void updateColors() {
 		super.updateColors();

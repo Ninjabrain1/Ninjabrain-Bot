@@ -11,6 +11,7 @@ import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
+import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.ModelState;
@@ -76,11 +77,13 @@ public class IntegrationTestBuilder {
 		preferences.sigma.set(0.005f);
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
+		preferences.useAltStd.set(true);
 		return this;
 	}
 
 	public IntegrationTestBuilder withAllAdvancementsSettings() {
 		preferences.allAdvancements.set(true);
+		preferences.allAdvancementsToggleType.set(AllAdvancementsToggleType.Automatic);
 		return this;
 	}
 
@@ -118,6 +121,10 @@ public class IntegrationTestBuilder {
 		for (int i = 0; i < -correctionCount; i++) {
 			triggerHotkey(preferences.hotkeyDecrement);
 		}
+	}
+
+	public void inputStandardDeviationToggle() {
+		triggerHotkey(preferences.hotkeyAltStd);
 	}
 
 	public void triggerHotkey(HotkeyPreference hotkeyPreference) {
@@ -177,8 +184,15 @@ public class IntegrationTestBuilder {
 		actionExecutor.executeImmediately(new ResetAction(domainModel));
 	}
 
+	public void enterNewWorld() {
+		setActiveMinecraftWorld(new FakeMinecraftWorldFile(new MinecraftInstance("panda"), "gargamel", false));
+	}
+
 	public void enterEnd() {
-		setActiveMinecraftWorld(new FakeMinecraftWorldFile(new MinecraftInstance("instance 1"), "world1", true));
+		if (activeInstanceProvider.activeMinecraftWorld().get() == null)
+			setActiveMinecraftWorld(new FakeMinecraftWorldFile(new MinecraftInstance("instance 1"), "world1", false));
+		var world = activeInstanceProvider.activeMinecraftWorld().get();
+		setActiveMinecraftWorld(new FakeMinecraftWorldFile(world.minecraftInstance(), world.name(), true));
 	}
 
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
