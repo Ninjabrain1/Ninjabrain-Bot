@@ -1,13 +1,9 @@
 package ninjabrainbot.io;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.util.Assert;
 
 public class LanguageResources {
@@ -42,17 +38,30 @@ public class LanguageResources {
 
 	private static List<Locale> readSupportedLocales() {
 		ArrayList<Locale> locales = new ArrayList<>();
-		for (File file : getLanguageResourceFiles()) {
-			Assert.isTrue(file.isFile(), "Expected resources/lang to only have files.");
-			locales.add(getLocale(file.getName()));
+		for (String fileName : getAllLanguageResourceNames()) {
+			locales.add(getLocale(fileName));
 		}
 		return locales;
 	}
 
-	private static File[] getLanguageResourceFiles() {
-		URL url = Main.class.getResource("/lang");
-		String path = Objects.requireNonNull(url).getPath();
-		return new File(path).listFiles();
+	public static List<String> getAllLanguageResourceNames() {
+		// Could not find an easy solution to get all language resource files,
+		// it seems trivial but isn't for some reason. All solutions either work
+		// in dev environment, or when packaged as jar, but never both.
+		// For now, they are just hard coded, with a test to make sure that
+		// this function returns all files in the directory.
+		ArrayList<String> list = new ArrayList<>();
+		list.add("I18n.properties");
+		list.add("I18n_es_ES.properties");
+		list.add("I18n_it_IT.properties");
+		list.add("I18n_ja_JP.properties");
+		list.add("I18n_ja_Ryukyuan.properties");
+		list.add("I18n_ko_KR.properties");
+		list.add("I18n_pt_BR.properties");
+		list.add("I18n_ru_RU.properties");
+		list.add("I18n_zh_CN.properties");
+		list.add("I18n_zh_TW.properties");
+		return list;
 	}
 
 	private static Locale getLocale(String resourceFileName) {
