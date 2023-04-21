@@ -72,16 +72,18 @@ public class DomainModel implements IDomainModel, IDisposable {
 	}
 
 	private void releaseWriteLock(boolean saveSnapshotOfNewState) {
-		if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
-			domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
+		try {
+			if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
+				domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
 
-		eventLockers.forEach(EventLocker::unlockAndReleaseEvents);
+			eventLockers.forEach(EventLocker::unlockAndReleaseEvents);
 
-		if (isModifiedDuringCurrentWriteLock)
-			whenModified.notifySubscribers(this);
-		isModifiedDuringCurrentWriteLock = false;
-
-		lock.writeLock().unlock();
+			if (isModifiedDuringCurrentWriteLock)
+				whenModified.notifySubscribers(this);
+			isModifiedDuringCurrentWriteLock = false;
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 	@Override

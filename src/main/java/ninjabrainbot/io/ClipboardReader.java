@@ -3,6 +3,8 @@ package ninjabrainbot.io;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ninjabrainbot.event.IObservable;
@@ -49,16 +51,15 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 					e.printStackTrace();
 				}
 			}
+			String clipboardString = null;
 			try {
-				if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-					String clipboardString = null;
+				if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor))
 					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
-					if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
-						onClipboardUpdated(clipboardString);
-						lastClipboardString = clipboardString;
-					}
-				}
-			} catch (Exception e) {
+			} catch (UnsupportedFlavorException | IllegalStateException | IOException ignored) {
+			}
+			if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
+				onClipboardUpdated(clipboardString);
+				lastClipboardString = clipboardString;
 			}
 			// Sleep 0.1 seconds
 			try {
