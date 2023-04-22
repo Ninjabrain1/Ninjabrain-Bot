@@ -42,6 +42,7 @@ public class DivineContextPanel extends ThemedPanel implements IDisposable {
 		removeButton.setBackgroundColor(styleManager.currentTheme.COLOR_DIVIDER);
 		removeButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_STRONG);
 		removeButton.setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
+		removeButton.setBorder(null);
 		add(removeButton);
 		add(label);
 		setLayout(null);

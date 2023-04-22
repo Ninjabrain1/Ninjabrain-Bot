@@ -356,7 +356,7 @@ class FeinbergTheme extends Theme {
 		COLOR_DIVIDER = createColor(Color.decode("#54688C"));
 		COLOR_DIVIDER_DARK = createColor(Color.decode("#375268"));
 		COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#99CCFB"));
-		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#FFE4F5"));
+		COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#FFEBF8"));
 		TEXT_COLOR_SLIGHTLY_WEAK = createColor(Color.decode("#000000"));
 		TEXT_COLOR_SLIGHTLY_STRONG = createColor(Color.decode("#000000"));
 		TEXT_COLOR_WEAK = createColor(Color.decode("#D2EEFF"));
