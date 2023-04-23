@@ -17,8 +17,4 @@ public class Modifiable<T> implements IModifiable<T> {
 		whenModified.notifySubscribers(value);
 	}
 
-	protected int subscriberCount() {
-		return whenModified.subscriberCount();
-	}
-
 }
