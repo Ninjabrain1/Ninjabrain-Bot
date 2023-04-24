@@ -42,7 +42,7 @@ public class I18n {
 	}
 
 	public static boolean localeRequiresExtraSpace() {
-		return LANGUAGE != Locale.US;
+		return !LANGUAGE.toLanguageTag().contentEquals("en-US");
 	}
 
 	public static class UTF8Control extends ResourceBundle.Control {

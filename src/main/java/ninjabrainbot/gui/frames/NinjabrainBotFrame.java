@@ -18,6 +18,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.NotificationsButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
+import ninjabrainbot.gui.components.RefreshWindowOnMonitorChangeListener;
 import ninjabrainbot.gui.components.labels.ThemedIcon;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.mainwindow.BoatIcon;
@@ -68,6 +69,8 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		Profiler.stop();
 
 		this.styleManager = styleManager;
+
+		addComponentListener(new RefreshWindowOnMonitorChangeListener(this));
 	}
 
 	@Override
