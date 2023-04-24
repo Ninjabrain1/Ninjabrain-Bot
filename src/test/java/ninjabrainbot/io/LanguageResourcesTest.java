@@ -19,7 +19,11 @@ class LanguageResourcesTest {
 		URL url = Main.class.getResource("/lang");
 		String path = Objects.requireNonNull(url).getPath();
 		File[] languageFiles = new File(path).listFiles();
-		List<String> expectedLanguageFileNames = Arrays.stream(Objects.requireNonNull(languageFiles)).map(File::getName).collect(Collectors.toList());
+		List<String> expectedLanguageFileNames = Arrays
+				.stream(Objects.requireNonNull(languageFiles))
+				.map(File::getName)
+				.filter(name -> !name.contentEquals("I18n.properties"))
+				.collect(Collectors.toList());
 		List<String> actualLanguageFileNames = LanguageResources.getAllLanguageResourceNames();
 		expectedLanguageFileNames.sort(Comparator.comparing(String::toString));
 		actualLanguageFileNames.sort(Comparator.comparing(String::toString));

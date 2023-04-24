@@ -51,7 +51,7 @@ public class LanguageResources {
 		// For now, they are just hard coded, with a test to make sure that
 		// this function returns all files in the directory.
 		ArrayList<String> list = new ArrayList<>();
-		list.add("I18n.properties");
+		list.add("I18n_en_US.properties");
 		list.add("I18n_es_ES.properties");
 		list.add("I18n_it_IT.properties");
 		list.add("I18n_ja_JP.properties");
