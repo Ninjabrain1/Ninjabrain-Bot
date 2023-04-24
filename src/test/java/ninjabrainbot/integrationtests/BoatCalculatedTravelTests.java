@@ -55,6 +55,11 @@ public class BoatCalculatedTravelTests {
 		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.VALID));
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopPredictionIsEqualTo(strongholdChunkX, strongholdChunkZ);
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopNetherCoordsIsEqualTo(2 * strongholdChunkX, 2 * strongholdChunkZ);
+
+		var angleError = testBuilder.dataState.calculatorResult().get().getBestPrediction().getAngleError(testBuilder.dataState.getThrowList().get(0));
+		final double toRad = Math.PI / 180.0;
+		var smallestPossibleCorrection = Math.atan(2 * Math.tan(15 * toRad) / testBuilder.preferences.resolutionHeight.get()) / Math.cos(-31 * toRad) / toRad;
+		Assertions.assertTrue(Math.abs(angleError) < smallestPossibleCorrection);
 	}
 
 }

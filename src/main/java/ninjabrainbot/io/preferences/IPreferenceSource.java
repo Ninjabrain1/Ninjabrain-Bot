@@ -10,6 +10,10 @@ public interface IPreferenceSource {
 
 	void putFloat(String key, float value);
 
+	double getDouble(String key, double defaultValue);
+
+	void putDouble(String key, double value);
+
 	boolean getBoolean(String key, boolean defaultValue);
 
 	void putBoolean(String key, boolean value);

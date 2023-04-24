@@ -13,6 +13,7 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
+import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
 import ninjabrainbot.gui.components.preferences.HotkeyPanel;
 import ninjabrainbot.gui.frames.CalibrationDialog;
@@ -74,7 +75,7 @@ public class AdvancedOptionsPanel extends JPanel {
 			column1.add(sigmaAltHotkey);
 		}
 
-		column2.add(new FloatPreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), preferences.crosshairCorrection));
+		column2.add(new DoublePreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), preferences.crosshairCorrection));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), preferences.showAngleErrors));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));

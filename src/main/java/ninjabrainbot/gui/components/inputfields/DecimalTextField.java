@@ -22,7 +22,7 @@ public class DecimalTextField extends JSpinner implements ThemedComponent {
 	private WrappedColor bgCol;
 	private WrappedColor fgCol;
 
-	public DecimalTextField(StyleManager styleManager, float value, float min, float max) {
+	public DecimalTextField(StyleManager styleManager, double value, double min, double max) {
 		super(new SpinnerNumberModel(value, -1e7, 1e7, min));
 		setBorder(BorderFactory.createEmptyBorder());
 		setAlignmentX(1);

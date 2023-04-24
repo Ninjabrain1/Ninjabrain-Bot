@@ -27,11 +27,11 @@ public class NinjabrainBotPreferences {
 	public final FloatPreference sigmaAlt;
 	public final FloatPreference sigmaManual;
 	public final FloatPreference sigmaBoat;
-	public final FloatPreference crosshairCorrection;
 	public final FloatPreference resolutionHeight;
-	public final FloatPreference sensitivity;
 	public final FloatPreference boatErrorLimit;
 	public final FloatPreference overlayHideDelay;
+	public final DoublePreference sensitivity;
+	public final DoublePreference crosshairCorrection;
 	public final BooleanPreference checkForUpdates;
 	public final BooleanPreference translucent;
 	public final BooleanPreference alwaysOnTop;
@@ -84,11 +84,12 @@ public class NinjabrainBotPreferences {
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
 		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
 		sigmaBoat = new FloatPreference("sigma_boat", 0.001f, 0.0001f, 1f, source);
-		crosshairCorrection = new FloatPreference("crosshair_correction", 0, -1f, 1f, source);
 		resolutionHeight = new FloatPreference("resolution_height", 16384, 1f, 16384f, source);
-		sensitivity = new FloatPreference("sensitivity", 0.012727597f, 0f, 1f, source);
 		boatErrorLimit = new FloatPreference("boat_error", 0.03f, 0f, 0.7f, source);
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
+		// Double
+		sensitivity = new DoublePreference("sensitivity", 0.012727597f, 0f, 1f, source);
+		crosshairCorrection = new DoublePreference("crosshair_correction", 0, -1f, 1f, source);
 		// Boolean
 		checkForUpdates = new BooleanPreference("check_for_updates", true, source);
 		translucent = new BooleanPreference("translucent", false, source);

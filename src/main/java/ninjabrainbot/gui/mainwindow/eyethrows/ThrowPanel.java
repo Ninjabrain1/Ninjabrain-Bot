@@ -42,9 +42,9 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private final int index;
 	private IEnderEyeThrow t;
-	private final JLabel x;
-	private final JLabel z;
-	private final JLabel alpha;
+	final JLabel x;
+	final JLabel z;
+	final JLabel alpha;
 	private final JLabel correction;
 	private final JLabel error;
 	private final FlatButton removeButton;

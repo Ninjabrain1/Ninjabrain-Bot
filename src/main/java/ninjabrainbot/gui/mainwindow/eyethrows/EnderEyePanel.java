@@ -14,7 +14,7 @@ public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 	public static final int DEFAULT_SHOWN_THROWS = 3;
 
 	private final ThrowPanelHeader throwPanelHeader;
-	private final ThrowPanel[] throwPanels;
+	final ThrowPanel[] throwPanels;
 	private final DivineContextPanel divineContextPanel;
 
 	public EnderEyePanel(StyleManager styleManager, NinjabrainBotPreferences preferences, IDataState dataState, IButtonInputHandler buttonInputHandler) {

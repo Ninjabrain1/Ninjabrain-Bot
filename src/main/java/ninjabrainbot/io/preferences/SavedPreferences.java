@@ -33,6 +33,16 @@ public class SavedPreferences implements IPreferenceSource {
 	}
 
 	@Override
+	public double getDouble(String key, double defaultValue) {
+		return pref.getDouble(key, defaultValue);
+	}
+
+	@Override
+	public void putDouble(String key, double value) {
+		pref.getDouble(key, value);
+	}
+
+	@Override
 	public boolean getBoolean(String key, boolean defaultValue) {
 		return pref.getBoolean(key, defaultValue);
 	}

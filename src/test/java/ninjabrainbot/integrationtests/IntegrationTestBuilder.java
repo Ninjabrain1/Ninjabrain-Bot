@@ -3,6 +3,8 @@ package ninjabrainbot.integrationtests;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.mainwindow.BoatIcon;
+import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanel;
+import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanelTestAdapter;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.gui.style.StyleManager;
@@ -97,7 +99,7 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder withBoatSettings() {
 		preferences.sigmaBoat.set(0.001f);
-		preferences.sensitivity.set(0.204225346f);
+		preferences.sensitivity.set(0.204225346);
 		preferences.resolutionHeight.set(16384);
 		preferences.useTallRes.set(true);
 		preferences.usePreciseAngle.set(true);
@@ -142,6 +144,12 @@ public class IntegrationTestBuilder {
 		if (styleManager == null) styleManager = TestUtils.createStyleManager();
 		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 		return new MainTextAreaTestAdapter(new MainTextArea(styleManager, buttonInputHandler, preferences, dataState));
+	}
+
+	public EnderEyePanelTestAdapter createEnderEyePanel() {
+		if (styleManager == null) styleManager = TestUtils.createStyleManager();
+		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		return new EnderEyePanelTestAdapter(new EnderEyePanel(styleManager, preferences, dataState, buttonInputHandler));
 	}
 
 	public NinjabrainBotFrame createNinjabrainBotFrame() {

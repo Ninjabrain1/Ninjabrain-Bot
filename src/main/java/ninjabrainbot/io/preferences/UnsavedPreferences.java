@@ -21,6 +21,15 @@ public class UnsavedPreferences implements IPreferenceSource {
 	}
 
 	@Override
+	public double getDouble(String key, double defaultValue) {
+		return defaultValue;
+	}
+
+	@Override
+	public void putDouble(String key, double value) {
+	}
+
+	@Override
 	public boolean getBoolean(String key, boolean defaultValue) {
 		return defaultValue;
 	}
