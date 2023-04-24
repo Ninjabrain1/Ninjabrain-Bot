@@ -13,6 +13,7 @@ import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.buttons.TitleBarButton;
+import ninjabrainbot.gui.components.RefreshWindowOnMonitorChangeListener;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.TitleBarPanel;
 import ninjabrainbot.gui.style.SizePreference;
@@ -48,6 +49,8 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 		titlebarPanel.addButton(createExitButton(styleManager));
 
 		bgCol = styleManager.currentTheme.COLOR_NEUTRAL;
+
+		addComponentListener(new RefreshWindowOnMonitorChangeListener(this));
 	}
 
 	private FlatButton createExitButton(StyleManager styleManager) {

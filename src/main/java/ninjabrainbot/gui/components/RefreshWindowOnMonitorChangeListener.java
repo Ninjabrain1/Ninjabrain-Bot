@@ -2,27 +2,26 @@ package ninjabrainbot.gui.components;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import javax.swing.JFrame;
-
 public class RefreshWindowOnMonitorChangeListener implements ComponentListener {
 
-	private final JFrame frame;
+	private final Window frame;
 	private GraphicsDevice[] allDisplays;
 	private int currentDisplayIndex;
 	boolean disabled = false;
 
-	public RefreshWindowOnMonitorChangeListener(JFrame frame) {
-		this.frame = frame;
+	public RefreshWindowOnMonitorChangeListener(Window window) {
+		this.frame = window;
 		try {
 			allDisplays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 			this.currentDisplayIndex = getDisplayIndex();
 		} catch (Exception e) {
 			System.out.println("Encountered exception in RefreshWindowOnMonitorChangeListener, disabling the listener.");
 			e.printStackTrace();
-			frame.removeComponentListener(this);
+			window.removeComponentListener(this);
 			this.currentDisplayIndex = -1;
 			disabled = true;
 		}

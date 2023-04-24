@@ -69,8 +69,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		Profiler.stop();
 
 		this.styleManager = styleManager;
-
-		addComponentListener(new RefreshWindowOnMonitorChangeListener(this));
 	}
 
 	@Override
