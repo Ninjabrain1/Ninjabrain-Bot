@@ -39,7 +39,7 @@ public class SavedPreferences implements IPreferenceSource {
 
 	@Override
 	public void putDouble(String key, double value) {
-		pref.getDouble(key, value);
+		pref.putDouble(key, value);
 	}
 
 	@Override
