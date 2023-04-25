@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
+import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;
@@ -23,6 +24,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 
 	public static final String CERTAINTY_TEXT = I18n.get("certainty");
 
+	private final StyleManager styleManager;
 	private final NinjabrainBotPreferences preferences;
 
 	public final ThemedLabel mainTextLabel;
@@ -32,11 +34,12 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 
 	private ICalculatorResult currentResult;
 
-	Subscription strongholdDisplayTypeChangedSubscription;
+	DisposeHandler disposeHandler = new DisposeHandler();
 	Subscription chunkPredictionSubscription;
 
 	public BasicTriangulationPanel(StyleManager styleManager, NinjabrainBotPreferences preferences) {
 		super(styleManager);
+		this.styleManager = styleManager;
 		this.preferences = preferences;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setAlignmentX(0);
@@ -59,7 +62,9 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		mainTextLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		netherLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
-		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setResult(currentResult));
+		currentAngleLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		disposeHandler.add(preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setResult(currentResult)));
+		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(this::setAngleUpdatesEnabled));
 	}
 
 	public void setResult(ICalculatorResult result) {
@@ -97,6 +102,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 
 	public void setAngleUpdatesEnabled(boolean b) {
 		currentAngleLabel.setVisible(b);
+		updateSize(styleManager);
 	}
 
 	@Override
@@ -118,7 +124,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 	public void dispose() {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.dispose();
-		strongholdDisplayTypeChangedSubscription.dispose();
+		disposeHandler.dispose();
 	}
 
 	private static String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {
