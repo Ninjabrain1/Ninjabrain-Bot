@@ -15,7 +15,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 
 	private int overworldDistance;
 	private double travelAngle;
-	private double travelAngleDiff;
+	private double travelAngleDifference;
 	private boolean playerIsInNether;
 
 	private Subscription playerPosSubscription;
@@ -29,7 +29,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 	public StructurePosition(int x, int z, IObservable<IPlayerPosition> playerPosition) {
 		this.x = x;
 		this.z = z;
-		whenRelativePlayerPositionChanged = new ObservableProperty<StructurePosition>();
+		whenRelativePlayerPositionChanged = new ObservableProperty<>();
 		if (playerPosition != null) {
 			updateWithPlayerPos(playerPosition.get(), false);
 			playerPosSubscription = playerPosition.subscribe(pos -> updateWithPlayerPos(pos, true));
@@ -45,13 +45,15 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		double xDiff = x - playerPos.xInOverworld();
 		double zDiff = z - playerPos.zInOverworld();
 
-		double newAngle = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
-		double simpleDiff = newAngle - playerPos.horizontalAngle();
-		double adjustedDiff = ((newAngle + 360) % 360) - ((playerPos.horizontalAngle() + 360) % 360);
-		double finalDiff = Math.abs(adjustedDiff) < Math.abs(simpleDiff) ? adjustedDiff : simpleDiff;
+		double angleToStructure = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
+		double angleDifference = (angleToStructure - playerPos.horizontalAngle()) % 360;
+		if (angleDifference > 180)
+			angleDifference -= 360;
+		if (angleDifference < -180)
+			angleDifference += 360;
 
-		this.travelAngle = newAngle;
-		this.travelAngleDiff = finalDiff;
+		this.travelAngle = angleToStructure;
+		this.travelAngleDifference = angleDifference;
 		whenRelativePlayerPositionChanged.notifySubscribers(this);
 	}
 
@@ -71,12 +73,12 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 	}
 
 	public String formatTravelAngleDiff() {
-		double absChange = Math.abs(travelAngleDiff);
-		return String.format(" (%s %.1f)", travelAngleDiff > 0 ? "->" : "<-", absChange);
+		double absChange = Math.abs(travelAngleDifference);
+		return String.format(" (%s %.1f)", travelAngleDifference > 0 ? "->" : "<-", absChange);
 	}
 
 	public float getTravelAngleDiffColor() {
-		return (float) (1 - Math.abs(travelAngleDiff) / 180.0);
+		return (float) (1 - Math.abs(travelAngleDifference) / 180.0);
 	}
 
 	@Override
@@ -110,7 +112,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 	}
 
 	public double getTravelAngleDiff() {
-		return travelAngleDiff;
+		return travelAngleDifference;
 	}
 
 	public ISubscribable<StructurePosition> whenRelativePlayerPositionChanged() {
