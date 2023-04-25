@@ -28,10 +28,10 @@ public class SavesReader {
 
 	public SavesReader(ISubscribable<MinecraftInstance> activeMinecraftInstance) throws IOException {
 		activeWorldInEachInstance = new HashMap<>();
-		lastModifiedWorldFile = new ObservableField<IMinecraftWorldFile>(null);
+		lastModifiedWorldFile = new ObservableField<>(null);
 		whenActiveWorldFileModified = new ObservableProperty<>();
 		watcher = FileSystems.getDefault().newWatchService();
-		activeMinecraftInstance.subscribe(activeInstance -> monitorMinecraftInstance(activeInstance));
+		activeMinecraftInstance.subscribe(this::monitorMinecraftInstance);
 	}
 
 	public void pollEvents() {
@@ -94,6 +94,7 @@ public class SavesReader {
 		if (isWorldFileDifferentFromTheLastModifiedWorldFile(worldName)) {
 			activeWorldFile = new MinecraftWorldFile(currentWatchedInstance.minecraftInstance, worldName);
 			lastModifiedWorldFile.set(activeWorldFile);
+			activeWorldInEachInstance.put(currentWatchedInstance.minecraftInstance, activeWorldFile);
 		}
 		onActiveMinecraftWorldFileModified();
 	}
