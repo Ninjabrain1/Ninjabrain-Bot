@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -56,7 +57,7 @@ public class SavesReader {
 			currentWatchedInstance = null;
 		}
 
-		Path savesDirectory = Path.of(minecraftInstance.savesDirectory);
+		Path savesDirectory = Paths.get(minecraftInstance.savesDirectory);
 		try {
 			WatchKey watchKey = savesDirectory.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
 			currentWatchedInstance = new WatchedInstance(minecraftInstance, watchKey);
@@ -104,10 +105,7 @@ public class SavesReader {
 		if (activeWorldFile.minecraftInstance() != currentWatchedInstance.minecraftInstance)
 			return true;
 
-		if (!activeWorldFile.name().contentEquals(worldName))
-			return true;
-
-		return false;
+		return !activeWorldFile.name().contentEquals(worldName);
 	}
 
 	private void onActiveMinecraftWorldFileModified() {

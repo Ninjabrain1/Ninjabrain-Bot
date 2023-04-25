@@ -58,7 +58,7 @@ public class EnvironmentComponent<T> implements IEnvironmentComponent<T> {
 	}
 
 	public static <T> EnvironmentComponent<T> of(IDomainModel domainModel, IObservable<T> observable, DisposeHandler disposeHandler) {
-		var environmentComponent = new EnvironmentComponent<>(domainModel, observable.get());
+		EnvironmentComponent<T> environmentComponent = new EnvironmentComponent<>(domainModel, observable.get());
 		disposeHandler.add(observable.subscribe(environmentComponent::set));
 		return environmentComponent;
 	}

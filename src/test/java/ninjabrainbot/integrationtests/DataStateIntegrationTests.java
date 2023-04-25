@@ -1,6 +1,8 @@
 package ninjabrainbot.integrationtests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
@@ -30,10 +32,10 @@ public class DataStateIntegrationTests {
 		testBuilder.resetCalculator();
 
 		// Assert
-		var expectedCalculatorResultEvents = new ArrayList<>();
+		ArrayList<ICalculatorResult> expectedCalculatorResultEvents = new ArrayList<>();
 		expectedCalculatorResultEvents.add(null);
 		Assertions.assertIterableEquals(expectedCalculatorResultEvents, calculatorResultEvents, "Incorrect CalculatorResult events: " + calculatorResultEvents);
-		Assertions.assertIterableEquals(List.of(ResultType.NONE), resultTypeEvents, "Incorrect ResultType events: " + resultTypeEvents);
+		Assertions.assertIterableEquals(Collections.singletonList(ResultType.NONE), resultTypeEvents, "Incorrect ResultType events: " + resultTypeEvents);
 	}
 
 }

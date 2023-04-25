@@ -37,7 +37,7 @@ public class PreferencesIntegrationTests {
 
 		// Assert
 		TestUtils.awaitSwingEvents();
-		var experimentallyCorrectedHorizontalAngle = horizontalAngle - 0.00079 * Math.sin((horizontalAngle + 45) * Math.PI / 180.0);
+		double experimentallyCorrectedHorizontalAngle = horizontalAngle - 0.00079 * Math.sin((horizontalAngle + 45) * Math.PI / 180.0);
 		Assertions.assertEquals(Math.round((horizontalAngle + crosshairCorrection) * 100f) / 100f, enderEyePanelTestAdapter.getPanel(0).getAngle(), 1e-4);
 		Assertions.assertEquals(experimentallyCorrectedHorizontalAngle + crosshairCorrection, integrationTestBuilder.dataState.getThrowList().get(0).horizontalAngle(), 1e-4);
 	}

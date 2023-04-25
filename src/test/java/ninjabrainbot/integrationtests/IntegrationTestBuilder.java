@@ -199,7 +199,7 @@ public class IntegrationTestBuilder {
 	public void enterEnd() {
 		if (activeInstanceProvider.activeMinecraftWorld().get() == null)
 			setActiveMinecraftWorld(new FakeMinecraftWorldFile(new MinecraftInstance("instance 1"), "world1", false));
-		var world = activeInstanceProvider.activeMinecraftWorld().get();
+		IMinecraftWorldFile world = activeInstanceProvider.activeMinecraftWorld().get();
 		setActiveMinecraftWorld(new FakeMinecraftWorldFile(world.minecraftInstance(), world.name(), true));
 	}
 

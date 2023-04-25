@@ -43,7 +43,7 @@ public class LanguageOptionsPanel extends JPanel {
 		return Arrays.stream(languageOptions)
 				.filter(languageOption -> languageOption.locale.toLanguageTag().equals(chosenLanguageTag))
 				.findFirst()
-				.orElseThrow();
+				.orElseThrow(() -> new RuntimeException(String.format("Language %s was not found in language options.", chosenLanguageTag)));
 	}
 
 }

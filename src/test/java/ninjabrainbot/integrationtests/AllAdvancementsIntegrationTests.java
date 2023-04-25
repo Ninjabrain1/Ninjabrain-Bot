@@ -30,8 +30,8 @@ public class AllAdvancementsIntegrationTests {
 											   String f3cOutpost, int outpostX, int outpostZ,
 											   String f3cMonument, int monumentX, int monumentZ) {
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withAllAdvancementsSettings().withProSettings();
-		var mainTextArea = testBuilder.createMainTextArea();
-		var aaDataState = testBuilder.dataState.allAdvancementsDataState();
+		MainTextAreaTestAdapter mainTextArea = testBuilder.createMainTextArea();
+		IAllAdvancementsDataState aaDataState = testBuilder.dataState.allAdvancementsDataState();
 
 		doAnyPercentSplit(testBuilder, aaDataState, mainTextArea, f3c1, f3c2, f3c3, strongholdChunkX, strongholdChunkZ);
 
@@ -69,8 +69,8 @@ public class AllAdvancementsIntegrationTests {
 	@CsvSource({ input1 })
 	void uiUpdatesAsExpected_HotkeysAreDisabledInAaMode(String f3c1, String f3c2, String f3c3, int strongholdChunkX, int strongholdChunkZ) {
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withAllAdvancementsSettings().withProSettings();
-		var mainTextArea = testBuilder.createMainTextArea();
-		var aaDataState = testBuilder.dataState.allAdvancementsDataState();
+		MainTextAreaTestAdapter mainTextArea = testBuilder.createMainTextArea();
+		IAllAdvancementsDataState aaDataState = testBuilder.dataState.allAdvancementsDataState();
 
 		doAnyPercentSplit(testBuilder, aaDataState, mainTextArea, f3c1, f3c2, f3c3, strongholdChunkX, strongholdChunkZ);
 

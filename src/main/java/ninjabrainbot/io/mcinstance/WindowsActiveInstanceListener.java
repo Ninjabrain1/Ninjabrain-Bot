@@ -129,7 +129,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 						if (jvmArgument.startsWith("Djava.library.path")) {
 							process.destroy();
 							commandOutputReader.close();
-							return getDotMinecraftDirectory(jvmArgument.strip());
+							return getDotMinecraftDirectory(jvmArgument.trim());
 						}
 					}
 				}

@@ -1,8 +1,8 @@
 package ninjabrainbot.integrationtests;
 
-import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.gui.mainwindow.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
+import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,9 +56,9 @@ public class BoatCalculatedTravelTests {
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopPredictionIsEqualTo(strongholdChunkX, strongholdChunkZ);
 		mainTextAreaTestAdapter.assertDetailedTriangulationTopNetherCoordsIsEqualTo(2 * strongholdChunkX, 2 * strongholdChunkZ);
 
-		var angleError = testBuilder.dataState.calculatorResult().get().getBestPrediction().getAngleError(testBuilder.dataState.getThrowList().get(0));
+		double angleError = testBuilder.dataState.calculatorResult().get().getBestPrediction().getAngleError(testBuilder.dataState.getThrowList().get(0));
 		final double toRad = Math.PI / 180.0;
-		var smallestPossibleCorrection = Math.atan(2 * Math.tan(15 * toRad) / testBuilder.preferences.resolutionHeight.get()) / Math.cos(-31 * toRad) / toRad;
+		double smallestPossibleCorrection = Math.atan(2 * Math.tan(15 * toRad) / testBuilder.preferences.resolutionHeight.get()) / Math.cos(-31 * toRad) / toRad;
 		Assertions.assertTrue(Math.abs(angleError) < smallestPossibleCorrection);
 	}
 

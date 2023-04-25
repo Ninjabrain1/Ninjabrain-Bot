@@ -1,5 +1,6 @@
 package ninjabrainbot.integrationtests;
 
+import java.util.List;
 import java.util.Random;
 
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
@@ -19,25 +20,25 @@ public class NextDirectionProviderIntegrationTests {
 	void expectedCertaintyOnNextThrowIsAtLeastAsGoodAsPromised() {
 		Logger.enabled = false;
 		// Arrange
-		var chunkRandom = new Random(111);
-		var testBuilder = new IntegrationTestBuilder().withProSettings();
+		Random chunkRandom = new Random(111);
+		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 		testBuilder.preferences.informationDirectionHelpEnabled.set(true);
-		var playerPositionProvider = new RandomPlayerPositionProvider(123);
-		var infoMessage = new NextThrowDirectionInformationProvider(testBuilder.dataState, testBuilder.environmentState, testBuilder.preferences);
+		RandomPlayerPositionProvider playerPositionProvider = new RandomPlayerPositionProvider(123);
+		NextThrowDirectionInformationProvider infoMessage = new NextThrowDirectionInformationProvider(testBuilder.dataState, testBuilder.environmentState, testBuilder.preferences);
 
 		// Act
 		double totalProbability = 0;
 		int samples = 0;
 		for (int i = 0; i < 100; i++) {
 			testBuilder.resetCalculator();
-			var firstPlayerPosition = playerPositionProvider.nextPlayerPositionFirstRing();
+			IDetailedPlayerPosition firstPlayerPosition = playerPositionProvider.nextPlayerPositionFirstRing();
 			testBuilder.inputDetailedPlayerPosition(firstPlayerPosition);
 			if (infoMessage.get() == null)
 				continue;
 			Chunk randomStrongholdChunk = sampleRandomChunk(chunkRandom, testBuilder.dataState.calculatorResult().get());
 			testBuilder.inputDetailedPlayerPosition(getPlayerPositionForNextThrow(firstPlayerPosition, randomStrongholdChunk, infoMessage.get().message));
-			var topChunks = testBuilder.dataState.calculatorResult().get().getTopChunks();
-			var eyeSpyProbability = topChunks.get(0).weight + (topChunks.get(0).isNeighboring(topChunks.get(1)) ? topChunks.get(1).weight : 0);
+			List<Chunk> topChunks = testBuilder.dataState.calculatorResult().get().getTopChunks();
+			double eyeSpyProbability = topChunks.get(0).weight + (topChunks.get(0).isNeighboring(topChunks.get(1)) ? topChunks.get(1).weight : 0);
 			totalProbability += eyeSpyProbability;
 			samples++;
 		}
@@ -49,7 +50,7 @@ public class NextDirectionProviderIntegrationTests {
 	}
 
 	private Chunk sampleRandomChunk(Random random, ICalculatorResult calculatorResult) {
-		var chunks = calculatorResult.getTopChunks();
+		List<Chunk> chunks = calculatorResult.getTopChunks();
 		double sample = random.nextDouble();
 		double cumProb = 0;
 		for (Chunk chunk : chunks) {

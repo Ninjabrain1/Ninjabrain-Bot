@@ -39,7 +39,7 @@ public class RadioButtonPanel extends ThemedPanel {
 				return p.TEXT_SIZE_SMALL;
 			}
 		};
-		radioButtonGroup = new RadioButtonGroup<>(styleManager, choices, selectedValue, verticalRadioButtons) {
+		radioButtonGroup = new RadioButtonGroup<T>(styleManager, choices, selectedValue, verticalRadioButtons) {
 			@Override
 			public void onChanged(T newValue) {
 				onChanged.accept(newValue);

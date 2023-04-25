@@ -39,7 +39,7 @@ class ActiveInstanceInputHandlerTest {
 		preferences.autoResetWhenChangingInstance.set(preferenceEnabled);
 
 		Mockito.when(domainModel.isReset()).thenReturn(false);
-		var locked = new DataComponent<>(domainModel, false);
+		DataComponent<Boolean> locked = new DataComponent<>(domainModel, false);
 		Mockito.when(dataState.locked()).thenReturn(locked);
 
 		FakeActiveInstanceProvider activeInstanceProvider = new FakeActiveInstanceProvider();
@@ -67,7 +67,7 @@ class ActiveInstanceInputHandlerTest {
 		preferences.autoResetWhenChangingInstance.set(preferenceEnabled);
 
 		Mockito.when(domainModel.isReset()).thenReturn(false);
-		var locked = new DataComponent<>(domainModel, false);
+		DataComponent<Boolean> locked = new DataComponent<>(domainModel, false);
 		Mockito.when(dataState.locked()).thenReturn(locked);
 
 		FakeActiveInstanceProvider activeInstanceProvider = new FakeActiveInstanceProvider();

@@ -39,7 +39,7 @@ public interface IDataState {
 	IDomainModelComponent<ResultType> resultType();
 
 	default double getBestCertainty() {
-		var calculatorResult = calculatorResult().get();
+		ICalculatorResult calculatorResult = calculatorResult().get();
 		return calculatorResult != null && calculatorResult.success() ? calculatorResult.getBestPrediction().chunk.weight : 0;
 	}
 

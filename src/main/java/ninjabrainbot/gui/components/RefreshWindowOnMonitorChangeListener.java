@@ -39,7 +39,7 @@ public class RefreshWindowOnMonitorChangeListener implements ComponentListener {
 	}
 
 	private int getDisplayIndex() {
-		var curDisplay = frame.getGraphicsConfiguration().getDevice();
+		GraphicsDevice curDisplay = frame.getGraphicsConfiguration().getDevice();
 		for (int i = 0; i < allDisplays.length; i++) {
 			if (allDisplays[i].equals(curDisplay)) {
 				return i;
