@@ -153,8 +153,7 @@ public class GUI {
 
 		new Thread(clipboardReader, "Clipboard reader").start();
 
-		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor);
-		preferences.autoReset.whenModified().subscribeEDT(b -> autoResetTimer.setAutoResetEnabled(b));
+		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor, preferences);
 
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, domainModel, new NinjabrainBotOverlayImageWriter(), 1000);
 
