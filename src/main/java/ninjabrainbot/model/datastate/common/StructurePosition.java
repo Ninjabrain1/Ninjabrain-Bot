@@ -44,7 +44,6 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		playerIsInNether = playerPos.isInNether();
 		double xDiff = x - playerPos.xInOverworld();
 		double zDiff = z - playerPos.zInOverworld();
-
 		double angleToStructure = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
 		double angleDifference = (angleToStructure - playerPos.horizontalAngle()) % 360;
 		if (angleDifference > 180)
