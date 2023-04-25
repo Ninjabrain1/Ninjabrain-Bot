@@ -46,12 +46,15 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		double zDiff = z - playerPos.zInOverworld();
 
 		double newAngle = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
-		double simpleDiff = newAngle - playerPos.horizontalAngle();
-		double adjustedDiff = ((newAngle + 360) % 360) - ((playerPos.horizontalAngle() + 360) % 360);
-		double finalDiff = Math.abs(adjustedDiff) < Math.abs(simpleDiff) ? adjustedDiff : simpleDiff;
+		double angleDiff = (newAngle - playerPos.horizontalAngle()) % 360.0;
+		if (angleDiff < -180.0) {
+			angleDiff += 360.0;
+		} else if (angleDiff > 180.0) {
+			angleDiff -= 360.0;
+		}
 
 		this.travelAngle = newAngle;
-		this.travelAngleDiff = finalDiff;
+		this.travelAngleDiff = angleDiff;
 		whenRelativePlayerPositionChanged.notifySubscribers(this);
 	}
 
