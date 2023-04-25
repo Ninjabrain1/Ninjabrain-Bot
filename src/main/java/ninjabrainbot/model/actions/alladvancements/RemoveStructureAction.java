@@ -28,7 +28,7 @@ public class RemoveStructureAction implements IAction {
 			allAdvancementsDataState.monumentPosition().reset();
 			return;
 		}
-		throw new IllegalArgumentException("Cannot remove structure position %s because it not present in the data state.".formatted(structurePosition));
+		throw new IllegalArgumentException(String.format("Cannot remove structure position %s because it not present in the data state.", structurePosition));
 	}
 
 }

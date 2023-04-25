@@ -29,9 +29,11 @@ public abstract class ThemedFrame extends JFrame implements IDisposable {
 	final WrappedColor bgCol;
 
 	protected final DisposeHandler disposeHandler = new DisposeHandler();
+	private final StyleManager styleManager;
 
 	public ThemedFrame(StyleManager styleManager, NinjabrainBotPreferences preferences, String title) {
 		super(title);
+		this.styleManager = styleManager;
 		styleManager.registerThemedFrame(this);
 		setUndecorated(true); // Remove borders
 		setAlwaysOnTop(preferences.alwaysOnTop.get()); // Always focused

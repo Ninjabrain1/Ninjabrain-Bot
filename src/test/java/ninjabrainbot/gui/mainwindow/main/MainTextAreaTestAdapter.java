@@ -40,33 +40,29 @@ public class MainTextAreaTestAdapter {
 
 	public String getAllAdvancementsStructurePanelCoordinates(StructureType structureType) {
 		switch (structureType) {
-			case Stronghold -> {
+			case Stronghold:
 				return ((StructurePanel) mainTextArea.allAdvancements.getComponent(1)).getLocationText();
-			}
-			case Spawn -> {
+			case Spawn:
 				return ((StructurePanel) mainTextArea.allAdvancements.getComponent(2)).getLocationText();
-			}
-			case Outpost -> {
+			case Outpost:
 				return ((StructurePanel) mainTextArea.allAdvancements.getComponent(3)).getLocationText();
-			}
-			case Monument -> {
+			case Monument:
 				return ((StructurePanel) mainTextArea.allAdvancements.getComponent(4)).getLocationText();
-			}
 		}
 		throw new RuntimeException("Unsupported structure type: " + structureType);
 	}
 
-	public void assertAllAdvancementsStructureCoordsAre(int x, int z, StructureType structureType){
+	public void assertAllAdvancementsStructureCoordsAre(int x, int z, StructureType structureType) {
 		String expectedStructureText = String.format("(%s, %s)", x, z);
 		Assertions.assertTrue(mainTextArea.allAdvancements.isVisible(), "AllAdvancementsPanel is not visible.");
 		Assertions.assertEquals(expectedStructureText, getAllAdvancementsStructurePanelCoordinates(structureType));
 	}
 
-	public boolean isBlindPanelVisible(){
+	public boolean isBlindPanelVisible() {
 		return mainTextArea.blind.isVisible();
 	}
 
-	public boolean isAllAdvancementsPanelVisible(){
+	public boolean isAllAdvancementsPanelVisible() {
 		return mainTextArea.allAdvancements.isVisible();
 	}
 
