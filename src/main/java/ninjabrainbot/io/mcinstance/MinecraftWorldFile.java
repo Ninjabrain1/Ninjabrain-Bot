@@ -5,7 +5,8 @@ import java.io.File;
 public class MinecraftWorldFile implements IMinecraftWorldFile {
 
 	private final MinecraftInstance minecraftInstance;
-	private final String name;
+	// Name can be null if the name has not been found out yet
+	private String name;
 	private boolean hasEnteredEnd;
 
 	private File endDimensionFile;
@@ -31,8 +32,12 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 		return hasEnteredEnd;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	File getEndDimensionFile() {
-		if (endDimensionFile == null)
+		if (endDimensionFile == null && name != null)
 			endDimensionFile = new File(minecraftInstance.savesDirectory + "\\" + name + "\\DIM1\\region");
 		return endDimensionFile;
 	}

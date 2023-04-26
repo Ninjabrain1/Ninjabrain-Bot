@@ -9,7 +9,6 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.HashMap;
 
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
@@ -20,14 +19,12 @@ public class SavesReader {
 
 	private final WatchService watcher;
 	private WatchedInstance currentWatchedInstance;
-	private final HashMap<MinecraftInstance, MinecraftWorldFile> activeWorldInEachInstance;
 
 	private final ObservableField<IMinecraftWorldFile> lastModifiedWorldFile;
 	private final ObservableProperty<IMinecraftWorldFile> whenActiveWorldFileModified;
 	private MinecraftWorldFile activeWorldFile;
 
 	public SavesReader(ISubscribable<MinecraftInstance> activeMinecraftInstance) throws IOException {
-		activeWorldInEachInstance = new HashMap<>();
 		lastModifiedWorldFile = new ObservableField<>(null);
 		whenActiveWorldFileModified = new ObservableProperty<>();
 		watcher = FileSystems.getDefault().newWatchService();
@@ -65,11 +62,11 @@ public class SavesReader {
 			e.printStackTrace();
 		}
 
-		if (!activeWorldInEachInstance.containsKey(minecraftInstance)) {
-			MinecraftWorldFile worldFile = new MinecraftWorldFile(minecraftInstance, getLatestModifiedWorldNameInSavesDirectory(minecraftInstance));
-			activeWorldInEachInstance.put(minecraftInstance, worldFile);
-		}
-		activeWorldFile = activeWorldInEachInstance.get(minecraftInstance);
+//		if (!activeWorldInEachInstance.containsKey(minecraftInstance)) {
+//			MinecraftWorldFile worldFile = new MinecraftWorldFile(minecraftInstance, getLatestModifiedWorldNameInSavesDirectory(minecraftInstance));
+//			activeWorldInEachInstance.put(minecraftInstance, worldFile);
+//		}
+		activeWorldFile = new MinecraftWorldFile(minecraftInstance, null);
 		lastModifiedWorldFile.set(activeWorldFile);
 		onActiveMinecraftWorldFileModified();
 	}
@@ -92,9 +89,11 @@ public class SavesReader {
 
 	private void whenActiveMinecraftInstanceSaveDirectoryModified(String worldName) {
 		if (isWorldFileDifferentFromTheLastModifiedWorldFile(worldName)) {
-			activeWorldFile = new MinecraftWorldFile(currentWatchedInstance.minecraftInstance, worldName);
+			if (activeWorldFile.name() == null)
+				activeWorldFile.setName(worldName);
+			else
+				activeWorldFile = new MinecraftWorldFile(currentWatchedInstance.minecraftInstance, worldName);
 			lastModifiedWorldFile.set(activeWorldFile);
-			activeWorldInEachInstance.put(currentWatchedInstance.minecraftInstance, activeWorldFile);
 		}
 		onActiveMinecraftWorldFileModified();
 	}
@@ -106,14 +105,15 @@ public class SavesReader {
 		if (activeWorldFile.minecraftInstance() != currentWatchedInstance.minecraftInstance)
 			return true;
 
-		return !activeWorldFile.name().contentEquals(worldName);
+		return activeWorldFile.name() == null || !activeWorldFile.name().contentEquals(worldName);
 	}
 
 	private void onActiveMinecraftWorldFileModified() {
-		if (!activeWorldFile.hasEnteredEnd() && activeWorldFile.getEndDimensionFile().exists()) {
+		if (!activeWorldFile.hasEnteredEnd() && activeWorldFile.getEndDimensionFile() != null && activeWorldFile.getEndDimensionFile().exists()) {
 			activeWorldFile.setHasEnteredEnd(true);
 		}
 		whenActiveWorldFileModified.notifySubscribers(activeWorldFile);
+		System.out.println(activeWorldFile.name() + ", " + activeWorldFile.hasEnteredEnd());
 	}
 
 	private String getLatestModifiedWorldNameInSavesDirectory(MinecraftInstance minecraftInstance) {
