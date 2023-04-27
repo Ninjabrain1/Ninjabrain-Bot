@@ -85,6 +85,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		certainty.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		distance.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		nether.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
+		angle.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 	}
 
 	public void setAngleUpdatesEnabled(boolean b) {
