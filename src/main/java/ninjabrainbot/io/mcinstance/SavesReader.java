@@ -113,7 +113,6 @@ public class SavesReader {
 			activeWorldFile.setHasEnteredEnd(true);
 		}
 		whenActiveWorldFileModified.notifySubscribers(activeWorldFile);
-		System.out.println(activeWorldFile.name() + ", " + activeWorldFile.hasEnteredEnd());
 	}
 
 	private String getLatestModifiedWorldNameInSavesDirectory(MinecraftInstance minecraftInstance) {
