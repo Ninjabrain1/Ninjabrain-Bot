@@ -16,6 +16,7 @@ import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 import ninjabrainbot.util.Coords;
 import ninjabrainbot.util.I18n;
+import ninjabrainbot.util.Logger;
 
 public class NextThrowDirectionInformationProvider extends InformationMessageProvider {
 
@@ -81,7 +82,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 				sidewaysDistanceIncrement *= 0.5;
 			iteration++;
 			if (iteration > 1000) {
-				System.out.println("Could not determine optimal sideways distance.");
+				Logger.log("Could not determine optimal sideways distance.");
 				return sidewaysDistance;
 			}
 		}

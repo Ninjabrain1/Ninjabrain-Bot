@@ -12,6 +12,7 @@ import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.util.Assert;
+import ninjabrainbot.util.Logger;
 import ninjabrainbot.util.Wrapper;
 
 public abstract class Theme {
@@ -115,7 +116,7 @@ public abstract class Theme {
 		}
 		preferences.customThemesNames.set(names.toString());
 		preferences.customThemesString.set(themeStrings.toString());
-		System.out.println("serialize");
+		Logger.log("Serializing custom themes.");
 	}
 
 	public static Theme get(int uid) {
