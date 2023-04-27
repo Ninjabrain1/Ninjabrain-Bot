@@ -18,6 +18,9 @@ public class DiscretizedDensity {
 	 */
 	public void reset(int discretizationPoints) {
 		discretizedDensity = new double[discretizationPoints];
+		for (int i = 0; i < discretizationPoints; i++)
+			discretizedDensity[0] = 1;
+		normalize();
 	}
 
 	/**
