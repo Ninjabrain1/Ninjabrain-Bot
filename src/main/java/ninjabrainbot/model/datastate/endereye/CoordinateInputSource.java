@@ -51,7 +51,7 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 
 		final Fossil f = Fossil.parseF3I(f3c);
 		if (f != null) {
-			whenNewFossilInputted.set(f);
+			whenNewFossilInputted.setAndAlwaysNotifySubscribers(f);
 		}
 	}
 
