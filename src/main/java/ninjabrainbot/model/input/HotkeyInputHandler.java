@@ -35,6 +35,7 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyAltStd.whenTriggered().subscribe(this::toggleAltStdIfNotLocked));
 		disposeHandler.add(preferences.hotkeyBoat.whenTriggered().subscribe(this::toggleEnteringBoatIfNotLocked));
 		disposeHandler.add(preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState))));
+		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(this::resetBoatState));
 	}
 
 	private void resetIfNotLocked() {
@@ -63,7 +64,12 @@ public class HotkeyInputHandler implements IDisposable {
 	}
 
 	private void toggleEnteringBoatIfNotLocked() {
-		if (!dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
+		if (preferences.usePreciseAngle.get() && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
+			actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
+	}
+
+	private void resetBoatState(){
+		if (!preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
 			actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
 	}
 
