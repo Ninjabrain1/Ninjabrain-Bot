@@ -129,6 +129,11 @@ public class IntegrationTestBuilder {
 		triggerHotkey(preferences.hotkeyAltStd);
 	}
 
+	public void clickRemoveFossilButton() {
+		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		buttonInputHandler.onRemoveFossilButtonPressed();
+	}
+
 	public void triggerHotkey(HotkeyPreference hotkeyPreference) {
 		if (hotkeyInputHandler == null) hotkeyInputHandler = new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor);
 		hotkeyPreference.execute();
@@ -189,7 +194,8 @@ public class IntegrationTestBuilder {
 	}
 
 	public void resetCalculator() {
-		actionExecutor.executeImmediately(new ResetAction(domainModel));
+		if (buttonInputHandler == null) buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
+		buttonInputHandler.onResetButtonPressed();
 	}
 
 	public void enterNewWorld() {
