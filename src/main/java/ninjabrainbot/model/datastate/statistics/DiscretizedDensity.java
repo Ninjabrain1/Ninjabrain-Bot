@@ -1,5 +1,7 @@
 package ninjabrainbot.model.datastate.statistics;
 
+import java.util.Arrays;
+
 public class DiscretizedDensity {
 
 	private double[] discretizedDensity; // values for each "sector"
@@ -18,8 +20,13 @@ public class DiscretizedDensity {
 	 */
 	public void reset(int discretizationPoints) {
 		discretizedDensity = new double[discretizationPoints];
-		for (int i = 0; i < discretizationPoints; i++)
-			discretizedDensity[0] = 1;
+	}
+
+	/**
+	 * Sets the density to a uniform distribution.
+	 */
+	public void setUniform() {
+		Arrays.fill(discretizedDensity, 1);
 		normalize();
 	}
 

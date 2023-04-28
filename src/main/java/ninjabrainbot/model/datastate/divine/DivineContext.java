@@ -85,6 +85,7 @@ public class DivineContext implements IDivineContext, IDisposable {
 	private void onFossilChanged(Fossil fossil) {
 		if (fossil == null) {
 			discretizedAngularDensity.reset(1);
+			discretizedAngularDensity.setUniform();
 			return;
 		}
 		discretizedAngularDensity.reset(16 * 3);
