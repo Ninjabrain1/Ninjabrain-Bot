@@ -25,7 +25,7 @@ public class SetBoatAngleAction implements IAction {
 			return;
 		}
 
-		float candidate = Math.round(angle / 1.40625) * 1.40625f;
+		float candidate = (angle >= 0) ? Math.round(angle / 1.40625) * 1.40625f : Math.round(angle / 0.140625) * 0.140625f;
 		double rounded = Math.round(candidate * 100) / 100.0;
 
 		if (Math.abs(rounded - angle) > boatErrorLimit) {
