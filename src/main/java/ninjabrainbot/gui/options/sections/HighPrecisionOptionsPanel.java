@@ -33,11 +33,8 @@ public class HighPrecisionOptionsPanel extends JPanel {
 		setLayout(new GridLayout(1, 1, 2 * OptionsFrame.PADDING, 0));
 		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
 		JPanel column1 = new StackPanel();
-//		JPanel column2 = new StackPanel();
 		column1.setOpaque(false);
-//		column2.setOpaque(false);
 		add(column1);
-//		add(column2);
 
 		// Tall Res Column
 		column1.add(new ThemedLabel(styleManager, "<html>" + I18n.get("settings.tall_resolution_explanation") + "</html>") {
@@ -58,7 +55,7 @@ public class HighPrecisionOptionsPanel extends JPanel {
 
 		sensitivity = new DoublePreferencePanel(styleManager, I18n.get("settings.sensitivity"), preferences.sensitivity);
 		sensitivity.setWidth(150);
-		sensitivity.setDecimals(9);
+		sensitivity.setDecimals(10);
 		sensitivity.setEnabled(preferences.usePreciseAngle.get() && preferences.useTallRes.get());
 		column1.add(sensitivity);
 		if (KeyboardListener.registered) {
