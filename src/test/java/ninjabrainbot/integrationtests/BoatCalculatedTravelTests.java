@@ -11,20 +11,20 @@ import org.junit.jupiter.params.provider.CsvSource;
 public class BoatCalculatedTravelTests {
 
 	private static final String input1 =
-			"/execute in minecraft:overworld run tp @s 1464.04 78.55 -2189.61 -95.63 18.16," +
-			"/execute in minecraft:overworld run tp @s 1465.31 79.00 -2189.73 -282.21 -32.64," +
-			"-1," +
-			"-3,-117";
+			"/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -78.75 32.82," +
+			"/execute in minecraft:overworld run tp @s 1275.31 93.00 1064.81 -146.11 -32.13," +
+			"7," +
+			"133,-14";
 	private static final String input2 =
-			"/execute in minecraft:overworld run tp @s -1442.62 70.00 1202.10 -40.78 37.05," +
-			"/execute in minecraft:overworld run tp @s -1442.62 70.00 1202.10 -230.14 -32.40," +
-			"2," +
-			"-101,66";
+			"/execute in minecraft:overworld run tp @s -1380.20 80.00 1138.90 -143.16 28.53," +
+			"/execute in minecraft:overworld run tp @s -1376.84 80.00 1132.87 -60.46 -31.73," +
+			"5," +
+			"-43,95";
 	private static final String input3 =
-			"/execute in minecraft:overworld run tp @s 3433.70 86.56 -4804.98 133.59 23.08," +
-			"/execute in minecraft:overworld run tp @s 3433.70 86.56 -4804.98 231.84 -31.92," +
-			"4," +
-			"334,-395";
+			"/execute in minecraft:overworld run tp @s 3430.24 62.07 -4805.87 104.06 74.04," +
+			"/execute in minecraft:overworld run tp @s 3430.24 63.09 -4805.87 93.92 -31.81," +
+			"23," +
+			"111,-308";
 
 	@ParameterizedTest
 	@CsvSource({ input1, input2, input3 })
