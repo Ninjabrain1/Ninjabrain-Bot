@@ -22,6 +22,7 @@ import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
+import ninjabrainbot.model.datastate.highprecision.BoatEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
@@ -49,6 +50,8 @@ public class Calibrator implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private final ObservableProperty<Calibrator> whenModified = new ObservableProperty<>();
 
+	private final boolean boatThrowCalibrator;
+
 	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences) {
 		try {
 			keyPresser = new KeyPresser();
@@ -63,11 +66,17 @@ public class Calibrator implements IDisposable {
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
 		ready = false;
+		boatThrowCalibrator = preferences.useTallRes.get() && preferences.usePreciseAngle.get();
 	}
 
 	private void onNewPlayerPositionInputted(IDetailedPlayerPosition playerPosition) {
 		try {
-			add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+			if (boatThrowCalibrator) {
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+			}
+			else {
+				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -108,6 +117,12 @@ public class Calibrator implements IDisposable {
 			double nextZ = t.zInOverworld() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
+			if (boatThrowCalibrator) {
+				double preMultiplier = preferences.sensitivity.get() * 0.6f + 0.2f;
+				preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0f;
+				double minInc = preMultiplier * 0.15D;
+				nextAlpha = Math.round(nextAlpha / minInc) * minInc;
+			}
 			tp(nextX, nextZ, nextAlpha, -31.2);
 		}
 	}
@@ -186,6 +201,10 @@ public class Calibrator implements IDisposable {
 
 	public boolean isReady() {
 		return ready;
+	}
+
+	public boolean isBoatThrowCalibrator() {
+		return boatThrowCalibrator;
 	}
 
 	public int getNumThrows() {
