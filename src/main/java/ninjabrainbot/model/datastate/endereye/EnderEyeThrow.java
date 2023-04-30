@@ -18,7 +18,7 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 
 	@Override
 	public final double verticalAngle() {
-		return 0;
+		return verticalAngle;
 	}
 
 
