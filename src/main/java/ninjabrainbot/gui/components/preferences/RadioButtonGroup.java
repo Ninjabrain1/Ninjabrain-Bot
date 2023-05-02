@@ -10,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import ninjabrainbot.Main;
@@ -26,18 +27,33 @@ class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 		super(styleManager);
 		setOpaque(false);
 		ButtonGroup group = new ButtonGroup();
-		setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.Y_AXIS : BoxLayout.X_AXIS));
-		for (int i = 0; i < options.length; i++) {
-			T option = options[i];
-			ActionListener listener = e -> onChanged(option);
-			JRadioButton button = new ThemedRadioButton(styleManager, option.choiceName());
-			if (selected == option)
-				button.setSelected(true);
-			button.addActionListener(listener);
-			group.add(button);
-			add(button);
-			if (i != options.length - 1)
-				add(verticalRadioButtons ? Box.createVerticalStrut(OptionsFrame.PADDING) : Box.createHorizontalStrut(10));
+
+		setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.X_AXIS : BoxLayout.Y_AXIS));
+		int entriesPerColumn = 10;
+		int numberOfColumns = options.length / entriesPerColumn + 1;
+
+		for (int j = 0; j < numberOfColumns; j++) {
+			JPanel column = new ThemedPanel(styleManager);
+			column.setLayout(new BoxLayout(column, verticalRadioButtons ? BoxLayout.Y_AXIS : BoxLayout.X_AXIS));
+			if (j != 0)
+				add(Box.createHorizontalStrut(16));
+			add(column);
+			for (int k = 0; k < entriesPerColumn; k++) {
+				int i = j * entriesPerColumn + k;
+				if (i >= options.length)
+					break;
+				T option = options[i];
+				ActionListener listener = e -> onChanged(option);
+				JRadioButton button = new ThemedRadioButton(styleManager, option.choiceName());
+				if (selected == option)
+					button.setSelected(true);
+				button.addActionListener(listener);
+				group.add(button);
+				column.add(button);
+				if (i != options.length - 1)
+					column.add(verticalRadioButtons ? Box.createVerticalStrut(OptionsFrame.PADDING) : Box.createHorizontalStrut(10));
+			}
+			column.add(Box.createGlue());
 		}
 	}
 
@@ -48,7 +64,7 @@ class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		for (Component component : getComponents()){
+		for (Component component : getComponents()) {
 			component.setEnabled(enabled);
 		}
 	}
