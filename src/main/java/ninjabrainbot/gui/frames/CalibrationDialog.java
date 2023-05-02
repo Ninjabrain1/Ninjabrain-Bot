@@ -114,7 +114,12 @@ public class CalibrationDialog extends ThemedDialog {
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
-			preferences.sigma.set(std);
+			if (calibrator.isBoatThrowCalibrator()) {
+				preferences.sigmaBoat.set(std);
+			}
+			else {
+				preferences.sigma.set(std);
+			}
 		}
 		dispose();
 	}
