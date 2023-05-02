@@ -24,7 +24,7 @@ public class McVersionWarningProvider extends InformationMessageProvider {
 
 	@Override
 	protected boolean shouldShowInformationMessage() {
-		return currentMinecraftInstance != null && currentMinecraftInstance.getMcVersion() != preferences.mcVersion.get();
+		return currentMinecraftInstance != null && currentMinecraftInstance.getMcVersion() != null && currentMinecraftInstance.getMcVersion() != preferences.mcVersion.get();
 	}
 
 	private InformationMessage warningMessage = null;
