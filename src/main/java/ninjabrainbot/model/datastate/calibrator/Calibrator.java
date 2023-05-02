@@ -50,9 +50,9 @@ public class Calibrator implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private final ObservableProperty<Calibrator> whenModified = new ObservableProperty<>();
 
-	private final boolean boatThrowCalibrator;
+	private final boolean isBoatThrowCalibrator;
 
-	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences) {
+	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences, boolean isBoatThrowCalibrator) {
 		try {
 			keyPresser = new KeyPresser();
 		} catch (AWTException e) {
@@ -66,12 +66,12 @@ public class Calibrator implements IDisposable {
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
 		ready = false;
-		boatThrowCalibrator = preferences.useTallRes.get() && preferences.usePreciseAngle.get();
+		this.isBoatThrowCalibrator = isBoatThrowCalibrator;
 	}
 
 	private void onNewPlayerPositionInputted(IDetailedPlayerPosition playerPosition) {
 		try {
-			if (boatThrowCalibrator) {
+			if (isBoatThrowCalibrator) {
 				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
 			}
 			else {
@@ -117,7 +117,7 @@ public class Calibrator implements IDisposable {
 			double nextZ = t.zInOverworld() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
-			if (boatThrowCalibrator) {
+			if (isBoatThrowCalibrator) {
 				double preMultiplier = preferences.sensitivity.get() * 0.6f + 0.2f;
 				preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0f;
 				double minInc = preMultiplier * 0.15D;
@@ -201,10 +201,6 @@ public class Calibrator implements IDisposable {
 
 	public boolean isReady() {
 		return ready;
-	}
-
-	public boolean isBoatThrowCalibrator() {
-		return boatThrowCalibrator;
 	}
 
 	public int getNumThrows() {
