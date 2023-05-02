@@ -62,6 +62,8 @@ public class LanguageResources {
 		list.add("I18n_zh_CN.properties");
 		list.add("I18n_zh_TW.properties");
 		list.add("I18n_fr_FR.properties");
+		list.add("I18n_cs_CS.properties");
+		list.add("I18n_tr_TR.properties");
 		return list;
 	}
 
