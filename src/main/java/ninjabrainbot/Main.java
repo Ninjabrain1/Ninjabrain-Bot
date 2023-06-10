@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.splash.Progress;
-import ninjabrainbot.gui.splash.Splash;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.SavedPreferences;
@@ -19,7 +18,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.opengl", "true");
-		Progress.init(new Splash());
 		Progress.setTask("Loading language", 0.02f);
 		Profiler.start("Initialize language");
 		Logger.log("Language: " + I18n.get("lang"));

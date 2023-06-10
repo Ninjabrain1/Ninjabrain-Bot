@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ninjabrainbot</groupId>
-    <artifactId>ninjabrainbot</artifactId>
+    <artifactId>ninjabrainbot-linux</artifactId>
     <packaging>jar</packaging>
     <version>1.4.1</version>
     <name>Ninjabrain Bot</name>
@@ -20,7 +20,6 @@
                             <mainClass>ninjabrainbot.Main</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <SplashScreen-Image>splash.png</SplashScreen-Image>
                             <Built-By>Ninjabrain</Built-By>
                         </manifestEntries>
                     </archive>

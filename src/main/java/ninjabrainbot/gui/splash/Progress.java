@@ -8,21 +8,21 @@ public class Progress {
 	private static Splash splash;
 
 	public static void init(Splash splash) {
-		Progress.splash = splash;
+//		Progress.splash = splash;
 	}
 
 	public static void setTask(String name, float progressWhenComplete) {
-		float totalProgress = pk.setCurrentTask(name, progressWhenComplete);
-		splash.setProgress(pk.label(), totalProgress, progressWhenComplete);
+//		float totalProgress = pk.setCurrentTask(name, progressWhenComplete);
+//		splash.setProgress(pk.label(), totalProgress, progressWhenComplete);
 	}
 
 	public static void startCompoundTask(String name, float progressWhenComplete) {
-		float totalProgress = pk.startCompoundTask(name, progressWhenComplete);
-		splash.setProgress(pk.label(), totalProgress, progressWhenComplete);
+//		float totalProgress = pk.startCompoundTask(name, progressWhenComplete);
+//		splash.setProgress(pk.label(), totalProgress, progressWhenComplete);
 	}
 
 	public static void endCompoundTask() {
-		pk.endCompoundTask();
+//		pk.endCompoundTask();
 	}
 
 }
