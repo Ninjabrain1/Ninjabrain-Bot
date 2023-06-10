@@ -53,7 +53,7 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 			}
 			String clipboardString = null;
 			try {
-				if (read && clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor))
+				if (read)
 					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
 			} catch (UnsupportedFlavorException | IllegalStateException | IOException ignored) {
 			}
