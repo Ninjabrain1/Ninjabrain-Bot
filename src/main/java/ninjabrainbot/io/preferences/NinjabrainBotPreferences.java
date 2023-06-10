@@ -15,7 +15,6 @@ public class NinjabrainBotPreferences {
 	public final IntPreference theme;
 	public final HotkeyPreference hotkeyIncrement;
 	public final HotkeyPreference hotkeyDecrement;
-	public final HotkeyPreference hotkeyBoat;
 	public final HotkeyPreference hotkeyReset;
 	public final HotkeyPreference hotkeyUndo;
 	public final HotkeyPreference hotkeyRedo;
@@ -44,7 +43,6 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference altClipboardReader;
 	public final BooleanPreference useAltStd;
 	public final BooleanPreference useTallRes;
-	public final BooleanPreference usePreciseAngle;
 	public final BooleanPreference useOverlay;
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
@@ -77,7 +75,6 @@ public class NinjabrainBotPreferences {
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", source);
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
-		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
 		hotkeyToggleAllAdvancementsMode = new HotkeyPreference("hotkey_toggle_aa_mode", source);
 		// Float
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
@@ -103,7 +100,6 @@ public class NinjabrainBotPreferences {
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);
 		useTallRes = new BooleanPreference("use_tall_res", false, source);
-		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);

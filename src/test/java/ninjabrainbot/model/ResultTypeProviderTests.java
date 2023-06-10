@@ -45,7 +45,7 @@ public class ResultTypeProviderTests {
 	@Test
 	void resultTypeUpdatesCorrectly() {
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences);
 		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 		new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
 

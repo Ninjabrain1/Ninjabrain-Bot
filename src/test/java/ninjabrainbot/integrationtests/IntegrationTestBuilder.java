@@ -18,7 +18,6 @@ import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -102,7 +101,6 @@ public class IntegrationTestBuilder {
 		preferences.sensitivity.set(0.065292805);
 		preferences.resolutionHeight.set(16384);
 		preferences.useTallRes.set(true);
-		preferences.usePreciseAngle.set(true);
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
 		return this;
@@ -212,14 +210,14 @@ public class IntegrationTestBuilder {
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
 		if (coordinateInputSource == null)
 			coordinateInputSource = new CoordinateInputSource(clipboardReader);
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences);
 		return new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 	}
 
 	private PlayerPositionInputHandler createFakePlayerPositionInputHandler() {
 		if (fakeCoordinateInputSource == null)
 			fakeCoordinateInputSource = new FakeCoordinateInputSource();
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences);
 		return new PlayerPositionInputHandler(fakeCoordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
 	}
 
