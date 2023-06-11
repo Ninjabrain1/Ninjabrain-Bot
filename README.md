@@ -76,7 +76,7 @@ available in the settings. Each players own standard deviation depends on a lot 
 Crosshair correction is used to correct crosshair misalignment. Usually the crosshair is aligned correctly but on certain resolutions combined with certain in-game settings it is misaligned. Below is a list of known settings that cause 
 crosshair misalignment, and what you should set the crosshair correction to. If your resolution and GUI scale are not listed, your crosshair correction should be 0.
 *  1440p Fullscreen GUI scale 3, you should set crosshair correction to 0.026.
-*  1440p Fullscreen GUI scale 0, you should set crosshair correction to 0.104.
+*  1440p Fullscreen GUI scale 6/Auto, you should set crosshair correction to 0.104.
 
 #### What is "Show angle errors" in the settings?
 
