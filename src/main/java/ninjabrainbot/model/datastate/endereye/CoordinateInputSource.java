@@ -37,6 +37,10 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 		if (f3c == null)
 			return;
 
+		f3c = f3c
+				.replaceAll("minecraft:world", "minecraft:overworld")
+				.replaceAll("minecraft:world_nether", "minecraft:the_nether");
+
 		F3CData f3cData = F3CData.tryParseF3CString(f3c);
 		if (f3cData != null) {
 			whenNewDetailedPlayerPositionInputted.set(new DetailedPlayerPosition(f3cData.x, f3cData.y, f3cData.z, f3cData.horizontalAngle, f3cData.verticalAngle, f3cData.nether));
