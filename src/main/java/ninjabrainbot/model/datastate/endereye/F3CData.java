@@ -15,14 +15,18 @@ public class F3CData {
 	}
 
 	public static F3CData tryParseF3CString(String string) {
-		if (!(string.startsWith("/execute in minecraft:overworld run tp @s") || string.startsWith("/execute in minecraft:the_nether run tp @s"))) {
+		if (!(string.startsWith("/execute in minecraft:"))) {
 			return null;
 		}
 		String[] substrings = string.split(" ");
 		if (substrings.length != 11)
 			return null;
 		try {
-			boolean nether = substrings[2].equals("minecraft:the_nether");
+			String world = substrings[2];
+			if (world.endsWith("_end")) {
+				return null;
+			}
+			boolean nether = world.endsWith("_nether");
 			double x = Double.parseDouble(substrings[6]);
 			double y = Double.parseDouble(substrings[7]);
 			double z = Double.parseDouble(substrings[8]);
