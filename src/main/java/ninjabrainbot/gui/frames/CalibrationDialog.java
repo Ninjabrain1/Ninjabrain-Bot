@@ -57,7 +57,7 @@ public class CalibrationDialog extends ThemedDialog {
 		this.preferences = preferences;
 		this.owner = owner;
 		actionExecutor.disable();
-		calibrator = disposeHandler.add(calibratorFactory.createCalibrator());
+		calibrator = disposeHandler.add(calibratorFactory.createCalibrator(isBoatCalibrator(preferences)));
 
 		JPanel panel2 = new JPanel();
 		panel2.setOpaque(false);
@@ -114,7 +114,11 @@ public class CalibrationDialog extends ThemedDialog {
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
-			preferences.sigma.set(std);
+			if (isBoatCalibrator(preferences)) {
+				preferences.sigmaBoat.set(std);
+			} else {
+				preferences.sigma.set(std);
+			}
 		}
 		dispose();
 	}
@@ -171,8 +175,12 @@ public class CalibrationDialog extends ThemedDialog {
 		}
 	}
 
+	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
+		return preferences.useTallRes.get() && preferences.usePreciseAngle.get();
+	}
+
 	private static String getTitle(NinjabrainBotPreferences preferences) {
-		return I18n.get("calibrator.title");
+		return I18n.get("calibrator.title") + (isBoatCalibrator(preferences) ? String.format(" (%s)", I18n.get("settings.boat_standard_deviation")) : "");
 	}
 
 	@Override
