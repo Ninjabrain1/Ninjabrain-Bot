@@ -18,11 +18,11 @@ public class BoatIcon extends ThemedLabel {
 	public BoatIcon(StyleManager styleManager, IObservable<BoatState> boatState, NinjabrainBotPreferences preferences, DisposeHandler sh) {
 		super(styleManager);
 		setIcon(getBoatIcon(boatState.get()));
-//		setVisible(preferences.useTallRes.get() && preferences.usePreciseAngle.get());
-//
-//		sh.add(boatState.subscribeEDT(b -> setIcon(getBoatIcon(b))));
-//		sh.add(preferences.useTallRes.whenModified().subscribeEDT(b -> setVisible(b && preferences.usePreciseAngle.get())));
-//		sh.add(preferences.usePreciseAngle.whenModified().subscribeEDT(this::setVisible));
+		setVisible(preferences.useTallRes.get() && preferences.usePreciseAngle.get());
+
+		sh.add(boatState.subscribeEDT(b -> setIcon(getBoatIcon(b))));
+		sh.add(preferences.useTallRes.whenModified().subscribeEDT(b -> setVisible(b && preferences.usePreciseAngle.get())));
+		sh.add(preferences.usePreciseAngle.whenModified().subscribeEDT(this::setVisible));
 	}
 
 	private static final HashMap<String, ImageIcon> cachedIcons = new HashMap<>();

@@ -123,6 +123,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(settingsButton);
 		NotificationsButton notificationsButton = new NotificationsButton(styleManager, this, preferences, updateChecker);
 		titlebarPanel.addButton(notificationsButton);
+		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, disposeHandler));
 	}
 
 	@Override

@@ -18,8 +18,8 @@ public class CalibratorFactory implements ICalibratorFactory {
 	}
 
 	@Override
-	public Calibrator createCalibrator() {
-		return new Calibrator(calculatorSettings.get(), playerPositionInputSource, preferences);
+	public Calibrator createCalibrator(boolean isBoatCalibrator) {
+		return new Calibrator(calculatorSettings.get(), playerPositionInputSource, preferences, isBoatCalibrator);
 	}
 
 }
