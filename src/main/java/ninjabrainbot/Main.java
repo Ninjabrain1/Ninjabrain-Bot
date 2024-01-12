@@ -1,6 +1,7 @@
 package ninjabrainbot;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.splash.Progress;
@@ -18,7 +19,8 @@ public class Main {
 	public static final String VERSION = "1.4.2";
 
 	public static void main(String[] args) {
-		System.setProperty("sun.java2d.opengl", "true");
+		Optional<String> sessionType = Optional.of(System.getenv("XDG_SESSION_TYPE")); // Hardware acceleration isn't supported when running java on wayland so we turn it off
+		System.setProperty("sun.java2d.opengl", sessionType.orElse("").equals("wayland") ? "false" : "true");
 		Progress.init(new Splash());
 		Progress.setTask("Loading language", 0.02f);
 		Profiler.start("Initialize language");
