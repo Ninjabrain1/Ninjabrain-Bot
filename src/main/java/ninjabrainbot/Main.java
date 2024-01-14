@@ -21,7 +21,7 @@ public class Main {
 	public static void main(String[] args) {
 		Optional<String> sessionType = Optional.of(System.getenv("XDG_SESSION_TYPE")); // Hardware acceleration isn't supported when running java on wayland so we turn it off
 		System.setProperty("sun.java2d.opengl", sessionType.orElse("").equals("wayland") ? "false" : "true");
-		Progress.init(new Splash());
+		Progress.init(new Splash(sessionType.isPresent()));
 		Progress.setTask("Loading language", 0.02f);
 		Profiler.start("Initialize language");
 		Logger.log("Language: " + I18n.get("lang"));

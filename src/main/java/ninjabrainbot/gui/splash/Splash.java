@@ -31,8 +31,10 @@ public class Splash {
 	private static final Color LOADING_BAR_COLOR = new Color(249, 255, 173);
 	private static final Color TEXT_COLOR = LOADING_BAR_COLOR;
 
-	public Splash() {
+	public Splash(boolean disabled) {
 		splashScreen = SplashScreen.getSplashScreen();
+		if (disabled) splashScreen.close();
+
 		if (splashScreen == null) {
 			System.err.println("Could not load splash screen");
 			return;
