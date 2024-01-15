@@ -33,12 +33,12 @@ public class Splash {
 
 	public Splash(boolean disabled) {
 		splashScreen = SplashScreen.getSplashScreen();
-		if (disabled) splashScreen.close();
-
 		if (splashScreen == null) {
 			System.err.println("Could not load splash screen");
 			return;
 		}
+		if (disabled) splashScreen.close();
+
 		g = splashScreen.createGraphics();
 		g.setFont(new Font("Arial", Font.PLAIN, LOADING_PROGRESS_FONT_SIZE));
 		if (g == null) {
