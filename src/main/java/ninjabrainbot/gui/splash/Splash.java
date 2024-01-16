@@ -37,7 +37,10 @@ public class Splash {
 			System.err.println("Could not load splash screen");
 			return;
 		}
-		if (disabled) splashScreen.close();
+		if (disabled) {
+			splashScreen.close();
+			return;
+		}
 
 		g = splashScreen.createGraphics();
 		g.setFont(new Font("Arial", Font.PLAIN, LOADING_PROGRESS_FONT_SIZE));
