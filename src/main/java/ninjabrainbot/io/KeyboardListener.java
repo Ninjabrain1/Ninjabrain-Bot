@@ -77,12 +77,12 @@ public class KeyboardListener implements NativeKeyListener {
 		if (c == NativeKeyEvent.VC_SHIFT || c == NativeKeyEvent.VC_CONTROL || c == NativeKeyEvent.VC_ALT)
 			return;
 		if (consumer != null) {
-			consumer.accept(e.getRawCode(), e.getModifiers());
+			consumer.accept(c, e.getModifiers());
 			consumer = null;
 			return;
 		}
 		for (HotkeyPreference h : HotkeyPreference.hotkeys) {
-			if (h.getCode() == e.getRawCode() && (h.getModifier() & e.getModifiers()) == h.getModifier()) {
+			if (h.getCode() == c && (h.getModifier() & e.getModifiers()) == h.getModifier()) {
 				h.execute();
 			}
 		}

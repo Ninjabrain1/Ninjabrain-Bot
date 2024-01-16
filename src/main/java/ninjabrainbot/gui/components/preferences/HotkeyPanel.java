@@ -3,8 +3,6 @@ package ninjabrainbot.gui.components.preferences;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -72,7 +70,7 @@ public class HotkeyPanel extends ThemedPanel {
 			KeyboardListener.instance.setConsumer((code, modifier) -> {
 				if (code == -1) {
 					// Canceled, dont change anything
-				} else if (code == KeyEvent.VK_ESCAPE) {
+				} else if (code == NativeKeyEvent.VC_ESCAPE) {
 					preference.setCode(-1);
 					preference.setModifier(-1);
 				} else {
@@ -91,7 +89,7 @@ public class HotkeyPanel extends ThemedPanel {
 	private String getKeyText() {
 		if (preference.getCode() == -1)
 			return I18n.get("settings.not_in_use");
-		String k = KeyEvent.getKeyText(preference.getCode());
+		String k = NativeKeyEvent.getKeyText(preference.getCode());
 		if (k.startsWith("Unknown")) {
 			k = k.substring(17);
 		}
