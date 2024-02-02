@@ -1,10 +1,13 @@
 package ninjabrainbot.io.preferences;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import ninjabrainbot.io.KeyConverter;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.io.preferences.enums.SizeSetting;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
+import ninjabrainbot.util.Assert;
 
 public class NinjabrainBotPreferences {
 
@@ -13,6 +16,7 @@ public class NinjabrainBotPreferences {
 	public final IntPreference windowX;
 	public final IntPreference windowY;
 	public final IntPreference theme;
+	private final IntPreference settingsVersion;
 	public final HotkeyPreference hotkeyIncrement;
 	public final HotkeyPreference hotkeyDecrement;
 	public final HotkeyPreference hotkeyBoat;
@@ -68,6 +72,7 @@ public class NinjabrainBotPreferences {
 		windowX = new IntPreference("window_x", 100, source);
 		windowY = new IntPreference("window_y", 100, source);
 		theme = new IntPreference("theme", 1, source);
+		settingsVersion = new IntPreference("settings_version", 0, source);
 		// Hotkey
 		hotkeyIncrement = new HotkeyPreference("hotkey_increment", source);
 		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", source);
@@ -123,6 +128,22 @@ public class NinjabrainBotPreferences {
 		view = new MultipleChoicePreference<>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
 		mcVersion = new MultipleChoicePreference<>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
+
+		// Upgrade if necessary
+		if (settingsVersion.get() == 0) {
+			upgradeSettings_From_0_To_1();
+		}
+		Assert.isEqual(settingsVersion.get(), 1);
+	}
+
+	private void upgradeSettings_From_0_To_1(){
+		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys){
+			if (hotkeyPreference.getCode() == -1)
+				continue;
+			int nativeKeyCode = KeyConverter.convertKeyCodeToNativeKeyCode(hotkeyPreference.getCode());
+			hotkeyPreference.setCode(nativeKeyCode);
+		}
+		settingsVersion.set(1);
 	}
 
 }
