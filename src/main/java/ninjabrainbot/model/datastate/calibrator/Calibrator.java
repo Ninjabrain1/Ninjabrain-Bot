@@ -86,7 +86,9 @@ public class Calibrator implements IDisposable {
 		if (!ready) {
 			keyPresser.releaseF3C();
 			doCommand("clear");
+			Thread.sleep(delay);
 			doCommand("give @p minecraft:ender_eye");
+			Thread.sleep(delay);
 			tp(0, 0, 0, 0);
 			ready = true;
 		} else {
@@ -147,11 +149,13 @@ public class Calibrator implements IDisposable {
 		keyPresser.paste(String.format("tp @p %.2f 128 %.2f %.5f %.2f", x, z, alpha, theta));
 		keyPresser.enter();
 		// place block
+		Thread.sleep(delay);
 		keyPresser.openCommand();
 		Thread.sleep(delay);
 		keyPresser.paste(String.format("setblock %d 255 %d minecraft:diamond_block", (int) Math.floor(x), (int) Math.floor(z)));
 		keyPresser.enter();
 		// tp
+		Thread.sleep(delay);
 		keyPresser.openCommand();
 		Thread.sleep(delay);
 		keyPresser.paste(String.format("tp @p %.2f 256 %.2f %.5f %.2f", x, z, alpha, theta));

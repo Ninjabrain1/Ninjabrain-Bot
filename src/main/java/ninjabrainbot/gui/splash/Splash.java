@@ -31,12 +31,17 @@ public class Splash {
 	private static final Color LOADING_BAR_COLOR = new Color(249, 255, 173);
 	private static final Color TEXT_COLOR = LOADING_BAR_COLOR;
 
-	public Splash() {
+	public Splash(boolean disabled) {
 		splashScreen = SplashScreen.getSplashScreen();
 		if (splashScreen == null) {
 			System.err.println("Could not load splash screen");
 			return;
 		}
+		if (disabled) {
+			splashScreen.close();
+			return;
+		}
+
 		g = splashScreen.createGraphics();
 		g.setFont(new Font("Arial", Font.PLAIN, LOADING_PROGRESS_FONT_SIZE));
 		if (g == null) {
