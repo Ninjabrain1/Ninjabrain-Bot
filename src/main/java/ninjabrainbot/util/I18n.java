@@ -39,12 +39,7 @@ public class I18n {
     }
 
     public static String get(String key, Object... args) {
-        try {
-            return String.format(BUNDLE.getString(key), args);
-        } catch (Throwable ex) {
-            System.out.println(key + ": " + Arrays.toString(args));
-        }
-        return key;
+        return String.format(BUNDLE.getString(key), args);
     }
 
     public static boolean localeRequiresExtraSpace() {
