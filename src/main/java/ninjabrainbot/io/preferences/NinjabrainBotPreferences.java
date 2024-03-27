@@ -51,6 +51,7 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference useAdvStatistics;
 	public final BooleanPreference altClipboardReader;
 	public final BooleanPreference useAltStd;
+	public final BooleanPreference colorCodeNegativeCoords;
 	public final BooleanPreference useTallRes;
 	public final BooleanPreference usePreciseAngle;
 	public final BooleanPreference useOverlay;
@@ -111,6 +112,7 @@ public class NinjabrainBotPreferences {
 		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, source);
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);
+		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
 		useTallRes = new BooleanPreference("use_tall_res", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);

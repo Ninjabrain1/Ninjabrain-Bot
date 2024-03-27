@@ -30,6 +30,7 @@ import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private final MultipleChoicePreference<StrongholdDisplayType> strongholdDisplayType;
+	private final NinjabrainBotPreferences preferences;
 
 	private ChunkPrediction currentPrediction;
 
@@ -45,6 +46,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 
 	private Subscription chunkPredictionSubscription;
 	private final Subscription strongholdDisplayTypeChangedSubscription;
+	private final Subscription colorCodeNegativeCoordsSubscription;
 
 	private final WrappedColor borderCol;
 
@@ -55,6 +57,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 	public ChunkPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, ChunkPrediction p) {
 		super(styleManager);
 		this.styleManager = styleManager;
+		this.preferences = preferences;
 		strongholdDisplayType = preferences.strongholdDisplayType;
 		setOpaque(true);
 		location = new ThemedLabel(styleManager, true);
@@ -76,6 +79,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		setPrediction(p);
 		setAngleUpdatesEnabled(preferences.showAngleUpdates.get());
 		strongholdDisplayTypeChangedSubscription = preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setPrediction(currentPrediction));
+		colorCodeNegativeCoordsSubscription = preferences.colorCodeNegativeCoords.whenModified().subscribeEDT(__ -> setPrediction(currentPrediction));
 
 		borderCol = styleManager.currentTheme.COLOR_DIVIDER;
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
@@ -148,6 +152,7 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		super.updateColors();
 		angle.updateColor();
 		certainty.updateColors();
+		setPrediction(currentPrediction);
 	}
 
 	@Override
@@ -166,30 +171,39 @@ public class ChunkPanel extends ThemedPanel implements IDisposable {
 		if (chunkPredictionSubscription != null)
 			chunkPredictionSubscription.dispose();
 		strongholdDisplayTypeChangedSubscription.dispose();
+		colorCodeNegativeCoordsSubscription.dispose();
 	}
 
 	private void setText(ChunkPrediction chunkPrediction) {
 		location.setText(formatStrongholdCoords(chunkPrediction.chunk, strongholdDisplayType.get()));
 		certainty.setText(chunkPrediction.formatCertainty(), (float) chunkPrediction.chunk.weight);
 		distance.setText(chunkPrediction.formatDistanceInPlayersDimension());
-		nether.setText(chunkPrediction.formatNether());
+		nether.setText(getFormattedCoords(chunkPrediction.xInNetherForDisplay(), chunkPrediction.zInNetherForDisplay()));
 		angle.setText(chunkPrediction.formatTravelAngle(false));
 		angle.setColoredText(chunkPrediction.formatTravelAngleDiff(), chunkPrediction.getTravelAngleDiffColor());
 		lastColor = chunkPrediction.chunk.weight;
 	}
 
-	private static String formatStrongholdCoords(Chunk chunk, StrongholdDisplayType strongholdDisplayType) {
+	private String formatStrongholdCoords(Chunk chunk, StrongholdDisplayType strongholdDisplayType) {
 		switch (strongholdDisplayType) {
 			case FOURFOUR:
-				return String.format(Locale.US, "(%d, %d)", chunk.fourFourX(), chunk.fourFourZ());
+				return getFormattedCoords(chunk.fourFourX(), chunk.fourFourZ());
 			case EIGHTEIGHT:
-				return String.format(Locale.US, "(%d, %d)", chunk.eightEightX(), chunk.eightEightZ());
+				return getFormattedCoords(chunk.eightEightX(), chunk.eightEightZ());
 			case CHUNK:
-				return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
+				return getFormattedCoords(chunk.x, chunk.z);
 			default:
 				break;
 		}
-		return String.format(Locale.US, "(%d, %d)", chunk.x, chunk.z);
+		return getFormattedCoords(chunk.x, chunk.z);
 	}
 
+	private String getFormattedCoords(int x, int z){
+		if (preferences.colorCodeNegativeCoords.get()){
+			String xColor = x < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
+			String zColor = z < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
+			return String.format(Locale.US, "<html>(<font color='%s'>%d</font>, <font color='%s'>%d</font>)</html>", xColor, x, zColor, z);
+		}
+		return String.format(Locale.US, "(%d, %d)", x, z);
+	}
 }

@@ -64,6 +64,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		certaintyPanel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		currentAngleLabel.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		disposeHandler.add(preferences.strongholdDisplayType.whenModified().subscribeEDT(__ -> setResult(currentResult)));
+		disposeHandler.add(preferences.colorCodeNegativeCoords.whenModified().subscribeEDT(__ -> setResult(currentResult)));
 		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(this::setAngleUpdatesEnabled));
 	}
 
@@ -95,7 +96,7 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		mainTextLabel.setText(formatStrongholdCoords(prediction, preferences.strongholdDisplayType.get()));
 		certaintyPanel.setText(CERTAINTY_TEXT);
 		certaintyPanel.setColoredText(String.format(Locale.US, "%.1f%%", prediction.chunk.weight * 100.0), (float) prediction.chunk.weight);
-		netherLabel.setText(I18n.get("nether_coordinates", prediction.chunk.x * 2, prediction.chunk.z * 2, prediction.getNetherDistance()));
+		netherLabel.setText("<html>" + I18n.get("nether_coordinates", getFormattedCoords(prediction.chunk.x * 2, prediction.chunk.z * 2), prediction.getNetherDistance()) + "</html>");
 		currentAngleLabel.setText(prediction.formatTravelAngle(true));
 		currentAngleLabel.setColoredText(prediction.formatTravelAngleDiff(), prediction.getTravelAngleDiffColor());
 	}
@@ -127,20 +128,28 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		disposeHandler.dispose();
 	}
 
-	private static String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {
+	private String formatStrongholdCoords(ChunkPrediction chunkPrediction, StrongholdDisplayType strongholdDisplayType) {
 		Chunk chunk = chunkPrediction.chunk;
 		int distance = chunkPrediction.getOverworldDistance();
 		switch (strongholdDisplayType) {
 			case FOURFOUR:
-				return I18n.get("location_blocks", chunk.fourFourX(), chunk.fourFourZ(), distance);
+				return "<html>" + I18n.get("location_blocks", getFormattedCoords(chunk.fourFourX(), chunk.fourFourZ()), distance) + "</html>";
 			case EIGHTEIGHT:
-				return I18n.get("location_blocks", chunk.eightEightX(), chunk.eightEightZ(), distance);
+				return "<html>" + I18n.get("location_blocks", getFormattedCoords(chunk.eightEightX(), chunk.eightEightZ()), distance) + "</html>";
 			case CHUNK:
-				return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
+				return "<html>" + I18n.get("chunk_blocks", getFormattedCoords(chunk.x, chunk.z), distance) + "</html>";
 			default:
 				break;
 		}
-		return I18n.get("chunk_blocks", chunk.x, chunk.z, distance);
+		return "<html>" + I18n.get("chunk_blocks", getFormattedCoords(chunk.x, chunk.z), distance) + "</html>";
 	}
 
+	private String getFormattedCoords(int x, int z){
+		if (preferences.colorCodeNegativeCoords.get()){
+			String xColor = x < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
+			String zColor = z < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
+			return String.format(Locale.US, "(<font color='%s'>%d</font>, <font color='%s'>%d</font>)", xColor, x, zColor, z);
+		}
+		return String.format(Locale.US, "(%d, %d)", x, z);
+	}
 }
