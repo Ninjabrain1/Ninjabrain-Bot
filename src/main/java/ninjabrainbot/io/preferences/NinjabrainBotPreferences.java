@@ -1,6 +1,10 @@
 package ninjabrainbot.io.preferences;
 
+import java.awt.event.KeyEvent;
+
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.SwingKeyAdapter;
+import com.sun.jna.Platform;
 import ninjabrainbot.io.KeyConverter;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
@@ -130,10 +134,12 @@ public class NinjabrainBotPreferences {
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
 
 		// Upgrade if necessary
-		if (settingsVersion.get() == 0) {
+		if (settingsVersion.get() == 0)
 			upgradeSettings_From_0_To_1();
-		}
-		Assert.isEqual(settingsVersion.get(), 1);
+		if (settingsVersion.get() == 1)
+			upgradeSettings_From_1_To_2();
+
+		Assert.isTrue(settingsVersion.get() >= 2); // Do >= to allow users to downgrade to an earlier version, in case newer version has issues
 	}
 
 	private void upgradeSettings_From_0_To_1(){
@@ -144,6 +150,19 @@ public class NinjabrainBotPreferences {
 			hotkeyPreference.setCode(nativeKeyCode);
 		}
 		settingsVersion.set(1);
+	}
+
+	private void upgradeSettings_From_1_To_2(){
+		if (!Platform.isLinux()){
+			KeyConverter keyConverter = new KeyConverter();
+			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys){
+				if (hotkeyPreference.getCode() == -1)
+					continue;
+				int keyCode = keyConverter.convertNativeKeyCodeToKeyCode(hotkeyPreference.getCode());
+				hotkeyPreference.setCode(keyCode);
+			}
+		}
+		settingsVersion.set(2);
 	}
 
 }

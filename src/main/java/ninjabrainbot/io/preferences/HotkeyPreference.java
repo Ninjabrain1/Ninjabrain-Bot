@@ -2,6 +2,8 @@ package ninjabrainbot.io.preferences;
 
 import java.util.ArrayList;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.sun.jna.Platform;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 
@@ -32,12 +34,22 @@ public class HotkeyPreference {
 		return modifier.get();
 	}
 
+	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent){
+		int code = getPlatformSpecificKeyCode(nativeKeyEvent);
+		return getCode() == code && (getModifier() & nativeKeyEvent.getModifiers()) == getModifier();
+	}
+
 	public synchronized void setCode(int value) {
 		code.set(value);
 	}
 
 	public synchronized void setModifier(int value) {
 		modifier.set(value);
+	}
+
+	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent){
+		setCode(getPlatformSpecificKeyCode(nativeKeyEvent));
+		setModifier(nativeKeyEvent.getModifiers());
 	}
 
 	public final void execute() {
@@ -48,4 +60,7 @@ public class HotkeyPreference {
 		return whenTriggered;
 	}
 
+	private static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent){
+		return Platform.isLinux() ? nativeKeyEvent.getKeyCode() : nativeKeyEvent.getRawCode();
+	}
 }
