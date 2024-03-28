@@ -56,7 +56,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
 			return new TryAddAllAdvancementsStructureAction(dataState, playerPosition);
 
-		if (dataState.boatDataState().enteringBoat().get())
+		if (preferences.useTallRes.get() && preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
 			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
 
 		if (playerPosition.lookingBelowHorizon())

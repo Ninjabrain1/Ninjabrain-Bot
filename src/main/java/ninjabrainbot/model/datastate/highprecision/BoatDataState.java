@@ -11,9 +11,13 @@ public class BoatDataState implements IBoatDataState {
 	private final DataComponent<BoatState> boatState;
 
 	public BoatDataState(IDomainModel domainModel) {
-		enteringBoat = new DataComponent<>(domainModel, false);
+		this(domainModel, false);
+	}
+
+	public BoatDataState(IDomainModel domainModel, boolean isBoatActivatedByDefault) {
+		enteringBoat = new DataComponent<>(domainModel, isBoatActivatedByDefault);
 		boatAngle = new DataComponent<>(domainModel);
-		boatState = new DataComponent<>(domainModel, BoatState.NONE);
+		boatState = new DataComponent<>(domainModel, isBoatActivatedByDefault ? BoatState.MEASURING : BoatState.NONE);
 	}
 
 	@Override
