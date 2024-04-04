@@ -50,7 +50,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (dataState.locked().get())
 			return null;
 
-		if (preferences.useTallRes.get() && preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
+		if (preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
 			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
 
 		if (!playerPosition.isInOverworld())

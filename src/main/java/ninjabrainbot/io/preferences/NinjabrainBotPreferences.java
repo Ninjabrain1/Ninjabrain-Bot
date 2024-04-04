@@ -1,16 +1,8 @@
 package ninjabrainbot.io.preferences;
 
-import java.awt.event.KeyEvent;
-
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.keyboard.SwingKeyAdapter;
 import com.sun.jna.Platform;
 import ninjabrainbot.io.KeyConverter;
-import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
-import ninjabrainbot.io.preferences.enums.MainViewType;
-import ninjabrainbot.io.preferences.enums.McVersion;
-import ninjabrainbot.io.preferences.enums.SizeSetting;
-import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
+import ninjabrainbot.io.preferences.enums.*;
 import ninjabrainbot.util.Assert;
 
 public class NinjabrainBotPreferences {
@@ -54,7 +46,6 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference colorCodeNegativeCoords;
 	public final BooleanPreference useTallRes;
 	public final BooleanPreference usePreciseAngle;
-	public final BooleanPreference activateBoatOnReset;
 	public final BooleanPreference useOverlay;
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
@@ -71,6 +62,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<MainViewType> view;
 	public final MultipleChoicePreference<McVersion> mcVersion;
 	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
+	public final MultipleChoicePreference<DefaultBoatType> defaultBoatType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -116,7 +108,6 @@ public class NinjabrainBotPreferences {
 		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
 		useTallRes = new BooleanPreference("use_tall_res", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
-		activateBoatOnReset = new BooleanPreference("activate_boat_on_reset", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
@@ -136,6 +127,7 @@ public class NinjabrainBotPreferences {
 		view = new MultipleChoicePreference<>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
 		mcVersion = new MultipleChoicePreference<>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
+		defaultBoatType = new MultipleChoicePreference<>("default_boat_type", DefaultBoatType.GRAY, new int[] { 0, 1, 2 }, new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
 
 		// Upgrade if necessary
 		if (settingsVersion.get() == 0)
