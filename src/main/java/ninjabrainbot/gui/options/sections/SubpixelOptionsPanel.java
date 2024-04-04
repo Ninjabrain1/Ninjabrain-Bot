@@ -2,13 +2,16 @@ package ninjabrainbot.gui.options.sections;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
+import ninjabrainbot.gui.components.layout.Divider;
 import ninjabrainbot.gui.components.layout.StackPanel;
-import ninjabrainbot.gui.components.preferences.CheckboxPanel;
+import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
+import ninjabrainbot.gui.components.preferences.RadioButtonPanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.SubpixelAdjustmentType;
 import ninjabrainbot.util.I18n;
 
 import javax.swing.*;
@@ -17,7 +20,9 @@ import java.awt.*;
 
 public class SubpixelOptionsPanel extends JPanel {
 
-	private final FloatPreferencePanel resolutionHeight;
+	private final ThemedLabel tallResExplanation;
+    private final FloatPreferencePanel resolutionHeight;
+	private final DoublePreferencePanel customAdjustmentAmount;
 
 	public SubpixelOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
 		setOpaque(false);
@@ -27,25 +32,50 @@ public class SubpixelOptionsPanel extends JPanel {
 		column1.setOpaque(false);
 		add(column1);
 
-		// Tall Res Column
-		column1.add(new ThemedLabel(styleManager, "<html>" + I18n.get("settings.tall_resolution_explanation") + "</html>") {
+        column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.subpixel_adjustment.adjustment_type"), preferences.subpixelAdjustmentType, true));
+
+		// Tall Res Section
+		column1.add(new Divider(styleManager));
+
+		tallResExplanation = new ThemedLabel(styleManager, "<html>" + I18n.get("settings.tall_resolution_explanation") + "</html>") {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
-		});
-		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.tall_resolution"), preferences.useTallRes));
+		};
+		column1.add(tallResExplanation);
+
 		resolutionHeight = new FloatPreferencePanel(styleManager, I18n.get("settings.resolution_height"), preferences.resolutionHeight);
 		resolutionHeight.setDecimals(0);
-		resolutionHeight.setEnabled(preferences.useTallRes.get());
 		column1.add(resolutionHeight);
 
-		disposeHandler.add(preferences.useTallRes.whenModified().subscribeEDT(this::setTallResolutionEnabled));
-		setTallResolutionEnabled(preferences.useTallRes.get());
+		// Custom Adjustment Section
+		column1.add(new Divider(styleManager));
+
+		customAdjustmentAmount = new DoublePreferencePanel(styleManager, I18n.get("settings.subpixel_adjustment.custom_amount"), preferences.customAdjustment);
+		customAdjustmentAmount.setDecimals(8);
+		column1.add(customAdjustmentAmount);
+
+		disposeHandler.add(preferences.subpixelAdjustmentType.whenModified().subscribeEDT(this::onAdjustmentTypeChanged));
+		onAdjustmentTypeChanged(preferences.subpixelAdjustmentType.get());
 	}
 
-	private void setTallResolutionEnabled(boolean b) {
-		resolutionHeight.setEnabled(b);
-		resolutionHeight.descLabel.updateColors();
+	private void onAdjustmentTypeChanged(SubpixelAdjustmentType type) {
+		switch (type) {
+			case TALL:
+				tallResExplanation.setEnabled(true);
+				resolutionHeight.setEnabled(true);
+				customAdjustmentAmount.setEnabled(false);
+				break;
+			case CUSTOM:
+				tallResExplanation.setEnabled(false);
+				resolutionHeight.setEnabled(false);
+				customAdjustmentAmount.setEnabled(true);
+				break;
+			default:
+				tallResExplanation.setEnabled(false);
+				resolutionHeight.setEnabled(false);
+				customAdjustmentAmount.setEnabled(false);
+		}
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.io.preferences.enums.SubpixelAdjustmentType;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -103,7 +104,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
 		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(error::setVisible));
-		disposeHandler.add(preferences.useTallRes.whenModified().subscribeEDT(b -> whenTallResChanged()));
+		disposeHandler.add(preferences.subpixelAdjustmentType.whenModified().subscribeEDT(b -> whenAdjustmentTypeChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -118,7 +119,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private void updateError(ChunkPrediction p) {
 		lastPredictionForUpdatingError = p;
-		error.setText(t == null || p == null ? null : String.format(Locale.US, preferences.useTallRes.get() ? "%.4f" : "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, preferences.usePreciseAngle.get() || preferences.subpixelAdjustmentType.get() != SubpixelAdjustmentType.DEFAULT ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -240,7 +241,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			alpha.setText(String.format(Locale.US, "%.2f", t.horizontalAngleWithoutCorrection()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.useTallRes.get() ? "%.3f" : "%.2f"), t.correction()));
+				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.subpixelAdjustmentType.get() == SubpixelAdjustmentType.DEFAULT ? "%.2f" : "%.3f"), t.correction()));
 				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);
@@ -280,7 +281,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		}
 	}
 
-	private void whenTallResChanged() {
+	private void whenAdjustmentTypeChanged() {
 		setThrow(t);
 		updateError(lastPredictionForUpdatingError);
 	}

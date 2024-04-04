@@ -53,6 +53,7 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 
 		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribeEDT(this::setPreciseAngleEnabled));
 		disposeHandler.add(preferences.sigmaBoat.whenModified().subscribeEDT(sigmaBoat::updateValue));
+		setPreciseAngleEnabled(preferences.usePreciseAngle.get());
 	}
 
 	private void setPreciseAngleEnabled(boolean b) {

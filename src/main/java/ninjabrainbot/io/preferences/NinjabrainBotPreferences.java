@@ -31,6 +31,7 @@ public class NinjabrainBotPreferences {
 	public final FloatPreference boatErrorLimit;
 	public final FloatPreference overlayHideDelay;
 	public final DoublePreference sensitivity;
+	public final DoublePreference customAdjustment;
 	public final DoublePreference crosshairCorrection;
 	public final BooleanPreference checkForUpdates;
 	public final BooleanPreference translucent;
@@ -44,7 +45,6 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference altClipboardReader;
 	public final BooleanPreference useAltStd;
 	public final BooleanPreference colorCodeNegativeCoords;
-	public final BooleanPreference useTallRes;
 	public final BooleanPreference usePreciseAngle;
 	public final BooleanPreference useOverlay;
 	public final BooleanPreference overlayAutoHide;
@@ -63,6 +63,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<McVersion> mcVersion;
 	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
 	public final MultipleChoicePreference<DefaultBoatType> defaultBoatType;
+	public final MultipleChoicePreference<SubpixelAdjustmentType> subpixelAdjustmentType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -92,6 +93,7 @@ public class NinjabrainBotPreferences {
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
 		// Double
 		sensitivity = new DoublePreference("sensitivity", 0.012727597f, 0f, 1f, source);
+		customAdjustment = new DoublePreference("custom_adjustment", 0.01, 0f, 1f, source);
 		crosshairCorrection = new DoublePreference("crosshair_correction", 0, -1f, 1f, source);
 		// Boolean
 		checkForUpdates = new BooleanPreference("check_for_updates", true, source);
@@ -106,7 +108,6 @@ public class NinjabrainBotPreferences {
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);
 		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
-		useTallRes = new BooleanPreference("use_tall_res", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
@@ -127,7 +128,10 @@ public class NinjabrainBotPreferences {
 		view = new MultipleChoicePreference<>("view", MainViewType.BASIC, new int[] { 0, 1 }, new MainViewType[] { MainViewType.BASIC, MainViewType.DETAILED }, source);
 		mcVersion = new MultipleChoicePreference<>("mc_version", McVersion.PRE_119, new int[] { 0, 1 }, new McVersion[] { McVersion.PRE_119, McVersion.POST_119 }, source);
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
-		defaultBoatType = new MultipleChoicePreference<>("default_boat_type", DefaultBoatType.GRAY, new int[] { 0, 1, 2 }, new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
+		defaultBoatType = new MultipleChoicePreference<>("default_boat_type", DefaultBoatType.GRAY, new int[] { 0, 1, 2 },
+				new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
+		subpixelAdjustmentType = new MultipleChoicePreference<>("subpixel_adjustment_type", SubpixelAdjustmentType.DEFAULT, new int[] { 0, 1, 2 },
+				new SubpixelAdjustmentType[] { SubpixelAdjustmentType.DEFAULT, SubpixelAdjustmentType.TALL, SubpixelAdjustmentType.CUSTOM }, source);
 
 		// Upgrade if necessary
 		if (settingsVersion.get() == 0)
