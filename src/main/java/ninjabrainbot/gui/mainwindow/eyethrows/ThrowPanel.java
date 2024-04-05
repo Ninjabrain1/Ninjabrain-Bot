@@ -56,8 +56,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	private Subscription chunkPredictionModifiedSubscription;
 	private final Runnable whenVisibilityChanged;
 
-	private ChunkPrediction lastPredictionForUpdatingError;
-
 	private final WrappedColor negCol;
 	private final WrappedColor posCol;
 	private final WrappedColor lineCol;
@@ -104,7 +102,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
 		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(error::setVisible));
-		disposeHandler.add(preferences.subpixelAdjustmentType.whenModified().subscribeEDT(b -> whenAdjustmentTypeChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -118,8 +115,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		lastPredictionForUpdatingError = p;
-		error.setText(t == null || p == null ? null : String.format(Locale.US, preferences.usePreciseAngle.get() || preferences.subpixelAdjustmentType.get() != SubpixelAdjustmentType.DEFAULT ? "%.4f" : "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.Boat ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -279,11 +275,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			int b = 2;
 			g.fillRect(b, b, a, a);
 		}
-	}
-
-	private void whenAdjustmentTypeChanged() {
-		setThrow(t);
-		updateError(lastPredictionForUpdatingError);
 	}
 
 	private boolean hasThrow() {
