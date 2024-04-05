@@ -32,6 +32,10 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 	public IEnderEyeThrow createEnderEyeThrowFromLimitedPlayerPosition(IPlayerPosition playerPosition) {
 		Assert.isTrue(playerPosition.isInOverworld());
 
+		boolean isBoatThrow = preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;
+		if (isBoatThrow)
+			return new BoatEnderEyeThrow(playerPosition, preferences, boatDataState.boatAngle().get());
+
 		return new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get());
 	}
 
