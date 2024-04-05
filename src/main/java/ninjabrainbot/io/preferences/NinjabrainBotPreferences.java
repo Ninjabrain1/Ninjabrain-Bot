@@ -63,7 +63,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<McVersion> mcVersion;
 	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
 	public final MultipleChoicePreference<DefaultBoatType> defaultBoatType;
-	public final MultipleChoicePreference<SubpixelAdjustmentType> subpixelAdjustmentType;
+	public final MultipleChoicePreference<AngleAdjustmentType> angleAdjustmentType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -130,8 +130,8 @@ public class NinjabrainBotPreferences {
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
 		defaultBoatType = new MultipleChoicePreference<>("default_boat_type", DefaultBoatType.GRAY, new int[] { 0, 1, 2 },
 				new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
-		subpixelAdjustmentType = new MultipleChoicePreference<>("subpixel_adjustment_type", SubpixelAdjustmentType.DEFAULT, new int[] { 0, 1, 2 },
-				new SubpixelAdjustmentType[] { SubpixelAdjustmentType.DEFAULT, SubpixelAdjustmentType.TALL, SubpixelAdjustmentType.CUSTOM }, source);
+		angleAdjustmentType = new MultipleChoicePreference<>("angle_adjustment_type", AngleAdjustmentType.SUBPIXEL, new int[] { 0, 1, 2 },
+				new AngleAdjustmentType[] { AngleAdjustmentType.SUBPIXEL, AngleAdjustmentType.TALL, AngleAdjustmentType.CUSTOM }, source);
 
 		// Upgrade if necessary
 		if (settingsVersion.get() == 0)

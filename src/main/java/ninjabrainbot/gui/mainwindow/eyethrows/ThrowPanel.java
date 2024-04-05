@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.io.preferences.enums.SubpixelAdjustmentType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -237,7 +237,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			alpha.setText(String.format(Locale.US, "%.2f", t.horizontalAngleWithoutCorrection()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.subpixelAdjustmentType.get() == SubpixelAdjustmentType.DEFAULT ? "%.2f" : "%.3f"), t.correction()));
+				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.angleAdjustmentType.get() == AngleAdjustmentType.SUBPIXEL ? "%.2f" : "%.3f"), t.correction()));
 				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);

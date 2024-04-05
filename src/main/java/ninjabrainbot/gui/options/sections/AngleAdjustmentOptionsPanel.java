@@ -11,20 +11,20 @@ import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
-import ninjabrainbot.io.preferences.enums.SubpixelAdjustmentType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.util.I18n;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class SubpixelOptionsPanel extends JPanel {
+public class AngleAdjustmentOptionsPanel extends JPanel {
 
 	private final ThemedLabel tallResExplanation;
     private final FloatPreferencePanel resolutionHeight;
 	private final DoublePreferencePanel customAdjustmentAmount;
 
-	public SubpixelOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
+	public AngleAdjustmentOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
 		setOpaque(false);
 		setLayout(new GridLayout(1, 1, 2 * OptionsFrame.PADDING, 0));
 		setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
@@ -32,7 +32,7 @@ public class SubpixelOptionsPanel extends JPanel {
 		column1.setOpaque(false);
 		add(column1);
 
-        column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.subpixel_adjustment.adjustment_type"), preferences.subpixelAdjustmentType, true));
+		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.adjustment_type"), preferences.angleAdjustmentType, true));
 
 		// Tall Res Section
 		column1.add(new Divider(styleManager));
@@ -51,15 +51,15 @@ public class SubpixelOptionsPanel extends JPanel {
 		// Custom Adjustment Section
 		column1.add(new Divider(styleManager));
 
-		customAdjustmentAmount = new DoublePreferencePanel(styleManager, I18n.get("settings.subpixel_adjustment.custom_amount"), preferences.customAdjustment);
+		customAdjustmentAmount = new DoublePreferencePanel(styleManager, I18n.get("settings.angle_adjustment.custom_amount"), preferences.customAdjustment);
 		customAdjustmentAmount.setDecimals(8);
 		column1.add(customAdjustmentAmount);
 
-		disposeHandler.add(preferences.subpixelAdjustmentType.whenModified().subscribeEDT(this::onAdjustmentTypeChanged));
-		onAdjustmentTypeChanged(preferences.subpixelAdjustmentType.get());
+		disposeHandler.add(preferences.angleAdjustmentType.whenModified().subscribeEDT(this::onAdjustmentTypeChanged));
+		onAdjustmentTypeChanged(preferences.angleAdjustmentType.get());
 	}
 
-	private void onAdjustmentTypeChanged(SubpixelAdjustmentType type) {
+	private void onAdjustmentTypeChanged(AngleAdjustmentType type) {
 		switch (type) {
 			case TALL:
 				tallResExplanation.setEnabled(true);

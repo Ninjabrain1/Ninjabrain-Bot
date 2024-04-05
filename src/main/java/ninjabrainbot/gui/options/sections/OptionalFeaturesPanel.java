@@ -12,7 +12,7 @@ public class OptionalFeaturesPanel extends ThemedTabbedPane {
 		super(styleManager);
 		addTab(I18n.get("settings.general"), new GeneralOptionalFeaturesOptionsPanel(styleManager, preferences));
 		addTab(I18n.get("settings.all_advancements"), new AllAdvancementsOptionsPanel(styleManager, preferences));
-		addTab(I18n.get("settings.subpixel_adjustment"), new SubpixelOptionsPanel(styleManager, preferences, disposeHandler));
+		addTab(I18n.get("settings.angle_adjustment"), new AngleAdjustmentOptionsPanel(styleManager, preferences, disposeHandler));
 		addTab(I18n.get("settings.boat_eye"), new BoatMeasurementOptionsPanel(styleManager, preferences, disposeHandler));
 	}
 

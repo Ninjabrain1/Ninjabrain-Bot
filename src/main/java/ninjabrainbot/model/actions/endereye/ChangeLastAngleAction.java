@@ -42,7 +42,7 @@ public class ChangeLastAngleAction implements IAction {
 
 	private double getAngleCorrectionAmountInDegrees(double beta) {
 		double change;
-		switch (preferences.subpixelAdjustmentType.get()) {
+		switch (preferences.angleAdjustmentType.get()) {
 			case TALL:
 				final double toRad = Math.PI / 180.0;
 				change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;

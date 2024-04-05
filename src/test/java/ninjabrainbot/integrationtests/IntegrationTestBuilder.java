@@ -16,7 +16,7 @@ import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
-import ninjabrainbot.io.preferences.enums.SubpixelAdjustmentType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
@@ -101,7 +101,7 @@ public class IntegrationTestBuilder {
 		preferences.sigmaBoat.set(0.001f);
 		preferences.sensitivity.set(0.065292805);
 		preferences.resolutionHeight.set(16384);
-		preferences.subpixelAdjustmentType.set(SubpixelAdjustmentType.TALL);
+		preferences.angleAdjustmentType.set(AngleAdjustmentType.TALL);
 		preferences.usePreciseAngle.set(true);
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
