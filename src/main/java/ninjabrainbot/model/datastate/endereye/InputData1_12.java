@@ -15,8 +15,14 @@ public class InputData1_12 {
 		if (substrings.length != 3)
 			return null;
 		try {
-			double x = Double.parseDouble(substrings[0]) + 0.5; // Add 0.5 because block coords should be used
-			double z = Double.parseDouble(substrings[1]) + 0.5; // Add 0.5 because block coords should be used
+			double x = Double.parseDouble(substrings[0]);
+			if ((int) x == x)
+				x += 0.5; // Add 0.5 if block coords are being used
+
+			double z = Double.parseDouble(substrings[1]);
+			if ((int) z == z)
+				z += 0.5; // Add 0.5 if block coords are being used
+
 			double rawAlpha = Double.parseDouble(substrings[2]);
 			return new InputData1_12(x, z, rawAlpha);
 		} catch (NullPointerException | NumberFormatException e) {
