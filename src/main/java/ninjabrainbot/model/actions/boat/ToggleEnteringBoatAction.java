@@ -20,10 +20,7 @@ public class ToggleEnteringBoatAction implements IAction {
 
 		IBoatDataState boatDataState = dataState.boatDataState();
 		boatDataState.enteringBoat().set(!boatDataState.enteringBoat().get());
-		if (boatDataState.enteringBoat().get()) {
-			boatDataState.boatState().set(BoatState.MEASURING);
-		} else {
-			boatDataState.boatState().set((boatDataState.boatAngle().get() == null) ? BoatState.NONE : BoatState.VALID);
-		}
+		boatDataState.boatState().set(boatDataState.enteringBoat().get() ? BoatState.MEASURING : BoatState.NONE);
+		boatDataState.boatAngle().set(null);
 	}
 }

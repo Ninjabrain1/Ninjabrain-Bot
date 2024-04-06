@@ -20,7 +20,6 @@ public class SetBoatAngleAction implements IAction {
 	@Override
 	public void execute() {
 		if (Math.abs(angle) > 360) {
-			boatDataState.boatAngle().set(null);
 			boatDataState.boatState().set(BoatState.ERROR);
 			return;
 		}
@@ -29,7 +28,6 @@ public class SetBoatAngleAction implements IAction {
 		double rounded = Math.round(candidate * 100) / 100.0;
 
 		if (Math.abs(rounded - angle) > boatErrorLimit) {
-			boatDataState.boatAngle().set(null);
 			boatDataState.boatState().set(BoatState.ERROR);
 			return;
 		}
