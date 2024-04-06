@@ -1,4 +1,4 @@
-package ninjabrainbot.gui.mainwindow;
+package ninjabrainbot.gui.mainwindow.boateye;
 
 import java.util.HashMap;
 import java.util.Objects;

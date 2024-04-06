@@ -2,7 +2,7 @@ package ninjabrainbot.integrationtests;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
-import ninjabrainbot.gui.mainwindow.BoatIcon;
+import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
 import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanel;
 import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanelTestAdapter;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;

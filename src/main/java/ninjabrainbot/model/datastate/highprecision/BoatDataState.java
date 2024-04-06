@@ -8,6 +8,7 @@ import ninjabrainbot.model.domainmodel.IDomainModel;
 public class BoatDataState implements IBoatDataState {
 
 	private final DataComponent<Boolean> enteringBoat;
+	private final DataComponent<Boolean> reducingModulo360;
 	private final DataComponent<Float> boatAngle;
 	private final DataComponent<BoatState> boatState;
 
@@ -16,6 +17,8 @@ public class BoatDataState implements IBoatDataState {
 	}
 
 	public BoatDataState(IDomainModel domainModel, DefaultBoatType defaultBoatType) {
+		reducingModulo360 = new DataComponent<>(domainModel, false);
+
 		switch (defaultBoatType) {
 			case GREEN:
 				enteringBoat = new DataComponent<>(domainModel, false);
@@ -37,6 +40,11 @@ public class BoatDataState implements IBoatDataState {
 	@Override
 	public IDataComponent<Boolean> enteringBoat() {
 		return enteringBoat;
+	}
+
+	@Override
+	public IDataComponent<Boolean> reducingModulo360() {
+		return reducingModulo360;
 	}
 
 	@Override

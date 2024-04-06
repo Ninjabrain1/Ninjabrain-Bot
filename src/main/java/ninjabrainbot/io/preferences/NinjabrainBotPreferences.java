@@ -16,6 +16,7 @@ public class NinjabrainBotPreferences {
 	public final HotkeyPreference hotkeyIncrement;
 	public final HotkeyPreference hotkeyDecrement;
 	public final HotkeyPreference hotkeyBoat;
+	public final HotkeyPreference hotkeyMod360;
 	public final HotkeyPreference hotkeyReset;
 	public final HotkeyPreference hotkeyUndo;
 	public final HotkeyPreference hotkeyRedo;
@@ -82,6 +83,7 @@ public class NinjabrainBotPreferences {
 		hotkeyAltStd = new HotkeyPreference("hotkey_alt_std", source);
 		hotkeyLock = new HotkeyPreference("hotkey_lock", source);
 		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
+		hotkeyMod360 = new HotkeyPreference("hotkey_mod_360", source);
 		hotkeyToggleAllAdvancementsMode = new HotkeyPreference("hotkey_toggle_aa_mode", source);
 		// Float
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);

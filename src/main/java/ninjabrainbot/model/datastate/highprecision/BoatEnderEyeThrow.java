@@ -54,10 +54,10 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 
 	private static double getPreciseBoatHorizontalAngle(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
 		double sensitivity = preferences.sensitivity.get();
-		double preMultiplier = sensitivity * 0.6f + 0.2f;
-		preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0f;
+		double preMultiplier = sensitivity * (double) 0.6f + (double) 0.2f;
+		preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0D;
 		double minInc = preMultiplier * 0.15D;
-		alpha = boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc;
+		alpha = (float) (boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc);
 		return getCorrectedHorizontalAngle(alpha, preferences.crosshairCorrection.get());
 	}
 

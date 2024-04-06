@@ -21,6 +21,7 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 	private final FloatPreferencePanel boatErrorLimit;
 	private final FloatPreferencePanel sigmaBoat;
 	private HotkeyPanel enterBoatHotkey;
+	private HotkeyPanel mod360Hotkey;
 
 	public BoatMeasurementOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {
 		setOpaque(false);
@@ -40,6 +41,9 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		if (KeyboardListener.registered) {
 			enterBoatHotkey = new HotkeyPanel(styleManager, I18n.get("settings.enter_boat"), preferences.hotkeyBoat);
 			column1.add(enterBoatHotkey);
+
+			mod360Hotkey = new HotkeyPanel(styleManager, I18n.get("settings.boat_eye.mod_360"), preferences.hotkeyMod360);
+			column1.add(mod360Hotkey);
 		}
 
 		column1.add(boatTypeRadioButtonPanel = new RadioButtonPanel(styleManager, I18n.get("settings.boat_eye.default_boat_type"), preferences.defaultBoatType, true));
@@ -63,6 +67,8 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		sigmaBoat.setEnabled(b);
 		if (enterBoatHotkey != null)
 			enterBoatHotkey.setEnabled(b);
+		if (mod360Hotkey != null)
+			mod360Hotkey.setEnabled(b);
 	}
 
 }

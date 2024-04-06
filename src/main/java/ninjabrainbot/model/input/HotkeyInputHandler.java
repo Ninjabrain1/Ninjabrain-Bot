@@ -6,6 +6,7 @@ import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.boat.ResetBoatStateAction;
 import ninjabrainbot.model.actions.boat.ToggleEnteringBoatAction;
+import ninjabrainbot.model.actions.boat.ToggleMod360IndicatorAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.actions.common.ToggleLockedAction;
 import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
@@ -35,6 +36,7 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(false)));
 		disposeHandler.add(preferences.hotkeyAltStd.whenTriggered().subscribe(this::toggleAltStdIfNotLocked));
 		disposeHandler.add(preferences.hotkeyBoat.whenTriggered().subscribe(this::toggleEnteringBoatIfNotLocked));
+		disposeHandler.add(preferences.hotkeyMod360.whenTriggered().subscribe(this::toggleMod360IndicatorIfNotLocked));
 		disposeHandler.add(preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState))));
 		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(this::resetBoatState));
 	}
@@ -65,8 +67,19 @@ public class HotkeyInputHandler implements IDisposable {
 	}
 
 	private void toggleEnteringBoatIfNotLocked() {
-		if (preferences.usePreciseAngle.get() && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
+		if (preferences.usePreciseAngle.get() && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
+			if (!dataState.boatDataState().enteringBoat().get() && dataState.boatDataState().reducingModulo360().get())
+				actionExecutor.executeImmediately(new ToggleMod360IndicatorAction(dataState));
 			actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
+		}
+	}
+
+	private void toggleMod360IndicatorIfNotLocked() {
+		if (preferences.usePreciseAngle.get() && dataState.boatDataState().boatAngle().get() != null && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
+			if (!dataState.boatDataState().reducingModulo360().get() && dataState.boatDataState().enteringBoat().get())
+				actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
+			actionExecutor.executeImmediately(new ToggleMod360IndicatorAction(dataState));
+		}
 	}
 
 	private void resetBoatState() {
