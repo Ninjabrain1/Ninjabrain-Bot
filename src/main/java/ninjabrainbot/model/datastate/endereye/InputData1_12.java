@@ -16,11 +16,11 @@ public class InputData1_12 {
 			return null;
 		try {
 			double x = Double.parseDouble(substrings[0]);
-			if ((int) x == x)
+			if (!substrings[0].contains("."))
 				x += 0.5; // Add 0.5 if block coords are being used
 
 			double z = Double.parseDouble(substrings[1]);
-			if ((int) z == z)
+			if (!substrings[1].contains("."))
 				z += 0.5; // Add 0.5 if block coords are being used
 
 			double rawAlpha = Double.parseDouble(substrings[2]);
