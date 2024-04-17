@@ -17,7 +17,8 @@ import ninjabrainbot.util.I18n;
 public class BoatMeasurementOptionsPanel extends JPanel {
 
 	private final RadioButtonPanel boatTypeRadioButtonPanel;
-    private final DoublePreferencePanel sensitivity;
+	private final DoublePreferencePanel sensitivityAutomatic;
+	private final FloatPreferencePanel sensitivityManual;
 	private final FloatPreferencePanel boatErrorLimit;
 	private final FloatPreferencePanel sigmaBoat;
 	private HotkeyPanel enterBoatHotkey;
@@ -34,10 +35,20 @@ public class BoatMeasurementOptionsPanel extends JPanel {
         CheckboxPanel enableBoatMeasurementsCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
 		column1.add(enableBoatMeasurementsCheckbox);
 
-		sensitivity = new DoublePreferencePanel(styleManager, I18n.get("settings.sensitivity"), preferences.sensitivity);
-		sensitivity.setWidth(150);
-		sensitivity.setDecimals(10);
-		column1.add(sensitivity);
+		sensitivityManual = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivityManual"), preferences.sensitivityManual);
+		sensitivityManual.setWidth(130);
+		sensitivityManual.setDecimals(10);
+
+		sensitivityAutomatic = new DoublePreferencePanel(styleManager, I18n.get("settings.sensitivityAutomatic"), preferences.sensitivityAutomatic);
+		sensitivityAutomatic.setWidth(130);
+		sensitivityAutomatic.setDecimals(10);
+
+		JPanel sensitivityRow = new JPanel(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
+		sensitivityRow.setOpaque(false);
+		sensitivityRow.add(sensitivityManual);
+		sensitivityRow.add(sensitivityAutomatic);
+		column1.add(sensitivityRow);
+
 		if (KeyboardListener.registered) {
 			enterBoatHotkey = new HotkeyPanel(styleManager, I18n.get("settings.enter_boat"), preferences.hotkeyBoat);
 			column1.add(enterBoatHotkey);
@@ -61,7 +72,8 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 	}
 
 	private void setPreciseAngleEnabled(boolean b) {
-		sensitivity.setEnabled(b);
+		sensitivityManual.setEnabled(b);
+		sensitivityAutomatic.setEnabled(b);
 		boatTypeRadioButtonPanel.setEnabled(b);
 		boatErrorLimit.setEnabled(b);
 		sigmaBoat.setEnabled(b);

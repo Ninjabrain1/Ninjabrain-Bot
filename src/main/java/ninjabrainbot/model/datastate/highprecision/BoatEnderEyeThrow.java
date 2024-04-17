@@ -14,12 +14,12 @@ import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 public class BoatEnderEyeThrow extends EnderEyeThrow {
 
 	public BoatEnderEyeThrow(IPlayerPosition playerPosition, NinjabrainBotPreferences preferences, float boatAngle) {
-		this(playerPosition.xInOverworld(), playerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(playerPosition.horizontalAngle(), preferences, boatAngle),
+		this(playerPosition.xInOverworld(), playerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(playerPosition.horizontalAngle(), preferences.sensitivityManual.get(), preferences.crosshairCorrection.get(), boatAngle),
 				-31.6, 0);
 	}
 
 	public BoatEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, NinjabrainBotPreferences preferences, float boatAngle) {
-		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(detailedPlayerPosition.horizontalAngle(), preferences, boatAngle),
+		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(detailedPlayerPosition.horizontalAngle(), preferences.sensitivityAutomatic.get(), preferences.crosshairCorrection.get(), boatAngle),
 				detailedPlayerPosition.verticalAngle(), 0);
 	}
 
@@ -52,13 +52,12 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 		return EnderEyeThrowType.Boat;
 	}
 
-	private static double getPreciseBoatHorizontalAngle(double alpha, NinjabrainBotPreferences preferences, float boatAngle) {
-		double sensitivity = preferences.sensitivity.get();
+	private static double getPreciseBoatHorizontalAngle(double alpha, double sensitivity, double crosshairCorrection, float boatAngle) {
 		double preMultiplier = sensitivity * (double) 0.6f + (double) 0.2f;
 		preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0D;
 		double minInc = preMultiplier * 0.15D;
 		alpha = (float) (boatAngle + Math.round((alpha - boatAngle) / minInc) * minInc);
-		return getCorrectedHorizontalAngle(alpha, preferences.crosshairCorrection.get());
+		return getCorrectedHorizontalAngle(alpha, crosshairCorrection);
 	}
 
 }

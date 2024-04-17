@@ -120,7 +120,7 @@ public class Calibrator implements IDisposable {
 			// Face in the general direction of the stronghold
 			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
 			if (isBoatThrowCalibrator) {
-				double preMultiplier = preferences.sensitivity.get() * (double) 0.6f + (double) 0.2f;
+				double preMultiplier = preferences.sensitivityAutomatic.get() * (double) 0.6f + (double) 0.2f;
 				preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0D;
 				double minInc = preMultiplier * 0.15D;
 				nextAlpha = (float) (Math.round(nextAlpha / minInc) * minInc);

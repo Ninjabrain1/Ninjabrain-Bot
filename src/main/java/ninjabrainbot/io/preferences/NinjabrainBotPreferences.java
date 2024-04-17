@@ -24,6 +24,7 @@ public class NinjabrainBotPreferences {
 	public final HotkeyPreference hotkeyAltStd;
 	public final HotkeyPreference hotkeyLock;
 	public final HotkeyPreference hotkeyToggleAllAdvancementsMode;
+	public final FloatPreference sensitivityManual;
 	public final FloatPreference sigma;
 	public final FloatPreference sigmaAlt;
 	public final FloatPreference sigmaManual;
@@ -31,7 +32,7 @@ public class NinjabrainBotPreferences {
 	public final FloatPreference resolutionHeight;
 	public final FloatPreference boatErrorLimit;
 	public final FloatPreference overlayHideDelay;
-	public final DoublePreference sensitivity;
+	public final DoublePreference sensitivityAutomatic;
 	public final DoublePreference customAdjustment;
 	public final DoublePreference crosshairCorrection;
 	public final BooleanPreference checkForUpdates;
@@ -86,6 +87,7 @@ public class NinjabrainBotPreferences {
 		hotkeyMod360 = new HotkeyPreference("hotkey_mod_360", source);
 		hotkeyToggleAllAdvancementsMode = new HotkeyPreference("hotkey_toggle_aa_mode", source);
 		// Float
+		sensitivityManual = new FloatPreference("sensitivity_manual", 0.4341732f, 0f, 1f, source);
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);
 		sigmaManual = new FloatPreference("sigma_manual", 0.03f, 0.001f, 1f, source);
@@ -94,7 +96,7 @@ public class NinjabrainBotPreferences {
 		boatErrorLimit = new FloatPreference("boat_error", 0.03f, 0f, 0.7f, source);
 		overlayHideDelay = new FloatPreference("overlay_hide_delay", 30f, 1f, 3600f, source);
 		// Double
-		sensitivity = new DoublePreference("sensitivity", 0.012727597f, 0f, 1f, source);
+		sensitivityAutomatic = new DoublePreference("sensitivity", 0.012727597f, 0f, 1f, source);
 		customAdjustment = new DoublePreference("custom_adjustment", 0.01, 0f, 1f, source);
 		crosshairCorrection = new DoublePreference("crosshair_correction", 0, -1f, 1f, source);
 		// Boolean

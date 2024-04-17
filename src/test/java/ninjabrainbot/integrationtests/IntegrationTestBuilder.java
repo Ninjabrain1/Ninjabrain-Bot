@@ -99,7 +99,7 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder withBoatSettings() {
 		preferences.sigmaBoat.set(0.001f);
-		preferences.sensitivity.set(0.065292805);
+		preferences.sensitivityAutomatic.set(0.065292805);
 		preferences.resolutionHeight.set(16384);
 		preferences.angleAdjustmentType.set(AngleAdjustmentType.TALL);
 		preferences.usePreciseAngle.set(true);

@@ -10,10 +10,10 @@ public class ReduceBoatAngleMod360Action implements IAction {
 	private final double angle;
 	private final double sensitivity;
 
-	public ReduceBoatAngleMod360Action(IBoatDataState boatDataState, double playerAngle, NinjabrainBotPreferences preferences) {
+	public ReduceBoatAngleMod360Action(IBoatDataState boatDataState, double playerAngle, double sensitivity) {
 		this.boatDataState = boatDataState;
 		this.angle = playerAngle;
-		this.sensitivity = preferences.sensitivity.get();
+		this.sensitivity = sensitivity;
 	}
 
 	@Override

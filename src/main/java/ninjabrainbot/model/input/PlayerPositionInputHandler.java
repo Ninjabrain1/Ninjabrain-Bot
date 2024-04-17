@@ -55,7 +55,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
 
 		if (preferences.usePreciseAngle.get() && dataState.boatDataState().reducingModulo360().get())
-			return new ReduceBoatAngleMod360Action(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
+			return new ReduceBoatAngleMod360Action(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences.sensitivityAutomatic.get());
 
 		if (!playerPosition.isInOverworld())
 			return null;
