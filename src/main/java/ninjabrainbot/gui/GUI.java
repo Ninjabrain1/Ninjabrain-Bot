@@ -15,6 +15,8 @@ import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.overlay.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.overlay.OBSOverlay;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.server.NinjabrainBotServerSocket;
+import ninjabrainbot.io.server.TestClient;
 import ninjabrainbot.io.updatechecker.GithubUpdateChecker;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
@@ -76,6 +78,8 @@ public class GUI {
 		initInputHandlers();
 		initUI();
 		postInit();
+		new Thread(new NinjabrainBotServerSocket()).start();
+		new TestClient();
 	}
 
 	private void initInputMethods() {
