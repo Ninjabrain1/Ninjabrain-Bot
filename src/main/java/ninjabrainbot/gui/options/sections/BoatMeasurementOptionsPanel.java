@@ -38,16 +38,12 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		sensitivityManual = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivityManual"), preferences.sensitivityManual);
 		sensitivityManual.setWidth(130);
 		sensitivityManual.setDecimals(10);
+		column1.add(sensitivityManual);
 
 		sensitivityAutomatic = new DoublePreferencePanel(styleManager, I18n.get("settings.sensitivityAutomatic"), preferences.sensitivityAutomatic);
 		sensitivityAutomatic.setWidth(130);
 		sensitivityAutomatic.setDecimals(10);
-
-		JPanel sensitivityRow = new JPanel(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
-		sensitivityRow.setOpaque(false);
-		sensitivityRow.add(sensitivityManual);
-		sensitivityRow.add(sensitivityAutomatic);
-		column1.add(sensitivityRow);
+		column1.add(sensitivityAutomatic);
 
 		if (KeyboardListener.registered) {
 			enterBoatHotkey = new HotkeyPanel(styleManager, I18n.get("settings.enter_boat"), preferences.hotkeyBoat);
