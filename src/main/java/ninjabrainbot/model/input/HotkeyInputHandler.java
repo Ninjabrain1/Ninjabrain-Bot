@@ -12,6 +12,7 @@ import ninjabrainbot.model.actions.common.ToggleLockedAction;
 import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
 import ninjabrainbot.model.actions.endereye.ToggleAltStdOnLastThrowAction;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class HotkeyInputHandler implements IDisposable {
@@ -68,16 +69,15 @@ public class HotkeyInputHandler implements IDisposable {
 
 	private void toggleEnteringBoatIfNotLocked() {
 		if (preferences.usePreciseAngle.get() && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
-			if (!dataState.boatDataState().enteringBoat().get() && dataState.boatDataState().reducingModulo360().get())
-				actionExecutor.executeImmediately(new ToggleMod360IndicatorAction(dataState));
-			actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
+			if (dataState.boatDataState().reducingModulo360().get())
+				actionExecutor.executeImmediately(new ToggleMod360IndicatorAction(dataState), new ToggleEnteringBoatAction(dataState));
+			else
+				actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
 		}
 	}
 
 	private void toggleMod360IndicatorIfNotLocked() {
-		if (preferences.usePreciseAngle.get() && dataState.boatDataState().boatAngle().get() != null && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
-			if (!dataState.boatDataState().reducingModulo360().get() && dataState.boatDataState().enteringBoat().get())
-				actionExecutor.executeImmediately(new ToggleEnteringBoatAction(dataState));
+		if (preferences.usePreciseAngle.get() && dataState.boatDataState().boatState().get() == BoatState.VALID && !dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
 			actionExecutor.executeImmediately(new ToggleMod360IndicatorAction(dataState));
 		}
 	}
