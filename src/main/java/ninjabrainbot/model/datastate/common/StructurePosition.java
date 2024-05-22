@@ -60,10 +60,6 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		return String.format(Locale.US, "%d", playerIsInNether ? getNetherDistance() : overworldDistance);
 	}
 
-	public String formatNether() {
-		return String.format(Locale.US, "(%d, %d)", (int) Math.floor(x / 8.0), (int) Math.floor(z / 8.0));
-	}
-
 	public String formatTravelAngle(boolean forBasic) {
 		if (forBasic) {
 			return String.format("%s: %.2f", I18n.get("current_angle"), travelAngle);
@@ -96,6 +92,14 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 
 	public double zInNether() {
 		return zInOverworld() / 8.0;
+	}
+
+	public int xInNetherForDisplay(){
+		return (int) Math.floor(x / 8.0);
+	}
+
+	public int zInNetherForDisplay(){
+		return (int) Math.floor(z / 8.0);
 	}
 
 	public int getOverworldDistance() {

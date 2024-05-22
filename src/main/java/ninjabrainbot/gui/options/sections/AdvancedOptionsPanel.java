@@ -77,6 +77,7 @@ public class AdvancedOptionsPanel extends JPanel {
 
 		column2.add(new DoublePreferencePanel(styleManager, I18n.get("settings.crosshair_correction"), preferences.crosshairCorrection));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.show_angle_errors"), preferences.showAngleErrors));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.color_negative_coords"), preferences.colorCodeNegativeCoords));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
 

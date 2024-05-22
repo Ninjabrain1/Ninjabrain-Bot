@@ -1,7 +1,7 @@
 package ninjabrainbot.io;
 
 import java.awt.event.KeyEvent;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -17,8 +17,8 @@ public class KeyboardListener implements NativeKeyListener {
 
 	private final BooleanPreference useAltClipboardReader;
 
-	BiConsumer<Integer, Integer> consumer;
-	final ClipboardReader clr;
+	Consumer<NativeKeyEvent> consumer;
+	final ClipboardReader clipboardReader;
 	boolean f3Held = false;
 
 	public static void preInit() {
@@ -44,54 +44,55 @@ public class KeyboardListener implements NativeKeyListener {
 		});
 	}
 
-	public static void init(ClipboardReader clr, BooleanPreference useAltClipboardReader) {
+	public static void init(ClipboardReader clipboardReader, BooleanPreference useAltClipboardReader) {
 		if (registered) {
-			instance = new KeyboardListener(clr, useAltClipboardReader);
+			instance = new KeyboardListener(clipboardReader, useAltClipboardReader);
 			GlobalScreen.addNativeKeyListener(instance);
 		}
 	}
 
-	KeyboardListener(ClipboardReader clr, BooleanPreference useAltClipboardReader) {
+	KeyboardListener(ClipboardReader clipboardReader, BooleanPreference useAltClipboardReader) {
 		super();
-		this.clr = clr;
+		this.clipboardReader = clipboardReader;
 		this.useAltClipboardReader = useAltClipboardReader;
 	}
 
-	public synchronized void setConsumer(BiConsumer<Integer, Integer> consumer) {
+	public synchronized void setConsumer(Consumer<NativeKeyEvent> consumer) {
 		if (this.consumer != null) {
-			this.consumer.accept(-1, -1);
+			this.consumer.accept(null);
 		}
 		this.consumer = consumer;
 	}
 
 	public synchronized void cancelConsumer() {
 		if (this.consumer != null) {
-			this.consumer.accept(-1, -1);
+			this.consumer.accept(null);
 			this.consumer = null;
 		}
 	}
 
 	@Override
-	public void nativeKeyPressed(NativeKeyEvent e) {
-		int c = e.getKeyCode();
-		if (c == NativeKeyEvent.VC_SHIFT || c == NativeKeyEvent.VC_CONTROL || c == NativeKeyEvent.VC_ALT)
+	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
+		int keyCode = nativeKeyEvent.getKeyCode();
+		if (keyCode == NativeKeyEvent.VC_SHIFT || keyCode == NativeKeyEvent.VC_CONTROL || keyCode == NativeKeyEvent.VC_ALT)
 			return;
+
 		if (consumer != null) {
-			consumer.accept(c, e.getModifiers());
+			consumer.accept(nativeKeyEvent);
 			consumer = null;
 			return;
 		}
-		for (HotkeyPreference h : HotkeyPreference.hotkeys) {
-			if (h.getCode() == c && (h.getModifier() & e.getModifiers()) == h.getModifier()) {
-				h.execute();
+		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
+			if (hotkeyPreference.isKeyEventMatching(nativeKeyEvent)) {
+				hotkeyPreference.execute();
 			}
 		}
 		// Alt clipboard reader
 		if (useAltClipboardReader.get()) {
-			if (e.getRawCode() == KeyEvent.VK_F3) {
+			if (nativeKeyEvent.getRawCode() == KeyEvent.VK_F3) {
 				f3Held = true;
-			} else if (f3Held && e.getRawCode() == KeyEvent.VK_C) {
-				clr.forceRead();
+			} else if (f3Held && nativeKeyEvent.getRawCode() == KeyEvent.VK_C) {
+				clipboardReader.forceRead();
 			}
 		}
 	}
@@ -102,5 +103,4 @@ public class KeyboardListener implements NativeKeyListener {
 			f3Held = false;
 		}
 	}
-
 }

@@ -1,6 +1,10 @@
 package ninjabrainbot.io.preferences;
 
+import java.awt.event.KeyEvent;
+
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.SwingKeyAdapter;
+import com.sun.jna.Platform;
 import ninjabrainbot.io.KeyConverter;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
@@ -47,8 +51,10 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference useAdvStatistics;
 	public final BooleanPreference altClipboardReader;
 	public final BooleanPreference useAltStd;
+	public final BooleanPreference colorCodeNegativeCoords;
 	public final BooleanPreference useTallRes;
 	public final BooleanPreference usePreciseAngle;
+	public final BooleanPreference activateBoatOnReset;
 	public final BooleanPreference useOverlay;
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
@@ -107,8 +113,10 @@ public class NinjabrainBotPreferences {
 		useAdvStatistics = new BooleanPreference("use_adv_statistics", true, source);
 		altClipboardReader = new BooleanPreference("alt_clipboard_reader", false, source);
 		useAltStd = new BooleanPreference("use_alt_std", false, source);
+		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
 		useTallRes = new BooleanPreference("use_tall_res", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
+		activateBoatOnReset = new BooleanPreference("activate_boat_on_reset", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
@@ -130,10 +138,12 @@ public class NinjabrainBotPreferences {
 		allAdvancementsToggleType = new MultipleChoicePreference<>("aa_toggle_type", AllAdvancementsToggleType.Automatic, new int[] { 0, 1 }, new AllAdvancementsToggleType[] { AllAdvancementsToggleType.Automatic, AllAdvancementsToggleType.Hotkey }, source);
 
 		// Upgrade if necessary
-		if (settingsVersion.get() == 0) {
+		if (settingsVersion.get() == 0)
 			upgradeSettings_From_0_To_1();
-		}
-		Assert.isEqual(settingsVersion.get(), 1);
+		if (settingsVersion.get() == 1)
+			upgradeSettings_From_1_To_2();
+
+		Assert.isTrue(settingsVersion.get() >= 2); // Do >= to allow users to downgrade to an earlier version, in case newer version has issues
 	}
 
 	private void upgradeSettings_From_0_To_1(){
@@ -144,6 +154,19 @@ public class NinjabrainBotPreferences {
 			hotkeyPreference.setCode(nativeKeyCode);
 		}
 		settingsVersion.set(1);
+	}
+
+	private void upgradeSettings_From_1_To_2(){
+		if (!Platform.isLinux()){
+			KeyConverter keyConverter = new KeyConverter();
+			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys){
+				if (hotkeyPreference.getCode() == -1)
+					continue;
+				int keyCode = keyConverter.convertNativeKeyCodeToKeyCode(hotkeyPreference.getCode());
+				hotkeyPreference.setCode(keyCode);
+			}
+		}
+		settingsVersion.set(2);
 	}
 
 }

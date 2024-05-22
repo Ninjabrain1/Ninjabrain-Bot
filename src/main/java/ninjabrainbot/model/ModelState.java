@@ -26,7 +26,7 @@ public class ModelState implements IDisposable {
 		this.domainModel = domainModel;
 		actionExecutor = new ActionExecutor(domainModel);
 		environmentState = disposeHandler.add(new EnvironmentState(domainModel, preferences));
-		dataState = disposeHandler.add(new DataState(domainModel, environmentState));
+		dataState = disposeHandler.add(new DataState(domainModel, environmentState, preferences.activateBoatOnReset.get()));
 		domainModel.finishInitialization();
 	}
 

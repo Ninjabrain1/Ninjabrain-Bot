@@ -43,6 +43,10 @@ public class DataState implements IDataState, IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DataState(IDomainModel domainModel, IEnvironmentState environmentState) {
+		this(domainModel, environmentState, false);
+	}
+
+	public DataState(IDomainModel domainModel, IEnvironmentState environmentState, boolean isBoatActivatedByDefault) {
 		divineContext = disposeHandler.add(new DivineContext(domainModel));
 		throwSet = new ListComponent<>(domainModel, 10);
 		playerPosition = new DataComponent<>(domainModel);
@@ -50,7 +54,7 @@ public class DataState implements IDataState, IDisposable {
 
 		calculatorManager = disposeHandler.add(new CalculatorManager(domainModel, environmentState, throwSet, playerPosition, divineContext));
 		allAdvancementsDataState = disposeHandler.add(new AllAdvancementsDataState(calculatorManager.topPrediction(), domainModel, environmentState));
-		boatDataState = new BoatDataState(domainModel);
+		boatDataState = new BoatDataState(domainModel, isBoatActivatedByDefault);
 
 		resultTypeProvider = disposeHandler.add(new ResultTypeProvider(this, domainModel));
 	}
