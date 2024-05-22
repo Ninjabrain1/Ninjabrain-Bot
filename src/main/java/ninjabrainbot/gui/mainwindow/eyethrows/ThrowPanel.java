@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -54,8 +55,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 
 	private Subscription chunkPredictionModifiedSubscription;
 	private final Runnable whenVisibilityChanged;
-
-	private ChunkPrediction lastPredictionForUpdatingError;
 
 	private final WrappedColor negCol;
 	private final WrappedColor posCol;
@@ -103,7 +102,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
 		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(error::setVisible));
-		disposeHandler.add(preferences.useTallRes.whenModified().subscribeEDT(b -> whenTallResChanged()));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -117,8 +115,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		lastPredictionForUpdatingError = p;
-		error.setText(t == null || p == null ? null : String.format(Locale.US, preferences.useTallRes.get() ? "%.4f" : "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.Boat ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -240,7 +237,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			alpha.setText(String.format(Locale.US, "%.2f", t.horizontalAngleWithoutCorrection()));
 			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
 			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.useTallRes.get() ? "%.3f" : "%.2f"), t.correction()));
+				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.angleAdjustmentType.get() == AngleAdjustmentType.SUBPIXEL ? "%.2f" : "%.3f"), t.correction()));
 				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
 			} else {
 				correction.setText(null);
@@ -278,11 +275,6 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			int b = 2;
 			g.fillRect(b, b, a, a);
 		}
-	}
-
-	private void whenTallResChanged() {
-		setThrow(t);
-		updateError(lastPredictionForUpdatingError);
 	}
 
 	private boolean hasThrow() {

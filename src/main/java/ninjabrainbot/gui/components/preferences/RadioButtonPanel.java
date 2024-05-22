@@ -1,15 +1,16 @@
 package ninjabrainbot.gui.components.preferences;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.IMultipleChoicePreferenceDataType;
 import ninjabrainbot.io.preferences.MultipleChoicePreference;
 
@@ -17,6 +18,8 @@ public class RadioButtonPanel extends ThemedPanel {
 
 	final ThemedLabel descLabel;
 	final RadioButtonGroup<?> radioButtonGroup;
+
+	WrappedColor disabledCol;
 
 	public <T extends IMultipleChoicePreferenceDataType> RadioButtonPanel(StyleManager styleManager, String description, MultipleChoicePreference<T> preference) {
 		this(styleManager, description, preference.getChoices(), preference.get(), preference::set);
@@ -38,6 +41,14 @@ public class RadioButtonPanel extends ThemedPanel {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
+
+			@Override
+			public Color getForegroundColor() {
+				if (radioButtonGroup.isEnabled()) {
+					return super.getForegroundColor();
+				}
+				return disabledCol.color();
+			}
 		};
 		radioButtonGroup = new RadioButtonGroup<T>(styleManager, choices, selectedValue, verticalRadioButtons) {
 			@Override
@@ -51,12 +62,14 @@ public class RadioButtonPanel extends ThemedPanel {
 		add(Box.createVerticalStrut(2));
 		add(radioButtonGroup);
 		setOpaque(true);
+
+		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		descLabel.updateColors();
 		radioButtonGroup.setEnabled(enabled);
+		descLabel.updateColors();
 	}
 }

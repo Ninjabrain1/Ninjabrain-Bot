@@ -50,7 +50,10 @@ public class DetailedTriangulationPanel extends ThemedPanel implements IDisposab
 		List<ChunkPrediction> predictions = result.getTopPredictions();
 		for (int i = 0; i < NUM_DETAILED_PANELS; i++) {
 			ChunkPanel p = panels.get(i);
-			p.setPrediction(predictions.get(i));
+			if (i < predictions.size())
+				p.setPrediction(predictions.get(i));
+			else
+				p.setPrediction(null);
 		}
 	}
 

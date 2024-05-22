@@ -176,7 +176,7 @@ public class CalibrationDialog extends ThemedDialog {
 	}
 
 	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
-		return preferences.useTallRes.get() && preferences.usePreciseAngle.get();
+		return preferences.usePreciseAngle.get();
 	}
 
 	private static String getTitle(NinjabrainBotPreferences preferences) {
