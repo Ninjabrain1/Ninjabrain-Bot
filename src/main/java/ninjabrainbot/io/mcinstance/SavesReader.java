@@ -109,6 +109,9 @@ public class SavesReader {
 	}
 
 	private void onActiveMinecraftWorldFileModified() {
+		if (activeWorldFile.minecraftInstance().isRanked)
+			return;
+
 		if (!activeWorldFile.hasEnteredEnd() && activeWorldFile.getEndDimensionFile() != null && activeWorldFile.getEndDimensionFile().exists()) {
 			activeWorldFile.setHasEnteredEnd(true);
 		}
