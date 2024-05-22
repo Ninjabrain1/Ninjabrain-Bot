@@ -35,8 +35,6 @@ public class AngleAdjustmentOptionsPanel extends JPanel {
 		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.adjustment_type"), preferences.angleAdjustmentType, true));
 
 		// Tall Res Section
-		column1.add(new Divider(styleManager));
-
 		tallResExplanation = new ThemedLabel(styleManager, "<html>" + I18n.get("settings.tall_resolution_explanation") + "</html>") {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
@@ -49,8 +47,6 @@ public class AngleAdjustmentOptionsPanel extends JPanel {
 		column1.add(resolutionHeight);
 
 		// Custom Adjustment Section
-		column1.add(new Divider(styleManager));
-
 		customAdjustmentAmount = new DoublePreferencePanel(styleManager, I18n.get("settings.angle_adjustment.custom_amount"), preferences.customAdjustment);
 		customAdjustmentAmount.setDecimals(8);
 		column1.add(customAdjustmentAmount);
@@ -62,19 +58,19 @@ public class AngleAdjustmentOptionsPanel extends JPanel {
 	private void onAdjustmentTypeChanged(AngleAdjustmentType type) {
 		switch (type) {
 			case TALL:
-				tallResExplanation.setEnabled(true);
-				resolutionHeight.setEnabled(true);
-				customAdjustmentAmount.setEnabled(false);
+				tallResExplanation.setVisible(true);
+				resolutionHeight.setVisible(true);
+				customAdjustmentAmount.setVisible(false);
 				break;
 			case CUSTOM:
-				tallResExplanation.setEnabled(false);
-				resolutionHeight.setEnabled(false);
-				customAdjustmentAmount.setEnabled(true);
+				tallResExplanation.setVisible(false);
+				resolutionHeight.setVisible(false);
+				customAdjustmentAmount.setVisible(true);
 				break;
 			default:
-				tallResExplanation.setEnabled(false);
-				resolutionHeight.setEnabled(false);
-				customAdjustmentAmount.setEnabled(false);
+				tallResExplanation.setVisible(false);
+				resolutionHeight.setVisible(false);
+				customAdjustmentAmount.setVisible(false);
 		}
 	}
 
