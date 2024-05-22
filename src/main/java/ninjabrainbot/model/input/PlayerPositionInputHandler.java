@@ -1,5 +1,6 @@
 package ninjabrainbot.model.input;
 
+import ninjabrainbot.model.actions.boat.ReduceBoatAngleMod360Action;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
 import ninjabrainbot.model.actions.IAction;
@@ -50,14 +51,17 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (dataState.locked().get())
 			return null;
 
+		if (preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
+			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
+
+		if (preferences.usePreciseAngle.get() && dataState.boatDataState().reducingModulo360().get())
+			return new ReduceBoatAngleMod360Action(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences.sensitivityAutomatic.get());
+
 		if (!playerPosition.isInOverworld())
 			return null;
 
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
 			return new TryAddAllAdvancementsStructureAction(dataState, playerPosition);
-
-		if (preferences.useTallRes.get() && preferences.usePreciseAngle.get() && dataState.boatDataState().enteringBoat().get())
-			return new SetBoatAngleAction(dataState.boatDataState(), playerPosition.horizontalAngle(), preferences);
 
 		if (playerPosition.lookingBelowHorizon())
 			return null;

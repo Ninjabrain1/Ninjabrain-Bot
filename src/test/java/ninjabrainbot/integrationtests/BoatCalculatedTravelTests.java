@@ -1,6 +1,6 @@
 package ninjabrainbot.integrationtests;
 
-import ninjabrainbot.gui.mainwindow.BoatIcon;
+import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.util.TestUtils;

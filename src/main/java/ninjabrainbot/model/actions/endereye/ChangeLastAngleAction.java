@@ -41,11 +41,19 @@ public class ChangeLastAngleAction implements IAction {
 	}
 
 	private double getAngleCorrectionAmountInDegrees(double beta) {
-		double change = 0.01;
-		if (preferences.useTallRes.get()) {
-			final double toRad = Math.PI / 180.0;
-			change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
+		double change;
+		switch (preferences.angleAdjustmentType.get()) {
+			case TALL:
+				final double toRad = Math.PI / 180.0;
+				change = Math.atan(2 * Math.tan(15 * toRad) / preferences.resolutionHeight.get()) / Math.cos(beta * toRad) / toRad;
+				break;
+			case CUSTOM:
+				change = preferences.customAdjustment.get();
+				break;
+			default:
+				change = 0.01;
 		}
+
 		change *= positive ? 1 : -1;
 		return change;
 	}
