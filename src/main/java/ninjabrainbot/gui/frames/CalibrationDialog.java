@@ -47,17 +47,20 @@ public class CalibrationDialog extends ThemedDialog {
 	final JPanel rightPanel;
 	final JLabel std;
 	static final int errorAreaWidth = 100;
+	static final int errorAreaHeight = 80;
 	private final IActionExecutor actionExecutor;
+	private final boolean isManualCalibrator;
 
-	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner) {
-		super(styleManager, preferences, owner, getTitle(preferences));
+	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner, boolean isManualCalibrator) {
+		super(styleManager, preferences, owner, getTitle(preferences, isManualCalibrator));
 		this.actionExecutor = actionExecutor;
 		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		this.owner = owner;
+		this.isManualCalibrator = isManualCalibrator;
 		actionExecutor.disable();
-		calibrator = disposeHandler.add(calibratorFactory.createCalibrator(isBoatCalibrator(preferences)));
+		calibrator = disposeHandler.add(calibratorFactory.createCalibrator(isBoatCalibrator(preferences), isManualCalibrator));
 
 		JPanel panel2 = new JPanel();
 		panel2.setOpaque(false);
@@ -68,8 +71,12 @@ public class CalibrationDialog extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
 		add(panel);
 
-		labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
-				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
+		if (isManualCalibrator)
+			labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label_manual")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label_manual")),
+					new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
+		else
+			labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
+					new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
 		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>" + I18n.get("calibrator.explanation") + "</div></html>") {
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -83,13 +90,13 @@ public class CalibrationDialog extends ThemedDialog {
 			panel.add(l);
 		}
 		errors = new ErrorTextArea(styleManager, new JTextArea());
-		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
+		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaHeight));
 		rightPanel = new JPanel();
 		rightPanel.setOpaque(false);
 		rightPanel.setLayout(new GridLayout(3, 1, 0, 0));
 		std = new ThemedLabel(styleManager);
 		std.setOpaque(false);
-		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
+		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaHeight));
 		JLabel l1 = new ThemedLabel(styleManager, I18n.get("calibrator.l1"));
 		JButton done = new FlatButton(styleManager, I18n.get("calibrator.done"));
 		done.addActionListener(p -> done());
@@ -114,11 +121,12 @@ public class CalibrationDialog extends ThemedDialog {
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
-			if (isBoatCalibrator(preferences)) {
+			if (isBoatCalibrator(preferences))
 				preferences.sigmaBoat.set(std);
-			} else {
+			else if (isManualCalibrator)
+				preferences.sigmaManual.set(std);
+			else
 				preferences.sigma.set(std);
-			}
 		}
 		dispose();
 	}
@@ -179,8 +187,13 @@ public class CalibrationDialog extends ThemedDialog {
 		return preferences.usePreciseAngle.get();
 	}
 
-	private static String getTitle(NinjabrainBotPreferences preferences) {
-		return I18n.get("calibrator.title") + (isBoatCalibrator(preferences) ? String.format(" (%s)", I18n.get("settings.boat_standard_deviation")) : "");
+	private static String getTitle(NinjabrainBotPreferences preferences, boolean isManualCalibrator) {
+		if (isBoatCalibrator(preferences))
+			return I18n.get("calibrator.title_boat");
+		else if (isManualCalibrator)
+			return I18n.get("calibrator.title_manual");
+		else
+			return I18n.get("calibrator.title");
 	}
 
 	@Override
