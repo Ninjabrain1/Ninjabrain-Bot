@@ -108,6 +108,17 @@ public class IntegrationTestBuilder {
 		return this;
 	}
 
+	public IntegrationTestBuilder withDoogileBoatSettings() {
+		preferences.sigmaBoat.set(0.0007f);
+		preferences.sensitivity.set(0.00467673);
+		preferences.resolutionHeight.set(16384);
+		preferences.useTallRes.set(true);
+		preferences.usePreciseAngle.set(true);
+		preferences.view.set(MainViewType.DETAILED);
+		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
+		return this;
+	}
+
 	public void setClipboard(String clipboardString) {
 		if (clipboardReader == null) clipboardReader = new MockedClipboardReader();
 		if (coordinateInputSource == null) coordinateInputSource = new CoordinateInputSource(clipboardReader);
