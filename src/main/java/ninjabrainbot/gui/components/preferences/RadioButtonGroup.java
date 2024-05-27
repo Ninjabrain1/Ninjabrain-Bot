@@ -1,17 +1,11 @@
 package ninjabrainbot.gui.components.preferences;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
 import java.util.Objects;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;
@@ -23,10 +17,12 @@ import ninjabrainbot.gui.style.theme.WrappedColor;
 
 class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 
+	final ButtonGroup group;
+
 	RadioButtonGroup(StyleManager styleManager, T[] options, T selected, boolean verticalRadioButtons) {
 		super(styleManager);
 		setOpaque(false);
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 
 		setLayout(new BoxLayout(this, verticalRadioButtons ? BoxLayout.X_AXIS : BoxLayout.Y_AXIS));
 		int entriesPerColumn = 10;
@@ -64,8 +60,9 @@ class RadioButtonGroup<T extends IMultipleChoiceOption> extends ThemedPanel {
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		for (Component component : getComponents()) {
-			component.setEnabled(enabled);
+		Enumeration<AbstractButton> elements = this.group.getElements();
+		while (elements.hasMoreElements()) {
+			elements.nextElement().setEnabled(enabled);
 		}
 	}
 }

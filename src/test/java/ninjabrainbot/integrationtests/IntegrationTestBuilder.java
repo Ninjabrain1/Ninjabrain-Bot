@@ -2,7 +2,7 @@ package ninjabrainbot.integrationtests;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
-import ninjabrainbot.gui.mainwindow.BoatIcon;
+import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
 import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanel;
 import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanelTestAdapter;
 import ninjabrainbot.gui.mainwindow.main.MainTextArea;
@@ -16,9 +16,9 @@ import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -99,9 +99,19 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder withBoatSettings() {
 		preferences.sigmaBoat.set(0.001f);
-		preferences.sensitivity.set(0.065292805);
+		preferences.sensitivityAutomatic.set(0.065292805);
 		preferences.resolutionHeight.set(16384);
-		preferences.useTallRes.set(true);
+		preferences.angleAdjustmentType.set(AngleAdjustmentType.TALL);
+		preferences.usePreciseAngle.set(true);
+		preferences.view.set(MainViewType.DETAILED);
+		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
+		return this;
+	}
+
+	public IntegrationTestBuilder withDoogileBoatSettings() {
+		preferences.sigmaBoat.set(0.0007f);
+		preferences.sensitivityAutomatic.set(0.00467673);
+		preferences.resolutionHeight.set(16384);
 		preferences.usePreciseAngle.set(true);
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);

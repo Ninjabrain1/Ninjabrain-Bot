@@ -6,7 +6,7 @@ import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 public class ManualEnderEyeThrow extends EnderEyeThrow {
 
 	public ManualEnderEyeThrow(IPlayerPosition playerPosition, double crosshairCorrection) {
-		this(playerPosition.xInOverworld(), playerPosition.zInOverworld(), playerPosition.horizontalAngle() + crosshairCorrection, -31.6, 0);
+		this(playerPosition.xInOverworld(), playerPosition.zInOverworld(), getCorrectedHorizontalAngle(playerPosition.horizontalAngle(), crosshairCorrection), -31.6, 0);
 	}
 
 	private ManualEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction) {

@@ -62,4 +62,13 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 		return angleInDegrees;
 	}
 
+	protected static double getCorrectedHorizontalAngle(double alpha, double crosshairCorrection) {
+		alpha += crosshairCorrection;
+
+		// Caused by rounding in client-bound move entity packets
+		alpha -= 0.000824 * Math.sin((alpha + 45) * Math.PI / 180.0);
+
+		return alpha;
+	}
+
 }
