@@ -110,9 +110,8 @@ public class IntegrationTestBuilder {
 
 	public IntegrationTestBuilder withDoogileBoatSettings() {
 		preferences.sigmaBoat.set(0.0007f);
-		preferences.sensitivity.set(0.00467673);
+		preferences.sensitivityAutomatic.set(0.00467673);
 		preferences.resolutionHeight.set(16384);
-		preferences.useTallRes.set(true);
 		preferences.usePreciseAngle.set(true);
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
