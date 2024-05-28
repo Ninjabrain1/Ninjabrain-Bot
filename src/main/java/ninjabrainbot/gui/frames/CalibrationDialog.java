@@ -115,7 +115,7 @@ public class CalibrationDialog extends ThemedDialog {
 		rightPanel.add(ciLabel);
 		rightPanel.add(confidenceInterval);
 		rightPanel.add(done);
-		hist = new Histogram(styleManager, -0.03f, 0.03f, 11);
+		hist = new Histogram(styleManager, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
