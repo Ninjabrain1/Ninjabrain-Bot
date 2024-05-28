@@ -60,6 +60,7 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		column1.add(boatErrorLimit);
 
 		sigmaBoat = new FloatPreferencePanel(styleManager, I18n.get("settings.boat_standard_deviation"), preferences.sigmaBoat);
+		sigmaBoat.setDecimals(5);
 		column1.add(sigmaBoat);
 
 		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribeEDT(this::setPreciseAngleEnabled));

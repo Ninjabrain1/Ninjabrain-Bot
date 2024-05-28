@@ -165,7 +165,7 @@ public class CalibrationDialog extends ThemedDialog {
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
 			double sampleSTD = calibrator.getSTD(preferences.mcVersion.get());
-			std.setText(String.format("%.4f", sampleSTD));
+			std.setText(String.format(isBoatCalibrator(preferences) ? "%.5f" : "%.4f", sampleSTD));
 			confidenceInterval.setText(getConfidenceInterval(sampleSTD));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
@@ -204,7 +204,7 @@ public class CalibrationDialog extends ThemedDialog {
 		double lowerBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(1 - significanceLevel / 2));
 		double upperBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(significanceLevel / 2));
 
-		return String.format("(%.4f,%.4f)", lowerBound, upperBound);
+		return String.format(isBoatCalibrator(preferences) ? "(%.5f,%.5f)" : "(%.4f,%.4f)", lowerBound, upperBound);
 	}
 
 	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
