@@ -33,6 +33,7 @@ import ninjabrainbot.model.datastate.calibrator.Calibrator;
 import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.util.I18n;
+import org.apache.commons.statistics.distribution.ChiSquaredDistribution;
 
 public class CalibrationDialog extends ThemedDialog {
 
@@ -46,6 +47,7 @@ public class CalibrationDialog extends ThemedDialog {
 	final Histogram hist;
 	final JPanel rightPanel;
 	final JLabel std;
+	final JLabel confidenceInterval;
 	static final int errorAreaWidth = 100;
 	static final int errorAreaHeight = 80;
 	private final IActionExecutor actionExecutor;
@@ -93,17 +95,25 @@ public class CalibrationDialog extends ThemedDialog {
 		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaHeight));
 		rightPanel = new JPanel();
 		rightPanel.setOpaque(false);
-		rightPanel.setLayout(new GridLayout(3, 1, 0, 0));
+		rightPanel.setLayout(new GridLayout(5, 1, 0, 0));
 		std = new ThemedLabel(styleManager);
 		std.setOpaque(false);
-		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaHeight));
+		std.setPreferredSize(new Dimension(errorAreaWidth, 40));
+		confidenceInterval = new ThemedLabel(styleManager);
+		confidenceInterval.setOpaque(false);
+		confidenceInterval.setPreferredSize(new Dimension(errorAreaWidth, 40));
 		JLabel l1 = new ThemedLabel(styleManager, I18n.get("calibrator.l1"));
+		JLabel ciLabel = new ThemedLabel(styleManager, I18n.get("calibrator.confidence_interval"));
 		JButton done = new FlatButton(styleManager, I18n.get("calibrator.done"));
 		done.addActionListener(p -> done());
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		ciLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		std.setHorizontalAlignment(SwingConstants.CENTER);
+		confidenceInterval.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(l1);
 		rightPanel.add(std);
+		rightPanel.add(ciLabel);
+		rightPanel.add(confidenceInterval);
 		rightPanel.add(done);
 		hist = new Histogram(styleManager, -0.03f, 0.03f, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
@@ -115,6 +125,7 @@ public class CalibrationDialog extends ThemedDialog {
 
 	public void startCalibrating() {
 		std.setText("-");
+		confidenceInterval.setText("(-,-)");
 		setHighlighted(0);
 	}
 
@@ -153,7 +164,9 @@ public class CalibrationDialog extends ThemedDialog {
 
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
-			std.setText(String.format("%.4f", calibrator.getSTD(preferences.mcVersion.get())));
+			double sampleSTD = calibrator.getSTD(preferences.mcVersion.get());
+			std.setText(String.format("%.4f", sampleSTD));
+			confidenceInterval.setText(getConfidenceInterval(sampleSTD));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
 			IReadOnlyList<IEnderEyeThrow> eyeThrows = calibrator.getThrows();
@@ -181,6 +194,17 @@ public class CalibrationDialog extends ThemedDialog {
 			}
 			errors.area.setText(b.toString());
 		}
+	}
+
+	private String getConfidenceInterval(double sampleSTD) {
+		int degreesOfFreedom = calibrator.getThrows().size() - 1;
+		ChiSquaredDistribution chiSquared = ChiSquaredDistribution.of(degreesOfFreedom);
+
+		double significanceLevel = 0.25;
+		double lowerBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(1 - significanceLevel / 2));
+		double upperBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(significanceLevel / 2));
+
+		return String.format("(%.4f,%.4f)", lowerBound, upperBound);
 	}
 
 	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
