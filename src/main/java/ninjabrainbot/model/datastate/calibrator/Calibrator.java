@@ -36,6 +36,7 @@ import ninjabrainbot.util.I18n;
 public class Calibrator implements IDisposable {
 
 	private final KeyPresser keyPresser;
+	private final int delay = 150; // key press delay
 
 	private final ICalculator calculator;
 	private final NinjabrainBotPreferences preferences;
@@ -113,7 +114,9 @@ public class Calibrator implements IDisposable {
 		keyPresser.releaseC();
 		if (!ready) {
 			doCommand("clear");
+			Thread.sleep(delay);
 			doCommand("give @p minecraft:ender_eye");
+			Thread.sleep(delay);
 			tp(0.5, 0.5, 0, 0);
 			ready = true;
 		} else {
@@ -168,19 +171,19 @@ public class Calibrator implements IDisposable {
 
 	private void doCommand(String command) throws InterruptedException {
 		keyPresser.openCommand();
-		Thread.sleep(100);
+		Thread.sleep(delay);
 		keyPresser.paste(command);
 		keyPresser.enter();
-		Thread.sleep(60);
 	}
 
 	private void tp(double x, double z, double alpha, double theta) throws InterruptedException {
 		// tp
 		doCommand(String.format("tp @p %.2f 128 %.2f %.5f %.2f", x, z, alpha, theta));
-		Thread.sleep(100);
 		// place block
+		Thread.sleep(delay);
 		doCommand(String.format("setblock %d 250 %d minecraft:diamond_block", (int) Math.floor(x), (int) Math.floor(z)));
 		// tp
+		Thread.sleep(delay);
 		doCommand(String.format("tp @p %.2f 251 %.2f %.5f %.2f", x, z, alpha, theta));
 		//
 		lastX = x;
