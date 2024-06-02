@@ -1,6 +1,6 @@
 package ninjabrainbot.integrationtests;
 
-import ninjabrainbot.io.json.JsonConverter;
+import ninjabrainbot.io.json.StrongholdJsonQuery;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,19 +9,62 @@ public class JsonIntegrationTests {
 
 	@Disabled("Just for testing how json looks")
 	@Test
-	void dataComponentsOnlySendsOneEventOnReset() {
+	void testJson_triangulation() {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 12, -31, false));
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 1000, 12, -31, true));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, false));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, 161.2, -31, false));
+		testBuilder.inputSubpixelCorrections(2);
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, true));
 
-		JsonConverter jsonConverter = new JsonConverter(true);
+		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
 
 		long t0 = System.nanoTime();
 
 		// Act
-		String json = jsonConverter.convert(testBuilder.dataState);
+		String json = jsonConverter.get(testBuilder.dataState);
+
+		// Assert
+		long deltaT = System.nanoTime() - t0;
+		System.out.println("Elapsed time [seconds]: " + deltaT * 1e-9);
+		System.out.println(json);
+	}
+
+	@Disabled("Just for testing how json looks")
+	@Test
+	void testJson_failed() {
+		// Arrange
+		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
+
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, false));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, -30, -31, false));
+
+		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
+
+		long t0 = System.nanoTime();
+
+		// Act
+		String json = jsonConverter.get(testBuilder.dataState);
+
+		// Assert
+		long deltaT = System.nanoTime() - t0;
+		System.out.println("Elapsed time [seconds]: " + deltaT * 1e-9);
+		System.out.println(json);
+	}
+
+	@Disabled("Just for testing how json looks")
+	@Test
+	void testJson_empty() {
+		// Arrange
+		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
+
+		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
+
+		long t0 = System.nanoTime();
+
+		// Act
+		String json = jsonConverter.get(testBuilder.dataState);
 
 		// Assert
 		long deltaT = System.nanoTime() - t0;
