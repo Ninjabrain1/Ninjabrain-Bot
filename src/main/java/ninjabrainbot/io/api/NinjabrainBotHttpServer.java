@@ -2,6 +2,7 @@ package ninjabrainbot.io.api;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.sun.net.httpserver.HttpServer;
@@ -21,6 +22,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 
 	private HttpServer httpServer;
 	private ApiV1HttpHandler apiV1HttpHandler;
+	private ExecutorService executorService;
 	private Exception error;
 
 	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, NinjabrainBotPreferences preferences) {
@@ -51,9 +53,11 @@ public class NinjabrainBotHttpServer implements IDisposable {
 			error = e;
 			return;
 		}
-		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel);
+		if (executorService == null)
+			executorService = Executors.newFixedThreadPool(1);
+		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, executorService);
 		httpServer.createContext("/api/v1", apiV1HttpHandler);
-		httpServer.setExecutor(Executors.newFixedThreadPool(1));
+		httpServer.setExecutor(executorService);
 		httpServer.start();
 		Logger.log("HTTP server started on port " + port);
 	}

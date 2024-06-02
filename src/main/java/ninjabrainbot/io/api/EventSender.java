@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -16,11 +17,13 @@ import ninjabrainbot.util.Logger;
 public class EventSender implements IDisposable {
 
 	private final IDataState dataState;
+	private final ExecutorService executorService;
 	private final HashMap<IQuery, List<OutputStream>> subscribersByQuery;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public EventSender(IDataState dataState, IDomainModel domainModel) {
+	public EventSender(IDataState dataState, IDomainModel domainModel, ExecutorService executorService) {
 		this.dataState = dataState;
+		this.executorService = executorService;
 		subscribersByQuery = new HashMap<>();
 
 		disposeHandler.add(domainModel.whenModified().subscribe(this::onDomainModelUpdated));
@@ -50,17 +53,18 @@ public class EventSender implements IDisposable {
 			List<OutputStream> outputStreams = subscribersByQuery.get(query);
 			byte[] data = query.get(dataState).getBytes();
 			for (OutputStream outputStream : outputStreams) {
-				sendSseEvent(data, query, outputStream);
+				executorService.submit(() -> sendSseEvent(data, query, outputStream));
 			}
 		}
 	}
 
-	private synchronized void sendSseEvent(byte[] data, IQuery query, OutputStream outputStream) {
+	private void sendSseEvent(byte[] data, IQuery query, OutputStream outputStream) {
 		try {
 			outputStream.write("data: ".getBytes());
 			outputStream.write(data);
 			outputStream.write("\n\n".getBytes());
 			outputStream.flush();
+			Logger.log("Sent query result " + query + " to subscriber " + outputStream);
 		} catch (IOException exception) {
 			removeSubscriber(query, outputStream);
 		}

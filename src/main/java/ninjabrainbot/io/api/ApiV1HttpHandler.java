@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 import com.sun.net.httpserver.Headers;
@@ -26,9 +27,9 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 	private final HashMap<String, IQuery> queries;
 	private final IDataState dataState;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel){
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, ExecutorService executorService){
 		this.dataState = dataState;
-		eventSender = new EventSender(dataState, domainModel);
+		eventSender = new EventSender(dataState, domainModel, executorService);
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdJsonQuery());
 	}
