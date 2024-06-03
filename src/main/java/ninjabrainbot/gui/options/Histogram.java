@@ -15,8 +15,8 @@ public class Histogram extends ThemedPanel {
 
 	private int[] counts;
 	private int maxCount;
-	private final float min;
-	private final float max;
+	private float min;
+	private float max;
 	private final int numBins;
 
 	final ArrayList<JLabel> ticks;
@@ -28,26 +28,44 @@ public class Histogram extends ThemedPanel {
 
 	private final WrappedColor histCol;
 	private final WrappedColor lineCol;
+	private final StyleManager styleManager;
 
-	public Histogram(StyleManager styleManager, float min, float max, int numBins) {
+	public Histogram(StyleManager styleManager, int numBins) {
 		super(styleManager);
-		this.min = min;
-		this.max = max;
 		this.numBins = numBins;
 		counts = new int[numBins];
 		maxCount = 0;
 		ticks = new ArrayList<>();
 		floatTicks = new ArrayList<>();
-		addTick(styleManager, 0);
-		addTick(styleManager, min);
-		addTick(styleManager, max);
 
 		histCol = styleManager.currentTheme.COLOR_SATURATED;
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER_DARK;
+		this.styleManager = styleManager;
 	}
 
-	private void addTick(StyleManager styleManager, float tick) {
-		ThemedLabel l = new ThemedLabel(styleManager, "" + tick);
+	private void updateBounds(double[] angleErrors) {
+		max = 0;
+		for (double error : angleErrors) {
+			double positiveError = Math.abs(error);
+			int digits = (int) Math.floor(Math.log10(positiveError));
+			float roundedError = (float) (Math.ceil(positiveError / Math.pow(10, digits)) * Math.pow(10, digits));
+			max = Math.max(max, roundedError);
+		}
+		min = -max;
+	}
+
+	private void updateTicks() {
+		this.removeAll();
+		ticks.clear();
+		floatTicks.clear();
+
+		addTick(0);
+		addTick(min);
+		addTick(max);
+	}
+
+	private void addTick(float tick) {
+		ThemedLabel l = new ThemedLabel(this.styleManager, "" + tick);
 		ticks.add(l);
 		floatTicks.add(tick);
 		add(l);
@@ -94,6 +112,8 @@ public class Histogram extends ThemedPanel {
 	public void setData(double[] angleErrors) {
 		counts = new int[numBins];
 		maxCount = 0;
+		updateBounds(angleErrors);
+		updateTicks();
 		for (double d : angleErrors) {
 			addData((float) d);
 		}

@@ -33,6 +33,7 @@ import ninjabrainbot.model.datastate.calibrator.Calibrator;
 import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.util.I18n;
+import org.apache.commons.statistics.distribution.ChiSquaredDistribution;
 
 public class CalibrationDialog extends ThemedDialog {
 
@@ -46,18 +47,22 @@ public class CalibrationDialog extends ThemedDialog {
 	final Histogram hist;
 	final JPanel rightPanel;
 	final JLabel std;
+	final JLabel confidenceInterval;
 	static final int errorAreaWidth = 100;
+	static final int errorAreaHeight = 80;
 	private final IActionExecutor actionExecutor;
+	private final boolean isManualCalibrator;
 
-	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner) {
-		super(styleManager, preferences, owner, getTitle(preferences));
+	public CalibrationDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, ICalibratorFactory calibratorFactory, IActionExecutor actionExecutor, JFrame owner, boolean isManualCalibrator) {
+		super(styleManager, preferences, owner, getTitle(preferences, isManualCalibrator));
 		this.actionExecutor = actionExecutor;
 		styleManager.registerThemedDialog(this);
 		this.styleManager = styleManager;
 		this.preferences = preferences;
 		this.owner = owner;
+		this.isManualCalibrator = isManualCalibrator;
 		actionExecutor.disable();
-		calibrator = disposeHandler.add(calibratorFactory.createCalibrator(isBoatCalibrator(preferences)));
+		calibrator = disposeHandler.add(calibratorFactory.createCalibrator(isBoatCalibrator(preferences), isManualCalibrator));
 
 		JPanel panel2 = new JPanel();
 		panel2.setOpaque(false);
@@ -68,8 +73,12 @@ public class CalibrationDialog extends ThemedDialog {
 		panel.setBorder(new EmptyBorder(OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING, OptionsFrame.PADDING));
 		add(panel);
 
-		labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
-				new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
+		if (isManualCalibrator)
+			labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label_manual")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label_manual")),
+					new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
+		else
+			labels = new InstructionLabel[] { new InstructionLabel(styleManager, I18n.get("calibrator.command_label")), new InstructionLabel(styleManager, I18n.get("calibrator.throw_label")),
+					new InstructionLabel(styleManager, I18n.get("calibrator.measure_label")), };
 		ThemedLabel explanation = new ThemedLabel(styleManager, "<html><div style='text-align: center;'>" + I18n.get("calibrator.explanation") + "</div></html>") {
 			@Override
 			public int getTextSize(SizePreference p) {
@@ -83,22 +92,30 @@ public class CalibrationDialog extends ThemedDialog {
 			panel.add(l);
 		}
 		errors = new ErrorTextArea(styleManager, new JTextArea());
-		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
+		errors.setPreferredSize(new Dimension(errorAreaWidth, errorAreaHeight));
 		rightPanel = new JPanel();
 		rightPanel.setOpaque(false);
-		rightPanel.setLayout(new GridLayout(3, 1, 0, 0));
+		rightPanel.setLayout(new GridLayout(5, 1, 0, 0));
 		std = new ThemedLabel(styleManager);
 		std.setOpaque(false);
-		std.setPreferredSize(new Dimension(errorAreaWidth, errorAreaWidth));
+		std.setPreferredSize(new Dimension(errorAreaWidth, 40));
+		confidenceInterval = new ThemedLabel(styleManager);
+		confidenceInterval.setOpaque(false);
+		confidenceInterval.setPreferredSize(new Dimension(errorAreaWidth, 40));
 		JLabel l1 = new ThemedLabel(styleManager, I18n.get("calibrator.l1"));
+		JLabel ciLabel = new ThemedLabel(styleManager, I18n.get("calibrator.confidence_interval"));
 		JButton done = new FlatButton(styleManager, I18n.get("calibrator.done"));
 		done.addActionListener(p -> done());
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		ciLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		std.setHorizontalAlignment(SwingConstants.CENTER);
+		confidenceInterval.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(l1);
 		rightPanel.add(std);
+		rightPanel.add(ciLabel);
+		rightPanel.add(confidenceInterval);
 		rightPanel.add(done);
-		hist = new Histogram(styleManager, -0.03f, 0.03f, 11);
+		hist = new Histogram(styleManager, 11);
 		panel2.add(errors, BorderLayout.LINE_START);
 		panel2.add(hist, BorderLayout.CENTER);
 		panel2.add(rightPanel, BorderLayout.LINE_END);
@@ -108,17 +125,19 @@ public class CalibrationDialog extends ThemedDialog {
 
 	public void startCalibrating() {
 		std.setText("-");
+		confidenceInterval.setText("(-, -)");
 		setHighlighted(0);
 	}
 
 	private void done() {
 		if (calibrator.isStrongholdDetermined()) {
 			float std = (float) calibrator.getSTD(preferences.mcVersion.get());
-			if (isBoatCalibrator(preferences)) {
+			if (isBoatCalibrator(preferences))
 				preferences.sigmaBoat.set(std);
-			} else {
+			else if (isManualCalibrator)
+				preferences.sigmaManual.set(std);
+			else
 				preferences.sigma.set(std);
-			}
 		}
 		dispose();
 	}
@@ -132,7 +151,7 @@ public class CalibrationDialog extends ThemedDialog {
 
 	private void updateUI() {
 		int stage = 0;
-		if (calibrator.isReady()) {
+		if (calibrator.isReadyToCalibrate()) {
 			if (calibrator.getNumThrows() > 0) {
 				stage = 2;
 			} else {
@@ -145,7 +164,9 @@ public class CalibrationDialog extends ThemedDialog {
 
 	private void updateHistogram() {
 		if (calibrator.isStrongholdDetermined()) {
-			std.setText(String.format("%.4f", calibrator.getSTD(preferences.mcVersion.get())));
+			double sampleSTD = calibrator.getSTD(preferences.mcVersion.get());
+			std.setText(String.format(isBoatCalibrator(preferences) ? "%.5f" : "%.4f", sampleSTD));
+			confidenceInterval.setText(getConfidenceInterval(sampleSTD));
 			StringBuilder b = new StringBuilder();
 			double[] angleErrors = calibrator.getErrors(preferences.mcVersion.get());
 			IReadOnlyList<IEnderEyeThrow> eyeThrows = calibrator.getThrows();
@@ -175,12 +196,28 @@ public class CalibrationDialog extends ThemedDialog {
 		}
 	}
 
+	private String getConfidenceInterval(double sampleSTD) {
+		int degreesOfFreedom = calibrator.getThrows().size() - 1;
+		ChiSquaredDistribution chiSquared = ChiSquaredDistribution.of(degreesOfFreedom);
+
+		double significanceLevel = 0.25;
+		double lowerBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(1 - significanceLevel / 2));
+		double upperBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(significanceLevel / 2));
+
+		return String.format(isBoatCalibrator(preferences) ? "(%.5f, %.5f)" : "(%.4f, %.4f)", lowerBound, upperBound);
+	}
+
 	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
 		return preferences.usePreciseAngle.get();
 	}
 
-	private static String getTitle(NinjabrainBotPreferences preferences) {
-		return I18n.get("calibrator.title") + (isBoatCalibrator(preferences) ? String.format(" (%s)", I18n.get("settings.boat_standard_deviation")) : "");
+	private static String getTitle(NinjabrainBotPreferences preferences, boolean isManualCalibrator) {
+		if (isBoatCalibrator(preferences))
+			return I18n.get("calibrator.title_boat");
+		else if (isManualCalibrator)
+			return I18n.get("calibrator.title_manual");
+		else
+			return I18n.get("calibrator.title");
 	}
 
 	@Override
