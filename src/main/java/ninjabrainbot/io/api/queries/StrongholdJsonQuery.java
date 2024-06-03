@@ -1,6 +1,5 @@
-package ninjabrainbot.io.json;
+package ninjabrainbot.io.api.queries;
 
-import ninjabrainbot.io.api.IQuery;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;

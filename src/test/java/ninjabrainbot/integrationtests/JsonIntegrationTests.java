@@ -1,6 +1,6 @@
 package ninjabrainbot.integrationtests;
 
-import ninjabrainbot.io.json.StrongholdJsonQuery;
+import ninjabrainbot.io.api.queries.StrongholdJsonQuery;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

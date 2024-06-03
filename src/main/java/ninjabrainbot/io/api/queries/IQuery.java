@@ -1,4 +1,4 @@
-package ninjabrainbot.io.api;
+package ninjabrainbot.io.api.queries;
 
 import ninjabrainbot.model.datastate.IDataState;
 
