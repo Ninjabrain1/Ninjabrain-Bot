@@ -42,7 +42,8 @@ public class Calibrator implements IDisposable {
 	private final NinjabrainBotPreferences preferences;
 	private final IObservable<Boolean> locked = new ObservableField<>(false);
 	private final IListComponent<IEnderEyeThrow> throwList;
-	private boolean ready;
+	private boolean readyToCalibrate;
+	private boolean readyToReadClipboard = false;
 
 	private Chunk stronghold;
 	private double lastX;
@@ -70,7 +71,8 @@ public class Calibrator implements IDisposable {
 		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, true).execute()));
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
-		ready = false;
+		readyToCalibrate = false;
+		readyToReadClipboard = true;
 		this.isBoatThrowCalibrator = isBoatThrowCalibrator;
 		this.isManualCalibrator = isManualCalibrator;
 	}
@@ -106,19 +108,22 @@ public class Calibrator implements IDisposable {
 	}
 
 	private void add(IEnderEyeThrow t) throws InterruptedException {
+		if (!readyToReadClipboard)
+			return;
+
 		if (this.isManualCalibrator) {
 			keyPresser.enter();
 			Thread.sleep(60);
 		}
 
 		keyPresser.releaseC();
-		if (!ready) {
+		if (!readyToCalibrate) {
 			doCommand("clear");
 			Thread.sleep(delay);
 			doCommand("give @p minecraft:ender_eye");
 			Thread.sleep(delay);
 			tp(0.5, 0.5, 0, 0);
-			ready = true;
+			readyToCalibrate = true;
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
 				doCommand("say " + I18n.get("calibrator.you_moved"));
@@ -228,8 +233,8 @@ public class Calibrator implements IDisposable {
 		return throwList.get();
 	}
 
-	public boolean isReady() {
-		return ready;
+	public boolean isReadyToCalibrate() {
+		return readyToCalibrate;
 	}
 
 	public int getNumThrows() {

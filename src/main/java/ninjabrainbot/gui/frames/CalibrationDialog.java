@@ -125,7 +125,7 @@ public class CalibrationDialog extends ThemedDialog {
 
 	public void startCalibrating() {
 		std.setText("-");
-		confidenceInterval.setText("(-,-)");
+		confidenceInterval.setText("(-, -)");
 		setHighlighted(0);
 	}
 
@@ -151,7 +151,7 @@ public class CalibrationDialog extends ThemedDialog {
 
 	private void updateUI() {
 		int stage = 0;
-		if (calibrator.isReady()) {
+		if (calibrator.isReadyToCalibrate()) {
 			if (calibrator.getNumThrows() > 0) {
 				stage = 2;
 			} else {
@@ -204,7 +204,7 @@ public class CalibrationDialog extends ThemedDialog {
 		double lowerBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(1 - significanceLevel / 2));
 		double upperBound = sampleSTD * Math.sqrt(degreesOfFreedom / chiSquared.inverseCumulativeProbability(significanceLevel / 2));
 
-		return String.format(isBoatCalibrator(preferences) ? "(%.5f,%.5f)" : "(%.4f,%.4f)", lowerBound, upperBound);
+		return String.format(isBoatCalibrator(preferences) ? "(%.5f, %.5f)" : "(%.4f, %.4f)", lowerBound, upperBound);
 	}
 
 	private static boolean isBoatCalibrator(NinjabrainBotPreferences preferences) {
