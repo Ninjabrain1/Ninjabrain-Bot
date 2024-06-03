@@ -9,15 +9,15 @@ import ninjabrainbot.model.domainmodel.IListComponent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class StrongholdJsonQuery implements IQuery {
+public class StrongholdQuery implements IQuery {
 
 	private final boolean isPretty;
 
-	public StrongholdJsonQuery() {
+	public StrongholdQuery() {
 		this(false);
 	}
 
-	public StrongholdJsonQuery(boolean isPretty) {
+	public StrongholdQuery(boolean isPretty) {
 		this.isPretty = isPretty;
 	}
 

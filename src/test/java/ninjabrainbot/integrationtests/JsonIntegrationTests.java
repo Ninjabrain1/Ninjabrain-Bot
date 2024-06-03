@@ -1,6 +1,6 @@
 package ninjabrainbot.integrationtests;
 
-import ninjabrainbot.io.api.queries.StrongholdJsonQuery;
+import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class JsonIntegrationTests {
 		testBuilder.inputSubpixelCorrections(2);
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, true));
 
-		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(true);
 
 		long t0 = System.nanoTime();
 
@@ -40,7 +40,7 @@ public class JsonIntegrationTests {
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, false));
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, -30, -31, false));
 
-		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(true);
 
 		long t0 = System.nanoTime();
 
@@ -59,7 +59,7 @@ public class JsonIntegrationTests {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 
-		StrongholdJsonQuery jsonConverter = new StrongholdJsonQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(true);
 
 		long t0 = System.nanoTime();
 

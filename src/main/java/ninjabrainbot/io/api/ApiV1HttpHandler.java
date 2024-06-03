@@ -13,8 +13,9 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
 import ninjabrainbot.io.api.queries.IQuery;
-import ninjabrainbot.io.api.queries.StrongholdJsonQuery;
+import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.util.Assert;
@@ -30,7 +31,8 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		this.dataState = dataState;
 		eventSender = new EventSender(dataState, domainModel, executorService);
 		queries = new HashMap<>();
-		queries.put("stronghold", new StrongholdJsonQuery());
+		queries.put("stronghold", new StrongholdQuery());
+		queries.put("allAdvancements", new AllAdvancementsQuery());
 	}
 
 	@Override
