@@ -53,6 +53,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 		if (subdirectories.size() == 1) {
 			sendQueryResponse(exchange, query);
+			return;
 		}
 
 		if (subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")){
@@ -98,7 +99,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			eventSender.addSubscriber(query, outputStream);
 		} catch (IOException e){
-			Logger.log("HTTP server failed to send query response: " + e);
+			Logger.log("HTTP server failed to send query subscription response: " + e);
 		}
 	}
 
