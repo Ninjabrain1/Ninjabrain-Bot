@@ -35,7 +35,7 @@ public class ChangeLastAngleAction implements IAction {
 
 		IEnderEyeThrow lastThrow = throwList.get(throwList.size() - 1);
 		double newCorrection = lastThrow.correction() + getAngleCorrectionAmountInDegrees(lastThrow.verticalAngle());
-		IEnderEyeThrow newThrow = lastThrow.withCorrection(newCorrection);
+		IEnderEyeThrow newThrow = lastThrow.withCorrection(newCorrection, lastThrow.correctionIncrements() + (positive ? 1 : -1));
 
 		throwList.replace(lastThrow, newThrow);
 	}

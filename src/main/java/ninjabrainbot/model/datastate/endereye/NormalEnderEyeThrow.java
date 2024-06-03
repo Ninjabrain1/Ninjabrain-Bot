@@ -12,22 +12,22 @@ public class NormalEnderEyeThrow extends EnderEyeThrow {
 
 	public NormalEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, double crosshairCorrection) {
 		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getCorrectedHorizontalAngle(detailedPlayerPosition.horizontalAngle(), crosshairCorrection),
-				detailedPlayerPosition.verticalAngle(), 0, false);
+				detailedPlayerPosition.verticalAngle(), 0, 0, false);
 	}
 
-	private NormalEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction, boolean altStandardDeviation) {
-		super(x, z, horizontalAngle, verticalAngle, correction);
+	private NormalEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction, int correctionIncrements, boolean altStandardDeviation) {
+		super(x, z, horizontalAngle, verticalAngle, correction, correctionIncrements);
 		this.altStandardDeviation = altStandardDeviation;
 	}
 
 	@Override
-	public IEnderEyeThrow withCorrection(double correction) {
-		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, altStandardDeviation);
+	public IEnderEyeThrow withCorrection(double correction, int correctionIncrements) {
+		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, correctionIncrements, altStandardDeviation);
 	}
 
 	@Override
 	public IEnderEyeThrow withToggledAltStd() {
-		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, !altStandardDeviation);
+		return new NormalEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, correctionIncrements, !altStandardDeviation);
 	}
 
 	@Override

@@ -66,6 +66,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
 	public final MultipleChoicePreference<DefaultBoatType> defaultBoatType;
 	public final MultipleChoicePreference<AngleAdjustmentType> angleAdjustmentType;
+	public final MultipleChoicePreference<AngleAdjustmentDisplayType> angleAdjustmentDisplayType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -136,6 +137,8 @@ public class NinjabrainBotPreferences {
 				new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
 		angleAdjustmentType = new MultipleChoicePreference<>("angle_adjustment_type", AngleAdjustmentType.SUBPIXEL, new int[] { 0, 1, 2 },
 				new AngleAdjustmentType[] { AngleAdjustmentType.SUBPIXEL, AngleAdjustmentType.TALL, AngleAdjustmentType.CUSTOM }, source);
+		angleAdjustmentDisplayType = new MultipleChoicePreference<>("angle_adjustment_display_type", AngleAdjustmentDisplayType.ANGLE_CHANGE, new int[] { 0, 1 },
+				new AngleAdjustmentDisplayType[] { AngleAdjustmentDisplayType.ANGLE_CHANGE, AngleAdjustmentDisplayType.INCREMENTS }, source);
 
 		// Upgrade if necessary
 		if (settingsVersion.get() == 0)

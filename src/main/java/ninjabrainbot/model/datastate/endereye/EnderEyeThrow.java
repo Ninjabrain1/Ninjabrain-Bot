@@ -7,13 +7,15 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 
 	protected final double x, z, horizontalAngleWithoutCorrection, verticalAngle;
 	protected final double correction;
+	protected final int correctionIncrements;
 
-	protected EnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction) {
+	protected EnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction, int correctionIncrements) {
 		this.x = x;
 		this.z = z;
 		this.horizontalAngleWithoutCorrection = clampToPlusMinus180Degrees(horizontalAngle);
 		this.verticalAngle = verticalAngle;
 		this.correction = correction;
+		this.correctionIncrements = correctionIncrements;
 	}
 
 	@Override
@@ -45,6 +47,11 @@ public abstract class EnderEyeThrow implements IEnderEyeThrow {
 	@Override
 	public double correction() {
 		return correction;
+	}
+
+	@Override
+	public int correctionIncrements() {
+		return correctionIncrements;
 	}
 
 	@Override

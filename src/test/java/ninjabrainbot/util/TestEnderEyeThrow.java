@@ -43,7 +43,7 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
-	public IEnderEyeThrow withCorrection(double correction) {
+	public IEnderEyeThrow withCorrection(double correction, int correctionIncrements) {
 		return null;
 	}
 
@@ -69,6 +69,11 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 
 	@Override
 	public double correction() {
+		return 0;
+	}
+
+	@Override
+	public int correctionIncrements() {
 		return 0;
 	}
 
