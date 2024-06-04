@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
-import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
@@ -61,10 +60,22 @@ public class AdvancedOptionsPanel extends JPanel {
 				return p.TEXT_SIZE_SMALL;
 			}
 		};
-		calibrateButton.addActionListener(p -> startCalibrating());
+		calibrateButton.addActionListener(p -> startCalibrating(false));
 		calibrateButton.setAlignmentX(0.5f);
 		column1.add(calibrateButton);
-		column1.add(new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation_manual"), preferences.sigmaManual));
+
+		FloatPreferencePanel sigmaManualPanel = new FloatPreferencePanel(styleManager, I18n.get("settings.standard_deviation_manual"), preferences.sigmaManual);
+		column1.add(sigmaManualPanel);
+		JButton manualCalibrateButton = new FlatButton(styleManager, I18n.get("settings.calibrate_standard_deviation_manual")) {
+			@Override
+			public int getTextSize(SizePreference p) {
+				return p.TEXT_SIZE_SMALL;
+			}
+		};
+		manualCalibrateButton.addActionListener(p -> startCalibrating(true));
+		manualCalibrateButton.setAlignmentX(0.5f);
+		column1.add(manualCalibrateButton);
+
 		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_standard_deviation_toggle"), preferences.useAltStd));
 		sigmaAlt = new FloatPreferencePanel(styleManager, I18n.get("settings.alt_standard_deviation"), preferences.sigmaAlt);
 		sigmaAlt.setEnabled(preferences.useAltStd.get());
@@ -83,10 +94,11 @@ public class AdvancedOptionsPanel extends JPanel {
 
 		disposeHandler.add(preferences.useAltStd.whenModified().subscribeEDT(this::setAltSigmaEnabled));
 		disposeHandler.add(preferences.sigma.whenModified().subscribeEDT(sigmaPanel::updateValue));
+		disposeHandler.add(preferences.sigmaManual.whenModified().subscribeEDT(sigmaManualPanel::updateValue));
 	}
 
-	private void startCalibrating() {
-		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, calibratorFactory, actionExecutor, owner);
+	private void startCalibrating(boolean isManualCalibrator) {
+		CalibrationDialog d = new CalibrationDialog(styleManager, preferences, calibratorFactory, actionExecutor, owner, isManualCalibrator);
 		d.setLocation(owner.getX() - 140, owner.getY() + 30);
 		styleManager.init();
 		SwingUtilities.invokeLater(() -> d.setVisible(true));

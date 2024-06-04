@@ -1,6 +1,7 @@
 package ninjabrainbot.model.datastate.calibrator;
 
 import java.awt.AWTException;
+import java.util.Random;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
@@ -17,10 +18,12 @@ import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.datastate.calculator.ICalculator;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.endereye.ManualEnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.NormalEnderEyeThrow;
 import ninjabrainbot.model.datastate.highprecision.BoatEnderEyeThrow;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
@@ -39,7 +42,8 @@ public class Calibrator implements IDisposable {
 	private final NinjabrainBotPreferences preferences;
 	private final IObservable<Boolean> locked = new ObservableField<>(false);
 	private final IListComponent<IEnderEyeThrow> throwList;
-	private boolean ready;
+	private boolean readyToCalibrate;
+	private boolean readyToReadClipboard = false;
 
 	private Chunk stronghold;
 	private double lastX;
@@ -51,8 +55,9 @@ public class Calibrator implements IDisposable {
 	private final ObservableProperty<Calibrator> whenModified = new ObservableProperty<>();
 
 	private final boolean isBoatThrowCalibrator;
+	private final boolean isManualCalibrator;
 
-	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences, boolean isBoatThrowCalibrator) {
+	public Calibrator(CalculatorSettings calculatorSettings, IPlayerPositionInputSource playerPositionInputSource, NinjabrainBotPreferences preferences, boolean isBoatThrowCalibrator, boolean isManualCalibrator) {
 		try {
 			keyPresser = new KeyPresser();
 		} catch (AWTException e) {
@@ -61,15 +66,35 @@ public class Calibrator implements IDisposable {
 		this.preferences = preferences;
 		calculator = new Calculator(calculatorSettings, new StandardDeviationSettings(0.2, 0.2, 0.2, 0.2));
 		throwList = new ListComponent<>(null, 100);
-		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewPlayerPositionInputted));
+		disposeHandler.add(playerPositionInputSource.whenNewLimitedPlayerPositionInputted().subscribe(this::onNewLimitedPlayerPositionInputted));
+		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewDetailedPlayerPositionInputted));
 		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, 1).execute()));
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, -1).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
-		ready = false;
+		readyToCalibrate = false;
+		readyToReadClipboard = true;
 		this.isBoatThrowCalibrator = isBoatThrowCalibrator;
+		this.isManualCalibrator = isManualCalibrator;
 	}
 
-	private void onNewPlayerPositionInputted(IDetailedPlayerPosition playerPosition) {
+	private void onNewLimitedPlayerPositionInputted(ILimitedPlayerPosition playerPosition) {
+		if (!isManualCalibrator)
+			return;
+		try {
+			if (isBoatThrowCalibrator) {
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+			}
+			else {
+				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+			}
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void onNewDetailedPlayerPositionInputted(IDetailedPlayerPosition playerPosition) {
+		if (isManualCalibrator)
+			return;
 		try {
 			if (isBoatThrowCalibrator) {
 				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
@@ -83,14 +108,22 @@ public class Calibrator implements IDisposable {
 	}
 
 	private void add(IEnderEyeThrow t) throws InterruptedException {
-		if (!ready) {
-			keyPresser.releaseF3C();
+		if (!readyToReadClipboard)
+			return;
+
+		if (this.isManualCalibrator) {
+			keyPresser.enter();
+			Thread.sleep(60);
+		}
+
+		keyPresser.releaseC();
+		if (!readyToCalibrate) {
 			doCommand("clear");
 			Thread.sleep(delay);
 			doCommand("give @p minecraft:ender_eye");
 			Thread.sleep(delay);
-			tp(0, 0, 0, 0);
-			ready = true;
+			tp(0.5, 0.5, 0, 0);
+			readyToCalibrate = true;
 		} else {
 			if (distanceFromIntendedPosition(t) > 0.05) { // truncation error makes the distance non-zero
 				doCommand("say " + I18n.get("calibrator.you_moved"));
@@ -118,12 +151,18 @@ public class Calibrator implements IDisposable {
 			double nextX = t.xInOverworld() + deltaX * 0.8 - Math.cos(phi) * perpendicularDistance;
 			double nextZ = t.zInOverworld() + deltaZ * 0.8 - Math.sin(phi) * perpendicularDistance;
 			// Face in the general direction of the stronghold
-			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (Math.random() - 0.5) * 10.0;
+			Random random = new Random();
+			double nextAlpha = getAlpha(prediction, nextX, nextZ) + (random.nextDouble() - 0.5) * 10.0;
 			if (isBoatThrowCalibrator) {
-				double preMultiplier = preferences.sensitivityAutomatic.get() * (double) 0.6f + (double) 0.2f;
+				double sensitivity = isManualCalibrator ? preferences.sensitivityManual.get() : preferences.sensitivityAutomatic.get();
+				double preMultiplier = sensitivity * (double) 0.6f + (double) 0.2f;
 				preMultiplier = preMultiplier * preMultiplier * preMultiplier * 8.0D;
 				double minInc = preMultiplier * 0.15D;
 				nextAlpha = (float) (Math.round(nextAlpha / minInc) * minInc);
+			}
+			if (isManualCalibrator) {
+				nextX = Math.floor(nextX) + 0.5;
+				nextZ = Math.floor(nextZ) + 0.5;
 			}
 			tp(nextX, nextZ, nextAlpha, -31.2);
 		}
@@ -144,22 +183,13 @@ public class Calibrator implements IDisposable {
 
 	private void tp(double x, double z, double alpha, double theta) throws InterruptedException {
 		// tp
-		keyPresser.openCommand();
-		Thread.sleep(delay);
-		keyPresser.paste(String.format("tp @p %.2f 128 %.2f %.5f %.2f", x, z, alpha, theta));
-		keyPresser.enter();
+		doCommand(String.format("tp @p %.2f 128 %.2f %.5f %.2f", x, z, alpha, theta));
 		// place block
 		Thread.sleep(delay);
-		keyPresser.openCommand();
-		Thread.sleep(delay);
-		keyPresser.paste(String.format("setblock %d 255 %d minecraft:diamond_block", (int) Math.floor(x), (int) Math.floor(z)));
-		keyPresser.enter();
+		doCommand(String.format("setblock %d 250 %d minecraft:diamond_block", (int) Math.floor(x), (int) Math.floor(z)));
 		// tp
 		Thread.sleep(delay);
-		keyPresser.openCommand();
-		Thread.sleep(delay);
-		keyPresser.paste(String.format("tp @p %.2f 256 %.2f %.5f %.2f", x, z, alpha, theta));
-		keyPresser.enter();
+		doCommand(String.format("tp @p %.2f 251 %.2f %.5f %.2f", x, z, alpha, theta));
 		//
 		lastX = x;
 		lastZ = z;
@@ -203,8 +233,8 @@ public class Calibrator implements IDisposable {
 		return throwList.get();
 	}
 
-	public boolean isReady() {
-		return ready;
+	public boolean isReadyToCalibrate() {
+		return readyToCalibrate;
 	}
 
 	public int getNumThrows() {
