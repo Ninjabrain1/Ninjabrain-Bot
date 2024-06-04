@@ -81,11 +81,15 @@ public class Calibrator implements IDisposable {
 		if (!isManualCalibrator)
 			return;
 		try {
+			ChangeLastAngleAction changeAngleAction = null;
+			if (playerPosition.correctionIncrements() != 0)
+				changeAngleAction = new ChangeLastAngleAction(throwList, locked, preferences, playerPosition.correctionIncrements());
+
 			if (isBoatThrowCalibrator) {
-				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), changeAngleAction);
 			}
 			else {
-				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), changeAngleAction);
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
@@ -97,17 +101,17 @@ public class Calibrator implements IDisposable {
 			return;
 		try {
 			if (isBoatThrowCalibrator) {
-				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), null);
 			}
 			else {
-				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), null);
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void add(IEnderEyeThrow t) throws InterruptedException {
+	private void add(IEnderEyeThrow t, ChangeLastAngleAction changeAngleAction) throws InterruptedException {
 		if (!readyToReadClipboard)
 			return;
 
@@ -131,6 +135,9 @@ public class Calibrator implements IDisposable {
 				return;
 			}
 			throwList.add(t);
+			if (changeAngleAction != null)
+				changeAngleAction.execute();
+
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {
