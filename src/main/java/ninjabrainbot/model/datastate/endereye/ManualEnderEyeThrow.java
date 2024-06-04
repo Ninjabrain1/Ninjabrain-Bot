@@ -1,11 +1,11 @@
 package ninjabrainbot.model.datastate.endereye;
 
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 
 public class ManualEnderEyeThrow extends EnderEyeThrow {
 
-	public ManualEnderEyeThrow(IPlayerPosition playerPosition, double crosshairCorrection) {
+	public ManualEnderEyeThrow(ILimitedPlayerPosition playerPosition, double crosshairCorrection) {
 		this(playerPosition.xInOverworld(), playerPosition.zInOverworld(), getCorrectedHorizontalAngle(playerPosition.horizontalAngle(), crosshairCorrection), -31.6, 0, 0);
 	}
 

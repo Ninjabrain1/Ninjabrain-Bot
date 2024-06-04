@@ -12,18 +12,18 @@ public class ChangeLastAngleAction implements IAction {
 	private final IListComponent<IEnderEyeThrow> throwList;
 	private final IObservable<Boolean> locked;
 	private final NinjabrainBotPreferences preferences;
-	private final boolean positive;
+	private final int correctionIncrements;
 
-	public ChangeLastAngleAction(IDataState dataState, NinjabrainBotPreferences preferences, boolean positive) {
-		this(dataState.getThrowList(), dataState.locked(), preferences, positive);
+	public ChangeLastAngleAction(IDataState dataState, NinjabrainBotPreferences preferences, int correctionIncrements) {
+		this(dataState.getThrowList(), dataState.locked(), preferences, correctionIncrements);
 	}
 
-	public ChangeLastAngleAction(IListComponent<IEnderEyeThrow> throwList, IObservable<Boolean> locked, NinjabrainBotPreferences preferences, boolean positive) {
+	public ChangeLastAngleAction(IListComponent<IEnderEyeThrow> throwList, IObservable<Boolean> locked, NinjabrainBotPreferences preferences, int correctionIncrements) {
 		this.throwList = throwList;
 		this.locked = locked;
 		this.preferences = preferences;
-		this.positive = positive;
-	}
+        this.correctionIncrements = correctionIncrements;
+    }
 
 	@Override
 	public void execute() {
@@ -35,7 +35,7 @@ public class ChangeLastAngleAction implements IAction {
 
 		IEnderEyeThrow lastThrow = throwList.get(throwList.size() - 1);
 		double newCorrection = lastThrow.correction() + getAngleCorrectionAmountInDegrees(lastThrow.verticalAngle());
-		IEnderEyeThrow newThrow = lastThrow.withCorrection(newCorrection, lastThrow.correctionIncrements() + (positive ? 1 : -1));
+		IEnderEyeThrow newThrow = lastThrow.withCorrection(newCorrection, lastThrow.correctionIncrements() + correctionIncrements);
 
 		throwList.replace(lastThrow, newThrow);
 	}
@@ -54,7 +54,7 @@ public class ChangeLastAngleAction implements IAction {
 				change = 0.01;
 		}
 
-		change *= positive ? 1 : -1;
+		change *= correctionIncrements;
 		return change;
 	}
 

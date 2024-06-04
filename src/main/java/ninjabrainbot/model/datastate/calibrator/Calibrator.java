@@ -62,8 +62,8 @@ public class Calibrator implements IDisposable {
 		calculator = new Calculator(calculatorSettings, new StandardDeviationSettings(0.2, 0.2, 0.2, 0.2));
 		throwList = new ListComponent<>(null, 100);
 		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewPlayerPositionInputted));
-		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, true).execute()));
-		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
+		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, 1).execute()));
+		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, -1).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
 		ready = false;
 		this.isBoatThrowCalibrator = isBoatThrowCalibrator;
