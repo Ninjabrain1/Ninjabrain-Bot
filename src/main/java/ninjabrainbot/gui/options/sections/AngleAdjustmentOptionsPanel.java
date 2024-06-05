@@ -2,7 +2,6 @@ package ninjabrainbot.gui.options.sections;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
-import ninjabrainbot.gui.components.layout.Divider;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
@@ -31,6 +30,8 @@ public class AngleAdjustmentOptionsPanel extends JPanel {
 		JPanel column1 = new StackPanel();
 		column1.setOpaque(false);
 		add(column1);
+
+		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.display_type"), preferences.angleAdjustmentDisplayType, true));
 
 		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.adjustment_type"), preferences.angleAdjustmentType, true));
 

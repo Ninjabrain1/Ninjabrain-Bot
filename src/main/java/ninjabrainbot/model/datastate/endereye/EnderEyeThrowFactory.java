@@ -2,7 +2,7 @@ package ninjabrainbot.model.datastate.endereye;
 
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.highprecision.BoatEnderEyeThrow;
 import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 import ninjabrainbot.util.Assert;
@@ -29,7 +29,7 @@ public class EnderEyeThrowFactory implements IEnderEyeThrowFactory {
 	}
 
 	@Override
-	public IEnderEyeThrow createEnderEyeThrowFromLimitedPlayerPosition(IPlayerPosition playerPosition) {
+	public IEnderEyeThrow createEnderEyeThrowFromLimitedPlayerPosition(ILimitedPlayerPosition playerPosition) {
 		Assert.isTrue(playerPosition.isInOverworld());
 
 		boolean isBoatThrow = preferences.usePreciseAngle.get() && boatDataState.boatAngle().get() != null;

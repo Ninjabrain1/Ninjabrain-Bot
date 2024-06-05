@@ -33,8 +33,8 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
 		disposeHandler.add(preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked));
 		disposeHandler.add(preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked));
-		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(true)));
-		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(false)));
+		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(1)));
+		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(-1)));
 		disposeHandler.add(preferences.hotkeyAltStd.whenTriggered().subscribe(this::toggleAltStdIfNotLocked));
 		disposeHandler.add(preferences.hotkeyBoat.whenTriggered().subscribe(this::toggleEnteringBoatIfNotLocked));
 		disposeHandler.add(preferences.hotkeyMod360.whenTriggered().subscribe(this::toggleMod360IndicatorIfNotLocked));
@@ -57,9 +57,9 @@ public class HotkeyInputHandler implements IDisposable {
 			domainModel.redoUnderWriteLock();
 	}
 
-	private void changeLastAngleIfNotLocked(boolean positive) {
+	private void changeLastAngleIfNotLocked(int correctionIncrements) {
 		if (!dataState.locked().get() && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
-			actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, positive));
+			actionExecutor.executeImmediately(new ChangeLastAngleAction(dataState, preferences, correctionIncrements));
 	}
 
 	private void toggleAltStdIfNotLocked() {

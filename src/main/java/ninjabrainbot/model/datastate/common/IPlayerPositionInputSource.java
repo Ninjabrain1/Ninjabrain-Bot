@@ -12,6 +12,6 @@ public interface IPlayerPositionInputSource {
 	/**
 	 * Notifies subscribers whenever new limited coordinates have been inputted (for pre 1.12, e.g. "12 2000 180")
 	 */
-	ISubscribable<IPlayerPosition> whenNewLimitedPlayerPositionInputted();
+	ISubscribable<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted();
 
 }

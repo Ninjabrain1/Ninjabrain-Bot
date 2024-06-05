@@ -1,7 +1,7 @@
 package ninjabrainbot.util;
 
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.input.IFossilInputSource;
@@ -11,7 +11,7 @@ import ninjabrainbot.event.ObservableProperty;
 public class FakeCoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource {
 
 	public final ObservableProperty<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
-	public final ObservableProperty<IPlayerPosition> whenNewLimitedPlayerPositionInputted;
+	public final ObservableProperty<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	public final ObservableProperty<Fossil> whenNewFossilInputted;
 
 	public FakeCoordinateInputSource() {
@@ -24,7 +24,7 @@ public class FakeCoordinateInputSource implements IPlayerPositionInputSource, IF
 		return whenNewDetailedPlayerPositionInputted;
 	}
 
-	public ISubscribable<IPlayerPosition> whenNewLimitedPlayerPositionInputted() {
+	public ISubscribable<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted() {
 		return whenNewLimitedPlayerPositionInputted;
 	}
 

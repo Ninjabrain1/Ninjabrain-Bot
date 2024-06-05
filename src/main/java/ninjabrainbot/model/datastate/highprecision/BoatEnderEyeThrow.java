@@ -15,21 +15,21 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 
 	public BoatEnderEyeThrow(IPlayerPosition playerPosition, NinjabrainBotPreferences preferences, float boatAngle) {
 		this(playerPosition.xInOverworld(), playerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(playerPosition.horizontalAngle(), preferences.sensitivityManual.get(), preferences.crosshairCorrection.get(), boatAngle),
-				-31.6, 0);
+				-31.6, 0, 0);
 	}
 
 	public BoatEnderEyeThrow(IDetailedPlayerPosition detailedPlayerPosition, NinjabrainBotPreferences preferences, float boatAngle) {
 		this(detailedPlayerPosition.xInOverworld(), detailedPlayerPosition.zInPlayerDimension(), getPreciseBoatHorizontalAngle(detailedPlayerPosition.horizontalAngle(), preferences.sensitivityAutomatic.get(), preferences.crosshairCorrection.get(), boatAngle),
-				detailedPlayerPosition.verticalAngle(), 0);
+				detailedPlayerPosition.verticalAngle(), 0, 0);
 	}
 
-	private BoatEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction) {
-		super(x, z, horizontalAngle, verticalAngle, correction);
+	private BoatEnderEyeThrow(double x, double z, double horizontalAngle, double verticalAngle, double correction, int correctionIncrements) {
+		super(x, z, horizontalAngle, verticalAngle, correction, correctionIncrements);
 	}
 
 	@Override
-	public IEnderEyeThrow withCorrection(double correction) {
-		return new BoatEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction);
+	public IEnderEyeThrow withCorrection(double correction, int correctionIncrements) {
+		return new BoatEnderEyeThrow(x, z, horizontalAngleWithoutCorrection, verticalAngle, correction, correctionIncrements);
 	}
 
 	@Override

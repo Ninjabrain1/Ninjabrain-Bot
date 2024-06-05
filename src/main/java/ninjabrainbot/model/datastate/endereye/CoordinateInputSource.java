@@ -5,11 +5,7 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.IClipboardProvider;
-import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
-import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
+import ninjabrainbot.model.datastate.common.*;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.input.IFossilInputSource;
 
@@ -20,7 +16,7 @@ import ninjabrainbot.model.input.IFossilInputSource;
 public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource, IDisposable {
 
 	private final ObservableField<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
-	private final ObservableField<IPlayerPosition> whenNewLimitedPlayerPositionInputted;
+	private final ObservableField<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	private final ObservableField<Fossil> whenNewFossilInputted;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
@@ -45,7 +41,7 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 
 		InputData1_12 data1_12 = InputData1_12.parseInputString(f3c);
 		if (data1_12 != null) {
-			whenNewLimitedPlayerPositionInputted.set(new LimitedPlayerPosition(data1_12.x, data1_12.z, data1_12.horizontalAngle));
+			whenNewLimitedPlayerPositionInputted.set(new LimitedPlayerPosition(data1_12.x, data1_12.z, data1_12.horizontalAngle, data1_12.correctionIncrements));
 			return;
 		}
 
@@ -59,7 +55,7 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 		return whenNewDetailedPlayerPositionInputted;
 	}
 
-	public ISubscribable<IPlayerPosition> whenNewLimitedPlayerPositionInputted() {
+	public ISubscribable<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted() {
 		return whenNewLimitedPlayerPositionInputted;
 	}
 

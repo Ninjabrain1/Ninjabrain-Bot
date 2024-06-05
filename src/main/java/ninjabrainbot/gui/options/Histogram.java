@@ -44,7 +44,7 @@ public class Histogram extends ThemedPanel {
 	}
 
 	private void updateBounds(double[] angleErrors) {
-		max = 0;
+		max = 0.001F;
 		for (double error : angleErrors) {
 			double positiveError = Math.abs(error);
 			int digits = (int) Math.floor(Math.log10(positiveError));
