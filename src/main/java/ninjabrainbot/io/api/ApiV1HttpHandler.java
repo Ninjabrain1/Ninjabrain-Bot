@@ -14,8 +14,11 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
+import ninjabrainbot.io.api.queries.BlindQuery;
 import ninjabrainbot.io.api.queries.IQuery;
+import ninjabrainbot.io.api.queries.PingQuery;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
+import ninjabrainbot.io.api.queries.VersionQuery;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.util.Assert;
@@ -33,6 +36,9 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery());
 		queries.put("allAdvancements", new AllAdvancementsQuery());
+		queries.put("blind", new BlindQuery());
+		queries.put("version", new VersionQuery());
+		queries.put("ping", new PingQuery());
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			return;
 		}
 
-		if (subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")){
+		if (query.supportsSubscriptions() &&  subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")){
 			subscribeToQuery(exchange, query);
 			return;
 		}

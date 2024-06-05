@@ -6,4 +6,6 @@ public interface IQuery {
 
 	String get(IDataState dataState);
 
+	boolean supportsSubscriptions();
+
 }

@@ -32,6 +32,11 @@ public class AllAdvancementsQuery implements IQuery {
 		return rootObject.toString(isPretty ? 4 : 0);
 	}
 
+	@Override
+	public boolean supportsSubscriptions() {
+		return true;
+	}
+
 	private JSONObject convertPosition(StructurePosition structurePosition) {
 		JSONObject structurePositionObject = new JSONObject();
 		if (structurePosition == null)

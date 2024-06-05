@@ -30,6 +30,11 @@ public class StrongholdQuery implements IQuery {
 		return rootObject.toString(isPretty ? 4 : 0);
 	}
 
+	@Override
+	public boolean supportsSubscriptions() {
+		return true;
+	}
+
 	private JSONArray convertCalculatorResult(ICalculatorResult calculatorResult, IPlayerPosition playerPosition) {
 		JSONArray predictions = new JSONArray();
 		if (calculatorResult == null || !calculatorResult.success())
