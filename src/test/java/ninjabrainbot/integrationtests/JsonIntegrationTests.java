@@ -17,6 +17,7 @@ public class JsonIntegrationTests {
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, 161.2, -31, false));
 		testBuilder.inputSubpixelCorrections(2);
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, true));
+		testBuilder.inputStandardDeviationToggle();
 
 		StrongholdQuery jsonConverter = new StrongholdQuery(true);
 

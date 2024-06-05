@@ -15,6 +15,8 @@ import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
 import ninjabrainbot.io.api.queries.BlindQuery;
+import ninjabrainbot.io.api.queries.BoatQuery;
+import ninjabrainbot.io.api.queries.DivineQuery;
 import ninjabrainbot.io.api.queries.IQuery;
 import ninjabrainbot.io.api.queries.PingQuery;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
@@ -37,6 +39,8 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		queries.put("stronghold", new StrongholdQuery());
 		queries.put("allAdvancements", new AllAdvancementsQuery());
 		queries.put("blind", new BlindQuery());
+		queries.put("divine", new DivineQuery());
+		queries.put("boat", new BoatQuery());
 		queries.put("version", new VersionQuery());
 		queries.put("ping", new PingQuery());
 	}

@@ -21,7 +21,7 @@ public class BlindQuery implements IQuery {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("isBlindModeEnabled", dataState.resultType().get() == ResultType.BLIND);
 		rootObject.put("hasDivine", dataState.getDivineContext().hasDivine());
-		rootObject.put("blindResult", convertPosition(dataState.blindResult().get()));
+		rootObject.put("blindResult", convertBlindResult(dataState.blindResult().get()));
 		return rootObject.toString(isPretty ? 4 : 0);
 	}
 
@@ -30,7 +30,7 @@ public class BlindQuery implements IQuery {
 		return true;
 	}
 
-	private JSONObject convertPosition(BlindResult blindResult) {
+	private JSONObject convertBlindResult(BlindResult blindResult) {
 		JSONObject blindResultObject = new JSONObject();
 		if (blindResult == null)
 			return blindResultObject;
