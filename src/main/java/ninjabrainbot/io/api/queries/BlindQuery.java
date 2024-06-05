@@ -42,6 +42,7 @@ public class BlindQuery implements IQuery {
 		blindResultObject.put("averageDistance", blindResult.averageDistance);
 		blindResultObject.put("improveDirection", blindResult.improveDirection);
 		blindResultObject.put("improveDistance", blindResult.improveDistance);
+		blindResultObject.put("evaluation", blindResult.evaluationEnum);
 		return blindResultObject;
 	}
 
