@@ -37,7 +37,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		eventSender = new EventSender(dataState, domainModel, executorService);
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery());
-		queries.put("allAdvancements", new AllAdvancementsQuery());
+		queries.put("all-advancements", new AllAdvancementsQuery());
 		queries.put("blind", new BlindQuery());
 		queries.put("divine", new DivineQuery());
 		queries.put("boat", new BoatQuery());
