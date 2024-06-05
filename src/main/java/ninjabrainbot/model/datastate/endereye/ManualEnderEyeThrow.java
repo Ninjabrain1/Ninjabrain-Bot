@@ -35,7 +35,7 @@ public class ManualEnderEyeThrow extends EnderEyeThrow {
 
 	@Override
 	public EnderEyeThrowType getType() {
-		return EnderEyeThrowType.Manual;
+		return EnderEyeThrowType.MANUAL;
 	}
 
 }

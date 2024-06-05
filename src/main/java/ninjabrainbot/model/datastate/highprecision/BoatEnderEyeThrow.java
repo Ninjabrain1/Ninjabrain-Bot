@@ -49,7 +49,7 @@ public class BoatEnderEyeThrow extends EnderEyeThrow {
 
 	@Override
 	public EnderEyeThrowType getType() {
-		return EnderEyeThrowType.Boat;
+		return EnderEyeThrowType.BOAT;
 	}
 
 	private static double getPreciseBoatHorizontalAngle(double alpha, double sensitivity, double crosshairCorrection, float boatAngle) {

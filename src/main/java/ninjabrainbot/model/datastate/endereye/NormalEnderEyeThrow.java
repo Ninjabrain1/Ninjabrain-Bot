@@ -42,7 +42,7 @@ public class NormalEnderEyeThrow extends EnderEyeThrow {
 
 	@Override
 	public EnderEyeThrowType getType() {
-		return altStandardDeviation ? EnderEyeThrowType.NormalWithAltStd : EnderEyeThrowType.Normal;
+		return altStandardDeviation ? EnderEyeThrowType.NORMAL_WITH_ALT_STD : EnderEyeThrowType.NORMAL;
 	}
 
 }
