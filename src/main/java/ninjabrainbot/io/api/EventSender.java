@@ -19,7 +19,7 @@ public class EventSender implements IDisposable {
 
 	private final IDataState dataState;
 	private final ExecutorService executorService;
-	private final HashMap<IQuery, List<OutputStream>> subscribersByQuery;
+	private final HashMap<IQuery, SubscriberList> subscribersByQuery;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public EventSender(IDataState dataState, IDomainModel domainModel, ExecutorService executorService) {
@@ -31,29 +31,36 @@ public class EventSender implements IDisposable {
 	}
 
 	public synchronized void addSubscriber(IQuery query, OutputStream outputStream) {
-		if (!subscribersByQuery.containsKey(query))
-			subscribersByQuery.put(query, new ArrayList<>());
+		if (!subscribersByQuery.containsKey(query)) {
+			SubscriberList subscriberList = new SubscriberList();
+			subscriberList.lastSentEvent = query.get(dataState);
+			subscribersByQuery.put(query, subscriberList);
+		}
 
-		List<OutputStream> subscribers = subscribersByQuery.get(query);
-		Assert.isFalse(subscribers.contains(outputStream));
-		subscribers.add(outputStream);
-		sendSseEvent(query.get(dataState).getBytes(), query, outputStream);
+		SubscriberList subscriberList = subscribersByQuery.get(query);
+		Assert.isFalse(subscriberList.subscribers.contains(outputStream));
+		subscriberList.subscribers.add(outputStream);
+		sendSseEvent(subscriberList.lastSentEvent.getBytes(), query, outputStream);
 		Logger.log("Added subscriber to query " + query);
 	}
 
 	private synchronized void removeSubscriber(IQuery query, OutputStream outputStream) {
-		List<OutputStream> subscribers = subscribersByQuery.get(query);
-		subscribers.remove(outputStream);
-		if (subscribers.size() == 0)
+		SubscriberList subscriberList = subscribersByQuery.get(query);
+		subscriberList.subscribers.remove(outputStream);
+		if (subscriberList.subscribers.size() == 0)
 			subscribersByQuery.remove(query);
 		Logger.log("Removed subscriber from query " + query);
 	}
 
 	private synchronized void onDomainModelUpdated() {
 		for (IQuery query : subscribersByQuery.keySet()) {
-			List<OutputStream> outputStreams = subscribersByQuery.get(query);
-			byte[] data = query.get(dataState).getBytes();
-			for (OutputStream outputStream : outputStreams) {
+			SubscriberList subscriberList = subscribersByQuery.get(query);
+			String string = query.get(dataState);
+			if (string.equals(subscriberList.lastSentEvent))
+				continue;
+			subscriberList.lastSentEvent = string;
+			byte[] data = string.getBytes();
+			for (OutputStream outputStream : subscriberList.subscribers) {
 				executorService.submit(() -> sendSseEvent(data, query, outputStream));
 			}
 		}
@@ -75,8 +82,8 @@ public class EventSender implements IDisposable {
 	public void dispose() {
 		disposeHandler.dispose();
 		for (IQuery query : subscribersByQuery.keySet()) {
-			List<OutputStream> outputStreams = subscribersByQuery.get(query);
-			for (OutputStream outputStream : outputStreams) {
+			SubscriberList subscriberList = subscribersByQuery.get(query);
+			for (OutputStream outputStream : subscriberList.subscribers) {
 				try {
 					outputStream.close();
 				} catch (IOException e) {
@@ -84,6 +91,11 @@ public class EventSender implements IDisposable {
 				}
 			}
 		}
+	}
+
+	private static class SubscriberList {
+		public List<OutputStream> subscribers = new ArrayList<>();
+		public String lastSentEvent = null;
 	}
 
 }
