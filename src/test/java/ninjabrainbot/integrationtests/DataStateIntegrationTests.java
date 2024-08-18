@@ -9,6 +9,8 @@ import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.Fossil;
+import ninjabrainbot.model.datastate.endereye.MCDimension;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +22,8 @@ public class DataStateIntegrationTests {
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings().withAllAdvancementsSettings();
 
 		testBuilder.inputFossil(new Fossil(4));
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 12, -31, false));
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 1000, 12, -31, true));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 12, -31, MCDimension.OVERWORLD));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 1000, 12, -31, MCDimension.NETHER));
 
 		List<ResultType> resultTypeEvents = new ArrayList<>();
 		List<ICalculatorResult> calculatorResultEvents = new ArrayList<>();

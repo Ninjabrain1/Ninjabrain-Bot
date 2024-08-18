@@ -20,6 +20,11 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	private final DataComponent<StructurePosition> spawnPosition;
 	private final DataComponent<StructurePosition> outpostPosition;
 	private final DataComponent<StructurePosition> monumentPosition;
+	private final DataComponent<StructurePosition> deepDarkPosition;
+	private final DataComponent<StructurePosition> cityQueryPosition;
+	private final DataComponent<StructurePosition> shulkerTransportPosition;
+	private final DataComponent<StructurePosition> generalLocationPosition;
+
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
@@ -30,6 +35,10 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		spawnPosition = new DataComponent<>(domainModel);
 		outpostPosition = new DataComponent<>(domainModel);
 		monumentPosition = new DataComponent<>(domainModel);
+		deepDarkPosition = new DataComponent<>(domainModel);
+		cityQueryPosition = new DataComponent<>(domainModel);
+		shulkerTransportPosition = new DataComponent<>(domainModel);
+		generalLocationPosition = new DataComponent<>(domainModel);
 		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(environmentState.hasEnteredEnd().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdPosition::set));
@@ -62,6 +71,26 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	@Override
 	public IDataComponent<StructurePosition> monumentPosition() {
 		return monumentPosition;
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> deepDarkPosition() {
+		return deepDarkPosition;
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> cityQueryPosition() {
+		return cityQueryPosition;
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> shulkerTransportPosition() {
+		return shulkerTransportPosition;
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> generalLocationPosition() {
+		return generalLocationPosition;
 	}
 
 	@Override

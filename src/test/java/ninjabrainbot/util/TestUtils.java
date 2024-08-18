@@ -11,6 +11,7 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IOverworldRay;
+import ninjabrainbot.model.datastate.endereye.MCDimension;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import org.junit.jupiter.api.Assertions;
 
@@ -37,15 +38,15 @@ public class TestUtils {
 	}
 
 	public static IDetailedPlayerPosition createPlayerPosition(double x, double z, double alpha) {
-		return new DetailedPlayerPosition(x, 80, z, alpha, -31, false);
+		return new DetailedPlayerPosition(x, 80, z, alpha, -31, MCDimension.OVERWORLD);
 	}
 
 	public static IDetailedPlayerPosition createPlayerPositionLookDown(double x, double z, double alpha) {
-		return new DetailedPlayerPosition(x, 80, z, alpha, 90, false);
+		return new DetailedPlayerPosition(x, 80, z, alpha, 90, MCDimension.OVERWORLD);
 	}
 
 	public static IDetailedPlayerPosition createPlayerPositionInNether(double x, double z, double alpha) {
-		return new DetailedPlayerPosition(x, 80, z, alpha, 0, true);
+		return new DetailedPlayerPosition(x, 80, z, alpha, 0, MCDimension.NETHER);
 	}
 
 	public static <T> void assertIterableEquals(Iterable<T> iterable1, Iterable<T> iterable2) {

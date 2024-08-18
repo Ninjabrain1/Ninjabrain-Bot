@@ -42,6 +42,11 @@ public class PreviewPlayerPosition implements IPlayerPosition {
 	}
 
 	@Override
+	public boolean isInEnd() {
+		return false;
+	}
+
+	@Override
 	public double horizontalAngle() {
 		return 0;
 	}

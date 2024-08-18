@@ -10,4 +10,6 @@ public interface IPlayerPosition extends IOverworldRay {
 
 	boolean isInNether();
 
+	boolean isInEnd();
+
 }

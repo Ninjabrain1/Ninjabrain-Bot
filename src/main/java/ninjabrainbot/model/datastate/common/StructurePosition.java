@@ -7,6 +7,7 @@ import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;
+import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.util.I18n;
 
 public class StructurePosition implements IOverworldPosition, IDisposable {
@@ -127,5 +128,20 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		if (playerPosSubscription != null)
 			playerPosSubscription.dispose();
 	}
+
+    public static StructurePosition tryParseGeneralLocation(String f3i) {
+		if (!f3i.startsWith("/setblock "))
+			return null;
+		String[] substrings = f3i.split(" ");
+		if (substrings.length != 5)
+			return null;
+		try {
+			int x = Integer.parseInt(substrings[1]);
+			int z = Integer.parseInt(substrings[3]);
+			return new StructurePosition(x, z);
+		} catch (NullPointerException | NumberFormatException e) {
+			return null;
+		}
+    }
 
 }

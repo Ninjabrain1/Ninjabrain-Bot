@@ -52,6 +52,7 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
 	public final BooleanPreference allAdvancements;
+	public final BooleanPreference oneDotTwentyPlusAA;
 	public final BooleanPreference informationMismeasureEnabled;
 	public final BooleanPreference informationDirectionHelpEnabled;
 	public final BooleanPreference informationCombinedCertaintyEnabled;
@@ -117,6 +118,7 @@ public class NinjabrainBotPreferences {
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
 		allAdvancements = new BooleanPreference("all_advancements", false, source);
+		oneDotTwentyPlusAA = new BooleanPreference("one_dot_twenty_plus_aa", false, source);
 		informationMismeasureEnabled = new BooleanPreference("mismeasure_warning_enabled", false, source);
 		informationDirectionHelpEnabled = new BooleanPreference("direction_help_enabled", false, source);
 		informationCombinedCertaintyEnabled = new BooleanPreference("combined_offset_information_enabled", true, source);

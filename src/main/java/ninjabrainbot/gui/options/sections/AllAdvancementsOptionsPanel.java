@@ -17,6 +17,7 @@ import ninjabrainbot.util.I18n;
 public class AllAdvancementsOptionsPanel extends StackPanel {
 
 	private final NinjabrainBotPreferences preferences;
+	private final CheckboxPanel oneDotTwentyPlusAA;
 	private final RadioButtonPanel switchTypeRadioButtonPanel;
 	private final HotkeyPanel toggleHotkeyPanel;
 
@@ -36,15 +37,21 @@ public class AllAdvancementsOptionsPanel extends StackPanel {
 			}
 		});
 		add(new CheckboxPanel(styleManager, I18n.get("settings.enable_all_advancements_mode"), preferences.allAdvancements));
+
+
+		add(oneDotTwentyPlusAA = new CheckboxPanel(styleManager, I18n.get("settings.enable_120plus_all_advancements_mode"), preferences.oneDotTwentyPlusAA));
+
 		add(switchTypeRadioButtonPanel = new RadioButtonPanel(styleManager, I18n.get("settings.all_advancements.switch_type"), preferences.allAdvancementsToggleType, true));
 		add(toggleHotkeyPanel = new HotkeyPanel(styleManager, I18n.get("settings.all_advancements.toggle_aa_mode_hotkey"), preferences.hotkeyToggleAllAdvancementsMode));
 
 		updateComponentsEnabled();
 		preferences.allAdvancements.whenModified().subscribeEDT(this::updateComponentsEnabled);
+		preferences.oneDotTwentyPlusAA.whenModified().subscribeEDT(this::updateComponentsEnabled);
 		preferences.allAdvancementsToggleType.whenModified().subscribeEDT(this::updateComponentsEnabled);
 	}
 
 	private void updateComponentsEnabled() {
+		oneDotTwentyPlusAA.setEnabled(preferences.allAdvancements.get());
 		switchTypeRadioButtonPanel.setEnabled(preferences.allAdvancements.get());
 		toggleHotkeyPanel.setEnabled(preferences.allAdvancements.get() && preferences.allAdvancementsToggleType.get() == AllAdvancementsToggleType.Hotkey);
 	}

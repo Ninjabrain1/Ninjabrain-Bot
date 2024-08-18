@@ -45,7 +45,7 @@ public class MainTextArea extends ResizablePanel {
 		detailedTriangulation = new DetailedTriangulationPanel(styleManager, preferences);
 		blind = new BlindPanel(styleManager);
 		divine = new DivinePanel(styleManager);
-		allAdvancements = new AllAdvancementsPanel(styleManager, buttonInputHandler, dataState.allAdvancementsDataState());
+		allAdvancements = new AllAdvancementsPanel(styleManager, buttonInputHandler, dataState.allAdvancementsDataState(), preferences);
 		add(basicTriangulation, TRIANGULATION);
 		add(detailedTriangulation, TRIANGULATION_DETAILED);
 		add(blind, BLIND);
@@ -61,11 +61,18 @@ public class MainTextArea extends ResizablePanel {
 		updateResult();
 	}
 
+	private void updateOneDotTwentyPlusAAEnabled() {
+		allAdvancements.updateOneDotTwentyPlusAAEnabled();
+		// Update the size of the panel
+		whenSizeModified.notifySubscribers(this);
+	}
+
 	private void setupSubscriptions() {
 		// Settings
 		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribeEDT(this::setNetherCoordsEnabled));
 		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribeEDT(this::setAngleUpdatesEnabled));
 		disposeHandler.add(preferences.view.whenModified().subscribeEDT(__ -> onViewTypeChanged()));
+		disposeHandler.add(preferences.oneDotTwentyPlusAA.whenModified().subscribeEDT(__ -> updateOneDotTwentyPlusAAEnabled()));
 		// Data state
 		disposeHandler.add(dataState.calculatorResult().subscribeEDT(this::setResult));
 		disposeHandler.add(dataState.blindResult().subscribeEDT(this::setResult));
@@ -145,6 +152,8 @@ public class MainTextArea extends ResizablePanel {
 	public Dimension getPreferredSize() {
 		if (preferences.view.get() == MainViewType.BASIC && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
 			return basicTriangulation.getPreferredSize();
+		} else if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
+			return allAdvancements.getPreferredSize();
 		} else {
 			return detailedTriangulation.getPreferredSize();
 		}

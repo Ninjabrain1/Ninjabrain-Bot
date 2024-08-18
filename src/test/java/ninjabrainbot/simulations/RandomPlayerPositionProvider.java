@@ -4,6 +4,7 @@ import java.util.Random;
 
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.endereye.MCDimension;
 import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.util.Coords;
 
@@ -21,7 +22,7 @@ public class RandomPlayerPositionProvider {
 		double r = random.nextDouble() * ring.outerRadiusPostSnapping * 16;
 		double x = Coords.getX(r, phi);
 		double z = Coords.getZ(r, phi);
-		return new DetailedPlayerPosition(x, 80, z, random.nextDouble() * 2 * Math.PI, -31, false);
+		return new DetailedPlayerPosition(x, 80, z, random.nextDouble() * 2 * Math.PI, -31, MCDimension.OVERWORLD);
 	}
 
 }

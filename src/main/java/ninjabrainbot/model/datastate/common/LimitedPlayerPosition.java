@@ -47,4 +47,9 @@ public class LimitedPlayerPosition implements IPlayerPosition {
 	public boolean isInNether() {
 		return false;
 	}
+
+	@Override
+	public boolean isInEnd() {
+		return false;
+	}
 }
