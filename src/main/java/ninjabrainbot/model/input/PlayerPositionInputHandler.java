@@ -1,21 +1,22 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.actions.boat.ReduceBoatAngleMod360Action;
-import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
+import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.alladvancements.TryAddAllAdvancementsStructureAction;
+import ninjabrainbot.model.actions.boat.ReduceBoatAngleMod360Action;
 import ninjabrainbot.model.actions.boat.SetBoatAngleAction;
 import ninjabrainbot.model.actions.common.SetPlayerPositionAction;
-import ninjabrainbot.model.actions.alladvancements.TryAddAllAdvancementsStructureAction;
+import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
+import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
+import ninjabrainbot.model.actions.util.JointAction;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
-import ninjabrainbot.event.DisposeHandler;
-import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 /**
  * Listens to a stream of player position inputs and decides if/how the inputs should affect the data state.
@@ -87,11 +88,12 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (!playerPosition.isInOverworld())
 			return null;
 
-		ChangeLastAngleAction changeAngleAction = null;
-		if (playerPosition.correctionIncrements() != 0)
-			changeAngleAction = new ChangeLastAngleAction(dataState, preferences, playerPosition.correctionIncrements());
+		IAction action = new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition));
 
-		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition), changeAngleAction);
+		if (playerPosition.correctionIncrements() != 0)
+			action = new JointAction(action, new ChangeLastAngleAction(dataState, preferences, playerPosition.correctionIncrements()));
+
+		return action;
 	}
 
 	@Override
