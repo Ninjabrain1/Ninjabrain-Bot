@@ -1,7 +1,5 @@
 package ninjabrainbot.util;
 
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
-import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
@@ -43,7 +41,7 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
-	public IEnderEyeThrow withCorrection(double correction) {
+	public IEnderEyeThrow withCorrection(double correction, int correctionIncrements) {
 		return null;
 	}
 
@@ -73,8 +71,8 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 	}
 
 	@Override
-	public IPlayerPosition getPlayerPosition() {
-		return new LimitedPlayerPosition(x, z, horizontalAngle());
+	public int correctionIncrements() {
+		return 0;
 	}
 
 }

@@ -1,20 +1,22 @@
 package ninjabrainbot.model.input;
 
-import ninjabrainbot.model.actions.boat.ReduceBoatAngleMod360Action;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
-import ninjabrainbot.model.actions.IAction;
-import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.boat.SetBoatAngleAction;
-import ninjabrainbot.model.actions.common.SetPlayerPositionAction;
-import ninjabrainbot.model.actions.alladvancements.TryAddAllAdvancementsStructureAction;
-import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.actions.IAction;
+import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.alladvancements.TryAddAllAdvancementsStructureAction;
+import ninjabrainbot.model.actions.boat.ReduceBoatAngleMod360Action;
+import ninjabrainbot.model.actions.boat.SetBoatAngleAction;
+import ninjabrainbot.model.actions.common.SetPlayerPositionAction;
+import ninjabrainbot.model.actions.endereye.AddEnderEyeThrowAction;
+import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
+import ninjabrainbot.model.actions.util.JointAction;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
+import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 
 /**
  * Listens to a stream of player position inputs and decides if/how the inputs should affect the data state.
@@ -69,7 +71,7 @@ public class PlayerPositionInputHandler implements IDisposable {
 		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromDetailedPlayerPosition(playerPosition));
 	}
 
-	private void onNewLimitedPlayerPositionInputted(IPlayerPosition playerPosition) {
+	private void onNewLimitedPlayerPositionInputted(ILimitedPlayerPosition playerPosition) {
 		IAction setPlayerPositionAction = new SetPlayerPositionAction(dataState, playerPosition);
 		IAction actionForNewThrow = getActionForInputtedLimitedPlayerPosition(playerPosition);
 		if (actionForNewThrow == null) {
@@ -79,14 +81,19 @@ public class PlayerPositionInputHandler implements IDisposable {
 		actionExecutor.executeImmediately(setPlayerPositionAction, actionForNewThrow);
 	}
 
-	private IAction getActionForInputtedLimitedPlayerPosition(IPlayerPosition playerPosition) {
+	private IAction getActionForInputtedLimitedPlayerPosition(ILimitedPlayerPosition playerPosition) {
 		if (dataState.locked().get())
 			return null;
 
 		if (!playerPosition.isInOverworld())
 			return null;
 
-		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition));
+		IAction action = new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition));
+
+		if (playerPosition.correctionIncrements() != 0)
+			action = new JointAction(action, new ChangeLastAngleAction(dataState, preferences, playerPosition.correctionIncrements()));
+
+		return action;
 	}
 
 	@Override

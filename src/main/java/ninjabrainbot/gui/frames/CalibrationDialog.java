@@ -28,6 +28,7 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentDisplayType;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.calibrator.Calibrator;
 import ninjabrainbot.model.datastate.calibrator.ICalibratorFactory;
@@ -173,11 +174,14 @@ public class CalibrationDialog extends ThemedDialog {
 			for (int i = 0; i < angleErrors.length; i++) {
 				IEnderEyeThrow t = eyeThrows.get(i);
 				double e = angleErrors[i];
-				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(I18n.get("angle") + (t.correction() < 0 ? ": %.3f %.3f\n" : ": %.3f +%.3f\n"), t.horizontalAngle() - t.correction(), t.correction()));
-				} else {
+
+				if (t.correctionIncrements() == 0)
 					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.horizontalAngle()));
-				}
+				else if (preferences.angleAdjustmentDisplayType.get() == AngleAdjustmentDisplayType.INCREMENTS)
+					b.append(String.format(I18n.get("angle") + ": %.3f %+d\n", t.horizontalAngleWithoutCorrection(), t.correctionIncrements()));
+				else
+					b.append(String.format(I18n.get("angle") + ": %.3f %+.3f\n", t.horizontalAngleWithoutCorrection(), t.correction()));
+
 				b.append(String.format(I18n.get("error") + ": %.4f\n", e));
 			}
 			errors.area.setText(b.toString());
@@ -186,11 +190,12 @@ public class CalibrationDialog extends ThemedDialog {
 			StringBuilder b = new StringBuilder();
 			IReadOnlyList<IEnderEyeThrow> eyeThrows = calibrator.getThrows();
 			for (IEnderEyeThrow t : eyeThrows) {
-				if (Math.abs(t.correction()) > 1e-7) {
-					b.append(String.format(t.correction() < 0 ? "Angle: %.3f %.3f\n" : "Angle: %.3f +%.3f\n", t.horizontalAngle() - t.correction(), t.correction()));
-				} else {
-					b.append(String.format("Angle: %.2f\n", t.horizontalAngle()));
-				}
+				if (t.correctionIncrements() == 0)
+					b.append(String.format(I18n.get("angle") + ": %.2f\n", t.horizontalAngle()));
+				else if (preferences.angleAdjustmentDisplayType.get() == AngleAdjustmentDisplayType.INCREMENTS)
+					b.append(String.format(I18n.get("angle") + ": %.3f %+d\n", t.horizontalAngleWithoutCorrection(), t.correctionIncrements()));
+				else
+					b.append(String.format(I18n.get("angle") + ": %.3f %+.3f\n", t.horizontalAngleWithoutCorrection(), t.correction()));
 			}
 			errors.area.setText(b.toString());
 		}
