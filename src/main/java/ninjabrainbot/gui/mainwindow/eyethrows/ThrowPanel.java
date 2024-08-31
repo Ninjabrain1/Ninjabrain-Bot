@@ -116,7 +116,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.Boat ? "%.4f" : "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.BOAT ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -281,12 +281,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// Paint dot if special std
-		if (t != null && t.getType() != EnderEyeThrowType.Normal) {
-			if (t.getType() == EnderEyeThrowType.NormalWithAltStd) {
+		if (t != null && t.getType() != EnderEyeThrowType.NORMAL) {
+			if (t.getType() == EnderEyeThrowType.NORMAL_WITH_ALT_STD) {
 				g.setColor(Color.RED);
-			} else if (t.getType() == EnderEyeThrowType.Manual) {
+			} else if (t.getType() == EnderEyeThrowType.MANUAL) {
 				g.setColor(Color.CYAN);
-			} else if (t.getType() == EnderEyeThrowType.Boat) {
+			} else if (t.getType() == EnderEyeThrowType.BOAT) {
 				g.setColor(Color.GREEN);
 			}
 			int a = 3;

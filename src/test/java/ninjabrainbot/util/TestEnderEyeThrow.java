@@ -52,7 +52,7 @@ public class TestEnderEyeThrow implements IEnderEyeThrow {
 
 	@Override
 	public EnderEyeThrowType getType() {
-		return EnderEyeThrowType.Normal;
+		return EnderEyeThrowType.NORMAL;
 	}
 
 	@Override

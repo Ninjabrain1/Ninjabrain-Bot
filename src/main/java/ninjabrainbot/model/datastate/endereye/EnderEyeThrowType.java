@@ -1,5 +1,5 @@
 package ninjabrainbot.model.datastate.endereye;
 
 public enum EnderEyeThrowType {
-	Normal, NormalWithAltStd, Manual, Boat
+	NORMAL, NORMAL_WITH_ALT_STD, MANUAL, BOAT
 }

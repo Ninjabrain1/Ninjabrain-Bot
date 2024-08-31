@@ -49,6 +49,7 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference colorCodeNegativeCoords;
 	public final BooleanPreference usePreciseAngle;
 	public final BooleanPreference useOverlay;
+	public final BooleanPreference enableHttpServer;
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
 	public final BooleanPreference allAdvancements;
@@ -115,6 +116,7 @@ public class NinjabrainBotPreferences {
 		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
+		enableHttpServer = new BooleanPreference("enable_http_server", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
 		allAdvancements = new BooleanPreference("all_advancements", false, source);
