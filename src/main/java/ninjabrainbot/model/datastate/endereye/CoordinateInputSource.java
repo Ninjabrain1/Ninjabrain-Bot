@@ -5,34 +5,31 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.IClipboardProvider;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.common.*;
 import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.input.IFossilInputSource;
-import ninjabrainbot.model.input.IGeneralLocationInputSource;
+import ninjabrainbot.model.input.IF3ILocationInputSource;
 
 /**
  * Listens changes of the clipboard in the ClipboardProvider and parses any compatible clipboard strings
  * into player positions and fossils, exposed through the streams whenNewPlayerPositionInputted(), and whenNewFossilInputted().
  */
-public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource, IGeneralLocationInputSource, IDisposable {
+public class CoordinateInputSource implements IPlayerPositionInputSource, IFossilInputSource, IF3ILocationInputSource, IDisposable {
 
-	private final NinjabrainBotPreferences preferences;
 	private final ObservableField<IDetailedPlayerPosition> whenNewDetailedPlayerPositionInputted;
 	private final ObservableField<ILimitedPlayerPosition> whenNewLimitedPlayerPositionInputted;
 	private final ObservableField<Fossil> whenNewFossilInputted;
-	private final ObservableField<StructurePosition> whenNewGeneralLocationInputted;
+	private final ObservableField<F3IData> whenNewF3ILocationInputted;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public CoordinateInputSource(IClipboardProvider clipboardProvider, NinjabrainBotPreferences preferences) {
+	public CoordinateInputSource(IClipboardProvider clipboardProvider) {
 		whenNewDetailedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewLimitedPlayerPositionInputted = new ObservableField<>(null, true);
 		whenNewFossilInputted = new ObservableField<>(null, true);
-		whenNewGeneralLocationInputted = new ObservableField<>(null, true);
+		whenNewF3ILocationInputted = new ObservableField<>(null, true);
 
 		disposeHandler.add(clipboardProvider.clipboardText().subscribe(this::parseF3C));
-		this.preferences = preferences;
 	}
 
 	private void parseF3C(String f3c) {
@@ -56,11 +53,9 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 			whenNewFossilInputted.setAndAlwaysNotifySubscribers(f);
 		}
 
-		if (preferences.oneDotTwentyPlusAA.get() && preferences.allAdvancements.get()) {
-			StructurePosition generalLocation = StructurePosition.tryParseGeneralLocation(f3c);
-			if (generalLocation != null) {
-				whenNewGeneralLocationInputted.setAndAlwaysNotifySubscribers(generalLocation);
-			}
+		F3IData f3iData = F3IData.tryParseF3IString(f3c);
+		if (f3iData != null) {
+			whenNewF3ILocationInputted.setAndAlwaysNotifySubscribers(f3iData);
 		}
 	}
 
@@ -76,8 +71,8 @@ public class CoordinateInputSource implements IPlayerPositionInputSource, IFossi
 		return whenNewFossilInputted;
 	}
 
-	public ISubscribable<StructurePosition> whenNewGeneralLocationInputted() {
-		return whenNewGeneralLocationInputted;
+	public ISubscribable<F3IData> whenNewF3ILocationInputted() {
+		return whenNewF3ILocationInputted;
 	}
 
 	@Override

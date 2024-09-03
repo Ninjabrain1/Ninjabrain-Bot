@@ -14,6 +14,17 @@ public class F3CData {
 		this.dimension = dimension;
 	}
 
+	private static MCDimension getMCDimension(String world) {
+		if (world.endsWith("overworld")) {
+			return MCDimension.OVERWORLD;
+		} else if (world.endsWith("the_nether")) {
+			return MCDimension.NETHER;
+		} else if (world.endsWith("the_end")) {
+			return MCDimension.END;
+		}
+		return null;
+	}
+
 	public static F3CData tryParseF3CString(String string) {
 		if (!(string.startsWith("/execute in minecraft:"))) {
 			return null;
@@ -23,14 +34,7 @@ public class F3CData {
 			return null;
 		try {
 			String world = substrings[2];
-			MCDimension dimension = null;
-			if (world.endsWith("overworld")) {
-				dimension = MCDimension.OVERWORLD;
-			} else if (world.endsWith("the_nether")) {
-				dimension = MCDimension.NETHER;
-			} else if (world.endsWith("the_end")) {
-				dimension = MCDimension.END;
-			}
+			MCDimension dimension = getMCDimension(world);
 			
 			double x = Double.parseDouble(substrings[6]);
 			double y = Double.parseDouble(substrings[7]);

@@ -2,6 +2,8 @@ package ninjabrainbot.integrationtests;
 
 import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
+import ninjabrainbot.model.datastate.endereye.MCDimension;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +15,10 @@ public class JsonIntegrationTests {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, false));
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, 161.2, -31, false));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, MCDimension.OVERWORLD));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, 161.2, -31, MCDimension.OVERWORLD));
 		testBuilder.inputSubpixelCorrections(2);
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, true));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, MCDimension.NETHER));
 		testBuilder.inputStandardDeviationToggle();
 
 		StrongholdQuery jsonConverter = new StrongholdQuery(true);
@@ -38,8 +40,8 @@ public class JsonIntegrationTests {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, false));
-		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, -30, -31, false));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, MCDimension.OVERWORLD));
+		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, -30, -31, MCDimension.OVERWORLD));
 
 		StrongholdQuery jsonConverter = new StrongholdQuery(true);
 

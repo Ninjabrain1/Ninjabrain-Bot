@@ -129,7 +129,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 			playerPosSubscription.dispose();
 	}
 
-    public static StructurePosition tryParseGeneralLocation(String f3i) {
+    public static StructurePosition tryParseF3ILocation(String f3i) {
 		if (!f3i.startsWith("/setblock "))
 			return null;
 		String[] substrings = f3i.split(" ");

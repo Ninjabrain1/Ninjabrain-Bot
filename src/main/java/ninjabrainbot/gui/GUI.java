@@ -35,7 +35,7 @@ import ninjabrainbot.model.information.PortalLinkingWarningProvider;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.FossilInputHandler;
-import ninjabrainbot.model.input.GeneralLocationInputHandler;
+import ninjabrainbot.model.input.F3ILocationInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
@@ -107,11 +107,11 @@ public class GUI {
 
 	private void initInputHandlers() {
 		Progress.setTask("Initializing input handlers", 0.08f);
-		coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader, preferences));
+		coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new FossilInputHandler(coordinateInputSource, dataState, actionExecutor));
-		disposeHandler.add(new GeneralLocationInputHandler(coordinateInputSource, dataState, actionExecutor));
+		disposeHandler.add(new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);

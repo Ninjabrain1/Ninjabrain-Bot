@@ -25,7 +25,7 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		this.preferences = preferences;
 	}
 
-	public StructurePosition getStructurePosition(StructureType structureType) {
+	private StructurePosition getStructurePosition(StructureType structureType) {
 		switch (structureType) {
 			case Outpost:
 				return getOutpostPosition(playerPosition);
@@ -34,11 +34,6 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 			default:
 				return new StructurePosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()), playerPositionObservable);
 		}
-	}
-
-	public void generalLocationSet(StructurePosition structurePosition) {
-		IDataComponent<StructurePosition> dataComponent = getDataComponentFromStructureType(StructureType.GeneralLocation);
-		dataComponent.set(structurePosition);
 	}
 
 	@Override
@@ -58,38 +53,39 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 	}
 
 	private StructureType getAllAdvancementStructureTypeFromPlayerPosition(IDetailedPlayerPosition t) {
-		if (!preferences.oneDotTwentyPlusAA.get()) {
-			if (t.isInNether())
-				return StructureType.Unknown;
+		if (t.isInNether())
+			return StructureType.Unknown;
 
-			if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
-				return StructureType.Spawn;
-
-			if (t.yInPlayerDimension() < 63)
-				return StructureType.Monument;
-
-			return StructureType.Outpost;
-		} else {
-			if (t.isInNether())
-				return StructureType.Unknown;
-
-			if (t.isInEnd())
+		if (t.isInEnd()) {
+			if (preferences.oneDotTwentyPlusAA.get()) {
 				return StructureType.ShulkerTransport;
+			} else {
+				return StructureType.Unknown;
+			}
+		}
 
-			if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
-				return StructureType.Spawn;
+		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
+			return StructureType.Spawn;
 
-			if (t.yInPlayerDimension() > 30 && t.yInPlayerDimension() < 63 && t.isInOverworld())
+		if (t.yInPlayerDimension() < 63) {
+			if (preferences.oneDotTwentyPlusAA.get()) {
+				if (t.yInPlayerDimension() > 30 && t.isInOverworld()) {
+					return StructureType.Monument;
+				}
+			} else {
 				return StructureType.Monument;
+			}
+		}
 
+		if (preferences.oneDotTwentyPlusAA.get()) {
 			if (t.yInPlayerDimension() <= 30 && t.isInOverworld())
 				return StructureType.DeepDark;
 			
 			if (t.yInPlayerDimension() > 160 && t.isInOverworld())
 				return StructureType.CityQuery;
-
-			return StructureType.Outpost;
 		}
+
+		return StructureType.Outpost;
 	}
 
 	private StructurePosition getOutpostPosition(IDetailedPlayerPosition t) {
