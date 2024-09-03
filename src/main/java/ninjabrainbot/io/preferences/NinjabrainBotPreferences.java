@@ -49,6 +49,7 @@ public class NinjabrainBotPreferences {
 	public final BooleanPreference colorCodeNegativeCoords;
 	public final BooleanPreference usePreciseAngle;
 	public final BooleanPreference useOverlay;
+	public final BooleanPreference enableHttpServer;
 	public final BooleanPreference overlayAutoHide;
 	public final BooleanPreference overlayHideWhenLocked;
 	public final BooleanPreference allAdvancements;
@@ -67,6 +68,7 @@ public class NinjabrainBotPreferences {
 	public final MultipleChoicePreference<AllAdvancementsToggleType> allAdvancementsToggleType;
 	public final MultipleChoicePreference<DefaultBoatType> defaultBoatType;
 	public final MultipleChoicePreference<AngleAdjustmentType> angleAdjustmentType;
+	public final MultipleChoicePreference<AngleAdjustmentDisplayType> angleAdjustmentDisplayType;
 
 	public NinjabrainBotPreferences(IPreferenceSource source) {
 		this.source = source;
@@ -115,6 +117,7 @@ public class NinjabrainBotPreferences {
 		colorCodeNegativeCoords = new BooleanPreference("color_negative_coords", false, source);
 		usePreciseAngle = new BooleanPreference("use_precise_angle", false, source);
 		useOverlay = new BooleanPreference("use_obs_overlay", false, source);
+		enableHttpServer = new BooleanPreference("enable_http_server", false, source);
 		overlayAutoHide = new BooleanPreference("overlay_auto_hide", false, source);
 		overlayHideWhenLocked = new BooleanPreference("overlay_lock_hide", false, source);
 		allAdvancements = new BooleanPreference("all_advancements", false, source);
@@ -138,6 +141,8 @@ public class NinjabrainBotPreferences {
 				new DefaultBoatType[] { DefaultBoatType.GRAY, DefaultBoatType.BLUE, DefaultBoatType.GREEN }, source);
 		angleAdjustmentType = new MultipleChoicePreference<>("angle_adjustment_type", AngleAdjustmentType.SUBPIXEL, new int[] { 0, 1, 2 },
 				new AngleAdjustmentType[] { AngleAdjustmentType.SUBPIXEL, AngleAdjustmentType.TALL, AngleAdjustmentType.CUSTOM }, source);
+		angleAdjustmentDisplayType = new MultipleChoicePreference<>("angle_adjustment_display_type", AngleAdjustmentDisplayType.ANGLE_CHANGE, new int[] { 0, 1 },
+				new AngleAdjustmentDisplayType[] { AngleAdjustmentDisplayType.ANGLE_CHANGE, AngleAdjustmentDisplayType.INCREMENTS }, source);
 
 		// Upgrade if necessary
 		if (settingsVersion.get() == 0)

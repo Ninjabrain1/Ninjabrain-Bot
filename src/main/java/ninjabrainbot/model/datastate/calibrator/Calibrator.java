@@ -18,7 +18,7 @@ import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.datastate.calculator.ICalculator;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
@@ -68,8 +68,8 @@ public class Calibrator implements IDisposable {
 		throwList = new ListComponent<>(null, 100);
 		disposeHandler.add(playerPositionInputSource.whenNewLimitedPlayerPositionInputted().subscribe(this::onNewLimitedPlayerPositionInputted));
 		disposeHandler.add(playerPositionInputSource.whenNewDetailedPlayerPositionInputted().subscribe(this::onNewDetailedPlayerPositionInputted));
-		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, true).execute()));
-		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, false).execute()));
+		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, 1).execute()));
+		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> new ChangeLastAngleAction(throwList, locked, preferences, -1).execute()));
 		disposeHandler.add(throwList.subscribe(__ -> whenModified.notifySubscribers(this)));
 		readyToCalibrate = false;
 		readyToReadClipboard = true;
@@ -77,15 +77,19 @@ public class Calibrator implements IDisposable {
 		this.isManualCalibrator = isManualCalibrator;
 	}
 
-	private void onNewLimitedPlayerPositionInputted(IPlayerPosition playerPosition) {
+	private void onNewLimitedPlayerPositionInputted(ILimitedPlayerPosition playerPosition) {
 		if (!isManualCalibrator)
 			return;
 		try {
+			ChangeLastAngleAction changeAngleAction = null;
+			if (playerPosition.correctionIncrements() != 0)
+				changeAngleAction = new ChangeLastAngleAction(throwList, locked, preferences, playerPosition.correctionIncrements());
+
 			if (isBoatThrowCalibrator) {
-				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), changeAngleAction);
 			}
 			else {
-				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), changeAngleAction);
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
@@ -97,17 +101,17 @@ public class Calibrator implements IDisposable {
 			return;
 		try {
 			if (isBoatThrowCalibrator) {
-				add(new BoatEnderEyeThrow(playerPosition, preferences, 0));
+				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), null);
 			}
 			else {
-				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()));
+				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), null);
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void add(IEnderEyeThrow t) throws InterruptedException {
+	private void add(IEnderEyeThrow t, ChangeLastAngleAction changeAngleAction) throws InterruptedException {
 		if (!readyToReadClipboard)
 			return;
 
@@ -131,6 +135,9 @@ public class Calibrator implements IDisposable {
 				return;
 			}
 			throwList.add(t);
+			if (changeAngleAction != null)
+				changeAngleAction.execute();
+
 			Chunk closest;
 			Chunk prediction;
 			if (stronghold == null) {

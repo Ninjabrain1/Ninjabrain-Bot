@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentDisplayType;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
@@ -102,6 +102,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 		lineCol = styleManager.currentTheme.COLOR_DIVIDER;
 
 		disposeHandler.add(preferences.showAngleErrors.whenModified().subscribeEDT(error::setVisible));
+		disposeHandler.add(preferences.angleAdjustmentDisplayType.whenModified().subscribeEDT(this::updateCorrection));
 	}
 
 	public void setPrediction(ChunkPrediction p) {
@@ -115,7 +116,7 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	}
 
 	private void updateError(ChunkPrediction p) {
-		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.Boat ? "%.4f" : "%.3f", p.getAngleError(t)));
+		error.setText(t == null || p == null ? null : String.format(Locale.US, t.getType() == EnderEyeThrowType.BOAT ? "%.4f" : "%.3f", p.getAngleError(t)));
 	}
 
 	@Override
@@ -235,18 +236,35 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 			x.setText(String.format(Locale.US, "%.2f", t.xInOverworld()));
 			z.setText(String.format(Locale.US, "%.2f", t.zInOverworld()));
 			alpha.setText(String.format(Locale.US, "%.2f", t.horizontalAngleWithoutCorrection()));
-			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
-			if (correctionSgn != 0) {
-				correction.setText(String.format(Locale.US, (t.correction() > 0 ? "+" : "") + (preferences.angleAdjustmentType.get() == AngleAdjustmentType.SUBPIXEL ? "%.2f" : "%.3f"), t.correction()));
-				correction.setForeground(t.correction() > 0 ? colorPos : colorNeg);
-			} else {
-				correction.setText(null);
-			}
+			updateCorrection(preferences.angleAdjustmentDisplayType.get());
 			updateError(lastTopPrediction);
 			removeButton.setVisible(true);
 		}
 		updateVisibility();
 		repaint(); // Update dot
+	}
+
+	void updateCorrection(AngleAdjustmentDisplayType displayType) {
+		if (t == null)
+			return;
+
+		if (displayType == AngleAdjustmentDisplayType.INCREMENTS)
+			correctionSgn = t.correctionIncrements() == 0 ? 0 : (t.correctionIncrements() > 0 ? 1 : -1);
+		else
+			correctionSgn = Math.abs(t.correction()) < 1e-7 ? 0 : (t.correction() > 0 ? 1 : -1);
+
+		if (correctionSgn != 0) {
+			if (displayType == AngleAdjustmentDisplayType.INCREMENTS)
+				correction.setText(String.format(Locale.US, "%+d", t.correctionIncrements()));
+			else if (Math.abs(Double.parseDouble(String.format("%.2f", t.correction())) - t.correction()) < 1e-7)
+				correction.setText(String.format(Locale.US, "%+.2f", t.correction()));
+			else
+				correction.setText(String.format(Locale.US, "%+.3f", t.correction()));
+
+			correction.setForeground(correctionSgn > 0 ? colorPos : colorNeg);
+		} else {
+			correction.setText(null);
+		}
 	}
 
 	void updateVisibility() {
@@ -263,12 +281,12 @@ public class ThrowPanel extends ThemedPanel implements IDisposable {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// Paint dot if special std
-		if (t != null && t.getType() != EnderEyeThrowType.Normal) {
-			if (t.getType() == EnderEyeThrowType.NormalWithAltStd) {
+		if (t != null && t.getType() != EnderEyeThrowType.NORMAL) {
+			if (t.getType() == EnderEyeThrowType.NORMAL_WITH_ALT_STD) {
 				g.setColor(Color.RED);
-			} else if (t.getType() == EnderEyeThrowType.Manual) {
+			} else if (t.getType() == EnderEyeThrowType.MANUAL) {
 				g.setColor(Color.CYAN);
-			} else if (t.getType() == EnderEyeThrowType.Boat) {
+			} else if (t.getType() == EnderEyeThrowType.BOAT) {
 				g.setColor(Color.GREEN);
 			}
 			int a = 3;
