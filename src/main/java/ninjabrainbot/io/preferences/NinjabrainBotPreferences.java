@@ -2,7 +2,14 @@ package ninjabrainbot.io.preferences;
 
 import com.sun.jna.Platform;
 import ninjabrainbot.io.KeyConverter;
-import ninjabrainbot.io.preferences.enums.*;
+import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentDisplayType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
+import ninjabrainbot.io.preferences.enums.DefaultBoatType;
+import ninjabrainbot.io.preferences.enums.MainViewType;
+import ninjabrainbot.io.preferences.enums.McVersion;
+import ninjabrainbot.io.preferences.enums.SizeSetting;
+import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.util.Assert;
 
 public class NinjabrainBotPreferences {

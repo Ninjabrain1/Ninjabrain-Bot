@@ -6,12 +6,12 @@ import java.util.Objects;
 import javax.swing.ImageIcon;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.highprecision.BoatState;
 
 public class BoatIcon extends ThemedLabel {
 

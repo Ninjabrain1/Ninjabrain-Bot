@@ -1,13 +1,7 @@
 package ninjabrainbot.io.api.queries;
 
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.StructurePosition;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
-import ninjabrainbot.model.domainmodel.IListComponent;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AllAdvancementsQuery implements IQuery {

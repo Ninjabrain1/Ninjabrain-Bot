@@ -1,7 +1,5 @@
 package ninjabrainbot.util;
 
-import ninjabrainbot.event.IObservable;
-import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;

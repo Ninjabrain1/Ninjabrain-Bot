@@ -1,14 +1,15 @@
 package ninjabrainbot.gui.mainwindow.boateye;
 
+import java.util.Objects;
+
+import javax.swing.ImageIcon;
+
 import ninjabrainbot.Main;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
-
-import javax.swing.*;
-import java.util.Objects;
 
 public class Mod360Icon extends ThemedLabel {
 

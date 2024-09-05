@@ -4,18 +4,16 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.gui.components.layout.StretchPanel;
-import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
-import ninjabrainbot.gui.components.panels.ThemedPanel;
+import ninjabrainbot.gui.components.layout.StretchPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.util.I18n;
 
 public class MainButtonPanel extends StretchPanel {

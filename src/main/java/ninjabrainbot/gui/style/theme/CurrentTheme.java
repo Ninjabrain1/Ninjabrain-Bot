@@ -1,9 +1,5 @@
 package ninjabrainbot.gui.style.theme;
 
-import java.awt.Color;
-
-import javax.swing.SwingUtilities;
-
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;

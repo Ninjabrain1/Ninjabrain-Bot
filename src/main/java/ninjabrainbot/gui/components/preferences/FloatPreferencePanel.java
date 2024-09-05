@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.text.DecimalFormat;
 import java.util.Collections;
 
-import javax.swing.Box;
 import javax.swing.JSpinner;
 
 import ninjabrainbot.gui.components.inputfields.DecimalTextField;

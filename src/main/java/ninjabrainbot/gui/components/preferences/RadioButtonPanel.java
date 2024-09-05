@@ -1,6 +1,6 @@
 package ninjabrainbot.gui.components.preferences;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Consumer;
 
 import javax.swing.Box;

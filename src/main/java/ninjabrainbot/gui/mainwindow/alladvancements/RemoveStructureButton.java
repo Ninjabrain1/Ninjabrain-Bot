@@ -7,7 +7,6 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.input.IButtonInputHandler;
 

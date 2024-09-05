@@ -1,19 +1,16 @@
 package ninjabrainbot.gui.mainwindow.alladvancements;
 
-import java.awt.Dimension;
-import java.util.Objects;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.event.Subscription;
-import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class AllAdvancementsPanel extends ThemedPanel {

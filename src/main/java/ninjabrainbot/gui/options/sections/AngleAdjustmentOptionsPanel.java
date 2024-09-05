@@ -1,5 +1,10 @@
 package ninjabrainbot.gui.options.sections;
 
+import java.awt.GridLayout;
+
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.layout.StackPanel;
@@ -12,10 +17,6 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.util.I18n;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class AngleAdjustmentOptionsPanel extends JPanel {
 

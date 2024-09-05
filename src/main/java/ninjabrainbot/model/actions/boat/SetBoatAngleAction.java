@@ -1,9 +1,9 @@
 package ninjabrainbot.model.actions.boat;
 
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class SetBoatAngleAction implements IAction {
 

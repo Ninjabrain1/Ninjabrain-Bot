@@ -1,8 +1,6 @@
 package ninjabrainbot.io.api.queries;
 
-import ninjabrainbot.Main;
 import ninjabrainbot.model.datastate.IDataState;
-import org.json.JSONObject;
 
 public class PingQuery implements IQuery {
 

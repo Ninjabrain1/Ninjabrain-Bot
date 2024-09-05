@@ -7,7 +7,6 @@ import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.util.I18n;
 
 public class StructurePosition implements IOverworldPosition, IDisposable {

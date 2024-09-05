@@ -7,10 +7,8 @@ import java.util.List;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.F3IData;
 import ninjabrainbot.model.datastate.endereye.MCDimension;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

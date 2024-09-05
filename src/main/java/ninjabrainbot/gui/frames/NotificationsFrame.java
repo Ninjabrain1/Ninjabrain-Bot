@@ -15,8 +15,8 @@ import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
-import ninjabrainbot.io.updatechecker.VersionURL;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.updatechecker.VersionURL;
 import ninjabrainbot.util.I18n;
 
 public class NotificationsFrame extends ThemedFrame {

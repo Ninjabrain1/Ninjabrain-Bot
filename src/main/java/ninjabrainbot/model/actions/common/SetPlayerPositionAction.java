@@ -1,7 +1,7 @@
 package ninjabrainbot.model.actions.common;
 
-import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.IAction;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 
 public class SetPlayerPositionAction implements IAction {

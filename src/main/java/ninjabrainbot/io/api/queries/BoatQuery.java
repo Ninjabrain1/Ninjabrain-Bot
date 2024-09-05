@@ -1,7 +1,6 @@
 package ninjabrainbot.io.api.queries;
 
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 import org.json.JSONObject;
 
 public class BoatQuery implements IQuery {

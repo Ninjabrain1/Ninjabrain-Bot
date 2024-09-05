@@ -1,7 +1,5 @@
 package ninjabrainbot.model.domainmodel;
 
-import ninjabrainbot.event.IObservable;
-
 /**
  * Represents a piece of data, write permissions of DataComponents are automatically handled by the DomainModel.
  * Any modifications to a DataComponent are automatically saved by the DomainModel, for the undo action to work.

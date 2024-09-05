@@ -9,12 +9,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import ninjabrainbot.Main;
-import ninjabrainbot.model.information.InformationMessage;
-import ninjabrainbot.model.information.InformationType;
 import ninjabrainbot.gui.components.labels.SmallThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.model.information.InformationMessage;
+import ninjabrainbot.model.information.InformationType;
 
 public class InformationTextPanel extends ThemedPanel {
 

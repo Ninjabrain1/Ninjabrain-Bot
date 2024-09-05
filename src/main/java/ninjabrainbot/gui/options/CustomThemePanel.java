@@ -3,7 +3,6 @@ package ninjabrainbot.gui.options;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;

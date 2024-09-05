@@ -2,7 +2,6 @@ package ninjabrainbot.model.domainmodel;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.util.TestUtils;

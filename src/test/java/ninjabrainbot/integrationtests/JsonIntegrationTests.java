@@ -3,7 +3,6 @@ package ninjabrainbot.integrationtests;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.MCDimension;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

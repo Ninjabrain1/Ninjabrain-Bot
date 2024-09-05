@@ -3,13 +3,8 @@ package ninjabrainbot.gui.components.layout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.Box;
-import javax.swing.JPanel;
 
 import ninjabrainbot.gui.components.panels.ThemedPanel;
-import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 
 public class StretchPanel extends ThemedPanel {

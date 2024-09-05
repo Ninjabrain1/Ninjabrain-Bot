@@ -8,9 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.model.datastate.divine.Fossil;
-import ninjabrainbot.model.datastate.divine.IDivineContext;
-import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.gui.buttons.FlatButton;
@@ -18,6 +15,9 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
+import ninjabrainbot.model.datastate.divine.Fossil;
+import ninjabrainbot.model.datastate.divine.IDivineContext;
+import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.util.I18n;
 
 /**

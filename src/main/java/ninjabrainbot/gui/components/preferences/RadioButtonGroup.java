@@ -1,11 +1,18 @@
 package ninjabrainbot.gui.components.preferences;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import java.util.Objects;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.ThemedComponent;

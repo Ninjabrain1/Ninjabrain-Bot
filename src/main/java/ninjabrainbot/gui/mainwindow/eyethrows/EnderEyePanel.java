@@ -2,12 +2,12 @@ package ninjabrainbot.gui.mainwindow.eyethrows;
 
 import javax.swing.BoxLayout;
 
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.gui.components.ThemedComponent;
 import ninjabrainbot.gui.components.panels.ResizablePanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class EnderEyePanel extends ResizablePanel implements ThemedComponent {
 

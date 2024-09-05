@@ -1,8 +1,8 @@
 package ninjabrainbot.model.actions.common;
 
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.actions.IAction;
 
 public class ToggleLockedAction implements IAction {
 

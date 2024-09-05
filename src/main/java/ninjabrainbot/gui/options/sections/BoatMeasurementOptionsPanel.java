@@ -7,7 +7,11 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.components.layout.StackPanel;
-import ninjabrainbot.gui.components.preferences.*;
+import ninjabrainbot.gui.components.preferences.CheckboxPanel;
+import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
+import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
+import ninjabrainbot.gui.components.preferences.HotkeyPanel;
+import ninjabrainbot.gui.components.preferences.RadioButtonPanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.KeyboardListener;

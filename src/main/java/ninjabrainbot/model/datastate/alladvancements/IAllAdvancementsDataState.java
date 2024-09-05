@@ -1,6 +1,5 @@
 package ninjabrainbot.model.datastate.alladvancements;
 
-import ninjabrainbot.event.IObservable;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;

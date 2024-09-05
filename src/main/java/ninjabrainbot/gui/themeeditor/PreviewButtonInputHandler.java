@@ -1,6 +1,5 @@
 package ninjabrainbot.gui.themeeditor;
 
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.StructurePosition;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.input.IButtonInputHandler;

@@ -8,11 +8,11 @@ import java.util.Locale;
 import javax.swing.Box;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.gui.components.labels.ColorMapLabel;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
+import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.util.I18n;
 import ninjabrainbot.util.Pair;
 

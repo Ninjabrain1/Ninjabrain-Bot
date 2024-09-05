@@ -1,7 +1,7 @@
 package ninjabrainbot.model.actions.endereye;
 
-import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.actions.IAction;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 
 public class AddEnderEyeThrowAction implements IAction {

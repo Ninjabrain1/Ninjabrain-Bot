@@ -1,11 +1,11 @@
 package ninjabrainbot.model.actions.endereye;
 
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.domainmodel.IListComponent;
-import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
 public class ChangeLastAngleAction implements IAction {
 

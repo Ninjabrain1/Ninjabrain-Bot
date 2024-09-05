@@ -5,7 +5,6 @@ import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
-import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -8,12 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import ninjabrainbot.model.datastate.divine.DivineResult;
-import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
+import ninjabrainbot.model.datastate.divine.DivineResult;
+import ninjabrainbot.model.datastate.stronghold.Ring;
 import ninjabrainbot.util.I18n;
 
 class DivinePanel extends ThemedPanel {

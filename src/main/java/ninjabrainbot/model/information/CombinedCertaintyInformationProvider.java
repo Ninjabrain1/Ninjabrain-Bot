@@ -2,12 +2,12 @@ package ninjabrainbot.model.information;
 
 import java.util.List;
 
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.ResultType;
+import ninjabrainbot.model.datastate.stronghold.Chunk;
 import ninjabrainbot.util.I18n;
 
 public class CombinedCertaintyInformationProvider extends InformationMessageProvider {

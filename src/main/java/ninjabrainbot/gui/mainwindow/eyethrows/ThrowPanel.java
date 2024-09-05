@@ -10,12 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import ninjabrainbot.io.preferences.enums.AngleAdjustmentDisplayType;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
-import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
-import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
-import ninjabrainbot.model.input.IButtonInputHandler;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -28,6 +22,12 @@ import ninjabrainbot.gui.style.SizePreference;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentDisplayType;
+import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.endereye.EnderEyeThrowType;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
+import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
+import ninjabrainbot.model.input.IButtonInputHandler;
 
 /**
  * JComponent for showing a Throw.
