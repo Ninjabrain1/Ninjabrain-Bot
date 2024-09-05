@@ -32,4 +32,24 @@ public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataStat
 	public IDataComponent<StructurePosition> monumentPosition() {
 		return new DataComponent<>(null);
 	}
+
+	@Override
+	public IDataComponent<StructurePosition> deepDarkPosition() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> cityQueryPosition() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> shulkerTransportPosition() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDataComponent<StructurePosition> generalLocationPosition() {
+		return new DataComponent<>(null);
+	}
 }

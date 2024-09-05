@@ -8,6 +8,7 @@ import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.DetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.stronghold.Chunk;
+import ninjabrainbot.model.datastate.endereye.MCDimension;
 import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
 import ninjabrainbot.simulations.RandomPlayerPositionProvider;
 import ninjabrainbot.util.Assert;
@@ -69,7 +70,7 @@ public class NextDirectionProviderIntegrationTests {
 		double x = playerPosition.xInOverworld() + Coords.getX(leftDistance, leftAngle);
 		double z = playerPosition.zInOverworld() + Coords.getZ(leftDistance, leftAngle);
 		double horizontalAngle = Coords.getPhi(stronghold.eightEightX() - x, stronghold.eightEightZ() - z) / Math.PI * 180.0;
-		return new DetailedPlayerPosition(x, 80, z, horizontalAngle, -31, false);
+		return new DetailedPlayerPosition(x, 80, z, horizontalAngle, -31, MCDimension.OVERWORLD);
 	}
 
 	private static int getFirstInt(String[] words) {

@@ -1,27 +1,29 @@
 package ninjabrainbot.model.datastate.common;
 
+import ninjabrainbot.model.datastate.endereye.MCDimension;
+
 public class DetailedPlayerPosition implements IDetailedPlayerPosition {
 
 	private final double x, y, z, horizontalAngle, verticalAngle;
-	private final boolean isInNether;
+	private final MCDimension dimension;
 
-	public DetailedPlayerPosition(double x, double y, double z, double horizontalAngle, double verticalAngle, boolean isInNether) {
+	public DetailedPlayerPosition(double x, double y, double z, double horizontalAngle, double verticalAngle, MCDimension dimension) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.horizontalAngle = horizontalAngle;
 		this.verticalAngle = verticalAngle;
-		this.isInNether = isInNether;
+		this.dimension = dimension;
 	}
 
 	@Override
 	public double xInOverworld() {
-		return x * (isInNether ? 8.0 : 1.0);
+		return x * (dimension == MCDimension.NETHER ? 8.0 : 1.0);
 	}
 
 	@Override
 	public double zInOverworld() {
-		return z * (isInNether ? 8.0 : 1.0);
+		return z * (dimension == MCDimension.NETHER ? 8.0 : 1.0);
 	}
 
 	@Override
@@ -56,12 +58,16 @@ public class DetailedPlayerPosition implements IDetailedPlayerPosition {
 
 	@Override
 	public boolean isInOverworld() {
-		return !isInNether;
+		return dimension == MCDimension.OVERWORLD;
 	}
 
 	@Override
 	public boolean isInNether() {
-		return isInNether;
+		return dimension == MCDimension.NETHER;
 	}
 
+	@Override
+	public boolean isInEnd() {
+		return dimension == MCDimension.END;
+	}
 }

@@ -28,6 +28,22 @@ public class RemoveStructureAction implements IAction {
 			allAdvancementsDataState.monumentPosition().reset();
 			return;
 		}
+		if (allAdvancementsDataState.shulkerTransportPosition().get() == structurePosition) {
+			allAdvancementsDataState.shulkerTransportPosition().reset();
+			return;
+		}
+		if (allAdvancementsDataState.deepDarkPosition().get() == structurePosition) {
+			allAdvancementsDataState.deepDarkPosition().reset();
+			return;
+		}
+		if (allAdvancementsDataState.cityQueryPosition().get() == structurePosition) {
+			allAdvancementsDataState.cityQueryPosition().reset();
+			return;
+		}
+		if (allAdvancementsDataState.generalLocationPosition().get() == structurePosition) {
+			allAdvancementsDataState.generalLocationPosition().reset();
+			return;
+		}
 		throw new IllegalArgumentException(String.format("Cannot remove structure position %s because it not present in the data state.", structurePosition));
 	}
 

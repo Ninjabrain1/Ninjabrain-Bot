@@ -1,5 +1,7 @@
 package ninjabrainbot.model.datastate.divine;
 
+import ninjabrainbot.model.datastate.endereye.F3IData;
+
 public class Fossil {
 
 	public final int x;
@@ -9,25 +11,13 @@ public class Fossil {
 	}
 
 	/**
-	 * Returns a Fossil object if the given string is the result of an F3+I command
+	 * Returns a Fossil object if the given F3+I-location is
 	 * in the 0,0 chunk, null otherwise.
 	 */
-	public static Fossil parseF3I(String string) {
-		if (!string.startsWith("/setblock "))
-			return null;
-		String[] substrings = string.split(" ");
-		if (substrings.length != 5)
-			return null;
-		try {
-			int x = Integer.parseInt(substrings[1]);
-			int z = Integer.parseInt(substrings[3]);
-			if (0 <= x && x < 16 && 0 <= z && z < 16) {
-				return new Fossil(x);
-			}
-			return null;
-		} catch (NullPointerException | NumberFormatException e) {
-			return null;
-		}
+	public static Fossil tryCreateFromF3I(F3IData f3IData) {
+		if (0 <= f3IData.x && f3IData.x < 16 && 0 <= f3IData.z && f3IData.z < 16)
+			return new Fossil(f3IData.x);
+		return null;
 	}
 
 	@Override

@@ -54,4 +54,9 @@ public class LimitedPlayerPosition implements ILimitedPlayerPosition {
 	public boolean isInNether() {
 		return false;
 	}
+
+	@Override
+	public boolean isInEnd() {
+		return false;
+	}
 }

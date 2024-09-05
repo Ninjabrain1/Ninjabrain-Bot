@@ -17,4 +17,12 @@ public interface IAllAdvancementsDataState {
 
 	IDataComponent<StructurePosition> monumentPosition();
 
+	IDataComponent<StructurePosition> deepDarkPosition();
+
+	IDataComponent<StructurePosition> cityQueryPosition();
+
+	IDataComponent<StructurePosition> shulkerTransportPosition();
+
+	IDataComponent<StructurePosition> generalLocationPosition();
+
 }
