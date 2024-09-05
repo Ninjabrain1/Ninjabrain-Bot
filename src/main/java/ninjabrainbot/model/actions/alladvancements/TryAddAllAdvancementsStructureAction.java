@@ -64,7 +64,7 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		if (preferences.oneDotTwentyPlusAA.get()) {
 			if (t.yInPlayerDimension() <= 30 && t.isInOverworld())
 				return StructureType.DeepDark;
-			
+
 			if (t.yInPlayerDimension() > 160 && t.isInOverworld())
 				return StructureType.CityQuery;
 		}

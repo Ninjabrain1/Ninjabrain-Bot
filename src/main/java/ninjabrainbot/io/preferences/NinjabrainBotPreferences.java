@@ -160,8 +160,8 @@ public class NinjabrainBotPreferences {
 		Assert.isTrue(settingsVersion.get() >= 2); // Do >= to allow users to downgrade to an earlier version, in case newer version has issues
 	}
 
-	private void upgradeSettings_From_0_To_1(){
-		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys){
+	private void upgradeSettings_From_0_To_1() {
+		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
 			if (hotkeyPreference.getCode() == -1)
 				continue;
 			int nativeKeyCode = KeyConverter.convertKeyCodeToNativeKeyCode(hotkeyPreference.getCode());
@@ -170,10 +170,10 @@ public class NinjabrainBotPreferences {
 		settingsVersion.set(1);
 	}
 
-	private void upgradeSettings_From_1_To_2(){
-		if (!Platform.isLinux()){
+	private void upgradeSettings_From_1_To_2() {
+		if (!Platform.isLinux()) {
 			KeyConverter keyConverter = new KeyConverter();
-			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys){
+			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
 				if (hotkeyPreference.getCode() == -1)
 					continue;
 				int keyCode = keyConverter.convertNativeKeyCodeToKeyCode(hotkeyPreference.getCode());

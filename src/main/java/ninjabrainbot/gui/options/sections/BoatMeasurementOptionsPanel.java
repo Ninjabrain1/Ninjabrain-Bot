@@ -36,7 +36,7 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		column1.setOpaque(false);
 		add(column1);
 
-        CheckboxPanel enableBoatMeasurementsCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
+		CheckboxPanel enableBoatMeasurementsCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
 		column1.add(enableBoatMeasurementsCheckbox);
 
 		sensitivityManual = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivityManual"), preferences.sensitivityManual);

@@ -98,7 +98,7 @@ public class BoatCalculatedTravelTests {
 		testBuilder.setClipboard(enderEyeF3c);
 		testBuilder.inputSubpixelCorrections(subpixelCorrections);
 
-		for (Chunk chunk : testBuilder.dataState.calculatorResult().get().getTopChunks()){
+		for (Chunk chunk : testBuilder.dataState.calculatorResult().get().getTopChunks()) {
 			double error = chunk.getAngleError(McVersion.PRE_119, testBuilder.dataState.getThrowList().get(0));
 			System.out.println("Chunk: (" + chunk.x + ", " + chunk.z + "), Certainty: " + chunk.weight + ", Error: " + error);
 		}

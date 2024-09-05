@@ -39,12 +39,12 @@ public class NinjabrainBotHttpServer implements IDisposable {
 			if (httpServer == null)
 				startHttpServer(52533);
 		} else {
-			if  (httpServer != null)
+			if (httpServer != null)
 				stopHttpServer();
 		}
 	}
 
-	private void startHttpServer(int port){
+	private void startHttpServer(int port) {
 		error = null;
 		try {
 			httpServer = HttpServer.create(new InetSocketAddress(port), 0);
@@ -62,7 +62,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 		Logger.log("HTTP server started on port " + port);
 	}
 
-	private void stopHttpServer(){
+	private void stopHttpServer() {
 		apiV1HttpHandler.dispose();
 		apiV1HttpHandler = null;
 		httpServer.stop(0);
@@ -75,7 +75,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 		if (httpServer != null) {
 			httpServer.stop(0);
 		}
-		if (apiV1HttpHandler != null){
+		if (apiV1HttpHandler != null) {
 			apiV1HttpHandler.dispose();
 		}
 		disposeHandler.dispose();

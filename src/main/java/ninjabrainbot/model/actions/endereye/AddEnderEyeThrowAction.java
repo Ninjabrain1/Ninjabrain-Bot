@@ -12,7 +12,7 @@ public class AddEnderEyeThrowAction implements IAction {
 	public AddEnderEyeThrowAction(IDataState dataState, IEnderEyeThrow throwToAdd) {
 		this.dataState = dataState;
 		this.throwToAdd = throwToAdd;
-    }
+	}
 
 	@Override
 	public void execute() {

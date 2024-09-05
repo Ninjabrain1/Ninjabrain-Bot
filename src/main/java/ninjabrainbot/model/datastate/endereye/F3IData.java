@@ -18,7 +18,7 @@ public class F3IData {
 			return null;
 		try {
 			int x = Integer.parseInt(substrings[1]);
-            int y = Integer.parseInt(substrings[2]);
+			int y = Integer.parseInt(substrings[2]);
 			int z = Integer.parseInt(substrings[3]);
 			return new F3IData(x, y, z);
 		} catch (NullPointerException | NumberFormatException e) {

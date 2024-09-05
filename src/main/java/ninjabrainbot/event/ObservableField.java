@@ -53,7 +53,7 @@ public class ObservableField<T> implements IObservable<T>, IUnsubscribable<T> {
 	/**
 	 * Sets the value and notifies subscribers even if the value was the same as the previous value.
 	 */
-	public void setAndAlwaysNotifySubscribers(T value){
+	public void setAndAlwaysNotifySubscribers(T value) {
 		data = value;
 		for (Consumer<T> subscriber : subscribers) {
 			subscriber.accept(data);

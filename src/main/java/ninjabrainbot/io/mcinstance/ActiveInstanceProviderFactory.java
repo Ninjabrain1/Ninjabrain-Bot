@@ -9,12 +9,10 @@ public abstract class ActiveInstanceProviderFactory {
 
 	public static IActiveInstanceProvider createPlatformSpecificActiveInstanceProvider() {
 		try {
-			switch (Platform.getOSType()) {
-				case Platform.WINDOWS:
-					return new WindowsActiveInstanceListener();
-				default:
-					return new UnsupportedOSActiveInstanceProvider();
+			if (Platform.getOSType() == Platform.WINDOWS) {
+				return new WindowsActiveInstanceListener();
 			}
+			return new UnsupportedOSActiveInstanceProvider();
 		} catch (IOException exception) {
 			Logger.log("Cannot monitor active Minecraft instance.");
 			Logger.log(exception);

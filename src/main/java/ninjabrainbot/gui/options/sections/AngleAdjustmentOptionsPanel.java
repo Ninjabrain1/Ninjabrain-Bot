@@ -21,7 +21,7 @@ import ninjabrainbot.util.I18n;
 public class AngleAdjustmentOptionsPanel extends JPanel {
 
 	private final ThemedLabel tallResExplanation;
-    private final FloatPreferencePanel resolutionHeight;
+	private final FloatPreferencePanel resolutionHeight;
 	private final DoublePreferencePanel customAdjustmentAmount;
 
 	public AngleAdjustmentOptionsPanel(StyleManager styleManager, NinjabrainBotPreferences preferences, DisposeHandler disposeHandler) {

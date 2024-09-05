@@ -22,8 +22,8 @@ public class ChangeLastAngleAction implements IAction {
 		this.throwList = throwList;
 		this.locked = locked;
 		this.preferences = preferences;
-        this.correctionIncrements = correctionIncrements;
-    }
+		this.correctionIncrements = correctionIncrements;
+	}
 
 	@Override
 	public void execute() {

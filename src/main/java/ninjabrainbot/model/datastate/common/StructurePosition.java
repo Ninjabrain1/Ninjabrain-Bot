@@ -94,11 +94,11 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		return zInOverworld() / 8.0;
 	}
 
-	public int xInNetherForDisplay(){
+	public int xInNetherForDisplay() {
 		return (int) Math.floor(x / 8.0);
 	}
 
-	public int zInNetherForDisplay(){
+	public int zInNetherForDisplay() {
 		return (int) Math.floor(z / 8.0);
 	}
 

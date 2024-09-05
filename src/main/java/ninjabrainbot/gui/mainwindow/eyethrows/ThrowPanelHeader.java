@@ -73,24 +73,24 @@ public class ThrowPanelHeader extends ThemedPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		int w = width - 2 * 0 - height;
+		int w = width - height;
 		int y0 = -1;
 		if (!errorsEnabled) {
 			if (this.x != null)
 				this.x.setBounds(0, y0, w / 3, height);
 			if (this.z != null)
-				this.z.setBounds(0 + w / 3, y0, w / 3, height);
+				this.z.setBounds(w / 3, y0, w / 3, height);
 			if (this.alpha != null)
-				this.alpha.setBounds(0 + 2 * w / 3, y0, w / 3, height);
+				this.alpha.setBounds(2 * w / 3, y0, w / 3, height);
 		} else {
 			if (this.x != null)
 				this.x.setBounds(0, y0, w / 4, height);
 			if (this.z != null)
-				this.z.setBounds(0 + w / 4, y0, w / 4, height);
+				this.z.setBounds(w / 4, y0, w / 4, height);
 			if (this.alpha != null)
-				this.alpha.setBounds(0 + 2 * w / 4, y0, w / 4, height);
+				this.alpha.setBounds(2 * w / 4, y0, w / 4, height);
 			if (this.error != null)
-				this.error.setBounds(0 + 3 * w / 4, y0, w / 4, height);
+				this.error.setBounds(3 * w / 4, y0, w / 4, height);
 		}
 		error.setVisible(errorsEnabled);
 	}

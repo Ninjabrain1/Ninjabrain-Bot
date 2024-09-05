@@ -41,7 +41,7 @@ public class BlindResult {
 	}
 
 	public Pair<Float, String> evaluation() {
-		switch (evaluationEnum){
+		switch (evaluationEnum) {
 			case EXCELLENT:
 				return EXCELLENT;
 			case HIGHROLL_GOOD:
@@ -58,7 +58,7 @@ public class BlindResult {
 		return NOT_IN_RING;
 	}
 
-	private BlindEvaluation getBlindEvaluation(){
+	private BlindEvaluation getBlindEvaluation() {
 		if (Ring.get(Math.sqrt(x * x + z * z) / 2.0) == null)
 			return BlindEvaluation.NOT_IN_RING;
 		if (highrollProbability / optHighrollProb < 0.01) // prevents divine from showing "Excellent" when not in a sector

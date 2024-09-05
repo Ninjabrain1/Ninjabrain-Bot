@@ -24,7 +24,7 @@ public class F3CData {
 		try {
 			String world = substrings[2];
 			MCDimension dimension = getMCDimension(world);
-			
+
 			double x = Double.parseDouble(substrings[6]);
 			double y = Double.parseDouble(substrings[7]);
 			double z = Double.parseDouble(substrings[8]);

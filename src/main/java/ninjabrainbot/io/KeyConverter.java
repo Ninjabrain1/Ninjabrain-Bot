@@ -7,8 +7,8 @@ import com.github.kwhat.jnativehook.keyboard.SwingKeyAdapter;
 
 public class KeyConverter extends SwingKeyAdapter {
 
-	public int convertNativeKeyCodeToKeyCode(int nativeKeyCode){
-		NativeKeyEvent nativeKeyEvent = new NativeKeyEvent(0, 0, 0, nativeKeyCode, (char)0);
+	public int convertNativeKeyCodeToKeyCode(int nativeKeyCode) {
+		NativeKeyEvent nativeKeyEvent = new NativeKeyEvent(0, 0, 0, nativeKeyCode, (char) 0);
 		return getJavaKeyEvent(nativeKeyEvent).getKeyCode();
 	}
 

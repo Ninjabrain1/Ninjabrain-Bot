@@ -144,8 +144,8 @@ public class BasicTriangulationPanel extends ThemedPanel implements IDisposable 
 		return "<html>" + I18n.get("chunk_blocks", getFormattedCoords(chunk.x, chunk.z), distance) + "</html>";
 	}
 
-	private String getFormattedCoords(int x, int z){
-		if (preferences.colorCodeNegativeCoords.get()){
+	private String getFormattedCoords(int x, int z) {
+		if (preferences.colorCodeNegativeCoords.get()) {
 			String xColor = x < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
 			String zColor = z < 0 ? styleManager.currentTheme.COLOR_NEGATIVE.hex() : styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK.hex();
 			return String.format(Locale.US, "(<font color='%s'>%d</font>, <font color='%s'>%d</font>)", xColor, x, zColor, z);

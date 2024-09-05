@@ -40,7 +40,7 @@ public class CustomCheckbox extends JCheckBox {
 		addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				boolean ticked = (boolean) ((JCheckBox) e.getSource()).isSelected();
+				boolean ticked = ((JCheckBox) e.getSource()).isSelected();
 				onChanged(ticked);
 			}
 		});

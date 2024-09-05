@@ -87,8 +87,7 @@ public class Calibrator implements IDisposable {
 
 			if (isBoatThrowCalibrator) {
 				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), changeAngleAction);
-			}
-			else {
+			} else {
 				add(new ManualEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), changeAngleAction);
 			}
 		} catch (InterruptedException e) {
@@ -102,8 +101,7 @@ public class Calibrator implements IDisposable {
 		try {
 			if (isBoatThrowCalibrator) {
 				add(new BoatEnderEyeThrow(playerPosition, preferences, 0), null);
-			}
-			else {
+			} else {
 				add(new NormalEnderEyeThrow(playerPosition, preferences.crosshairCorrection.get()), null);
 			}
 		} catch (InterruptedException e) {
