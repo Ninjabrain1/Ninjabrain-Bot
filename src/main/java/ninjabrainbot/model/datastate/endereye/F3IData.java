@@ -4,7 +4,7 @@ public class F3IData {
 
 	public final int x, y, z;
 
-	private F3IData(int x, int y, int z) {
+	public F3IData(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;

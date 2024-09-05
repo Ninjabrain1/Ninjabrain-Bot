@@ -9,13 +9,12 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.ResultType;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
+import ninjabrainbot.model.datastate.endereye.F3IData;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.domainmodel.DomainModel;
-import ninjabrainbot.model.environmentstate.CalculatorSettings;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
-import ninjabrainbot.model.input.FossilInputHandler;
+import ninjabrainbot.model.input.F3ILocationInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.FakeCoordinateInputSource;
 import ninjabrainbot.util.TestUtils;
@@ -47,14 +46,14 @@ public class ResultTypeProviderTests {
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
-		new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
+		new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences);
 
 		ObservableProperty<IDetailedPlayerPosition> playerPositionStream = coordinateInputSource.whenNewDetailedPlayerPositionInputted;
-		ObservableProperty<Fossil> fossilStream = coordinateInputSource.whenNewFossilInputted;
+		ObservableProperty<F3IData> f3iStream = coordinateInputSource.whenNewF3IInputted;
 
 		assertEquals(dataState.resultType().get(), ResultType.NONE);
 
-		fossilStream.notifySubscribers(new Fossil(1));
+		f3iStream.notifySubscribers(new F3IData(1, 0, 0));
 		assertEquals(dataState.resultType().get(), ResultType.DIVINE);
 		assertEquals(dataState.divineResult().get().fossil.x, 1);
 

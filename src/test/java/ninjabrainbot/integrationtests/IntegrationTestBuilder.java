@@ -14,23 +14,23 @@ import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
+import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
-import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
+import ninjabrainbot.model.datastate.endereye.F3IData;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
-import ninjabrainbot.model.input.FossilInputHandler;
+import ninjabrainbot.model.input.F3ILocationInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.Assert;
@@ -58,8 +58,8 @@ public class IntegrationTestBuilder {
 
 	private PlayerPositionInputHandler playerPositionInputHandler;
 	private PlayerPositionInputHandler fakePlayerPositionInputHandler;
-	private FossilInputHandler fossilInputHandler;
-	private FossilInputHandler fakeFossilInputHandler;
+	private F3ILocationInputHandler f3iLocationInputHandler;
+	private F3ILocationInputHandler fakeF3ILocationInputHandler;
 	private HotkeyInputHandler hotkeyInputHandler;
 	private ButtonInputHandler buttonInputHandler;
 	private ActiveInstanceInputHandler activeInstanceInputHandler;
@@ -122,7 +122,7 @@ public class IntegrationTestBuilder {
 		if (clipboardReader == null) clipboardReader = new MockedClipboardReader();
 		if (coordinateInputSource == null) coordinateInputSource = new CoordinateInputSource(clipboardReader);
 		if (playerPositionInputHandler == null) playerPositionInputHandler = createPlayerPositionInputHandler();
-		if (fossilInputHandler == null) fossilInputHandler = new FossilInputHandler(coordinateInputSource, dataState, actionExecutor);
+		if (f3iLocationInputHandler == null) f3iLocationInputHandler = new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences);
 		clipboardReader.setClipboard(clipboardString);
 	}
 
@@ -195,12 +195,12 @@ public class IntegrationTestBuilder {
 		fakeCoordinateInputSource.whenNewDetailedPlayerPositionInputted.notifySubscribers(detailedPlayerPosition);
 	}
 
-	public void inputFossil(Fossil fossil) {
+	public void inputF3I(F3IData f3IData) {
 		if (fakeCoordinateInputSource == null)
 			fakeCoordinateInputSource = new FakeCoordinateInputSource();
-		if (fakeFossilInputHandler == null)
-			fakeFossilInputHandler = new FossilInputHandler(fakeCoordinateInputSource, dataState, actionExecutor);
-		fakeCoordinateInputSource.whenNewFossilInputted.notifySubscribers(fossil);
+		if (fakeF3ILocationInputHandler == null)
+			fakeF3ILocationInputHandler = new F3ILocationInputHandler(fakeCoordinateInputSource, dataState, actionExecutor, preferences);
+		fakeCoordinateInputSource.whenNewF3IInputted.notifySubscribers(f3IData);
 	}
 
 	public void resetCalculator() {
