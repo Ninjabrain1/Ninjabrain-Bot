@@ -12,8 +12,8 @@ public class LimitedPlayerPosition implements ILimitedPlayerPosition {
 		this.x = x;
 		this.z = z;
 		this.horizontalAngle = horizontalAngle;
-        this.correctionIncrements = correctionIncrements;
-    }
+		this.correctionIncrements = correctionIncrements;
+	}
 
 	@Override
 	public double xInOverworld() {

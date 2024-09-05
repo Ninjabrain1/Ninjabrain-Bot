@@ -8,15 +8,15 @@ public class ThrowPanelTestAdapter {
 		this.throwPanel = throwPanel;
 	}
 
-	public float getX(){
+	public float getX() {
 		return Float.parseFloat(throwPanel.x.getText());
 	}
 
-	public float getZ(){
+	public float getZ() {
 		return Float.parseFloat(throwPanel.z.getText());
 	}
 
-	public float getAngle(){
+	public float getAngle() {
 		return Float.parseFloat(throwPanel.alpha.getText());
 	}
 

@@ -7,16 +7,16 @@ import ninjabrainbot.model.datastate.endereye.F3IData;
 
 public class SetAllAdvancementsGeneralLocationAction implements IAction {
 
-    private final IAllAdvancementsDataState allAdvancementsDataState;
-    private final StructurePosition structurePosition;
+	private final IAllAdvancementsDataState allAdvancementsDataState;
+	private final StructurePosition structurePosition;
 
-    public SetAllAdvancementsGeneralLocationAction(IAllAdvancementsDataState allAdvancementsDataState, F3IData f3iData) {
-        this.allAdvancementsDataState = allAdvancementsDataState;
-        this.structurePosition = new StructurePosition(f3iData.x, f3iData.z);
-    }
+	public SetAllAdvancementsGeneralLocationAction(IAllAdvancementsDataState allAdvancementsDataState, F3IData f3iData) {
+		this.allAdvancementsDataState = allAdvancementsDataState;
+		this.structurePosition = new StructurePosition(f3iData.x, f3iData.z);
+	}
 
-    @Override
-    public void execute() {
-        allAdvancementsDataState.generalLocationPosition().set(structurePosition);
-    }
+	@Override
+	public void execute() {
+		allAdvancementsDataState.generalLocationPosition().set(structurePosition);
+	}
 }

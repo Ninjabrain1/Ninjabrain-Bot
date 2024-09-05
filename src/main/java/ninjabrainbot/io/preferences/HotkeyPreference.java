@@ -34,7 +34,7 @@ public class HotkeyPreference {
 		return modifier.get();
 	}
 
-	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent){
+	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent) {
 		int code = getPlatformSpecificKeyCode(nativeKeyEvent);
 		return getCode() == code && (getModifier() & nativeKeyEvent.getModifiers()) == getModifier();
 	}
@@ -47,7 +47,7 @@ public class HotkeyPreference {
 		modifier.set(value);
 	}
 
-	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent){
+	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent) {
 		setCode(getPlatformSpecificKeyCode(nativeKeyEvent));
 		setModifier(nativeKeyEvent.getModifiers());
 	}
@@ -60,7 +60,7 @@ public class HotkeyPreference {
 		return whenTriggered;
 	}
 
-	private static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent){
+	private static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
 		return Platform.isLinux() ? nativeKeyEvent.getKeyCode() : nativeKeyEvent.getRawCode();
 	}
 }

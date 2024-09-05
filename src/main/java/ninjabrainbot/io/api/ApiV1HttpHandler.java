@@ -32,7 +32,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 	private final HashMap<String, IQuery> queries;
 	private final IDataState dataState;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, ExecutorService executorService){
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, ExecutorService executorService) {
 		this.dataState = dataState;
 		eventSender = new EventSender(dataState, domainModel, executorService);
 		queries = new HashMap<>();
@@ -56,7 +56,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		}
 
 		IQuery query = queries.getOrDefault(subdirectories.get(0), null);
-		if (query == null){
+		if (query == null) {
 			sendBadRequest(exchange);
 			return;
 		}
@@ -66,7 +66,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			return;
 		}
 
-		if (query.supportsSubscriptions() &&  subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")){
+		if (query.supportsSubscriptions() && subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")) {
 			subscribeToQuery(exchange, query);
 			return;
 		}
@@ -87,19 +87,19 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 	}
 
 	private void sendQueryResponse(HttpExchange exchange, IQuery query) {
-		try{
+		try {
 			OutputStream outputStream = exchange.getResponseBody();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			outputStream.write(query.get(dataState).getBytes());
 			outputStream.flush();
 			outputStream.close();
-		} catch (IOException e){
+		} catch (IOException e) {
 			Logger.log("HTTP server failed to send query response: " + e);
 		}
 	}
 
 	private void subscribeToQuery(HttpExchange exchange, IQuery query) {
-		try{
+		try {
 			Headers responseHeaders = exchange.getResponseHeaders();
 			responseHeaders.add("Content-Type", "text/event-stream");
 			responseHeaders.add("Connection", "keep-alive");
@@ -108,7 +108,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			OutputStream outputStream = exchange.getResponseBody();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			eventSender.addSubscriber(query, outputStream);
-		} catch (IOException e){
+		} catch (IOException e) {
 			Logger.log("HTTP server failed to send query subscription response: " + e);
 		}
 	}

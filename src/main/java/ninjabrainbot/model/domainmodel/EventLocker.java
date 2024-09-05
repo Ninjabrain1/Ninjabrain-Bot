@@ -22,8 +22,8 @@ public class EventLocker<T> implements ISubscribable<T>, IDisposable {
 		subscription = subscribable.subscribe(this::onEventReceived);
 	}
 
-	private void onEventReceived(T value){
-		if (!locked){
+	private void onEventReceived(T value) {
+		if (!locked) {
 			event.notifySubscribers(value);
 			return;
 		}

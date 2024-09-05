@@ -9,8 +9,8 @@ public class InputData1_12 {
 		this.x = x;
 		this.z = z;
 		this.horizontalAngle = horizontalAngle;
-        this.correctionIncrements = correctionIncrements;
-    }
+		this.correctionIncrements = correctionIncrements;
+	}
 
 	public static InputData1_12 parseInputString(String string) {
 		String[] substrings = string.split(" ");

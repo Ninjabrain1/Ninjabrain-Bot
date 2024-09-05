@@ -6,7 +6,7 @@ import ninjabrainbot.io.IClipboardProvider;
 
 public class FakeClipboardProvider implements IClipboardProvider {
 
-	private ObservableField<String> clipboard = new ObservableField<String>("");
+	private final ObservableField<String> clipboard = new ObservableField<String>("");
 
 	@Override
 	public IObservable<String> clipboardText() {

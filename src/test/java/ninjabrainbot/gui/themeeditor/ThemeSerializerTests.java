@@ -62,7 +62,7 @@ public class ThemeSerializerTests {
 		} catch (IllegalArgumentException e) {
 			thrown = true;
 		}
-		assert thrown == true;
+		assert thrown;
 
 		thrown = false;
 		try {
@@ -70,7 +70,7 @@ public class ThemeSerializerTests {
 		} catch (IllegalArgumentException e) {
 			thrown = true;
 		}
-		assert thrown == true;
+		assert thrown;
 
 		thrown = false;
 		try {
@@ -78,7 +78,7 @@ public class ThemeSerializerTests {
 		} catch (IllegalArgumentException e) {
 			thrown = true;
 		}
-		assert thrown == true;
+		assert thrown;
 	}
 
 	@Test

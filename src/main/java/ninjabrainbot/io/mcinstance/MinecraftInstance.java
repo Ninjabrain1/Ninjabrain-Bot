@@ -24,13 +24,13 @@ public class MinecraftInstance {
 		return minecraftVersion;
 	}
 
-	private boolean isRanked(){
+	private boolean isRanked() {
 		File modsDirectory = new File(dotMinecraftDirectory + "\\mods");
 		File[] modFiles = modsDirectory.listFiles();
 		if (modFiles == null)
 			return false;
 
-		for (File modFile : modFiles){
+		for (File modFile : modFiles) {
 			String modFileName = modFile.getName();
 			if (modFileName.contains("mcsrranked") && modFileName.endsWith(".jar"))
 				return true;
