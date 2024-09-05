@@ -149,10 +149,10 @@ public class MainTextArea extends ResizablePanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		if (preferences.view.get() == MainViewType.BASIC && !dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
-			return basicTriangulation.getPreferredSize();
-		} else if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
+		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
 			return allAdvancements.getPreferredSize();
+		} else if (preferences.view.get() == MainViewType.BASIC) {
+			return basicTriangulation.getPreferredSize();
 		} else {
 			return detailedTriangulation.getPreferredSize();
 		}

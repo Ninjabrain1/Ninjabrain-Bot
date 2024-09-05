@@ -1,5 +1,7 @@
 package ninjabrainbot.gui.mainwindow.alladvancements;
 
+import javax.swing.border.EmptyBorder;
+
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
@@ -18,6 +20,7 @@ public class RemoveStructureButton extends FlatButton implements IDisposable {
 		setBackgroundColor(styleManager.currentTheme.COLOR_SLIGHTLY_WEAK);
 		setForegroundColor(styleManager.currentTheme.TEXT_COLOR_NEUTRAL);
 		setHoverColor(styleManager.currentTheme.COLOR_EXIT_BUTTON_HOVER);
+		setBorder(new EmptyBorder(0, 6, 0, 6));
 		addActionListener(__ -> {
 			if (structurePosition.get() != null)
 				buttonInputHandler.onRemoveAllAdvancementsStructureButtonPressed(structurePosition.get());
