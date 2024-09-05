@@ -1,7 +1,8 @@
 package ninjabrainbot.gui.themeeditor;
 
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.IOverworldPosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;
@@ -14,42 +15,77 @@ public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataStat
 	}
 
 	@Override
-	public IDomainModelComponent<StructurePosition> strongholdPosition() {
+	public IDataComponent<IOverworldPosition> spawnPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> spawnPosition() {
+	public IDataComponent<IOverworldPosition> outpostPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> outpostPosition() {
+	public IDataComponent<IOverworldPosition> monumentPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> monumentPosition() {
+	public IDataComponent<IOverworldPosition> deepDarkPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> deepDarkPosition() {
+	public IDataComponent<IOverworldPosition> cityQueryPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> cityQueryPosition() {
+	public IDataComponent<IOverworldPosition> shulkerTransportPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> shulkerTransportPosition() {
+	public IDataComponent<IOverworldPosition> generalLocationPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> generalLocationPosition() {
+	public IDomainModelComponent<StructureInformation> strongholdInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> spawnInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> outpostInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> monumentInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> deepDarkInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> cityQueryInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> shulkerTransportInformation() {
+		return new DataComponent<>(null);
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> generalLocationInformation() {
 		return new DataComponent<>(null);
 	}
 }

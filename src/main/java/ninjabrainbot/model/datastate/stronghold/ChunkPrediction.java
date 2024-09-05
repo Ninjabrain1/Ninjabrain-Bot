@@ -6,10 +6,11 @@ import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.IReadOnlyList;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.OverworldPosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 
-public class ChunkPrediction extends StructurePosition {
+public class ChunkPrediction extends StructureInformation {
 
 	public final Chunk chunk;
 	public final boolean success;
@@ -27,7 +28,7 @@ public class ChunkPrediction extends StructurePosition {
 	 * Creates a triangulation result.
 	 */
 	public ChunkPrediction(Chunk chunk, IObservable<IPlayerPosition> playerPosition, McVersion version) {
-		super(chunk.fourFourX(), chunk.fourFourZ(), playerPosition);
+		super(new OverworldPosition(chunk.fourFourX(), chunk.fourFourZ()), playerPosition);
 		this.version = version;
 		this.chunk = chunk;
 		this.success = Double.isFinite(chunk.weight) && chunk.weight > 0.0005;
@@ -52,6 +53,5 @@ public class ChunkPrediction extends StructurePosition {
 	public double zInNether() {
 		return chunk.z * 2;
 	}
-
 
 }

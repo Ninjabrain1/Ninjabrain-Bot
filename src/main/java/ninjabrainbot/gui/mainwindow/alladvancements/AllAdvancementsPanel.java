@@ -31,14 +31,14 @@ public class AllAdvancementsPanel extends ThemedPanel {
 		super(styleManager);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(new AllAdvancementsHeader(styleManager));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.strongholdPosition(), strongholdIcon, false, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.spawnPosition(), shulkerIcon, true, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.outpostPosition(), outpostIcon, true, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.monumentPosition(), monumentIcon, true, true, true));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.deepDarkPosition(), deepDarkIcon, true, true, true));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.shulkerTransportPosition(), shulkerTransportIcon, true, true, false));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.cityQueryPosition(), cityQueryIcon, true, true, false));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.generalLocationPosition(), generalLocationIcon, true, false, false));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.strongholdInformation(), strongholdIcon, false, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.spawnInformation(), shulkerIcon, true, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.outpostInformation(), outpostIcon, true, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.monumentInformation(), monumentIcon, true, true, true));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.deepDarkInformation(), deepDarkIcon, true, true, true));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.shulkerTransportInformation(), shulkerTransportIcon, true, true, false));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.cityQueryInformation(), cityQueryIcon, true, true, false));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.generalLocationInformation(), generalLocationIcon, true, false, false));
 		for (StructurePanel panel : oneDotTwentyPlusPanels) {
 			add(panel);
 		}

@@ -2,7 +2,11 @@ package ninjabrainbot.model.datastate.alladvancements;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.event.IObservable;
+import ninjabrainbot.model.datastate.common.IOverworldPosition;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.OverworldPosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
@@ -13,25 +17,33 @@ import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDisposable {
 
+	private final IObservable<IPlayerPosition> playerPosition;
 	private final IEnvironmentState environmentState;
 
-	private final InferredComponent<Boolean> allAdvancementsModeEnabled;
-	private final InferredComponent<StructurePosition> strongholdPosition;
-	private final DataComponent<StructurePosition> spawnPosition;
-	private final DataComponent<StructurePosition> outpostPosition;
-	private final DataComponent<StructurePosition> monumentPosition;
-	private final DataComponent<StructurePosition> deepDarkPosition;
-	private final DataComponent<StructurePosition> cityQueryPosition;
-	private final DataComponent<StructurePosition> shulkerTransportPosition;
-	private final DataComponent<StructurePosition> generalLocationPosition;
+	private final DataComponent<IOverworldPosition> spawnPosition;
+	private final DataComponent<IOverworldPosition> outpostPosition;
+	private final DataComponent<IOverworldPosition> monumentPosition;
+	private final DataComponent<IOverworldPosition> deepDarkPosition;
+	private final DataComponent<IOverworldPosition> cityQueryPosition;
+	private final DataComponent<IOverworldPosition> shulkerTransportPosition;
+	private final DataComponent<IOverworldPosition> generalLocationPosition;
 
+	private final InferredComponent<Boolean> allAdvancementsModeEnabled;
+	private final InferredComponent<StructureInformation> strongholdInformation;
+	private final InferredComponent<StructureInformation> spawnInformation;
+	private final InferredComponent<StructureInformation> outpostInformation;
+	private final InferredComponent<StructureInformation> monumentInformation;
+	private final InferredComponent<StructureInformation> deepDarkInformation;
+	private final InferredComponent<StructureInformation> cityQueryInformation;
+	private final InferredComponent<StructureInformation> shulkerTransportInformation;
+	private final InferredComponent<StructureInformation> generalLocationInformation;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public AllAdvancementsDataState(IDomainModelComponent<ChunkPrediction> currentStrongholdPrediction, IDomainModel domainModel, IEnvironmentState environmentState) {
+	public AllAdvancementsDataState(IDomainModelComponent<ChunkPrediction> currentStrongholdPrediction, IObservable<IPlayerPosition> playerPosition, IDomainModel domainModel, IEnvironmentState environmentState) {
+		this.playerPosition = playerPosition;
 		this.environmentState = environmentState;
-		allAdvancementsModeEnabled = new InferredComponent<>(domainModel, false);
-		strongholdPosition = new InferredComponent<>(domainModel);
+
 		spawnPosition = new DataComponent<>(domainModel);
 		outpostPosition = new DataComponent<>(domainModel);
 		monumentPosition = new DataComponent<>(domainModel);
@@ -39,13 +51,37 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		cityQueryPosition = new DataComponent<>(domainModel);
 		shulkerTransportPosition = new DataComponent<>(domainModel);
 		generalLocationPosition = new DataComponent<>(domainModel);
+
+		allAdvancementsModeEnabled = new InferredComponent<>(domainModel, false);
+		strongholdInformation = new InferredComponent<>(domainModel);
+		spawnInformation = new InferredComponent<>(domainModel);
+		outpostInformation = new InferredComponent<>(domainModel);
+		monumentInformation = new InferredComponent<>(domainModel);
+		deepDarkInformation = new InferredComponent<>(domainModel);
+		cityQueryInformation = new InferredComponent<>(domainModel);
+		shulkerTransportInformation = new InferredComponent<>(domainModel);
+		generalLocationInformation = new InferredComponent<>(domainModel);
+
 		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(environmentState.hasEnteredEnd().subscribeInternal(this::updateAllAdvancementsMode));
-		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdPosition::set));
+		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdInformation::set));
+		disposeHandler.add(spawnPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(spawnInformation, overworldPosition)));
+		disposeHandler.add(outpostPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(outpostInformation, overworldPosition)));
+		disposeHandler.add(monumentPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(monumentInformation, overworldPosition)));
+		disposeHandler.add(deepDarkPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(deepDarkInformation, overworldPosition)));
+		disposeHandler.add(cityQueryPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(cityQueryInformation, overworldPosition)));
+		disposeHandler.add(shulkerTransportPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(shulkerTransportInformation, overworldPosition)));
+		disposeHandler.add(generalLocationPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(generalLocationInformation, overworldPosition)));
 	}
 
 	private void updateAllAdvancementsMode() {
 		allAdvancementsModeEnabled.set(environmentState.allAdvancementsModeEnabled().get() && environmentState.hasEnteredEnd().get());
+	}
+
+	private void updateStructureInformationComponent(InferredComponent<StructureInformation> structureInformationComponent, IOverworldPosition overworldPosition) {
+		structureInformationComponent.set(overworldPosition == null
+				? null
+				: new StructureInformation(overworldPosition, playerPosition));
 	}
 
 	@Override
@@ -54,43 +90,78 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	}
 
 	@Override
-	public IDomainModelComponent<StructurePosition> strongholdPosition() {
-		return strongholdPosition;
-	}
-
-	@Override
-	public IDataComponent<StructurePosition> spawnPosition() {
+	public IDataComponent<IOverworldPosition> spawnPosition() {
 		return spawnPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> outpostPosition() {
+	public IDataComponent<IOverworldPosition> outpostPosition() {
 		return outpostPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> monumentPosition() {
+	public IDataComponent<IOverworldPosition> monumentPosition() {
 		return monumentPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> deepDarkPosition() {
+	public IDataComponent<IOverworldPosition> deepDarkPosition() {
 		return deepDarkPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> cityQueryPosition() {
+	public IDataComponent<IOverworldPosition> cityQueryPosition() {
 		return cityQueryPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> shulkerTransportPosition() {
+	public IDataComponent<IOverworldPosition> shulkerTransportPosition() {
 		return shulkerTransportPosition;
 	}
 
 	@Override
-	public IDataComponent<StructurePosition> generalLocationPosition() {
+	public IDataComponent<IOverworldPosition> generalLocationPosition() {
 		return generalLocationPosition;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> strongholdInformation() {
+		return strongholdInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> spawnInformation() {
+		return spawnInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> outpostInformation() {
+		return outpostInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> monumentInformation() {
+		return monumentInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> deepDarkInformation() {
+		return deepDarkInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> cityQueryInformation() {
+		return cityQueryInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> shulkerTransportInformation() {
+		return shulkerTransportInformation;
+	}
+
+	@Override
+	public IDomainModelComponent<StructureInformation> generalLocationInformation() {
+		return generalLocationInformation;
 	}
 
 	@Override

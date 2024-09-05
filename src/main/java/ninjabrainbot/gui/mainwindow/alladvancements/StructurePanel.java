@@ -14,7 +14,7 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.ColumnLayout;
 import ninjabrainbot.gui.style.theme.WrappedColor;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.input.IButtonInputHandler;
 
 public class StructurePanel extends ThemedPanel implements IDisposable {
@@ -30,7 +30,7 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private Subscription angleSubscription;
 
-	public StructurePanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IObservable<StructurePosition> structurePosition, ImageIcon icon, boolean addDeleteButton, boolean showBorder, boolean showNether) {
+	public StructurePanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IObservable<StructureInformation> structurePosition, ImageIcon icon, boolean addDeleteButton, boolean showBorder, boolean showNether) {
 		super(styleManager);
 		setOpaque(true);
 		ThemedLabel iconLabel = new ThemedLabel(styleManager, true);
@@ -67,19 +67,19 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 		disposeHandler.add(structurePosition.subscribeEDT(this::onStructurePositionUpdated));
 	}
 
-	private RemoveStructureButton createDeleteButton(StyleManager styleManager, IObservable<StructurePosition> structurePosition, IButtonInputHandler buttonInputHandler) {
+	private RemoveStructureButton createDeleteButton(StyleManager styleManager, IObservable<StructureInformation> structurePosition, IButtonInputHandler buttonInputHandler) {
 		RemoveStructureButton removeStructureButton = new RemoveStructureButton(styleManager, structurePosition, buttonInputHandler);
 		removeStructureButton.setForegroundColor(styleManager.currentTheme.TEXT_COLOR_SLIGHTLY_WEAK);
 		disposeHandler.add(removeStructureButton);
 		return removeStructureButton;
 	}
 
-	public void onStructurePositionUpdated(StructurePosition structurePosition) {
-		if (structurePosition != null) {
-			location.setText(String.format("(%.0f, %.0f)", structurePosition.xInOverworld(), structurePosition.zInOverworld()));
-			angle.setText(String.format("%.1f", structurePosition.getTravelAngle()));
+	public void onStructurePositionUpdated(StructureInformation structureInformation) {
+		if (structureInformation != null) {
+			location.setText(String.format("(%.0f, %.0f)", structureInformation.xInOverworld(), structureInformation.zInOverworld()));
+			angle.setText(String.format("%.1f", structureInformation.getTravelAngle()));
 			if (showNether)
-				nether.setText(String.format("(%.0f, %.0f)", structurePosition.xInNether(), structurePosition.zInNether()));
+				nether.setText(String.format("(%.0f, %.0f)", structureInformation.xInNether(), structureInformation.zInNether()));
 		} else {
 			location.setText("");
 			nether.setText("");
@@ -90,8 +90,8 @@ public class StructurePanel extends ThemedPanel implements IDisposable {
 			angleSubscription.dispose();
 			angleSubscription = null;
 		}
-		if (structurePosition != null)
-			angleSubscription = structurePosition.whenRelativePlayerPositionChanged().subscribeEDT(this::onStructurePositionUpdated);
+		if (structureInformation != null)
+			angleSubscription = structureInformation.whenRelativePlayerPositionChanged().subscribeEDT(this::onStructurePositionUpdated);
 	}
 
 	public String getLocationText() {

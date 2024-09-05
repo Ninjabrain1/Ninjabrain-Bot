@@ -6,7 +6,7 @@ import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.actions.endereye.RemoveEnderEyeThrowAction;
 import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
@@ -48,8 +48,8 @@ public class ButtonInputHandler implements IButtonInputHandler {
 	}
 
 	@Override
-	public void onRemoveAllAdvancementsStructureButtonPressed(StructurePosition structurePosition) {
-		actionExecutor.executeImmediately(new RemoveStructureAction(dataState.allAdvancementsDataState(), structurePosition));
+	public void onRemoveAllAdvancementsStructureButtonPressed(StructureInformation structureInformation) {
+		actionExecutor.executeImmediately(new RemoveStructureAction(dataState.allAdvancementsDataState(), structureInformation));
 	}
 
 }

@@ -2,49 +2,49 @@ package ninjabrainbot.model.actions.alladvancements;
 
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.common.StructurePosition;
+import ninjabrainbot.model.datastate.common.StructureInformation;
 
 public class RemoveStructureAction implements IAction {
 
 	private final IAllAdvancementsDataState allAdvancementsDataState;
-	private final StructurePosition structurePosition;
+	private final StructureInformation structureInformation;
 
-	public RemoveStructureAction(IAllAdvancementsDataState allAdvancementsDataState, StructurePosition structurePosition) {
+	public RemoveStructureAction(IAllAdvancementsDataState allAdvancementsDataState, StructureInformation structureInformation) {
 		this.allAdvancementsDataState = allAdvancementsDataState;
-		this.structurePosition = structurePosition;
+		this.structureInformation = structureInformation;
 	}
 
 	@Override
 	public void execute() {
-		if (allAdvancementsDataState.spawnPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.spawnInformation().get() == structureInformation) {
 			allAdvancementsDataState.spawnPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.outpostPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.outpostInformation().get() == structureInformation) {
 			allAdvancementsDataState.outpostPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.monumentPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.monumentInformation().get() == structureInformation) {
 			allAdvancementsDataState.monumentPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.shulkerTransportPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.shulkerTransportInformation().get() == structureInformation) {
 			allAdvancementsDataState.shulkerTransportPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.deepDarkPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.deepDarkInformation().get() == structureInformation) {
 			allAdvancementsDataState.deepDarkPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.cityQueryPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.cityQueryInformation().get() == structureInformation) {
 			allAdvancementsDataState.cityQueryPosition().reset();
 			return;
 		}
-		if (allAdvancementsDataState.generalLocationPosition().get() == structurePosition) {
+		if (allAdvancementsDataState.generalLocationInformation().get() == structureInformation) {
 			allAdvancementsDataState.generalLocationPosition().reset();
 			return;
 		}
-		throw new IllegalArgumentException(String.format("Cannot remove structure position %s because it not present in the data state.", structurePosition));
+		throw new IllegalArgumentException(String.format("Cannot remove structure position %s because it not present in the data state.", structureInformation));
 	}
 
 }

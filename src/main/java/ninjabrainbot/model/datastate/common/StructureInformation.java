@@ -9,9 +9,9 @@ import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.I18n;
 
-public class StructurePosition implements IOverworldPosition, IDisposable {
+public class StructureInformation implements IOverworldPosition, IDisposable {
 
-	private final int x, z;
+	private final IOverworldPosition overworldPosition;
 
 	private int overworldDistance;
 	private double travelAngle;
@@ -20,15 +20,10 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 
 	private Subscription playerPosSubscription;
 
-	private final ObservableProperty<StructurePosition> whenRelativePlayerPositionChanged;
+	private final ObservableProperty<StructureInformation> whenRelativePlayerPositionChanged;
 
-	public StructurePosition(int x, int z) {
-		this(x, z, null);
-	}
-
-	public StructurePosition(int x, int z, IObservable<IPlayerPosition> playerPosition) {
-		this.x = x;
-		this.z = z;
+	public StructureInformation(IOverworldPosition overworldPosition, IObservable<IPlayerPosition> playerPosition) {
+		this.overworldPosition = overworldPosition;
 		whenRelativePlayerPositionChanged = new ObservableProperty<>();
 		if (playerPosition != null) {
 			updateWithPlayerPos(playerPosition.get(), false);
@@ -42,8 +37,8 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 
 		overworldDistance = (int) this.distanceInOverworld(playerPos);
 		playerIsInNether = playerPos.isInNether();
-		double xDiff = x - playerPos.xInOverworld();
-		double zDiff = z - playerPos.zInOverworld();
+		double xDiff = overworldPosition.xInOverworld() - playerPos.xInOverworld();
+		double zDiff = overworldPosition.xInOverworld() - playerPos.zInOverworld();
 		double angleToStructure = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
 		double angleDifference = (angleToStructure - playerPos.horizontalAngle()) % 360;
 		if (angleDifference > 180)
@@ -78,12 +73,12 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 
 	@Override
 	public double xInOverworld() {
-		return x;
+		return overworldPosition.xInOverworld();
 	}
 
 	@Override
 	public double zInOverworld() {
-		return z;
+		return overworldPosition.zInOverworld();
 	}
 
 	public double xInNether() {
@@ -95,11 +90,11 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 	}
 
 	public int xInNetherForDisplay() {
-		return (int) Math.floor(x / 8.0);
+		return (int) Math.floor(overworldPosition.xInOverworld() / 8.0);
 	}
 
 	public int zInNetherForDisplay() {
-		return (int) Math.floor(z / 8.0);
+		return (int) Math.floor(overworldPosition.zInOverworld() / 8.0);
 	}
 
 	public int getOverworldDistance() {
@@ -118,7 +113,7 @@ public class StructurePosition implements IOverworldPosition, IDisposable {
 		return travelAngleDifference;
 	}
 
-	public ISubscribable<StructurePosition> whenRelativePlayerPositionChanged() {
+	public ISubscribable<StructureInformation> whenRelativePlayerPositionChanged() {
 		return whenRelativePlayerPositionChanged;
 	}
 
