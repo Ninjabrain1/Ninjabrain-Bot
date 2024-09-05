@@ -5,11 +5,13 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.actions.alladvancements.SetF3ILocationAction;
+import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.divine.Fossil;
 import ninjabrainbot.model.datastate.endereye.F3IData;
 
 /**
- * Listens to the stream of fossils and decides if/how the fossils should be inputted into the data state.
+ * Listens to the stream of F3+I-inputs and decides if/how they should be inputted into the data state.
  */
 public class F3ILocationInputHandler implements IDisposable {
 
@@ -26,13 +28,18 @@ public class F3ILocationInputHandler implements IDisposable {
 		disposeHandler.add(f3iLocationInputSource.whenNewF3ILocationInputted().subscribe(this::onNewF3ILocation));
 	}
 
-	private void onNewF3ILocation(F3IData pos) {
+	private void onNewF3ILocation(F3IData f3IData) {
 		if (dataState.locked().get())
 			return;
 
-		// Only execute if 1.20+ AA mode enabled.
-		if (preferences.oneDotTwentyPlusAA.get() && preferences.allAdvancements.get()) {
-			actionExecutor.executeImmediately(new SetF3ILocationAction(dataState.allAdvancementsDataState(), pos));
+		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
+			// Only execute if 1.20+ AA mode enabled.
+			if (preferences.oneDotTwentyPlusAA.get() && preferences.allAdvancements.get()) {
+				actionExecutor.executeImmediately(new SetF3ILocationAction(dataState.allAdvancementsDataState(), f3IData));
+			}
+		} else {
+			Fossil fossil = Fossil.tryCreateFromF3I(f3IData);
+			actionExecutor.executeImmediately(new SetFossilAction(dataState.getDivineContext(), fossil));
 		}
 	}
 
