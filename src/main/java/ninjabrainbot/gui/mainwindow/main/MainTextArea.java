@@ -61,23 +61,17 @@ public class MainTextArea extends ResizablePanel {
 		updateResult();
 	}
 
-	private void updateOneDotTwentyPlusAAEnabled() {
-		allAdvancements.updateOneDotTwentyPlusAAEnabled();
-		// Update the size of the panel
-		whenSizeModified.notifySubscribers(this);
-	}
-
 	private void setupSubscriptions() {
 		// Settings
 		disposeHandler.add(preferences.showNetherCoords.whenModified().subscribeEDT(this::setNetherCoordsEnabled));
 		disposeHandler.add(preferences.showAngleUpdates.whenModified().subscribeEDT(this::setAngleUpdatesEnabled));
-		disposeHandler.add(preferences.view.whenModified().subscribeEDT(__ -> onViewTypeChanged()));
-		disposeHandler.add(preferences.oneDotTwentyPlusAA.whenModified().subscribeEDT(__ -> updateOneDotTwentyPlusAAEnabled()));
+		disposeHandler.add(preferences.view.whenModified().subscribeEDT(this::onViewTypeChanged));
+		disposeHandler.add(preferences.oneDotTwentyPlusAA.whenModified().subscribeEDT(this::updateOneDotTwentyPlusAAEnabled));
 		// Data state
 		disposeHandler.add(dataState.calculatorResult().subscribeEDT(this::setResult));
 		disposeHandler.add(dataState.blindResult().subscribeEDT(this::setResult));
 		disposeHandler.add(dataState.divineResult().subscribeEDT(this::setResult));
-		disposeHandler.add(dataState.resultType().subscribeEDT(__ -> updateResult()));
+		disposeHandler.add(dataState.resultType().subscribeEDT(this::updateResult));
 	}
 
 	private void onViewTypeChanged() {
@@ -145,6 +139,11 @@ public class MainTextArea extends ResizablePanel {
 	private void setAngleUpdatesEnabled(boolean b) {
 		basicTriangulation.setAngleUpdatesEnabled(b);
 		detailedTriangulation.setAngleUpdatesEnabled(b);
+		whenSizeModified.notifySubscribers(this);
+	}
+
+	private void updateOneDotTwentyPlusAAEnabled() {
+		allAdvancements.updateOneDotTwentyPlusAAEnabled();
 		whenSizeModified.notifySubscribers(this);
 	}
 

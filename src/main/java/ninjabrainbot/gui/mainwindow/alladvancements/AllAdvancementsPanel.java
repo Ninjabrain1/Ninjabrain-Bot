@@ -16,7 +16,7 @@ import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.input.IButtonInputHandler;
 
-public class AllAdvancementsPanel extends ThemedPanel implements IDisposable {
+public class AllAdvancementsPanel extends ThemedPanel {
 
 	private final NinjabrainBotPreferences preferences;
 	private static final ImageIcon strongholdIcon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/stronghold_icon.png")));
@@ -29,7 +29,6 @@ public class AllAdvancementsPanel extends ThemedPanel implements IDisposable {
 	private static final ImageIcon generalLocationIcon = new ImageIcon(Objects.requireNonNull(Main.class.getResource("/general_location_icon.png")));
 
 	private final ArrayList<StructurePanel> oneDotTwentyPlusPanels = new ArrayList<>();
-	final Subscription generalLocationSubscription;
 
 	public AllAdvancementsPanel(StyleManager styleManager, IButtonInputHandler buttonInputHandler, IAllAdvancementsDataState allAdvancementsDataState, NinjabrainBotPreferences preferences) {
 		super(styleManager);
@@ -43,7 +42,6 @@ public class AllAdvancementsPanel extends ThemedPanel implements IDisposable {
 		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.shulkerTransportPosition(), shulkerTransportIcon, true, true, false));
 		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.cityQueryPosition(), cityQueryIcon, true, true, false));
 		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.generalLocationPosition(), generalLocationIcon, true, false, false));
-		generalLocationSubscription = allAdvancementsDataState.generalLocationPosition().subscribeEDT(__ -> updateOneDotTwentyPlusAAEnabled());
 		for (StructurePanel panel : oneDotTwentyPlusPanels) {
 			add(panel);
 		}
@@ -55,8 +53,6 @@ public class AllAdvancementsPanel extends ThemedPanel implements IDisposable {
 	}
 
 	public void updateOneDotTwentyPlusAAEnabled() {
-		// print contents of oneDotTwentyPlusPanels for debugging
-
 		for (StructurePanel panel : oneDotTwentyPlusPanels) {
 			panel.setEnabled(preferences.oneDotTwentyPlusAA.get());
 			panel.setVisible(preferences.oneDotTwentyPlusAA.get());
@@ -64,10 +60,5 @@ public class AllAdvancementsPanel extends ThemedPanel implements IDisposable {
 
 		this.revalidate();
 		this.repaint();
-	}
-
-	@Override
-	public void dispose() {
-		generalLocationSubscription.dispose();
 	}
 }

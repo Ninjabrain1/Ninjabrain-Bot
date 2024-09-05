@@ -25,17 +25,6 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		this.preferences = preferences;
 	}
 
-	private StructurePosition getStructurePosition(StructureType structureType) {
-		switch (structureType) {
-			case Outpost:
-				return getOutpostPosition(playerPosition);
-			case CityQuery:
-			    return getCityRegionCentre(playerPosition);
-			default:
-				return new StructurePosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()), playerPositionObservable);
-		}
-	}
-
 	@Override
 	public void execute() {
 		StructureType structureType = getAllAdvancementStructureTypeFromPlayerPosition(playerPosition);
@@ -56,13 +45,8 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		if (t.isInNether())
 			return StructureType.Unknown;
 
-		if (t.isInEnd()) {
-			if (preferences.oneDotTwentyPlusAA.get()) {
-				return StructureType.ShulkerTransport;
-			} else {
-				return StructureType.Unknown;
-			}
-		}
+		if (t.isInEnd())
+			return preferences.oneDotTwentyPlusAA.get() ? StructureType.ShulkerTransport : StructureType.Unknown;
 
 		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
 			return StructureType.Spawn;
@@ -88,6 +72,17 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		return StructureType.Outpost;
 	}
 
+	private StructurePosition getStructurePosition(StructureType structureType) {
+		switch (structureType) {
+			case Outpost:
+				return getOutpostPosition(playerPosition);
+			case CityQuery:
+				return getCityRegionCentre(playerPosition);
+			default:
+				return new StructurePosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()), playerPositionObservable);
+		}
+	}
+
 	private StructurePosition getOutpostPosition(IDetailedPlayerPosition t) {
 		int averageOutpostY = 80;
 		double deltaY = averageOutpostY - t.yInPlayerDimension();
@@ -98,7 +93,6 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		deltaZ = Math.max(Math.min(deltaZ, 350), -350);
 		return new StructurePosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ), playerPositionObservable);
 	}
-
 
 	// City region centres are at chunk positions 24m + 8, where m is an integer.
 	// Find the closest city region centre to the player's position.
