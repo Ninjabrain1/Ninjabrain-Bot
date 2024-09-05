@@ -4,7 +4,7 @@ import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IActionExecutor;
-import ninjabrainbot.model.actions.alladvancements.SetF3ILocationAction;
+import ninjabrainbot.model.actions.alladvancements.SetAllAdvancementsGeneralLocationAction;
 import ninjabrainbot.model.actions.common.SetFossilAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.divine.Fossil;
@@ -35,7 +35,7 @@ public class F3ILocationInputHandler implements IDisposable {
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get()) {
 			// Only execute if 1.20+ AA mode enabled.
 			if (preferences.oneDotTwentyPlusAA.get() && preferences.allAdvancements.get()) {
-				actionExecutor.executeImmediately(new SetF3ILocationAction(dataState.allAdvancementsDataState(), f3IData));
+				actionExecutor.executeImmediately(new SetAllAdvancementsGeneralLocationAction(dataState.allAdvancementsDataState(), f3IData));
 			}
 		} else {
 			Fossil fossil = Fossil.tryCreateFromF3I(f3IData);
