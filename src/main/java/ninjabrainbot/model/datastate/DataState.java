@@ -48,9 +48,9 @@ public class DataState implements IDataState, IDisposable {
 
 	public DataState(IDomainModel domainModel, IEnvironmentState environmentState, DefaultBoatType defaultBoatType) {
 		divineContext = disposeHandler.add(new DivineContext(domainModel));
-		throwSet = new ListComponent<>(domainModel, 10);
-		playerPosition = new DataComponent<>(domainModel);
-		locked = new DataComponent<>(domainModel, false);
+		throwSet = new ListComponent<>("throw_set", domainModel, 10);
+		playerPosition = new DataComponent<>("player_position", domainModel);
+		locked = new DataComponent<>("is_locked", domainModel, false);
 
 		calculatorManager = disposeHandler.add(new CalculatorManager(domainModel, environmentState, throwSet, playerPosition, divineContext));
 		allAdvancementsDataState = disposeHandler.add(new AllAdvancementsDataState(calculatorManager.topPrediction(), playerPosition, domainModel, environmentState));

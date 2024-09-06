@@ -19,7 +19,7 @@ public class DivineContext implements IDivineContext, IDisposable {
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public DivineContext(IDomainModel domainModel) {
-		fossil = new DataComponent<>(domainModel);
+		fossil = new DataComponent<>("fossil", domainModel);
 		discretizedAngularDensity = new DiscretizedDensity(0, 2.0 * Math.PI);
 		disposeHandler.add(fossil.subscribeInternal(this::onFossilChanged));
 	}

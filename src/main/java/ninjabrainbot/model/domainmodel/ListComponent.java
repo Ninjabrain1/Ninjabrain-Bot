@@ -26,14 +26,16 @@ public class ListComponent<T extends Serializable> implements IListComponent<T> 
 	private final ObservableList<T> observableList;
 	private final ISubscribable<IReadOnlyList<T>> externalEvent;
 	private final int maxCapacity;
+	private final String uniqueId;
 
-	public ListComponent(IDomainModel domainModel, int maxCapacity) {
+	public ListComponent(String uniqueId, IDomainModel domainModel, int maxCapacity) {
+		Assert.isNotNull(domainModel, "Domain model cannot be null");
 		this.domainModel = domainModel;
 		this.maxCapacity = maxCapacity;
 		observableList = new ObservableList<>();
-		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableList) : observableList;
-		if (domainModel != null)
-			domainModel.registerFundamentalComponent(this);
+		externalEvent = domainModel.createExternalEventFor(observableList);
+		domainModel.registerFundamentalComponent(this);
+		this.uniqueId = uniqueId;
 	}
 
 	@Override
@@ -136,6 +138,11 @@ public class ListComponent<T extends Serializable> implements IListComponent<T> 
 		if (domainModel != null)
 			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IListComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
+	}
+
+	@Override
+	public String uniqueId() {
+		return uniqueId;
 	}
 
 	@Override

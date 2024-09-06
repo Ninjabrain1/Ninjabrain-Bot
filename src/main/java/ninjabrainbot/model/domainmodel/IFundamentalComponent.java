@@ -24,7 +24,7 @@ public interface IFundamentalComponent<T, U extends Serializable> extends IDomai
 
 	boolean isReset();
 
-//	String uniqueId();
+	String uniqueId();
 
 	U getAsSerializable();
 

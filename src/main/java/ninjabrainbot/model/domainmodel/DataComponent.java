@@ -22,18 +22,20 @@ public class DataComponent<T extends Serializable> implements IDataComponent<T> 
 	private final ObservableField<T> observableField;
 	private final ISubscribable<T> externalEvent;
 	private final T defaultValue;
+	private final String uniqueId;
 
-	public DataComponent(IDomainModel domainModel) {
-		this(domainModel, null);
+	public DataComponent(String uniqueId, IDomainModel domainModel) {
+		this(uniqueId, domainModel, null);
 	}
 
-	public DataComponent(IDomainModel domainModel, T defaultValue) {
+	public DataComponent(String uniqueId, IDomainModel domainModel, T defaultValue) {
+		Assert.isNotNull(domainModel, "Domain model cannot be null");
 		this.domainModel = domainModel;
+		this.uniqueId = uniqueId;
 		observableField = new ObservableField<>(defaultValue);
-		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableField) : observableField;
+		externalEvent = domainModel.createExternalEventFor(observableField);
 		this.defaultValue = defaultValue;
-		if (domainModel != null)
-			domainModel.registerFundamentalComponent(this);
+		domainModel.registerFundamentalComponent(this);
 	}
 
 	@Override
@@ -81,6 +83,11 @@ public class DataComponent<T extends Serializable> implements IDataComponent<T> 
 		if (domainModel != null)
 			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IDataComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
+	}
+
+	@Override
+	public String uniqueId() {
+		return uniqueId;
 	}
 
 	@Override

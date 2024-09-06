@@ -17,23 +17,23 @@ public class BoatDataState implements IBoatDataState {
 	}
 
 	public BoatDataState(IDomainModel domainModel, DefaultBoatType defaultBoatType) {
-		reducingModulo360 = new DataComponent<>(domainModel, false);
+		reducingModulo360 = new DataComponent<>("boat_reducing_mod_360", domainModel, false);
 
 		switch (defaultBoatType) {
 			case GREEN:
-				enteringBoat = new DataComponent<>(domainModel, false);
-				boatAngle = new DataComponent<>(domainModel, 0f);
-				boatState = new DataComponent<>(domainModel, BoatState.VALID);
+				enteringBoat = new DataComponent<>("boat_entering", domainModel, false);
+				boatAngle = new DataComponent<>("boat_angle", domainModel, 0f);
+				boatState = new DataComponent<>("boat_state", domainModel, BoatState.VALID);
 				break;
 			case BLUE:
-				enteringBoat = new DataComponent<>(domainModel, true);
-				boatAngle = new DataComponent<>(domainModel);
-				boatState = new DataComponent<>(domainModel, BoatState.MEASURING);
+				enteringBoat = new DataComponent<>("boat_entering", domainModel, true);
+				boatAngle = new DataComponent<>("boat_angle", domainModel);
+				boatState = new DataComponent<>("boat_state", domainModel, BoatState.MEASURING);
 				break;
 			default:
-				enteringBoat = new DataComponent<>(domainModel, false);
-				boatAngle = new DataComponent<>(domainModel);
-				boatState = new DataComponent<>(domainModel, BoatState.NONE);
+				enteringBoat = new DataComponent<>("boat_entering", domainModel, false);
+				boatAngle = new DataComponent<>("boat_angle", domainModel);
+				boatState = new DataComponent<>("boat_state", domainModel, BoatState.NONE);
 		}
 	}
 

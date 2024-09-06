@@ -43,13 +43,13 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		this.playerPosition = playerPosition;
 		this.environmentState = environmentState;
 
-		spawnPosition = new DataComponent<>(domainModel);
-		outpostPosition = new DataComponent<>(domainModel);
-		monumentPosition = new DataComponent<>(domainModel);
-		deepDarkPosition = new DataComponent<>(domainModel);
-		cityQueryPosition = new DataComponent<>(domainModel);
-		shulkerTransportPosition = new DataComponent<>(domainModel);
-		generalLocationPosition = new DataComponent<>(domainModel);
+		spawnPosition = new DataComponent<>("aa_spawn", domainModel);
+		outpostPosition = new DataComponent<>("aa_outpost", domainModel);
+		monumentPosition = new DataComponent<>("aa_monument", domainModel);
+		deepDarkPosition = new DataComponent<>("aa_deep_dark", domainModel);
+		cityQueryPosition = new DataComponent<>("aa_city_query", domainModel);
+		shulkerTransportPosition = new DataComponent<>("aa_shulker_transport", domainModel);
+		generalLocationPosition = new DataComponent<>("aa_general_location", domainModel);
 
 		allAdvancementsModeEnabled = new InferredComponent<>(domainModel, false);
 		strongholdInformation = new InferredComponent<>(domainModel);
@@ -64,13 +64,13 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(environmentState.hasEnteredEnd().subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdInformation::set));
-		disposeHandler.add(spawnPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(spawnInformation, overworldPosition)));
-		disposeHandler.add(outpostPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(outpostInformation, overworldPosition)));
-		disposeHandler.add(monumentPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(monumentInformation, overworldPosition)));
-		disposeHandler.add(deepDarkPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(deepDarkInformation, overworldPosition)));
-		disposeHandler.add(cityQueryPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(cityQueryInformation, overworldPosition)));
-		disposeHandler.add(shulkerTransportPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(shulkerTransportInformation, overworldPosition)));
-		disposeHandler.add(generalLocationPosition.subscribeInternal(overworldPosition -> updateStructureInformationComponent(generalLocationInformation, overworldPosition)));
+		disposeHandler.add(spawnPosition.subscribeInternal(position -> updateStructureInformationComponent(spawnInformation, position)));
+		disposeHandler.add(outpostPosition.subscribeInternal(position -> updateStructureInformationComponent(outpostInformation, position)));
+		disposeHandler.add(monumentPosition.subscribeInternal(position -> updateStructureInformationComponent(monumentInformation, position)));
+		disposeHandler.add(deepDarkPosition.subscribeInternal(position -> updateStructureInformationComponent(deepDarkInformation, position)));
+		disposeHandler.add(cityQueryPosition.subscribeInternal(position -> updateStructureInformationComponent(cityQueryInformation, position)));
+		disposeHandler.add(shulkerTransportPosition.subscribeInternal(position -> updateStructureInformationComponent(shulkerTransportInformation, position)));
+		disposeHandler.add(generalLocationPosition.subscribeInternal(position -> updateStructureInformationComponent(generalLocationInformation, position)));
 	}
 
 	private void updateAllAdvancementsMode() {

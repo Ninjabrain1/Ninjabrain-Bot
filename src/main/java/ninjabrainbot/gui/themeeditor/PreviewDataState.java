@@ -7,6 +7,7 @@ import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
+import ninjabrainbot.model.datastate.common.DetachedDomainModel;
 import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.DivineResult;
@@ -18,6 +19,7 @@ import ninjabrainbot.model.datastate.highprecision.IBoatDataState;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
+import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.IListComponent;
 import ninjabrainbot.model.domainmodel.InferredComponent;
@@ -50,15 +52,16 @@ public class PreviewDataState implements IDataState {
 	}
 
 	public PreviewDataState() {
-		divineContext = new DivineContext(null);
-		throwSet = new ListComponent<>(null, 10);
-		playerPosition = new DataComponent<>(null);
-		locked = new DataComponent<>(null, false);
-		resultType = new DataComponent<>(null, ResultType.NONE);
-		calculatorResult = new InferredComponent<>(null);
-		topPrediction = new InferredComponent<>(null);
-		blindResult = new InferredComponent<>(null);
-		divineResult = new InferredComponent<>(null);
+		IDomainModel domainModel = new DetachedDomainModel();
+		divineContext = new DivineContext(domainModel);
+		throwSet = new ListComponent<>("", domainModel, 10);
+		playerPosition = new DataComponent<>("", domainModel, null);
+		locked = new DataComponent<>("", domainModel, false);
+		resultType = new DataComponent<>("", domainModel, ResultType.NONE);
+		calculatorResult = new InferredComponent<>(domainModel);
+		topPrediction = new InferredComponent<>(domainModel);
+		blindResult = new InferredComponent<>(domainModel);
+		divineResult = new InferredComponent<>(domainModel);
 
 		boatDataState = new BoatDataState(null);
 		allAdvancementsDataState = new PreviewAllAdvancementsDataState();

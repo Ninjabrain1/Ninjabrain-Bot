@@ -8,7 +8,7 @@ public class DomainModelTests {
 	@Test
 	public void undoRedoWithDataComponent() {
 		DomainModel domainModel = new DomainModel();
-		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
+		DataComponent<Integer> integer = new DataComponent<>("int", domainModel, 0);
 		domainModel.finishInitialization();
 
 		Assertions.assertEquals(0, integer.get());
@@ -41,7 +41,7 @@ public class DomainModelTests {
 	@Test
 	public void undoRedoWithListComponent() {
 		DomainModel domainModel = new DomainModel();
-		ListComponent<Integer> list = new ListComponent<>(domainModel, 10);
+		ListComponent<Integer> list = new ListComponent<>("ints", domainModel, 10);
 		domainModel.finishInitialization();
 
 		Assertions.assertEquals(0, list.size());
@@ -81,7 +81,7 @@ public class DomainModelTests {
 		int maxNumberOfUndoSnapshots = 100;
 
 		DomainModel domainModel = new DomainModel();
-		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
+		DataComponent<Integer> integer = new DataComponent<>("int", domainModel, 0);
 		domainModel.finishInitialization();
 
 		for (int i = 0; i < maxNumberOfUndoSnapshots; i++) {
@@ -112,7 +112,7 @@ public class DomainModelTests {
 	@Test
 	public void duplicateStatesAreNotSavedForUndo() {
 		DomainModel domainModel = new DomainModel();
-		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
+		DataComponent<Integer> integer = new DataComponent<>("int", domainModel, 0);
 		domainModel.finishInitialization();
 
 		domainModel.acquireWriteLock();
@@ -148,7 +148,7 @@ public class DomainModelTests {
 	@Test
 	public void noRaceConditionsDuringAttemptedConcurrentModification() {
 		DomainModel domainModel = new DomainModel();
-		DataComponent<Integer> integer = new DataComponent<>(domainModel, 0);
+		DataComponent<Integer> integer = new DataComponent<>("int", domainModel, 0);
 		domainModel.finishInitialization();
 
 		Thread thread1 = new Thread(() -> {

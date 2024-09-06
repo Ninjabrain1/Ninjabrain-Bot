@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ninjabrainbot.model.datastate.common.DetachedDomainModel;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.statistics.ApproximatedPrior;
 import ninjabrainbot.model.datastate.statistics.IPrior;
@@ -27,7 +28,7 @@ class ApproximatedPriorTests {
 
 	@BeforeEach
 	void setup() {
-		divineContext = new DivineContext(null);
+		divineContext = new DivineContext(new DetachedDomainModel());
 	}
 
 	@ParameterizedTest

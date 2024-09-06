@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ninjabrainbot.io.preferences.enums.McVersion;
+import ninjabrainbot.model.datastate.common.DetachedDomainModel;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.statistics.ApproximatedPrior;
 import ninjabrainbot.model.datastate.statistics.IPrior;
@@ -25,7 +26,7 @@ class RayApproximatedPriorTests {
 
 	@BeforeAll
 	static void calculateTruePrior() {
-		divineContext = new DivineContext(null);
+		divineContext = new DivineContext(new DetachedDomainModel());
 		Ring ring = Ring.get(1);
 		int radius = (int) Math.ceil(ring.outerRadiusPostSnapping);
 		truePrior = new Prior(0, 0, radius, divineContext);

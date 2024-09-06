@@ -6,6 +6,7 @@ import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.calculator.Calculator;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
+import ninjabrainbot.model.datastate.common.DetachedDomainModel;
 import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.IDivineContext;
@@ -59,7 +60,7 @@ public class OneEyeAccuracySimulation {
 	}
 
 	private static ICalculatorResult calculateOneEye(IEnderEyeThrow eyeThrow) {
-		IListComponent<IEnderEyeThrow> throwSet = new ListComponent<>(null, 10);
+		IListComponent<IEnderEyeThrow> throwSet = new ListComponent<>("throw_list", new DetachedDomainModel(), 10);
 		throwSet.add(eyeThrow);
 		return calculator.triangulate(throwSet, new ObservableField<>(eyeThrow.getPlayerPosition()), divineContext);
 	}
