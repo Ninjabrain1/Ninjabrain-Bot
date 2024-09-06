@@ -2,7 +2,6 @@ package ninjabrainbot.model.domainmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import ninjabrainbot.event.IObservableList;
 import ninjabrainbot.event.IReadOnlyList;
