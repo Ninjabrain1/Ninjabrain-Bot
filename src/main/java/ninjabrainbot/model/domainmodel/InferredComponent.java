@@ -8,7 +8,7 @@ import ninjabrainbot.event.Subscription;
 import ninjabrainbot.util.Assert;
 
 /**
- * A data component that cannot be set externally, but is instead inferred from DataComponents
+ * A data component that cannot be set externally, but is instead inferred from IFundamentalComponents
  * and the EnvironmentState. Can only be modified under the DomainModel write lock.
  */
 public class InferredComponent<T> implements IInferredComponent<T> {

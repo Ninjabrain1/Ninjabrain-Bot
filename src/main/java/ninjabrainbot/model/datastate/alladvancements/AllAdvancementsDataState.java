@@ -20,13 +20,13 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	private final IObservable<IPlayerPosition> playerPosition;
 	private final IEnvironmentState environmentState;
 
-	private final DataComponent<IOverworldPosition> spawnPosition;
-	private final DataComponent<IOverworldPosition> outpostPosition;
-	private final DataComponent<IOverworldPosition> monumentPosition;
-	private final DataComponent<IOverworldPosition> deepDarkPosition;
-	private final DataComponent<IOverworldPosition> cityQueryPosition;
-	private final DataComponent<IOverworldPosition> shulkerTransportPosition;
-	private final DataComponent<IOverworldPosition> generalLocationPosition;
+	private final DataComponent<IAllAdvancementsPosition> spawnPosition;
+	private final DataComponent<IAllAdvancementsPosition> outpostPosition;
+	private final DataComponent<IAllAdvancementsPosition> monumentPosition;
+	private final DataComponent<IAllAdvancementsPosition> deepDarkPosition;
+	private final DataComponent<IAllAdvancementsPosition> cityQueryPosition;
+	private final DataComponent<IAllAdvancementsPosition> shulkerTransportPosition;
+	private final DataComponent<IAllAdvancementsPosition> generalLocationPosition;
 
 	private final InferredComponent<Boolean> allAdvancementsModeEnabled;
 	private final InferredComponent<StructureInformation> strongholdInformation;
@@ -90,37 +90,37 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> spawnPosition() {
+	public IDataComponent<IAllAdvancementsPosition> spawnPosition() {
 		return spawnPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> outpostPosition() {
+	public IDataComponent<IAllAdvancementsPosition> outpostPosition() {
 		return outpostPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> monumentPosition() {
+	public IDataComponent<IAllAdvancementsPosition> monumentPosition() {
 		return monumentPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> deepDarkPosition() {
+	public IDataComponent<IAllAdvancementsPosition> deepDarkPosition() {
 		return deepDarkPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> cityQueryPosition() {
+	public IDataComponent<IAllAdvancementsPosition> cityQueryPosition() {
 		return cityQueryPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> shulkerTransportPosition() {
+	public IDataComponent<IAllAdvancementsPosition> shulkerTransportPosition() {
 		return shulkerTransportPosition;
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> generalLocationPosition() {
+	public IDataComponent<IAllAdvancementsPosition> generalLocationPosition() {
 		return generalLocationPosition;
 	}
 

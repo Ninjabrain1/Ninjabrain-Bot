@@ -1,8 +1,10 @@
 package ninjabrainbot.model.datastate.divine;
 
+import java.io.Serializable;
+
 import ninjabrainbot.model.datastate.endereye.F3IData;
 
-public class Fossil {
+public class Fossil implements Serializable {
 
 	public final int x;
 

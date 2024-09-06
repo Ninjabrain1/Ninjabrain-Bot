@@ -1,6 +1,8 @@
 package ninjabrainbot.model.datastate.common;
 
-public class OverworldPosition implements IOverworldPosition {
+import java.io.Serializable;
+
+public class OverworldPosition implements IOverworldPosition, Serializable {
 
 	private final double x, z;
 

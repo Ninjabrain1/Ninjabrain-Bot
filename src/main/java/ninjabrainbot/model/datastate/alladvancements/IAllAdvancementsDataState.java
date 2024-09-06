@@ -1,6 +1,5 @@
 package ninjabrainbot.model.datastate.alladvancements;
 
-import ninjabrainbot.model.datastate.common.IOverworldPosition;
 import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;
@@ -9,19 +8,19 @@ public interface IAllAdvancementsDataState {
 
 	IDomainModelComponent<Boolean> allAdvancementsModeEnabled();
 
-	IDataComponent<IOverworldPosition> spawnPosition();
+	IDataComponent<IAllAdvancementsPosition> spawnPosition();
 
-	IDataComponent<IOverworldPosition> outpostPosition();
+	IDataComponent<IAllAdvancementsPosition> outpostPosition();
 
-	IDataComponent<IOverworldPosition> monumentPosition();
+	IDataComponent<IAllAdvancementsPosition> monumentPosition();
 
-	IDataComponent<IOverworldPosition> deepDarkPosition();
+	IDataComponent<IAllAdvancementsPosition> deepDarkPosition();
 
-	IDataComponent<IOverworldPosition> cityQueryPosition();
+	IDataComponent<IAllAdvancementsPosition> cityQueryPosition();
 
-	IDataComponent<IOverworldPosition> shulkerTransportPosition();
+	IDataComponent<IAllAdvancementsPosition> shulkerTransportPosition();
 
-	IDataComponent<IOverworldPosition> generalLocationPosition();
+	IDataComponent<IAllAdvancementsPosition> generalLocationPosition();
 
 	IDomainModelComponent<StructureInformation> strongholdInformation();
 

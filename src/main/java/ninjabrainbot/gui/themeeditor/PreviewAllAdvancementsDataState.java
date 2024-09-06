@@ -1,11 +1,12 @@
 package ninjabrainbot.gui.themeeditor;
 
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.common.IOverworldPosition;
+import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsPosition;
 import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;
+import ninjabrainbot.model.domainmodel.InferredComponent;
 
 public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataState {
 
@@ -15,77 +16,77 @@ public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataStat
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> spawnPosition() {
+	public IDataComponent<IAllAdvancementsPosition> spawnPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> outpostPosition() {
+	public IDataComponent<IAllAdvancementsPosition> outpostPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> monumentPosition() {
+	public IDataComponent<IAllAdvancementsPosition> monumentPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> deepDarkPosition() {
+	public IDataComponent<IAllAdvancementsPosition> deepDarkPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> cityQueryPosition() {
+	public IDataComponent<IAllAdvancementsPosition> cityQueryPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> shulkerTransportPosition() {
+	public IDataComponent<IAllAdvancementsPosition> shulkerTransportPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
-	public IDataComponent<IOverworldPosition> generalLocationPosition() {
+	public IDataComponent<IAllAdvancementsPosition> generalLocationPosition() {
 		return new DataComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> strongholdInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> spawnInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> outpostInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> monumentInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> deepDarkInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> cityQueryInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> shulkerTransportInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 
 	@Override
 	public IDomainModelComponent<StructureInformation> generalLocationInformation() {
-		return new DataComponent<>(null);
+		return new InferredComponent<>(null);
 	}
 }

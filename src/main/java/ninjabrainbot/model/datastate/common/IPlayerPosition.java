@@ -1,6 +1,8 @@
 package ninjabrainbot.model.datastate.common;
 
-public interface IPlayerPosition extends IOverworldRay {
+import java.io.Serializable;
+
+public interface IPlayerPosition extends IOverworldRay, Serializable {
 
 	double xInPlayerDimension();
 

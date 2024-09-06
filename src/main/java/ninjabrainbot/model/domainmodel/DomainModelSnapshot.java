@@ -1,44 +1,45 @@
 package ninjabrainbot.model.domainmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DomainModelSnapshot {
 
-	private final List<DataComponentSnapshot<?>> dataComponentSnapshots;
+	private final List<FundamentalComponentSnapshot<?, ?>> fundamentalComponentSnapshots;
 
-	public DomainModelSnapshot(List<IDataComponent<?>> dataComponentList) {
-		dataComponentSnapshots = new ArrayList<>();
-		for (IDataComponent<?> dataComponent : dataComponentList) {
-			dataComponentSnapshots.add(new DataComponentSnapshot<>(dataComponent));
+	public DomainModelSnapshot(List<IFundamentalComponent<?, ?>> dataComponentList) {
+		fundamentalComponentSnapshots = new ArrayList<>();
+		for (IFundamentalComponent<?, ?> fundamentalComponent : dataComponentList) {
+			fundamentalComponentSnapshots.add(new FundamentalComponentSnapshot<>(fundamentalComponent));
 		}
 	}
 
 	public void restoreDomainModelToStateAtSnapshot() {
-		dataComponentSnapshots.forEach(DataComponentSnapshot::restoreDataComponentToStateAtSnapshot);
+		fundamentalComponentSnapshots.forEach(FundamentalComponentSnapshot::restoreDataComponentToStateAtSnapshot);
 	}
 
 	public boolean isEqualToCurrentStateOfDomainModel() {
-		return dataComponentSnapshots.stream().allMatch(DataComponentSnapshot::isEqualToCurrentStateOfDataComponent);
+		return fundamentalComponentSnapshots.stream().allMatch(FundamentalComponentSnapshot::isEqualToCurrentStateOfDataComponent);
 	}
 }
 
-class DataComponentSnapshot<T> {
+class FundamentalComponentSnapshot<T, U extends Serializable> {
 
-	private final IDataComponent<T> dataComponent;
+	private final IFundamentalComponent<T, U> fundamentalComponent;
 	private final T value;
 
-	DataComponentSnapshot(IDataComponent<T> dataComponent) {
-		this.dataComponent = dataComponent;
-		this.value = dataComponent.getAsImmutable();
+	FundamentalComponentSnapshot(IFundamentalComponent<T, U> fundamentalComponent) {
+		this.fundamentalComponent = fundamentalComponent;
+		this.value = fundamentalComponent.getAsImmutable();
 	}
 
 	void restoreDataComponentToStateAtSnapshot() {
-		dataComponent.set(value);
+		fundamentalComponent.set(value);
 	}
 
 	boolean isEqualToCurrentStateOfDataComponent() {
-		return dataComponent.contentEquals(value);
+		return fundamentalComponent.contentEquals(value);
 	}
 
 }

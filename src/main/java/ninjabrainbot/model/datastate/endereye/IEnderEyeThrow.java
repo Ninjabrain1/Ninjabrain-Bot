@@ -1,11 +1,13 @@
 package ninjabrainbot.model.datastate.endereye;
 
+import java.io.Serializable;
+
 import ninjabrainbot.model.datastate.common.IOverworldRay;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.LimitedPlayerPosition;
 import ninjabrainbot.model.environmentstate.StandardDeviationSettings;
 
-public interface IEnderEyeThrow extends IOverworldRay {
+public interface IEnderEyeThrow extends IOverworldRay, Serializable {
 
 	double verticalAngle();
 

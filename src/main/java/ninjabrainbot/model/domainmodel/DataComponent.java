@@ -1,5 +1,6 @@
 package ninjabrainbot.model.domainmodel;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import ninjabrainbot.event.ISubscribable;
@@ -15,7 +16,7 @@ import ninjabrainbot.util.Assert;
  * for the undo action, and the DataComponent will not be write locked. However, in most cases where saving of
  * the data for undo is not needed, an {@link ObservableField} is more suiting.
  */
-public class DataComponent<T> implements IDataComponent<T> {
+public class DataComponent<T extends Serializable> implements IDataComponent<T> {
 
 	private final IDomainModel domainModel;
 	private final ObservableField<T> observableField;
@@ -32,7 +33,7 @@ public class DataComponent<T> implements IDataComponent<T> {
 		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableField) : observableField;
 		this.defaultValue = defaultValue;
 		if (domainModel != null)
-			domainModel.registerDataComponent(this);
+			domainModel.registerFundamentalComponent(this);
 	}
 
 	@Override
@@ -80,6 +81,16 @@ public class DataComponent<T> implements IDataComponent<T> {
 		if (domainModel != null)
 			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IDataComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
+	}
+
+	@Override
+	public T getAsSerializable() {
+		return get();
+	}
+
+	@Override
+	public void setFromDeserializedObject(T deserialized) {
+		set(deserialized);
 	}
 
 }

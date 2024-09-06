@@ -7,7 +7,7 @@ import ninjabrainbot.util.Assert;
 
 public class DomainModelHistory {
 
-	private final List<IDataComponent<?>> dataComponents;
+	private final List<IFundamentalComponent<?, ?>> fundamentalComponents;
 	private final int maxCapacity;
 
 	private final List<DomainModelSnapshot> snapshots = new ArrayList<>();
@@ -15,25 +15,25 @@ public class DomainModelHistory {
 	private int currentIndex;
 	private int numberOfDataComponents;
 
-	public DomainModelHistory(List<IDataComponent<?>> dataComponents, int maxCapacity) {
-		this.dataComponents = dataComponents;
+	public DomainModelHistory(List<IFundamentalComponent<?, ?>> fundamentalComponents, int maxCapacity) {
+		this.fundamentalComponents = fundamentalComponents;
 		this.maxCapacity = maxCapacity;
 	}
 
 	public void initialize() {
 		Assert.isFalse(isInitialized, "The DomainModelHistory has already been initialized.");
 		isInitialized = true;
-		numberOfDataComponents = dataComponents.size();
+		numberOfDataComponents = fundamentalComponents.size();
 		currentIndex = 0;
-		snapshots.add(new DomainModelSnapshot(dataComponents));
+		snapshots.add(new DomainModelSnapshot(fundamentalComponents));
 	}
 
 	public void saveSnapshotIfUniqueFromLastSnapshot() {
 		Assert.isTrue(isInitialized, "The DomainModelHistory has not been initialized.");
-		Assert.isEqual(numberOfDataComponents, dataComponents.size(), "Number of DataComponents have changed since last snapshot.");
+		Assert.isEqual(numberOfDataComponents, fundamentalComponents.size(), "Number of DataComponents have changed since last snapshot.");
 		if (snapshots.get(currentIndex).isEqualToCurrentStateOfDomainModel())
 			return;
-		saveSnapshotAfterCurrentSnapshot(new DomainModelSnapshot(dataComponents));
+		saveSnapshotAfterCurrentSnapshot(new DomainModelSnapshot(fundamentalComponents));
 	}
 
 	private void saveSnapshotAfterCurrentSnapshot(DomainModelSnapshot domainModelSnapshot) {

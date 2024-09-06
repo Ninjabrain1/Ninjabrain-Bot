@@ -16,7 +16,7 @@ import ninjabrainbot.util.Assert;
 public class DomainModel implements IDomainModel, IDisposable {
 
 	private final ReentrantReadWriteLock lock;
-	private final List<IDataComponent<?>> dataComponents;
+	private final List<IFundamentalComponent<?, ?>> fundamentalComponents;
 	private final List<EventLocker<?>> eventLockers;
 	private final DomainModelHistory domainModelHistory;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
@@ -28,9 +28,9 @@ public class DomainModel implements IDomainModel, IDisposable {
 
 	public DomainModel() {
 		lock = new ReentrantReadWriteLock();
-		dataComponents = new ArrayList<>();
+		fundamentalComponents = new ArrayList<>();
 		eventLockers = new ArrayList<>();
-		domainModelHistory = new DomainModelHistory(dataComponents, 100);
+		domainModelHistory = new DomainModelHistory(fundamentalComponents, 100);
 	}
 
 	public void finishInitialization() {
@@ -39,10 +39,10 @@ public class DomainModel implements IDomainModel, IDisposable {
 	}
 
 	@Override
-	public void registerDataComponent(IDataComponent<?> dataComponent) {
-		Assert.isFalse(isFullyInitialized, "New DataComponents cannot be registered in the DomainModel after it has been fully initialized.");
-		dataComponents.add(dataComponent);
-		dataComponent.subscribeInternal(__ -> isModifiedDuringCurrentWriteLock = true);
+	public void registerFundamentalComponent(IFundamentalComponent<?, ?> fundamentalComponent) {
+		Assert.isFalse(isFullyInitialized, "New IFundamentalComponents cannot be registered in the DomainModel after it has been fully initialized.");
+		fundamentalComponents.add(fundamentalComponent);
+		fundamentalComponent.subscribeInternal(__ -> isModifiedDuringCurrentWriteLock = true);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class DomainModel implements IDomainModel, IDisposable {
 
 	@Override
 	public void reset() {
-		dataComponents.forEach(IDataComponent::reset);
+		fundamentalComponents.forEach(IFundamentalComponent::reset);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class DomainModel implements IDomainModel, IDisposable {
 
 	@Override
 	public boolean isReset() {
-		return dataComponents.stream().allMatch(IDataComponent::isReset);
+		return fundamentalComponents.stream().allMatch(IFundamentalComponent::isReset);
 	}
 
 	@Override

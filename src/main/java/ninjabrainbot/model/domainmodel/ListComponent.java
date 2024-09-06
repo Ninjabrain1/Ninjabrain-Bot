@@ -1,5 +1,7 @@
 package ninjabrainbot.model.domainmodel;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -18,7 +20,7 @@ import ninjabrainbot.util.Assert;
  * for the undo action, and the ListComponent will not be write locked. However, in most cases where saving of
  * the data for undo is not needed, an {@link ObservableList} is more suiting.
  */
-public class ListComponent<T> implements IListComponent<T> {
+public class ListComponent<T extends Serializable> implements IListComponent<T> {
 
 	private final IDomainModel domainModel;
 	private final ObservableList<T> observableList;
@@ -31,7 +33,7 @@ public class ListComponent<T> implements IListComponent<T> {
 		observableList = new ObservableList<>();
 		externalEvent = domainModel != null ? domainModel.createExternalEventFor(observableList) : observableList;
 		if (domainModel != null)
-			domainModel.registerDataComponent(this);
+			domainModel.registerFundamentalComponent(this);
 	}
 
 	@Override
@@ -134,5 +136,17 @@ public class ListComponent<T> implements IListComponent<T> {
 		if (domainModel != null)
 			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IListComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
+	}
+
+	@Override
+	public ArrayList<T> getAsSerializable() {
+		ArrayList<T> arrayList = new ArrayList<>();
+		observableList.get().forEach(arrayList::add);
+		return arrayList;
+	}
+
+	@Override
+	public void setFromDeserializedObject(ArrayList<T> deserialized) {
+		set(new ArrayListImplementingReadOnlyList<>(deserialized));
 	}
 }

@@ -3,11 +3,11 @@ package ninjabrainbot.model.actions.alladvancements;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsPosition;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
+import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsPosition;
 import ninjabrainbot.model.datastate.alladvancements.StructureType;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
-import ninjabrainbot.model.datastate.common.IOverworldPosition;
-import ninjabrainbot.model.datastate.common.OverworldPosition;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 
 public class TryAddAllAdvancementsStructureAction implements IAction {
@@ -28,9 +28,9 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		if (structureType == StructureType.Unknown)
 			return;
 
-		OverworldPosition structurePosition = getStructurePosition(structureType);
+		IAllAdvancementsPosition structurePosition = getStructurePosition(structureType);
 
-		IDataComponent<IOverworldPosition> dataComponent = getDataComponentFromStructureType(structureType);
+		IDataComponent<IAllAdvancementsPosition> dataComponent = getDataComponentFromStructureType(structureType);
 		// Cities can be queried multiple times, so overwrite the position.
 		if (structureType != StructureType.CityQuery && dataComponent.get() != null)
 			return;
@@ -69,18 +69,18 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		return StructureType.Outpost;
 	}
 
-	private OverworldPosition getStructurePosition(StructureType structureType) {
+	private IAllAdvancementsPosition getStructurePosition(StructureType structureType) {
 		switch (structureType) {
 			case Outpost:
 				return getOutpostPosition(playerPosition);
 			case CityQuery:
 				return getCityRegionCentre(playerPosition);
 			default:
-				return new OverworldPosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()));
+				return new AllAdvancementsPosition((int) Math.floor(playerPosition.xInOverworld()), (int) Math.floor(playerPosition.zInOverworld()));
 		}
 	}
 
-	private OverworldPosition getOutpostPosition(IDetailedPlayerPosition t) {
+	private IAllAdvancementsPosition getOutpostPosition(IDetailedPlayerPosition t) {
 		int averageOutpostY = 80;
 		double deltaY = averageOutpostY - t.yInPlayerDimension();
 		double horizontalDistance = deltaY / Math.tan(-t.verticalAngle() * Math.PI / 180.0);
@@ -88,20 +88,20 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		double deltaZ = horizontalDistance * Math.cos(t.horizontalAngle() * Math.PI / 180.0);
 		deltaX = Math.max(Math.min(deltaX, 350), -350);
 		deltaZ = Math.max(Math.min(deltaZ, 350), -350);
-		return new OverworldPosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ));
+		return new AllAdvancementsPosition((int) (t.xInOverworld() + deltaX), (int) (t.zInOverworld() + deltaZ));
 	}
 
 	// City region centres are at chunk positions 24m + 8, where m is an integer.
 	// Find the closest city region centre to the player's position.
-	private OverworldPosition getCityRegionCentre(IDetailedPlayerPosition t) {
+	private IAllAdvancementsPosition getCityRegionCentre(IDetailedPlayerPosition t) {
 		int chunkX = (int) Math.floor(t.xInOverworld() / 16);
 		int chunkZ = (int) Math.floor(t.zInOverworld() / 16);
 		int cityRegionCentreX = 24 * (int) Math.round((chunkX - 8) / 24D) + 8;
 		int cityRegionCentreZ = 24 * (int) Math.round((chunkZ - 8) / 24D) + 8;
-		return new OverworldPosition(cityRegionCentreX * 16 + 8, cityRegionCentreZ * 16 + 8);
+		return new AllAdvancementsPosition(cityRegionCentreX * 16 + 8, cityRegionCentreZ * 16 + 8);
 	}
 
-	private IDataComponent<IOverworldPosition> getDataComponentFromStructureType(StructureType structureType) {
+	private IDataComponent<IAllAdvancementsPosition> getDataComponentFromStructureType(StructureType structureType) {
 		switch (structureType) {
 			case Spawn:
 				return allAdvancementsDataState.spawnPosition();

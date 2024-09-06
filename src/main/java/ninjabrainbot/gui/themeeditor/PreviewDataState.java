@@ -20,6 +20,7 @@ import ninjabrainbot.model.domainmodel.DataComponent;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 import ninjabrainbot.model.domainmodel.IDomainModelComponent;
 import ninjabrainbot.model.domainmodel.IListComponent;
+import ninjabrainbot.model.domainmodel.InferredComponent;
 import ninjabrainbot.model.domainmodel.ListComponent;
 
 public class PreviewDataState implements IDataState {
@@ -33,10 +34,10 @@ public class PreviewDataState implements IDataState {
 	private final DataComponent<IPlayerPosition> playerPosition;
 
 	private final DataComponent<ResultType> resultType;
-	private final DataComponent<ICalculatorResult> calculatorResult;
-	private final DataComponent<ChunkPrediction> topPrediction;
-	private final DataComponent<BlindResult> blindResult;
-	private final DataComponent<DivineResult> divineResult;
+	private final InferredComponent<ICalculatorResult> calculatorResult;
+	private final InferredComponent<ChunkPrediction> topPrediction;
+	private final InferredComponent<BlindResult> blindResult;
+	private final InferredComponent<DivineResult> divineResult;
 
 	public PreviewDataState(ICalculatorResult result, List<IEnderEyeThrow> eyeThrows, Fossil f) {
 		this();
@@ -54,10 +55,10 @@ public class PreviewDataState implements IDataState {
 		playerPosition = new DataComponent<>(null);
 		locked = new DataComponent<>(null, false);
 		resultType = new DataComponent<>(null, ResultType.NONE);
-		calculatorResult = new DataComponent<>(null);
-		topPrediction = new DataComponent<>(null);
-		blindResult = new DataComponent<>(null);
-		divineResult = new DataComponent<>(null);
+		calculatorResult = new InferredComponent<>(null);
+		topPrediction = new InferredComponent<>(null);
+		blindResult = new InferredComponent<>(null);
+		divineResult = new InferredComponent<>(null);
 
 		boatDataState = new BoatDataState(null);
 		allAdvancementsDataState = new PreviewAllAdvancementsDataState();

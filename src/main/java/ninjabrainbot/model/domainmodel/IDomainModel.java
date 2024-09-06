@@ -7,7 +7,7 @@ import ninjabrainbot.event.ISubscribable;
  */
 public interface IDomainModel extends IWriteLock {
 
-	void registerDataComponent(IDataComponent<?> dataComponent);
+	void registerFundamentalComponent(IFundamentalComponent<?, ?> dataComponent);
 
 	void registerInferredComponent(IInferredComponent<?> inferredComponent);
 
