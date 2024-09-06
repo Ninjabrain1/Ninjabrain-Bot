@@ -33,7 +33,7 @@ public class OneEyeAccuracySimulation {
 	public static void main(String[] args) {
 		Logger.enabled = false;
 		calculator = new Calculator(new CalculatorSettings(true, McVersion.PRE_119), new StandardDeviationSettings(std, std, std, std));
-		divineContext = new DivineContext(null);
+		divineContext = new DivineContext(new DetachedDomainModel());
 
 		for (int r = 0; r < 3000; r += 100) {
 			int successes = 0;

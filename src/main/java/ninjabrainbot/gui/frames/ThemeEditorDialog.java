@@ -61,14 +61,12 @@ public class ThemeEditorDialog extends ThemedDialog {
 	private FramePreviewPanel ninBotPreviewDetailed;
 
 	private final StyleManager previewStyleManager;
-	private final NinjabrainBotPreferences preferences;
 	private final CustomTheme customTheme; // theme that is saved
 	private final CustomTheme previewTheme; // used for previewing
 
 	public ThemeEditorDialog(StyleManager styleManager, NinjabrainBotPreferences preferences, JFrame owner, CustomTheme customTheme) {
 		super(styleManager, preferences, owner, I18n.get("settings.themeeditor.themeeditor"));
 		Assert.isTrue(SwingUtilities.isEventDispatchThread());
-		this.preferences = preferences;
 		this.customTheme = customTheme;
 		previewTheme = new CustomTheme();
 		previewTheme.setFromTheme(customTheme, true);

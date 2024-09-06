@@ -20,6 +20,7 @@ import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.calibrator.CalibratorFactory;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
@@ -173,6 +174,12 @@ public class IntegrationTestBuilder {
 		NinjabrainBotFrame frame = new NinjabrainBotFrame(styleManager, preferences, new FakeUpdateChecker(), dataState, buttonInputHandler, new InformationMessageList());
 		styleManager.init();
 		return frame;
+	}
+
+	public CalibratorFactory createCalibratorFactory() {
+		if (fakeCoordinateInputSource == null)
+			fakeCoordinateInputSource = new FakeCoordinateInputSource();
+		return new CalibratorFactory(environmentState.calculatorSettings(), fakeCoordinateInputSource, preferences);
 	}
 
 	public BoatIcon createBoatIcon() {

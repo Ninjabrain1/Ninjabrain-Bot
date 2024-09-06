@@ -6,8 +6,8 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.blind.BlindResult;
 import ninjabrainbot.model.datastate.calculator.ICalculatorResult;
-import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.DetachedDomainModel;
+import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.model.datastate.divine.DivineContext;
 import ninjabrainbot.model.datastate.divine.DivineResult;
@@ -63,7 +63,7 @@ public class PreviewDataState implements IDataState {
 		blindResult = new InferredComponent<>(domainModel);
 		divineResult = new InferredComponent<>(domainModel);
 
-		boatDataState = new BoatDataState(null);
+		boatDataState = new BoatDataState(domainModel);
 		allAdvancementsDataState = new PreviewAllAdvancementsDataState();
 	}
 

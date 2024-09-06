@@ -128,15 +128,13 @@ public class ListComponent<T extends Serializable> implements IListComponent<T> 
 
 	@Override
 	public Subscription subscribeInternal(Consumer<IReadOnlyList<T>> subscriber) {
-		if (domainModel != null)
-			Assert.isFalse(domainModel.isFullyInitialized(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IListComponent.subscribe().");
+		Assert.isTrue(domainModel.isInternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IListComponent.subscribe().");
 		return observableList.subscribe(subscriber);
 	}
 
 	@Override
 	public Subscription subscribe(Consumer<IReadOnlyList<T>> subscriber) {
-		if (domainModel != null)
-			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IListComponent.subscribeInternal().");
+		Assert.isTrue(domainModel.isExternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IListComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
 	}
 

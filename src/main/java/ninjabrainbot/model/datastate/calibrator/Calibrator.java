@@ -50,7 +50,7 @@ public class Calibrator implements IDisposable {
 	private double lastX;
 	private double lastZ;
 
-	private final IDivineContext divineContext = new DivineContext(null);
+	private final IDivineContext divineContext = new DivineContext(new DetachedDomainModel());
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 	private final ObservableProperty<Calibrator> whenModified = new ObservableProperty<>();

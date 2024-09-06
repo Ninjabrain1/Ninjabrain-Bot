@@ -23,7 +23,9 @@ public interface IDomainModel extends IWriteLock {
 
 	boolean isReset();
 
-	boolean isFullyInitialized();
+	boolean isExternalSubscriptionRegistrationAllowed();
+
+	boolean isInternalSubscriptionRegistrationAllowed();
 
 	ISubscribable<IDomainModel> whenModified();
 

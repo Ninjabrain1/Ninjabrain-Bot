@@ -73,15 +73,13 @@ public class DataComponent<T extends Serializable> implements IDataComponent<T> 
 
 	@Override
 	public Subscription subscribeInternal(Consumer<T> subscriber) {
-		if (domainModel != null)
-			Assert.isFalse(domainModel.isFullyInitialized(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IDataComponent.subscribe().");
+		Assert.isTrue(domainModel.isInternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IDataComponent.subscribe().");
 		return observableField.subscribe(subscriber);
 	}
 
 	@Override
 	public Subscription subscribe(Consumer<T> subscriber) {
-		if (domainModel != null)
-			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IDataComponent.subscribeInternal().");
+		Assert.isTrue(domainModel.isExternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IDataComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
 	}
 

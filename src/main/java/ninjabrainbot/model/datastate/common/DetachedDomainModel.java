@@ -53,8 +53,13 @@ public class DetachedDomainModel implements IDomainModel {
 	}
 
 	@Override
-	public boolean isFullyInitialized() {
-		return false;
+	public boolean isExternalSubscriptionRegistrationAllowed() {
+		return true;
+	}
+
+	@Override
+	public boolean isInternalSubscriptionRegistrationAllowed() {
+		return true;
 	}
 
 	@Override

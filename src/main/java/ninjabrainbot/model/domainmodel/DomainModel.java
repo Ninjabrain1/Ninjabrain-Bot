@@ -119,8 +119,13 @@ public class DomainModel implements IDomainModel, IDisposable {
 	}
 
 	@Override
-	public boolean isFullyInitialized() {
+	public boolean isExternalSubscriptionRegistrationAllowed() {
 		return isFullyInitialized;
+	}
+
+	@Override
+	public boolean isInternalSubscriptionRegistrationAllowed() {
+		return !isFullyInitialized;
 	}
 
 	@Override

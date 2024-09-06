@@ -43,14 +43,14 @@ public class InferredComponent<T> implements IInferredComponent<T> {
 	@Override
 	public Subscription subscribeInternal(Consumer<T> subscriber) {
 		if (domainModel != null)
-			Assert.isFalse(domainModel.isFullyInitialized(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IInferredComponent.subscribe().");
+			Assert.isTrue(domainModel.isInternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to internal events after domain model initialization has completed. External subscribers should use IInferredComponent.subscribe().");
 		return observableField.subscribe(subscriber);
 	}
 
 	@Override
 	public Subscription subscribe(Consumer<T> subscriber) {
 		if (domainModel != null)
-			Assert.isTrue(domainModel.isFullyInitialized(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IInferredComponent.subscribeInternal().");
+			Assert.isTrue(domainModel.isExternalSubscriptionRegistrationAllowed(), "Attempted to subscribe to external events before domain model initialization has completed. Internal subscribers should use IInferredComponent.subscribeInternal().");
 		return externalEvent.subscribe(subscriber);
 	}
 
