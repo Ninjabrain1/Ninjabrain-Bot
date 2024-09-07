@@ -16,6 +16,17 @@ public class SetPlayerPositionAction implements IAction {
 
 	@Override
 	public void execute() {
+		IPlayerPosition currentPlayerPosition = dataState.playerPosition().get();
+		if (currentPlayerPosition != null &&
+			newPlayerPosition != null &&
+			currentPlayerPosition.xInPlayerDimension() == newPlayerPosition.xInPlayerDimension() &&
+			currentPlayerPosition.zInPlayerDimension() == newPlayerPosition.zInPlayerDimension() &&
+			currentPlayerPosition.isInNether() == newPlayerPosition.isInNether() &&
+			currentPlayerPosition.isInOverworld() == newPlayerPosition.isInOverworld() &&
+			currentPlayerPosition.isInEnd() == newPlayerPosition.isInEnd() &&
+			currentPlayerPosition.horizontalAngle() == newPlayerPosition.horizontalAngle())
+			return;
+
 		dataState.playerPosition().set(newPlayerPosition);
 	}
 }

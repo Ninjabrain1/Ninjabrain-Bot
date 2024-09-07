@@ -16,6 +16,7 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.datastate.common.ILimitedPlayerPosition;
 import ninjabrainbot.model.datastate.common.IPlayerPositionInputSource;
+import ninjabrainbot.model.datastate.endereye.IEnderEyeThrow;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 
 /**
@@ -68,7 +69,11 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (playerPosition.lookingBelowHorizon())
 			return null;
 
-		return new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromDetailedPlayerPosition(playerPosition));
+		IEnderEyeThrow enderEyeThrowToAdd = enderEyeThrowFactory.createEnderEyeThrowFromDetailedPlayerPosition(playerPosition);
+		if (shouldSkipAddingThrow(enderEyeThrowToAdd))
+			return null;
+
+		return new AddEnderEyeThrowAction(dataState, enderEyeThrowToAdd);
 	}
 
 	private void onNewLimitedPlayerPositionInputted(ILimitedPlayerPosition playerPosition) {
@@ -88,12 +93,26 @@ public class PlayerPositionInputHandler implements IDisposable {
 		if (!playerPosition.isInOverworld())
 			return null;
 
-		IAction action = new AddEnderEyeThrowAction(dataState, enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition));
+		IEnderEyeThrow enderEyeThrowToAdd = enderEyeThrowFactory.createEnderEyeThrowFromLimitedPlayerPosition(playerPosition);
+		if (shouldSkipAddingThrow(enderEyeThrowToAdd))
+			return null;
+
+		IAction action = new AddEnderEyeThrowAction(dataState, enderEyeThrowToAdd);
 
 		if (playerPosition.correctionIncrements() != 0)
 			action = new JointAction(action, new ChangeLastAngleAction(dataState, preferences, playerPosition.correctionIncrements()));
 
 		return action;
+	}
+
+	private boolean shouldSkipAddingThrow(IEnderEyeThrow enderEyeThrow) {
+		if (dataState.getThrowList().size() == 0)
+			return false;
+
+		IEnderEyeThrow lastThrow = dataState.getThrowList().getLast();
+		return lastThrow.xInOverworld() == enderEyeThrow.xInOverworld() &&
+			   lastThrow.zInOverworld() == enderEyeThrow.zInOverworld() &&
+			   lastThrow.horizontalAngleWithoutCorrection() == enderEyeThrow.horizontalAngleWithoutCorrection();
 	}
 
 	@Override
