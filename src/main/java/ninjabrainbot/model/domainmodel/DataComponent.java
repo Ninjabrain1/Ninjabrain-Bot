@@ -93,9 +93,10 @@ public class DataComponent<T extends Serializable> implements IDataComponent<T> 
 		return get();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setFromDeserializedObject(T deserialized) {
-		set(deserialized);
+	public void setFromDeserializedObject(Serializable deserialized) {
+		set((T) deserialized);
 	}
 
 }

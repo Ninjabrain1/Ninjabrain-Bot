@@ -31,11 +31,11 @@ public class ListComponent<T extends Serializable> implements IListComponent<T> 
 	public ListComponent(String uniqueId, IDomainModel domainModel, int maxCapacity) {
 		Assert.isNotNull(domainModel, "Domain model cannot be null");
 		this.domainModel = domainModel;
+		this.uniqueId = uniqueId;
 		this.maxCapacity = maxCapacity;
 		observableList = new ObservableList<>();
 		externalEvent = domainModel.createExternalEventFor(observableList);
 		domainModel.registerFundamentalComponent(this);
-		this.uniqueId = uniqueId;
 	}
 
 	@Override
@@ -150,8 +150,9 @@ public class ListComponent<T extends Serializable> implements IListComponent<T> 
 		return arrayList;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setFromDeserializedObject(ArrayList<T> deserialized) {
-		set(new ArrayListImplementingReadOnlyList<>(deserialized));
+	public void setFromDeserializedObject(Serializable deserialized) {
+		set(new ArrayListImplementingReadOnlyList<>((Iterable<? extends T>) deserialized));
 	}
 }

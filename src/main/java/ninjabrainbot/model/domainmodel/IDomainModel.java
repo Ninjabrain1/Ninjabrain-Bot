@@ -1,5 +1,9 @@
 package ninjabrainbot.model.domainmodel;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import ninjabrainbot.event.ISubscribable;
 
 /**
@@ -28,5 +32,9 @@ public interface IDomainModel extends IWriteLock {
 	boolean isInternalSubscriptionRegistrationAllowed();
 
 	ISubscribable<IDomainModel> whenModified();
+
+	void serialize(ObjectOutput objectOutput) throws SerializationException;
+
+	void deserialize(ObjectInput objectInput) throws SerializationException;
 
 }

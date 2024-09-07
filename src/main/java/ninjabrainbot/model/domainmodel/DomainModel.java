@@ -1,14 +1,21 @@
 package ninjabrainbot.model.domainmodel;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import ninjabrainbot.Main;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.util.Assert;
+import ninjabrainbot.util.Logger;
 
 /**
  * Keeps track of all DataComponents, to manage write lock to them and monitors changes so that undo works.
@@ -41,6 +48,13 @@ public class DomainModel implements IDomainModel, IDisposable {
 	@Override
 	public void registerFundamentalComponent(IFundamentalComponent<?, ?> fundamentalComponent) {
 		Assert.isFalse(isFullyInitialized, "New IFundamentalComponents cannot be registered in the DomainModel after it has been fully initialized.");
+
+		if (fundamentalComponent.uniqueId() == null || fundamentalComponent.uniqueId().isEmpty())
+			throw new IllegalArgumentException("Id cannot be empty");
+
+		if (fundamentalComponents.stream().anyMatch(x -> x.uniqueId().equals(fundamentalComponent.uniqueId())))
+			throw new IllegalArgumentException("A component with id '" + fundamentalComponent.uniqueId() + "' has already been registered.");
+
 		fundamentalComponents.add(fundamentalComponent);
 		fundamentalComponent.subscribeInternal(__ -> isModifiedDuringCurrentWriteLock = true);
 	}
@@ -152,6 +166,61 @@ public class DomainModel implements IDomainModel, IDisposable {
 			throw new IllegalModificationException("DataComponents cannot be changed without a write lock, create and execute an Action instead of trying to modify the DataComponent directly.");
 		if (!lock.isWriteLockedByCurrentThread())
 			throw new IllegalModificationException("Modification was attempted by thread " + Thread.currentThread().getName() + ", while the write lock is held by another thread.");
+	}
+
+	@Override
+	public void serialize(ObjectOutput objectOutput) throws SerializationException {
+		Assert.isTrue(isFullyInitialized);
+		HashMap<String, Serializable> serializedFundamentalComponents = new HashMap<>();
+		for (IFundamentalComponent<?, ?> fundamentalComponent : fundamentalComponents) {
+			String uniqueId = fundamentalComponent.uniqueId();
+			Serializable serializable = fundamentalComponent.getAsSerializable();
+			serializedFundamentalComponents.put(uniqueId, serializable);
+		}
+		serializedFundamentalComponents.put("", Main.VERSION);
+
+		try {
+			objectOutput.writeObject(serializedFundamentalComponents);
+		} catch (IOException e) {
+			throw new SerializationException("IOException when deserializing domain model.", e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deserialize(ObjectInput objectInput) throws SerializationException {
+		HashMap<String, Serializable> deserializedFundamentalComponents = null;
+		try {
+			deserializedFundamentalComponents = (HashMap<String, Serializable>) objectInput.readObject();
+		} catch (ClassNotFoundException e) {
+			throw new SerializationException("Class not found when deserializing domain model.", e);
+		} catch (IOException e) {
+			throw new SerializationException("IOException when deserializing domain model.", e);
+		} catch (ClassCastException e) {
+			throw new SerializationException("ClassCastException when deserializing domain model.", e);
+		}
+
+		String deserializedVersion = (String) deserializedFundamentalComponents.getOrDefault("", "UNKNOWN");
+		if (!deserializedVersion.equals(Main.VERSION)) {
+			Logger.log("Domain model deserialization failed, saved data has version " + deserializedVersion + " but application has version " + Main.VERSION);
+			return;
+		}
+		deserializedFundamentalComponents.remove("");
+
+		if (deserializedFundamentalComponents.size() != fundamentalComponents.size())
+			throw new SerializationException("Expected there to be " + (fundamentalComponents.size()) + " deserialized objects, but got " + deserializedFundamentalComponents.size());
+
+		try{
+			acquireWriteLock();
+			for (IFundamentalComponent<?, ?> fundamentalComponent : fundamentalComponents) {
+				String uniqueId = fundamentalComponent.uniqueId();
+				if (!deserializedFundamentalComponents.containsKey(uniqueId))
+					throw new SerializationException("Key '" + uniqueId + "' is missing in list of deserialized fundamental components.");
+				fundamentalComponent.setFromDeserializedObject(deserializedFundamentalComponents.get(uniqueId));
+			}
+		} finally {
+			releaseWriteLock(true);
+		}
 	}
 
 	@Override

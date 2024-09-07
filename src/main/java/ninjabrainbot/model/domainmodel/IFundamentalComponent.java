@@ -28,6 +28,6 @@ public interface IFundamentalComponent<T, U extends Serializable> extends IDomai
 
 	U getAsSerializable();
 
-	void setFromDeserializedObject(U deserialized);
+	void setFromDeserializedObject(Serializable deserialized);
 
 }

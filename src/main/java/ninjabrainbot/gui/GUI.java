@@ -16,6 +16,7 @@ import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
 import ninjabrainbot.io.overlay.NinjabrainBotOverlayImageWriter;
 import ninjabrainbot.io.overlay.OBSOverlay;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.savestate.TempFileAccessor;
 import ninjabrainbot.io.updatechecker.GithubUpdateChecker;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
@@ -24,6 +25,7 @@ import ninjabrainbot.model.datastate.calibrator.CalibratorFactory;
 import ninjabrainbot.model.datastate.endereye.CoordinateInputSource;
 import ninjabrainbot.model.datastate.endereye.EnderEyeThrowFactory;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
+import ninjabrainbot.model.domainmodel.DomainModelImportExportService;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
 import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
@@ -59,6 +61,7 @@ public class GUI {
 	private IActionExecutor actionExecutor;
 	private IEnvironmentState environmentState;
 	private IDataState dataState;
+	private DomainModelImportExportService domainModelImportExportService;
 
 	private CoordinateInputSource coordinateInputSource;
 	private IButtonInputHandler buttonInputHandler;
@@ -101,6 +104,8 @@ public class GUI {
 		actionExecutor = modelState.actionExecutor;
 		environmentState = modelState.environmentState;
 		dataState = modelState.dataState;
+		domainModelImportExportService = new DomainModelImportExportService(domainModel, new TempFileAccessor("NinjabrainBot-save-state.txt"), preferences);
+		domainModelImportExportService.triggerDeserialization();
 		Profiler.stop();
 	}
 
@@ -181,6 +186,7 @@ public class GUI {
 			public void run() {
 				preferences.windowX.set(ninjabrainBotFrame.getX());
 				preferences.windowY.set(ninjabrainBotFrame.getY());
+				domainModelImportExportService.onShutdown();
 				disposeHandler.dispose();
 				obsOverlay.dispose();
 				autoResetTimer.dispose();

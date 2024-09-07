@@ -1,10 +1,14 @@
 package ninjabrainbot.model.datastate.common;
 
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.domainmodel.IFundamentalComponent;
 import ninjabrainbot.model.domainmodel.IInferredComponent;
+import ninjabrainbot.model.domainmodel.SerializationException;
 
 public class DetachedDomainModel implements IDomainModel {
 
@@ -70,5 +74,13 @@ public class DetachedDomainModel implements IDomainModel {
 	@Override
 	public Runnable applyWriteLock(Runnable runnable) {
 		return runnable;
+	}
+
+	@Override
+	public void serialize(ObjectOutput objectOutput) {
+	}
+
+	@Override
+	public void deserialize(ObjectInput objectInput) {
 	}
 }
