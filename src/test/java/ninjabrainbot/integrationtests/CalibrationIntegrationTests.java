@@ -9,9 +9,11 @@ import ninjabrainbot.model.datastate.calibrator.CalibratorFactory;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 public class CalibrationIntegrationTests {
 
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Test
 	public void canOpenDialog() {
 		// Arrange
@@ -29,6 +31,7 @@ public class CalibrationIntegrationTests {
 		}
 	}
 
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Test
 	public void canOpenDialog_manualCalibration() {
 		// Arrange

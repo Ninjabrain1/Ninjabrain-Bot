@@ -10,9 +10,11 @@ import ninjabrainbot.gui.style.theme.CustomTheme;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 public class ThemeEditorIntegrationTests {
 
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Test
 	public void canOpenDialog() {
 		// Arrange

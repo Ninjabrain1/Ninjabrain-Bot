@@ -210,7 +210,7 @@ public class DomainModel implements IDomainModel, IDisposable {
 		if (deserializedFundamentalComponents.size() != fundamentalComponents.size())
 			throw new SerializationException("Expected there to be " + (fundamentalComponents.size()) + " deserialized objects, but got " + deserializedFundamentalComponents.size());
 
-		try{
+		try {
 			acquireWriteLock();
 			for (IFundamentalComponent<?, ?> fundamentalComponent : fundamentalComponents) {
 				String uniqueId = fundamentalComponent.uniqueId();

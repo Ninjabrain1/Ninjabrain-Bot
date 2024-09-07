@@ -1,6 +1,5 @@
 package ninjabrainbot.model.domainmodel;
 
-import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 

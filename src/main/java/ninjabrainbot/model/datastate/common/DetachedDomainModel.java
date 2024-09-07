@@ -8,7 +8,6 @@ import ninjabrainbot.event.ObservableProperty;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.domainmodel.IFundamentalComponent;
 import ninjabrainbot.model.domainmodel.IInferredComponent;
-import ninjabrainbot.model.domainmodel.SerializationException;
 
 public class DetachedDomainModel implements IDomainModel {
 
