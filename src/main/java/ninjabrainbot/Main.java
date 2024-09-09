@@ -6,6 +6,7 @@ import java.util.Optional;
 import ninjabrainbot.gui.GUI;
 import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.splash.Splash;
+import ninjabrainbot.io.ErrorHandler;
 import ninjabrainbot.io.KeyboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.SavedPreferences;
@@ -19,6 +20,15 @@ public class Main {
 	public static final String VERSION = "1.4.3";
 
 	public static void main(String[] args) {
+		ErrorHandler errorHandler = new ErrorHandler();
+		try {
+			start();
+		} catch (Exception e) {
+			errorHandler.handleStartupException(e);
+		}
+	}
+
+	private static void start() {
 		boolean isSplashScreenDisabled = Optional.ofNullable(System.getenv("XDG_SESSION_TYPE")).isPresent(); // Splash screen does not work for linux (wayland) so we turn it off
 		Progress.init(new Splash(isSplashScreenDisabled));
 		Progress.setTask("Loading language", 0.02f);
@@ -46,5 +56,4 @@ public class Main {
 		Profiler.stop();
 		Profiler.print();
 	}
-
 }
