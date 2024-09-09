@@ -18,8 +18,4 @@ public interface IEnvironmentState {
 
 	IEnvironmentComponent<Boolean> allAdvancementsModeEnabled();
 
-	IEnvironmentComponent<Boolean> hasEnteredEnd();
-
-	void setHasEnteredEnd(boolean hasEnteredEnd);
-
 }

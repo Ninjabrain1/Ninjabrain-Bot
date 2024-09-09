@@ -18,19 +18,16 @@ import ninjabrainbot.model.domainmodel.IEnvironmentComponent;
  */
 public class EnvironmentState implements IEnvironmentState, IDisposable {
 
-	private final IDomainModel domainModel;
 	private final NinjabrainBotPreferences preferences;
 
 	private final IEnvironmentComponent<ICalculator> calculator;
 	private final IEnvironmentComponent<CalculatorSettings> calculatorSettings;
 	private final IEnvironmentComponent<StandardDeviationSettings> standardDeviationSettings;
 	private final IEnvironmentComponent<Boolean> allAdvancementsModeEnabled;
-	private final EnvironmentComponent<Boolean> hasEnteredEnd;
 
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	public EnvironmentState(IDomainModel domainModel, NinjabrainBotPreferences preferences) {
-		this.domainModel = domainModel;
 		this.preferences = preferences;
 
 		IObservable<CalculatorSettings> calculatorSettings = disposeHandler.add(Observable
@@ -52,8 +49,6 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 				.inferFrom(preferences.allAdvancements::get)
 				.dependsOn(preferences.allAdvancements));
 		this.allAdvancementsModeEnabled = EnvironmentComponent.of(domainModel, allAdvancementsModeEnabled, disposeHandler);
-
-		hasEnteredEnd = new EnvironmentComponent<>(domainModel, false);
 	}
 
 	@Override
@@ -74,21 +69,6 @@ public class EnvironmentState implements IEnvironmentState, IDisposable {
 	@Override
 	public IEnvironmentComponent<Boolean> allAdvancementsModeEnabled() {
 		return allAdvancementsModeEnabled;
-	}
-
-	@Override
-	public IEnvironmentComponent<Boolean> hasEnteredEnd() {
-		return hasEnteredEnd;
-	}
-
-	@Override
-	public void setHasEnteredEnd(boolean hasEnteredEnd) {
-		domainModel.acquireWriteLock();
-		try {
-			this.hasEnteredEnd.set(hasEnteredEnd);
-		} finally {
-			domainModel.releaseWriteLock();
-		}
 	}
 
 	private ICalculator createCalculator() {

@@ -58,7 +58,7 @@ public class AllAdvancementsIntegrationTests {
 
 		testBuilder.resetCalculator();
 		TestUtils.awaitSwingEvents();
-		Assertions.assertTrue(mainTextArea.isAllAdvancementsPanelVisible());
+		Assertions.assertFalse(mainTextArea.isAllAdvancementsPanelVisible());
 		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Stronghold).isEmpty());
 		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Spawn).isEmpty());
 		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Outpost).isEmpty());

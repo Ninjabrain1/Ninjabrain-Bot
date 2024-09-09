@@ -8,6 +8,8 @@ public interface IAllAdvancementsDataState {
 
 	IDomainModelComponent<Boolean> allAdvancementsModeEnabled();
 
+	IDataComponent<Boolean> hasEnteredEnd();
+
 	IDataComponent<IAllAdvancementsPosition> spawnPosition();
 
 	IDataComponent<IAllAdvancementsPosition> outpostPosition();

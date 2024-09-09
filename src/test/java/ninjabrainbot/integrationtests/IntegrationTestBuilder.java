@@ -152,7 +152,7 @@ public class IntegrationTestBuilder {
 
 	public void setActiveMinecraftWorld(IMinecraftWorldFile minecraftWorld) {
 		if (activeInstanceProvider == null) activeInstanceProvider = new MockedInstanceProvider();
-		if (activeInstanceInputHandler == null) activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
+		if (activeInstanceInputHandler == null) activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences);
 		activeInstanceProvider.activeMinecraftWorld().set(minecraftWorld);
 	}
 

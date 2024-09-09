@@ -3,7 +3,7 @@ package ninjabrainbot.model.datastate.alladvancements;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.event.IObservable;
-import ninjabrainbot.model.datastate.common.IOverworldPosition;
+import ninjabrainbot.event.Subscription;
 import ninjabrainbot.model.datastate.common.IPlayerPosition;
 import ninjabrainbot.model.datastate.common.StructureInformation;
 import ninjabrainbot.model.datastate.stronghold.ChunkPrediction;
@@ -19,6 +19,7 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 	private final IObservable<IPlayerPosition> playerPosition;
 	private final IEnvironmentState environmentState;
 
+	private final DataComponent<Boolean> hasEnteredEnd;
 	private final DataComponent<IAllAdvancementsPosition> spawnPosition;
 	private final DataComponent<IAllAdvancementsPosition> outpostPosition;
 	private final DataComponent<IAllAdvancementsPosition> monumentPosition;
@@ -43,6 +44,7 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		this.playerPosition = playerPosition;
 		this.environmentState = environmentState;
 
+		hasEnteredEnd = new DataComponent<>("aa_toggle", domainModel, false);
 		spawnPosition = new DataComponent<>("aa_spawn", domainModel);
 		outpostPosition = new DataComponent<>("aa_outpost", domainModel);
 		monumentPosition = new DataComponent<>("aa_monument", domainModel);
@@ -62,30 +64,39 @@ public class AllAdvancementsDataState implements IAllAdvancementsDataState, IDis
 		generalLocationInformation = new InferredComponent<>(domainModel);
 
 		disposeHandler.add(environmentState.allAdvancementsModeEnabled().subscribeInternal(this::updateAllAdvancementsMode));
-		disposeHandler.add(environmentState.hasEnteredEnd().subscribeInternal(this::updateAllAdvancementsMode));
+		disposeHandler.add(hasEnteredEnd.subscribeInternal(this::updateAllAdvancementsMode));
 		disposeHandler.add(currentStrongholdPrediction.subscribeInternal(strongholdInformation::set));
-		disposeHandler.add(spawnPosition.subscribeInternal(position -> updateStructureInformationComponent(spawnInformation, position)));
-		disposeHandler.add(outpostPosition.subscribeInternal(position -> updateStructureInformationComponent(outpostInformation, position)));
-		disposeHandler.add(monumentPosition.subscribeInternal(position -> updateStructureInformationComponent(monumentInformation, position)));
-		disposeHandler.add(deepDarkPosition.subscribeInternal(position -> updateStructureInformationComponent(deepDarkInformation, position)));
-		disposeHandler.add(cityQueryPosition.subscribeInternal(position -> updateStructureInformationComponent(cityQueryInformation, position)));
-		disposeHandler.add(shulkerTransportPosition.subscribeInternal(position -> updateStructureInformationComponent(shulkerTransportInformation, position)));
-		disposeHandler.add(generalLocationPosition.subscribeInternal(position -> updateStructureInformationComponent(generalLocationInformation, position)));
+
+		disposeHandler.add(createStructureInformationSubscription(spawnPosition, spawnInformation));
+		disposeHandler.add(createStructureInformationSubscription(outpostPosition, outpostInformation));
+		disposeHandler.add(createStructureInformationSubscription(monumentPosition, monumentInformation));
+		disposeHandler.add(createStructureInformationSubscription(deepDarkPosition, deepDarkInformation));
+		disposeHandler.add(createStructureInformationSubscription(cityQueryPosition, cityQueryInformation));
+		disposeHandler.add(createStructureInformationSubscription(shulkerTransportPosition, shulkerTransportInformation));
+		disposeHandler.add(createStructureInformationSubscription(generalLocationPosition, generalLocationInformation));
+	}
+
+	private Subscription createStructureInformationSubscription(IDataComponent<IAllAdvancementsPosition> allAdvancementsPosition, InferredComponent<StructureInformation> structureInformation) {
+		return allAdvancementsPosition.subscribeInternal(overworldPosition ->
+				structureInformation.set(overworldPosition == null
+						? null
+						: new StructureInformation(overworldPosition, playerPosition)
+				)
+		);
 	}
 
 	private void updateAllAdvancementsMode() {
-		allAdvancementsModeEnabled.set(environmentState.allAdvancementsModeEnabled().get() && environmentState.hasEnteredEnd().get());
-	}
-
-	private void updateStructureInformationComponent(InferredComponent<StructureInformation> structureInformationComponent, IOverworldPosition overworldPosition) {
-		structureInformationComponent.set(overworldPosition == null
-				? null
-				: new StructureInformation(overworldPosition, playerPosition));
+		allAdvancementsModeEnabled.set(environmentState.allAdvancementsModeEnabled().get() && hasEnteredEnd.get());
 	}
 
 	@Override
 	public IDomainModelComponent<Boolean> allAdvancementsModeEnabled() {
 		return allAdvancementsModeEnabled;
+	}
+
+	@Override
+	public IDataComponent<Boolean> hasEnteredEnd() {
+		return hasEnteredEnd;
 	}
 
 	@Override

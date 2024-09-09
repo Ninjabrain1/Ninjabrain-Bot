@@ -115,7 +115,7 @@ public class GUI {
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
 		disposeHandler.add(new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences));
-		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences));
+		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
 	}

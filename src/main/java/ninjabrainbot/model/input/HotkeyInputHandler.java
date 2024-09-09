@@ -3,7 +3,9 @@ package ninjabrainbot.model.input;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.model.actions.IActionExecutor;
+import ninjabrainbot.model.actions.alladvancements.SetHasEnteredEndAction;
 import ninjabrainbot.model.actions.boat.ResetBoatStateAction;
 import ninjabrainbot.model.actions.boat.ToggleEnteringBoatAction;
 import ninjabrainbot.model.actions.boat.ToggleMod360IndicatorAction;
@@ -12,6 +14,7 @@ import ninjabrainbot.model.actions.common.ToggleLockedAction;
 import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
 import ninjabrainbot.model.actions.endereye.ToggleAltStdOnLastThrowAction;
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
@@ -40,6 +43,7 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyMod360.whenTriggered().subscribe(this::toggleMod360IndicatorIfNotLocked));
 		disposeHandler.add(preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState))));
 		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(this::resetBoatState));
+		disposeHandler.add(preferences.hotkeyToggleAllAdvancementsMode.whenTriggered().subscribe(this::onToggleAllAdvancementsModeHotkeyTriggered));
 	}
 
 	private void resetIfNotLocked() {
@@ -85,6 +89,13 @@ public class HotkeyInputHandler implements IDisposable {
 	private void resetBoatState() {
 		if (!preferences.usePreciseAngle.get())
 			actionExecutor.executeImmediately(new ResetBoatStateAction(dataState));
+	}
+
+	private void onToggleAllAdvancementsModeHotkeyTriggered() {
+		if (preferences.allAdvancementsToggleType.get() == AllAdvancementsToggleType.Hotkey) {
+			IAllAdvancementsDataState allAdvancementsDataState = dataState.allAdvancementsDataState();
+			actionExecutor.executeImmediately(new SetHasEnteredEndAction(allAdvancementsDataState, !allAdvancementsDataState.hasEnteredEnd().get()));
+		}
 	}
 
 	@Override

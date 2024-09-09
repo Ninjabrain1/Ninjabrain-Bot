@@ -20,6 +20,11 @@ public class PreviewAllAdvancementsDataState implements IAllAdvancementsDataStat
 	}
 
 	@Override
+	public IDataComponent<Boolean> hasEnteredEnd() {
+		return new DataComponent<>("", domainModel);
+	}
+
+	@Override
 	public IDataComponent<IAllAdvancementsPosition> spawnPosition() {
 		return new DataComponent<>("", domainModel);
 	}

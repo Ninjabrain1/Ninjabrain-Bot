@@ -46,7 +46,7 @@ class ActiveInstanceInputHandlerTest {
 		MinecraftInstance minecraftInstance = new MinecraftInstance("instance 1");
 		activeInstanceProvider.currentWorldFile.set(new MinecraftWorldFile(minecraftInstance, "world 1"));
 
-		ActiveInstanceInputHandler sut = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
+		ActiveInstanceInputHandler sut = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences);
 
 		// Act
 		activeInstanceProvider.currentWorldFile.set(new MinecraftWorldFile(minecraftInstance, "world 2"));
@@ -74,7 +74,7 @@ class ActiveInstanceInputHandlerTest {
 		MinecraftInstance minecraftInstance = new MinecraftInstance("instance 1");
 		activeInstanceProvider.currentWorldFile.set(null);
 
-		ActiveInstanceInputHandler sut = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, environmentState, actionExecutor, preferences);
+		ActiveInstanceInputHandler sut = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences);
 
 		// Act
 		activeInstanceProvider.currentWorldFile.set(new MinecraftWorldFile(minecraftInstance, "world 1"));

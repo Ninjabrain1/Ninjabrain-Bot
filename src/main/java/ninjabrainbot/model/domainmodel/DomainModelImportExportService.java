@@ -49,6 +49,16 @@ public class DomainModelImportExportService {
 			}
 			if (!domainModel.isReset())
 				throw new RuntimeException("Domain model is not in the default state after failed deserialization, crashing the application to avoid an inconsistent data state.");
+		} catch (Exception e) {
+			Logger.log("Unhandled exception during domain model deserialization: " + e);
+			try {
+				objectInputStream.close();
+				fileAccessor.deleteFile();
+			} catch (IOException ex) {
+				Logger.log("Failed to close ObjectInputStream after failed deserialization: " + ex);
+				fileAccessor.deleteFile();
+			}
+			throw e;
 		}
 	}
 
