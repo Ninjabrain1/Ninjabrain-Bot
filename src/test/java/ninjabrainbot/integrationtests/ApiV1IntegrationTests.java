@@ -4,37 +4,327 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpPrincipal;
+import ninjabrainbot.Main;
 import ninjabrainbot.io.api.ApiV1HttpHandler;
+import ninjabrainbot.model.datastate.common.ResultType;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ApiV1IntegrationTests {
 
 	@Test
 	void stronghold() throws IOException {
+		// Arrange
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/stronghold");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withProSettings();
+		builder.preferences.sigmaAlt.set(0.005f);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 1213.26 71.00 -318.63 -45.53 -31.39");
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 1212.65 69.00 -318.01 -45.53 -31.52");
+		builder.inputStandardDeviationToggle();
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+		JSONObject root = new JSONObject(exchange.getResponseBodyAsString());
+
+		JSONArray eyeThrows = root.getJSONArray("eyeThrows");
+		Assertions.assertEquals(2, eyeThrows.length());
+
+		JSONObject eyeThrow1 = eyeThrows.getJSONObject(0);
+		Assertions.assertEquals(1213.26, eyeThrow1.getDouble("xInOverworld"));
+		Assertions.assertEquals(-45.529992377906794, eyeThrow1.getDouble("angleWithoutCorrection"));
+		Assertions.assertEquals(-318.63, eyeThrow1.getDouble("zInOverworld"));
+		Assertions.assertEquals(-45.529992377906794, eyeThrow1.getDouble("angle"));
+		Assertions.assertEquals(0, eyeThrow1.getDouble("correction"));
+		Assertions.assertEquals(-0.01593748756458524, eyeThrow1.getDouble("error"));
+		Assertions.assertEquals("NORMAL", eyeThrow1.getString("type"));
+
+		JSONObject eyeThrow2 = eyeThrows.getJSONObject(1);
+		Assertions.assertEquals(1212.65, eyeThrow2.getDouble("xInOverworld"));
+		Assertions.assertEquals(-45.529992377906794, eyeThrow2.getDouble("angleWithoutCorrection"));
+		Assertions.assertEquals(-318.01, eyeThrow2.getDouble("zInOverworld"));
+		Assertions.assertEquals(-45.529992377906794, eyeThrow2.getDouble("angle"));
+		Assertions.assertEquals(0, eyeThrow2.getDouble("correction"));
+		Assertions.assertEquals(0.015504548661041895, eyeThrow2.getDouble("error"));
+		Assertions.assertEquals("NORMAL_WITH_ALT_STD", eyeThrow2.getString("type"));
+
+		Assertions.assertEquals("TRIANGULATION", root.getString("resultType"));
+
+		JSONObject playerPosition = root.getJSONObject("playerPosition");
+		Assertions.assertEquals(1212.65, playerPosition.getDouble("xInOverworld"));
+		Assertions.assertTrue(playerPosition.getBoolean("isInOverworld"));
+		Assertions.assertFalse(playerPosition.getBoolean("isInNether"));
+		Assertions.assertEquals(-45.53, playerPosition.getDouble("horizontalAngle"));
+		Assertions.assertEquals(-318.01, playerPosition.getDouble("zInOverworld"));
+
+		JSONArray predictions = root.getJSONArray("predictions");
+		Assertions.assertEquals(5, predictions.length());
+
+		JSONObject prediction = predictions.getJSONObject(0);
+		Assertions.assertEquals(1579.2960908582024, prediction.getDouble("overworldDistance"));
+		Assertions.assertEquals(0.828727319460384, prediction.getDouble("certainty"));
+		Assertions.assertEquals(146, prediction.getInt("chunkX"));
+		Assertions.assertEquals(49, prediction.getInt("chunkZ"));
+	}
+
+	@Test
+	void allAdvancements() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/all-advancements");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withAllAdvancementsSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 1477.68 70.00 -211.29 -103.76 -31.31");
+		builder.enterNewWorld();
+		builder.enterEnd();
+		builder.setClipboard("/execute in minecraft:overworld run tp @s -214.50 71.00 185.50 0.00 0.00");
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 3357.69 55.29 3693.87 -48.99 50.06");
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+//		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{" +
+				 "   \"spawnPosition\":{" +
+				 "      \"overworldDistance\":5007," +
+				 "      \"xInOverworld\":-215," +
+				 "      \"zInOverworld\":185," +
+				 "      \"travelAngle\":137.57282532371786" +
+				 "   }," +
+				 "   \"monumentPosition\":{" +
+				 "      \"overworldDistance\":1," +
+				 "      \"xInOverworld\":3357," +
+				 "      \"zInOverworld\":3693," +
+				 "      \"travelAngle\":179.88264305940854" +
+				 "   }," +
+				 "   \"strongholdPosition\":{" +
+				 "      \"overworldDistance\":4247," +
+				 "      \"xInOverworld\":2212," +
+				 "      \"zInOverworld\":-396," +
+				 "      \"travelAngle\":142.2910279309858" +
+				 "   }," +
+				 "   \"outpostPosition\":{" +
+				 "      " +
+				 "   }," +
+				 "   \"isAllAdvancementsModeEnabled\":true" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void blind() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/blind");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
 		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
 
+		builder.setClipboard("/execute in minecraft:the_nether run tp @s -217.82 85.00 6.88 -133.68 81.14");
+
+		// Act
 		apiV1HttpHandler.handle(exchange);
 
-		System.out.println(exchange.getResponseBodyAsString());
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+//		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{" +
+				 "    \"isBlindModeEnabled\": true," +
+				 "    \"hasDivine\": false," +
+				 "    \"blindResult\": {" +
+				 "        \"evaluation\": \"HIGHROLL_GOOD\"," +
+				 "        \"xInNether\": -217.82," +
+				 "        \"improveDistance\": 8.071372233935255," +
+				 "        \"zInNether\": 6.88," +
+				 "        \"averageDistance\": 1086.9952915836398," +
+				 "        \"improveDirection\": 1.5392211114431098," +
+				 "        \"highrollProbability\": 0.10072320582001268," +
+				 "        \"highrollThreshold\": 400" +
+				 "    }" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void divine() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/divine");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		builder.setClipboard("/setblock 5 73 0 minecraft:bone_block[axis=y]");
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+//		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{" +
+				 "    \"isDivineModeEnabled\": true," +
+				 "    \"divineResult\": {" +
+				 "        \"formattedSafeCoords\": \"(-142, 213), (-113, -230), (255, 17)\"," +
+				 "        \"formattedHighrollCoords\": \"(-106, 158), (-84, -170), (190, 12)\"," +
+				 "        \"fossilXCoordinate\": 5" +
+				 "    }" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString().replaceAll("\\s+", ""));
+	}
+
+	@Test
+	void boat() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		builder.triggerHotkey(builder.preferences.hotkeyBoat);
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -77.34375 32.82");
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+//		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{" +
+				 "    \"boatAngle\": -77.34375," +
+				 "    \"boatState\": \"VALID\"" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void version() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/version");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+//		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{" +
+				 "    \"version\": \"" + Main.VERSION + "\"" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void ping() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/ping");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+//		System.out.println(exchange.getResponseBodyAsString());
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+		String expectedResult = "Ninjabrain Bot HTTP server is active!";
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void subscribe_pushesNewDataWhenModified() throws IOException, InterruptedException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		// Act 1
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert 1
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+		Assertions.assertEquals("data: {\"boatState\":\"NONE\"}\n\n", exchange.getResponseBodyAsString());
+
+		// Act 2
+		builder.triggerHotkey(builder.preferences.hotkeyBoat);
+		executorService.shutdown();
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+		// Assert 2
+		String expectedResult = "data: {\"boatState\":\"NONE\"}\n" +
+								"\n" +
+								"data: {\"boatState\":\"MEASURING\"}\n\n";
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void subscribe_doesNotPushNewDataWhenIrrelevantDataIsModified() throws IOException, InterruptedException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+
+		// Act 1
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert 1
+		Assertions.assertEquals(exchange.getResponseCode(), HttpURLConnection.HTTP_OK);
+		Assertions.assertEquals("data: {\"boatState\":\"NONE\"}\n\n", exchange.getResponseBodyAsString());
+		Assertions.assertEquals(ResultType.NONE, builder.dataState.resultType().get());
+
+		// Act 2
+		builder.setClipboard("/execute in minecraft:overworld run tp @s -14.76 65.00 46.01 193.84 -31.23");
+		executorService.shutdown();
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+		// Assert 2
+		Assertions.assertEquals("data: {\"boatState\":\"NONE\"}\n\n", exchange.getResponseBodyAsString());
+		Assertions.assertEquals(ResultType.TRIANGULATION, builder.dataState.resultType().get());
 	}
 
 	private static class TestHttpExchange extends HttpExchange {
 
 		private final String endpoint;
 		public OutputStream outputStream = new ByteArrayOutputStream();
+		private int responseCode = 0;
 
 		public TestHttpExchange(String endpoint) {
 			this.endpoint = endpoint;
@@ -51,7 +341,7 @@ public class ApiV1IntegrationTests {
 
 		@Override
 		public Headers getResponseHeaders() {
-			return null;
+			return new Headers();
 		}
 
 		@Override
@@ -90,7 +380,7 @@ public class ApiV1IntegrationTests {
 
 		@Override
 		public void sendResponseHeaders(int rCode, long responseLength) throws IOException {
-
+			responseCode = rCode;
 		}
 
 		@Override
@@ -100,7 +390,7 @@ public class ApiV1IntegrationTests {
 
 		@Override
 		public int getResponseCode() {
-			return 0;
+			return responseCode;
 		}
 
 		@Override

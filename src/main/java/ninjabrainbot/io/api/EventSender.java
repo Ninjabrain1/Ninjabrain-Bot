@@ -72,7 +72,7 @@ public class EventSender implements IDisposable {
 			outputStream.write(data);
 			outputStream.write("\n\n".getBytes());
 			outputStream.flush();
-			Logger.log("Sent query result " + query + " to subscriber " + outputStream);
+			Logger.log("Sent query result " + query + " to subscriber " + outputStream.hashCode());
 		} catch (IOException exception) {
 			removeSubscriber(query, outputStream);
 		}
