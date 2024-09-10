@@ -128,6 +128,11 @@ public class DomainModel implements IDomainModel, IDisposable {
 	}
 
 	@Override
+	public void deleteHistory() {
+		domainModelHistory.deleteHistory();
+	}
+
+	@Override
 	public boolean isReset() {
 		return fundamentalComponents.stream().allMatch(IFundamentalComponent::isReset);
 	}

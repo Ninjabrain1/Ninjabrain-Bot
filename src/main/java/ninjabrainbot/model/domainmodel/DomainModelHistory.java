@@ -51,11 +51,13 @@ public class DomainModelHistory {
 	}
 
 	public DomainModelSnapshot moveToPreviousSnapshotAndGet() {
+		Assert.isTrue(isInitialized, "The DomainModelHistory has not been initialized.");
 		currentIndex--;
 		return snapshots.get(currentIndex);
 	}
 
 	public DomainModelSnapshot moveToNextSnapshotAndGet() {
+		Assert.isTrue(isInitialized, "The DomainModelHistory has not been initialized.");
 		currentIndex++;
 		return snapshots.get(currentIndex);
 	}
@@ -68,4 +70,10 @@ public class DomainModelHistory {
 		return currentIndex < snapshots.size() - 1;
 	}
 
+	public void deleteHistory() {
+		DomainModelSnapshot currentSnapshot = snapshots.get(currentIndex);
+		snapshots.removeIf(snapshot -> snapshot != currentSnapshot);
+		currentIndex = 0;
+		Assert.isEqual(snapshots.size(), 1, "The number of snapshots shall be 1 after deleting domain model history.");
+	}
 }

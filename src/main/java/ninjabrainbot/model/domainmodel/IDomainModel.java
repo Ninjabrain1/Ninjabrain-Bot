@@ -24,6 +24,8 @@ public interface IDomainModel extends IWriteLock {
 
 	void redoUnderWriteLock();
 
+	void deleteHistory();
+
 	boolean isReset();
 
 	boolean isExternalSubscriptionRegistrationAllowed();

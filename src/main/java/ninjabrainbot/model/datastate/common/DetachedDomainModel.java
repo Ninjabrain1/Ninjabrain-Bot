@@ -51,6 +51,10 @@ public class DetachedDomainModel implements IDomainModel {
 	}
 
 	@Override
+	public void deleteHistory() {
+	}
+
+	@Override
 	public boolean isReset() {
 		return true;
 	}
