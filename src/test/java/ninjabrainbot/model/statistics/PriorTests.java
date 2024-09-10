@@ -30,7 +30,7 @@ class PriorTests {
 
 	@ParameterizedTest
 	@ValueSource(ints = { 0, 1 })
-	void probabilitySumsToNumberOfStringholds(int ringNumber) {
+	void probabilitySumsToNumberOfStrongholds(int ringNumber) {
 		Ring ring = Ring.get(ringNumber);
 		IPrior prior = new Prior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);
 
@@ -53,7 +53,7 @@ class PriorTests {
 
 	@ParameterizedTest
 	@ValueSource(ints = { 0, 2, 6, 13, 15 })
-	void probabilitySumsToNumberOfStringholds_withFossilDivine(int fossil) {
+	void probabilitySumsToNumberOfStrongholds_withFossilDivine(int fossil) {
 		Ring ring = Ring.get(0);
 		divineContext.fossil.set(new Fossil(fossil));
 		IPrior prior = new Prior(0, 0, (int) Math.ceil(ring.outerRadiusPostSnapping), divineContext);

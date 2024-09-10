@@ -11,7 +11,6 @@ import ninjabrainbot.model.actions.alladvancements.SetHasEnteredEndAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
-import ninjabrainbot.model.environmentstate.IEnvironmentState;
 
 /**
  * Listens to active instance changes and decides if/how the changes should affect the data state.
@@ -41,9 +40,33 @@ public class ActiveInstanceInputHandler implements IDisposable {
 	}
 
 	private void onActiveMinecraftWorldChanged(IMinecraftWorldFile newWorldFile) {
-		if (!dataState.locked().get() && !domainModel.isReset() && preferences.autoResetWhenChangingInstance.get() && lastActiveMinecraftWorldFile != null)
+		if (shouldReset(newWorldFile))
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
 		lastActiveMinecraftWorldFile = newWorldFile;
+	}
+
+	private boolean shouldReset(IMinecraftWorldFile newWorldFile) {
+		if (dataState.locked().get())
+			return false;
+
+		if (domainModel.isReset())
+			return false;
+
+		if (!preferences.autoResetWhenChangingInstance.get())
+			return false;
+
+		if (lastActiveMinecraftWorldFile == null)
+			return false;
+
+		// world name is null on newly opened instances (which has not entered a world yet), do not reset when switching away from these
+		if (lastActiveMinecraftWorldFile.name() == null)
+			return false;
+
+		// Auto reset should be disabled when AA is enabled since alt-tabbing is frequent and the user can accidentally reset.
+		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
+			return false;
+
+		return true;
 	}
 
 	private void updateHasEnteredEndState() {
