@@ -58,10 +58,6 @@ public class ActiveInstanceInputHandler implements IDisposable {
 		if (lastActiveMinecraftWorldFile == null)
 			return false;
 
-		// world name is null on newly opened instances (which has not entered a world yet), do not reset when switching away from these
-		if (lastActiveMinecraftWorldFile.name() == null)
-			return false;
-
 		// Auto reset should be disabled when AA is enabled since alt-tabbing is frequent and the user can accidentally reset.
 		if (dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get())
 			return false;
