@@ -10,6 +10,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.input.IButtonInputHandler;
 
@@ -31,14 +32,14 @@ public class AllAdvancementsPanel extends ThemedPanel {
 		super(styleManager);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(new AllAdvancementsHeader(styleManager));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.strongholdInformation(), strongholdIcon, false, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.spawnInformation(), shulkerIcon, true, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.outpostInformation(), outpostIcon, true, true, true));
-		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.monumentInformation(), monumentIcon, true, true, true));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.deepDarkInformation(), deepDarkIcon, true, true, true));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.shulkerTransportInformation(), shulkerTransportIcon, true, true, false));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.cityQueryInformation(), cityQueryIcon, true, true, false));
-		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.generalLocationInformation(), generalLocationIcon, true, false, false));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.Stronghold), strongholdIcon, false, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.Spawn), shulkerIcon, true, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.Outpost), outpostIcon, true, true, true));
+		add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.Monument), monumentIcon, true, true, true));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.DeepDark), deepDarkIcon, true, true, true));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.ShulkerTransport), shulkerTransportIcon, true, true, false));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.CityQuery), cityQueryIcon, true, true, false));
+		oneDotTwentyPlusPanels.add(new StructurePanel(styleManager, buttonInputHandler, allAdvancementsDataState.getStructureInformation(AllAdvancementsStructureType.GeneralLocation), generalLocationIcon, true, false, false));
 		for (StructurePanel panel : oneDotTwentyPlusPanels) {
 			add(panel);
 		}

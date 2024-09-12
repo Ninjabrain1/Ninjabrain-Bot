@@ -1,6 +1,7 @@
 package ninjabrainbot.io.api.queries;
 
 import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.common.StructureInformation;
 import org.json.JSONObject;
 
@@ -19,10 +20,10 @@ public class AllAdvancementsQuery implements IQuery {
 	public String get(IDataState dataState) {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("isAllAdvancementsModeEnabled", dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get());
-		rootObject.put("strongholdPosition", convertPosition(dataState.allAdvancementsDataState().strongholdInformation().get()));
-		rootObject.put("spawnPosition", convertPosition(dataState.allAdvancementsDataState().spawnInformation().get()));
-		rootObject.put("outpostPosition", convertPosition(dataState.allAdvancementsDataState().outpostInformation().get()));
-		rootObject.put("monumentPosition", convertPosition(dataState.allAdvancementsDataState().monumentInformation().get()));
+		for (AllAdvancementsStructureType allAdvancementsStructureType : AllAdvancementsStructureType.values()){
+			String key = mapAllAdvancementsStructureTypeName(allAdvancementsStructureType);
+			rootObject.put(key, convertPosition(dataState.allAdvancementsDataState().getStructureInformation(allAdvancementsStructureType).get()));
+		}
 		return rootObject.toString(isPretty ? 4 : 0);
 	}
 
@@ -41,6 +42,28 @@ public class AllAdvancementsQuery implements IQuery {
 		structurePositionObject.put("overworldDistance", structureInformation.getOverworldDistance());
 		structurePositionObject.put("travelAngle", structureInformation.getTravelAngle());
 		return structurePositionObject;
+	}
+
+	private String mapAllAdvancementsStructureTypeName(AllAdvancementsStructureType allAdvancementsStructureType){
+		switch (allAdvancementsStructureType){
+			case Spawn:
+				return "spawn";
+			case Outpost:
+				return "outpost";
+			case Monument:
+				return "monument";
+			case Stronghold:
+				return "stronghold";
+			case DeepDark:
+				return "deepDark";
+			case CityQuery:
+				return "cityQuery";
+			case ShulkerTransport:
+				return "shulkerTransport";
+			case GeneralLocation:
+				return "generalLocation";
+		}
+		throw new IllegalArgumentException("Unknown all advancements structure type: " + allAdvancementsStructureType);
 	}
 
 }

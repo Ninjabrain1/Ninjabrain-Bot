@@ -2,6 +2,7 @@ package ninjabrainbot.model.actions.alladvancements;
 
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsPosition;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.endereye.F3IData;
 
@@ -17,6 +18,6 @@ public class SetAllAdvancementsGeneralLocationAction implements IAction {
 
 	@Override
 	public void execute() {
-		allAdvancementsDataState.generalLocationPosition().set(allAdvancementsPosition);
+		allAdvancementsDataState.getAllAdvancementsPosition(AllAdvancementsStructureType.GeneralLocation).set(allAdvancementsPosition);
 	}
 }

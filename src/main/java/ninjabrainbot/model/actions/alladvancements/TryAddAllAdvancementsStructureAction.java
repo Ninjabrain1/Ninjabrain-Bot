@@ -25,12 +25,12 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 	@Override
 	public void execute() {
 		AllAdvancementsStructureType structureType = getAllAdvancementStructureTypeFromPlayerPosition(playerPosition);
-		if (structureType == AllAdvancementsStructureType.Unknown)
+		if (structureType == null)
 			return;
 
 		IAllAdvancementsPosition structurePosition = getStructurePosition(structureType);
 
-		IDataComponent<IAllAdvancementsPosition> dataComponent = getDataComponentFromStructureType(structureType);
+		IDataComponent<IAllAdvancementsPosition> dataComponent = allAdvancementsDataState.getAllAdvancementsPosition(structureType);
 		// Cities can be queried multiple times, so overwrite the position.
 		if (structureType != AllAdvancementsStructureType.CityQuery && dataComponent.get() != null)
 			return;
@@ -40,10 +40,10 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 
 	private AllAdvancementsStructureType getAllAdvancementStructureTypeFromPlayerPosition(IDetailedPlayerPosition t) {
 		if (t.isInNether())
-			return AllAdvancementsStructureType.Unknown;
+			return null;
 
 		if (t.isInEnd())
-			return preferences.oneDotTwentyPlusAA.get() ? AllAdvancementsStructureType.ShulkerTransport : AllAdvancementsStructureType.Unknown;
+			return preferences.oneDotTwentyPlusAA.get() ? AllAdvancementsStructureType.ShulkerTransport : null;
 
 		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
 			return AllAdvancementsStructureType.Spawn;
@@ -100,26 +100,4 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		int cityRegionCentreZ = 24 * (int) Math.round((chunkZ - 8) / 24D) + 8;
 		return new AllAdvancementsPosition(cityRegionCentreX * 16 + 8, cityRegionCentreZ * 16 + 8);
 	}
-
-	private IDataComponent<IAllAdvancementsPosition> getDataComponentFromStructureType(AllAdvancementsStructureType structureType) {
-		switch (structureType) {
-			case Spawn:
-				return allAdvancementsDataState.spawnPosition();
-			case Outpost:
-				return allAdvancementsDataState.outpostPosition();
-			case Monument:
-				return allAdvancementsDataState.monumentPosition();
-			case DeepDark:
-				return allAdvancementsDataState.deepDarkPosition();
-			case CityQuery:
-				return allAdvancementsDataState.cityQueryPosition();
-			case ShulkerTransport:
-				return allAdvancementsDataState.shulkerTransportPosition();
-			case GeneralLocation:
-				return allAdvancementsDataState.generalLocationPosition();
-			default:
-				throw new IllegalArgumentException("Setting of structure type " + structureType + " is not supported.");
-		}
-	}
-
 }

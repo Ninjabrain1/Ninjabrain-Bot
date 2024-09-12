@@ -107,31 +107,43 @@ public class ApiV1IntegrationTests {
 		// Assert
 		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
 
-//		System.out.println(exchange.getResponseBodyAsString());
+		System.out.println(exchange.getResponseBodyAsString());
 		String expectedResult =
-				("{" +
-				 "   \"spawnPosition\":{" +
-				 "      \"overworldDistance\":5007," +
-				 "      \"xInOverworld\":-215," +
-				 "      \"zInOverworld\":185," +
-				 "      \"travelAngle\":137.57282532371786" +
-				 "   }," +
-				 "   \"monumentPosition\":{" +
-				 "      \"overworldDistance\":1," +
-				 "      \"xInOverworld\":3357," +
-				 "      \"zInOverworld\":3693," +
-				 "      \"travelAngle\":179.88264305940854" +
-				 "   }," +
-				 "   \"strongholdPosition\":{" +
-				 "      \"overworldDistance\":4247," +
-				 "      \"xInOverworld\":2212," +
-				 "      \"zInOverworld\":-396," +
-				 "      \"travelAngle\":142.2910279309858" +
-				 "   }," +
-				 "   \"outpostPosition\":{" +
-				 "      " +
-				 "   }," +
-				 "   \"isAllAdvancementsModeEnabled\":true" +
+				("{\n" +
+				 "   \"generalLocation\":{\n" +
+				 "      \n" +
+				 "   },\n" +
+				 "   \"spawn\":{\n" +
+				 "      \"overworldDistance\":5007,\n" +
+				 "      \"xInOverworld\":-215,\n" +
+				 "      \"zInOverworld\":185,\n" +
+				 "      \"travelAngle\":137.57282532371786\n" +
+				 "   },\n" +
+				 "   \"cityQuery\":{\n" +
+				 "      \n" +
+				 "   },\n" +
+				 "   \"monument\":{\n" +
+				 "      \"overworldDistance\":1,\n" +
+				 "      \"xInOverworld\":3357,\n" +
+				 "      \"zInOverworld\":3693,\n" +
+				 "      \"travelAngle\":179.88264305940854\n" +
+				 "   },\n" +
+				 "   \"shulkerTransport\":{\n" +
+				 "      \n" +
+				 "   },\n" +
+				 "   \"stronghold\":{\n" +
+				 "      \"overworldDistance\":4247,\n" +
+				 "      \"xInOverworld\":2212,\n" +
+				 "      \"zInOverworld\":-396,\n" +
+				 "      \"travelAngle\":142.2910279309858\n" +
+				 "   },\n" +
+				 "   \"deepDark\":{\n" +
+				 "      \n" +
+				 "   },\n" +
+				 "   \"isAllAdvancementsModeEnabled\":true,\n" +
+				 "   \"outpost\":{\n" +
+				 "      \n" +
+				 "   }\n" +
 				 "}").replaceAll("\\s+", "");
 		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
 	}
