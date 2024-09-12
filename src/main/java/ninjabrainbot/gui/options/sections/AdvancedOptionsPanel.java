@@ -91,7 +91,7 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.color_negative_coords"), preferences.colorCodeNegativeCoords));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
-		column2.add(new CheckboxPanel(styleManager, "HTTP SERVER", preferences.enableHttpServer));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_api"), preferences.enableHttpServer));
 
 		disposeHandler.add(preferences.useAltStd.whenModified().subscribeEDT(this::setAltSigmaEnabled));
 		disposeHandler.add(preferences.sigma.whenModified().subscribeEDT(sigmaPanel::updateValue));
