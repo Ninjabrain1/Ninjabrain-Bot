@@ -53,8 +53,11 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 			}
 			String clipboardString = null;
 			try {
-				if (read)
-					clipboardString = (String) clipboard.getData(DataFlavor.stringFlavor);
+				if (read) {
+					clipboardString = ((String) clipboard.getData(DataFlavor.stringFlavor));
+					if (clipboardString.length() > 1000)
+						clipboardString = clipboardString.substring(0, 1000);
+				}
 			} catch (UnsupportedFlavorException | IllegalStateException | IOException ignored) {
 			}
 			if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
