@@ -1,7 +1,7 @@
 package ninjabrainbot.gui.mainwindow.main;
 
 import ninjabrainbot.gui.mainwindow.alladvancements.StructurePanel;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.util.I18n;
 import org.junit.jupiter.api.Assertions;
 
@@ -38,7 +38,7 @@ public class MainTextAreaTestAdapter {
 		Assertions.assertEquals(expectedNetherText, getDetailedTriangulationPanel_netherCoords(0));
 	}
 
-	public String getAllAdvancementsStructurePanelCoordinates(StructureType structureType) {
+	public String getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType structureType) {
 		switch (structureType) {
 			case Stronghold:
 				return ((StructurePanel) mainTextArea.allAdvancements.getComponent(1)).getLocationText();
@@ -52,7 +52,7 @@ public class MainTextAreaTestAdapter {
 		throw new RuntimeException("Unsupported structure type: " + structureType);
 	}
 
-	public void assertAllAdvancementsStructureCoordsAre(int x, int z, StructureType structureType) {
+	public void assertAllAdvancementsStructureCoordsAre(int x, int z, AllAdvancementsStructureType structureType) {
 		String expectedStructureText = String.format("(%s, %s)", x, z);
 		Assertions.assertTrue(mainTextArea.allAdvancements.isVisible(), "AllAdvancementsPanel is not visible.");
 		Assertions.assertEquals(expectedStructureText, getAllAdvancementsStructurePanelCoordinates(structureType));

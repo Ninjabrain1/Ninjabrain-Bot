@@ -6,7 +6,7 @@ import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsPosition;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsPosition;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.common.IDetailedPlayerPosition;
 import ninjabrainbot.model.domainmodel.IDataComponent;
 
@@ -24,52 +24,52 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 
 	@Override
 	public void execute() {
-		StructureType structureType = getAllAdvancementStructureTypeFromPlayerPosition(playerPosition);
-		if (structureType == StructureType.Unknown)
+		AllAdvancementsStructureType structureType = getAllAdvancementStructureTypeFromPlayerPosition(playerPosition);
+		if (structureType == AllAdvancementsStructureType.Unknown)
 			return;
 
 		IAllAdvancementsPosition structurePosition = getStructurePosition(structureType);
 
 		IDataComponent<IAllAdvancementsPosition> dataComponent = getDataComponentFromStructureType(structureType);
 		// Cities can be queried multiple times, so overwrite the position.
-		if (structureType != StructureType.CityQuery && dataComponent.get() != null)
+		if (structureType != AllAdvancementsStructureType.CityQuery && dataComponent.get() != null)
 			return;
 
 		dataComponent.set(structurePosition);
 	}
 
-	private StructureType getAllAdvancementStructureTypeFromPlayerPosition(IDetailedPlayerPosition t) {
+	private AllAdvancementsStructureType getAllAdvancementStructureTypeFromPlayerPosition(IDetailedPlayerPosition t) {
 		if (t.isInNether())
-			return StructureType.Unknown;
+			return AllAdvancementsStructureType.Unknown;
 
 		if (t.isInEnd())
-			return preferences.oneDotTwentyPlusAA.get() ? StructureType.ShulkerTransport : StructureType.Unknown;
+			return preferences.oneDotTwentyPlusAA.get() ? AllAdvancementsStructureType.ShulkerTransport : AllAdvancementsStructureType.Unknown;
 
 		if (Math.abs(t.xInOverworld()) <= 300 && Math.abs(t.zInOverworld()) <= 300 && Math.abs(Math.round(t.yInPlayerDimension()) - t.yInPlayerDimension()) < 0.001)
-			return StructureType.Spawn;
+			return AllAdvancementsStructureType.Spawn;
 
 		if (t.yInPlayerDimension() < 63) {
 			if (preferences.oneDotTwentyPlusAA.get()) {
 				if (t.yInPlayerDimension() > 30 && t.isInOverworld()) {
-					return StructureType.Monument;
+					return AllAdvancementsStructureType.Monument;
 				}
 			} else {
-				return StructureType.Monument;
+				return AllAdvancementsStructureType.Monument;
 			}
 		}
 
 		if (preferences.oneDotTwentyPlusAA.get()) {
 			if (t.yInPlayerDimension() <= 30 && t.isInOverworld())
-				return StructureType.DeepDark;
+				return AllAdvancementsStructureType.DeepDark;
 
 			if (t.yInPlayerDimension() > 160 && t.isInOverworld())
-				return StructureType.CityQuery;
+				return AllAdvancementsStructureType.CityQuery;
 		}
 
-		return StructureType.Outpost;
+		return AllAdvancementsStructureType.Outpost;
 	}
 
-	private IAllAdvancementsPosition getStructurePosition(StructureType structureType) {
+	private IAllAdvancementsPosition getStructurePosition(AllAdvancementsStructureType structureType) {
 		switch (structureType) {
 			case Outpost:
 				return getOutpostPosition(playerPosition);
@@ -101,7 +101,7 @@ public class TryAddAllAdvancementsStructureAction implements IAction {
 		return new AllAdvancementsPosition(cityRegionCentreX * 16 + 8, cityRegionCentreZ * 16 + 8);
 	}
 
-	private IDataComponent<IAllAdvancementsPosition> getDataComponentFromStructureType(StructureType structureType) {
+	private IDataComponent<IAllAdvancementsPosition> getDataComponentFromStructureType(AllAdvancementsStructureType structureType) {
 		switch (structureType) {
 			case Spawn:
 				return allAdvancementsDataState.spawnPosition();

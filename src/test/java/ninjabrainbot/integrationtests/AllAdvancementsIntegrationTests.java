@@ -2,7 +2,7 @@ package ninjabrainbot.integrationtests;
 
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
-import ninjabrainbot.model.datastate.alladvancements.StructureType;
+import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.common.ResultType;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
@@ -39,30 +39,30 @@ public class AllAdvancementsIntegrationTests {
 		TestUtils.awaitSwingEvents();
 		Assertions.assertTrue(aaDataState.allAdvancementsModeEnabled().get());
 		Assertions.assertSame(testBuilder.dataState.resultType().get(), ResultType.ALL_ADVANCEMENTS);
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, StructureType.Stronghold);
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Spawn).isEmpty());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Outpost).isEmpty());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Monument).isEmpty());
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Spawn).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Outpost).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Monument).isEmpty());
 
 		testBuilder.setClipboard(f3cSpawn);
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(spawnX, spawnZ, StructureType.Spawn);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(spawnX, spawnZ, AllAdvancementsStructureType.Spawn);
 
 		testBuilder.setClipboard(f3cOutpost);
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(outpostX, outpostZ, StructureType.Outpost);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(outpostX, outpostZ, AllAdvancementsStructureType.Outpost);
 
 		testBuilder.setClipboard(f3cMonument);
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(monumentX, monumentZ, StructureType.Monument);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(monumentX, monumentZ, AllAdvancementsStructureType.Monument);
 
 		testBuilder.resetCalculator();
 		TestUtils.awaitSwingEvents();
 		Assertions.assertFalse(mainTextArea.isAllAdvancementsPanelVisible());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Stronghold).isEmpty());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Spawn).isEmpty());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Outpost).isEmpty());
-		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(StructureType.Monument).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Stronghold).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Spawn).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Outpost).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Monument).isEmpty());
 	}
 
 	@ParameterizedTest
@@ -77,13 +77,13 @@ public class AllAdvancementsIntegrationTests {
 		testBuilder.enterEnd();
 		testBuilder.inputSubpixelCorrections(10);
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, StructureType.Stronghold);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
 		testBuilder.inputSubpixelCorrections(-10);
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, StructureType.Stronghold);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
 		testBuilder.inputStandardDeviationToggle();
 		TestUtils.awaitSwingEvents();
-		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, StructureType.Stronghold);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
 	}
 
 	private void doAnyPercentSplit(IntegrationTestBuilder testBuilder, IAllAdvancementsDataState aaDataState, MainTextAreaTestAdapter mainTextArea,
