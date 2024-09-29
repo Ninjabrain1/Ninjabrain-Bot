@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.buttons.FlatButton;
+import ninjabrainbot.gui.buttons.WikiButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
@@ -91,7 +92,8 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.color_negative_coords"), preferences.colorCodeNegativeCoords));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_advanced_stronghold_statistics"), preferences.useAdvStatistics));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
-		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_api"), preferences.enableHttpServer));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_api"), preferences.enableHttpServer)
+				.withWikiButton(new WikiButton(styleManager, "https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/API")));
 
 		disposeHandler.add(preferences.useAltStd.whenModified().subscribeEDT(this::setAltSigmaEnabled));
 		disposeHandler.add(preferences.sigma.whenModified().subscribeEDT(sigmaPanel::updateValue));

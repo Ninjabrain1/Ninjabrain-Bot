@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ninjabrainbot.event.DisposeHandler;
+import ninjabrainbot.gui.buttons.WikiButton;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.CheckboxPanel;
 import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
@@ -36,8 +37,8 @@ public class BoatMeasurementOptionsPanel extends JPanel {
 		column1.setOpaque(false);
 		add(column1);
 
-		CheckboxPanel enableBoatMeasurementsCheckbox = new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle);
-		column1.add(enableBoatMeasurementsCheckbox);
+		column1.add(new CheckboxPanel(styleManager, I18n.get("settings.use_precise_angle"), preferences.usePreciseAngle)
+				.withWikiButton(new WikiButton(styleManager, "https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/Boat-measurements")));
 
 		sensitivityManual = new FloatPreferencePanel(styleManager, I18n.get("settings.sensitivityManual"), preferences.sensitivityManual);
 		sensitivityManual.setWidth(130);

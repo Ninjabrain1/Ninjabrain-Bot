@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.Box;
 
+import ninjabrainbot.gui.buttons.WikiButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
@@ -35,7 +36,9 @@ public class CheckboxPanel extends ThemedPanel {
 			}
 
 			public Dimension getPreferredSize() {
-				return new Dimension(t.getWidth() - 2 * OptionsFrame.PADDING - 32, super.getPreferredSize().height);
+				Dimension superPreferredSize = super.getPreferredSize();
+				int preferredWidth = Math.min(superPreferredSize.width, t.getWidth() - 2 * OptionsFrame.PADDING - 32);
+				return new Dimension(preferredWidth, superPreferredSize.height);
 			}
 
 			@Override
@@ -58,6 +61,12 @@ public class CheckboxPanel extends ThemedPanel {
 		setOpaque(true);
 
 		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
+	}
+
+	public CheckboxPanel withWikiButton(WikiButton wikiButton) {
+		add(Box.createHorizontalStrut(OptionsFrame.PADDING));
+		add(wikiButton);
+		return this;
 	}
 
 	@Override
