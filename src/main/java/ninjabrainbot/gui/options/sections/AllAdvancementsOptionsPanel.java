@@ -39,7 +39,6 @@ public class AllAdvancementsOptionsPanel extends StackPanel {
 		});
 		add(new CheckboxPanel(styleManager, I18n.get("settings.enable_all_advancements_mode"), preferences.allAdvancements));
 
-
 		add(oneDotTwentyPlusAA = new CheckboxPanel(styleManager, I18n.get("settings.enable_120plus_all_advancements_mode"), preferences.oneDotTwentyPlusAA)
 				.withWikiButton(new WikiButton(styleManager, "https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/All-advancements-mode-with-Minecraft-version-1.20-and-later")));
 

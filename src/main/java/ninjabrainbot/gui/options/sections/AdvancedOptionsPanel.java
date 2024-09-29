@@ -94,6 +94,7 @@ public class AdvancedOptionsPanel extends JPanel {
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.use_alternative_clipboard_reader"), preferences.altClipboardReader));
 		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.enable_api"), preferences.enableHttpServer)
 				.withWikiButton(new WikiButton(styleManager, "https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/API")));
+		column2.add(new CheckboxPanel(styleManager, I18n.get("settings.save_state"), preferences.saveState));
 
 		disposeHandler.add(preferences.useAltStd.whenModified().subscribeEDT(this::setAltSigmaEnabled));
 		disposeHandler.add(preferences.sigma.whenModified().subscribeEDT(sigmaPanel::updateValue));
