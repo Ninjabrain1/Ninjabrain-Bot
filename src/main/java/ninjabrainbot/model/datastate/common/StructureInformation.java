@@ -38,7 +38,7 @@ public class StructureInformation implements IOverworldPosition, IDisposable {
 		overworldDistance = (int) this.distanceInOverworld(playerPos);
 		playerIsInNether = playerPos.isInNether();
 		double xDiff = overworldPosition.xInOverworld() - playerPos.xInOverworld();
-		double zDiff = overworldPosition.xInOverworld() - playerPos.zInOverworld();
+		double zDiff = overworldPosition.zInOverworld() - playerPos.zInOverworld();
 		double angleToStructure = -Math.atan2(xDiff, zDiff) * 180 / Math.PI;
 		double angleDifference = (angleToStructure - playerPos.horizontalAngle()) % 360;
 		if (angleDifference > 180)
