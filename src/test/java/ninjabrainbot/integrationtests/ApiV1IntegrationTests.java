@@ -117,7 +117,7 @@ public class ApiV1IntegrationTests {
 				 "      \"overworldDistance\":5007,\n" +
 				 "      \"xInOverworld\":-215,\n" +
 				 "      \"zInOverworld\":185,\n" +
-				 "      \"travelAngle\":137.57282532371786\n" +
+				 "      \"travelAngle\":134.48365647425098\n" +
 				 "   },\n" +
 				 "   \"cityQuery\":{\n" +
 				 "      \n" +
@@ -126,7 +126,7 @@ public class ApiV1IntegrationTests {
 				 "      \"overworldDistance\":1,\n" +
 				 "      \"xInOverworld\":3357,\n" +
 				 "      \"zInOverworld\":3693,\n" +
-				 "      \"travelAngle\":179.88264305940854\n" +
+				 "      \"travelAngle\":141.5819446551723\n" +
 				 "   },\n" +
 				 "   \"shulkerTransport\":{\n" +
 				 "      \n" +
@@ -135,7 +135,7 @@ public class ApiV1IntegrationTests {
 				 "      \"overworldDistance\":4247,\n" +
 				 "      \"xInOverworld\":2212,\n" +
 				 "      \"zInOverworld\":-396,\n" +
-				 "      \"travelAngle\":142.2910279309858\n" +
+				 "      \"travelAngle\":164.35091545590393\n" +
 				 "   },\n" +
 				 "   \"deepDark\":{\n" +
 				 "      \n" +
