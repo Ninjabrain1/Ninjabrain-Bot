@@ -14,7 +14,7 @@ import ninjabrainbot.gui.components.panels.ThemedPanel;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.gui.style.theme.WrappedColor;
 import ninjabrainbot.model.information.InformationMessage;
-import ninjabrainbot.model.information.InformationType;
+import ninjabrainbot.model.information.InformationMessageSeverity;
 
 public class InformationTextPanel extends ThemedPanel {
 
@@ -36,7 +36,7 @@ public class InformationTextPanel extends ThemedPanel {
 	}
 
 	public void setInformationMessage(InformationMessage informationMessage) {
-		icon.setIcon(getIcon(informationMessage.type));
+		icon.setIcon(getIcon(informationMessage.severity));
 		textLabel.setText("<html>" + informationMessage.message + "</html>");
 	}
 
@@ -46,16 +46,16 @@ public class InformationTextPanel extends ThemedPanel {
 		setBorder(new MatteBorder(0, 0, 1, 0, borderColor.color()));
 	}
 
-	private ImageIcon getIcon(InformationType informationType) {
+	private ImageIcon getIcon(InformationMessageSeverity informationMessageSeverity) {
 		String imagePath = null;
-		switch (informationType) {
-			case Info:
+		switch (informationMessageSeverity) {
+			case INFO:
 				imagePath = "/info_icon.png";
 				break;
-			case Warning:
+			case WARNING:
 				imagePath = "/warning_icon.png";
 				break;
-			case Error:
+			case ERROR:
 				imagePath = "/warning_icon.png";
 				break;
 		}

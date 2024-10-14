@@ -27,6 +27,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		super(preferences.informationDirectionHelpEnabled);
 		this.dataState = dataState;
 		this.standardDeviationSettings = environmentState.standardDeviationSettings();
+		raiseInformationMessageChanged();
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(preferences.sigma.whenModified().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(preferences.sigmaManual.whenModified().subscribe(this::raiseInformationMessageChanged));
@@ -62,7 +63,7 @@ public class NextThrowDirectionInformationProvider extends InformationMessagePro
 		double phiLeft = (lastThrow.horizontalAngle() - 90.0) * Math.PI / 180.0;
 		int rightDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiRight));
 		int leftDistance = (int) Math.ceil(binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(predictions, lastThrow, phiLeft));
-		return new InformationMessage(InformationType.Info, I18n.get("information.go_left_x_block_or_right_y_blocks", leftDistance, rightDistance));
+		return new InformationMessage(InformationMessageSeverity.INFO, "NEXT_THROW_DIRECTION", I18n.get("information.go_left_x_block_or_right_y_blocks", leftDistance, rightDistance));
 	}
 
 	private double binarySearchSidewaysDistanceFor99PercentLowestPossibleCertainty(List<Chunk> predictions, IEnderEyeThrow lastThrow, double phiSideways) {

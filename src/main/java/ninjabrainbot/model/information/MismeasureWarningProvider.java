@@ -20,6 +20,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 		super(preferences.informationMismeasureEnabled);
 		this.dataState = dataState;
 		this.standardDeviationSettings = environmentState.standardDeviationSettings();
+		raiseInformationMessageChanged();
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(standardDeviationSettings.subscribe(this::raiseInformationMessageChanged));
@@ -52,7 +53,7 @@ public class MismeasureWarningProvider extends InformationMessageProvider {
 	@Override
 	protected InformationMessage getInformationMessage() {
 		if (warningMessage == null)
-			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.mismeasure"));
+			warningMessage = new InformationMessage(InformationMessageSeverity.WARNING, "MISMEASURE", I18n.get("information.mismeasure"));
 		return warningMessage;
 	}
 

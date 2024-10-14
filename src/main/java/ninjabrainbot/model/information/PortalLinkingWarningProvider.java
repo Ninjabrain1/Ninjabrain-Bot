@@ -15,6 +15,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 	public PortalLinkingWarningProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationPortalLinkingEnabled);
 		this.dataState = dataState;
+		raiseInformationMessageChanged();
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::raiseInformationMessageChanged));
 		disposeHandler.add(dataState.resultType().subscribe(this::raiseInformationMessageChanged));
 	}
@@ -43,7 +44,7 @@ public class PortalLinkingWarningProvider extends InformationMessageProvider {
 	@Override
 	protected InformationMessage getInformationMessage() {
 		if (warningMessage == null)
-			warningMessage = new InformationMessage(InformationType.Warning, I18n.get("information.portal_linking"));
+			warningMessage = new InformationMessage(InformationMessageSeverity.WARNING, "PORTAL_LINKING", I18n.get("information.portal_linking"));
 		return warningMessage;
 	}
 
