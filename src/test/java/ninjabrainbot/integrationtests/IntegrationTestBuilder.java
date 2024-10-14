@@ -1,5 +1,7 @@
 package ninjabrainbot.integrationtests;
 
+import java.util.Locale;
+
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.gui.frames.NinjabrainBotFrame;
 import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
@@ -9,6 +11,7 @@ import ninjabrainbot.gui.mainwindow.main.MainTextArea;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.gui.style.StyleManager;
 import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
+import ninjabrainbot.io.mcinstance.McInstanceTestAdapter;
 import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
@@ -16,6 +19,7 @@ import ninjabrainbot.io.preferences.UnsavedPreferences;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
 import ninjabrainbot.io.preferences.enums.AngleAdjustmentType;
 import ninjabrainbot.io.preferences.enums.MainViewType;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.io.preferences.enums.StrongholdDisplayType;
 import ninjabrainbot.model.ModelState;
 import ninjabrainbot.model.actions.IActionExecutor;
@@ -28,7 +32,12 @@ import ninjabrainbot.model.datastate.endereye.F3IData;
 import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.environmentstate.IEnvironmentState;
+import ninjabrainbot.model.information.CombinedCertaintyInformationProvider;
 import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.model.information.McVersionWarningProvider;
+import ninjabrainbot.model.information.MismeasureWarningProvider;
+import ninjabrainbot.model.information.NextThrowDirectionInformationProvider;
+import ninjabrainbot.model.information.PortalLinkingWarningProvider;
 import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.F3ILocationInputHandler;
@@ -68,6 +77,7 @@ public class IntegrationTestBuilder {
 	private StyleManager styleManager;
 
 	public IntegrationTestBuilder() {
+		Locale.setDefault(Locale.US);
 		preferences = new NinjabrainBotPreferences(new UnsavedPreferences());
 		ModelState modelState = new ModelState(preferences);
 		domainModel = modelState.domainModel;
@@ -81,6 +91,19 @@ public class IntegrationTestBuilder {
 		preferences.view.set(MainViewType.DETAILED);
 		preferences.strongholdDisplayType.set(StrongholdDisplayType.CHUNK);
 		preferences.useAltStd.set(true);
+		return this;
+	}
+
+	public IntegrationTestBuilder withAllInformationMessagesSettings() {
+		preferences.informationDirectionHelpEnabled.set(true);
+		preferences.informationMismeasureEnabled.set(true);
+		preferences.informationCombinedCertaintyEnabled.set(true);
+		preferences.informationMismeasureEnabled.set(true);
+		return this;
+	}
+
+	public IntegrationTestBuilder withMcVersionSetting(McVersion mcVersion) {
+		preferences.mcVersion.set(mcVersion);
 		return this;
 	}
 
@@ -151,9 +174,15 @@ public class IntegrationTestBuilder {
 	}
 
 	public void setActiveMinecraftWorld(IMinecraftWorldFile minecraftWorld) {
+		setActiveMinecraftWorld(minecraftWorld, McVersion.PRE_119);
+	}
+
+	public void setActiveMinecraftWorld(IMinecraftWorldFile minecraftWorld, McVersion mcVersion) {
 		if (activeInstanceProvider == null) activeInstanceProvider = new MockedInstanceProvider();
 		if (activeInstanceInputHandler == null) activeInstanceInputHandler = new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences);
+		McInstanceTestAdapter.setMinecraftInstanceVersion(minecraftWorld.minecraftInstance(), mcVersion);
 		activeInstanceProvider.activeMinecraftWorld().set(minecraftWorld);
+		activeInstanceProvider.activeMinecraftInstance().set(minecraftWorld.minecraftInstance());
 	}
 
 	public MainTextAreaTestAdapter createMainTextArea() {
@@ -180,6 +209,19 @@ public class IntegrationTestBuilder {
 		if (fakeCoordinateInputSource == null)
 			fakeCoordinateInputSource = new FakeCoordinateInputSource();
 		return new CalibratorFactory(environmentState.calculatorSettings(), fakeCoordinateInputSource, preferences);
+	}
+
+	public InformationMessageList createInformationMessageList(){
+		if (activeInstanceProvider == null)
+			activeInstanceProvider = new MockedInstanceProvider();
+
+		InformationMessageList informationMessageList = new InformationMessageList();
+		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, environmentState, preferences));
+		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, environmentState, preferences));
+		return informationMessageList;
 	}
 
 	public BoatIcon createBoatIcon() {

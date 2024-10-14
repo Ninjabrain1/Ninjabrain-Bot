@@ -20,12 +20,12 @@ public class JsonIntegrationTests {
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(-60, 80, -150, 12, -31, MCDimension.NETHER));
 		testBuilder.inputStandardDeviationToggle();
 
-		StrongholdQuery jsonConverter = new StrongholdQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(testBuilder.dataState, true);
 
 		long t0 = System.nanoTime();
 
 		// Act
-		String json = jsonConverter.get(testBuilder.dataState);
+		String json = jsonConverter.get();
 
 		// Assert
 		long deltaT = System.nanoTime() - t0;
@@ -42,12 +42,12 @@ public class JsonIntegrationTests {
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(0, 80, 0, 161.9, -31, MCDimension.OVERWORLD));
 		testBuilder.inputDetailedPlayerPosition(new DetailedPlayerPosition(20, 80, 0, -30, -31, MCDimension.OVERWORLD));
 
-		StrongholdQuery jsonConverter = new StrongholdQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(testBuilder.dataState, true);
 
 		long t0 = System.nanoTime();
 
 		// Act
-		String json = jsonConverter.get(testBuilder.dataState);
+		String json = jsonConverter.get();
 
 		// Assert
 		long deltaT = System.nanoTime() - t0;
@@ -61,12 +61,12 @@ public class JsonIntegrationTests {
 		// Arrange
 		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withProSettings();
 
-		StrongholdQuery jsonConverter = new StrongholdQuery(true);
+		StrongholdQuery jsonConverter = new StrongholdQuery(testBuilder.dataState, true);
 
 		long t0 = System.nanoTime();
 
 		// Act
-		String json = jsonConverter.get(testBuilder.dataState);
+		String json = jsonConverter.get();
 
 		// Assert
 		long deltaT = System.nanoTime() - t0;

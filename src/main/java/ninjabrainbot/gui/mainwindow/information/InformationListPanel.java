@@ -27,8 +27,6 @@ public class InformationListPanel extends ResizablePanel implements ThemedCompon
 		setAlignmentX(0);
 		this.styleManager = styleManager;
 
-		SwingUtilities.invokeLater(() -> synchronizeInformationMessages(informationMessageList.get()));
-
 		informationMessageList.subscribeEDT(this::onInformationMessageListChanged);
 	}
 

@@ -77,8 +77,8 @@ public class GUI {
 		this.preferences = preferences;
 		initInputMethods();
 		initModel();
-		initDataProcessors();
 		initInputHandlers();
+		initDataProcessors();
 		initUI();
 		postInit();
 	}
@@ -123,13 +123,8 @@ public class GUI {
 
 	private void initDataProcessors() {
 		Progress.setTask("Initializing information message generators", 0.09f);
-		Profiler.start("Init info message generators");
+		Profiler.start("Init info message list");
 		informationMessageList = new InformationMessageList();
-		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
-		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, environmentState, preferences));
-		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
-		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
-		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, environmentState, preferences));
 		Profiler.stop();
 	}
 
@@ -160,6 +155,14 @@ public class GUI {
 		Profiler.start("Post init");
 
 		new Thread(clipboardReader, "Clipboard reader").start();
+
+		Profiler.start("Init info message generators");
+		informationMessageList.AddInformationMessageProvider(new McVersionWarningProvider(activeInstanceProvider, preferences));
+		informationMessageList.AddInformationMessageProvider(new MismeasureWarningProvider(dataState, environmentState, preferences));
+		informationMessageList.AddInformationMessageProvider(new PortalLinkingWarningProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new CombinedCertaintyInformationProvider(dataState, preferences));
+		informationMessageList.AddInformationMessageProvider(new NextThrowDirectionInformationProvider(dataState, environmentState, preferences));
+		Profiler.stop();
 
 		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor, preferences);
 

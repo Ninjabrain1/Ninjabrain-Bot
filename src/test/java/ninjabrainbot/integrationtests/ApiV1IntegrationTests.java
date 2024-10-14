@@ -18,6 +18,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpPrincipal;
 import ninjabrainbot.Main;
 import ninjabrainbot.io.api.ApiV1HttpHandler;
+import ninjabrainbot.io.mcinstance.MinecraftInstance;
+import ninjabrainbot.io.mcinstance.MinecraftWorldFile;
+import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.ResultType;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +36,7 @@ public class ApiV1IntegrationTests {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withProSettings();
 		builder.preferences.sigmaAlt.set(0.005f);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1213.26 71.00 -318.63 -45.53 -31.39");
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1212.65 69.00 -318.01 -45.53 -31.52");
@@ -93,7 +96,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/all-advancements");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withAllAdvancementsSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1477.68 70.00 -211.29 -103.76 -31.31");
 		builder.enterNewWorld();
@@ -154,7 +157,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/blind");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		builder.setClipboard("/execute in minecraft:the_nether run tp @s -217.82 85.00 6.88 -133.68 81.14");
 
@@ -189,7 +192,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/divine");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		builder.setClipboard("/setblock 5 73 0 minecraft:bone_block[axis=y]");
 
@@ -218,7 +221,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		builder.triggerHotkey(builder.preferences.hotkeyBoat);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -77.34375 32.82");
@@ -239,12 +242,67 @@ public class ApiV1IntegrationTests {
 	}
 
 	@Test
+	void informationMessages() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/information-messages");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder()
+				.withProSettings()
+				.withAllInformationMessagesSettings()
+				.withMcVersionSetting(McVersion.PRE_119);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+
+		builder.setActiveMinecraftWorld(new MinecraftWorldFile(new MinecraftInstance("directory"), "worldName"), McVersion.POST_119);
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 2408 65.00 8 0 -31.87");
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 2408 65.00 9 0.02 -31.87");
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+		System.out.println(exchange.getResponseBodyAsString());
+		String expectedResult =
+				("{\n" +
+				 "   \"informationMessages\":[\n" +
+				 "      {\n" +
+				 "         \"severity\":\"WARNING\",\n" +
+				 "         \"type\":\"MC_VERSION\",\n" +
+				 "         \"message\":\"Detected wrong Minecraft version, make sure the correct version is chosen in the settings.\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"WARNING\",\n" +
+				 "         \"type\":\"PORTAL_LINKING\",\n" +
+				 "         \"message\":\"You might not be able to nether travel into the stronghold due to portal linking.\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"WARNING\",\n" +
+				 "         \"type\":\"MISMEASURE\",\n" +
+				 "         \"message\":\"Detected unusually large errors, you probably mismeasured or your standard deviation is too low.\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"INFO\",\n" +
+				 "         \"type\":\"COMBINED_CERTAINTY\",\n" +
+				 "         \"message\":\"Nether coords (300, 3) have <span style=\\\"color:#00CE29;\\\">86.1%<\\/span> chance to hit the stronghold (it is between the top 2 offsets).\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"INFO\",\n" +
+				 "         \"type\":\"NEXT_THROW_DIRECTION\",\n" +
+				 "         \"message\":\"Go left 1 blocks, or right 1 blocks, for ~95% certainty after next measurement.\"\n" +
+				 "      }\n" +
+				 "   ]\n" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString().replaceAll("\\s+", ""));
+	}
+
+	@Test
 	void version() throws IOException {
 		// Arrange
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/version");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -266,7 +324,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/ping");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -285,7 +343,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -312,7 +370,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -330,6 +388,62 @@ public class ApiV1IntegrationTests {
 		// Assert 2
 		Assertions.assertEquals("data: {\"boatState\":\"NONE\"}\n\n", exchange.getResponseBodyAsString());
 		Assertions.assertEquals(ResultType.TRIANGULATION, builder.dataState.resultType().get());
+	}
+
+	/**
+	 * Important test because information messages are updated after domain model, so need to make sure the changes happen before API updates.
+	 */
+	@Test
+	void subscribeInformationMessage_includesAllMessages() throws IOException, InterruptedException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/information-messages/events");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder()
+				.withProSettings()
+				.withAllInformationMessagesSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+
+		// Act 1
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert 1
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+		Assertions.assertEquals("data: {\"informationMessages\":[]}\n\n", exchange.getResponseBodyAsString());
+
+		// Act 2
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 2408 65.00 9 0.02 -31.87");
+		executorService.shutdown();
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+		// Assert 2
+		String expectedResult =
+				("data: {\"informationMessages\":[]}\n" +
+				 "\n" +
+				 "data: {\n" +
+				 "   \"informationMessages\":[\n" +
+				 "      {\n" +
+				 "         \"severity\":\"WARNING\",\n" +
+				 "         \"type\":\"MISMEASURE\",\n" +
+				 "         \"message\":\"Detected unusually large errors, you probably mismeasured or your standard deviation is too low.\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"WARNING\",\n" +
+				 "         \"type\":\"PORTAL_LINKING\",\n" +
+				 "         \"message\":\"You might not be able to nether travel into the stronghold due to portal linking.\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"INFO\",\n" +
+				 "         \"type\":\"COMBINED_CERTAINTY\",\n" +
+				 "         \"message\":\"Nether coords (300, 3) have <span style=\\\"color:#00CE29;\\\">86.0%<\\/span> chance to hit the stronghold (it is between the top 2 offsets).\"\n" +
+				 "      },\n" +
+				 "      {\n" +
+				 "         \"severity\":\"INFO\",\n" +
+				 "         \"type\":\"NEXT_THROW_DIRECTION\",\n" +
+				 "         \"message\":\"Go left 1 blocks, or right 1 blocks, for ~95% certainty after next measurement.\"\n" +
+				 "      }\n" +
+				 "   ]\n" +
+				 "}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString().replaceAll("\\s+", ""));
 	}
 
 	private static class TestHttpExchange extends HttpExchange {

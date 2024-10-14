@@ -102,7 +102,6 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		disposeHandler.add(mainTextArea.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		disposeHandler.add(informationTextPanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
 		disposeHandler.add(enderEyePanel.whenModified().subscribeEDT(__ -> updateSize(styleManager)));
-		// Lock
 		disposeHandler.add(dataState.locked().subscribeEDT(b -> lockIcon.setVisible(b)));
 	}
 

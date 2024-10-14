@@ -18,7 +18,7 @@ public class CombinedCertaintyInformationProvider extends InformationMessageProv
 	public CombinedCertaintyInformationProvider(IDataState dataState, NinjabrainBotPreferences preferences) {
 		super(preferences.informationCombinedCertaintyEnabled);
 		resultType = dataState.resultType();
-		raiseInformationMessageChanged();
+		updateInformationMessage(dataState.calculatorResult().get());
 		disposeHandler.add(dataState.calculatorResult().subscribe(this::updateInformationMessage));
 		disposeHandler.add(resultType.subscribe(this::raiseInformationMessageChanged));
 	}
