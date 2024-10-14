@@ -17,13 +17,11 @@ import ninjabrainbot.util.Logger;
 
 public class EventSender implements IDisposable {
 
-	private final IDataState dataState;
 	private final ExecutorService executorService;
 	private final HashMap<IQuery, SubscriberList> subscribersByQuery;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
-	public EventSender(IDataState dataState, IDomainModel domainModel, ExecutorService executorService) {
-		this.dataState = dataState;
+	public EventSender(IDomainModel domainModel, ExecutorService executorService) {
 		this.executorService = executorService;
 		subscribersByQuery = new HashMap<>();
 
@@ -33,7 +31,7 @@ public class EventSender implements IDisposable {
 	public synchronized void addSubscriber(IQuery query, OutputStream outputStream) {
 		if (!subscribersByQuery.containsKey(query)) {
 			SubscriberList subscriberList = new SubscriberList();
-			subscriberList.lastSentEvent = query.get(dataState);
+			subscriberList.lastSentEvent = query.get();
 			subscribersByQuery.put(query, subscriberList);
 		}
 
@@ -55,7 +53,7 @@ public class EventSender implements IDisposable {
 	private synchronized void onDomainModelUpdated() {
 		for (IQuery query : subscribersByQuery.keySet()) {
 			SubscriberList subscriberList = subscribersByQuery.get(query);
-			String string = query.get(dataState);
+			String string = query.get();
 			if (string.equals(subscriberList.lastSentEvent))
 				continue;
 			subscriberList.lastSentEvent = string;

@@ -5,17 +5,19 @@ import org.json.JSONObject;
 
 public class BoatQuery implements IQuery {
 
+	private final IDataState dataState;
 	private final boolean isPretty;
 
-	public BoatQuery() {
-		this(false);
+	public BoatQuery(IDataState dataState) {
+		this(dataState, false);
 	}
 
-	public BoatQuery(boolean isPretty) {
+	public BoatQuery(IDataState dataState, boolean isPretty) {
+		this.dataState = dataState;
 		this.isPretty = isPretty;
 	}
 
-	public String get(IDataState dataState) {
+	public String get() {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("boatAngle", dataState.boatDataState().boatAngle().get());
 		rootObject.put("boatState", dataState.boatDataState().boatState().get());

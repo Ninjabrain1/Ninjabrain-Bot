@@ -7,17 +7,19 @@ import org.json.JSONObject;
 
 public class BlindQuery implements IQuery {
 
+	private final IDataState dataState;
 	private final boolean isPretty;
 
-	public BlindQuery() {
-		this(false);
+	public BlindQuery(IDataState dataState) {
+		this(dataState, false);
 	}
 
-	public BlindQuery(boolean isPretty) {
+	public BlindQuery(IDataState dataState, boolean isPretty) {
+		this.dataState = dataState;
 		this.isPretty = isPretty;
 	}
 
-	public String get(IDataState dataState) {
+	public String get() {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("isBlindModeEnabled", dataState.resultType().get() == ResultType.BLIND);
 		rootObject.put("hasDivine", dataState.getDivineContext().hasDivine());

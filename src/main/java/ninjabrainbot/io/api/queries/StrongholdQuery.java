@@ -12,16 +12,18 @@ import org.json.JSONObject;
 public class StrongholdQuery implements IQuery {
 
 	private final boolean isPretty;
+	private final IDataState dataState;
 
-	public StrongholdQuery() {
-		this(false);
+	public StrongholdQuery(IDataState dataState) {
+		this(dataState, false);
 	}
 
-	public StrongholdQuery(boolean isPretty) {
+	public StrongholdQuery(IDataState dataState, boolean isPretty) {
+		this.dataState = dataState;
 		this.isPretty = isPretty;
 	}
 
-	public String get(IDataState dataState) {
+	public String get() {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("resultType", dataState.resultType().get());
 		rootObject.put("predictions", convertCalculatorResult(dataState.calculatorResult().get(), dataState.playerPosition().get()));

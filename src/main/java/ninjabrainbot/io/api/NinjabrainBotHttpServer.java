@@ -11,12 +11,14 @@ import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.util.Logger;
 
 public class NinjabrainBotHttpServer implements IDisposable {
 
 	private final IDataState dataState;
 	private final IDomainModel domainModel;
+	private final InformationMessageList informationMessageList;
 	private final NinjabrainBotPreferences preferences;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
@@ -25,9 +27,10 @@ public class NinjabrainBotHttpServer implements IDisposable {
 	private ExecutorService executorService;
 	private Exception error;
 
-	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, NinjabrainBotPreferences preferences) {
+	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, NinjabrainBotPreferences preferences) {
 		this.dataState = dataState;
 		this.domainModel = domainModel;
+		this.informationMessageList = informationMessageList;
 		this.preferences = preferences;
 		updateHttpServerStatus();
 
@@ -55,7 +58,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 		}
 		if (executorService == null)
 			executorService = Executors.newFixedThreadPool(1);
-		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, executorService);
+		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, informationMessageList, executorService);
 		httpServer.createContext("/api/v1", apiV1HttpHandler);
 		httpServer.setExecutor(executorService);
 		httpServer.start();

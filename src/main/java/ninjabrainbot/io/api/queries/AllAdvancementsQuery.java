@@ -7,17 +7,19 @@ import org.json.JSONObject;
 
 public class AllAdvancementsQuery implements IQuery {
 
+	private final IDataState dataState;
 	private final boolean isPretty;
 
-	public AllAdvancementsQuery() {
-		this(false);
+	public AllAdvancementsQuery(IDataState dataState) {
+		this(dataState, false);
 	}
 
-	public AllAdvancementsQuery(boolean isPretty) {
+	public AllAdvancementsQuery(IDataState dataState, boolean isPretty) {
+		this.dataState = dataState;
 		this.isPretty = isPretty;
 	}
 
-	public String get(IDataState dataState) {
+	public String get() {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("isAllAdvancementsModeEnabled", dataState.allAdvancementsDataState().allAdvancementsModeEnabled().get());
 		for (AllAdvancementsStructureType allAdvancementsStructureType : AllAdvancementsStructureType.values()){

@@ -18,11 +18,13 @@ import ninjabrainbot.io.api.queries.BlindQuery;
 import ninjabrainbot.io.api.queries.BoatQuery;
 import ninjabrainbot.io.api.queries.DivineQuery;
 import ninjabrainbot.io.api.queries.IQuery;
+import ninjabrainbot.io.api.queries.InformationMessagesQuery;
 import ninjabrainbot.io.api.queries.PingQuery;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.io.api.queries.VersionQuery;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.information.InformationMessageList;
 import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.Logger;
 
@@ -30,17 +32,16 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 	private final EventSender eventSender;
 	private final HashMap<String, IQuery> queries;
-	private final IDataState dataState;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, ExecutorService executorService) {
-		this.dataState = dataState;
-		eventSender = new EventSender(dataState, domainModel, executorService);
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, ExecutorService executorService) {
+		eventSender = new EventSender(domainModel, executorService);
 		queries = new HashMap<>();
-		queries.put("stronghold", new StrongholdQuery());
-		queries.put("all-advancements", new AllAdvancementsQuery());
-		queries.put("blind", new BlindQuery());
-		queries.put("divine", new DivineQuery());
-		queries.put("boat", new BoatQuery());
+		queries.put("stronghold", new StrongholdQuery(dataState));
+		queries.put("all-advancements", new AllAdvancementsQuery(dataState));
+		queries.put("blind", new BlindQuery(dataState));
+		queries.put("divine", new DivineQuery(dataState));
+		queries.put("boat", new BoatQuery(dataState));
+		queries.put("information-messages", new InformationMessagesQuery(informationMessageList));
 		queries.put("version", new VersionQuery());
 		queries.put("ping", new PingQuery());
 	}
@@ -90,7 +91,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		try {
 			OutputStream outputStream = exchange.getResponseBody();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			outputStream.write(query.get(dataState).getBytes());
+			outputStream.write(query.get().getBytes());
 			outputStream.flush();
 			outputStream.close();
 		} catch (IOException e) {

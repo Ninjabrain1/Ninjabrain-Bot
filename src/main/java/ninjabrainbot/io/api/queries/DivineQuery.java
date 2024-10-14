@@ -7,17 +7,19 @@ import org.json.JSONObject;
 
 public class DivineQuery implements IQuery {
 
+	private final IDataState dataState;
 	private final boolean isPretty;
 
-	public DivineQuery() {
-		this(false);
+	public DivineQuery(IDataState dataState) {
+		this(dataState, false);
 	}
 
-	public DivineQuery(boolean isPretty) {
+	public DivineQuery(IDataState dataState, boolean isPretty) {
+		this.dataState = dataState;
 		this.isPretty = isPretty;
 	}
 
-	public String get(IDataState dataState) {
+	public String get() {
 		JSONObject rootObject = new JSONObject();
 		rootObject.put("isDivineModeEnabled", dataState.resultType().get() == ResultType.DIVINE);
 		rootObject.put("divineResult", convertDivineResult(dataState.divineResult().get()));
