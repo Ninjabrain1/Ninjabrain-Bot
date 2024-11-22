@@ -15,7 +15,7 @@ public class F3CData {
 	}
 
 	public static F3CData tryParseF3CString(String string) {
-		if (!(string.startsWith("/execute in minecraft:"))) {
+		if (!(string.startsWith("/execute in "))) {
 			return null;
 		}
 		String[] substrings = string.split(" ");
