@@ -36,6 +36,8 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
 		disposeHandler.add(preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked));
 		disposeHandler.add(preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked));
+		disposeHandler.add(preferences.hotkeyIncrementByN.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked((int)preferences.nPixelCount.get())));
+		disposeHandler.add(preferences.hotkeyDecrementByN.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked((int)-preferences.nPixelCount.get())));
 		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(1)));
 		disposeHandler.add(preferences.hotkeyDecrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(-1)));
 		disposeHandler.add(preferences.hotkeyAltStd.whenTriggered().subscribe(this::toggleAltStdIfNotLocked));

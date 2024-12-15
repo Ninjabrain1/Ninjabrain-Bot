@@ -31,6 +31,9 @@ public class NinjabrainBotPreferences {
 	public final HotkeyPreference hotkeyAltStd;
 	public final HotkeyPreference hotkeyLock;
 	public final HotkeyPreference hotkeyToggleAllAdvancementsMode;
+	public final HotkeyPreference hotkeyIncrementByN;
+	public final HotkeyPreference hotkeyDecrementByN;
+	public final FloatPreference nPixelCount;
 	public final FloatPreference sensitivityManual;
 	public final FloatPreference sigma;
 	public final FloatPreference sigmaAlt;
@@ -97,7 +100,10 @@ public class NinjabrainBotPreferences {
 		hotkeyBoat = new HotkeyPreference("hotkey_boat", source);
 		hotkeyMod360 = new HotkeyPreference("hotkey_mod_360", source);
 		hotkeyToggleAllAdvancementsMode = new HotkeyPreference("hotkey_toggle_aa_mode", source);
+		hotkeyIncrementByN = new HotkeyPreference("hotkey_increment_by_n", source);
+		hotkeyDecrementByN = new HotkeyPreference("hotkey_decrement_by_n", source);
 		// Float
+		nPixelCount = new FloatPreference("n_pixel_count", 13, 0f, 500f, source);
 		sensitivityManual = new FloatPreference("sensitivity_manual", 0.4341732f, 0f, 1f, source);
 		sigma = new FloatPreference("sigma", 0.1f, 0.001f, 1f, source);
 		sigmaAlt = new FloatPreference("sigma_alt", 0.1f, 0.001f, 1f, source);

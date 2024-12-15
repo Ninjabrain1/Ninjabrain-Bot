@@ -10,6 +10,7 @@ import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.layout.StackPanel;
 import ninjabrainbot.gui.components.preferences.DoublePreferencePanel;
 import ninjabrainbot.gui.components.preferences.FloatPreferencePanel;
+import ninjabrainbot.gui.components.preferences.HotkeyPanel;
 import ninjabrainbot.gui.components.preferences.RadioButtonPanel;
 import ninjabrainbot.gui.frames.OptionsFrame;
 import ninjabrainbot.gui.style.SizePreference;
@@ -32,9 +33,29 @@ public class AngleAdjustmentOptionsPanel extends JPanel {
 		column1.setOpaque(false);
 		add(column1);
 
-		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.display_type"), preferences.angleAdjustmentDisplayType, true));
+		JPanel topCol1 = new StackPanel(2 * OptionsFrame.PADDING);
+		topCol1.setOpaque(false);
+		JPanel topCol2 = new StackPanel(3 * OptionsFrame.PADDING);
+		topCol2.setOpaque(false);
+		JPanel topGrid = new JPanel();
+		topGrid.setOpaque(false);
+		topGrid.setLayout(new GridLayout(1, 2, 2 * OptionsFrame.PADDING, 0));
+		topGrid.setBorder(new EmptyBorder(2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING, 2 * OptionsFrame.PADDING));
 
-		column1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.adjustment_type"), preferences.angleAdjustmentType, true));
+		topGrid.add(topCol1);
+		topGrid.add(topCol2);
+
+		topCol1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.display_type"), preferences.angleAdjustmentDisplayType, true));
+
+		topCol1.add(new RadioButtonPanel(styleManager, I18n.get("settings.angle_adjustment.adjustment_type"), preferences.angleAdjustmentType, true));
+
+		FloatPreferencePanel nPixel = new FloatPreferencePanel(styleManager, I18n.get("settings.n_pixels"), preferences.nPixelCount);
+		nPixel.setDecimals(0);
+		topCol2.add(nPixel);
+		topCol2.add(new HotkeyPanel(styleManager, I18n.get("settings.up_n_pixels"), preferences.hotkeyIncrementByN));
+		topCol2.add(new HotkeyPanel(styleManager, I18n.get("settings.down_n_pixels"), preferences.hotkeyDecrementByN));
+
+		column1.add(topGrid);
 
 		// Tall Res Section
 		tallResExplanation = new ThemedLabel(styleManager, "<html>" + I18n.get("settings.tall_resolution_explanation") + "</html>") {
