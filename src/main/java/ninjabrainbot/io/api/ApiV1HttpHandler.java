@@ -89,6 +89,9 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 	private void sendQueryResponse(HttpExchange exchange, IQuery query) {
 		try {
+			Headers responseHeaders = exchange.getResponseHeaders();
+			responseHeaders.add("Access-Control-Allow-Origin", "*");
+
 			OutputStream outputStream = exchange.getResponseBody();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			outputStream.write(query.get().getBytes());
@@ -105,6 +108,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			responseHeaders.add("Content-Type", "text/event-stream");
 			responseHeaders.add("Connection", "keep-alive");
 			responseHeaders.add("Transfer-Encoding", "chunked");
+			responseHeaders.add("Access-Control-Allow-Origin", "*");
 
 			OutputStream outputStream = exchange.getResponseBody();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
