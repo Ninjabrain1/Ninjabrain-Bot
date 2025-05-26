@@ -63,7 +63,7 @@ public class StrongholdQuery implements IQuery {
 			eyeThrowJson.put("angle", eyeThrow.horizontalAngle());
 			eyeThrowJson.put("angleWithoutCorrection", eyeThrow.horizontalAngleWithoutCorrection());
 			eyeThrowJson.put("correction", eyeThrow.correction());
-			eyeThrowJson.put("angleAdjustments", eyeThrow.correctionIncrements());
+			eyeThrowJson.put("correctionIncrements", eyeThrow.correctionIncrements());
 			eyeThrowJson.put("error", prediction != null ? prediction.getAngleError(eyeThrow) : 0);
 			eyeThrowJson.put("type", eyeThrow.getType());
 			eyeThrows.put(eyeThrowJson);

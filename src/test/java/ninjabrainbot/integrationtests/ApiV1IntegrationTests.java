@@ -59,7 +59,7 @@ public class ApiV1IntegrationTests {
 		Assertions.assertEquals(-318.63, eyeThrow1.getDouble("zInOverworld"));
 		Assertions.assertEquals(-45.529992377906794, eyeThrow1.getDouble("angle"));
 		Assertions.assertEquals(0, eyeThrow1.getDouble("correction"));
-		Assertions.assertEquals(0, eyeThrow1.getDouble("angleAdjustments"));
+		Assertions.assertEquals(0, eyeThrow1.getDouble("correctionIncrements"));
 		Assertions.assertEquals(-0.01593748756458524, eyeThrow1.getDouble("error"));
 		Assertions.assertEquals("NORMAL", eyeThrow1.getString("type"));
 
@@ -69,7 +69,7 @@ public class ApiV1IntegrationTests {
 		Assertions.assertEquals(-318.01, eyeThrow2.getDouble("zInOverworld"));
 		Assertions.assertEquals(-45.529992377906794, eyeThrow2.getDouble("angle"));
 		Assertions.assertEquals(0, eyeThrow2.getDouble("correction"));
-		Assertions.assertEquals(0, eyeThrow2.getDouble("angleAdjustments"));
+		Assertions.assertEquals(0, eyeThrow2.getDouble("correctionIncrements"));
 		Assertions.assertEquals(0.015504548661041895, eyeThrow2.getDouble("error"));
 		Assertions.assertEquals("NORMAL_WITH_ALT_STD", eyeThrow2.getString("type"));
 
