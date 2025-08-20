@@ -104,12 +104,17 @@ public class Posterior {
 		double delta = Math.abs((gamma - t.horizontalAngle()) % 360.0);
 		delta = Math.min(delta, 360.0 - delta);
 		double s1 = t.getStandardDeviation(standardDeviationSettings);
-		double v2 = getVarianceFromPositionImprecision(deltax * deltax + deltaz * deltaz);
+		double v2 = getVarianceFromPositionImprecision(deltax * deltax + deltaz * deltaz, t.xInOverworld(), t.zInOverworld());
 		double s = Math.sqrt(s1 * s1 + v2);
 		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
 	}
 
-	private double getVarianceFromPositionImprecision(double distance2) {
+	private double getVarianceFromPositionImprecision(double distance2, double throwX, double throwZ) {
+		// Check if the throw was against a block corner
+		if ((Math.abs(throwX - Math.floor(throwX) - 0.3) < 1e-6 || Math.abs(throwX - Math.floor(throwX) - 0.7) < 1e-6) &&
+			(Math.abs(throwZ - Math.floor(throwZ) - 0.3) < 1e-6 || Math.abs(throwZ - Math.floor(throwZ) - 0.7) < 1e-6)) {
+			return 0;
+		}
 		// Assume the error is uniformly distributed for simplicity
 		double maxLateralError = 0.005 * Math.sqrt(2) * 180 / Math.PI;
 		return maxLateralError * maxLateralError / distance2 / 6; // Variance for uniform distribution
