@@ -87,7 +87,7 @@ public class ApiV1IntegrationTests {
 
 		JSONObject prediction = predictions.getJSONObject(0);
 		Assertions.assertEquals(1579.2960908582024, prediction.getDouble("overworldDistance"));
-		Assertions.assertEquals(0.828727319460384, prediction.getDouble("certainty"));
+		Assertions.assertEquals(0.8287273194603837, prediction.getDouble("certainty"));
 		Assertions.assertEquals(146, prediction.getInt("chunkX"));
 		Assertions.assertEquals(49, prediction.getInt("chunkZ"));
 	}

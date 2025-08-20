@@ -105,8 +105,8 @@ public class Posterior {
 		delta = Math.min(delta, 360.0 - delta);
 		double s1 = t.getStandardDeviation(standardDeviationSettings);
 		double v2 = getVarianceFromPositionImprecision(deltax * deltax + deltaz * deltaz, t.xInOverworld(), t.zInOverworld());
-		double s = Math.sqrt(s1 * s1 + v2);
-		chunk.weight *= Math.exp(-delta * delta / (2 * s * s));
+		double v = s1 * s1 + v2;
+		chunk.weight *= Math.exp(-delta * delta / (2 * v));
 	}
 
 	private double getVarianceFromPositionImprecision(double distance2, double throwX, double throwZ) {
