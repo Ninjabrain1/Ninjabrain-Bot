@@ -11,7 +11,9 @@ public abstract class ActiveInstanceProviderFactory {
 		try {
 			if (Platform.getOSType() == Platform.WINDOWS) {
 				return new WindowsActiveInstanceListener();
-			}
+			} else if (Platform.isMac()) {
+                return new MacActiveInstanceListener();
+            }
 			return new UnsupportedOSActiveInstanceProvider();
 		} catch (IOException exception) {
 			Logger.log("Cannot monitor active Minecraft instance.");
