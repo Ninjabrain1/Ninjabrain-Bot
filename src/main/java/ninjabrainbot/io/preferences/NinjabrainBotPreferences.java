@@ -1,5 +1,6 @@
 package ninjabrainbot.io.preferences;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.sun.jna.Platform;
 import ninjabrainbot.io.KeyConverter;
 import ninjabrainbot.io.preferences.enums.AllAdvancementsToggleType;
@@ -158,8 +159,10 @@ public class NinjabrainBotPreferences {
 			upgradeSettings_From_0_To_1();
 		if (settingsVersion.get() == 1)
 			upgradeSettings_From_1_To_2();
+		if (settingsVersion.get() == 2)
+			upgradeSettings_From_2_To_3();
 
-		Assert.isTrue(settingsVersion.get() >= 2); // Do >= to allow users to downgrade to an earlier version, in case newer version has issues
+		Assert.isTrue(settingsVersion.get() >= 3); // Do >= to allow users to downgrade to an earlier version, in case newer version has issues
 	}
 
 	private void upgradeSettings_From_0_To_1() {
@@ -183,6 +186,27 @@ public class NinjabrainBotPreferences {
 			}
 		}
 		settingsVersion.set(2);
+	}
+
+	private void upgradeSettings_From_2_To_3() {
+		if (Platform.isMac()) {
+			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
+				if (hotkeyPreference.getCode() == -1)
+					continue;
+				int nativeKeyCode = KeyConverter.convertRawMacKeyCode(hotkeyPreference.getCode());
+				if (nativeKeyCode >> 16 == 0) {
+					nativeKeyCode |= NativeKeyEvent.KEY_LOCATION_STANDARD << 16;
+				}
+				hotkeyPreference.setCode(nativeKeyCode);
+			}
+		} else if (Platform.isLinux()) {
+			for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
+				if (hotkeyPreference.getCode() == -1)
+					continue;
+				hotkeyPreference.setCode(hotkeyPreference.getCode() | (NativeKeyEvent.KEY_LOCATION_STANDARD << 16));
+			}
+		}
+		settingsVersion.set(3);
 	}
 
 }
