@@ -47,6 +47,7 @@ public class Main {
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
 
+		System.setProperty("apple.awt.application.name", "NinjabrainBot");
 		Progress.startCompoundTask("", 1f);
 		Profiler.stopAndStart("Initialize GUI");
 		Locale.setDefault(Locale.US);

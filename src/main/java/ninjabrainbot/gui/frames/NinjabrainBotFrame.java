@@ -4,6 +4,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.Image;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Objects;
 
@@ -13,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.sun.jna.Platform;
 import ninjabrainbot.Main;
 import ninjabrainbot.event.IDisposable;
 import ninjabrainbot.gui.buttons.FlatButton;
@@ -193,7 +196,31 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		URL iconURL = Main.class.getResource("/icon.png");
 		ImageIcon img = new ImageIcon(Objects.requireNonNull(iconURL));
 		setIconImage(img.getImage());
+
+        if (Platform.isMac()) {
+            setIconOnMac(img.getImage());
+        }
 	}
+
+    private void setIconOnMac(Image image) {
+        try {
+            // Java 9+ way to set icon
+            // Taskbar.getTaskbar().setIconImage(image);
+            Class<?> taskbarClass = Class.forName("java.awt.Taskbar");
+            Object taskbar = taskbarClass.getMethod("getTaskbar").invoke(null);
+            Method setIconImage = taskbarClass.getMethod("setIconImage", Image.class);
+            setIconImage.invoke(taskbar, image);
+            return;
+        } catch (Exception ignored) {}
+        try {
+            // Java 8 way to set icon
+            // Application.getApplication().setDockIconImage(image);
+            Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
+            Object application = applicationClass.getMethod("getApplication").invoke(null);
+            Method setDockIconImage = applicationClass.getMethod("setDockIconImage", Image.class);
+            setDockIconImage.invoke(application, image);
+        } catch (Exception ignored) {}
+    }
 
 	@Override
 	public void dispose() {
