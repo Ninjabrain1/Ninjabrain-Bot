@@ -94,6 +94,24 @@ public class HotkeyPanel extends ThemedPanel {
 		String k = Platform.isLinux() ? NativeKeyEvent.getKeyText(preference.getCode()) : KeyEvent.getKeyText(preference.getCode());
 		if (k.startsWith("Unknown")) {
 			k = k.substring(17);
+
+			// Try to map Windows VK keycodes that aren't mapped in KeyEvent
+			if (Platform.isWindows()) {
+				switch (k) {
+					case "0xba": k = ";"; break;
+					case "0xbb": k = "="; break;
+					case "0xbc": k = ","; break;
+					case "0xbd": k = "-"; break;
+					case "0xbe": k = "."; break;
+					case "0xbf": k = "/"; break;
+					case "0xc0": k = "`"; break;
+					case "0xdb": k = "["; break;
+					case "0xdc": k = "\\"; break;
+					case "0xdd": k = "]"; break;
+					case "0xde": k = "'"; break;
+				}
+			}
+
 		}
 		if (preference.getModifier() == 0) {
 			return k;

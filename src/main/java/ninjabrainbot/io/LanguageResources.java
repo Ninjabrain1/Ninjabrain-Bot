@@ -58,6 +58,7 @@ public class LanguageResources {
 		list.add("I18n_ja_Ryukyuan.properties");
 		list.add("I18n_ko_KR.properties");
 		list.add("I18n_pl_PL.properties");
+		list.add("I18n_pt_PT.properties");
 		list.add("I18n_pt_BR.properties");
 		list.add("I18n_ru_RU.properties");
 		list.add("I18n_zh_CN.properties");
