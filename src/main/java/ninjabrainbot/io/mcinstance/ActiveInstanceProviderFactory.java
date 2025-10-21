@@ -3,6 +3,8 @@ package ninjabrainbot.io.mcinstance;
 import java.io.IOException;
 
 import com.sun.jna.Platform;
+import ninjabrainbot.io.mcinstance.mac.MacActiveInstanceListener;
+import ninjabrainbot.io.mcinstance.windows.WindowsActiveInstanceListener;
 import ninjabrainbot.util.Logger;
 
 public abstract class ActiveInstanceProviderFactory {

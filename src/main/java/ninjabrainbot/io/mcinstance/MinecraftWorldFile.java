@@ -49,7 +49,7 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 
 	@Override
 	public String toString() {
-		return Paths.get(minecraftInstance.savesDirectory, name).toString();
+		return Paths.get(minecraftInstance.savesDirectory, name != null ? name : "").toString();
 	}
 
 }

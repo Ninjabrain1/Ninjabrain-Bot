@@ -211,7 +211,9 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
             Method setIconImage = taskbarClass.getMethod("setIconImage", Image.class);
             setIconImage.invoke(taskbar, image);
             return;
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
         try {
             // Java 8 way to set icon
             // Application.getApplication().setDockIconImage(image);
@@ -219,7 +221,9 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
             Object application = applicationClass.getMethod("getApplication").invoke(null);
             Method setDockIconImage = applicationClass.getMethod("setDockIconImage", Image.class);
             setDockIconImage.invoke(application, image);
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+			e.printStackTrace();
+        }
     }
 
 	@Override

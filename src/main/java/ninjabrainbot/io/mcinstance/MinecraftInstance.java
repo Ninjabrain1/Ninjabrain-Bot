@@ -10,7 +10,7 @@ public class MinecraftInstance {
 	public final String dotMinecraftDirectory;
 	public final String savesDirectory;
 	public final boolean isRanked;
-	McVersion minecraftVersion;
+	private McVersion minecraftVersion;
 
 	public MinecraftInstance(String dotMinecraftDirectory) {
 		if (dotMinecraftDirectory == null)
@@ -23,6 +23,10 @@ public class MinecraftInstance {
 
 	public McVersion getMcVersion() {
 		return minecraftVersion;
+	}
+
+	public void setMcVersion(McVersion minecraftVersion) {
+		this.minecraftVersion = minecraftVersion;
 	}
 
 	private boolean isRanked() {
