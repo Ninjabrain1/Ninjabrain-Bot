@@ -268,12 +268,12 @@ public class MacActiveInstanceListener implements IActiveInstanceProvider, Runna
 	}
 
 	private boolean isJavaProcess(int pid) {
-		String[] getProcessCommCommand = {"bash", "-lc", "ps -p " + pid + " -o comm="};
-		String comm = runCommandAndReadFirstLine(getProcessCommCommand);
-		if (comm == null)
+		String[] getProcessExecutableCommand = {"bash", "-lc", "ps -p " + pid + " -o comm="};
+		String executable = runCommandAndReadFirstLine(getProcessExecutableCommand);
+		if (executable == null)
 			return false;
-		comm = comm.trim().toLowerCase();
-		return comm.endsWith("/java") || comm.equals("java");
+		executable = executable.trim().toLowerCase();
+		return executable.endsWith("/java") || executable.equals("java");
 	}
 
 	private String runCommandAndReadFirstLine(String[] command) {
