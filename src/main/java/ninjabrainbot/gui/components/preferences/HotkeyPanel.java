@@ -54,6 +54,11 @@ public class HotkeyPanel extends ThemedPanel {
 			public int getTextSize(SizePreference p) {
 				return p.TEXT_SIZE_SMALL;
 			}
+
+			@Override
+			public void updateSize(StyleManager styleManager) {
+				setFont(styleManager.fontSize(getTextSize(styleManager.size), !bold, true));
+			}
 		};
 		button.addActionListener(p -> clicked());
 		Dimension size = button.getPreferredSize();
@@ -88,10 +93,18 @@ public class HotkeyPanel extends ThemedPanel {
 		}
 	}
 
+	private String getNativeKeyText(int code) {
+		String text = NativeKeyEvent.getKeyText(code & 0xFFFF);
+		if (code >> 16 == NativeKeyEvent.KEY_LOCATION_NUMPAD && !text.startsWith("Unknown") && !text.startsWith("Num")) {
+			return "Num " + text;
+		}
+		return text;
+	}
+
 	private String getKeyText() {
 		if (preference.getCode() == -1)
 			return I18n.get("settings.not_in_use");
-		String k = Platform.isLinux() ? NativeKeyEvent.getKeyText(preference.getCode()) : KeyEvent.getKeyText(preference.getCode());
+		String k = Platform.isLinux() || Platform.isMac() ? getNativeKeyText(preference.getCode()) : KeyEvent.getKeyText(preference.getCode());
 		if (k.startsWith("Unknown")) {
 			k = k.substring(17);
 

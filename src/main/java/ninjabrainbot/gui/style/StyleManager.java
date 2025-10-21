@@ -31,6 +31,7 @@ public class StyleManager {
 	private final ArrayList<ThemedDialog> themedDialogs;
 
 	private Font font;
+	private Font fallbackFont;
 	private HashMap<String, Font> fonts;
 
 	private final FontRenderContext frc = new FontRenderContext(null, true, false);
@@ -40,6 +41,7 @@ public class StyleManager {
 		currentTheme.setTheme(theme);
 		this.size = size;
 		font = new Font(null, Font.BOLD, 25);
+        fallbackFont = font;
 		themedComponents = new ArrayList<>();
 		themedFrames = new ArrayList<>();
 		themedDialogs = new ArrayList<>();
@@ -55,10 +57,14 @@ public class StyleManager {
 		fonts = new HashMap<>();
 	}
 
-	public Font fontSize(float size, boolean light) {
-		String key = size + " " + light;
+    public Font fontSize(float size, boolean light) {
+        return fontSize(size, light, false);
+    }
+
+    public Font fontSize(float size, boolean light, boolean useFallbackFont) {
+		String key = size + " " + light + " " + useFallbackFont;
 		if (!fonts.containsKey(key)) {
-			Font f = font.deriveFont(light ? Font.PLAIN : Font.BOLD, size);
+			Font f = (useFallbackFont ? fallbackFont : font).deriveFont(light ? Font.PLAIN : Font.BOLD, size);
 			fonts.put(key, f);
 			return f;
 		}

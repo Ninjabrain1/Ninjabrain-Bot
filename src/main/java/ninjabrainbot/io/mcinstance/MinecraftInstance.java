@@ -1,6 +1,7 @@
 package ninjabrainbot.io.mcinstance;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import ninjabrainbot.io.preferences.enums.McVersion;
 
@@ -9,13 +10,13 @@ public class MinecraftInstance {
 	public final String dotMinecraftDirectory;
 	public final String savesDirectory;
 	public final boolean isRanked;
-	McVersion minecraftVersion;
+	private McVersion minecraftVersion;
 
 	public MinecraftInstance(String dotMinecraftDirectory) {
 		if (dotMinecraftDirectory == null)
 			throw new IllegalArgumentException(".minecraft directory cannot be null");
 		this.dotMinecraftDirectory = dotMinecraftDirectory;
-		savesDirectory = dotMinecraftDirectory + "\\saves";
+		savesDirectory = Paths.get(dotMinecraftDirectory, "saves").toString();
 		minecraftVersion = null;
 		isRanked = isRanked();
 	}
@@ -24,8 +25,12 @@ public class MinecraftInstance {
 		return minecraftVersion;
 	}
 
+	public void setMcVersion(McVersion minecraftVersion) {
+		this.minecraftVersion = minecraftVersion;
+	}
+
 	private boolean isRanked() {
-		File modsDirectory = new File(dotMinecraftDirectory + "\\mods");
+		File modsDirectory = Paths.get(dotMinecraftDirectory, "mods").toFile();
 		File[] modFiles = modsDirectory.listFiles();
 		if (modFiles == null)
 			return false;

@@ -1,4 +1,4 @@
-package ninjabrainbot.io.mcinstance;
+package ninjabrainbot.io.mcinstance.windows;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,10 @@ import com.sun.jna.ptr.IntByReference;
 import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ISubscribable;
 import ninjabrainbot.event.ObservableField;
+import ninjabrainbot.io.mcinstance.IActiveInstanceProvider;
+import ninjabrainbot.io.mcinstance.IMinecraftWorldFile;
+import ninjabrainbot.io.mcinstance.MinecraftInstance;
+import ninjabrainbot.io.mcinstance.SavesReader;
 import ninjabrainbot.io.preferences.enums.McVersion;
 
 public class WindowsActiveInstanceListener implements IActiveInstanceProvider, Runnable {
@@ -24,7 +28,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 
 	private final SavesReader savesReader;
 
-	WindowsActiveInstanceListener() throws IOException {
+	public WindowsActiveInstanceListener() throws IOException {
 		minecraftInstances = new HashMap<>();
 		activeMinecraftInstance = new ObservableField<MinecraftInstance>(null);
 
@@ -89,8 +93,8 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 			minecraftInstances.put(dotMinecraftDirectory, new MinecraftInstance(dotMinecraftDirectory));
 
 		MinecraftInstance minecraftInstance = minecraftInstances.get(dotMinecraftDirectory);
-		if (minecraftInstance.minecraftVersion == null)
-			minecraftInstance.minecraftVersion = GetMinecraftVersion(windowTitle);
+		if (minecraftInstance.getMcVersion() == null)
+			minecraftInstance.setMcVersion(GetMinecraftVersion(windowTitle));
 
 		activeMinecraftInstance.set(minecraftInstance);
 	}
