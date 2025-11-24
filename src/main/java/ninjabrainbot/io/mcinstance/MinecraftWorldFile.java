@@ -1,6 +1,7 @@
 package ninjabrainbot.io.mcinstance;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 public class MinecraftWorldFile implements IMinecraftWorldFile {
 
@@ -38,7 +39,7 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 
 	File getEndDimensionFile() {
 		if (endDimensionFile == null && name != null)
-			endDimensionFile = new File(minecraftInstance.savesDirectory + "\\" + name + "\\DIM1\\region");
+			endDimensionFile = Paths.get(minecraftInstance.savesDirectory, name , "DIM1", "region").toFile();
 		return endDimensionFile;
 	}
 
@@ -48,7 +49,7 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 
 	@Override
 	public String toString() {
-		return minecraftInstance.savesDirectory + "\\" + name;
+		return Paths.get(minecraftInstance.savesDirectory, name != null ? name : "").toString();
 	}
 
 }
