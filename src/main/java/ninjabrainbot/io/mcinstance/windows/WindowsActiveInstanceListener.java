@@ -1,6 +1,7 @@
 package ninjabrainbot.io.mcinstance.windows;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -85,14 +86,14 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		if (!isWindowMinecraft(foregroundWindowHandle, windowTitle))
 			return;
 
-		String dotMinecraftDirectory = getDotMinecraftDirectoryFromProcessId(processId);
-		if (dotMinecraftDirectory == null)
+		String minecraftDirectory = getMinecraftDirectoryFromProcessId(processId);
+		if (minecraftDirectory == null)
 			return;
 
-		if (!minecraftInstances.containsKey(dotMinecraftDirectory))
-			minecraftInstances.put(dotMinecraftDirectory, new MinecraftInstance(dotMinecraftDirectory));
+		if (!minecraftInstances.containsKey(minecraftDirectory))
+			minecraftInstances.put(minecraftDirectory, new MinecraftInstance(minecraftDirectory));
 
-		MinecraftInstance minecraftInstance = minecraftInstances.get(dotMinecraftDirectory);
+		MinecraftInstance minecraftInstance = minecraftInstances.get(minecraftDirectory);
 		if (minecraftInstance.getMcVersion() == null)
 			minecraftInstance.setMcVersion(GetMinecraftVersion(windowTitle));
 
@@ -118,7 +119,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		return pid.getValue();
 	}
 
-	private String getDotMinecraftDirectoryFromProcessId(int pid) {
+	private String getMinecraftDirectoryFromProcessId(int pid) {
 		Runtime runtime = Runtime.getRuntime();
 		String[] commands = { "jcmd", "" + pid, "VM.command_line" };
 		try {
@@ -133,7 +134,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 						if (jvmArgument.startsWith("Djava.library.path")) {
 							process.destroy();
 							commandOutputReader.close();
-							return getDotMinecraftDirectory(jvmArgument.trim());
+							return getMinecraftDirectory(jvmArgument.trim());
 						}
 					}
 				}
@@ -144,13 +145,18 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		return null;
 	}
 
-	private String getDotMinecraftDirectory(String nativesJvmArgument) {
+	private String getMinecraftDirectory(String nativesJvmArgument) {
 		int dotMinecraftIndex = nativesJvmArgument.lastIndexOf(".minecraft");
 		if (dotMinecraftIndex != -1)
 			return nativesJvmArgument.substring(19, dotMinecraftIndex + 10);
 
-		if (nativesJvmArgument.endsWith("natives"))
-			return nativesJvmArgument.substring(19).replace("natives", ".minecraft");
+		if (nativesJvmArgument.endsWith("natives")) {
+			String dotMinecraftDirectory = nativesJvmArgument.substring(19).replace("natives", ".minecraft");
+			if (new File(dotMinecraftDirectory).isDirectory())
+				return dotMinecraftDirectory;
+			else
+				return nativesJvmArgument.substring(19).replace("natives", "minecraft");
+		}
 
 		return null;
 	}
