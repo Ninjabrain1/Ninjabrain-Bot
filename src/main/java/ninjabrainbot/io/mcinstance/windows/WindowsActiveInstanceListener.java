@@ -154,8 +154,12 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 			String dotMinecraftDirectory = nativesJvmArgument.substring(19).replace("natives", ".minecraft");
 			if (new File(dotMinecraftDirectory).isDirectory())
 				return dotMinecraftDirectory;
-			else
-				return nativesJvmArgument.substring(19).replace("natives", "minecraft");
+
+			String minecraftDirectory = nativesJvmArgument.substring(19).replace("natives", "minecraft");
+			if (new File(minecraftDirectory).isDirectory())
+				return minecraftDirectory;
+
+			return dotMinecraftDirectory;
 		}
 
 		return null;
