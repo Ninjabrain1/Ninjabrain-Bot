@@ -15,7 +15,9 @@ If you are used to perfect travel and want the same accuracy you need to set hot
 
 ## Video guide
 
-[Full tutorial](https://www.youtube.com/watch?v=Rx8i7e5lu7g)  by Four
+[Beginner guide (2026)](https://www.youtube.com/watch?v=XmikooWmIAM) by K4yfour
+
+[Longer guide](https://www.youtube.com/watch?v=Rx8i7e5lu7g) by Four
 
 ## Features
 
