@@ -160,22 +160,7 @@ public class WindowsActiveInstanceListener implements IActiveInstanceProvider, R
 		if (titleWords.length <= 1)
 			return null;
 
-		String[] versionNumbers = titleWords[1].split("\\.");
-		if (versionNumbers.length <= 1)
-			return null;
-
-		String majorVersion = versionNumbers[0];
-		if (!majorVersion.contentEquals("1"))
-			return null;
-
-		int minorVersion;
-		try {
-			minorVersion = Integer.parseInt(versionNumbers[1]);
-		} catch (NumberFormatException e) {
-			return null;
-		}
-
-		return minorVersion < 19 ? McVersion.PRE_119 : McVersion.POST_119;
+		return McVersion.fromVersionString(titleWords[1]);
 	}
 
 }
