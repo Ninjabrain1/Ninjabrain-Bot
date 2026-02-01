@@ -185,21 +185,7 @@ public class MacActiveInstanceListener implements IActiveInstanceProvider, Runna
 			}
 		}
 
-		if (versionString == null || versionString.isEmpty())
-			return null;
-
-		// Map "1.x.y" → enum bucket
-		String[] versionNumbers = versionString.split("\\.");
-		if (versionNumbers.length < 2)
-			return null;
-		if (!"1".equals(versionNumbers[0]))
-			return null;
-		try {
-			int minor = Integer.parseInt(versionNumbers[1]);
-			return minor < 19 ? McVersion.PRE_119 : McVersion.POST_119;
-		} catch (NumberFormatException ignored) {
-			return null;
-		}
+		return McVersion.fromVersionString(versionString);
 	}
 
 	/**
@@ -253,8 +239,8 @@ public class MacActiveInstanceListener implements IActiveInstanceProvider, Runna
 		minecraftInstances.computeIfAbsent(minecraftDirectory, MinecraftInstance::new);
 		MinecraftInstance instance = minecraftInstances.get(minecraftDirectory);
 
-		McVersion parsedVersion = getMinecraftVersion(pid);
 		if (instance.getMcVersion() == null) {
+			McVersion parsedVersion = getMinecraftVersion(pid);
 			instance.setMcVersion(parsedVersion);
 		}
 		activeMinecraftInstance.set(instance);
