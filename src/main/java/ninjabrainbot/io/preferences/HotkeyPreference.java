@@ -61,6 +61,8 @@ public class HotkeyPreference {
 	}
 
 	private static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
-		return Platform.isLinux() || Platform.isMac() ? nativeKeyEvent.getKeyCode() | (nativeKeyEvent.getKeyLocation() << 16) : nativeKeyEvent.getRawCode();
+		int keyCode = nativeKeyEvent.getKeyCode();
+		boolean isValidKeyCode = keyCode != 0;
+		return isValidKeyCode && (Platform.isLinux() || Platform.isMac()) ? keyCode | (nativeKeyEvent.getKeyLocation() << 16) : nativeKeyEvent.getRawCode();
 	}
 }
