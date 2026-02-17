@@ -1,6 +1,5 @@
-package ninjabrainbot.parsing;
+package ninjabrainbot.io.preferences.enums;
 
-import ninjabrainbot.io.preferences.enums.McVersion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
