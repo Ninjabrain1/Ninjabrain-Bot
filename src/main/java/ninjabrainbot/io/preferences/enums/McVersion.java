@@ -17,4 +17,24 @@ public enum McVersion implements IMultipleChoicePreferenceDataType {
 	public String choiceName() {
 		return name;
 	}
+
+	public static McVersion fromVersionString(String versionString) {
+		if (versionString == null || versionString.isEmpty())
+			return null;
+
+		String[] versionNumbers = versionString.split("\\.");
+		if (versionNumbers.length < 2)
+			return null;
+
+		try {
+			int majorVersion = Integer.parseInt(versionNumbers[0]);
+			if (majorVersion < 26 && majorVersion != 1)
+				return null;
+
+			int minorVersion = majorVersion != 1 ? majorVersion : Integer.parseInt(versionNumbers[1]);
+			return minorVersion < 19 ? McVersion.PRE_119 : McVersion.POST_119;
+		} catch (NumberFormatException ignored) {
+			return null;
+		}
+	}
 }

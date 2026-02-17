@@ -12,6 +12,11 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 
 	private File endDimensionFile;
 
+	private static final String[] END_DIMENSION_REGION_NEW = {"dimensions", "minecraft", "the_end", "region"};
+	private static final String[] END_DIMENSION_REGION_LEGACY = {"DIM1", "region"};
+	private static final String[] LEGACY_LAYOUT_MARKER = {"region"};
+	private static final String[] NEW_LAYOUT_MARKER = {"dimensions", "minecraft"};
+
 	public MinecraftWorldFile(MinecraftInstance minecraftInstance, String name) {
 		this.minecraftInstance = minecraftInstance;
 		this.name = name;
@@ -38,9 +43,23 @@ public class MinecraftWorldFile implements IMinecraftWorldFile {
 	}
 
 	File getEndDimensionFile() {
-		if (endDimensionFile == null && name != null)
-			endDimensionFile = Paths.get(minecraftInstance.savesDirectory, name , "DIM1", "region").toFile();
-		return endDimensionFile;
+		if (name == null)
+			return null;
+
+		if (worldPath(LEGACY_LAYOUT_MARKER).exists())
+			endDimensionFile = worldPath(END_DIMENSION_REGION_LEGACY);
+
+		if (worldPath(NEW_LAYOUT_MARKER).exists())
+			endDimensionFile = worldPath(END_DIMENSION_REGION_NEW);
+
+		if (endDimensionFile != null)
+			return endDimensionFile;
+
+		return null;
+	}
+
+	private File worldPath(String[] parts) {
+		return Paths.get(minecraftInstance.savesDirectory).resolve(Paths.get(name, parts)).toFile();
 	}
 
 	void setHasEnteredEnd(boolean hasEnteredEnd) {
