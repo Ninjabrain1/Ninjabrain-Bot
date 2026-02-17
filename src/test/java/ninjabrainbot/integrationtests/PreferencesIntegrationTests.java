@@ -20,7 +20,7 @@ public class PreferencesIntegrationTests {
 
 	@ParameterizedTest
 	@ValueSource(floats = { 0.1f, -0.231f, 1, -1, -0.001f, 0.014f })
-	void CrosshairCorrectionIntegrationTest(float crosshairCorrection) {
+	void crosshairCorrectionIntegrationTest(float crosshairCorrection) {
 		// Arrange
 		IntegrationTestBuilder integrationTestBuilder = new IntegrationTestBuilder();
 		integrationTestBuilder.preferences.crosshairCorrection.set(crosshairCorrection);
