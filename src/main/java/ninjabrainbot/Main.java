@@ -8,6 +8,7 @@ import ninjabrainbot.gui.splash.Progress;
 import ninjabrainbot.gui.splash.Splash;
 import ninjabrainbot.io.ErrorHandler;
 import ninjabrainbot.io.KeyboardListener;
+import ninjabrainbot.io.StdinKeyReader;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.io.preferences.SavedPreferences;
 import ninjabrainbot.model.datastate.statistics.ApproximatedDensity;
@@ -46,6 +47,7 @@ public class Main {
 		Progress.setTask("Starting keyboard listener", 0.08f);
 		Profiler.stopAndStart("Register keyboard listener");
 		KeyboardListener.preInit();
+		StdinKeyReader.start();
 
 		System.setProperty("apple.awt.application.name", "NinjabrainBot");
 		Progress.startCompoundTask("", 1f);
