@@ -11,7 +11,7 @@ import ninjabrainbot.event.IObservable;
 import ninjabrainbot.event.ObservableField;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 
-public class ClipboardReader implements IClipboardProvider, Runnable {
+public class ClipboardReader implements IClipboardProvider, IClipboardListener, Runnable {
 
 	private final NinjabrainBotPreferences preferences;
 
@@ -61,7 +61,7 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 			} catch (UnsupportedFlavorException | IllegalStateException | IOException ignored) {
 			}
 			if (clipboardString != null && !lastClipboardString.equals(clipboardString)) {
-				onClipboardUpdated(clipboardString);
+				setClipboard(clipboardString);
 				lastClipboardString = clipboardString;
 			}
 			// Sleep 0.1 seconds
@@ -73,7 +73,8 @@ public class ClipboardReader implements IClipboardProvider, Runnable {
 		}
 	}
 
-	private void onClipboardUpdated(String clipboard) {
+	@Override
+	public void setClipboard(String clipboard) {
 		clipboardString.set(clipboard);
 	}
 

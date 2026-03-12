@@ -61,9 +61,9 @@ public class IntegrationTestBuilder {
 	public final IEnvironmentState environmentState;
 	public final IDataState dataState;
 
+	public MockedClipboardReader clipboardReader;
 	private CoordinateInputSource coordinateInputSource;
 	private FakeCoordinateInputSource fakeCoordinateInputSource;
-	private MockedClipboardReader clipboardReader;
 	private MockedInstanceProvider activeInstanceProvider;
 
 	private PlayerPositionInputHandler playerPositionInputHandler;
@@ -142,11 +142,16 @@ public class IntegrationTestBuilder {
 		return this;
 	}
 
-	public void setClipboard(String clipboardString) {
+	public IntegrationTestBuilder withClipboardReader() {
 		if (clipboardReader == null) clipboardReader = new MockedClipboardReader();
 		if (coordinateInputSource == null) coordinateInputSource = new CoordinateInputSource(clipboardReader);
 		if (playerPositionInputHandler == null) playerPositionInputHandler = createPlayerPositionInputHandler();
 		if (f3iLocationInputHandler == null) f3iLocationInputHandler = new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences);
+		return this;
+	}
+
+	public void setClipboard(String clipboardString) {
+		withClipboardReader();
 		clipboardReader.setClipboard(clipboardString);
 	}
 
@@ -169,8 +174,13 @@ public class IntegrationTestBuilder {
 	}
 
 	public void triggerHotkey(HotkeyPreference hotkeyPreference) {
-		if (hotkeyInputHandler == null) hotkeyInputHandler = new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor);
+		withHotkeyInputHandler();
 		hotkeyPreference.execute();
+	}
+
+	public IntegrationTestBuilder withHotkeyInputHandler() {
+		if (hotkeyInputHandler == null) hotkeyInputHandler = new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor);
+		return this;
 	}
 
 	public void setActiveMinecraftWorld(IMinecraftWorldFile minecraftWorld) {

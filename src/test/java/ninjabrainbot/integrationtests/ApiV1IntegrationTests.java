@@ -1,13 +1,17 @@
 package ninjabrainbot.integrationtests;
 
+import javax.swing.SwingUtilities;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +24,7 @@ import ninjabrainbot.Main;
 import ninjabrainbot.io.api.ApiV1HttpHandler;
 import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.mcinstance.MinecraftWorldFile;
+import ninjabrainbot.io.preferences.HotkeyPreference;
 import ninjabrainbot.io.preferences.enums.McVersion;
 import ninjabrainbot.model.datastate.common.ResultType;
 import org.json.JSONArray;
@@ -36,7 +41,7 @@ public class ApiV1IntegrationTests {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withProSettings();
 		builder.preferences.sigmaAlt.set(0.005f);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1213.26 71.00 -318.63 -45.53 -31.39");
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1212.65 69.00 -318.01 -45.53 -31.52");
@@ -98,7 +103,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/all-advancements");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withAllAdvancementsSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService,  builder.clipboardReader);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1477.68 70.00 -211.29 -103.76 -31.31");
 		builder.enterNewWorld();
@@ -159,7 +164,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/blind");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		builder.setClipboard("/execute in minecraft:the_nether run tp @s -217.82 85.00 6.88 -133.68 81.14");
 
@@ -194,7 +199,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/divine");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		builder.setClipboard("/setblock 5 73 0 minecraft:bone_block[axis=y]");
 
@@ -223,7 +228,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		builder.triggerHotkey(builder.preferences.hotkeyBoat);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -77.34375 32.82");
@@ -252,7 +257,7 @@ public class ApiV1IntegrationTests {
 				.withProSettings()
 				.withAllInformationMessagesSettings()
 				.withMcVersionSetting(McVersion.PRE_119);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		builder.setActiveMinecraftWorld(new MinecraftWorldFile(new MinecraftInstance("directory"), "worldName"), McVersion.POST_119);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 2408 65.00 8 0 -31.87");
@@ -304,7 +309,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/version");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -326,7 +331,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/ping");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -340,12 +345,106 @@ public class ApiV1IntegrationTests {
 	}
 
 	@Test
+	void calcStateNoAngles() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/calc-state");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
+
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+		String expectedResult =
+				("{" +
+						"\"boatState\":\"NONE\"," +
+						"\"adjustment\":0," +
+						"\"locked\":false," +
+						"\"angleCount\":0," +
+						"\"isAllAdvancementsModeEnabled\":false" +
+						"}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void calcState() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/calc-state");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
+
+		// Act
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 128.68 67.00 -72.11 -57.90 -48.05");
+		builder.triggerHotkey(builder.preferences.hotkeyIncrement);
+		builder.triggerHotkey(builder.preferences.hotkeyIncrement);
+		builder.triggerHotkey(builder.preferences.hotkeyBoat);
+		builder.triggerHotkey(builder.preferences.hotkeyLock);
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+		String expectedResult =
+				("{" +
+						"\"boatState\":\"MEASURING\"," +
+						"\"adjustment\":2," +
+						"\"locked\":true," +
+						"\"angleCount\":1," +
+						"\"isAllAdvancementsModeEnabled\":false" +
+						"}").replaceAll("\\s+", "");
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+	}
+
+	@Test
+	void inputClipboard() throws IOException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/input-clipboard");
+		exchange.setRequestBody("/execute in minecraft:overworld run tp @s 128.68 67.00 -72.11 -57.90 -48.05");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withClipboardReader();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
+		// Act
+		apiV1HttpHandler.handle(exchange);
+
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+		String expectedResult = "copied";
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+		Assertions.assertEquals(1, builder.dataState.getThrowList().size());
+	}
+
+	@Test
+	void inputKeys() throws IOException, InterruptedException, InvocationTargetException {
+		// Arrange
+		TestHttpExchange exchange = new TestHttpExchange("/api/v1/input-keys");
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		HotkeyPreference.hotkeys.clear();
+		IntegrationTestBuilder builder = new IntegrationTestBuilder().withHotkeyInputHandler();
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
+		// Act
+		builder.setClipboard("/execute in minecraft:overworld run tp @s 128.68 67.00 -72.11 -57.90 -48.05");
+		exchange.setRequestBody("[[\"hotkey_increment\", 20], \"hotkey_reset\", \"hotkey_undo\"]");
+		apiV1HttpHandler.handle(exchange);
+		SwingUtilities.invokeAndWait(() -> {});
+		// Assert
+		Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode());
+
+		String expectedResult = "success";
+		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString());
+		Assertions.assertEquals(1, builder.dataState.getThrowList().size());
+		Assertions.assertEquals(20, builder.dataState.getThrowList().getLast().correctionIncrements());
+	}
+
+	@Test
 	void subscribe_pushesNewDataWhenModified() throws IOException, InterruptedException {
 		// Arrange
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -372,7 +471,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -403,7 +502,7 @@ public class ApiV1IntegrationTests {
 		IntegrationTestBuilder builder = new IntegrationTestBuilder()
 				.withProSettings()
 				.withAllInformationMessagesSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService, builder.clipboardReader);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -452,6 +551,7 @@ public class ApiV1IntegrationTests {
 
 		private final String endpoint;
 		public OutputStream outputStream = new ByteArrayOutputStream();
+		public InputStream inputStream = null;
 		private int responseCode = 0;
 
 		public TestHttpExchange(String endpoint) {
@@ -483,7 +583,7 @@ public class ApiV1IntegrationTests {
 
 		@Override
 		public String getRequestMethod() {
-			return null;
+			return getRequestBody() == null ? "get" : "post";
 		}
 
 		@Override
@@ -496,9 +596,13 @@ public class ApiV1IntegrationTests {
 
 		}
 
+		public void setRequestBody(String body) {
+			inputStream = new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
+		}
+
 		@Override
 		public InputStream getRequestBody() {
-			return null;
+			return inputStream;
 		}
 
 		@Override
