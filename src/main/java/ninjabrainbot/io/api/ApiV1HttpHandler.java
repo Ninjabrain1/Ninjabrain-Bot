@@ -1,6 +1,8 @@
 package ninjabrainbot.io.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.Arrays;
@@ -13,9 +15,14 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.io.IClipboardListener;
+import ninjabrainbot.io.api.actions.IApiAction;
+import ninjabrainbot.io.api.actions.InputClipboardApiAction;
+import ninjabrainbot.io.api.actions.InputKeysApiAction;
 import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
 import ninjabrainbot.io.api.queries.BlindQuery;
 import ninjabrainbot.io.api.queries.BoatQuery;
+import ninjabrainbot.io.api.queries.CalculatorStateQuery;
 import ninjabrainbot.io.api.queries.DivineQuery;
 import ninjabrainbot.io.api.queries.IQuery;
 import ninjabrainbot.io.api.queries.InformationMessagesQuery;
@@ -32,18 +39,25 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 	private final EventSender eventSender;
 	private final HashMap<String, IQuery> queries;
+	private final HashMap<String, IApiAction> actions;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, ExecutorService executorService) {
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, ExecutorService executorService, IClipboardListener clipboardListener) {
 		eventSender = new EventSender(domainModel, executorService);
+
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery(dataState));
 		queries.put("all-advancements", new AllAdvancementsQuery(dataState));
 		queries.put("blind", new BlindQuery(dataState));
 		queries.put("divine", new DivineQuery(dataState));
 		queries.put("boat", new BoatQuery(dataState));
+		queries.put("calc-state", new CalculatorStateQuery(dataState));
 		queries.put("information-messages", new InformationMessagesQuery(informationMessageList));
 		queries.put("version", new VersionQuery());
 		queries.put("ping", new PingQuery());
+
+		actions = new HashMap<>();
+		actions.put("input-keys", new InputKeysApiAction());
+		actions.put("input-clipboard", new InputClipboardApiAction(clipboardListener));
 	}
 
 	@Override
@@ -55,21 +69,33 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			sendBadRequest(exchange);
 			return;
 		}
+		if ("get".equalsIgnoreCase(exchange.getRequestMethod())) {
+			IQuery query = queries.getOrDefault(subdirectories.get(0), null);
+			if (query == null) {
+				sendBadRequest(exchange);
+				return;
+			}
 
-		IQuery query = queries.getOrDefault(subdirectories.get(0), null);
-		if (query == null) {
-			sendBadRequest(exchange);
-			return;
-		}
+			if (subdirectories.size() == 1) {
+				sendQueryResponse(exchange, query);
+				return;
+			}
 
-		if (subdirectories.size() == 1) {
-			sendQueryResponse(exchange, query);
-			return;
-		}
+			if (query.supportsSubscriptions() && subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")) {
+				subscribeToQuery(exchange, query);
+				return;
+			}
+		} else if ("post".equalsIgnoreCase(exchange.getRequestMethod())) {
+			IApiAction action = actions.getOrDefault(subdirectories.get(0), null);
+			if (action == null) {
+				sendBadRequest(exchange);
+				return;
+			}
 
-		if (query.supportsSubscriptions() && subdirectories.size() == 2 && subdirectories.get(1).contentEquals("events")) {
-			subscribeToQuery(exchange, query);
-			return;
+			if (subdirectories.size() == 1) {
+				sendActionResponse(exchange, action);
+				return;
+			}
 		}
 
 		sendBadRequest(exchange);
@@ -99,6 +125,30 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			outputStream.close();
 		} catch (IOException e) {
 			Logger.log("HTTP server failed to send query response: " + e);
+		}
+	}
+
+	private void sendActionResponse(HttpExchange exchange, IApiAction action) {
+		try {
+			try {
+				String body = new BufferedReader(new InputStreamReader(exchange.getRequestBody())).lines()
+						.collect(Collectors.joining(System.lineSeparator()));
+				String response = action.post(body);
+
+				Headers responseHeaders = exchange.getResponseHeaders();
+				responseHeaders.add("Access-Control-Allow-Origin", "*");
+
+				OutputStream outputStream = exchange.getResponseBody();
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				outputStream.write(response.getBytes());
+				outputStream.flush();
+				outputStream.close();
+			} catch (RuntimeException e) {
+				Logger.log("Invalid request handling: " + e);
+				sendBadRequest(exchange);
+			}
+		} catch (IOException e) {
+			Logger.log("HTTP server failed to send action response: " + e);
 		}
 	}
 

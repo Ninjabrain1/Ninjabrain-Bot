@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import com.sun.net.httpserver.HttpServer;
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.io.IClipboardListener;
 import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
@@ -20,6 +21,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 	private final IDomainModel domainModel;
 	private final InformationMessageList informationMessageList;
 	private final NinjabrainBotPreferences preferences;
+	private final IClipboardListener clipboardListener;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	private HttpServer httpServer;
@@ -27,11 +29,12 @@ public class NinjabrainBotHttpServer implements IDisposable {
 	private ExecutorService executorService;
 	private Exception error;
 
-	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, NinjabrainBotPreferences preferences) {
+	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, NinjabrainBotPreferences preferences, IClipboardListener clipboardListener) {
 		this.dataState = dataState;
 		this.domainModel = domainModel;
 		this.informationMessageList = informationMessageList;
 		this.preferences = preferences;
+		this.clipboardListener = clipboardListener;
 		updateHttpServerStatus();
 
 		disposeHandler.add(preferences.enableHttpServer.whenModified().subscribe(this::updateHttpServerStatus));
@@ -58,7 +61,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 		}
 		if (executorService == null)
 			executorService = Executors.newFixedThreadPool(1);
-		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, informationMessageList, executorService);
+		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, informationMessageList, executorService, clipboardListener);
 		httpServer.createContext("/api/v1", apiV1HttpHandler);
 		httpServer.setExecutor(executorService);
 		httpServer.start();
