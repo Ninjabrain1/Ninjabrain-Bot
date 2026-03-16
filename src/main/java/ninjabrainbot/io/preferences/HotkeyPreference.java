@@ -15,15 +15,21 @@ public class HotkeyPreference {
 
 	final IntPreference modifier;
 	final IntPreference code;
+	final String key;
 
 	private final ObservableProperty<HotkeyPreference> whenTriggered;
 
 	public HotkeyPreference(String key, IPreferenceSource pref) {
 		this.pref = pref;
+		this.key = key;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);
 		hotkeys.add(this);
 		whenTriggered = new ObservableProperty<>();
+	}
+
+	public String getKey() {
+		return key;
 	}
 
 	public int getCode() {
