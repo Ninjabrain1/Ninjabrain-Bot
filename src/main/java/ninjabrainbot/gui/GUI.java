@@ -167,7 +167,7 @@ public class GUI {
 		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor, preferences);
 
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, domainModel, new NinjabrainBotOverlayImageWriter(), 100);
-		ninjabrainBotHttpServer = new NinjabrainBotHttpServer(dataState, domainModel, informationMessageList, preferences);
+		ninjabrainBotHttpServer = new NinjabrainBotHttpServer(dataState, domainModel, informationMessageList, preferences, actionExecutor);
 
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);

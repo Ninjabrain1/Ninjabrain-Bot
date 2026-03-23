@@ -36,7 +36,7 @@ public class ApiV1IntegrationTests {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withProSettings();
 		builder.preferences.sigmaAlt.set(0.005f);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1213.26 71.00 -318.63 -45.53 -31.39");
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1212.65 69.00 -318.01 -45.53 -31.52");
@@ -98,7 +98,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/all-advancements");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withAllAdvancementsSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1477.68 70.00 -211.29 -103.76 -31.31");
 		builder.enterNewWorld();
@@ -159,7 +159,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/blind");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.setClipboard("/execute in minecraft:the_nether run tp @s -217.82 85.00 6.88 -133.68 81.14");
 
@@ -194,7 +194,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/divine");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.setClipboard("/setblock 5 73 0 minecraft:bone_block[axis=y]");
 
@@ -223,7 +223,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.triggerHotkey(builder.preferences.hotkeyBoat);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -77.34375 32.82");
@@ -252,7 +252,7 @@ public class ApiV1IntegrationTests {
 				.withProSettings()
 				.withAllInformationMessagesSettings()
 				.withMcVersionSetting(McVersion.PRE_119);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		builder.setActiveMinecraftWorld(new MinecraftWorldFile(new MinecraftInstance("directory"), "worldName"), McVersion.POST_119);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 2408 65.00 8 0 -31.87");
@@ -304,7 +304,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/version");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -326,7 +326,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/ping");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);
@@ -345,7 +345,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -372,7 +372,7 @@ public class ApiV1IntegrationTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -403,7 +403,7 @@ public class ApiV1IntegrationTests {
 		IntegrationTestBuilder builder = new IntegrationTestBuilder()
 				.withProSettings()
 				.withAllInformationMessagesSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);

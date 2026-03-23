@@ -13,6 +13,8 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
+import ninjabrainbot.io.api.commands.ICommand;
+import ninjabrainbot.io.api.commands.ResetCommand;
 import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
 import ninjabrainbot.io.api.queries.BlindQuery;
 import ninjabrainbot.io.api.queries.BoatQuery;
@@ -22,6 +24,7 @@ import ninjabrainbot.io.api.queries.InformationMessagesQuery;
 import ninjabrainbot.io.api.queries.PingQuery;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.io.api.queries.VersionQuery;
+import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.information.InformationMessageList;
@@ -32,9 +35,11 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 	private final EventSender eventSender;
 	private final HashMap<String, IQuery> queries;
+	private final HashMap<String, ICommand> commands;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, ExecutorService executorService) {
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, IActionExecutor actionExecutor, ExecutorService executorService) {
 		eventSender = new EventSender(domainModel, executorService);
+
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery(dataState));
 		queries.put("all-advancements", new AllAdvancementsQuery(dataState));
@@ -44,6 +49,9 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		queries.put("information-messages", new InformationMessagesQuery(informationMessageList));
 		queries.put("version", new VersionQuery());
 		queries.put("ping", new PingQuery());
+
+		commands = new HashMap<>();
+		commands.put("reset", new ResetCommand(actionExecutor, domainModel));
 	}
 
 	@Override
