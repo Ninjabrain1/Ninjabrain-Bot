@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface ApiParam {
 	String description();
 	boolean required() default false;
+	String example() default "";
 }

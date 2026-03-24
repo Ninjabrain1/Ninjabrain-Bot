@@ -28,7 +28,9 @@ public class InputClipboardCommand implements IParametrizedCommand<InputClipboar
 
 	public static class Args {
 
-		@ApiParam(description = "Text to parse and input into the application as if the clipboard was set to it.", required = true)
+		@ApiParam(description = "Text to parse and input into the application as if the clipboard was set to it.",
+				required = true,
+				example = "/execute in minecraft:overworld run tp @s 0.00 0.00 0.00 0.00 0.00")
 		private String clipboardText;
 
 	}
