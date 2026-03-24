@@ -8,7 +8,7 @@ import java.util.List;
 
 import ninjabrainbot.io.api.documentation.ApiParam;
 import ninjabrainbot.io.api.ApiV1Commands;
-import ninjabrainbot.io.api.interfaces.IApiCommand;
+import ninjabrainbot.io.api.interfaces.ICommand;
 import ninjabrainbot.io.api.interfaces.IParametrizedCommand;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -17,13 +17,18 @@ public class GenerateApiDocsTests {
 
 	@Test
 	void generateApiDocs() {
-		List<IApiCommand> commands = ApiV1Commands.createAllCommands();
+		List<ICommand> commands = ApiV1Commands.createAllCommands();
 
 		StringBuilder md = new StringBuilder();
 
 		md.append("# API v1 – Commands\n\n");
-		md.append("Commands are sent as `POST` requests to `/api/v1/commands` with a JSON body.\n\n");
-		md.append("## Request format\n\n");
+		md.append("Commands are executed by sending `POST` requests to one of the endpoints below.\n\n");
+
+		md.append("## Endpoints\n\n");
+
+		md.append("### `POST /api/v1/send-command`\n\n");
+		md.append("Executes a single command.\n\n");
+		md.append("**Request body:**\n\n");
 		md.append("```json\n");
 		md.append("{\n");
 		md.append("  \"command\": \"<command_name>\",\n");
@@ -32,17 +37,29 @@ public class GenerateApiDocsTests {
 		md.append("```\n\n");
 		md.append("The `parameters` property should be omitted for commands that take no parameters.\n\n");
 
+		md.append("### `POST /api/v1/send-commands`\n\n");
+		md.append("Executes multiple commands in order.\n\n");
+		md.append("**Request body:**\n\n");
+		md.append("```json\n");
+		md.append("{\n");
+		md.append("  \"commands\": [\n");
+		md.append("    { \"command\": \"<command_name>\", \"parameters\": { ... } },\n");
+		md.append("    { \"command\": \"<command_name>\" }\n");
+		md.append("  ]\n");
+		md.append("}\n");
+		md.append("```\n\n");
+
 		// Table of contents
 		md.append("## Commands\n\n");
 		md.append("| Command | Description |\n");
 		md.append("| --- | --- |\n");
-		for (IApiCommand command : commands) {
+		for (ICommand command : commands) {
 			md.append("| [`").append(command.name()).append("`](#").append(command.name().replace("_", "_")).append(") | ").append(command.description()).append(" |\n");
 		}
 		md.append("\n---\n\n");
 
 		// Detail sections
-		for (IApiCommand command : commands) {
+		for (ICommand command : commands) {
 			md.append("### `").append(command.name()).append("`\n\n");
 			md.append(command.description()).append("\n\n");
 
@@ -80,7 +97,7 @@ public class GenerateApiDocsTests {
 		System.out.println(md);
 	}
 
-	private static List<ParameterInfo> getParameters(IApiCommand command) {
+	private static List<ParameterInfo> getParameters(ICommand command) {
 		List<ParameterInfo> params = new ArrayList<>();
 		if (!(command instanceof IParametrizedCommand))
 			return params;

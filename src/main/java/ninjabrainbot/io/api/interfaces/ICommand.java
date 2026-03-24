@@ -1,11 +1,13 @@
 package ninjabrainbot.io.api.interfaces;
 
-import ninjabrainbot.model.actions.IAction;
-import ninjabrainbot.model.datastate.IDataState;
-import ninjabrainbot.model.domainmodel.IDomainModel;
+/**
+ * Common base interface for all API commands (both simple and parametrized).
+ */
+public interface ICommand {
 
-public interface ICommand extends IApiCommand {
+	String name();
 
-	Iterable<IAction> mapToActions(IDomainModel domainModel, IDataState dataState);
+	String description();
 
 }
+

@@ -1,8 +1,11 @@
 package ninjabrainbot.io.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +16,6 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.io.api.commands.ResetCommand;
-import ninjabrainbot.io.api.interfaces.ICommand;
 import ninjabrainbot.io.api.interfaces.IQuery;
 import ninjabrainbot.io.api.queries.AllAdvancementsQuery;
 import ninjabrainbot.io.api.queries.BlindQuery;
@@ -34,11 +35,12 @@ import ninjabrainbot.util.Logger;
 public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 	private final EventSender eventSender;
+	private final ApiV1CommandHandler commandHandler;
 	private final HashMap<String, IQuery> queries;
-	private final HashMap<String, ICommand> commands;
 
 	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, IActionExecutor actionExecutor, ExecutorService executorService) {
 		eventSender = new EventSender(domainModel, executorService);
+		commandHandler = new ApiV1CommandHandler(domainModel, dataState, actionExecutor);
 
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery(dataState));
@@ -49,24 +51,26 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		queries.put("information-messages", new InformationMessagesQuery(informationMessageList));
 		queries.put("version", new VersionQuery());
 		queries.put("ping", new PingQuery());
-
-		commands = new HashMap<>();
-		commands.put("reset", new ResetCommand());
 	}
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		Logger.log("Received request: " + exchange.getRequestURI());
+		Logger.log("Received http request: " + exchange.getRequestURI());
 		List<String> subdirectories = getSubdirectories(exchange);
 
-		if (subdirectories.size() == 0) {
-			sendBadRequest(exchange);
+		if (subdirectories.isEmpty()) {
+			sendBadRequest(exchange, "Missing endpoint.");
+			return;
+		}
+
+		if (exchange.getRequestMethod().equalsIgnoreCase("POST")){
+			handlePost(exchange, subdirectories);
 			return;
 		}
 
 		IQuery query = queries.getOrDefault(subdirectories.get(0), null);
 		if (query == null) {
-			sendBadRequest(exchange);
+			sendBadRequest(exchange, "Unknown endpoint: " + subdirectories.get(0));
 			return;
 		}
 
@@ -80,7 +84,40 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			return;
 		}
 
-		sendBadRequest(exchange);
+		sendBadRequest(exchange, "Invalid request.");
+	}
+
+	private void handlePost(HttpExchange exchange, List<String> subdirectories) throws IOException {
+		if (subdirectories.size() != 1) {
+			sendBadRequest(exchange, "Invalid command endpoint.");
+			return;
+		}
+
+		String body = readRequestBody(exchange);
+		ApiV1CommandHandler.Result result = commandHandler.handleCommandRequest(subdirectories.get(0), body);
+
+		if (!result.success) {
+			sendBadRequest(exchange, result.errorMessage);
+			return;
+		}
+
+		sendOk(exchange);
+	}
+
+	private String readRequestBody(HttpExchange exchange) throws IOException {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			return sb.toString();
+		}
+	}
+
+	private void sendOk(HttpExchange exchange) throws IOException {
+		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+		exchange.close();
 	}
 
 	private List<String> getSubdirectories(HttpExchange exchange) {
@@ -90,9 +127,13 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		return Arrays.stream(subdirectories).filter(x -> x.length() != 0).collect(Collectors.toList());
 	}
 
-	private void sendBadRequest(HttpExchange exchange) throws IOException {
-		exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-		exchange.getResponseBody().close();
+	private void sendBadRequest(HttpExchange exchange, String errorMessage) throws IOException {
+		byte[] responseBytes = ("{\"error\":\"" + errorMessage + "\"}").getBytes(StandardCharsets.UTF_8);
+		exchange.getResponseHeaders().add("Content-Type", "application/json");
+		exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, responseBytes.length);
+		OutputStream os = exchange.getResponseBody();
+		os.write(responseBytes);
+		os.close();
 	}
 
 	private void sendQueryResponse(HttpExchange exchange, IQuery query) {
