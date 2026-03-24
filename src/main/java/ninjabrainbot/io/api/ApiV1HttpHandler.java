@@ -51,7 +51,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		queries.put("ping", new PingQuery());
 
 		commands = new HashMap<>();
-		commands.put("reset", new ResetCommand(actionExecutor, domainModel));
+		commands.put("reset", new ResetCommand(domainModel));
 	}
 
 	@Override

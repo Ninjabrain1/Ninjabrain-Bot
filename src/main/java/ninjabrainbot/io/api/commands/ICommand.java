@@ -1,7 +1,11 @@
 package ninjabrainbot.io.api.commands;
 
+import ninjabrainbot.model.actions.IAction;
+
 public interface ICommand {
 
-	void post(String arguments);
+	String name();
+
+	Iterable<IAction> mapToActions();
 
 }

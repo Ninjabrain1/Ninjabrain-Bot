@@ -1,21 +1,25 @@
 package ninjabrainbot.io.api.commands;
 
-import ninjabrainbot.model.actions.IActionExecutor;
+import java.util.Collections;
+
+import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class ResetCommand implements ICommand {
 
-	private final IActionExecutor actionExecutor;
 	private final IDomainModel domainModel;
 
-	public ResetCommand(IActionExecutor actionExecutor, IDomainModel domainModel) {
-		this.actionExecutor = actionExecutor;
+	public ResetCommand(IDomainModel domainModel) {
 		this.domainModel = domainModel;
 	}
 
-	public void post(String arguments) {
-		actionExecutor.executeImmediately(new ResetAction(domainModel));
+	public String name() {
+		return "reset";
+	}
+
+	public Iterable<IAction> mapToActions() {
+		return Collections.singleton(new ResetAction(domainModel));
 	}
 
 }
