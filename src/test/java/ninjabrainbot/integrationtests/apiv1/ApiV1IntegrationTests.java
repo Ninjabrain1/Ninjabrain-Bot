@@ -1,13 +1,17 @@
-package ninjabrainbot.integrationtests;
+package ninjabrainbot.integrationtests.apiv1;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +21,12 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpPrincipal;
 import ninjabrainbot.Main;
+import ninjabrainbot.integrationtests.IntegrationTestBuilder;
 import ninjabrainbot.io.api.ApiV1HttpHandler;
+import ninjabrainbot.io.api.commands.ApiParam;
+import ninjabrainbot.io.api.commands.ApiV1Commands;
+import ninjabrainbot.io.api.commands.IApiCommand;
+import ninjabrainbot.io.api.commands.IParametrizedCommand;
 import ninjabrainbot.io.mcinstance.MinecraftInstance;
 import ninjabrainbot.io.mcinstance.MinecraftWorldFile;
 import ninjabrainbot.io.preferences.enums.McVersion;
@@ -446,6 +455,48 @@ public class ApiV1IntegrationTests {
 				 "   ]\n" +
 				 "}").replaceAll("\\s+", "");
 		Assertions.assertEquals(expectedResult, exchange.getResponseBodyAsString().replaceAll("\\s+", ""));
+	}
+
+	@Test
+	void generateApiDocs() throws IOException {
+		List<IApiCommand> commands = ApiV1Commands.createAllCommands();
+
+		for (IApiCommand command : commands) {
+			System.out.println("Command: " + command.name());
+			System.out.println("  " + command.description());
+
+			if (command instanceof IParametrizedCommand) {
+				for (Type implementedInterface : command.getClass().getGenericInterfaces()) {
+					if (!(implementedInterface instanceof ParameterizedType))
+						continue;
+
+					ParameterizedType parameterizedType = (ParameterizedType) implementedInterface;
+					if (parameterizedType.getRawType() != IParametrizedCommand.class)
+						continue;
+
+					Type argType = parameterizedType.getActualTypeArguments()[0];
+					System.out.println("  Parameters:");
+					for (Field field : ((Class<?>) argType).getDeclaredFields()) {
+						ApiParam annotation = field.getAnnotation(ApiParam.class);
+
+						String name = field.getName();
+						String type = field.getType().getSimpleName();
+
+						String description = annotation != null
+								? annotation.description()
+								: "No description";
+
+						boolean required = annotation != null && annotation.required();
+
+						System.out.println("    " + name + " (" + type + ")");
+						System.out.println("      Required: " + required);
+						System.out.println("      " + description);
+					}
+				}
+			}
+			System.out.println();
+		}
+
 	}
 
 	private static class TestHttpExchange extends HttpExchange {

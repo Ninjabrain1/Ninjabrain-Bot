@@ -14,10 +14,17 @@ public class ResetCommand implements ICommand {
 		this.domainModel = domainModel;
 	}
 
+	@Override
 	public String name() {
 		return "reset";
 	}
 
+	@Override
+	public String description() {
+		return "Resets the application state.";
+	}
+
+	@Override
 	public Iterable<IAction> mapToActions() {
 		return Collections.singleton(new ResetAction(domainModel));
 	}
