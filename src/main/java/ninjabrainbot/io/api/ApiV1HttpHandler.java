@@ -70,7 +70,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 
 		IQuery query = queries.getOrDefault(subdirectories.get(0), null);
 		if (query == null) {
-			sendBadRequest(exchange, "Unknown endpoint: " + subdirectories.get(0));
+			sendBadRequest(exchange, "Unknown GET endpoint: " + subdirectories.get(0));
 			return;
 		}
 

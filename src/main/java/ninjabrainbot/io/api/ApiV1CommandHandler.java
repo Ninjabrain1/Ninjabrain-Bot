@@ -41,6 +41,10 @@ public class ApiV1CommandHandler {
 
 	public Result handleCommandRequest(String endpoint, String requestBody) {
 		List<JSONObject> commandJsonObjects;
+
+		if (requestBody.isEmpty())
+			return Result.error("Missing request body.");
+
 		try {
 			if (endpoint.equals("send-command")) {
 				JSONObject json = new JSONObject(requestBody);
@@ -53,7 +57,7 @@ public class ApiV1CommandHandler {
 					commandJsonObjects.add(commandsArray.getJSONObject(i));
 				}
 			} else {
-				return Result.error("Unknown command endpoint: " + endpoint);
+				return Result.error("Unknown POST endpoint: " + endpoint);
 			}
 		} catch (JSONException e) {
 			Logger.log("Failed to parse command JSON: " + e.getMessage());
