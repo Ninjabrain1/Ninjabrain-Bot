@@ -1,4 +1,4 @@
-package ninjabrainbot.io.api.commands;
+package ninjabrainbot.io.api.interfaces;
 
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.datastate.IDataState;

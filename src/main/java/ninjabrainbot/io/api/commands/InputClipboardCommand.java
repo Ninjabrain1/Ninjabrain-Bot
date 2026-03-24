@@ -2,6 +2,8 @@ package ninjabrainbot.io.api.commands;
 
 import java.util.Collections;
 
+import ninjabrainbot.io.api.documentation.ApiParam;
+import ninjabrainbot.io.api.interfaces.IParametrizedCommand;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.datastate.IDataState;

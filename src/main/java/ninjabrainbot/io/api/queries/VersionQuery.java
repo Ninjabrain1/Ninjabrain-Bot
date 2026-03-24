@@ -1,6 +1,7 @@
 package ninjabrainbot.io.api.queries;
 
 import ninjabrainbot.Main;
+import ninjabrainbot.io.api.interfaces.IQuery;
 import org.json.JSONObject;
 
 public class VersionQuery implements IQuery {

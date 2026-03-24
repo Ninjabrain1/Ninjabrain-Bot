@@ -9,8 +9,7 @@ import java.util.concurrent.ExecutorService;
 
 import ninjabrainbot.event.DisposeHandler;
 import ninjabrainbot.event.IDisposable;
-import ninjabrainbot.io.api.queries.IQuery;
-import ninjabrainbot.model.datastate.IDataState;
+import ninjabrainbot.io.api.interfaces.IQuery;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.Logger;

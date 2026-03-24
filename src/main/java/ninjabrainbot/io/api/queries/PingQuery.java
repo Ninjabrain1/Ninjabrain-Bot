@@ -1,5 +1,7 @@
 package ninjabrainbot.io.api.queries;
 
+import ninjabrainbot.io.api.interfaces.IQuery;
+
 public class PingQuery implements IQuery {
 
 	public String get() {

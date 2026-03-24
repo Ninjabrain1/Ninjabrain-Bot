@@ -5,10 +5,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import ninjabrainbot.io.api.commands.ApiParam;
-import ninjabrainbot.io.api.commands.ApiV1Commands;
-import ninjabrainbot.io.api.commands.IApiCommand;
-import ninjabrainbot.io.api.commands.IParametrizedCommand;
+import ninjabrainbot.io.api.documentation.ApiParam;
+import ninjabrainbot.io.api.ApiV1Commands;
+import ninjabrainbot.io.api.interfaces.IApiCommand;
+import ninjabrainbot.io.api.interfaces.IParametrizedCommand;
 import org.junit.jupiter.api.Test;
 
 public class GenerateApiDocsTests {

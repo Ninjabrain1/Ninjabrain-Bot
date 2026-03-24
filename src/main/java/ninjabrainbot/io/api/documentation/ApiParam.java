@@ -1,4 +1,4 @@
-package ninjabrainbot.io.api.commands;
+package ninjabrainbot.io.api.documentation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

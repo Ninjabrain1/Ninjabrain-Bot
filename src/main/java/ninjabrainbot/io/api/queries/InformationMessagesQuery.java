@@ -1,8 +1,8 @@
 package ninjabrainbot.io.api.queries;
 
+import ninjabrainbot.io.api.interfaces.IQuery;
 import ninjabrainbot.model.information.InformationMessage;
 import ninjabrainbot.model.information.InformationMessageList;
-import ninjabrainbot.model.information.InformationMessageSeverity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

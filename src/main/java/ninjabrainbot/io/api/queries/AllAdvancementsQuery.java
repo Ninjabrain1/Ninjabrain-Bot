@@ -1,5 +1,6 @@
 package ninjabrainbot.io.api.queries;
 
+import ninjabrainbot.io.api.interfaces.IQuery;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.common.StructureInformation;

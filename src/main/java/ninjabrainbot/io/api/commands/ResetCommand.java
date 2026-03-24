@@ -2,17 +2,13 @@ package ninjabrainbot.io.api.commands;
 
 import java.util.Collections;
 
+import ninjabrainbot.io.api.interfaces.ICommand;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class ResetCommand implements ICommand {
-
-	private final IDomainModel domainModel;
-
-	public ResetCommand(IDomainModel domainModel) {
-		this.domainModel = domainModel;
-	}
 
 	@Override
 	public String name() {
@@ -25,7 +21,7 @@ public class ResetCommand implements ICommand {
 	}
 
 	@Override
-	public Iterable<IAction> mapToActions() {
+	public Iterable<IAction> mapToActions(IDomainModel domainModel, IDataState dataState) {
 		return Collections.singleton(new ResetAction(domainModel));
 	}
 
