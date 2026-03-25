@@ -15,6 +15,10 @@ import ninjabrainbot.model.datastate.endereye.IEnderEyeThrowFactory;
 import ninjabrainbot.model.domainmodel.DomainModel;
 import ninjabrainbot.model.environmentstate.EnvironmentState;
 import ninjabrainbot.model.input.F3ILocationInputHandler;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
+import ninjabrainbot.model.input.InputtedF3IToActionMapper;
+import ninjabrainbot.model.input.InputtedPlayerPositionToActionMapper;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.FakeCoordinateInputSource;
 import ninjabrainbot.util.TestUtils;
@@ -45,8 +49,10 @@ public class ResultTypeProviderTests {
 	void resultTypeUpdatesCorrectly() {
 		FakeCoordinateInputSource coordinateInputSource = new FakeCoordinateInputSource();
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
-		new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
-		new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences);
+		IInputtedF3IToActionMapper inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
+		IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
+		new PlayerPositionInputHandler(coordinateInputSource, actionExecutor, inputtedPlayerPositionToActionMapper);
+		new F3ILocationInputHandler(coordinateInputSource, actionExecutor, inputtedF3IToActionMapper);
 
 		ObservableProperty<IDetailedPlayerPosition> playerPositionStream = coordinateInputSource.whenNewDetailedPlayerPositionInputted;
 		ObservableProperty<F3IData> f3iStream = coordinateInputSource.whenNewF3IInputted;

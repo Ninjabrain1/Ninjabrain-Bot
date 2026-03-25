@@ -42,6 +42,10 @@ import ninjabrainbot.model.input.ActiveInstanceInputHandler;
 import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.F3ILocationInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
+import ninjabrainbot.model.input.InputtedF3IToActionMapper;
+import ninjabrainbot.model.input.InputtedPlayerPositionToActionMapper;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.Assert;
 import ninjabrainbot.util.FakeCoordinateInputSource;
@@ -68,6 +72,8 @@ public class IntegrationTestBuilder {
 
 	private PlayerPositionInputHandler playerPositionInputHandler;
 	private PlayerPositionInputHandler fakePlayerPositionInputHandler;
+	private IInputtedF3IToActionMapper inputtedF3IToActionMapper;
+	private IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper;
 	private F3ILocationInputHandler f3iLocationInputHandler;
 	private F3ILocationInputHandler fakeF3ILocationInputHandler;
 	private HotkeyInputHandler hotkeyInputHandler;
@@ -146,7 +152,8 @@ public class IntegrationTestBuilder {
 		if (clipboardReader == null) clipboardReader = new MockedClipboardReader();
 		if (coordinateInputSource == null) coordinateInputSource = new CoordinateInputSource(clipboardReader);
 		if (playerPositionInputHandler == null) playerPositionInputHandler = createPlayerPositionInputHandler();
-		if (f3iLocationInputHandler == null) f3iLocationInputHandler = new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences);
+		if (inputtedF3IToActionMapper == null) inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
+		if (f3iLocationInputHandler == null) f3iLocationInputHandler = new F3ILocationInputHandler(coordinateInputSource, actionExecutor, inputtedF3IToActionMapper);
 		clipboardReader.setClipboard(clipboardString);
 	}
 
@@ -247,8 +254,10 @@ public class IntegrationTestBuilder {
 	public void inputF3I(F3IData f3IData) {
 		if (fakeCoordinateInputSource == null)
 			fakeCoordinateInputSource = new FakeCoordinateInputSource();
+		if (inputtedF3IToActionMapper == null)
+			inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
 		if (fakeF3ILocationInputHandler == null)
-			fakeF3ILocationInputHandler = new F3ILocationInputHandler(fakeCoordinateInputSource, dataState, actionExecutor, preferences);
+			fakeF3ILocationInputHandler = new F3ILocationInputHandler(fakeCoordinateInputSource, actionExecutor, inputtedF3IToActionMapper);
 		fakeCoordinateInputSource.whenNewF3IInputted.notifySubscribers(f3IData);
 	}
 
@@ -271,15 +280,19 @@ public class IntegrationTestBuilder {
 	private PlayerPositionInputHandler createPlayerPositionInputHandler() {
 		if (coordinateInputSource == null)
 			coordinateInputSource = new CoordinateInputSource(clipboardReader);
-		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
-		return new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
+		if (inputtedPlayerPositionToActionMapper == null){
+			IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
+			inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
+		}
+		return new PlayerPositionInputHandler(coordinateInputSource, actionExecutor, inputtedPlayerPositionToActionMapper);
 	}
 
 	private PlayerPositionInputHandler createFakePlayerPositionInputHandler() {
 		if (fakeCoordinateInputSource == null)
 			fakeCoordinateInputSource = new FakeCoordinateInputSource();
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
-		return new PlayerPositionInputHandler(fakeCoordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory);
+		InputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
+		return new PlayerPositionInputHandler(fakeCoordinateInputSource, actionExecutor, inputtedPlayerPositionToActionMapper);
 	}
 
 }

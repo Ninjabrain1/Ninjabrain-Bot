@@ -39,6 +39,10 @@ import ninjabrainbot.model.input.ButtonInputHandler;
 import ninjabrainbot.model.input.F3ILocationInputHandler;
 import ninjabrainbot.model.input.HotkeyInputHandler;
 import ninjabrainbot.model.input.IButtonInputHandler;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
+import ninjabrainbot.model.input.InputtedF3IToActionMapper;
+import ninjabrainbot.model.input.InputtedPlayerPositionToActionMapper;
 import ninjabrainbot.model.input.PlayerPositionInputHandler;
 import ninjabrainbot.util.Profiler;
 
@@ -114,8 +118,10 @@ public class GUI {
 		Progress.setTask("Initializing input handlers", 0.08f);
 		coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
-		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, dataState, actionExecutor, preferences, enderEyeThrowFactory));
-		disposeHandler.add(new F3ILocationInputHandler(coordinateInputSource, dataState, actionExecutor, preferences));
+		IInputtedF3IToActionMapper inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
+		IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
+		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, actionExecutor, inputtedPlayerPositionToActionMapper));
+		disposeHandler.add(new F3ILocationInputHandler(coordinateInputSource, actionExecutor, inputtedF3IToActionMapper));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
 		disposeHandler.add(new HotkeyInputHandler(preferences, domainModel, dataState, actionExecutor));
 		buttonInputHandler = new ButtonInputHandler(domainModel, dataState, actionExecutor);
