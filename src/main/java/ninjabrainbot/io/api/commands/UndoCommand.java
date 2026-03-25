@@ -18,7 +18,9 @@ public class UndoCommand implements IDomainModelCommand {
 
 	@Override
 	public String description() {
-		return "Undoes the last action, does the same as pressing the 'Undo' button in the UI.";
+		return "Undoes the last action, does the same as pressing the 'Undo' button in the UI." +
+			   "Will do nothing if the calculator is locked. " +
+			   "This command cannot be sent together with other commands, as undoing inside a transaction does not make sense. ";
 	}
 
 	@Override

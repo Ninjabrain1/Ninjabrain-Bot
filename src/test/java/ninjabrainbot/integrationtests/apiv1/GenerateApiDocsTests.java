@@ -58,7 +58,7 @@ public class GenerateApiDocsTests {
 				rows.append("| `").append(p.name).append("` | `").append(p.type).append("` | ")
 						.append(p.required ? "Yes" : "No").append(" | ").append(p.description).append(" |\n");
 				if (p.example != null) {
-					exampleParams.put(p.name, p.example);
+					exampleParams.put(p.name, parseExample(p.example, p.type));
 				}
 			}
 			exampleJson.put("parameters", exampleParams);
@@ -85,6 +85,28 @@ public class GenerateApiDocsTests {
 			return new String(buffer.toByteArray(), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load template: " + name, e);
+		}
+	}
+
+	private static Object parseExample(String example, String type) {
+		switch (type) {
+			case "boolean":
+			case "Boolean":
+				return Boolean.parseBoolean(example);
+			case "int":
+			case "Integer":
+				return Integer.parseInt(example);
+			case "long":
+			case "Long":
+				return Long.parseLong(example);
+			case "double":
+			case "Double":
+				return Double.parseDouble(example);
+			case "float":
+			case "Float":
+				return Float.parseFloat(example);
+			default:
+				return example;
 		}
 	}
 
