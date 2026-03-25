@@ -20,7 +20,7 @@ public class SubscribeApiTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -47,7 +47,7 @@ public class SubscribeApiTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat/events");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);
@@ -78,7 +78,7 @@ public class SubscribeApiTests {
 		IntegrationTestBuilder builder = new IntegrationTestBuilder()
 				.withProSettings()
 				.withAllInformationMessagesSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
 
 		// Act 1
 		apiV1HttpHandler.handle(exchange);

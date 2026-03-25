@@ -67,6 +67,9 @@ public class GUI {
 	private IDataState dataState;
 	private DomainModelImportExportService domainModelImportExportService;
 
+	private IInputtedF3IToActionMapper inputtedF3IToActionMapper;
+	private IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper;
+
 	private CoordinateInputSource coordinateInputSource;
 	private IButtonInputHandler buttonInputHandler;
 
@@ -118,8 +121,8 @@ public class GUI {
 		Progress.setTask("Initializing input handlers", 0.08f);
 		coordinateInputSource = disposeHandler.add(new CoordinateInputSource(clipboardReader));
 		IEnderEyeThrowFactory enderEyeThrowFactory = new EnderEyeThrowFactory(preferences, dataState.boatDataState());
-		IInputtedF3IToActionMapper inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
-		IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
+		inputtedF3IToActionMapper = new InputtedF3IToActionMapper(dataState, preferences);
+		inputtedPlayerPositionToActionMapper = new InputtedPlayerPositionToActionMapper(dataState, preferences, enderEyeThrowFactory);
 		disposeHandler.add(new PlayerPositionInputHandler(coordinateInputSource, actionExecutor, inputtedPlayerPositionToActionMapper));
 		disposeHandler.add(new F3ILocationInputHandler(coordinateInputSource, actionExecutor, inputtedF3IToActionMapper));
 		disposeHandler.add(new ActiveInstanceInputHandler(activeInstanceProvider, domainModel, dataState, actionExecutor, preferences));
@@ -173,7 +176,7 @@ public class GUI {
 		autoResetTimer = new AutoResetTimer(dataState, domainModel, actionExecutor, preferences);
 
 		obsOverlay = new OBSOverlay(ninjabrainBotFrame, preferences, dataState, domainModel, new NinjabrainBotOverlayImageWriter(), 100);
-		ninjabrainBotHttpServer = new NinjabrainBotHttpServer(dataState, domainModel, informationMessageList, preferences, actionExecutor);
+		ninjabrainBotHttpServer = new NinjabrainBotHttpServer(dataState, domainModel, informationMessageList, preferences, actionExecutor, inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper);
 
 		ninjabrainBotFrame.checkIfOffScreen();
 		ninjabrainBotFrame.setVisible(true);

@@ -8,15 +8,17 @@ import ninjabrainbot.io.api.commands.RedoCommand;
 import ninjabrainbot.io.api.commands.ResetCommand;
 import ninjabrainbot.io.api.commands.UndoCommand;
 import ninjabrainbot.io.api.interfaces.ICommand;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
 
 public class ApiV1Commands {
 
-	public static List<ICommand> createAllCommands() {
+	public static List<ICommand> createAllCommands(IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper) {
 		return Arrays.asList(
 				new UndoCommand(),
 				new RedoCommand(),
 				new ResetCommand(),
-				new InputClipboardCommand()
+				new InputClipboardCommand(inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper)
 		);
 	}
 

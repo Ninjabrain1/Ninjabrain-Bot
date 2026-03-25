@@ -13,6 +13,8 @@ import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.information.InformationMessageList;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
 import ninjabrainbot.util.Logger;
 
 public class NinjabrainBotHttpServer implements IDisposable {
@@ -22,6 +24,8 @@ public class NinjabrainBotHttpServer implements IDisposable {
 	private final InformationMessageList informationMessageList;
 	private final NinjabrainBotPreferences preferences;
 	private final IActionExecutor actionExecutor;
+	private final IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper;
+	private final IInputtedF3IToActionMapper inputtedF3IToActionMapper;
 	private final DisposeHandler disposeHandler = new DisposeHandler();
 
 	private HttpServer httpServer;
@@ -29,12 +33,14 @@ public class NinjabrainBotHttpServer implements IDisposable {
 	private ExecutorService executorService;
 	private Exception error;
 
-	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, NinjabrainBotPreferences preferences, IActionExecutor actionExecutor) {
+	public NinjabrainBotHttpServer(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, NinjabrainBotPreferences preferences, IActionExecutor actionExecutor, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper) {
 		this.dataState = dataState;
 		this.domainModel = domainModel;
 		this.informationMessageList = informationMessageList;
 		this.preferences = preferences;
 		this.actionExecutor = actionExecutor;
+		this.inputtedPlayerPositionToActionMapper = inputtedPlayerPositionToActionMapper;
+		this.inputtedF3IToActionMapper = inputtedF3IToActionMapper;
 		updateHttpServerStatus();
 
 		disposeHandler.add(preferences.enableHttpServer.whenModified().subscribe(this::updateHttpServerStatus));
@@ -61,7 +67,7 @@ public class NinjabrainBotHttpServer implements IDisposable {
 		}
 		if (executorService == null)
 			executorService = Executors.newFixedThreadPool(1);
-		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, informationMessageList, actionExecutor, executorService);
+		apiV1HttpHandler = new ApiV1HttpHandler(dataState, domainModel, informationMessageList, actionExecutor, executorService, inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper);
 		httpServer.createContext("/api/v1", apiV1HttpHandler);
 		httpServer.setExecutor(executorService);
 		httpServer.start();

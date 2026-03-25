@@ -21,8 +21,8 @@ public class ResetCommand implements IParameterlessCommand {
 	}
 
 	@Override
-	public Iterable<IAction> mapToActions(IDomainModel domainModel, IDataState dataState) {
-		return Collections.singleton(new ResetAction(domainModel));
+	public IAction[] mapToActions(IDomainModel domainModel, IDataState dataState) {
+		return new IAction[] { new ResetAction(domainModel) };
 	}
 
 }

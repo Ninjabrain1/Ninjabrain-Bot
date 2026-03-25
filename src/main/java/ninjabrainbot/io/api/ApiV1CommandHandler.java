@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
+import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
+import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
 import ninjabrainbot.util.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,12 +32,12 @@ public class ApiV1CommandHandler {
 	private final IActionExecutor actionExecutor;
 	private final Map<String, ICommand> commands;
 
-	public ApiV1CommandHandler(IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor) {
+	public ApiV1CommandHandler(IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper) {
 		this.domainModel = domainModel;
 		this.dataState = dataState;
 		this.actionExecutor = actionExecutor;
 		this.commands = ApiV1Commands
-				.createAllCommands()
+				.createAllCommands(inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper)
 				.stream()
 				.collect(Collectors.toMap(ICommand::name, x -> x));
 	}
@@ -81,17 +84,13 @@ public class ApiV1CommandHandler {
 			if (command instanceof IDomainModelCommand) {
 				domainModelCommands.add((IDomainModelCommand) command);
 			} else if (command instanceof IParameterlessCommand) {
-				for (IAction action : ((IParameterlessCommand) command).mapToActions(domainModel, dataState)) {
-					actions.add(action);
-				}
+				actions.addAll(Arrays.asList(((IParameterlessCommand) command).mapToActions(domainModel, dataState)));
 			} else if (command instanceof IParametrizedCommand) {
 				if (parameters == null)
 					return Result.error("Missing 'parameters' for command: " + commandName);
 				try {
 					Object args = deserializeArgs((IParametrizedCommand<?>) command, parameters);
-					for (IAction action : invokeMapToActions((IParametrizedCommand<?>) command, args)) {
-						actions.add(action);
-					}
+					actions.addAll(Arrays.asList(invokeMapToActions((IParametrizedCommand<?>) command, args)));
 				} catch (Exception e) {
 					Logger.log("Failed to deserialize command parameters: " + e.getMessage());
 					return Result.error("Invalid parameters for command '" + commandName + "': " + e.getMessage());
@@ -157,7 +156,7 @@ public class ApiV1CommandHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <TArgs> Iterable<IAction> invokeMapToActions(IParametrizedCommand<TArgs> command, Object args) {
+	private <TArgs> IAction[] invokeMapToActions(IParametrizedCommand<TArgs> command, Object args) {
 		return command.mapToActions(domainModel, dataState, (TArgs) args);
 	}
 

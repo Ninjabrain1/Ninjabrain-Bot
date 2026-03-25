@@ -6,6 +6,6 @@ import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public interface IParameterlessCommand extends ICommand {
 
-	Iterable<IAction> mapToActions(IDomainModel domainModel, IDataState dataState);
+	IAction[] mapToActions(IDomainModel domainModel, IDataState dataState);
 
 }

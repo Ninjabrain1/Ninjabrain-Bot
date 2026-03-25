@@ -17,7 +17,7 @@ public class GenerateApiDocsTests {
 
 	@Test
 	void generateApiDocs() {
-		List<ICommand> commands = ApiV1Commands.createAllCommands();
+		List<ICommand> commands = ApiV1Commands.createAllCommands(null, null);
 
 		StringBuilder md = new StringBuilder();
 
