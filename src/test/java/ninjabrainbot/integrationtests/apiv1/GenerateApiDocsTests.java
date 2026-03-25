@@ -1,8 +1,12 @@
 package ninjabrainbot.integrationtests.apiv1;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,82 +23,69 @@ public class GenerateApiDocsTests {
 	void generateApiDocs() {
 		List<ICommand> commands = ApiV1Commands.createAllCommands(null, null);
 
-		StringBuilder md = new StringBuilder();
+		String mainTemplate = loadTemplate("api_docs_template.md");
+		String commandTemplate = loadTemplate("api_docs_command_template.md");
+		String parametersTemplate = loadTemplate("api_docs_parameters_template.md");
 
-		md.append("# API v1 – Commands\n\n");
-		md.append("Commands are executed by sending `POST` requests to one of the endpoints below.\n\n");
+		StringBuilder commandsTable = new StringBuilder();
+		StringBuilder commandDetails = new StringBuilder();
 
-		md.append("## Endpoints\n\n");
-
-		md.append("### `POST /api/v1/send-command`\n\n");
-		md.append("Executes a single command.\n\n");
-		md.append("**Request body:**\n\n");
-		md.append("```json\n");
-		md.append("{\n");
-		md.append("  \"command\": \"<command_name>\",\n");
-		md.append("  \"parameters\": { ... }\n");
-		md.append("}\n");
-		md.append("```\n\n");
-		md.append("The `parameters` property should be omitted for commands that take no parameters.\n\n");
-
-		md.append("### `POST /api/v1/send-commands`\n\n");
-		md.append("Executes multiple commands in order.\n\n");
-		md.append("**Request body:**\n\n");
-		md.append("```json\n");
-		md.append("{\n");
-		md.append("  \"commands\": [\n");
-		md.append("    { \"command\": \"<command_name>\", \"parameters\": { ... } },\n");
-		md.append("    { \"command\": \"<command_name>\" }\n");
-		md.append("  ]\n");
-		md.append("}\n");
-		md.append("```\n\n");
-
-		// Table of contents
-		md.append("## Commands\n\n");
-		md.append("| Command | Description |\n");
-		md.append("| --- | --- |\n");
 		for (ICommand command : commands) {
-			md.append("| [`").append(command.name()).append("`](#").append(command.name()).append(") | ").append(command.summary()).append(" |\n");
+			commandsTable.append("| [`").append(command.name()).append("`](#").append(command.name()).append(") | ").append(command.summary()).append(" |\n");
+			commandDetails.append(renderCommandSection(command, commandTemplate, parametersTemplate));
 		}
-		md.append("\n---\n\n");
 
-		// Detail sections
-		for (ICommand command : commands) {
-			md.append("### `").append(command.name()).append("`\n\n");
-			md.append(command.description()).append("\n\n");
+		String result = mainTemplate
+				.replace("{{commands_table}}", commandsTable.toString())
+				.replace("{{command_details}}", commandDetails.toString());
 
-			JSONObject exampleJson = new JSONObject();
-			exampleJson.put("command", command.name());
+		System.out.println(result);
+	}
 
-			List<ParameterInfo> params = getParameters(command);
+	private String renderCommandSection(ICommand command, String commandTemplate, String parametersTemplate) {
+		List<ParameterInfo> params = getParameters(command);
 
-			if (params.isEmpty()) {
-				md.append("This command takes no parameters.\n\n");
-			} else {
-				md.append("#### Parameters\n\n");
-				md.append("| Name | Type | Required | Description |\n");
-				md.append("| --- | --- | --- | --- |\n");
+		JSONObject exampleJson = new JSONObject();
+		exampleJson.put("command", command.name());
 
-				JSONObject exampleParams = new JSONObject();
-				for (ParameterInfo p : params) {
-					md.append("| `").append(p.name).append("` | `").append(p.type).append("` | ")
-							.append(p.required ? "Yes" : "No").append(" | ").append(p.description).append(" |\n");
-					if (p.example != null) {
-						exampleParams.put(p.name, p.example);
-					}
+		String parametersSection;
+		if (params.isEmpty()) {
+			parametersSection = "This command takes no parameters.";
+		} else {
+			StringBuilder rows = new StringBuilder();
+			JSONObject exampleParams = new JSONObject();
+			for (ParameterInfo p : params) {
+				rows.append("| `").append(p.name).append("` | `").append(p.type).append("` | ")
+						.append(p.required ? "Yes" : "No").append(" | ").append(p.description).append(" |\n");
+				if (p.example != null) {
+					exampleParams.put(p.name, p.example);
 				}
-				md.append("\n");
-				exampleJson.put("parameters", exampleParams);
 			}
-
-			md.append("#### Example\n\n");
-			md.append("```json\n");
-			md.append(exampleJson.toString(2)).append("\n");
-			md.append("```\n\n");
-			md.append("---\n\n");
+			exampleJson.put("parameters", exampleParams);
+			parametersSection = parametersTemplate.replace("{{parameters_table_rows}}", rows.toString());
 		}
 
-		System.out.println(md);
+		return commandTemplate
+				.replace("{{command_name}}", command.name())
+				.replace("{{command_description}}", command.description())
+				.replace("{{parameters_section}}", parametersSection)
+				.replace("{{example_json}}", exampleJson.toString(2));
+	}
+
+	private static String loadTemplate(String name) {
+		try (InputStream inputStream = GenerateApiDocsTests.class.getResourceAsStream("/apiv1/" + name)) {
+			if (inputStream == null)
+				throw new IllegalStateException("Template not found: " + name);
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			byte[] data = new byte[4096];
+			int bytesRead;
+			while ((bytesRead = inputStream.read(data)) != -1) {
+				buffer.write(data, 0, bytesRead);
+			}
+			return new String(buffer.toByteArray(), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to load template: " + name, e);
+		}
 	}
 
 	private static List<ParameterInfo> getParameters(ICommand command) {
