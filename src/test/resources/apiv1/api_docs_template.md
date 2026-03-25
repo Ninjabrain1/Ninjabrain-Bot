@@ -1,6 +1,6 @@
 # API v1 – Commands
 
-All interactions with Ninjabrain Bot through the input API happens with _commands_. They allow external tools and scripts to control the application programmatically.
+All interactions with Ninjabrain Bot through the input API happen with _commands_. They allow external tools and scripts to control the application programmatically.
 
 Commands are executed by sending `POST` requests to one of the endpoints below.
 
