@@ -27,7 +27,7 @@ Executes multiple commands in sequence within a single request. Commands are val
 
 Each command is executed in order, and its effects are applied to the application state before the next command runs. This means later commands in the batch can depend on state changes made by earlier ones.
 All commands are executed in one transaction, meaning that no intermediate state is visible to other API clients or the UI until the entire batch has completed.
-~~~~
+
 An undo or redo action, executed through the API or the GUI, will undo or redo all commands in the most recently completed batch as a single unit. This means that if you send a batch of 5 commands, a single undo will revert all 5 commands together, rather than requiring 5 separate undo actions.
 
 **Request body:**
