@@ -1,7 +1,5 @@
 package ninjabrainbot.io.api.commands;
 
-import java.util.Collections;
-
 import ninjabrainbot.io.api.interfaces.IParameterlessCommand;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.common.ResetAction;
@@ -16,8 +14,13 @@ public class ResetCommand implements IParameterlessCommand {
 	}
 
 	@Override
+	public String summary() {
+		return "Resets the calculator.";
+	}
+
+	@Override
 	public String description() {
-		return "Resets the application state, as if the 'Reset' button is pressed.";
+		return "Resets the application state, does the same as pressing the 'Reset' button in the UI.";
 	}
 
 	@Override

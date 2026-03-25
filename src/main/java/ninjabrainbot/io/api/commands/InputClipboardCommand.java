@@ -29,6 +29,11 @@ public class InputClipboardCommand implements IParametrizedCommand<InputClipboar
 	}
 
 	@Override
+	public String summary() {
+		return "Inputs clipboard text, e.g. F3+C data.";
+	}
+
+	@Override
 	public String description() {
 		return "Parses the given text and inputs it into the application as if the clipboard was set to it.";
 	}

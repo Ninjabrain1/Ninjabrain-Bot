@@ -7,6 +7,14 @@ public interface ICommand {
 
 	String name();
 
+	/**
+	 * Short one-line summary, used in the commands overview table.
+	 */
+	String summary();
+
+	/**
+	 * Detailed description, used in the per-command documentation section.
+	 */
 	String description();
 
 }

@@ -11,8 +11,13 @@ public class UndoCommand implements IDomainModelCommand {
 	}
 
 	@Override
+	public String summary() {
+		return "Undoes the last action.";
+	}
+
+	@Override
 	public String description() {
-		return "Undoes the last action, as if the 'Undo' button is pressed.";
+		return "Undoes the last action, does the same as pressing the 'Undo' button in the UI.";
 	}
 
 	@Override

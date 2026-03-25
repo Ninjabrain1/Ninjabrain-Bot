@@ -54,7 +54,7 @@ public class GenerateApiDocsTests {
 		md.append("| Command | Description |\n");
 		md.append("| --- | --- |\n");
 		for (ICommand command : commands) {
-			md.append("| [`").append(command.name()).append("`](#").append(command.name().replace("_", "_")).append(") | ").append(command.description()).append(" |\n");
+			md.append("| [`").append(command.name()).append("`](#").append(command.name()).append(") | ").append(command.summary()).append(" |\n");
 		}
 		md.append("\n---\n\n");
 
