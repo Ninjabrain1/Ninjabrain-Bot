@@ -126,10 +126,11 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 		String path = exchange.getRequestURI().getPath();
 		Assert.isTrue(path.startsWith("/api/v1"));
 		String[] subdirectories = path.substring(7).split("/");
-		return Arrays.stream(subdirectories).filter(x -> x.length() != 0).collect(Collectors.toList());
+		return Arrays.stream(subdirectories).filter(x -> !x.isEmpty()).collect(Collectors.toList());
 	}
 
 	private void sendBadRequest(HttpExchange exchange, String errorMessage) throws IOException {
+		Logger.log("Bad request: " + errorMessage);
 		byte[] responseBytes = ("{\"error\":\"" + errorMessage + "\"}").getBytes(StandardCharsets.UTF_8);
 		exchange.getResponseHeaders().add("Content-Type", "application/json");
 		exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, responseBytes.length);

@@ -4,12 +4,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ninjabrainbot.io.api.documentation.ApiParam;
 import ninjabrainbot.io.api.interfaces.ICommand;
 import ninjabrainbot.io.api.interfaces.IDomainModelCommand;
 import ninjabrainbot.io.api.interfaces.IParameterlessCommand;
@@ -21,6 +21,7 @@ import ninjabrainbot.model.domainmodel.IDomainModel;
 import ninjabrainbot.model.input.IInputtedF3IToActionMapper;
 import ninjabrainbot.model.input.IInputtedPlayerPositionToActionMapper;
 import ninjabrainbot.util.Logger;
+import ninjabrainbot.util.StopWatch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ public class ApiV1CommandHandler {
 	}
 
 	public Result handleCommandRequest(String endpoint, String requestBody) {
+		StopWatch stopWatch = new StopWatch();
 		List<JSONObject> commandJsonObjects;
 
 		if (requestBody.isEmpty())
@@ -66,9 +68,9 @@ public class ApiV1CommandHandler {
 			Logger.log("Failed to parse command JSON: " + e.getMessage());
 			return Result.error("Malformed JSON: " + e.getMessage());
 		}
+		stopWatch.log("JSON parsing");
 
-		List<IDomainModelCommand> domainModelCommands = new ArrayList<>();
-		List<IAction> actions = new ArrayList<>();
+		List<ParsedCommand> parsedCommands = new ArrayList<>();
 
 		for (JSONObject commandJson : commandJsonObjects) {
 			String commandName = commandJson.optString("command", null);
@@ -79,39 +81,44 @@ public class ApiV1CommandHandler {
 			if (command == null)
 				return Result.error("Unknown command: " + commandName);
 
-			JSONObject parameters = commandJson.optJSONObject("parameters");
-
 			if (command instanceof IDomainModelCommand) {
-				domainModelCommands.add((IDomainModelCommand) command);
+				if (commandJsonObjects.size() > 1) {
+					return Result.error("Command '" + commandName + "' cannot be executed together with other commands.");
+				}
+				((IDomainModelCommand) command).execute(domainModel);
+				stopWatch.logTotal("Domain model command '" + commandName + "' executed");
+				return Result.success();
 			} else if (command instanceof IParameterlessCommand) {
-				actions.addAll(Arrays.asList(((IParameterlessCommand) command).mapToActions(domainModel, dataState)));
+				parsedCommands.add(new ParsedCommand(command, null));
 			} else if (command instanceof IParametrizedCommand) {
+				JSONObject parameters = commandJson.optJSONObject("parameters");
 				if (parameters == null)
 					return Result.error("Missing 'parameters' for command: " + commandName);
 				try {
 					Object args = deserializeArgs((IParametrizedCommand<?>) command, parameters);
-					actions.addAll(Arrays.asList(invokeMapToActions((IParametrizedCommand<?>) command, args)));
+					parsedCommands.add(new ParsedCommand(command, args));
 				} catch (Exception e) {
 					Logger.log("Failed to deserialize command parameters: " + e.getMessage());
 					return Result.error("Invalid parameters for command '" + commandName + "': " + e.getMessage());
 				}
 			}
 		}
+		stopWatch.log("Command parsing and validation");
 
-		if (!domainModelCommands.isEmpty() && !actions.isEmpty()) {
-			return Result.error("Command '" + domainModelCommands.get(0).name() + "' cannot be executed together with other commands.");
-		}
+		domainModel.applyWriteLock(() -> {
+			for (ParsedCommand parsedCommand : parsedCommands) {
+				if (parsedCommand.command instanceof IParameterlessCommand) {
+					IAction[] actions = ((IParameterlessCommand) parsedCommand.command).mapToActions(domainModel, dataState);
+					actionExecutor.executeImmediately(actions);
+				} else if (parsedCommand.command instanceof IParametrizedCommand) {
+					IAction[] actions = invokeMapToActions((IParametrizedCommand<?>) parsedCommand.command, parsedCommand.args);
+					actionExecutor.executeImmediately(actions);
+				}
+				stopWatch.log("Executed command '" + parsedCommand.command.name() + "'");
+			}
+		}).run();
 
-		if (domainModelCommands.size() > 1) {
-			return Result.error("Command '" + domainModelCommands.get(1).name() + "' cannot be executed together with other commands.");
-		}
-
-		if (domainModelCommands.size() == 1) {
-			domainModelCommands.get(0).execute(domainModel);
-		} else if (!actions.isEmpty()) {
-			actionExecutor.executeImmediately(actions.toArray(new IAction[0]));
-		}
-
+		stopWatch.logTotal("Total request handling");
 		return Result.success();
 	}
 
@@ -120,8 +127,13 @@ public class ApiV1CommandHandler {
 		Object args = argsType.newInstance();
 		for (Field field : argsType.getDeclaredFields()) {
 			String fieldName = field.getName();
-			if (!parameters.has(fieldName))
+			if (!parameters.has(fieldName)) {
+				ApiParam annotation = field.getAnnotation(ApiParam.class);
+				if (annotation != null && annotation.required()) {
+					throw new IllegalArgumentException("Missing required parameter: " + fieldName);
+				}
 				continue;
+			}
 			field.setAccessible(true);
 			Class<?> fieldType = field.getType();
 			if (fieldType == String.class) {
@@ -158,6 +170,16 @@ public class ApiV1CommandHandler {
 	@SuppressWarnings("unchecked")
 	private <TArgs> IAction[] invokeMapToActions(IParametrizedCommand<TArgs> command, Object args) {
 		return command.mapToActions(domainModel, dataState, (TArgs) args);
+	}
+
+	private static class ParsedCommand {
+		final ICommand command;
+		final Object args;
+
+		ParsedCommand(ICommand command, Object args) {
+			this.command = command;
+			this.args = args;
+		}
 	}
 
 	public static class Result {

@@ -77,7 +77,8 @@ public class DomainModel implements IDomainModel, IDisposable {
 	public void acquireWriteLock() {
 		Assert.isTrue(isFullyInitialized, "Attempted to modify DomainModel before it has been fully initialized.");
 		lock.writeLock().lock();
-		eventLockers.forEach(EventLocker::lock);
+		if (lock.getWriteHoldCount() == 1)
+			eventLockers.forEach(EventLocker::lock);
 	}
 
 	@Override
@@ -87,14 +88,16 @@ public class DomainModel implements IDomainModel, IDisposable {
 
 	private void releaseWriteLock(boolean saveSnapshotOfNewState) {
 		try {
-			if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
-				domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
+			if (lock.getWriteHoldCount() == 1) {
+				if (saveSnapshotOfNewState && isModifiedDuringCurrentWriteLock)
+					domainModelHistory.saveSnapshotIfUniqueFromLastSnapshot();
 
-			eventLockers.forEach(EventLocker::unlockAndReleaseEvents);
+				eventLockers.forEach(EventLocker::unlockAndReleaseEvents);
 
-			if (isModifiedDuringCurrentWriteLock)
-				whenModified.notifySubscribers(this);
-			isModifiedDuringCurrentWriteLock = false;
+				if (isModifiedDuringCurrentWriteLock)
+					whenModified.notifySubscribers(this);
+				isModifiedDuringCurrentWriteLock = false;
+			}
 		} finally {
 			lock.writeLock().unlock();
 		}
