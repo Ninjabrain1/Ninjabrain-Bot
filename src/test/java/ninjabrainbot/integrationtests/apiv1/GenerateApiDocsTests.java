@@ -21,7 +21,7 @@ public class GenerateApiDocsTests {
 
 	@Test
 	void generateApiDocs() {
-		List<ICommand> commands = ApiV1Commands.createAllCommands(null, null);
+		List<ICommand> commands = ApiV1Commands.createAllCommands(null, null, null);
 
 		String mainTemplate = loadTemplate("api_docs_template.md");
 		String commandTemplate = loadTemplate("api_docs_command_template.md");

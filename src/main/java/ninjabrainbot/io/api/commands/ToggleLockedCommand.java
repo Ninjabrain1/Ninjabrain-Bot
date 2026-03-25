@@ -1,35 +1,32 @@
 package ninjabrainbot.io.api.commands;
 
 import ninjabrainbot.io.api.interfaces.IParameterlessCommand;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
-import ninjabrainbot.model.actions.common.ResetAction;
+import ninjabrainbot.model.actions.common.ToggleLockedAction;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
-public class ResetCommand implements IParameterlessCommand {
+public class ToggleLockedCommand implements IParameterlessCommand {
 
 	@Override
 	public String name() {
-		return "reset";
+		return "toggle_lock";
 	}
 
 	@Override
 	public String summary() {
-		return "Resets the calculator.";
+		return "Toggles the calculator lock.";
 	}
 
 	@Override
 	public String description() {
-		return "Resets the application state, does the same as pressing the 'Reset' button in the UI. " +
-			   "Will do nothing if the calculator is locked.";
+		return "Toggles the calculator lock similar to the 'Lock calculator' hotkey. ";
 	}
 
 	@Override
 	public IAction[] mapToActions(IDomainModel domainModel, IDataState dataState) {
-		if (!dataState.locked().get())
-			return new IAction[] { new ResetAction(domainModel) };
-
-		return new IAction[0];
+		return new IAction[] { new ToggleLockedAction(dataState) };
 	}
 
 }

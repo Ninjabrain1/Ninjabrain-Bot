@@ -18,7 +18,7 @@ public class DivineApiTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/divine");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null, builder.preferences);
 
 		builder.setClipboard("/setblock 5 73 0 minecraft:bone_block[axis=y]");
 

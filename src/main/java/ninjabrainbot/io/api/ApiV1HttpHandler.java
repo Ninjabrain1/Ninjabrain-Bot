@@ -25,6 +25,7 @@ import ninjabrainbot.io.api.queries.InformationMessagesQuery;
 import ninjabrainbot.io.api.queries.PingQuery;
 import ninjabrainbot.io.api.queries.StrongholdQuery;
 import ninjabrainbot.io.api.queries.VersionQuery;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
@@ -40,9 +41,9 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 	private final ApiV1CommandHandler commandHandler;
 	private final HashMap<String, IQuery> queries;
 
-	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, IActionExecutor actionExecutor, ExecutorService executorService, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper) {
+	public ApiV1HttpHandler(IDataState dataState, IDomainModel domainModel, InformationMessageList informationMessageList, IActionExecutor actionExecutor, ExecutorService executorService, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper, NinjabrainBotPreferences ninjabrainBotPreferences) {
 		eventSender = new EventSender(domainModel, executorService);
-		commandHandler = new ApiV1CommandHandler(domainModel, dataState, actionExecutor, inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper);
+		commandHandler = new ApiV1CommandHandler(domainModel, dataState, actionExecutor, inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper, ninjabrainBotPreferences);
 
 		queries = new HashMap<>();
 		queries.put("stronghold", new StrongholdQuery(dataState));

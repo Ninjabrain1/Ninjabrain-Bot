@@ -21,7 +21,7 @@ public class StrongholdApiTests {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withProSettings();
 		builder.preferences.sigmaAlt.set(0.005f);
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null, builder.preferences);
 
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1213.26 71.00 -318.63 -45.53 -31.39");
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1212.65 69.00 -318.01 -45.53 -31.52");

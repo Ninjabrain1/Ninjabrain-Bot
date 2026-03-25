@@ -1,6 +1,7 @@
 package ninjabrainbot.io.api.commands;
 
 import ninjabrainbot.io.api.interfaces.IDomainModelCommand;
+import ninjabrainbot.model.datastate.IDataState;
 import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public class UndoCommand implements IDomainModelCommand {
@@ -21,8 +22,9 @@ public class UndoCommand implements IDomainModelCommand {
 	}
 
 	@Override
-	public void execute(IDomainModel domainModel) {
-		domainModel.undoUnderWriteLock();
+	public void execute(IDomainModel domainModel, IDataState dataState) {
+		if (!dataState.locked().get())
+			domainModel.undoUnderWriteLock();
 	}
 
 }

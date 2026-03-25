@@ -18,7 +18,7 @@ public class PingApiTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/ping");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null, builder.preferences);
 
 		// Act
 		apiV1HttpHandler.handle(exchange);

@@ -6,6 +6,6 @@ import ninjabrainbot.model.domainmodel.IDomainModel;
 
 public interface IDomainModelCommand extends ICommand {
 
-	void execute(IDomainModel domainModel);
+	void execute(IDomainModel domainModel, IDataState dataState);
 
 }

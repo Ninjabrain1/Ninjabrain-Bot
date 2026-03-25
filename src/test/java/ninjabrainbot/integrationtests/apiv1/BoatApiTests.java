@@ -18,7 +18,7 @@ public class BoatApiTests {
 		TestHttpExchange exchange = new TestHttpExchange("/api/v1/boat");
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		IntegrationTestBuilder builder = new IntegrationTestBuilder().withBoatSettings();
-		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null);
+		ApiV1HttpHandler apiV1HttpHandler = new ApiV1HttpHandler(builder.dataState, builder.domainModel, builder.createInformationMessageList(), builder.actionExecutor, executorService, null, null, builder.preferences);
 
 		builder.triggerHotkey(builder.preferences.hotkeyBoat);
 		builder.setClipboard("/execute in minecraft:overworld run tp @s 1274.04 92.55 1064.56 -77.34375 32.82");

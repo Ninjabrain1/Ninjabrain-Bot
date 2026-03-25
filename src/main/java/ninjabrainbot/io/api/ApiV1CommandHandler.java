@@ -14,6 +14,7 @@ import ninjabrainbot.io.api.interfaces.ICommand;
 import ninjabrainbot.io.api.interfaces.IDomainModelCommand;
 import ninjabrainbot.io.api.interfaces.IParameterlessCommand;
 import ninjabrainbot.io.api.interfaces.IParametrizedCommand;
+import ninjabrainbot.io.preferences.NinjabrainBotPreferences;
 import ninjabrainbot.model.actions.IAction;
 import ninjabrainbot.model.actions.IActionExecutor;
 import ninjabrainbot.model.datastate.IDataState;
@@ -33,12 +34,12 @@ public class ApiV1CommandHandler {
 	private final IActionExecutor actionExecutor;
 	private final Map<String, ICommand> commands;
 
-	public ApiV1CommandHandler(IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper) {
+	public ApiV1CommandHandler(IDomainModel domainModel, IDataState dataState, IActionExecutor actionExecutor, IInputtedPlayerPositionToActionMapper inputtedPlayerPositionToActionMapper, IInputtedF3IToActionMapper inputtedF3IToActionMapper, NinjabrainBotPreferences ninjabrainBotPreferences) {
 		this.domainModel = domainModel;
 		this.dataState = dataState;
 		this.actionExecutor = actionExecutor;
 		this.commands = ApiV1Commands
-				.createAllCommands(inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper)
+				.createAllCommands(inputtedPlayerPositionToActionMapper, inputtedF3IToActionMapper, ninjabrainBotPreferences)
 				.stream()
 				.collect(Collectors.toMap(ICommand::name, x -> x));
 	}
@@ -85,7 +86,7 @@ public class ApiV1CommandHandler {
 				if (commandJsonObjects.size() > 1) {
 					return Result.error("Command '" + commandName + "' cannot be executed together with other commands.");
 				}
-				((IDomainModelCommand) command).execute(domainModel);
+				((IDomainModelCommand) command).execute(domainModel, dataState);
 				stopWatch.logTotal("Domain model command '" + commandName + "' executed");
 				return Result.success();
 			} else if (command instanceof IParameterlessCommand) {
