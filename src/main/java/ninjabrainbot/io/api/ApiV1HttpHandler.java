@@ -63,7 +63,7 @@ public class ApiV1HttpHandler implements HttpHandler, IDisposable {
 			return;
 		}
 
-		if (exchange.getRequestMethod().equalsIgnoreCase("POST")){
+		if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
 			handlePost(exchange, subdirectories);
 			return;
 		}
