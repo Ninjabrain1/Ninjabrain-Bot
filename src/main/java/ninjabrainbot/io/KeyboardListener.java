@@ -9,6 +9,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
+import ninjabrainbot.util.Logger;
 
 public class KeyboardListener implements NativeKeyListener {
 
@@ -47,7 +48,14 @@ public class KeyboardListener implements NativeKeyListener {
 	public static void init(ClipboardReader clipboardReader, BooleanPreference useAltClipboardReader) {
 		if (registered) {
 			instance = new KeyboardListener(clipboardReader, useAltClipboardReader);
-			GlobalScreen.addNativeKeyListener(instance);
+			// When launched from tuxinjector, keys arrive via stdin, don't add JNH listener
+			// (XRecord can be unreliable on XWayland for certain keys like +, -, [, ], 0)
+			// JNH is still registered in preInit() because its X11 connection keeps AWT alive.
+			if (System.getenv("TUXINJECTOR_STDIN_KEYS") == null) {
+				GlobalScreen.addNativeKeyListener(instance);
+			} else {
+				Logger.log("KeyboardListener: JNH registered but key listener skipped (stdin delivery)");
+			}
 		}
 	}
 
