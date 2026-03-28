@@ -1,9 +1,11 @@
 package ninjabrainbot.integrationtests;
 
+import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
 import ninjabrainbot.gui.mainwindow.main.MainTextAreaTestAdapter;
 import ninjabrainbot.model.datastate.alladvancements.IAllAdvancementsDataState;
 import ninjabrainbot.model.datastate.alladvancements.AllAdvancementsStructureType;
 import ninjabrainbot.model.datastate.common.ResultType;
+import ninjabrainbot.model.datastate.highprecision.BoatState;
 import ninjabrainbot.util.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -84,6 +86,67 @@ public class AllAdvancementsIntegrationTests {
 		testBuilder.inputStandardDeviationToggle();
 		TestUtils.awaitSwingEvents();
 		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
+	}
+
+	private static final String input2 =
+			"/execute in minecraft:overworld run tp @s -1306.60 62.07 587.31 -2.67 74.04," +
+			"/execute in minecraft:overworld run tp @s -1306.60 62.07 587.31 -55.68 -31.81," +
+			"0," +
+			"-81,37," +
+			"/execute in minecraft:overworld run tp @s -214.50 71.00 185.50 0.00 0.00," +
+			"-215, 185,";
+
+	/**
+	 * This tests that the
+	 */
+	@ParameterizedTest
+	@CsvSource({ input2 })
+	void uiUpdatesAsExpected_AASpeedrunWithBoat(String boatF3c, String enderEyeF3c, int subpixelCorrections, int strongholdChunkX, int strongholdChunkZ,
+												String f3cSpawn, int spawnX, int spawnZ) {
+		// Arrange
+		IntegrationTestBuilder testBuilder = new IntegrationTestBuilder().withBoatSettings().withAllAdvancementsSettings().withProSettings();
+		MainTextAreaTestAdapter mainTextArea = testBuilder.createMainTextArea();
+		BoatIcon boatIcon = testBuilder.createBoatIcon();
+		IAllAdvancementsDataState aaDataState = testBuilder.dataState.allAdvancementsDataState();
+
+		// Act + Assert
+		TestUtils.awaitSwingEvents();
+		testBuilder.enterNewWorld();
+		Assertions.assertTrue(boatIcon.isVisible());
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.NONE));
+
+		testBuilder.triggerHotkey(testBuilder.preferences.hotkeyBoat);
+		TestUtils.awaitSwingEvents();
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.MEASURING));
+
+		testBuilder.setClipboard(boatF3c);
+		TestUtils.awaitSwingEvents();
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.VALID));
+
+		testBuilder.setClipboard(enderEyeF3c);
+		testBuilder.inputSubpixelCorrections(subpixelCorrections);
+
+		TestUtils.awaitSwingEvents();
+		Assertions.assertFalse(aaDataState.allAdvancementsModeEnabled().get());
+		Assertions.assertSame(testBuilder.dataState.resultType().get(), ResultType.TRIANGULATION);
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.VALID));
+		mainTextArea.assertDetailedTriangulationTopPredictionIsEqualTo(strongholdChunkX, strongholdChunkZ);
+		mainTextArea.assertDetailedTriangulationTopNetherCoordsIsEqualTo(2 * strongholdChunkX, 2 * strongholdChunkZ);
+
+		testBuilder.triggerHotkey(testBuilder.preferences.hotkeyBoat);
+		testBuilder.enterEnd();
+		TestUtils.awaitSwingEvents();
+		Assertions.assertTrue(aaDataState.allAdvancementsModeEnabled().get());
+		Assertions.assertSame(testBuilder.dataState.resultType().get(), ResultType.ALL_ADVANCEMENTS);
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(strongholdChunkX * 16 + 4, strongholdChunkZ * 16 + 4, AllAdvancementsStructureType.Stronghold);
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Spawn).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Outpost).isEmpty());
+		Assertions.assertTrue(mainTextArea.getAllAdvancementsStructurePanelCoordinates(AllAdvancementsStructureType.Monument).isEmpty());
+
+		testBuilder.setClipboard(f3cSpawn);
+		TestUtils.awaitSwingEvents();
+		mainTextArea.assertAllAdvancementsStructureCoordsAre(spawnX, spawnZ, AllAdvancementsStructureType.Spawn);
+		Assertions.assertEquals(boatIcon.getIcon(), BoatIcon.getBoatIcon(BoatState.MEASURING));
 	}
 
 	private void doAnyPercentSplit(IntegrationTestBuilder testBuilder, IAllAdvancementsDataState aaDataState, MainTextAreaTestAdapter mainTextArea,

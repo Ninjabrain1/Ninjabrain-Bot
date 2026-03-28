@@ -48,7 +48,7 @@ public class OBSOverlay implements IDisposable {
 	}
 
 	private void createUpdateTimer() {
-		overlayUpdateTimer = new Timer(1000, p -> {
+		overlayUpdateTimer = new Timer(100, p -> {
 			overlayUpdateTimer.stop();
 			markShouldUpdate();
 		});
