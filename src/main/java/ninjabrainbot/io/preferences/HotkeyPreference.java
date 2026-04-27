@@ -44,18 +44,24 @@ public class HotkeyPreference {
 	}
 
 	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent, java.util.Set<Integer> pressedKeys) {
-		int code = getPlatformSpecificKeyCode(nativeKeyEvent);
-		if (this.code.get() != code && this.code2.get() != code)
+		int eventCode = getPlatformSpecificKeyCode(nativeKeyEvent);
+		int hotkeyCode1 = code.get();
+		int hotkeyCode2 = code2.get();
+
+		if (hotkeyCode1 == -1 || eventCode == -1)
+			return false;
+
+		if (hotkeyCode1 != eventCode && hotkeyCode2 != eventCode)
 			return false;
 
 		if ((getModifier() & nativeKeyEvent.getModifiers()) != getModifier())
 			return false;
 
-		if (this.code2.get() == -1)
-			return true;
+		if (hotkeyCode2 == -1)
+			return eventCode == hotkeyCode1;
 
-		int otherCode = (this.code.get() == code) ? this.code2.get() : this.code.get();
-		return pressedKeys.contains(otherCode);
+		int otherCode = (eventCode == hotkeyCode1) ? hotkeyCode2 : hotkeyCode1;
+		return pressedKeys.contains(otherCode) && otherCode != eventCode;
 	}
 
 	public boolean isMouseWheelMatching(int scrollCode, java.util.Set<Integer> pressedKeys) {
@@ -99,6 +105,7 @@ public class HotkeyPreference {
 	public ISubscribable<HotkeyPreference> whenTriggered() {
 		return whenTriggered;
 	}
+
 
 	public static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
 		if (Platform.isLinux() || Platform.isMac()){
