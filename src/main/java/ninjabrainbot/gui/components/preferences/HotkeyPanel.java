@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -11,9 +13,6 @@ import javax.swing.SwingUtilities;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
 import com.sun.jna.Platform;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
@@ -89,7 +88,8 @@ public class HotkeyPanel extends ThemedPanel {
 			maxModifiers = 0;
 
 			KeyboardListener.instance.setConsumer(nativeKeyEvent -> {
-				if (nativeKeyEvent == null) return;
+				if (nativeKeyEvent == null)
+					return;
 				if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 					preference.setCode(-1);
 					preference.setCode2(-1);
@@ -110,7 +110,8 @@ public class HotkeyPanel extends ThemedPanel {
 
 				updateRecordingText();
 			}, nativeKeyReleasedEvent -> {
-				if (nativeKeyReleasedEvent == null) return;
+				if (nativeKeyReleasedEvent == null)
+					return;
 				int code = HotkeyPreference.getPlatformSpecificKeyCode(nativeKeyReleasedEvent);
 				currentKeys.remove((Integer) code);
 
@@ -123,7 +124,8 @@ public class HotkeyPanel extends ThemedPanel {
 					finishEditing();
 				}
 			}, nativeMouseWheelEvent -> {
-				if (nativeMouseWheelEvent == null) return;
+				if (nativeMouseWheelEvent == null)
+					return;
 				int scrollCode = nativeMouseWheelEvent.getWheelRotation() < 0 ? HotkeyPreference.SCROLL_UP : HotkeyPreference.SCROLL_DOWN;
 				
 				// Handle Scroll + Key if any keys are held
@@ -186,8 +188,10 @@ public class HotkeyPanel extends ThemedPanel {
 	}
 
 	private String getKeyName(int code) {
-		if (code == HotkeyPreference.SCROLL_UP) return "Scroll Up";
-		if (code == HotkeyPreference.SCROLL_DOWN) return "Scroll Down";
+		if (code == HotkeyPreference.SCROLL_UP)
+			return I18n.get("settings.scroll_up");
+		if (code == HotkeyPreference.SCROLL_DOWN)
+			return I18n.get("settings.scroll_down");
 
 		String k = Platform.isLinux() || Platform.isMac() ? getNativeKeyText(code) : KeyEvent.getKeyText(code);
 		if (k.startsWith("Unknown")) {

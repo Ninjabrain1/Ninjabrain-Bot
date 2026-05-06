@@ -1,6 +1,7 @@
 package ninjabrainbot.io.preferences;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.sun.jna.Platform;
@@ -43,7 +44,7 @@ public class HotkeyPreference {
 		return modifier.get();
 	}
 
-	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent, java.util.Set<Integer> pressedKeys) {
+	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent, Set<Integer> pressedKeys) {
 		int eventCode = getPlatformSpecificKeyCode(nativeKeyEvent);
 		int hotkeyCode1 = code.get();
 		int hotkeyCode2 = code2.get();
@@ -64,7 +65,7 @@ public class HotkeyPreference {
 		return pressedKeys.contains(otherCode) && otherCode != eventCode;
 	}
 
-	public boolean isMouseWheelMatching(int scrollCode, java.util.Set<Integer> pressedKeys) {
+	public boolean isMouseWheelMatching(int scrollCode, Set<Integer> pressedKeys) {
 		if (this.code.get() != scrollCode)
 			return false;
 
@@ -108,7 +109,7 @@ public class HotkeyPreference {
 
 
 	public static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
-		if (Platform.isLinux() || Platform.isMac()){
+		if (Platform.isLinux() || Platform.isMac()) {
 			int keyCode = nativeKeyEvent.getKeyCode();
 			boolean isValidKeyCode = keyCode != 0;
 			return isValidKeyCode ? keyCode | (nativeKeyEvent.getKeyLocation() << 16) : nativeKeyEvent.getRawCode();
