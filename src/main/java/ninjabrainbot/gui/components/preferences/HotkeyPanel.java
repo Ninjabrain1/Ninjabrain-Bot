@@ -4,12 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
 import com.sun.jna.Platform;
+
 import ninjabrainbot.gui.buttons.FlatButton;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.components.panels.ThemedPanel;
@@ -71,26 +75,91 @@ public class HotkeyPanel extends ThemedPanel {
 		disabledCol = styleManager.currentTheme.TEXT_COLOR_WEAK;
 	}
 
+	private List<Integer> currentKeys = new ArrayList<>();
+	private List<Integer> maxCombo = new ArrayList<>();
+	private int maxModifiers = 0;
+
 	private void clicked() {
 		if (!editing) {
 			editing = true;
 			button.setText("...");
+			currentKeys.clear();
+			maxCombo.clear();
+			maxModifiers = 0;
+
 			KeyboardListener.instance.setConsumer(nativeKeyEvent -> {
-				if (nativeKeyEvent == null) {
-					// Canceled, dont change anything
-				} else if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+				if (nativeKeyEvent == null)
+					return;
+				if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 					preference.setCode(-1);
+					preference.setCode2(-1);
 					preference.setModifier(-1);
-				} else {
-					preference.setHotkey(nativeKeyEvent);
+					finishEditing();
+					return;
 				}
-				String s = getKeyText();
-				SwingUtilities.invokeLater(() -> {
-					button.setText(s);
-					editing = false;
-				});
+
+				int code = HotkeyPreference.getPlatformSpecificKeyCode(nativeKeyEvent);
+				if (!currentKeys.contains(code)) {
+					currentKeys.add(code);
+				}
+
+				if (currentKeys.size() >= maxCombo.size()) {
+					maxCombo = new ArrayList<>(currentKeys);
+					maxModifiers = nativeKeyEvent.getModifiers();
+				}
+
+				updateRecordingText();
+			}, nativeKeyReleasedEvent -> {
+				if (nativeKeyReleasedEvent == null)
+					return;
+				int code = HotkeyPreference.getPlatformSpecificKeyCode(nativeKeyReleasedEvent);
+				currentKeys.remove((Integer) code);
+
+				if (currentKeys.isEmpty() && !maxCombo.isEmpty()) {
+					int c1 = maxCombo.get(0);
+					int c2 = maxCombo.size() > 1 ? maxCombo.get(1) : -1;
+					preference.setCode(c1);
+					preference.setCode2(c2);
+					preference.setModifier(maxModifiers);
+					finishEditing();
+				}
+			}, nativeMouseWheelEvent -> {
+				if (nativeMouseWheelEvent == null)
+					return;
+				int scrollCode = nativeMouseWheelEvent.getWheelRotation() < 0 ? HotkeyPreference.SCROLL_UP : HotkeyPreference.SCROLL_DOWN;
+				
+				// Handle Scroll + Key if any keys are held
+				int code2 = -1;
+				if (!currentKeys.isEmpty()) {
+					code2 = currentKeys.get(0);
+				}
+				
+				preference.setHotkey(scrollCode, code2);
+				finishEditing();
 			});
 		}
+	}
+
+	private void updateRecordingText() {
+		StringBuilder sb = new StringBuilder();
+		if (maxModifiers != 0) {
+			sb.append(NativeKeyEvent.getModifiersText(maxModifiers)).append("+");
+		}
+		for (int i = 0; i < maxCombo.size(); i++) {
+			if (i > 0) sb.append("+");
+			sb.append(getKeyName(maxCombo.get(i)));
+		}
+		String text = sb.toString();
+		SwingUtilities.invokeLater(() -> button.setText(text.isEmpty() ? "..." : text));
+	}
+
+	private void finishEditing() {
+		KeyboardListener.instance.cancelConsumer();
+		String s = getKeyText();
+		SwingUtilities.invokeLater(() -> {
+			button.setText(s);
+			editing = false;
+		});
 	}
 
 	private String getNativeKeyText(int code) {
@@ -104,7 +173,27 @@ public class HotkeyPanel extends ThemedPanel {
 	private String getKeyText() {
 		if (preference.getCode() == -1)
 			return I18n.get("settings.not_in_use");
-		String k = Platform.isLinux() || Platform.isMac() ? getNativeKeyText(preference.getCode()) : KeyEvent.getKeyText(preference.getCode());
+
+		String k1 = getKeyName(preference.getCode());
+		String k2 = preference.getCode2() != -1 ? getKeyName(preference.getCode2()) : null;
+
+		String text = k1;
+		if (k2 != null) text = k2 + " + " + k1;
+
+		if (preference.getModifier() == 0) {
+			return text;
+		} else {
+			return NativeKeyEvent.getModifiersText(preference.getModifier()) + "+" + text;
+		}
+	}
+
+	private String getKeyName(int code) {
+		if (code == HotkeyPreference.SCROLL_UP)
+			return I18n.get("settings.scroll_up");
+		if (code == HotkeyPreference.SCROLL_DOWN)
+			return I18n.get("settings.scroll_down");
+
+		String k = Platform.isLinux() || Platform.isMac() ? getNativeKeyText(code) : KeyEvent.getKeyText(code);
 		if (k.startsWith("Unknown")) {
 			k = k.substring(17);
 
@@ -124,13 +213,8 @@ public class HotkeyPanel extends ThemedPanel {
 					case "0xde": k = "'"; break;
 				}
 			}
-
 		}
-		if (preference.getModifier() == 0) {
-			return k;
-		} else {
-			return NativeKeyEvent.getModifiersText(preference.getModifier()) + "+" + k;
-		}
+		return k;
 	}
 
 	@Override

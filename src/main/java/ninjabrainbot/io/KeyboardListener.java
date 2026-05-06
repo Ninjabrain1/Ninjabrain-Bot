@@ -1,16 +1,20 @@
 package ninjabrainbot.io;
 
-import java.awt.event.KeyEvent;
-import java.util.function.Consumer;
-
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener;
 import ninjabrainbot.io.preferences.BooleanPreference;
 import ninjabrainbot.io.preferences.HotkeyPreference;
 
-public class KeyboardListener implements NativeKeyListener {
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
+
+public class KeyboardListener implements NativeKeyListener, NativeMouseWheelListener {
 
 	public static boolean registered = false;
 	public static KeyboardListener instance;
@@ -18,8 +22,12 @@ public class KeyboardListener implements NativeKeyListener {
 	private final BooleanPreference useAltClipboardReader;
 
 	Consumer<NativeKeyEvent> consumer;
+	Consumer<NativeKeyEvent> releaseConsumer;
+	Consumer<NativeMouseWheelEvent> mouseWheelConsumer;
 	final ClipboardReader clipboardReader;
 	boolean f3Held = false;
+
+	public final Set<Integer> pressedKeys = new HashSet<>();
 
 	public static void preInit() {
 		try {
@@ -48,6 +56,7 @@ public class KeyboardListener implements NativeKeyListener {
 		if (registered) {
 			instance = new KeyboardListener(clipboardReader, useAltClipboardReader);
 			GlobalScreen.addNativeKeyListener(instance);
+			GlobalScreen.addNativeMouseWheelListener(instance);
 		}
 	}
 
@@ -57,11 +66,19 @@ public class KeyboardListener implements NativeKeyListener {
 		this.useAltClipboardReader = useAltClipboardReader;
 	}
 
-	public synchronized void setConsumer(Consumer<NativeKeyEvent> consumer) {
+	public synchronized void setConsumer(Consumer<NativeKeyEvent> consumer, Consumer<NativeKeyEvent> releaseConsumer, Consumer<NativeMouseWheelEvent> mouseWheelConsumer) {
 		if (this.consumer != null) {
 			this.consumer.accept(null);
 		}
+		if (this.releaseConsumer != null) {
+			this.releaseConsumer.accept(null);
+		}
+		if (this.mouseWheelConsumer != null) {
+			this.mouseWheelConsumer.accept(null);
+		}
 		this.consumer = consumer;
+		this.releaseConsumer = releaseConsumer;
+		this.mouseWheelConsumer = mouseWheelConsumer;
 	}
 
 	public synchronized void cancelConsumer() {
@@ -69,21 +86,28 @@ public class KeyboardListener implements NativeKeyListener {
 			this.consumer.accept(null);
 			this.consumer = null;
 		}
+		if (this.releaseConsumer != null) {
+			this.releaseConsumer.accept(null);
+			this.releaseConsumer = null;
+		}
+		if (this.mouseWheelConsumer != null) {
+			this.mouseWheelConsumer.accept(null);
+			this.mouseWheelConsumer = null;
+		}
 	}
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-		int keyCode = nativeKeyEvent.getKeyCode();
-		if (keyCode == NativeKeyEvent.VC_SHIFT || keyCode == NativeKeyEvent.VC_CONTROL || keyCode == NativeKeyEvent.VC_ALT)
-			return;
+		int keyCode = HotkeyPreference.getPlatformSpecificKeyCode(nativeKeyEvent);
+		pressedKeys.add(keyCode);
 
 		if (consumer != null) {
 			consumer.accept(nativeKeyEvent);
-			consumer = null;
 			return;
 		}
+
 		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
-			if (hotkeyPreference.isKeyEventMatching(nativeKeyEvent)) {
+			if (hotkeyPreference.isKeyEventMatching(nativeKeyEvent, pressedKeys)) {
 				hotkeyPreference.execute();
 			}
 		}
@@ -99,8 +123,26 @@ public class KeyboardListener implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
+		pressedKeys.remove(HotkeyPreference.getPlatformSpecificKeyCode(e));
+		if (releaseConsumer != null) {
+			releaseConsumer.accept(e);
+		}
 		if (useAltClipboardReader.get() && e.getRawCode() == KeyEvent.VK_F3) {
 			f3Held = false;
+		}
+	}
+
+	@Override
+	public void nativeMouseWheelMoved(NativeMouseWheelEvent nativeMouseWheelEvent) {
+		if (mouseWheelConsumer != null) {
+			mouseWheelConsumer.accept(nativeMouseWheelEvent);
+			return;
+		}
+		int scrollCode = nativeMouseWheelEvent.getWheelRotation() < 0 ? HotkeyPreference.SCROLL_UP : HotkeyPreference.SCROLL_DOWN;
+		for (HotkeyPreference hotkeyPreference : HotkeyPreference.hotkeys) {
+			if (hotkeyPreference.isMouseWheelMatching(scrollCode, pressedKeys)) {
+				hotkeyPreference.execute();
+			}
 		}
 	}
 }
