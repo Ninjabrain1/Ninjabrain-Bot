@@ -1,6 +1,7 @@
 package ninjabrainbot.io.preferences;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.sun.jna.Platform;
@@ -9,12 +10,16 @@ import ninjabrainbot.event.ObservableProperty;
 
 public class HotkeyPreference {
 
+	public static final int SCROLL_UP = -10;
+	public static final int SCROLL_DOWN = -11;
+
 	public static final ArrayList<HotkeyPreference> hotkeys = new ArrayList<HotkeyPreference>();
 
 	final IPreferenceSource pref;
 
 	final IntPreference modifier;
 	final IntPreference code;
+	final IntPreference code2;
 
 	private final ObservableProperty<HotkeyPreference> whenTriggered;
 
@@ -22,6 +27,7 @@ public class HotkeyPreference {
 		this.pref = pref;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);
+		code2 = new IntPreference(key + "_code2", -1, pref);
 		hotkeys.add(this);
 		whenTriggered = new ObservableProperty<>();
 	}
@@ -30,26 +36,67 @@ public class HotkeyPreference {
 		return code.get();
 	}
 
+	public int getCode2() {
+		return code2.get();
+	}
+
 	public int getModifier() {
 		return modifier.get();
 	}
 
-	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent) {
-		int code = getPlatformSpecificKeyCode(nativeKeyEvent);
-		return getCode() == code && (getModifier() & nativeKeyEvent.getModifiers()) == getModifier();
+	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent, Set<Integer> pressedKeys) {
+		int eventCode = getPlatformSpecificKeyCode(nativeKeyEvent);
+		int hotkeyCode1 = code.get();
+		int hotkeyCode2 = code2.get();
+
+		if (hotkeyCode1 == -1 || eventCode == -1)
+			return false;
+
+		if (hotkeyCode1 != eventCode && hotkeyCode2 != eventCode)
+			return false;
+
+		if ((getModifier() & nativeKeyEvent.getModifiers()) != getModifier())
+			return false;
+
+		if (hotkeyCode2 == -1)
+			return eventCode == hotkeyCode1;
+
+		int otherCode = (eventCode == hotkeyCode1) ? hotkeyCode2 : hotkeyCode1;
+		return pressedKeys.contains(otherCode) && otherCode != eventCode;
+	}
+
+	public boolean isMouseWheelMatching(int scrollCode, Set<Integer> pressedKeys) {
+		if (this.code.get() != scrollCode)
+			return false;
+
+		if (this.code2.get() == -1)
+			return true;
+
+		return pressedKeys.contains(this.code2.get());
 	}
 
 	public synchronized void setCode(int value) {
 		code.set(value);
 	}
 
+	public synchronized void setCode2(int value) {
+		code2.set(value);
+	}
+
 	public synchronized void setModifier(int value) {
 		modifier.set(value);
 	}
 
-	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent) {
+	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent, int code2) {
 		setCode(getPlatformSpecificKeyCode(nativeKeyEvent));
+		setCode2(code2);
 		setModifier(nativeKeyEvent.getModifiers());
+	}
+
+	public synchronized void setHotkey(int scrollCode, int code2) {
+		setCode(scrollCode);
+		setCode2(code2);
+		setModifier(0);
 	}
 
 	public final void execute() {
@@ -60,8 +107,9 @@ public class HotkeyPreference {
 		return whenTriggered;
 	}
 
-	private static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
-		if (Platform.isLinux() || Platform.isMac()){
+
+	public static int getPlatformSpecificKeyCode(NativeKeyEvent nativeKeyEvent) {
+		if (Platform.isLinux() || Platform.isMac()) {
 			int keyCode = nativeKeyEvent.getKeyCode();
 			boolean isValidKeyCode = keyCode != 0;
 			return isValidKeyCode ? keyCode | (nativeKeyEvent.getKeyLocation() << 16) : nativeKeyEvent.getRawCode();
