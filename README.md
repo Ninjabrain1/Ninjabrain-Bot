@@ -48,7 +48,10 @@ Yes, as of the calculator unban 2021-12-09 it is legal for runs submitted on spe
 #### The calculator said it was 100% certain but still missed the stronghold, what went wrong?
 
 You most likely moved when you were throwing one of the eyes. It takes way longer than most people think for the player to fully come to a stop, even when your coordinates in F3 are completely stationary you still have to wait a while
-before throwing the eye (because of weird client-server desync). If you want to come to a stop quickly I recommend pushing yourself into a corner between two blocks, this also seems to prevent the aforementioned client-server desync.
+before throwing the eye (because of weird client-server desync). See [this video](https://www.youtube.com/watch?v=uBqAeZMlEFQ) for a full explanation of desync, but common ways to prevent desync include:
+- Standing still for more than a second
+- Jumping while standing still (walking into the corner of two blocks will result in you standing still and let you do this, but the jump is necessary)
+- Exiting a boat and not moving
 
 #### Can I do subpixel adjustment, like in perfect travel, with the bot?
 
