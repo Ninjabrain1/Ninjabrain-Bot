@@ -1,106 +1,188 @@
 # Ninjabrain Bot
 
-An accurate stronghold calculator for Minecraft speedrunning. Achieves better results than regular calculators by accounting for user error and stronghold generation mechanics.
-See [triangulation.pdf](https://github.com/Ninjabrain1/Ninjabrain-Bot/blob/main/triangulation.pdf) for an explanation of the underlying mathematics.
+[![Latest release](https://img.shields.io/github/v/release/Ninjabrain1/Ninjabrain-Bot?label=release)](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest)
+[![CI](https://github.com/Ninjabrain1/Ninjabrain-Bot/actions/workflows/maven.yml/badge.svg)](https://github.com/Ninjabrain1/Ninjabrain-Bot/actions/workflows/maven.yml)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
-![NinjabrainBot](https://i.imgur.com/adsnzfE.png)
+An accurate stronghold calculator for Minecraft speedrunning. Ninjabrain Bot uses Bayesian inference to combine eye measurements, player error, and Minecraft's stronghold-generation mechanics, producing ranked locations with estimated confidence. For the derivation and implementation approximations of the core algorithm, read [Predicting stronghold locations with Bayesian statistics](triangulation.pdf).
 
-## Getting started
 
-Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest) and run the jar. To use the calculator, throw an ender eye, look at it, and press F3+C, and repeat for as many eyes as you like. The calculator
-will give you a certainty percentage of how confident it is that the predicted location is correct. If you want the certainty improved you should also change the standard deviation in the settings (see the FAQ down below for how to do
-this).
+![Ninjabrain Bot calculating a stronghold from two eye throws](docs/assets/demo.gif)
 
-If you are used to perfect travel and want the same accuracy you need to set hotkeys for "+0.01/-0.01 to last angle" in the advanced options, and calibrate your standard deviation (can also be done in the advanced options).
+## Contents
 
-## Video guide
+- [Quick start](#quick-start)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Video guides](#video-guides)
+- [FAQ](#faq)
+- [Under the hood](#under-the-hood)
+- [Development](#development)
+- [Project history](#project-history)
 
-[Beginner guide (2026)](https://www.youtube.com/watch?v=XmikooWmIAM) by K4yfour
+## Quick start
 
-[Longer guide](https://www.youtube.com/watch?v=Rx8i7e5lu7g) by Four
+1. Download the [latest release](https://github.com/Ninjabrain1/Ninjabrain-Bot/releases/latest).
+2. Run the downloaded JAR.
+3. Throw an eye of ender, look directly at it, and press `F3+C`.
+4. Move to a new position and repeat. The calculator ranks potential stronghold locations and shows how confident it is in its predictions.
+
+## Video guides
+
+- [Beginner guide (2026)](https://www.youtube.com/watch?v=XmikooWmIAM) by K4yfour
+- [Longer guide](https://www.youtube.com/watch?v=Rx8i7e5lu7g) by Four
 
 ## Features
 
-* Most accurate known triangulation algorithm
-    * Accounts for user error and all known stronghold generation mechanics
-    * The certainty value describes how much the prediction should be trusted
-* Subpixel adjustment
-* Evaluation of blind coords (press F3+C in the nether)
-* Fossil divine
-    * Look at the fossil start and press F3+I to get the divine coords
-    * Works with blind coord evaluation
-    * Ender eye throws can be combined with divine for increased precision
-* OBS overlay (auto hides in OBS when it's not showing anything)
-* Lots of quality of life features
+### Core calculator
 
-## History
+- Stronghold prediction from any number of eye throws
+- Estimated probability for each candidate stronghold location
+- Models player measurement error and stronghold-generation mechanics
+- Built-in standard deviation calibration
+- Subpixel angle adjustment
+- Direction and distance updates while travelling
 
-Ninjabrain bot was first created in November 2020, in the era of Throwpro. The bot was created because the calculators at the time were too inaccurate, especially for calculated travel which was just beeing pioneered at the time. The two
-most common alternatives, Throwpro and FastStronghold, used models that were too simple and were not accurate at long distances. However, back then Ninjabrain bot only existed in a more primitive form, as a twitch chat bot. The first
-example of it being used in a real run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).
+### Additional features
+
+- Blind-coordinate evaluation from the Nether
+- Fossil divine calculations, including combined divine and eye measurements
+- High-precision [boat measurements](https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/Boat-measurements)
+- [All Advancements mode](https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/All-advancements-mode-with-Minecraft-version-1.20-and-later)
+- OBS overlay that automatically hides when no result is displayed
+- [HTTP API](https://github.com/Ninjabrain1/Ninjabrain-Bot/wiki/API) for integrations
+- Configurable themes, hotkeys, and community translations
+
+## How it works
+
+Traditional triangulation intersects the lines created by two eye throws and effectively assumes that both angles were measured perfectly. In practice, manually aiming at an eye introduces error, especially over long distances.
+
+Ninjabrain Bot treats each measured angle as a noisy observation. It uses a calibrated normal distribution to model the player's measurement error, then applies Bayes' theorem to update the probability of candidate stronghold chunks after every throw. The prior model accounts for stronghold rings, chunk and biome snapping, and the fact that an eye points towards the nearest stronghold.
+
+The displayed certainty is an estimated probability produced by this model. Its reliability depends on the model's assumptions and on using a standard deviation that reflects the player's actual measurement accuracy.
 
 ## FAQ
 
-#### Is this legal to use in speedruns?
+<details>
+<summary><strong>Is this legal to use in speedruns?</strong></summary>
 
-Yes, as of the calculator unban 2021-12-09 it is legal for runs submitted on speedrun.com.
+Yes, stronghold calculators were unbanned for Minecraft speedruns on December 9, 2021. Ninjabrain Bot is also listed as a community speedrunning resource.
 
-#### The calculator said it was 100% certain but still missed the stronghold, what went wrong?
+Check the current category rules before submitting a run.
 
-You most likely moved when you were throwing one of the eyes. It takes way longer than most people think for the player to fully come to a stop, even when your coordinates in F3 are completely stationary you still have to wait a while
-before throwing the eye (because of weird client-server desync). If you want to come to a stop quickly I recommend pushing yourself into a corner between two blocks, this also seems to prevent the aforementioned client-server desync.
+- [Calculators Unbanned announcement](https://www.speedrun.com/mc/news/j430mgx5)
+- [Ninjabrain Bot speedrun.com resource](https://www.speedrun.com/mc/resources/8xmdp)
 
-#### Can I do subpixel adjustment, like in perfect travel, with the bot?
+</details>
 
-Yes. Under advanced options in the settings you can set hotkeys for "+0.01 to last angle" and "-0.01 to last angle". Pressing those hotkeys will manually change the angle of the last F3+C you did. So for example, if your resolution is
-1920x1027 and your eye has a wide middle eye-slit, you would press the "+0.01 to last angle"-hotkey to adjust the angle. See
-the [perfect travel document](https://docs.google.com/document/d/1JTMOIiS-Hl6_giEB0IQ5ki7UV-gvUXnNmoxhYoSgEAA/edit#heading=h.agb0mdup7ims) for more details.
+<details>
+<summary><strong>The calculator said it was 100% certain but still missed the stronghold. What went wrong?</strong></summary>
 
-#### What does the "Display stronghold location" setting mean?
+You most likely moved while throwing one of the eyes. It takes longer than many players expect to come to a complete stop. Your coordinates may appear stationary in the F3 screen while client-server desynchronization still affects the throw.
 
-It is just a setting that says how the stronghold location should be presented, it does not impact the accuracy of the calculator in any way.
+Wait before throwing, or push yourself into a corner between two blocks to stop quickly. This also appears to prevent the same desynchronization issue.
 
-* **(4, 4)** will show you the coordinates of the starter staircase
-* **(8, 8)** will show you the coordinates of (8, 8) in the stronghold chunk (the center of the chunk)
-* **Chunk** will show you the chunk coordinates of the stronghold
+The certainty value is an estimate based on the measurements and configured standard deviation. Incorrect measurements or an unrealistically low standard deviation can make the result overconfident.
 
-#### What is "Standard deviation" in the settings?
+</details>
 
-Simply put, the standard deviation describes how accuretely you measure ender eye angles. The better you are at measuring ender eyes the lower the standard deviation should be. Setting the standard deviation to a small value means that the
-bot will trust your readings more, but setting the standard deviation too low means that the bot will be overconfident in its results. To find out your optimal standard deviation you can use the "Calibrate standard deviation" funciton
-available in the settings. Each players own standard deviation depends on a lot of factors such as FOV, resolution, mouse sensitivity, and experience measuring ender eyes, but the value should typically be in the range
+<details>
+<summary><strong>Can I use subpixel adjustment, like in perfect travel?</strong></summary>
 
-* 0.050 - 0.200, if you're measuring eyes in quake pro
-* 0.020 - 0.040, if you're measuring eyes in 30 FOV
-* 0.005 - 0.010, if you're measuring eyes in 30 FOV and use subpixel adjustment
+Yes. In the advanced settings, assign hotkeys for `+0.01 to last angle` and `-0.01 to last angle`. These hotkeys manually adjust the angle from your most recent `F3+C` measurement.
 
-#### What is "Crosshair correction" in the settings?
-Crosshair correction is used to correct crosshair misalignment. Usually the crosshair is aligned correctly but on certain resolutions combined with certain in-game settings it is misaligned. Below is a list of known settings that cause 
-crosshair misalignment, and what you should set the crosshair correction to. If your resolution and GUI scale are not listed, your crosshair correction should be 0.
-*  1440p Fullscreen GUI scale 3, you should set crosshair correction to 0.026.
-*  1440p Fullscreen GUI scale 6/Auto, you should set crosshair correction to 0.104.
+For example, at a resolution of 1920x1027, an eye with a wide middle eye slit may require pressing the `+0.01` hotkey. See the [perfect travel document](https://docs.google.com/document/d/1JTMOIiS-Hl6_giEB0IQ5ki7UV-gvUXnNmoxhYoSgEAA/edit#heading=h.agb0mdup7ims) for more detail.
 
-#### What is "Show angle errors" in the settings?
+</details>
 
-Angle errors tell you how wrongly you measured each ender eye (assuming that the predicted stronghold location is correct). This can be used to practice your ender eye measuring accuracy by trying to get as low errors as possible. It can
-also be used as a sanity check in runs, if the angle errors are abnormally large you may have measured something wrong, or moved while you were throwing one of the eyes.
+<details>
+<summary><strong>What does the "Display stronghold location" setting mean?</strong></summary>
 
-#### What is "Use advanced stronghold statistics" in the settings?
+This setting only changes how the predicted location is presented. It does not affect calculation accuracy.
 
-"Advanced stronghold statistics" will use the existence of other strongholds and the fact that the eye points towards the closest one to make a better prediction. This improves the accuracy and it should be turned on for 99.9% of users.
+- **(4, 4)** shows the coordinates of the starter staircase.
+- **(8, 8)** shows the `(8, 8)` position in the stronghold chunk.
+- **Chunk** shows the stronghold's chunk coordinates.
 
-#### What is "Show direction to stronghold" in the settings?
+</details>
 
-With this setting enabled the bot will tell you the direction you need to go to get to the stronghold. If you press F3+C while looking down the bot will tell you what direction the stronghold is from your current position, which is useful
-if you have gone off angle while traveling. This will also update the distance to the stronghold, and can be done in both the overworld and the nether (in the nether you don't have to look down, however). The stronghold direction is
-presented as
-both a raw angle, as well as a relative angle (meaning how much leftward or rightward you have to turn to be on the right angle).
+<details>
+<summary><strong>What is "Standard deviation" in the settings?</strong></summary>
 
-#### What is the "Lock calculator" hotkey in the settings?
+Standard deviation describes how accurately you measure eye angles. A lower value tells the calculator to trust your readings more. Setting it lower than your real measurement error can make the calculator overconfident.
 
-Pressing this hotkey will toggle "Locked mode", with this mode enabled:
+Use **Calibrate standard deviation** in the advanced settings to estimate your value. Accuracy varies with FOV, resolution, mouse sensitivity, and experience, but typical ranges are:
 
-- Hotkeys for Reset, Undo, and subpixel adjustment will be disabled, so that you do not change the result by accident.
-- If "Auto reset when idle for 15 minutes" is enabled, the calculator will not auto reset.
-- Pressing F3+C will not count as another eye throw, but will rather update the distance and direction to the
-  stronghold from your current location (keep in mind that in order to see the direction to the stronghold you have to enable "Show direction to stronghold" in the settings).
+- `0.050-0.200` when measuring in Quake Pro
+- `0.020-0.040` when measuring at 30 FOV
+- `0.005-0.010` when measuring at 30 FOV with subpixel adjustment
+
+</details>
+
+<details>
+<summary><strong>What is "Crosshair correction" in the settings?</strong></summary>
+
+Crosshair correction compensates for crosshair misalignment caused by certain combinations of resolution and in-game settings. If your setup is not listed below, leave the correction at `0`.
+
+- 1440p fullscreen with GUI scale 3: use `0.026`.
+- 1440p fullscreen with GUI scale 6/Auto: use `0.104`.
+
+</details>
+
+<details>
+<summary><strong>What is "Show angle errors" in the settings?</strong></summary>
+
+Angle errors show how far each measured angle differs from the angle to the predicted stronghold, assuming that prediction is correct.
+
+They can help you practise eye measurement and provide a sanity check during runs. Abnormally large errors may mean that an eye was measured incorrectly or thrown while you were still moving.
+
+</details>
+
+<details>
+<summary><strong>What is "Use advanced stronghold statistics" in the settings?</strong></summary>
+
+Advanced stronghold statistics use the existence of other strongholds and the fact that an eye points towards the closest one to improve the probability model. This should remain enabled for almost all users.
+
+</details>
+
+<details>
+<summary><strong>What is "Show direction to stronghold" in the settings?</strong></summary>
+
+This setting shows the direction and distance from your current position to the predicted stronghold.
+
+After enabling it, press `F3+C` while looking down to update the direction from your current position. This works in both the Overworld and Nether; in the Nether, you do not need to look down.
+
+The direction is displayed as both a raw angle and a relative angle showing how far left or right to turn.
+
+</details>
+
+<details>
+<summary><strong>What does the "Lock calculator" hotkey do?</strong></summary>
+
+The hotkey toggles locked mode. While locked:
+
+- Reset, undo, and subpixel-adjustment hotkeys are disabled.
+- **Auto reset when idle for 15 minutes** will not reset the calculator.
+- `F3+C` updates the direction and distance from your current location instead of recording another eye throw. Enable **Show direction to stronghold** to display the direction.
+
+</details>
+
+## Under the hood
+
+- Java desktop application with a custom Swing interface
+- Bayesian inference and numerical approximations for stronghold prediction
+- Observable domain state shared by the calculator, UI, overlay, and API
+- Global hotkeys and native platform integration
+- HTTP API with queries, commands, and event subscriptions
+- Unit and integration tests with JUnit and Mockito
+- Maven builds and GitHub Actions CI
+
+## Project history
+
+Ninjabrain Bot began in November 2020, during the era of Throwpro, when calculated travel was still emerging. Existing calculators used simpler models that were unreliable at long distances, so the first version introduced a probability based approach that accounted for measurement error.
+
+The project initially ran as a Twitch chat bot before becoming the standalone desktop application maintained today. An early example of the calculator being used in a run can be seen [here](https://youtu.be/zK96gjkLTGc?t=880).
+
+## License
+
+Ninjabrain Bot is licensed under the [GNU General Public License v3.0](LICENSE).
