@@ -12,12 +12,10 @@ An accurate stronghold calculator for Minecraft speedrunning. Ninjabrain Bot use
 ## Contents
 
 - [Quick start](#quick-start)
+- [Video guides](#video-guides)
 - [Features](#features)
 - [How it works](#how-it-works)
-- [Video guides](#video-guides)
 - [FAQ](#faq)
-- [Under the hood](#under-the-hood)
-- [Development](#development)
 - [Project history](#project-history)
 
 ## Quick start
@@ -166,16 +164,6 @@ The hotkey toggles locked mode. While locked:
 - `F3+C` updates the direction and distance from your current location instead of recording another eye throw. Enable **Show direction to stronghold** to display the direction.
 
 </details>
-
-## Under the hood
-
-- Java desktop application with a custom Swing interface
-- Bayesian inference and numerical approximations for stronghold prediction
-- Observable domain state shared by the calculator, UI, overlay, and API
-- Global hotkeys and native platform integration
-- HTTP API with queries, commands, and event subscriptions
-- Unit and integration tests with JUnit and Mockito
-- Maven builds and GitHub Actions CI
 
 ## Project history
 
