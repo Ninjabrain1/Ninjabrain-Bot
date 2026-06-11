@@ -4,7 +4,7 @@
 [![CI](https://github.com/Ninjabrain1/Ninjabrain-Bot/actions/workflows/maven.yml/badge.svg)](https://github.com/Ninjabrain1/Ninjabrain-Bot/actions/workflows/maven.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
-An accurate stronghold calculator for Minecraft speedrunning. Ninjabrain Bot uses Bayesian inference to combine eye measurements, player error, and Minecraft's stronghold-generation mechanics, producing ranked locations with estimated confidence. For the derivation and implementation approximations of the core algorithm, read [Predicting stronghold locations with Bayesian statistics](triangulation.pdf).
+An accurate stronghold calculator for Minecraft speedrunning. Ninjabrain Bot uses Bayesian inference to combine eye measurements, player error, and Minecraft's stronghold-generation mechanics, producing ranked locations with estimated confidence. For the derivation of the core algorithm, read [Predicting stronghold locations with Bayesian statistics](triangulation.pdf).
 
 
 ![Ninjabrain Bot calculating a stronghold from two eye throws](docs/assets/demo.gif)
