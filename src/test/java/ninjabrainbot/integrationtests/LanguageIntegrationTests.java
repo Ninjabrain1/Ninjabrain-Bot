@@ -1,6 +1,7 @@
 package ninjabrainbot.integrationtests;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 public class LanguageIntegrationTests {
 
-	private static final Pattern FORMAT_PATTERN = Pattern.compile("%(\\d+\\$)?[\\d.]*[dfs]");
+	private static final Pattern FORMAT_PATTERN = Pattern.compile("%(?:([1-9]\\d*)\\$|(<))?([-#+ 0,(]*)?(\\d+)?(?:\\.(\\d+))?([tT])?([a-zA-Z%])");
 
 	@Test
 	void allTranslationsAreFormattedCorrectly() {
@@ -46,8 +47,11 @@ public class LanguageIntegrationTests {
 			String baseValue = base.getString(key);
 			String otherValue = bundle.getString(key);
 
-			List<String> baseFormats = extractFormats(baseValue);
-			List<String> otherFormats = extractFormats(otherValue);
+			List<String> baseFormats = extractFormats(key, baseValue);
+			List<String> otherFormats = extractFormats(key, otherValue);
+
+			validateFormatString(key, baseValue, baseFormats);
+			validateFormatString(key, otherValue, otherFormats);
 
 			if (!baseFormats.equals(otherFormats)) {
 				Assertions.fail("Format mismatch in key: " + key + ". Base:  " + baseFormats + ". Other: " + otherFormats);
@@ -55,13 +59,73 @@ public class LanguageIntegrationTests {
 		}
 	}
 
-	private static List<String> extractFormats(String text) {
+	private static List<String> extractFormats(String key, String text) {
 		Matcher matcher = FORMAT_PATTERN.matcher(text);
 		List<String> formats = new ArrayList<>();
+		int searchStart = 0;
 		while (matcher.find()) {
-			formats.add(matcher.group());
+			int unmatchedPercent = text.indexOf('%', searchStart);
+			if (unmatchedPercent >= 0 && unmatchedPercent < matcher.start()) {
+				Assertions.fail("Invalid format in key: " + key + ". Text contains an unescaped %: " + text);
+			}
+			searchStart = matcher.end();
+			if (!matcher.group().equals("%%") && !matcher.group().equals("%n")) {
+				formats.add(formatSignature(matcher));
+			}
+		}
+		if (text.indexOf('%', searchStart) >= 0) {
+			Assertions.fail("Invalid format in key: " + key + ". Text contains an unescaped %: " + text);
 		}
 		return formats;
+	}
+
+	private static String formatSignature(Matcher matcher) {
+		String precision = matcher.group(5) == null ? "" : "." + matcher.group(5);
+		String dateTimePrefix = matcher.group(6) == null ? "" : matcher.group(6);
+		return precision + dateTimePrefix + matcher.group(7);
+	}
+
+	private static void validateFormatString(String key, String text, List<String> formats) {
+		try {
+			String.format(Locale.US, text, getFormatArguments(formats));
+		} catch (RuntimeException e) {
+			Assertions.fail("Invalid format in key: " + key + ". Text: " + text, e);
+		}
+	}
+
+	private static Object[] getFormatArguments(List<String> formats) {
+		Object[] arguments = new Object[formats.size()];
+		for (int i = 0; i < formats.size(); i++) {
+			arguments[i] = getFormatArgument(formats.get(i));
+		}
+		return arguments;
+	}
+
+	private static Object getFormatArgument(String format) {
+		char conversion = format.charAt(format.length() - 1);
+		if (format.length() > 1 && (format.charAt(format.length() - 2) == 't' || format.charAt(format.length() - 2) == 'T')) {
+			return new Date();
+		}
+		switch (Character.toLowerCase(conversion)) {
+			case 'd':
+			case 'o':
+			case 'x':
+				return 1;
+			case 'e':
+			case 'f':
+			case 'g':
+			case 'a':
+				return 1.0;
+			case 'c':
+				return 'a';
+			case 'b':
+				return true;
+			case 'h':
+			case 's':
+				return "text";
+			default:
+				return "text";
+		}
 	}
 
 }
