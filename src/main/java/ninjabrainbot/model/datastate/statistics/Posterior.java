@@ -20,19 +20,23 @@ public class Posterior {
 	private final StandardDeviationSettings standardDeviationSettings;
 	private final McVersion version;
 
-	final IPrior prior;
 	final ArrayList<Chunk> chunks;
 
 	public Posterior(IReadOnlyList<IEnderEyeThrow> eyeThrows, IDivineContext divineContext, StandardDeviationSettings standardDeviationSettings, boolean useAdvStatistics, McVersion version) {
 		this.standardDeviationSettings = standardDeviationSettings;
 		this.version = version;
 		double sigma0 = eyeThrows.get(0).getStandardDeviation(standardDeviationSettings);
-		prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);
 		chunks = new ArrayList<Chunk>();
 		double px = eyeThrows.get(0).xInOverworld();
 		double pz = eyeThrows.get(0).zInOverworld();
 		double maxDist = StrongholdConstants.getMaxDistance(px, pz) / 16.0;
 		double maxDist2 = maxDist * maxDist;
+
+		// Exit early if the number of candidate strongholds is too large, as the calculation would be too slow and result in a failure anyway
+		if (maxDist * sigma0 > 1000)
+			return;
+
+		IPrior prior = new RayApproximatedPrior(eyeThrows.get(0), Math.min(1.0, 30 * sigma0) / 180.0 * Math.PI, divineContext, version);
 		for (Chunk c : prior.getChunks()) {
 			Chunk clone = c.clone();
 			double dx = clone.x - px / 16.0;
