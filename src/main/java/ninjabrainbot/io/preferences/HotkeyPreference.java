@@ -15,6 +15,7 @@ public class HotkeyPreference {
 
 	final IntPreference modifier;
 	final IntPreference code;
+	final IntPreference rawCode;
 
 	private final ObservableProperty<HotkeyPreference> whenTriggered;
 
@@ -22,6 +23,7 @@ public class HotkeyPreference {
 		this.pref = pref;
 		modifier = new IntPreference(key + "_modifier", -1, pref);
 		code = new IntPreference(key + "_code", -1, pref);
+		rawCode = new IntPreference(key + "_raw", -1, pref);
 		hotkeys.add(this);
 		whenTriggered = new ObservableProperty<>();
 	}
@@ -36,7 +38,28 @@ public class HotkeyPreference {
 
 	public boolean isKeyEventMatching(NativeKeyEvent nativeKeyEvent) {
 		int code = getPlatformSpecificKeyCode(nativeKeyEvent);
-		return getCode() == code && (getModifier() & nativeKeyEvent.getModifiers()) == getModifier();
+		boolean matches = getCode() == code && (getModifier() & nativeKeyEvent.getModifiers()) == getModifier();
+		// Auto-populate rawCode for existing bindings that predate rawCode storage
+		if (matches && rawCode.get() == -1) {
+			rawCode.set(nativeKeyEvent.getRawCode());
+		}
+		return matches;
+	}
+
+      // Match against a raw X11 keycode + JNH-format modifiers. (Used by StdinKeyReader for external key forwarding.)
+	
+	public boolean isRawKeyMatching(int raw, int modifiers) {
+		if (rawCode.get() == -1) return false;
+		return rawCode.get() == raw && (getModifier() & modifiers) == getModifier();
+	}
+
+
+      // Match against a JNH virtual keycode (no keyLocation shift) + JNH-format modifiers. (Fallback for old bindings that don't have rawCode stored yet.)
+
+
+	public boolean isJnhCodeMatching(int jnhCode, int modifiers) {
+		if (jnhCode == -1) return false;
+		return getCode() == jnhCode && (getModifier() & modifiers) == getModifier();
 	}
 
 	public synchronized void setCode(int value) {
@@ -50,6 +73,7 @@ public class HotkeyPreference {
 	public synchronized void setHotkey(NativeKeyEvent nativeKeyEvent) {
 		setCode(getPlatformSpecificKeyCode(nativeKeyEvent));
 		setModifier(nativeKeyEvent.getModifiers());
+		rawCode.set(nativeKeyEvent.getRawCode());
 	}
 
 	public final void execute() {
