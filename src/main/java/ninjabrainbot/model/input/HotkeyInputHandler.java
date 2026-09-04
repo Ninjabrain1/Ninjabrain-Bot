@@ -44,6 +44,10 @@ public class HotkeyInputHandler implements IDisposable {
 		disposeHandler.add(preferences.hotkeyLock.whenTriggered().subscribe(__ -> actionExecutor.executeImmediately(new ToggleLockedAction(dataState))));
 		disposeHandler.add(preferences.usePreciseAngle.whenModified().subscribe(this::resetBoatState));
 		disposeHandler.add(preferences.hotkeyToggleAllAdvancementsMode.whenTriggered().subscribe(this::onToggleAllAdvancementsModeHotkeyTriggered));
+		disposeHandler.add(preferences.hotkeyAutoLock.whenTriggered().subscribe(__ -> {boolean current = preferences.autoLockEnabled.get(); 
+		preferences.autoLockEnabled.set(!current);
+}));
+
 	}
 
 	private void resetIfNotLocked() {

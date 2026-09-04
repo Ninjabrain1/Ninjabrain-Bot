@@ -24,6 +24,7 @@ import ninjabrainbot.gui.buttons.TitleBarButton;
 import ninjabrainbot.gui.components.labels.ThemedIcon;
 import ninjabrainbot.gui.components.labels.ThemedLabel;
 import ninjabrainbot.gui.mainwindow.boateye.BoatIcon;
+import ninjabrainbot.gui.mainwindow.autolock.AutoLockIcon;
 import ninjabrainbot.gui.mainwindow.boateye.Mod360Icon;
 import ninjabrainbot.gui.mainwindow.eyethrows.EnderEyePanel;
 import ninjabrainbot.gui.mainwindow.information.InformationListPanel;
@@ -127,6 +128,7 @@ public class NinjabrainBotFrame extends ThemedFrame implements IDisposable {
 		titlebarPanel.addButton(notificationsButton);
 		titlebarPanel.addButton(new BoatIcon(styleManager, dataState.boatDataState().boatState(), preferences, disposeHandler));
 		titlebarPanel.addButton(new Mod360Icon(styleManager, dataState.boatDataState(), preferences, disposeHandler));
+		titlebarPanel.addButton(new AutoLockIcon(styleManager, preferences, disposeHandler)); // auto lock icon
 	}
 
 	@Override

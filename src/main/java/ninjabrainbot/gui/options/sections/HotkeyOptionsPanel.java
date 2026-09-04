@@ -24,6 +24,7 @@ public class HotkeyOptionsPanel extends StackPanel {
 			add(new HotkeyPanel(styleManager, I18n.get("redo"), preferences.hotkeyRedo));
 			add(new HotkeyPanel(styleManager, I18n.get("lock"), preferences.hotkeyLock));
 			add(new HotkeyPanel(styleManager, I18n.get("hide_show_window"), preferences.hotkeyMinimize));
+			add(new HotkeyPanel(styleManager, I18n.get("hotkey_autolock"), preferences.hotkeyAutoLock));
 		}
 	}
 
