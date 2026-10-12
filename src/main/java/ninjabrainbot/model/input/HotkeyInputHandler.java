@@ -9,6 +9,7 @@ import ninjabrainbot.model.actions.alladvancements.SetHasEnteredEndAction;
 import ninjabrainbot.model.actions.boat.ResetBoatStateAction;
 import ninjabrainbot.model.actions.boat.ToggleEnteringBoatAction;
 import ninjabrainbot.model.actions.boat.ToggleMod360IndicatorAction;
+import ninjabrainbot.model.actions.common.KeepOnlyMostRecentMeasurementAction;
 import ninjabrainbot.model.actions.common.ResetAction;
 import ninjabrainbot.model.actions.common.ToggleLockedAction;
 import ninjabrainbot.model.actions.endereye.ChangeLastAngleAction;
@@ -34,6 +35,7 @@ public class HotkeyInputHandler implements IDisposable {
 		this.actionExecutor = actionExecutor;
 
 		disposeHandler.add(preferences.hotkeyReset.whenTriggered().subscribe(this::resetIfNotLocked));
+		disposeHandler.add(preferences.hotkeyKeepOnlyMostRecentMeasurement.whenTriggered().subscribe(this::keepOnlyMostRecentMeasurementIfNotLocked));
 		disposeHandler.add(preferences.hotkeyUndo.whenTriggered().subscribe(this::undoIfNotLocked));
 		disposeHandler.add(preferences.hotkeyRedo.whenTriggered().subscribe(this::redoIfNotLocked));
 		disposeHandler.add(preferences.hotkeyIncrement.whenTriggered().subscribe(__ -> changeLastAngleIfNotLocked(1)));
@@ -49,6 +51,11 @@ public class HotkeyInputHandler implements IDisposable {
 	private void resetIfNotLocked() {
 		if (!dataState.locked().get())
 			actionExecutor.executeImmediately(new ResetAction(domainModel));
+	}
+
+	private void keepOnlyMostRecentMeasurementIfNotLocked() {
+		if (!dataState.locked().get())
+			actionExecutor.executeImmediately(new KeepOnlyMostRecentMeasurementAction(dataState));
 	}
 
 	private void undoIfNotLocked() {

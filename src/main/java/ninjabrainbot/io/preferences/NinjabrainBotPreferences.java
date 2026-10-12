@@ -26,6 +26,7 @@ public class NinjabrainBotPreferences {
 	public final HotkeyPreference hotkeyBoat;
 	public final HotkeyPreference hotkeyMod360;
 	public final HotkeyPreference hotkeyReset;
+	public final HotkeyPreference hotkeyKeepOnlyMostRecentMeasurement;
 	public final HotkeyPreference hotkeyUndo;
 	public final HotkeyPreference hotkeyRedo;
 	public final HotkeyPreference hotkeyMinimize;
@@ -90,6 +91,7 @@ public class NinjabrainBotPreferences {
 		hotkeyIncrement = new HotkeyPreference("hotkey_increment", source);
 		hotkeyDecrement = new HotkeyPreference("hotkey_decrement", source);
 		hotkeyReset = new HotkeyPreference("hotkey_reset", source);
+		hotkeyKeepOnlyMostRecentMeasurement = new HotkeyPreference("hotkey_keep_only_most_recent_measurement", source);
 		hotkeyUndo = new HotkeyPreference("hotkey_undo", source);
 		hotkeyRedo = new HotkeyPreference("hotkey_redo", source);
 		hotkeyMinimize = new HotkeyPreference("hotkey_minimize", source);
