@@ -21,6 +21,12 @@ An accurate stronghold calculator for Minecraft speedrunning. Ninjabrain Bot use
 3. Throw an eye of ender, look directly at it, and press `F3+C`.
 4. Move to a new position and repeat. The calculator ranks potential stronghold locations and shows how confident it is in its predictions.
 
+### Linux
+To run on Linux, you can also install via
+```sh
+curl -fsSL https://raw.githubusercontent.com/Ninjabrain1/Ninjabrain-Bot/main/install.sh | bash
+```
+Then the app will install to your desktop entries as "Ninjabrain Bot"
 ## Video guides
 
 - [Beginner guide (2026)](https://www.youtube.com/watch?v=XmikooWmIAM) by K4yfour
