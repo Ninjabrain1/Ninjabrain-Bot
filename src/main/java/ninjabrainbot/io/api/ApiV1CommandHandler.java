@@ -106,18 +106,16 @@ public class ApiV1CommandHandler {
 		}
 		stopWatch.log("Command parsing and validation");
 
-		domainModel.applyWriteLock(() -> {
-			for (ParsedCommand parsedCommand : parsedCommands) {
-				if (parsedCommand.command instanceof IParameterlessCommand) {
-					IAction[] actions = ((IParameterlessCommand) parsedCommand.command).mapToActions(domainModel, dataState);
-					actionExecutor.executeImmediately(actions);
-				} else if (parsedCommand.command instanceof IParametrizedCommand) {
-					IAction[] actions = invokeMapToActions((IParametrizedCommand<?>) parsedCommand.command, parsedCommand.args);
-					actionExecutor.executeImmediately(actions);
-				}
-				stopWatch.log("Executed command '" + parsedCommand.command.name() + "'");
+		for (ParsedCommand parsedCommand : parsedCommands) {
+			if (parsedCommand.command instanceof IParameterlessCommand) {
+				IAction[] actions = ((IParameterlessCommand) parsedCommand.command).mapToActions(domainModel, dataState);
+				actionExecutor.executeImmediately(actions);
+			} else if (parsedCommand.command instanceof IParametrizedCommand) {
+				IAction[] actions = invokeMapToActions((IParametrizedCommand<?>) parsedCommand.command, parsedCommand.args);
+				actionExecutor.executeImmediately(actions);
 			}
-		}).run();
+			stopWatch.log("Executed command '" + parsedCommand.command.name() + "'");
+		}
 
 		stopWatch.logTotal("Total request handling");
 		return Result.success();
