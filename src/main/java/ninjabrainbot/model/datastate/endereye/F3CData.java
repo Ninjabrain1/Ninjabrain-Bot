@@ -37,14 +37,13 @@ public class F3CData {
 	}
 
 	private static MCDimension getMCDimension(String world) {
-		if (world.endsWith("overworld")) {
-			return MCDimension.OVERWORLD;
-		} else if (world.endsWith("the_nether")) {
+		if (world.endsWith("_nether")) {
 			return MCDimension.NETHER;
 		} else if (world.endsWith("the_end")) {
 			return MCDimension.END;
+		} else {
+			return MCDimension.OVERWORLD;
 		}
-		return null;
 	}
 
 }
